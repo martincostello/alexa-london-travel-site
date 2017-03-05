@@ -1,0 +1,29 @@
+﻿@model SiteOptions
+<hr />
+<footer>
+    <p class="hidden-sm hidden-xs">
+        &copy; @Model.Metadata.Author.Name @DateTimeOffset.UtcNow.Year |
+        <a id="link-status" href="@Model.ExternalLinks.Status.AbsoluteUri" rel="noopener" target="_blank" title="View site uptime information">
+            Site Status &amp; Uptime
+        </a>
+        | Built from
+        <a id="link-git-commit" href="@Model.Metadata.Repository/commit/@GitMetadata.Commit" title="View commit @GitMetadata.Commit on GitHub">
+            @string.Join(string.Empty, GitMetadata.Commit.Take(7))
+        </a>
+        on
+        <a id="link-git-branch" href="@Model.Metadata.Repository/tree/@GitMetadata.Branch" title="View branch @GitMetadata.Branch on GitHub">
+            @GitMetadata.Branch
+        </a>
+        <span id="build-date" data-format="YYYY-MM-DD HH:mm Z" data-timestamp="@GitMetadata.Timestamp.ToString("u", CultureInfo.InvariantCulture)"></span>
+    </p>
+    <div class="row hidden-md hidden-lg">
+        <div class="col-sm-12 col-xs-12">
+            <p>
+                &copy; @Model.Metadata.Author.Name @DateTimeOffset.UtcNow.Year |
+                <a id="link-status" href="@Model.ExternalLinks.Status.AbsoluteUri" rel="noopener" target="_blank" title="View site uptime information">
+                    Site Status &amp; Uptime
+                </a>
+            </p>
+        </div>
+    </div>
+</footer>

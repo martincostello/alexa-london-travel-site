@@ -1,0 +1,75 @@
+﻿@inject IConfiguration Config
+@inject SiteOptions Options
+<!DOCTYPE html>
+<html lang="en-gb">
+<head prefix="og:http://ogp.me/ns#">
+    @await Html.PartialAsync("_StylesHead")
+    @await RenderSectionAsync("stylesHead", required: false)
+@{
+    string canonicalUri = Context.Request.Canonical();
+    string image = ViewBag.MetaImage ?? string.Empty;
+
+    if (!string.IsNullOrEmpty(image))
+    {
+        image = Url.Content(image);
+    }
+
+    var model = MetaModel.Create(
+        Options.Metadata,
+        canonicalUri: canonicalUri,
+        description: ViewBag.MetaDescription as string,
+        imageUri: image,
+        imageAltText: ViewBag.MetaImageAltText as string,
+        robots: ViewBag.MetaRobots as string,
+        title: ViewBag.Title as string);
+}
+    @await Html.PartialAsync("_Meta", model)
+    @await Html.PartialAsync("_Links", Tuple.Create(canonicalUri, Options))
+    @await RenderSectionAsync("meta", required: false)
+    @Html.Raw(JavaScriptSnippet.FullScript)
+    <script type="text/javascript">
+        if (self == top) {
+            document.documentElement.className = document.documentElement.className.replace(/\bjs-flash\b/, '');
+        }
+        else {
+            top.location = self.location;
+        }
+    </script>
+</head>
+<body>
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a id="link-home" asp-controller="Home" asp-action="Index" class="navbar-brand">
+                    <lazyimg alt="London Travel" src="@Url.CdnContent("london-travel-108x108.png", Options)" height="32" width="32">
+                </a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a id="link-nav-install" class="navbar-brand" href="@Options?.ExternalLinks?.Skill" rel="noopener" target="_blank" title="Install London Travel for Amazon Alexa">Install</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        @await Html.PartialAsync("_Footer", Options)
+    </div>
+    @await Html.PartialAsync("_StylesBody")
+    @await RenderSectionAsync("stylesBody", required: false)
+    @await Html.PartialAsync("_Scripts")
+    @await RenderSectionAsync("scripts", required: false)
+</body>
+<!--
+    Datacenter: @Config["Azure:Datacenter"]
+    Instance:   @Environment.MachineName
+    Commit:     @GitMetadata.Commit
+    Timestamp:  @GitMetadata.Timestamp.ToString("u", CultureInfo.InvariantCulture)
+-->
+</html>

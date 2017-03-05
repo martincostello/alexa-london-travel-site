@@ -1,0 +1,13 @@
+﻿@inject SiteOptions Options
+@{
+    ViewBag.Title = "Home";
+}
+<div class="jumbotron">
+    <h1>London Travel</h1>
+    <p class="lead">
+        An Amazon Alexa skill for checking the status for travel in London.
+    </p>
+    <p>
+        <a class="btn btn-primary" id="link-install" href="@Options?.ExternalLinks?.Skill" rel="noopener" target="_blank" title="Install London Travel for Amazon Alexa">Install »</a>
+    </p>
+</div>

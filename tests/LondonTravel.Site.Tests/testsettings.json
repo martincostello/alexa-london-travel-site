@@ -1,0 +1,55 @@
+﻿{
+  "Logging": {
+    "IncludeScopes": false,
+    "LogLevel": {
+      "Default": "Warning",
+      "Microsoft": "Warning",
+      "System": "Warning"
+    }
+  },
+  "Site": {
+    "Analytics": {
+      "Google": "UA-42907618-7"
+    },
+    "ContentSecurityPolicyOrigins": {},
+    "ExternalLinks": {
+      "Api": "/",
+      "Cdn": "https://martincostello.azureedge.net/",
+      "Skill": "https://www.amazon.co.uk/dp/B01NB0T86R",
+      "Status": "http://status.martincostello.com/",
+      "Reports": {
+        "ContentSecurityPolicy": null,
+        "ContentSecurityPolicyReportOnly": null,
+        "PublicKeyPins": null,
+        "PublicKeyPinsReportOnly": null
+      }
+    },
+    "Metadata": {
+      "Author": {
+        "Avatar": "https://secure.gravatar.com/avatar/52c4a06bebd01c96ab7def5bed77ad6d",
+        "Bitcoin": "12uKG1MwnApd6uiFQ3VXLxFMNC3Z74Z2NG",
+        "Email": "londontravel@martincostello.com",
+        "Name": "Martin Costello",
+        "SocialMedia": {
+          "Facebook": "10100867762061905",
+          "Twitter": "@martin_costello"
+        },
+        "Website": "https://londontravel.martincostello.com/"
+      },
+      "Description": "London Travel Alexa Skill",
+      "Domain": "londontravel.martincostello.com",
+      "Keywords": "alexa,london travel",
+      "Name": "London Travel",
+      "Repository": "https://github.com/martincostello/alexa-london-travel-site",
+      "Robots": "INDEX",
+      "Type": "website"
+    },
+    "PublicKeyPins": {
+      "MaxAge": "60.00:00:00",
+      "IncludeSubdomains": false,
+      "Sha256Hashes": [
+        "wvMoN/75fGqUXeGDMNIe704oXvDghZhTNYhtQ7td+aY="
+      ]
+    }
+  }
+}

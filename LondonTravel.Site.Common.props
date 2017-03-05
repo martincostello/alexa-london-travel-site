@@ -1,0 +1,26 @@
+﻿<Project>
+  <ItemGroup>
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" Link="stylecop.json" />
+  </ItemGroup>
+  <PropertyGroup>
+    <Authors>Martin Costello</Authors>
+    <CodeAnalysisRuleSet>../../LondonTravel.Site.ruleset</CodeAnalysisRuleSet>
+    <Company>https://github.com/martincostello/alexa-london-travel-site</Company>
+    <Copyright>Martin Costello (c) 2017</Copyright>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <PackageIconUrl>https://martincostello.com/favicon.ico</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/martincostello/alexa-london-travel-site</PackageProjectUrl>
+    <PackageLicenseUrl>$(PackageProjectUrl)/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageReleaseNotes>$(PackageProjectUrl)/releases</PackageReleaseNotes>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageTags></PackageTags>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>$(PackageProjectUrl).git</RepositoryUrl>
+    <VersionPrefix>1.0.0</VersionPrefix>
+    <VersionSuffix></VersionSuffix>
+    <WarningsAsErrors>true</WarningsAsErrors>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,56 @@
+﻿[
+  {
+    "outputFileName": "wwwroot/assets/css/site.css",
+    "inputFiles": [
+      "assets/styles/css/site.css"
+    ],
+    "minify": {
+      "enabled": false
+    }
+  },
+  {
+    "outputFileName": "wwwroot/assets/css/site.min.css",
+    "inputFiles": [
+      "assets/styles/css/site.css"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/assets/js/site.js",
+    "inputFiles": [
+      "assets/scripts/js/martinCostello/martinCostello.js",
+      "assets/scripts/js/martinCostello/londonTravel/londonTravel.js",
+      "assets/scripts/js/martinCostello/londonTravel/debug.js",
+      "assets/scripts/js/martinCostello/londonTravel/track.js",
+      "assets/scripts/js/analytics.js",
+      "assets/scripts/js/footer.js",
+      "assets/scripts/js/lazyload.js",
+      "assets/scripts/js/serviceWorker.js"
+    ],
+    "minify": {
+      "enabled": false,
+      "renameLocals": false
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/assets/js/site.min.js",
+    "inputFiles": [
+      "assets/scripts/js/martinCostello/martinCostello.js",
+      "assets/scripts/js/martinCostello/londonTravel/londonTravel.js",
+      "assets/scripts/js/martinCostello/londonTravel/debug.js",
+      "assets/scripts/js/martinCostello/londonTravel/track.js",
+      "assets/scripts/js/analytics.js",
+      "assets/scripts/js/footer.js",
+      "assets/scripts/js/lazyload.js",
+      "assets/scripts/js/serviceWorker.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": true
+  }
+]

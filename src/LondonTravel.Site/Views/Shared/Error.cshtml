@@ -1,0 +1,7 @@
+﻿@model int?
+@{
+    ViewBag.Title = "Error";
+    ViewBag.Message = ViewBag.Message ?? "An error occurred while processing your request.";
+}
+<h1 class="text-danger">Error (HTTP @(Model ?? 500))</h1>
+<h2 class="text-danger">@ViewBag.Message</h2>

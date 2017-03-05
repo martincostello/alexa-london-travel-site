@@ -1,0 +1,9 @@
+{
+  "name": "londontravel.martincostello.com",
+  "private": true,
+  "dependencies": {
+    "jquery": "2.2.4",
+    "jquery.lazyload": "1.9.1",
+    "moment": "2.17.1"
+  }
+}
