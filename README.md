@@ -21,11 +21,19 @@ The repository is hosted in [GitHub](https://github.com/martincostello/alexa-lon
 
 ## Building and Testing
 
-_TODO_
+To build and test the website run one of the following commands:
 
-## Debugging
+**Linux/OS X**
 
-_TODO_
+```sh
+    ./build.sh
+```
+
+**Windows**
+
+```batchfile
+    .\Build.ps1
+```
 
 ## License
 
