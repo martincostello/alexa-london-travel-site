@@ -1,4 +1,4 @@
-param(
+﻿param(
     [Parameter(Mandatory=$false)][bool]   $RestorePackages  = $false,
     [Parameter(Mandatory=$false)][string] $Configuration    = "Release",
     [Parameter(Mandatory=$false)][string] $VersionSuffix    = "",
@@ -36,16 +36,14 @@ if (!(Test-Path $env:DOTNET_INSTALL_DIR)) {
 $env:PATH = "$env:DOTNET_INSTALL_DIR;$env:PATH"
 $dotnet   = "$env:DOTNET_INSTALL_DIR\dotnet"
 
-function DotNetRestore {
-    param([string]$Project)
+function DotNetRestore { param([string]$Project)
     & $dotnet restore $Project --verbosity minimal
     if ($LASTEXITCODE -ne 0) {
         throw "dotnet restore failed with exit code $LASTEXITCODE"
     }
 }
 
-function DotNetBuild {
-    param([string]$Project, [string]$Configuration, [string]$VersionSuffix)
+function DotNetBuild { param([string]$Project, [string]$Configuration, [string]$VersionSuffix)
     if ($VersionSuffix) {
         & $dotnet build $Project --output $OutputPath --framework $framework --configuration $Configuration --version-suffix "$VersionSuffix"
     } else {
@@ -56,16 +54,14 @@ function DotNetBuild {
     }
 }
 
-function DotNetTest {
-    param([string]$Project)
+function DotNetTest { param([string]$Project)
     & $dotnet test $Project --output $OutputPath --framework $framework --no-build
     if ($LASTEXITCODE -ne 0) {
         throw "dotnet test failed with exit code $LASTEXITCODE"
     }
 }
 
-function DotNetPublish {
-    param([string]$Project)
+function DotNetPublish { param([string]$Project)
     $publishPath = (Join-Path $OutputPath "publish")
     if ($VersionSuffix) {
         & $dotnet publish $Project --output $publishPath --framework $framework --configuration $Configuration --version-suffix "$VersionSuffix"
@@ -94,6 +90,11 @@ if ($PatchVersion -eq $true) {
     Set-Content ".\AssemblyVersion.cs" $assemblyVersionWithMetadata -Encoding utf8
 }
 
+$projects = @(
+    (Join-Path $solutionPath "src\LondonTravel.Site\LondonTravel.Site.csproj"),
+    (Join-Path $solutionPath "tests\LondonTravel.Site.Tests\LondonTravel.Site.Tests.csproj")
+)
+
 $testProjects = @(
     (Join-Path $solutionPath "tests\LondonTravel.Site.Tests\LondonTravel.Site.Tests.csproj")
 )
@@ -107,8 +108,10 @@ if ($RestorePackages -eq $true) {
     DotNetRestore $solutionFile
 }
 
-Write-Host "Building solution..." -ForegroundColor Green
-DotNetBuild $solutionFile $Configuration $PrereleaseSuffix
+Write-Host "Building $($projects.Count) projects..." -ForegroundColor Green
+ForEach ($project in $projects) {
+    DotNetBuild $project $Configuration $PrereleaseSuffix
+}
 
 if ($RunTests -eq $true) {
     Write-Host "Testing $($testProjects.Count) project(s)..." -ForegroundColor Green
