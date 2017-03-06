@@ -50,6 +50,16 @@ namespace MartinCostello.LondonTravel.Site.Integration
             }
         }
 
+        [Theory]
+        [InlineData("/manage/", Skip = "Identity is not full implemented yet.")]
+        public async Task Cannot_Load_Resource_Unauthenticated(string requestUri)
+        {
+            using (var response = await Fixture.Client.GetAsync(requestUri))
+            {
+                Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+            }
+        }
+
         [Fact]
         public async Task Response_Headers_Contains_Expected_Headers()
         {

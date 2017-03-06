@@ -38,7 +38,7 @@
                         <li class="divider" role="separator"></li>
                         @if (isAuthenticated)
                         {
-                            <li><a href="#" rel="noopener" title="Manage your London Travel account">My account <i class="fa fa-cog" aria-hidden="true"></i></a></li>
+                            <li><a asp-route="Manage" rel="noopener" title="Manage your London Travel account">My account <i class="fa fa-cog" aria-hidden="true"></i></a></li>
                         }
                         <li><a asp-route="PrivacyPolicy" title="View the London Travel Alexa skill's privacy policy">Privacy Policy <i class="fa fa-gavel" aria-hidden="true"></i></a></li>
                         @if (isAuthenticated)
@@ -65,7 +65,7 @@
                 <li><a href="@Options?.ExternalLinks?.Skill" rel="noopener" target="_blank" title="Install London Travel for Amazon Alexa from amazon.co.uk">Install <i class="fa fa-external-link" aria-hidden="true"></i></a></li>
                 @if (isAuthenticated)
                 {
-                    <li><a href="#" rel="noopener" title="Manage your London Travel account">My account <i class="fa fa-cog" aria-hidden="true"></i></a></li>
+                    <li><a asp-route="Manage" rel="noopener" title="Manage your London Travel account">My account <i class="fa fa-cog" aria-hidden="true"></i></a></li>
                 }
                 <li><a asp-route="PrivacyPolicy" title="View the London Travel Alexa skill's privacy policy">Privacy Policy <i class="fa fa-gavel" aria-hidden="true"></i></a></li>
                 @if (isAuthenticated)
