@@ -21,6 +21,11 @@ namespace MartinCostello.LondonTravel.Site.Options
         public ApiOptions Api { get; set; }
 
         /// <summary>
+        /// Gets or sets the authentication options.
+        /// </summary>
+        public AuthenticationOptions Authentication { get; set; }
+
+        /// <summary>
         /// Gets or sets the Content Security Policy origins for the site.
         /// </summary>
         public IDictionary<string, IList<string>> ContentSecurityPolicyOrigins { get; set; }
