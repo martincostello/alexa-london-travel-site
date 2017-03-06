@@ -47,14 +47,10 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a id="link-home" asp-controller="Home" asp-action="Index" class="navbar-brand">
-                    <span>@Options.Metadata.Name&nbsp;<lazyimg alt="London Travel" src="@Url.CdnContent("favicon-32x32.png", Options)"></span>
+                    <lazyimg alt="London Travel" src="@Url.CdnContent("avatar.png", Options)">
                 </a>
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a id="link-nav-install" class="navbar-brand" href="@Options?.ExternalLinks?.Skill" rel="noopener" target="_blank" title="Install London Travel for Amazon Alexa">Install</a></li>
-                </ul>
-            </div>
+            @await Html.PartialAsync("_Navbar")
         </div>
     </div>
     <div class="container body-content">
