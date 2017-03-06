@@ -53,7 +53,7 @@
   <Target Name="PrepublishScript" DependsOnTargets="BundleAssets" BeforeTargets="Publish">
     <Exec Command="npm install --loglevel=error" />
     <Exec Command="bower install --loglevel=error" />
-    <Exec Command="gulp test" />
+    <Exec Command="gulp publish" />
   </Target>
   <Target Name="AddGeneratedContentItems" BeforeTargets="AssignTargetPaths" DependsOnTargets="PrepareForPublish">
     <ItemGroup>
