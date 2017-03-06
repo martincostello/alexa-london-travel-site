@@ -54,6 +54,14 @@
                 {
                     <li><a id="link-nav-sign-in" href="#" rel="nofollow" title="Sign in or register">Sign in/register</a></li>
                 }
+                else
+                {
+                    <li>
+                        <a id="link-nav-menu" class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                            Signed in as @User.GetDisplayName() <lazyimg alt="@User.Identity.Name" src="@User.GetAvatarUrl(Url.CdnContent("avatar.png", Options))" aria-hidden="true" />
+                        </a>
+                    </li>
+                }
                 <li><a id="link-nav-install" href="@Options?.ExternalLinks?.Skill" rel="noopener" target="_blank" title="Install London Travel for Amazon Alexa from amazon.co.uk">Install <i class="fa fa-external-link" aria-hidden="true"></i></a></li>
                 @if (isAuthenticated)
                 {
