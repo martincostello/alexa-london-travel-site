@@ -95,8 +95,10 @@ namespace MartinCostello.LondonTravel.Site.Middleware
                     context.Response.Headers.Add("Content-Security-Policy", _contentSecurityPolicy);
                     context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
                     context.Response.Headers.Add("X-Download-Options", "noopen");
-                    context.Response.Headers.Add("X-Frame-Options", "DENY");
                     context.Response.Headers.Add("X-XSS-Protection", "1; mode=block");
+
+                    // Middleware (e.g. Identity) may have already set X-Frame-Options
+                    context.Response.Headers["X-Frame-Options"] = "DENY";
 
                     if (context.Request.IsHttps)
                     {
