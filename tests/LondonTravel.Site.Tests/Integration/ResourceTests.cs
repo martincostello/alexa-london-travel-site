@@ -32,6 +32,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         [InlineData("/humans.txt", "text/plain")]
         [InlineData("/keybase.txt", "text/plain")]
         [InlineData("/manifest.json", "application/json")]
+        [InlineData("/privacy-policy/", "text/html")]
         [InlineData("/robots.txt", "text/plain")]
         [InlineData("/service-worker.js", "application/javascript")]
         [InlineData("/sitemap.xml", "text/xml")]

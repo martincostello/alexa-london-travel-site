@@ -10,7 +10,7 @@
             var value = moment(timestamp, format);
             if (value.isValid()) {
                 var text = value.fromNow();
-                element.text("(" + text + ")");
+                element.text("| Last updated " + text);
             }
         }
     });
