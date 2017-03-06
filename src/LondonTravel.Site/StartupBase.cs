@@ -7,6 +7,8 @@ namespace MartinCostello.LondonTravel.Site
     using Autofac;
     using Autofac.Extensions.DependencyInjection;
     using Extensions;
+    using MartinCostello.LondonTravel.Site.Identity;
+    using MartinCostello.LondonTravel.Site.Services;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.CookiePolicy;
     using Microsoft.AspNetCore.Cors.Infrastructure;
@@ -108,6 +110,8 @@ namespace MartinCostello.LondonTravel.Site
 
             app.UseHttpMethodOverride();
 
+            ConfigureIdentity(app, options.Value);
+
             app.UseMvc(
                 (routes) =>
                 {
@@ -138,14 +142,38 @@ namespace MartinCostello.LondonTravel.Site
                     p.CookieName = "_anti-forgery";
                     p.FormFieldName = "_anti-forgery";
                     p.HeaderName = "x-anti-forgery";
-                    p.RequireSsl = !HostingEnvironment.IsDevelopment();
+                    p.RequireSsl = true;
                 });
 
             services
                 .AddMemoryCache()
                 .AddDistributedMemoryCache()
-                .AddCors(ConfigureCors)
-                .AddMvc(ConfigureMvc)
+                .AddCors(ConfigureCors);
+
+            services.AddIdentity<LondonTravelUser, LondonTravelRole>(
+                (options) =>
+                {
+                    options.Cookies.ApplicationCookie.AccessDeniedPath = "/account/access-denied/";
+                    options.Cookies.ApplicationCookie.CookieName = "london-travel-auth";
+                    options.Cookies.ApplicationCookie.CookieHttpOnly = true;
+                    options.Cookies.ApplicationCookie.CookieSecure = CookieSecurePolicy.Always;
+                    options.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromDays(150);
+                    options.Cookies.ApplicationCookie.LoginPath = "/account/sign-in/";
+                    options.Cookies.ApplicationCookie.LogoutPath = "/account/sign-out/";
+                    options.Cookies.ApplicationCookie.SlidingExpiration = true;
+
+                    options.Cookies.ExternalCookie.CookieName = "london-travel-auth";
+                    options.Cookies.ExternalCookie.CookieHttpOnly = true;
+                    options.Cookies.ExternalCookie.CookieSecure = CookieSecurePolicy.Always;
+
+                    options.User.RequireUniqueEmail = true;
+                })
+                .AddClaimsPrincipalFactory<UserClaimsPrincipalFactory>()
+                .AddRoleStore<RoleStore>()
+                .AddUserStore<UserStore>()
+                .AddDefaultTokenProviders();
+
+            services.AddMvc(ConfigureMvc)
                 .AddJsonOptions((p) => services.AddSingleton(ConfigureJsonFormatter(p)));
 
             services.AddRouting(
@@ -162,6 +190,11 @@ namespace MartinCostello.LondonTravel.Site
             services.AddSingleton<IConfiguration>((_) => Configuration);
             services.AddScoped((p) => p.GetRequiredService<IHttpContextAccessor>().HttpContext);
             services.AddScoped((p) => p.GetRequiredService<IOptionsSnapshot<SiteOptions>>().Value);
+
+            services.AddScoped<IDocumentClient>(
+                (p) => new DocumentClientWrapper(
+                    p.GetRequiredService<SiteOptions>().Authentication.UserStore,
+                    p.GetRequiredService<ILogger<DocumentClientWrapper>>()));
 
             var builder = new ContainerBuilder();
 
@@ -220,6 +253,29 @@ namespace MartinCostello.LondonTravel.Site
                         builder.WithOrigins(siteOptions?.Api?.Cors?.Origins ?? Array.Empty<string>());
                     }
                 });
+        }
+
+        /// <summary>
+        /// Configures identity for the application.
+        /// </summary>
+        /// <param name="app">The <see cref="IApplicationBuilder"/> to configure.</param>
+        /// <param name="options">The current site configuration.</param>
+        private void ConfigureIdentity(IApplicationBuilder app, SiteOptions options)
+        {
+            if (options?.Authentication?.IsEnabled == true)
+            {
+                app.UseIdentity();
+
+                ExternalSignInOptions provider = null;
+
+                if (options?.Authentication?.ExternalProviders.TryGetValue("Google", out provider) == true &&
+                    provider?.IsEnabled == true &&
+                    !string.IsNullOrEmpty(provider?.ClientId) &&
+                    !string.IsNullOrEmpty(provider?.ClientSecret))
+                {
+                    app.UseGoogleAuthentication(new GoogleOptions() { ClientId = provider.ClientId, ClientSecret = provider.ClientSecret });
+                }
+            }
         }
 
         /// <summary>
