@@ -1,5 +1,7 @@
 ﻿@model int?
 @{
+    ViewBag.MetaDescription = string.Empty;
+    ViewBag.MetaRobots = "NOINDEX";
     ViewBag.Title = "Error";
     ViewBag.Message = ViewBag.Message ?? "An error occurred while processing your request.";
 }
