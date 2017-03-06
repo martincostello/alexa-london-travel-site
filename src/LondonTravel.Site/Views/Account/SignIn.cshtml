@@ -1,0 +1,44 @@
+﻿@inject Microsoft.AspNetCore.Identity.SignInManager<LondonTravelUser> SignInManager
+@{
+    ViewBag.MetaDescription = "Sign in to your London Travel account.";
+    ViewBag.MetaRobots = "NOINDEX";
+    ViewBag.Title = "Sign in";
+}
+<h2>@ViewBag.Title</h2>
+<div class="row">
+    <div class="col-md-12">
+        <section>
+            <h4>Choose an external service to sign in with</h4>
+            <p>If you do not already have a London Travel account, one will be created for you automatically once you've signed in.</p>
+            <p>The London Travel account created the first time you sign in will use with email address associated with the external service you sign in with.</p>
+            <p>
+                Accounts and their data are managed by this service in line with the
+                <a asp-route="PrivacyPolicy" rel="noopener" title="View the London Travel Alexa skill's privacy policy">
+                    Privacy Policy
+                </a>.
+            </p>
+            <hr />
+            <form asp-route="ExternalSignIn" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+                <div>
+                    <p>
+                        @{
+                            IDictionary<string, string> iconMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+                            {
+                                { "Google", "google" },
+                            };
+                        }
+                        @foreach (var provider in SignInManager.GetExternalAuthenticationSchemes())
+                        {
+                            <button type="submit" class="btn btn-default btn-social btn-@provider.AuthenticationScheme.ToLowerInvariant()" name="provider" value="@provider.AuthenticationScheme" title="Sign in using your @provider.DisplayName account">
+                                <i class="fa fa-@iconMap[provider.AuthenticationScheme]"></i> Sign in using your @provider.DisplayName account
+                            </button>
+                        }
+                    </p>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
+@section stylesBody {
+    <link rel="stylesheet" href="~/lib/bootstrap-social/bootstrap-social.css" asp-append-version="true" async />
+}

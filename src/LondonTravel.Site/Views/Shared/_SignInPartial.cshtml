@@ -1,0 +1,28 @@
+﻿@inject SiteOptions Options
+@inject Microsoft.AspNetCore.Identity.SignInManager<LondonTravelUser> SignInManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <form asp-route="SignOut" method="post" id="signOutForm" class="navbar-right">
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a asp-route="Manage" rel="nofollow" title="Manage your London Travel account">
+                    @User.GetDisplayName()
+                    <lazyimg alt="@User.Identity.Name" src="@User.GetAvatarUrl(Url.CdnContent("avatar.png", Options))" aria-hidden="true" />
+                </a>
+            </li>
+            <li>
+                <button type="submit" class="btn btn-link navbar-btn navbar-link">
+                    Sign out
+                    <i class="fa fa-sign-out" aria-hidden="true"></i>
+                </button>
+            </li>
+        </ul>
+    </form>
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li><a asp-route="SignIn" rel="nofollow" title="Sign in or register">Sign in/register</a></li>
+    </ul>
+}
