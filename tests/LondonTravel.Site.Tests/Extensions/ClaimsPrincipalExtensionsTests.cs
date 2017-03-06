@@ -64,5 +64,72 @@ namespace MartinCostello.LondonTravel.Site.Extensions
             // Assert
             actual.ShouldBe("https://www.gravatar.com/avatar/0bc83cb571cd1c50ba6f3e8a78ef1346?s=42&d=https://www.mypicture.com/Hello%20World");
         }
+
+        [Fact]
+        public static void GetDisplayName_Throws_If_Value_Is_Null()
+        {
+            Assert.Throws<ArgumentNullException>(() => ClaimsPrincipalExtensions.GetDisplayName(null)).ParamName.ShouldBe("value");
+        }
+
+        [Fact]
+        public static void GetDisplayName_Returns_Correct_Value_If_No_GivenName_Or_Name()
+        {
+            // Arrange
+            var principal = new ClaimsPrincipal();
+
+            // Act
+            string actual = principal.GetDisplayName();
+
+            // Assert
+            actual.ShouldBe(string.Empty);
+        }
+
+        [Theory]
+        [InlineData("martin costello", "martin")]
+        [InlineData("m costello", "m")]
+        public static void GetDisplayName_Returns_Correct_Value_If_No_GivenName_But_Name(string name, string expected)
+        {
+            // Arrange
+            var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, name) });
+            var principal = new ClaimsPrincipal(identity);
+
+            // Act
+            string actual = principal.GetDisplayName();
+
+            // Assert
+            actual.ShouldBe(expected);
+        }
+
+        [Theory]
+        [InlineData("  martin costello  ", "martin")]
+        [InlineData("  m  costello  ", "m")]
+        public static void GetDisplayName_Returns_Correct_Value_If_Blank_GivenName_But_Name(string name, string expected)
+        {
+            // Arrange
+            var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, name), new Claim(ClaimTypes.GivenName, string.Empty) });
+            var principal = new ClaimsPrincipal(identity);
+
+            // Act
+            string actual = principal.GetDisplayName();
+
+            // Assert
+            actual.ShouldBe(expected);
+        }
+
+        [Theory]
+        [InlineData("martin ", "martin")]
+        [InlineData(" Martin", "Martin")]
+        public static void GetDisplayName_Returns_Correct_Value_If_GivenName(string givenName, string expected)
+        {
+            // Arrange
+            var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.GivenName, givenName) });
+            var principal = new ClaimsPrincipal(identity);
+
+            // Act
+            string actual = principal.GetDisplayName();
+
+            // Assert
+            actual.ShouldBe(expected);
+        }
     }
 }

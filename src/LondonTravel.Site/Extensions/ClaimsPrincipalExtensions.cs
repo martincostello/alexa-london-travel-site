@@ -5,6 +5,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
 {
     using System;
     using System.Globalization;
+    using System.Linq;
     using System.Security.Claims;
     using System.Text;
 
@@ -13,6 +14,11 @@ namespace MartinCostello.LondonTravel.Site.Extensions
     /// </summary>
     public static class ClaimsPrincipalExtensions
     {
+        /// <summary>
+        /// An array containing the space character. This field is read-only.
+        /// </summary>
+        private static readonly char[] Space = new[] { ' ' };
+
         /// <summary>
         /// Gets the URL of the avatar image to use for the specified claims principal.
         /// </summary>
@@ -58,6 +64,42 @@ namespace MartinCostello.LondonTravel.Site.Extensions
             string escapedFallback = Uri.EscapeUriString(fallbackImageUrl);
 
             return FormattableString.Invariant($"https://www.gravatar.com/avatar/{hashString}?s={size}&d={escapedFallback}");
+        }
+
+        /// <summary>
+        /// Gets the display name to use for the specified claims principal.
+        /// </summary>
+        /// <param name="value">The user to get the display name for.</param>
+        /// <returns>
+        /// The display name to use for the specified user.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="value"/> is <see langword="null"/>.
+        /// </exception>
+        public static string GetDisplayName(this ClaimsPrincipal value)
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
+            string name = value.FindFirst(ClaimTypes.GivenName)?.Value;
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                return name.Trim();
+            }
+
+            name = value.FindFirst(ClaimTypes.Name)?.Value;
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                name = name.Trim()
+                    .Split(Space, StringSplitOptions.RemoveEmptyEntries)
+                    .FirstOrDefault();
+            }
+
+            return name ?? string.Empty;
         }
 
         /// <summary>
