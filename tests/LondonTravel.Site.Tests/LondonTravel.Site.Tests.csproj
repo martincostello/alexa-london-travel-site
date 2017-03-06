@@ -3,6 +3,7 @@
   <PropertyGroup>
     <Description>Tests for https://londontravel.martincostello.com/</Description>
     <PreserveCompilationContext>true</PreserveCompilationContext>
+    <RootNamespace>MartinCostello.LondonTravel.Site</RootNamespace>
     <Summary>Tests for the London Travel website</Summary>
     <TargetFramework>netcoreapp1.1</TargetFramework>
   </PropertyGroup>

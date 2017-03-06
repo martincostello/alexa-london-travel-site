@@ -5,6 +5,7 @@
     <OutputType>Exe</OutputType>
     <PackageTargetFallback>$(PackageTargetFallback);dotnet5.6;portable-net45+win8</PackageTargetFallback>
     <PreserveCompilationContext>true</PreserveCompilationContext>
+    <RootNamespace>MartinCostello.LondonTravel.Site</RootNamespace>
     <Summary>Website for the London Travel Amazon Alexa skill.</Summary>
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <UserSecretsId>londontravel.martincostello.com</UserSecretsId>
