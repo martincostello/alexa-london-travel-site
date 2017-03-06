@@ -55,7 +55,6 @@
                     <li><a id="link-nav-sign-in" href="#" rel="nofollow" title="Sign in or register">Sign in/register</a></li>
                 }
                 <li><a id="link-nav-install" href="@Options?.ExternalLinks?.Skill" rel="noopener" target="_blank" title="Install London Travel for Amazon Alexa from amazon.co.uk">Install <i class="fa fa-external-link" aria-hidden="true"></i></a></li>
-                <li class="divider" role="separator"></li>
                 @if (isAuthenticated)
                 {
                     <li><a id="link-nav-account" href="#" rel="noopener" title="Manage your London Travel account">My account <i class="fa fa-cog" aria-hidden="true"></i></a></li>
@@ -63,7 +62,6 @@
                 <li><a id="link-nav-privacy" asp-route="PrivacyPolicy" title="View the London Travel Alexa skill's privacy policy">Privacy Policy <i class="fa fa-gavel" aria-hidden="true"></i></a></li>
                 @if (isAuthenticated)
                 {
-                    <li class="divider" role="separator"></li>
                     <li><a id="link-nav-sign-out" href="#" title="Sign out of London Travel">Sign out <i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
                 }
             </ul>
