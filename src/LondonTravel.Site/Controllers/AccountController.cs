@@ -3,6 +3,7 @@
 
 namespace MartinCostello.LondonTravel.Site.Controllers
 {
+    using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
     using MartinCostello.LondonTravel.Site.Identity;
@@ -206,9 +207,12 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                     return RedirectToLocal(returnUrl);
                 }
 
+                bool isUserAlreadyRegistered = identityResult.Errors.Any((p) => p.Code.StartsWith("Duplicate"));
+
                 AddErrors(identityResult);
 
-                ViewData["ReturnUrl"] = returnUrl;
+                ViewBag.IsAlreadyRegistered = isUserAlreadyRegistered;
+                ViewData["ReturnUrl"] = returnUrl ?? (isUserAlreadyRegistered ? Url.RouteUrl("Manage") : string.Empty);
 
                 return View("SignIn");
             }
@@ -218,6 +222,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         {
             foreach (var error in result.Errors)
             {
+                _logger?.LogWarning($"{error.Code}: {error.Description}");
                 ModelState.AddModelError(string.Empty, error.Description);
             }
         }
