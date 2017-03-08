@@ -3,6 +3,7 @@
 
 namespace MartinCostello.LondonTravel.Site.Extensions
 {
+    using MartinCostello.LondonTravel.Site.Identity.Amazon;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
@@ -46,6 +47,11 @@ namespace MartinCostello.LondonTravel.Site.Extensions
                 app.UseIdentity();
 
                 ExternalSignInOptions provider;
+
+                if (TryGetProvider("Amazon", options, out provider))
+                {
+                    app.UseAmazonAuthentication(new AmazonOptions() { ClientId = provider.ClientId, ClientSecret = provider.ClientSecret });
+                }
 
                 if (TryGetProvider("Facebook", options, out provider))
                 {

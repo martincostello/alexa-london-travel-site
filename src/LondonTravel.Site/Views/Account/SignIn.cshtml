@@ -42,6 +42,7 @@ else if (ViewBag.IsAlreadyRegistered == true)
                         @{
                             IDictionary<string, string> iconMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
                             {
+                                { "Amazon", "amazon" },
                                 { "Facebook", "facebook" },
                                 { "Google", "google" },
                                 { "Microsoft", "windows" },
@@ -50,8 +51,16 @@ else if (ViewBag.IsAlreadyRegistered == true)
                         }
                         @foreach (var provider in SignInManager.GetExternalAuthenticationSchemes().OrderBy((p) => p.DisplayName).ThenBy((p) => p.AuthenticationScheme))
                         {
+                            string iconClass = string.Empty;
+                            string modifier;
+
+                            if (iconMap.TryGetValue(provider.AuthenticationScheme, out modifier))
+                            {
+                                iconClass = $"fa-{modifier}";
+                            }
+
                             <button type="submit" class="btn btn-block btn-social btn-@provider.AuthenticationScheme.ToLowerInvariant()" name="provider" value="@provider.AuthenticationScheme" title="Sign in using your @provider.DisplayName account">
-                                <i class="fa fa-@iconMap[provider.AuthenticationScheme]"></i> Sign in using your @provider.DisplayName account
+                                <i class="fa @iconClass"></i> Sign in using your @provider.DisplayName account
                             </button>
                         }
                     </p>
