@@ -82,9 +82,25 @@ namespace MartinCostello.LondonTravel.Site.Identity
         }
 
         /// <inheritdoc />
-        public Task<IdentityResult> DeleteAsync(LondonTravelUser user, CancellationToken cancellationToken)
+        public async Task<IdentityResult> DeleteAsync(LondonTravelUser user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            ThrowIfDisposed();
+
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            if (string.IsNullOrEmpty(user.Id))
+            {
+                throw new ArgumentException("No user Id specified.", nameof(user));
+            }
+
+            bool deleted = await _client.DeleteAsync(user.Id);
+
+            return deleted ?
+                IdentityResult.Success :
+                IdentityResult.Failed(new IdentityError() { Code = "UserNotFound", Description = $"User with Id '{user.Id}' does not exist." });
         }
 
         /// <inheritdoc />
