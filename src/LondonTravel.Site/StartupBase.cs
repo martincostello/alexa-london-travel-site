@@ -110,7 +110,7 @@ namespace MartinCostello.LondonTravel.Site
 
             app.UseHttpMethodOverride();
 
-            ConfigureIdentity(app, options.Value);
+            app.UseIdentity(options.Value);
 
             app.UseMvc(
                 (routes) =>
@@ -253,53 +253,6 @@ namespace MartinCostello.LondonTravel.Site
                         builder.WithOrigins(siteOptions?.Api?.Cors?.Origins ?? Array.Empty<string>());
                     }
                 });
-        }
-
-        /// <summary>
-        /// Configures identity for the application.
-        /// </summary>
-        /// <param name="app">The <see cref="IApplicationBuilder"/> to configure.</param>
-        /// <param name="options">The current site configuration.</param>
-        private void ConfigureIdentity(IApplicationBuilder app, SiteOptions options)
-        {
-            if (options?.Authentication?.IsEnabled == true)
-            {
-                app.UseIdentity();
-
-                ExternalSignInOptions provider = null;
-
-                if (options?.Authentication?.ExternalProviders?.TryGetValue("Facebook", out provider) == true &&
-                    provider?.IsEnabled == true &&
-                    !string.IsNullOrEmpty(provider?.ClientId) &&
-                    !string.IsNullOrEmpty(provider?.ClientSecret))
-                {
-                    app.UseFacebookAuthentication(new FacebookOptions() { ClientId = provider.ClientId, ClientSecret = provider.ClientSecret });
-                }
-
-                if (options?.Authentication?.ExternalProviders?.TryGetValue("Google", out provider) == true &&
-                    provider?.IsEnabled == true &&
-                    !string.IsNullOrEmpty(provider?.ClientId) &&
-                    !string.IsNullOrEmpty(provider?.ClientSecret))
-                {
-                    app.UseGoogleAuthentication(new GoogleOptions() { ClientId = provider.ClientId, ClientSecret = provider.ClientSecret });
-                }
-
-                if (options?.Authentication?.ExternalProviders?.TryGetValue("Microsoft", out provider) == true &&
-                    provider?.IsEnabled == true &&
-                    !string.IsNullOrEmpty(provider?.ClientId) &&
-                    !string.IsNullOrEmpty(provider?.ClientSecret))
-                {
-                    app.UseMicrosoftAccountAuthentication(new MicrosoftAccountOptions() { ClientId = provider.ClientId, ClientSecret = provider.ClientSecret });
-                }
-
-                if (options?.Authentication?.ExternalProviders?.TryGetValue("Twitter", out provider) == true &&
-                    provider?.IsEnabled == true &&
-                    !string.IsNullOrEmpty(provider?.ClientId) &&
-                    !string.IsNullOrEmpty(provider?.ClientSecret))
-                {
-                    app.UseTwitterAuthentication(new TwitterOptions() { ConsumerKey = provider.ClientId, ConsumerSecret = provider.ClientSecret, RetrieveUserDetails = true });
-                }
-            }
         }
 
         /// <summary>
