@@ -25,6 +25,29 @@ namespace MartinCostello.LondonTravel.Site.Services
         Task<string> CreateAsync(object document);
 
         /// <summary>
+        /// Deletes the document with the specified Id as an asynchronous operation.
+        /// </summary>
+        /// <param name="id">The Id of the document to delete.</param>
+        /// <returns>
+        /// A <see cref="Task{TResult}"/> representing the asynchronous operation to delete the
+        /// document with the specified Id which returns <see langword="true"/> if the document
+        /// was deleted or <see langword="false"/> if not found.
+        /// </returns>
+        Task<bool> DeleteAsync(string id);
+
+        /// <summary>
+        /// Gets the document with the specified Id as an asynchronous operation.
+        /// </summary>
+        /// <typeparam name="T">The type of the document to return.</typeparam>
+        /// <param name="id">The Id of the document to retrieve.</param>
+        /// <returns>
+        /// A <see cref="Task{TResult}"/> representing the asynchronous operation to get the
+        /// document with the specified Id of the specified type or <see langword="null"/> if not found.
+        /// </returns>
+        Task<T> GetAsync<T>(string id)
+            where T : class;
+
+        /// <summary>
         /// Gets any documents that match the specified predicate as an asynchronous operation.
         /// </summary>
         /// <typeparam name="T">The type of the documents to return.</typeparam>

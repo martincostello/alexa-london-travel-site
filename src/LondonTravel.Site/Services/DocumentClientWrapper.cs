@@ -7,6 +7,7 @@ namespace MartinCostello.LondonTravel.Site.Services
     using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
+    using System.Net;
     using System.Threading;
     using System.Threading.Tasks;
     using MartinCostello.LondonTravel.Site.Options;
@@ -119,6 +120,52 @@ namespace MartinCostello.LondonTravel.Site.Services
         }
 
         /// <inheritdoc />
+        public async Task<bool> DeleteAsync(string id)
+        {
+            await EnsureCollectionExistsAsync();
+
+            try
+            {
+                await _client.DeleteDocumentAsync(BuildDocumentUri(id));
+                return true;
+            }
+            catch (DocumentClientException ex)
+            {
+                if (ex.StatusCode != HttpStatusCode.NotFound)
+                {
+                    _logger?.LogError(default(EventId), ex, $"Failed to delete document with Id '{id}'.");
+                    throw;
+                }
+
+                return false;
+            }
+        }
+
+        /// <inheritdoc />
+        public async Task<T> GetAsync<T>(string id)
+            where T : class
+        {
+            await EnsureCollectionExistsAsync();
+            T result = null;
+
+            try
+            {
+                Document document = await _client.ReadDocumentAsync(BuildDocumentUri(id));
+                return (T)(dynamic)document;
+            }
+            catch (DocumentClientException ex)
+            {
+                if (ex.StatusCode != HttpStatusCode.NotFound)
+                {
+                    _logger?.LogError(default(EventId), ex, $"Failed to query document with Id '{id}'.");
+                    throw;
+                }
+            }
+
+            return result;
+        }
+
+        /// <inheritdoc />
         public async Task<IEnumerable<T>> GetAsync<T>(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken)
             where T : class
         {
@@ -217,7 +264,7 @@ namespace MartinCostello.LondonTravel.Site.Services
             }
             catch (DocumentClientException ex)
             {
-                if (ex.StatusCode != System.Net.HttpStatusCode.NotFound)
+                if (ex.StatusCode != HttpStatusCode.NotFound)
                 {
                     _logger?.LogError(default(EventId), ex, $"Failed to read collection '{_collectionName}' in database '{_databaseName}'.");
                     throw;
