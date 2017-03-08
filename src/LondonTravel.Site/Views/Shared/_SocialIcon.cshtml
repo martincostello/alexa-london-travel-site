@@ -1,0 +1,21 @@
+﻿@model string
+@{
+    IDictionary<string, string> iconMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+    {
+        { "Amazon", "amazon" },
+        { "Facebook", "facebook" },
+        { "GitHub", "github" },
+        { "Google", "google" },
+        { "Microsoft", "windows" },
+        { "Twitter", "twitter" },
+    };
+
+    string iconClass = string.Empty;
+    string modifier;
+
+    if (iconMap.TryGetValue(Model, out modifier))
+    {
+        iconClass = $"fa-{modifier}";
+    }
+}
+<i class="fa @iconClass" aria-hidden="true"></i>

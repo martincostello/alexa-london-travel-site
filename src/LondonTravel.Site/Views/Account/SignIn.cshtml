@@ -39,30 +39,9 @@ else if (ViewBag.IsAlreadyRegistered == true)
             <form asp-route="ExternalSignIn" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
                 <div>
                     <p>
-                        @{
-                            IDictionary<string, string> iconMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-                            {
-                                { "Amazon", "amazon" },
-                                { "Facebook", "facebook" },
-                                { "GitHub", "github" },
-                                { "Google", "google" },
-                                { "Microsoft", "windows" },
-                                { "Twitter", "twitter" },
-                            };
-                        }
                         @foreach (var provider in SignInManager.GetExternalAuthenticationSchemes().OrderBy((p) => p.DisplayName).ThenBy((p) => p.AuthenticationScheme))
                         {
-                            string iconClass = string.Empty;
-                            string modifier;
-
-                            if (iconMap.TryGetValue(provider.AuthenticationScheme, out modifier))
-                            {
-                                iconClass = $"fa-{modifier}";
-                            }
-
-                            <button type="submit" class="btn btn-block btn-social btn-@provider.AuthenticationScheme.ToLowerInvariant()" name="provider" value="@provider.AuthenticationScheme" title="Sign in using your @provider.DisplayName account">
-                                <i class="fa @iconClass"></i> Sign in using your @provider.DisplayName account
-                            </button>
+                            @await Html.PartialAsync("_SocialButton", provider)
                         }
                     </p>
                 </div>
@@ -88,5 +67,5 @@ else if (ViewBag.IsAlreadyRegistered == true)
     </div>
 </div>
 @section stylesBody {
-    <link rel="stylesheet" href="~/lib/bootstrap-social/bootstrap-social.css" asp-append-version="true" async />
+    @await Html.PartialAsync("_SocialButtonsScripts")
 }

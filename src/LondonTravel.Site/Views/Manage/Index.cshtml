@@ -1,19 +1,8 @@
 ﻿@model ManageViewModel
-@using Microsoft.AspNetCore.Http.Authentication
 @{
     ViewBag.MetaDescription = "Manage your account details for the London Travel skill.";
     ViewBag.MetaRobots = "NOINDEX";
     ViewBag.Title = "Manage your account";
-
-    IDictionary<string, string> iconMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-    {
-        { "Amazon", "amazon" },
-        { "Facebook", "facebook" },
-        { "GitHub", "github" },
-        { "Google", "google" },
-        { "Microsoft", "windows" },
-        { "Twitter", "twitter" },
-    };
 }
 <h2>@ViewBag.Title</h2>
 
@@ -21,21 +10,16 @@
 
 <div class="row">
     <div class="col-md-8">
-        <h4>Registered Accounts</h4>
+        <h4>Linked Accounts</h4>
         <table class="table">
             <tbody>
                 @foreach (var provider in Model.CurrentLogins.OrderBy((p) => p.ProviderDisplayName).ThenBy((p) => p.LoginProvider))
                 {
-                    string iconClass = string.Empty;
-                    string modifier;
-
-                    if (iconMap.TryGetValue(provider.LoginProvider, out modifier))
-                    {
-                        iconClass = $"fa-{modifier}";
-                    }
-
                     <tr>
-                        <td><i class="fa @iconClass"></i> @provider.LoginProvider</td>
+                        <td>
+                            @await Html.PartialAsync("_SocialIcon", provider.LoginProvider)
+                            @provider.LoginProvider
+                        </td>
                         <td>
                             @if (ViewBag.ShowRemoveButton == true)
                             {
@@ -50,7 +34,7 @@
                             else
                             {
                                 @: &nbsp;
-                    }
+                            }
                         </td>
                     </tr>
                 }
@@ -60,24 +44,14 @@
     <div class="col-md-4">
         @if (Model.OtherLogins.Count > 0)
         {
-            <h4>Add another external service to sign in.</h4>
+            <h4>Link another account</h4>
             <hr />
             <form asp-route="LinkAccount" method="post" class="form-horizontal">
                 <div>
                     <p>
                         @foreach (var provider in Model.OtherLogins.OrderBy((p) => p.DisplayName).ThenBy((p) => p.AuthenticationScheme))
                         {
-                            string iconClass = string.Empty;
-                            string modifier;
-
-                            if (iconMap.TryGetValue(provider.AuthenticationScheme, out modifier))
-                            {
-                                iconClass = $"fa-{modifier}";
-                            }
-
-                            <button type="submit" class="btn btn-block btn-social btn-@provider.AuthenticationScheme.ToLowerInvariant()" name="provider" value="@provider.AuthenticationScheme" title="Sign in using your @provider.DisplayName account">
-                                <i class="fa @iconClass"></i> Sign in using your @provider.DisplayName account
-                            </button>
+                            @await Html.PartialAsync("_SocialButton", provider)
                         }
                     </p>
                 </div>
@@ -88,6 +62,6 @@
 @if (Model.OtherLogins.Count > 0)
 {
     @section stylesBody {
-        <link rel="stylesheet" href="~/lib/bootstrap-social/bootstrap-social.css" asp-append-version="true" async />
+        @await Html.PartialAsync("_SocialButtonsScripts")
     }
 }
