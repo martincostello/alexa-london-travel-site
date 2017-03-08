@@ -3,6 +3,7 @@
 
 namespace MartinCostello.LondonTravel.Site.Integration
 {
+    using System;
     using System.Net;
     using System.Threading.Tasks;
     using Xunit;
@@ -52,12 +53,13 @@ namespace MartinCostello.LondonTravel.Site.Integration
         }
 
         [Theory]
-        [InlineData("/manage/", Skip = "Identity is not full implemented yet.")]
+        [InlineData("/manage/")]
         public async Task Cannot_Load_Resource_Unauthenticated(string requestUri)
         {
             using (var response = await Fixture.Client.GetAsync(requestUri))
             {
-                Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+                Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+                Assert.Equal($"/account/sign-in/?ReturnUrl={Uri.EscapeDataString(requestUri)}", response.Headers.Location?.PathAndQuery);
             }
         }
 

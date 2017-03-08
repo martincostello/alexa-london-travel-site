@@ -268,7 +268,7 @@ namespace MartinCostello.LondonTravel.Site
 
                 ExternalSignInOptions provider = null;
 
-                if (options?.Authentication?.ExternalProviders.TryGetValue("Google", out provider) == true &&
+                if (options?.Authentication?.ExternalProviders?.TryGetValue("Google", out provider) == true &&
                     provider?.IsEnabled == true &&
                     !string.IsNullOrEmpty(provider?.ClientId) &&
                     !string.IsNullOrEmpty(provider?.ClientSecret))
@@ -276,7 +276,7 @@ namespace MartinCostello.LondonTravel.Site
                     app.UseGoogleAuthentication(new GoogleOptions() { ClientId = provider.ClientId, ClientSecret = provider.ClientSecret });
                 }
 
-                if (options?.Authentication?.ExternalProviders.TryGetValue("Microsoft", out provider) == true &&
+                if (options?.Authentication?.ExternalProviders?.TryGetValue("Microsoft", out provider) == true &&
                     provider?.IsEnabled == true &&
                     !string.IsNullOrEmpty(provider?.ClientId) &&
                     !string.IsNullOrEmpty(provider?.ClientSecret))
@@ -284,7 +284,7 @@ namespace MartinCostello.LondonTravel.Site
                     app.UseMicrosoftAccountAuthentication(new MicrosoftAccountOptions() { ClientId = provider.ClientId, ClientSecret = provider.ClientSecret });
                 }
 
-                if (options?.Authentication?.ExternalProviders.TryGetValue("Twitter", out provider) == true &&
+                if (options?.Authentication?.ExternalProviders?.TryGetValue("Twitter", out provider) == true &&
                     provider?.IsEnabled == true &&
                     !string.IsNullOrEmpty(provider?.ClientId) &&
                     !string.IsNullOrEmpty(provider?.ClientSecret))

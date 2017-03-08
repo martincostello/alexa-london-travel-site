@@ -11,6 +11,17 @@
     "Analytics": {
       "Google": "UA-42907618-7"
     },
+    "Authentication": {
+      "IsEnabled": true,
+      "ExternalProviders": {
+      },
+      "UserStore": {
+        "ServiceUri": "http://localhost/",
+        "AccessKey": "2jmj7l5rSw0yVb/vlWAYkK/YBwk=",
+        "DatabaseName": "LondonTravel",
+        "CollectionName": "Users_Tests"
+      }
+    },
     "ContentSecurityPolicyOrigins": {},
     "ExternalLinks": {
       "Api": "/",
