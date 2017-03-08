@@ -268,6 +268,14 @@ namespace MartinCostello.LondonTravel.Site
 
                 ExternalSignInOptions provider = null;
 
+                if (options?.Authentication?.ExternalProviders?.TryGetValue("Facebook", out provider) == true &&
+                    provider?.IsEnabled == true &&
+                    !string.IsNullOrEmpty(provider?.ClientId) &&
+                    !string.IsNullOrEmpty(provider?.ClientSecret))
+                {
+                    app.UseFacebookAuthentication(new FacebookOptions() { ClientId = provider.ClientId, ClientSecret = provider.ClientSecret });
+                }
+
                 if (options?.Authentication?.ExternalProviders?.TryGetValue("Google", out provider) == true &&
                     provider?.IsEnabled == true &&
                     !string.IsNullOrEmpty(provider?.ClientId) &&
