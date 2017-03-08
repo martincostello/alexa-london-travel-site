@@ -5,7 +5,18 @@
     ViewBag.Title = "Sign in";
 }
 <h2>@ViewBag.Title</h2>
-@if (ViewBag.IsAlreadyRegistered == true)
+@if (ViewBag.PermissionDenied == true)
+{
+    <div class="alert alert-warning" role="alert">
+        <p>
+            You did not grant permission for London Travel to access your email address when you signed in.
+        </p>
+        <p>
+            An email address is required to set up an account when signing in with an external service.
+        </p>
+    </div>
+}
+else if (ViewBag.IsAlreadyRegistered == true)
 {
     <div class="alert alert-warning" role="alert">
         <p>

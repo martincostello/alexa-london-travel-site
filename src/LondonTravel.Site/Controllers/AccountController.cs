@@ -182,6 +182,15 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             else
             {
                 var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+
+                if (string.IsNullOrEmpty(email))
+                {
+                    ViewBag.PermissionDenied = true;
+                    ViewData["ReturnUrl"] = returnUrl;
+
+                    return View("SignIn");
+                }
+
                 var givenName = info.Principal.FindFirstValue(ClaimTypes.GivenName);
                 var surname = info.Principal.FindFirstValue(ClaimTypes.Surname);
 
