@@ -30,6 +30,15 @@
                             </a>
                         </li>
                         <li role="separator" class="divider"></li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li>
+                                <a asp-route="Manage" title="Manage your account">
+                                    Manage account <i class="fa fa-user" aria-hidden="true"></i>
+                                </a>
+                            </li>
+                            <li role="separator" class="divider"></li>
+                        }
                         <li>
                             <a asp-route="PrivacyPolicy" title="View the London Travel Alexa skill's Privacy Policy">
                                 Privacy Policy
