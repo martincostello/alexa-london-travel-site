@@ -4,6 +4,7 @@
 namespace MartinCostello.LondonTravel.Site.Extensions
 {
     using MartinCostello.LondonTravel.Site.Identity.Amazon;
+    using MartinCostello.LondonTravel.Site.Identity.GitHub;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
@@ -61,6 +62,11 @@ namespace MartinCostello.LondonTravel.Site.Extensions
                 if (TryGetProvider("Google", options, out provider))
                 {
                     app.UseGoogleAuthentication(new GoogleOptions() { ClientId = provider.ClientId, ClientSecret = provider.ClientSecret });
+                }
+
+                if (TryGetProvider("GitHub", options, out provider))
+                {
+                    app.UseGitHubAuthentication(new GitHubOptions() { ClientId = provider.ClientId, ClientSecret = provider.ClientSecret });
                 }
 
                 if (TryGetProvider("Microsoft", options, out provider))
