@@ -283,6 +283,14 @@ namespace MartinCostello.LondonTravel.Site
                 {
                     app.UseMicrosoftAccountAuthentication(new MicrosoftAccountOptions() { ClientId = provider.ClientId, ClientSecret = provider.ClientSecret });
                 }
+
+                if (options?.Authentication?.ExternalProviders.TryGetValue("Twitter", out provider) == true &&
+                    provider?.IsEnabled == true &&
+                    !string.IsNullOrEmpty(provider?.ClientId) &&
+                    !string.IsNullOrEmpty(provider?.ClientSecret))
+                {
+                    app.UseTwitterAuthentication(new TwitterOptions() { ConsumerKey = provider.ClientId, ConsumerSecret = provider.ClientSecret, RetrieveUserDetails = true });
+                }
             }
         }
 
