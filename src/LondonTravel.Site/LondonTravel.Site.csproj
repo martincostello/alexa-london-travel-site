@@ -25,6 +25,7 @@
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="1.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.CookiePolicy" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.HttpOverrides" Version="1.1.0" />
