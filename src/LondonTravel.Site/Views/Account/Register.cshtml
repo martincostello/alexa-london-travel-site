@@ -1,10 +1,8 @@
 ﻿@inject Microsoft.AspNetCore.Identity.SignInManager<LondonTravelUser> SignInManager
 @{
-    ViewBag.MetaDescription = "Register a London Travel account.";
-    ViewBag.MetaRobots = "NOINDEX";
-    ViewBag.Title = "Sign in";
+    ViewBag.MetaDescription = "Register for a London Travel account.";
+    ViewBag.Title = "Register";
 }
-<h2>@ViewBag.Title</h2>
 @if (ViewBag.PermissionDenied == true)
 {
     <div class="alert alert-danger" role="alert">
@@ -20,39 +18,33 @@ else if (ViewBag.IsAlreadyRegistered == true)
 {
     <div class="alert alert-warning" role="alert">
         <p>
-            You have already created a London Travel account by signing in with a different
-            external service to the one you just tried to sign in with.
+            You have already created a London Travel account by signing in with a
+            different service to the one you just tried to sign in with.
         </p>
         <p>
-            Sign in with one of the external service(s) you've already used to sign-in,
-            then you'll be able to link other external services to your account
-            from the <a asp-route="Manage" class="alert-link">account mangement</a>
-            page after you've signed in.
+            Sign in with one of the service(s) you've already used to sign-in,
+            then you'll be able to link other service(s) to your account
+            from the <a asp-route="Manage" class="alert-link">account mangement</a> page.
         </p>
     </div>
 }
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
         <section>
-            <h4>Choose an external service to sign in with</h4>
-            <hr />
-            <form asp-route="ExternalSignIn" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
-                <div>
-                    <p>
-                        @foreach (var provider in SignInManager.GetExternalAuthenticationSchemes().OrderBy((p) => p.DisplayName).ThenBy((p) => p.AuthenticationScheme))
-                        {
-                            @await Html.PartialAsync("_SocialButton", provider)
-                        }
-                    </p>
-                </div>
-            </form>
-        </section>
-    </div>
-    <div class="col-md-8">
-        <section>
-            <h3>Create an account</h3>
-            <p>If you do not already have a London Travel account, one will be created for you automatically once you've signed in.</p>
-            <p>The London Travel account created will use with email address associated with the external service you sign in with.</p>
+            <h2>Register for an account</h2>
+            <p class="lead">
+                Registering for an account for the London Travel skill allows you to save
+                your tube line and station preferences so that you can ask about your commute.
+            </p>
+            <blockquote>
+                <p><i>&quot;Alexa, ask London Travel what my commute's like today?&quot;</i></p>
+            </blockquote>
+            <p>
+                If you do not already have a London Travel account, you can create one by signing in with one of the services below.
+            </p>
+            <p>
+                The London Travel account created will use with email address associated with the service you sign in with.
+            </p>
             <p>
                 Accounts and their data are managed by this service in line with the
                 <a asp-route="PrivacyPolicy" rel="noopener" title="View the London Travel Alexa skill's Privacy Policy">
@@ -63,6 +55,26 @@ else if (ViewBag.IsAlreadyRegistered == true)
                     Terms of Service
                 </a>.
             </p>
+        </section>
+    </div>
+</div>
+<hr />
+<h4>
+    Choose a service to sign-in with:
+</h4>
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-4">
+        <section>
+            <form asp-route="ExternalSignIn" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+                <div>
+                    <p>
+                        @foreach (var provider in SignInManager.GetExternalAuthenticationSchemes().OrderBy((p) => p.DisplayName).ThenBy((p) => p.AuthenticationScheme))
+                        {
+                            @await Html.PartialAsync("_SocialButton", provider)
+                        }
+                    </p>
+                </div>
+            </form>
         </section>
     </div>
 </div>

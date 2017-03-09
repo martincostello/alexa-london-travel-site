@@ -7,12 +7,12 @@
 <h2>@ViewBag.Title</h2>
 @if (ViewBag.PermissionDenied == true)
 {
-    <div class="alert alert-warning" role="alert">
+    <div class="alert alert-danger" role="alert">
         <p>
             You did not grant permission for London Travel to access your email address when you signed in.
         </p>
         <p>
-            An email address is required to set up an account when signing in with an external service.
+            An email address is required to register.
         </p>
     </div>
 }
@@ -20,21 +20,20 @@ else if (ViewBag.IsAlreadyRegistered == true)
 {
     <div class="alert alert-warning" role="alert">
         <p>
-            You have already created a London Travel account by signing in with a different
-            external service to the one you just tried to sign in with.
+            You have already created a London Travel account by signing in with a
+            different service to the one you just tried to sign in with.
         </p>
         <p>
-            Sign in with one of the external service(s) you've already used to sign-in,
-            then you'll be able to link other external services to your account
-            from the <a asp-route="Manage" class="alert-link">account mangement</a>
-            page after you've signed in.
+            Sign in with one of the service(s) you've already used to sign-in,
+            then you'll be able to link other service(s) to your account
+            from the <a asp-route="Manage" class="alert-link">account mangement</a> page.
         </p>
     </div>
 }
 <div class="row">
     <div class="col-md-4">
         <section>
-            <h4>Choose an external service to sign in with</h4>
+            <h4>Choose a service to sign in with:</h4>
             <hr />
             <form asp-route="ExternalSignIn" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
                 <div>
@@ -48,11 +47,12 @@ else if (ViewBag.IsAlreadyRegistered == true)
             </form>
         </section>
     </div>
+    <hr class="hidden-md hidden-lg" />
     <div class="col-md-8">
         <section>
-            <h3>...or create a new account</h3>
+            <h3>...or register a new account</h3>
             <p>
-                If you do not already have a London Travel account, create one <a asp-route="Register" title="Register for a London Travel account">here</a>.
+                If you do not already have a London Travel account, register for one <a asp-route="Register" title="Register for a London Travel account">here</a>.
             </p>
             <p>
                 <a class="btn btn-primary" asp-route="Register" title="Register for a London Travel account">Register <i class="fa fa-user-plus" aria-hidden="true"></i></a>
