@@ -1,24 +1,5 @@
 ﻿@model Microsoft.AspNetCore.Http.Authentication.AuthenticationDescription
-@{
-    IDictionary<string, string> iconMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-    {
-        { "Amazon", "amazon" },
-        { "Facebook", "facebook" },
-        { "GitHub", "github" },
-        { "Google", "google" },
-        { "Microsoft", "windows" },
-        { "Twitter", "twitter" },
-    };
-
-    string iconClass = string.Empty;
-    string modifier;
-
-    if (iconMap.TryGetValue(Model.AuthenticationScheme, out modifier))
-    {
-        iconClass = $"fa-{modifier}";
-    }
-}
-<button type="submit" class="btn btn-block btn-social btn-@Model.AuthenticationScheme.ToLowerInvariant()" name="provider" value="@Model.AuthenticationScheme" title="Sign in using your @Model.DisplayName account">
+<button type="submit" class="btn btn-block btn-social @Html.GetSocialLoginButtonCss(Model.AuthenticationScheme)" name="provider" value="@Model.AuthenticationScheme" title="Sign in using your @Model.DisplayName account">
     @await Html.PartialAsync("_SocialIcon", Model.AuthenticationScheme)
     Sign in using your @Model.DisplayName account
 </button>
