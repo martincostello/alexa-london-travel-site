@@ -60,6 +60,7 @@ else if (ViewBag.IsAlreadyRegistered == true)
         </section>
     </div>
 </div>
+@await Html.PartialAsync("_SignInModal")
 @section stylesBody {
     @await Html.PartialAsync("_SocialButtonsScripts")
 }
