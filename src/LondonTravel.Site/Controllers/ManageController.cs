@@ -99,7 +99,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             if (info == null)
             {
-                return RedirectToAction(nameof(Index), new { Message = "Error" });
+                return RedirectToRoute(SiteRoutes.Manage, new { Message = "Error" });
             }
 
             var result = await _userManager.AddLoginAsync(user, info);
@@ -113,7 +113,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
             }
 
-            return RedirectToAction(nameof(Index), new { Message = message });
+            return RedirectToRoute(SiteRoutes.Manage, new { Message = message });
         }
 
         [HttpPost]
@@ -135,7 +135,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 }
             }
 
-            return RedirectToAction(nameof(Index), new { Message = message });
+            return RedirectToRoute(SiteRoutes.Manage, new { Message = message });
         }
     }
 }
