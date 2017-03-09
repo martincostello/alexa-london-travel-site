@@ -36,6 +36,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         [InlineData("/browserconfig.xml", "text/xml")]
         [InlineData("/favicon.ico", "image/x-icon")]
         [InlineData("/googled1107923138d0b79.html", "text/html")]
+        [InlineData("/help/", "text/html")]
         [InlineData("/humans.txt", "text/plain")]
         [InlineData("/keybase.txt", "text/plain")]
         [InlineData("/manifest.json", "application/json")]
@@ -43,6 +44,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         [InlineData("/robots.txt", "text/plain")]
         [InlineData("/service-worker.js", "application/javascript")]
         [InlineData("/sitemap.xml", "text/xml")]
+        [InlineData("/support/", "text/html")]
         [InlineData("/terms-of-service/", "text/html")]
         public async Task Can_Load_Resource(string requestUri, string contentType)
         {
