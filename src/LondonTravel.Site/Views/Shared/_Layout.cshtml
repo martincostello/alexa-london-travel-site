@@ -37,22 +37,7 @@
     </script>
 </head>
 <body>
-    <div class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a id="link-home" asp-controller="Home" asp-action="Index" class="navbar-brand">
-                    <lazyimg alt="London Travel" src="@Url.CdnContent("avatar.png", Options)">
-                </a>
-            </div>
-            @await Html.PartialAsync("_Navbar")
-        </div>
-    </div>
+    @await Html.PartialAsync("_Navbar")
     <div class="container body-content">
         @RenderBody()
         @await Html.PartialAsync("_Footer", Options)
