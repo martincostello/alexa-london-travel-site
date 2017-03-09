@@ -149,7 +149,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         [AllowAnonymous]
         [Route("external-sign-in-callback", Name = "ExternalSignInCallback")]
         [HttpGet]
-        public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
+        public async Task<IActionResult> ExternalSignInCallback(string returnUrl = null, string remoteError = null)
         {
             if (!_isEnabled)
             {
