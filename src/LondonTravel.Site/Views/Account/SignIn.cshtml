@@ -26,7 +26,7 @@ else if (ViewBag.IsAlreadyRegistered == true)
         <p>
             Sign in with one of the service(s) you've already used to sign-in,
             then you'll be able to link other service(s) to your account
-            from the <a asp-route="Manage" class="alert-link">account mangement</a> page.
+            from the <a asp-route="@SiteRoutes.Manage" class="alert-link">account mangement</a> page.
         </p>
     </div>
 }
@@ -35,7 +35,7 @@ else if (ViewBag.IsAlreadyRegistered == true)
         <section>
             <h4>Choose a service to sign in with:</h4>
             <hr />
-            <form asp-route="ExternalSignIn" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+            <form asp-route="@SiteRoutes.ExternalSignIn" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
                 <div>
                     <p>
                         @foreach (var provider in SignInManager.GetExternalAuthenticationSchemes().OrderBy((p) => p.DisplayName).ThenBy((p) => p.AuthenticationScheme))
@@ -52,10 +52,10 @@ else if (ViewBag.IsAlreadyRegistered == true)
         <section>
             <h3>...or register a new account</h3>
             <p>
-                If you do not already have a London Travel account, register for one <a asp-route="Register" title="Register for a London Travel account">here</a>.
+                If you do not already have a London Travel account, register for one <a asp-route="@SiteRoutes.Register" title="Register for a London Travel account">here</a>.
             </p>
             <p>
-                <a class="btn btn-primary" asp-route="Register" title="Register for a London Travel account">Register <i class="fa fa-user-plus" aria-hidden="true"></i></a>
+                <a class="btn btn-primary" asp-route="@SiteRoutes.Register" title="Register for a London Travel account">Register <i class="fa fa-user-plus" aria-hidden="true"></i></a>
             </p>
         </section>
     </div>

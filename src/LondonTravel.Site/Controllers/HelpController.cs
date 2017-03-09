@@ -18,7 +18,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// The result for the <c>/help/</c> action.
         /// </returns>
         [HttpGet]
-        [Route("help", Name = "Help")]
+        [Route("help", Name = SiteRoutes.Help)]
         public IActionResult Index() => View();
 
         /// <summary>
@@ -29,6 +29,6 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// </returns>
         [HttpGet]
         [Route("support")]
-        public IActionResult Support() => RedirectToRoute("Help");
+        public IActionResult Support() => RedirectToRoute(SiteRoutes.Help);
     }
 }

@@ -9,7 +9,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     /// <summary>
     /// A class representing the controller for the <c>/privacy-policy/</c> resource.
     /// </summary>
-    [Route("privacy-policy", Name = "PrivacyPolicy")]
+    [Route("privacy-policy", Name = SiteRoutes.PrivacyPolicy)]
     public class PrivacyPolicyController : Controller
     {
         /// <summary>

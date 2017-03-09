@@ -18,7 +18,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     /// A class representing the controller for the <c>/account/</c> resource.
     /// </summary>
     [Authorize]
-    [Route("account", Name = "Account")]
+    [Route("account", Name = SiteRoutes.Account)]
     public class AccountController : Controller
     {
         private readonly UserManager<LondonTravelUser> _userManager;
@@ -51,7 +51,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// The result for the <c>/account/access-denied/</c> action.
         /// </returns>
         [HttpGet]
-        [Route("access-denied", Name = "AccessDenied")]
+        [Route("access-denied", Name = SiteRoutes.AccessDenied)]
         public IActionResult AccessDenied() => View();
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// </returns>
         [AllowAnonymous]
         [HttpGet]
-        [Route("sign-in", Name = "SignIn")]
+        [Route("sign-in", Name = SiteRoutes.SignIn)]
         public async Task<IActionResult> SignIn(string returnUrl = null)
         {
             if (!_isEnabled)
@@ -84,9 +84,9 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// The result for the <c>/account/sign-out/</c> action.
         /// </returns>
         [HttpGet]
-        [Route("sign-out", Name = "SignOut")]
+        [Route("sign-out", Name = SiteRoutes.SignOut)]
         [ValidateAntiForgeryToken]
-        public IActionResult SignOutGet() => RedirectToAction(nameof(HomeController.Index), "Home");
+        public IActionResult SignOutGet() => RedirectToRoute(SiteRoutes.Home);
 
         /// <summary>
         /// Gets the result for the POST <c>/account/sign-out/</c> action.
@@ -95,7 +95,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// The result for the <c>/account/sign-out/</c> action.
         /// </returns>
         [HttpPost]
-        [Route("sign-out", Name = "SignOut")]
+        [Route("sign-out", Name = SiteRoutes.SignOut)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SignOutPost()
         {
@@ -110,7 +110,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             _logger.LogInformation($"User '{userName}' signed out.");
 
-            return RedirectToAction(nameof(HomeController.Index), "Home");
+            return RedirectToRoute(SiteRoutes.Home);
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// </returns>
         [AllowAnonymous]
         [HttpPost]
-        [Route("external-sign-in", Name = "ExternalSignIn")]
+        [Route("external-sign-in", Name = SiteRoutes.ExternalSignIn)]
         [ValidateAntiForgeryToken]
         public IActionResult ExternalSignIn(string provider, string returnUrl = null)
         {
@@ -132,7 +132,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 return NotFound();
             }
 
-            var redirectUrl = Url.RouteUrl("ExternalSignInCallback", new { ReturnUrl = returnUrl });
+            var redirectUrl = Url.RouteUrl(SiteRoutes.ExternalSignInCallback, new { ReturnUrl = returnUrl });
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
 
             return Challenge(properties, provider);
@@ -147,7 +147,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// The result for the <c>/account/external-sign-in-callback/</c> action.
         /// </returns>
         [AllowAnonymous]
-        [Route("external-sign-in-callback", Name = "ExternalSignInCallback")]
+        [Route("external-sign-in-callback", Name = SiteRoutes.ExternalSignInCallback)]
         [HttpGet]
         public async Task<IActionResult> ExternalSignInCallback(string returnUrl = null, string remoteError = null)
         {
@@ -238,7 +238,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// </returns>
         [AllowAnonymous]
         [HttpGet]
-        [Route("register", Name = "Register")]
+        [Route("register", Name = SiteRoutes.Register)]
         public IActionResult Register() => View();
 
         private void AddErrors(IdentityResult result)
@@ -258,7 +258,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             }
             else
             {
-                return RedirectToAction(nameof(HomeController.Index), "Home");
+                return RedirectToRoute(SiteRoutes.Home);
             }
         }
     }

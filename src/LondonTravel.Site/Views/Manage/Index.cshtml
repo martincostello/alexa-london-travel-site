@@ -23,7 +23,7 @@
                         <td>
                             @if (ViewBag.ShowRemoveButton == true)
                             {
-                                <form asp-route="RemoveAccount" method="post" class="form-horizontal">
+                                <form asp-route="@SiteRoutes.RemoveAccount" method="post" class="form-horizontal">
                                     <div>
                                         <input asp-for="@provider.LoginProvider" name="LoginProvider" type="hidden" />
                                         <input asp-for="@provider.ProviderKey" name="ProviderKey" type="hidden" />
@@ -46,7 +46,7 @@
         {
             <h4>Link another account</h4>
             <hr />
-            <form asp-route="LinkAccount" method="post" class="form-horizontal">
+            <form asp-route="@SiteRoutes.LinkAccount" method="post" class="form-horizontal">
                 <div>
                     <p>
                         @foreach (var provider in Model.OtherLogins.OrderBy((p) => p.DisplayName).ThenBy((p) => p.AuthenticationScheme))

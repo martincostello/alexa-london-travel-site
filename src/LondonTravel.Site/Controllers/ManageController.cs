@@ -17,7 +17,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     /// A class representing the controller for the <c>/manage/</c> resource.
     /// </summary>
     [Authorize]
-    [Route("manage", Name = "Manage")]
+    [Route("manage", Name = SiteRoutes.Manage)]
     public class ManageController : Controller
     {
         private readonly UserManager<LondonTravelUser> _userManager;
@@ -69,13 +69,13 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         }
 
         [HttpPost]
-        [Route("link-account", Name = "LinkAccount")]
+        [Route("link-account", Name = SiteRoutes.LinkAccount)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LinkAccount(string provider)
         {
             await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
 
-            var redirectUrl = Url.RouteUrl("LinkAccountCallback");
+            var redirectUrl = Url.RouteUrl(SiteRoutes.LinkAccountCallback);
             var userId = _userManager.GetUserId(User);
 
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl, userId);
@@ -84,7 +84,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         }
 
         [HttpGet]
-        [Route("link-account-callback", Name = "LinkAccountCallback")]
+        [Route("link-account-callback", Name = SiteRoutes.LinkAccountCallback)]
         public async Task<ActionResult> LinkAccountCallback()
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
@@ -117,7 +117,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         }
 
         [HttpPost]
-        [Route("remove-account", Name = "RemoveAccount")]
+        [Route("remove-account", Name = SiteRoutes.RemoveAccount)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveAccount(RemoveExternalService account)
         {

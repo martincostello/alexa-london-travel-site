@@ -24,7 +24,7 @@ else if (ViewBag.IsAlreadyRegistered == true)
         <p>
             Sign in with one of the service(s) you've already used to sign-in,
             then you'll be able to link other service(s) to your account
-            from the <a asp-route="Manage" class="alert-link">account mangement</a> page.
+            from the <a asp-route="@SiteRoutes.Manage" class="alert-link">account mangement</a> page.
         </p>
     </div>
 }
@@ -47,11 +47,11 @@ else if (ViewBag.IsAlreadyRegistered == true)
             </p>
             <p>
                 Accounts and their data are managed by this service in line with the
-                <a asp-route="PrivacyPolicy" rel="noopener" title="View the London Travel Alexa skill's Privacy Policy">
+                <a asp-route="@SiteRoutes.PrivacyPolicy" rel="noopener" title="View the London Travel Alexa skill's Privacy Policy">
                     Privacy Policy
                 </a>
                 and
-                <a asp-route="TermsOfService" rel="noopener" title="View the London Travel Alexa skill's Terms of Service">
+                <a asp-route="@SiteRoutes.TermsOfService" rel="noopener" title="View the London Travel Alexa skill's Terms of Service">
                     Terms of Service
                 </a>.
             </p>
@@ -65,7 +65,7 @@ else if (ViewBag.IsAlreadyRegistered == true)
 <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-4">
         <section>
-            <form asp-route="ExternalSignIn" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+            <form asp-route="@SiteRoutes.ExternalSignIn" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
                 <div>
                     <p>
                         @foreach (var provider in SignInManager.GetExternalAuthenticationSchemes().OrderBy((p) => p.DisplayName).ThenBy((p) => p.AuthenticationScheme))

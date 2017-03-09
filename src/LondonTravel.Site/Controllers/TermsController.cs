@@ -9,7 +9,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     /// <summary>
     /// A class representing the controller for the <c>/terms-of-service/</c> resource.
     /// </summary>
-    [Route("terms-of-service", Name = "TermsOfService")]
+    [Route("terms-of-service", Name = SiteRoutes.TermsOfService)]
     public class TermsController : Controller
     {
         /// <summary>

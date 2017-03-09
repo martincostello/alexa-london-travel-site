@@ -3,10 +3,10 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <form asp-route="SignOut" method="post" id="signOutForm" class="navbar-right">
+    <form asp-route="@SiteRoutes.SignOut" method="post" id="signOutForm" class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
             <li>
-                <a asp-route="Manage" rel="nofollow" title="Manage your London Travel account">
+                <a asp-route="@SiteRoutes.Manage" rel="nofollow" title="Manage your London Travel account">
                     @User.GetDisplayName()
                     <lazyimg alt="@User.Identity.Name" src="@User.GetAvatarUrl(Url.CdnContent("avatar.png", Options))" aria-hidden="true" />
                 </a>
@@ -23,7 +23,7 @@
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li><a asp-route="SignIn" rel="nofollow" title="Sign in to your London Travel account">Sign in</a></li>
-        <li><a asp-route="Register" title="Register for a London Travel account">Register</a></li>
+        <li><a asp-route="@SiteRoutes.SignIn" rel="nofollow" title="Sign in to your London Travel account">Sign in</a></li>
+        <li><a asp-route="@SiteRoutes.Register" title="Register for a London Travel account">Register</a></li>
     </ul>
 }

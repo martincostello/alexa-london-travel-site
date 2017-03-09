@@ -18,6 +18,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// The result for the <c>/</c> action.
         /// </returns>
         [HttpGet]
+        [Route("", Name = SiteRoutes.Home)]
         public IActionResult Index() => View();
 
         /// <summary>
@@ -29,6 +30,6 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         [HttpGet]
         [Route("/register")]
         [Route("/sign-up")]
-        public IActionResult Register() => RedirectToRoute("Register");
+        public IActionResult Register() => RedirectToRoute(SiteRoutes.Register);
     }
 }
