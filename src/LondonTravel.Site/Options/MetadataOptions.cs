@@ -49,6 +49,11 @@ namespace MartinCostello.LondonTravel.Site.Options
         public string Robots { get; set; }
 
         /// <summary>
+        /// Gets or sets the social media options.
+        /// </summary>
+        public AuthorSocialMediaOptions SocialMedia { get; set; }
+
+        /// <summary>
         /// Gets or sets the site type.
         /// </summary>
         public string Type { get; set; }

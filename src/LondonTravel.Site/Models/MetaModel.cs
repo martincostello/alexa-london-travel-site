@@ -31,9 +31,14 @@ namespace MartinCostello.LondonTravel.Site.Models
         public string Description { get; set; }
 
         /// <summary>
+        /// Gets or sets the Facebook add Id.
+        /// </summary>
+        public string FacebookApp { get; set; }
+
+        /// <summary>
         /// Gets or sets the Facebook profile Id.
         /// </summary>
-        public string Facebook { get; set; }
+        public string FacebookProfile { get; set; }
 
         /// <summary>
         /// Gets or sets the host name.
@@ -115,7 +120,8 @@ namespace MartinCostello.LondonTravel.Site.Models
                 Bitcoin = options.Author.Bitcoin,
                 CanonicalUri = canonicalUri ?? string.Empty,
                 Description = description ?? options.Description,
-                Facebook = options.Author.SocialMedia.Facebook,
+                FacebookApp = options?.SocialMedia?.Facebook,
+                FacebookProfile = options?.Author?.SocialMedia?.Facebook,
                 HostName = options.Domain,
                 ImageUri = imageUri ?? options.Image ?? string.Empty,
                 ImageAltText = imageAltText ?? options.Name,
@@ -125,7 +131,7 @@ namespace MartinCostello.LondonTravel.Site.Models
                 SiteType = options.Type ?? "website",
                 Title = $"{title} - {options.Name}",
                 TwitterCard = "summary",
-                TwitterHandle = options.Author.SocialMedia.Twitter,
+                TwitterHandle = options?.Author?.SocialMedia?.Twitter,
             };
         }
     }
