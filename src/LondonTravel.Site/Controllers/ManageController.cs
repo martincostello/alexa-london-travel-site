@@ -22,6 +22,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     {
         private readonly UserManager<LondonTravelUser> _userManager;
         private readonly SignInManager<LondonTravelUser> _signInManager;
+        private readonly string _applicationCookieScheme;
         private readonly string _externalCookieScheme;
         private readonly ILogger<ManageController> _logger;
 
@@ -33,6 +34,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _applicationCookieScheme = identityCookieOptions.Value.ApplicationCookieAuthenticationScheme;
             _externalCookieScheme = identityCookieOptions.Value.ExternalCookieAuthenticationScheme;
             _logger = loggerFactory.CreateLogger<ManageController>();
         }
@@ -106,19 +108,27 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             if (info == null)
             {
                 _logger?.LogError($"Failed to get external login info for user '{userId}' to link account.");
-                return RedirectToRoute(SiteRoutes.Manage, new { Message = "Error" });
+                return RedirectToRoute(SiteRoutes.Manage, new { Message = SiteMessage.Error });
             }
 
+            _logger.LogInformation($"Adding login for '{info.LoginProvider}' to user '{userId}'.");
+
             var result = await _userManager.AddLoginAsync(user, info);
-            var message = "Error";
+            var message = SiteMessage.Error;
 
             if (result.Succeeded)
             {
-                message = "LinkSuccess";
+                _logger.LogInformation($"Added login for '{info.LoginProvider}' to user '{userId}'.");
+
+                message = SiteMessage.LinkSuccess;
 
                 result = await UpdateClaimsAsync(user, info);
 
-                if (!result.Succeeded)
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation($"Updated claims for user '{userId}' for provider '{info.LoginProvider}'.");
+                }
+                else
                 {
                     _logger?.LogError($"Failed to update user '{userId}' with additional role claims.");
                 }
@@ -135,25 +145,70 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         }
 
         [HttpPost]
-        [Route("remove-account", Name = SiteRoutes.RemoveAccount)]
+        [Route("remove-account-link", Name = SiteRoutes.RemoveAccountLink)]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RemoveAccount(RemoveExternalService account)
+        public async Task<IActionResult> RemoveAccountLink(RemoveExternalService account)
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            var message = "Error";
+            var message = SiteMessage.Error;
 
             if (user != null && account != null)
             {
+                _logger.LogInformation($"Removing login for '{account.LoginProvider}' from user '{user.Id}'.");
+
                 var result = await _userManager.RemoveLoginAsync(user, account.LoginProvider, account.ProviderKey);
 
                 if (result.Succeeded)
                 {
+                    _logger.LogInformation($"Removed login for '{account.LoginProvider}' from user '{user.Id}'.");
+
                     await _signInManager.SignInAsync(user, isPersistent: true);
-                    message = "RemoveSuccess";
+                    message = SiteMessage.RemoveSuccess;
+                }
+                else
+                {
+                    _logger?.LogError(
+                        $"Failed to remove external login info from user '{user.Id}' for provider '{account.LoginProvider}': {string.Join(";", result.Errors.Select((p) => $"{p.Code}: {p.Description}"))}.");
                 }
             }
 
             return RedirectToRoute(SiteRoutes.Manage, new { Message = message });
+        }
+
+        [HttpPost]
+        [Route("delete-account", Name = SiteRoutes.DeleteAccount)]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteAccount()
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+
+            if (user != null)
+            {
+                _logger.LogInformation($"Deleting user '{user.Id}'.");
+
+                var result = await _userManager.DeleteAsync(user);
+
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation($"Deleted user '{user.Id}'.");
+
+                    await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
+                    await HttpContext.Authentication.SignOutAsync(_applicationCookieScheme);
+
+                    return RedirectToRoute(SiteRoutes.Home, new { Message = SiteMessage.AccountDeleted });
+                }
+                else
+                {
+                    _logger?.LogError(
+                        $"Failed to delete user '{user.Id}': {string.Join(";", result.Errors.Select((p) => $"{p.Code}: {p.Description}"))}.");
+                }
+            }
+            else
+            {
+                _logger?.LogError($"Failed to get user to delete account.");
+            }
+
+            return RedirectToRoute(SiteRoutes.Manage, new { Message = SiteMessage.Error });
         }
 
         private async Task<IdentityResult> UpdateClaimsAsync(LondonTravelUser user, ExternalLoginInfo info)

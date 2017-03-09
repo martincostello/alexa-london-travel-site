@@ -188,7 +188,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
                 if (string.IsNullOrEmpty(user?.Email))
                 {
-                    ViewBag.PermissionDenied = true;
+                    ViewData["Message"] = nameof(SiteMessage.PermissionDenied);
                     ViewData["ReturnUrl"] = returnUrl;
 
                     return View("SignIn");
@@ -202,15 +202,22 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
                     _logger.LogInformation($"New user account '{user.Id}' created through '{info.LoginProvider}'.");
 
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToRoute(SiteRoutes.Home, new { Message = SiteMessage.AccountCreated });
                 }
 
                 bool isUserAlreadyRegistered = identityResult.Errors.Any((p) => p.Code.StartsWith("Duplicate"));
 
                 AddErrors(identityResult);
 
-                ViewBag.IsAlreadyRegistered = isUserAlreadyRegistered;
-                ViewData["ReturnUrl"] = returnUrl ?? (isUserAlreadyRegistered ? Url.RouteUrl("Manage") : string.Empty);
+                if (isUserAlreadyRegistered)
+                {
+                    ViewData["Message"] = nameof(SiteMessage.AlreadyRegistered);
+                    ViewData["ReturnUrl"] = Url.RouteUrl("Manage");
+                }
+                else
+                {
+                    ViewData["ReturnUrl"] = returnUrl;
+                }
 
                 return View("SignIn");
             }

@@ -12,6 +12,8 @@ namespace MartinCostello.LondonTravel.Site
 
         public const string AccessDenied = nameof(AccessDenied);
 
+        public const string DeleteAccount = nameof(DeleteAccount);
+
         public const string ExternalSignIn = nameof(ExternalSignIn);
 
         public const string ExternalSignInCallback = nameof(ExternalSignInCallback);
@@ -30,7 +32,7 @@ namespace MartinCostello.LondonTravel.Site
 
         public const string Register = nameof(Register);
 
-        public const string RemoveAccount = nameof(RemoveAccount);
+        public const string RemoveAccountLink = nameof(RemoveAccountLink);
 
         public const string SignIn = nameof(SignIn);
 

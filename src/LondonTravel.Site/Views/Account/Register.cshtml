@@ -3,9 +3,15 @@
     ViewBag.MetaDescription = "Register for a London Travel account.";
     ViewBag.Title = "Register";
 }
-@if (ViewBag.PermissionDenied == true)
+@if (string.Equals(ViewData["Message"] as string, nameof(SiteMessage.PermissionDenied), StringComparison.OrdinalIgnoreCase))
 {
-    <div class="alert alert-danger" role="alert">
+    <div class="alert alert-warning" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <p class="lead">
+            Permission denied
+        </p>
         <p>
             You did not grant permission for London Travel to access your email address when you signed in.
         </p>
@@ -14,9 +20,15 @@
         </p>
     </div>
 }
-else if (ViewBag.IsAlreadyRegistered == true)
+else if (string.Equals(ViewData["Message"] as string, nameof(SiteMessage.AlreadyRegistered), StringComparison.OrdinalIgnoreCase))
 {
     <div class="alert alert-warning" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <p class="lead">
+            Already registered
+        </p>
         <p>
             You have already created a London Travel account by signing in with a
             different service to the one you just tried to sign in with.
@@ -65,7 +77,7 @@ else if (ViewBag.IsAlreadyRegistered == true)
 <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-4">
         <section>
-            <form asp-route="@SiteRoutes.ExternalSignIn" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+            <form asp-route="@SiteRoutes.ExternalSignIn" method="post" class="form-horizontal">
                 <div>
                     <p>
                         @foreach (var provider in SignInManager.GetExternalAuthenticationSchemes().OrderBy((p) => p.DisplayName).ThenBy((p) => p.AuthenticationScheme))

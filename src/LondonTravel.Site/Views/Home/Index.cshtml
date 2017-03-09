@@ -2,6 +2,33 @@
 @{
     ViewBag.Title = "Home";
 }
+@if (User.Identity.IsAuthenticated &&
+     string.Equals(Context.Request.Query["Message"], nameof(SiteMessage.AccountCreated), StringComparison.OrdinalIgnoreCase))
+{
+    <div class="alert alert-success" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <p class="lead">
+            Your London Travel account has been created.
+        </p>
+    </div>
+}
+@if (!User.Identity.IsAuthenticated &&
+     string.Equals(Context.Request.Query["Message"], nameof(SiteMessage.AccountDeleted), StringComparison.OrdinalIgnoreCase))
+{
+    <div class="alert alert-success" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <p class="lead">
+            Your London Travel account has been deleted.
+        </p>
+        <p>
+            Sorry to see you go.
+        </p>
+    </div>
+}
 <div class="jumbotron">
     <h1>London Travel</h1>
     <p class="lead">
