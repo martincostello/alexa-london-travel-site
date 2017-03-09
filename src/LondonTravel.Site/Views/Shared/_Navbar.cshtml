@@ -4,7 +4,10 @@
         <div class="navbar-header">
             <a asp-controller="Home" asp-action="Index" class="navbar-brand" title="View the homepage">
                 <span>
-                    <lazyimg src="@Url.CdnContent("avatar.png", Options)" aria-hidden="true" />
+                    <lazyimg src="@Url.CdnContent("avatar.png", Options)" alt="London Travel" title="London Travel" aria-hidden="true" />
+                    <noscript>
+                        <img src="@Url.CdnContent("avatar.png", Options)" alt="London Travel" title="London Travel" aria-hidden="true" />
+                    </noscript>
                     @Options.Metadata.Name
                 </span>
             </a>

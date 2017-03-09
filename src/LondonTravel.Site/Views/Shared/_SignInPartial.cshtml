@@ -1,14 +1,20 @@
 ﻿@inject SiteOptions Options
 @inject Microsoft.AspNetCore.Identity.SignInManager<LondonTravelUser> SignInManager
-
+@{
+    string displayName = User.GetDisplayName();
+    string avatarUrl = User.GetAvatarUrl(Url.CdnContent("avatar.png", Options));
+}
 @if (SignInManager.IsSignedIn(User))
 {
     <form asp-route="@SiteRoutes.SignOut" method="post" id="signOutForm" class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
             <li>
-                <a asp-route="@SiteRoutes.Manage" rel="nofollow" title="Manage your London Travel account">
-                    @User.GetDisplayName()
-                    <lazyimg alt="@User.Identity.Name" src="@User.GetAvatarUrl(Url.CdnContent("avatar.png", Options))" aria-hidden="true" />
+                <a asp-route="@SiteRoutes.Manage" title="Manage your London Travel account">
+                    @displayName
+                    <lazyimg alt="@displayName" title="@displayName" src="@avatarUrl" aria-hidden="true" />
+                    <noscript>
+                        <img alt="@displayName" title="@displayName" src="@avatarUrl" aria-hidden="true" />
+                    </noscript>
                 </a>
             </li>
             <li>
