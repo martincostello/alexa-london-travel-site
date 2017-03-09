@@ -37,8 +37,14 @@
                                     Manage account <i class="fa fa-user" aria-hidden="true"></i>
                                 </a>
                             </li>
-                            <li role="separator" class="divider"></li>
                         }
+                        else
+                        {
+                            <li>
+                                <a asp-route="Register" title="Register for a London Travel account">Register <i class="fa fa-user-plus" aria-hidden="true"></i></a>
+                            </li>
+                        }
+                        <li role="separator" class="divider"></li>
                         <li>
                             <a asp-route="Help" title="View help and support information for the London Travel Alexa skill and this website">
                                 Help &amp; Support

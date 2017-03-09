@@ -24,6 +24,8 @@ namespace MartinCostello.LondonTravel.Site.Integration
 
         [Theory]
         [InlineData("/", "text/html")]
+        [InlineData("/account/register/", "text/html")]
+        [InlineData("/account/sign-in/", "text/html")]
         [InlineData("/apple-app-site-association", "application/json")]
         [InlineData("/assets/css/site.css", "text/css")]
         [InlineData("/assets/css/site.min.css", "text/css")]
@@ -44,7 +46,6 @@ namespace MartinCostello.LondonTravel.Site.Integration
         [InlineData("/robots.txt", "text/plain")]
         [InlineData("/service-worker.js", "application/javascript")]
         [InlineData("/sitemap.xml", "text/xml")]
-        [InlineData("/support/", "text/html")]
         [InlineData("/terms-of-service/", "text/html")]
         public async Task Can_Load_Resource(string requestUri, string contentType)
         {
@@ -52,6 +53,19 @@ namespace MartinCostello.LondonTravel.Site.Integration
             {
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
                 Assert.Equal(contentType, response.Content.Headers.ContentType?.MediaType);
+            }
+        }
+
+        [Theory]
+        [InlineData("/register/", "/account/register/")]
+        [InlineData("/sign-up/", "/account/register/")]
+        [InlineData("/support/", "/help/")]
+        public async Task Resource_Is_Redirect(string requestUri, string location)
+        {
+            using (var response = await Fixture.Client.GetAsync(requestUri))
+            {
+                Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+                Assert.Equal(location, response.Headers.Location?.OriginalString);
             }
         }
 

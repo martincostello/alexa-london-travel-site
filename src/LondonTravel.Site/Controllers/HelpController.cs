@@ -15,11 +15,20 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// Gets the result for the <c>/help/</c> action.
         /// </summary>
         /// <returns>
-        /// The result for the <c>/support/</c> action.
+        /// The result for the <c>/help/</c> action.
         /// </returns>
         [HttpGet]
         [Route("help", Name = "Help")]
-        [Route("support")]
         public IActionResult Index() => View();
+
+        /// <summary>
+        /// Gets the result for the <c>/support/</c> action.
+        /// </summary>
+        /// <returns>
+        /// The result for the <c>/support/</c> action.
+        /// </returns>
+        [HttpGet]
+        [Route("support")]
+        public IActionResult Support() => RedirectToRoute("Help");
     }
 }

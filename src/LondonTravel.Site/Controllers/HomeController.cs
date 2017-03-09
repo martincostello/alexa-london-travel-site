@@ -19,5 +19,16 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// </returns>
         [HttpGet]
         public IActionResult Index() => View();
+
+        /// <summary>
+        /// Gets the result for the <c>/register/</c> action.
+        /// </summary>
+        /// <returns>
+        /// The result for the <c>/register/</c> action.
+        /// </returns>
+        [HttpGet]
+        [Route("/register")]
+        [Route("/sign-up")]
+        public IActionResult Register() => RedirectToRoute("Register");
     }
 }

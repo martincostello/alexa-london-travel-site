@@ -1,18 +1,18 @@
 ﻿@inject Microsoft.AspNetCore.Identity.SignInManager<LondonTravelUser> SignInManager
 @{
-    ViewBag.MetaDescription = "Sign in to your London Travel account.";
+    ViewBag.MetaDescription = "Register a London Travel account.";
     ViewBag.MetaRobots = "NOINDEX";
     ViewBag.Title = "Sign in";
 }
 <h2>@ViewBag.Title</h2>
 @if (ViewBag.PermissionDenied == true)
 {
-    <div class="alert alert-warning" role="alert">
+    <div class="alert alert-danger" role="alert">
         <p>
             You did not grant permission for London Travel to access your email address when you signed in.
         </p>
         <p>
-            An email address is required to set up an account when signing in with an external service.
+            An email address is required to register.
         </p>
     </div>
 }
@@ -50,12 +50,18 @@ else if (ViewBag.IsAlreadyRegistered == true)
     </div>
     <div class="col-md-8">
         <section>
-            <h3>...or create a new account</h3>
+            <h3>Create an account</h3>
+            <p>If you do not already have a London Travel account, one will be created for you automatically once you've signed in.</p>
+            <p>The London Travel account created will use with email address associated with the external service you sign in with.</p>
             <p>
-                If you do not already have a London Travel account, create one <a asp-route="Register" title="Register for a London Travel account">here</a>.
-            </p>
-            <p>
-                <a class="btn btn-primary" asp-route="Register" title="Register for a London Travel account">Register <i class="fa fa-user-plus" aria-hidden="true"></i></a>
+                Accounts and their data are managed by this service in line with the
+                <a asp-route="PrivacyPolicy" rel="noopener" title="View the London Travel Alexa skill's Privacy Policy">
+                    Privacy Policy
+                </a>
+                and
+                <a asp-route="TermsOfService" rel="noopener" title="View the London Travel Alexa skill's Terms of Service">
+                    Terms of Service
+                </a>.
             </p>
         </section>
     </div>

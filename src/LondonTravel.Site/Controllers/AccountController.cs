@@ -37,8 +37,11 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
             _externalCookieScheme = identityCookieOptions.Value.ExternalCookieAuthenticationScheme;
-            _isEnabled = siteOptions?.Authentication?.IsEnabled == true && siteOptions?.Authentication.ExternalProviders?.Count > 0;
             _logger = logger;
+
+            _isEnabled =
+                siteOptions?.Authentication?.IsEnabled == true &&
+                siteOptions?.Authentication.ExternalProviders?.Any((p) => p.Value?.IsEnabled == true) == true;
         }
 
         /// <summary>
@@ -226,6 +229,17 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 return View("SignIn");
             }
         }
+
+        /// <summary>
+        /// Gets the result for the <c>/account/register/</c> action.
+        /// </summary>
+        /// <returns>
+        /// The result for the <c>/account/register/</c> action.
+        /// </returns>
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("register", Name = "Register")]
+        public IActionResult Register() => View();
 
         private void AddErrors(IdentityResult result)
         {

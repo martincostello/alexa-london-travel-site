@@ -142,7 +142,7 @@ namespace MartinCostello.LondonTravel.Site
                     p.CookieName = "_anti-forgery";
                     p.FormFieldName = "_anti-forgery";
                     p.HeaderName = "x-anti-forgery";
-                    p.RequireSsl = true;
+                    p.RequireSsl = !HostingEnvironment.IsDevelopment();
                 });
 
             services
@@ -154,22 +154,22 @@ namespace MartinCostello.LondonTravel.Site
                 (options) =>
                 {
                     options.Cookies.ApplicationCookie.AccessDeniedPath = "/account/access-denied/";
-                    options.Cookies.ApplicationCookie.CookieName = "london-travel-auth";
+                    options.Cookies.ApplicationCookie.CookieName = "london-travel-auth-app";
                     options.Cookies.ApplicationCookie.CookieHttpOnly = true;
-                    options.Cookies.ApplicationCookie.CookieSecure = CookieSecurePolicy.Always;
+                    options.Cookies.ApplicationCookie.CookieSecure = CookiePolicy();
                     options.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromDays(150);
                     options.Cookies.ApplicationCookie.LoginPath = "/account/sign-in/";
                     options.Cookies.ApplicationCookie.LogoutPath = "/account/sign-out/";
                     options.Cookies.ApplicationCookie.SlidingExpiration = true;
 
-                    options.Cookies.ExternalCookie.AccessDeniedPath = "/account/access-denied/";
+                    options.Cookies.ExternalCookie.AccessDeniedPath = options.Cookies.ApplicationCookie.AccessDeniedPath;
                     options.Cookies.ExternalCookie.CookieName = "london-travel-auth-external";
-                    options.Cookies.ExternalCookie.CookieHttpOnly = true;
-                    options.Cookies.ExternalCookie.CookieSecure = CookieSecurePolicy.Always;
-                    options.Cookies.ExternalCookie.ExpireTimeSpan = TimeSpan.FromDays(150);
-                    options.Cookies.ExternalCookie.LoginPath = "/account/sign-in/";
-                    options.Cookies.ExternalCookie.LogoutPath = "/account/sign-out/";
-                    options.Cookies.ExternalCookie.SlidingExpiration = true;
+                    options.Cookies.ExternalCookie.CookieHttpOnly = options.Cookies.ApplicationCookie.CookieHttpOnly;
+                    options.Cookies.ExternalCookie.CookieSecure = options.Cookies.ApplicationCookie.CookieSecure;
+                    options.Cookies.ExternalCookie.ExpireTimeSpan = options.Cookies.ApplicationCookie.ExpireTimeSpan;
+                    options.Cookies.ExternalCookie.LoginPath = options.Cookies.ApplicationCookie.LoginPath;
+                    options.Cookies.ExternalCookie.LogoutPath = options.Cookies.ApplicationCookie.LogoutPath;
+                    options.Cookies.ExternalCookie.SlidingExpiration = options.Cookies.ApplicationCookie.SlidingExpiration;
 
                     options.User.RequireUniqueEmail = true;
                 })
@@ -283,8 +283,13 @@ namespace MartinCostello.LondonTravel.Site
             return new CookiePolicyOptions()
             {
                 HttpOnly = HttpOnlyPolicy.Always,
-                Secure = HostingEnvironment.IsDevelopment() ? CookieSecurePolicy.SameAsRequest : CookieSecurePolicy.Always,
+                Secure = CookiePolicy(),
             };
+        }
+
+        private CookieSecurePolicy CookiePolicy()
+        {
+            return HostingEnvironment.IsDevelopment() ? CookieSecurePolicy.SameAsRequest : CookieSecurePolicy.Always;
         }
     }
 }
