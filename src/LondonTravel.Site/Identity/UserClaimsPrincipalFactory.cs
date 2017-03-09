@@ -34,14 +34,10 @@ namespace MartinCostello.LondonTravel.Site.Identity
 
             if (identity != null)
             {
-                var claims = new[]
+                foreach (LondonTravelRole role in user?.RoleClaims)
                 {
-                    new Claim(ClaimTypes.Email, user.Email ?? string.Empty),
-                    new Claim(ClaimTypes.GivenName, user.GivenName ?? string.Empty),
-                    new Claim(ClaimTypes.Surname, user.Surname ?? string.Empty),
-                };
-
-                identity.AddClaims(claims);
+                    identity.AddClaim(role.ToClaim());
+                }
             }
 
             return principal;

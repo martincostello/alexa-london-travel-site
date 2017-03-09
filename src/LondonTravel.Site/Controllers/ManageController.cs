@@ -23,6 +23,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         private readonly UserManager<LondonTravelUser> _userManager;
         private readonly SignInManager<LondonTravelUser> _signInManager;
         private readonly string _externalCookieScheme;
+        private readonly ILogger<ManageController> _logger;
 
         public ManageController(
           UserManager<LondonTravelUser> userManager,
@@ -33,6 +34,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
             _externalCookieScheme = identityCookieOptions.Value.ExternalCookieAuthenticationScheme;
+            _logger = loggerFactory.CreateLogger<ManageController>();
         }
 
         /// <summary>
@@ -48,6 +50,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             if (user == null)
             {
+                _logger?.LogError($"Failed to get user to manage account.");
                 return View("Error");
             }
 
@@ -80,6 +83,8 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl, userId);
 
+            _logger?.LogInformation($"Attempting to link user '{userId}' to provider '{provider}'.");
+
             return Challenge(properties, provider);
         }
 
@@ -91,6 +96,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             if (user == null)
             {
+                _logger?.LogError($"Failed to get user to link account.");
                 return View("Error");
             }
 
@@ -99,18 +105,30 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             if (info == null)
             {
+                _logger?.LogError($"Failed to get external login info for user '{userId}' to link account.");
                 return RedirectToRoute(SiteRoutes.Manage, new { Message = "Error" });
             }
 
             var result = await _userManager.AddLoginAsync(user, info);
-
             var message = "Error";
 
             if (result.Succeeded)
             {
                 message = "LinkSuccess";
 
+                result = await UpdateClaimsAsync(user, info);
+
+                if (!result.Succeeded)
+                {
+                    _logger?.LogError($"Failed to update user '{userId}' with additional role claims.");
+                }
+
                 await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
+            }
+            else
+            {
+                _logger?.LogError(
+                    $"Failed to add external login info for user '{userId}': {string.Join(";", result.Errors.Select((p) => $"{p.Code}: {p.Description}"))}.");
             }
 
             return RedirectToRoute(SiteRoutes.Manage, new { Message = message });
@@ -136,6 +154,26 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             }
 
             return RedirectToRoute(SiteRoutes.Manage, new { Message = message });
+        }
+
+        private async Task<IdentityResult> UpdateClaimsAsync(LondonTravelUser user, ExternalLoginInfo info)
+        {
+            foreach (var claim in info.Principal.Claims)
+            {
+                bool hasClaim = user?.RoleClaims
+                    .Where((p) => p.ClaimType == claim.Type)
+                    .Where((p) => p.Issuer == claim.Issuer)
+                    .Where((p) => p.Value == claim.Value)
+                    .Where((p) => p.ValueType == claim.ValueType)
+                    .Any() == true;
+
+                if (!hasClaim)
+                {
+                    user.RoleClaims.Add(LondonTravelRole.FromClaim(claim));
+                }
+            }
+
+            return await _userManager.UpdateAsync(user);
         }
     }
 }

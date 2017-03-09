@@ -166,7 +166,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             if (info == null)
             {
-                return RedirectToAction(nameof(SignIn));
+                return RedirectToRoute(SiteRoutes.SignIn);
             }
 
             var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: true);
@@ -184,29 +184,15 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             }
             else
             {
-                var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+                LondonTravelUser user = CreateSystemUser(info);
 
-                if (string.IsNullOrEmpty(email))
+                if (string.IsNullOrEmpty(user?.Email))
                 {
                     ViewBag.PermissionDenied = true;
                     ViewData["ReturnUrl"] = returnUrl;
 
                     return View("SignIn");
                 }
-
-                var givenName = info.Principal.FindFirstValue(ClaimTypes.GivenName);
-                var surname = info.Principal.FindFirstValue(ClaimTypes.Surname);
-
-                var user = new LondonTravelUser()
-                {
-                    Email = email,
-                    GivenName = givenName,
-                    Surname = surname,
-                    UserName = email,
-                    EmailConfirmed = false,
-                };
-
-                user.Logins.Add(LondonTravelLoginInfo.FromUserLoginInfo(info));
 
                 var identityResult = await _userManager.CreateAsync(user);
 
@@ -260,6 +246,37 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             {
                 return RedirectToRoute(SiteRoutes.Home);
             }
+        }
+
+        private LondonTravelUser CreateSystemUser(ExternalLoginInfo info)
+        {
+            var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+
+            if (string.IsNullOrEmpty(email))
+            {
+                return null;
+            }
+
+            var givenName = info.Principal.FindFirstValue(ClaimTypes.GivenName);
+            var surname = info.Principal.FindFirstValue(ClaimTypes.Surname);
+
+            var user = new LondonTravelUser()
+            {
+                Email = email,
+                GivenName = givenName,
+                Surname = surname,
+                UserName = email,
+                EmailConfirmed = false,
+            };
+
+            user.Logins.Add(LondonTravelLoginInfo.FromUserLoginInfo(info));
+
+            foreach (var claim in info.Principal.Claims)
+            {
+                user.RoleClaims.Add(LondonTravelRole.FromClaim(claim));
+            }
+
+            return user;
         }
     }
 }

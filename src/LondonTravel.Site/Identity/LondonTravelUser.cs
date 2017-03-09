@@ -17,6 +17,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
         public LondonTravelUser()
         {
             Logins = new List<LondonTravelLoginInfo>();
+            RoleClaims = new List<LondonTravelRole>();
         }
 
         /// <summary>
@@ -72,5 +73,11 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// </summary>
         [JsonProperty(PropertyName = "logins")]
         public IList<LondonTravelLoginInfo> Logins { get; set; }
+
+        /// <summary>
+        /// Gets or sets the user's role claims.
+        /// </summary>
+        [JsonProperty(PropertyName = "roleClaims")]
+        public IList<LondonTravelRole> RoleClaims { get; set; }
     }
 }
