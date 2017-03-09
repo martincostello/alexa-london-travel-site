@@ -13,9 +13,9 @@ namespace MartinCostello.LondonTravel.Site.Extensions
     public static class IHtmlHelperExtensions
     {
         /// <summary>
-        /// A mapping of authentication schems to icon classes. This field is read-only.
+        /// A mapping of authentication schemes to icon classes. This field is read-only.
         /// </summary>
-        private static readonly IDictionary<string, string> _iconClassMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        private static readonly IDictionary<string, string> _iconImageMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
             { "Amazon", "amazon" },
             { "Facebook", "facebook" },
@@ -35,7 +35,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         /// </returns>
         public static string GetSocialLoginButtonCss(this IHtmlHelper html, string authenticationScheme)
         {
-            return html.GetSocialLoginCss(authenticationScheme, "btn");
+            return $"btn-{authenticationScheme?.ToLowerInvariant()}";
         }
 
         /// <summary>
@@ -48,20 +48,6 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         /// </returns>
         public static string GetSocialLoginIconCss(this IHtmlHelper html, string authenticationScheme)
         {
-            return html.GetSocialLoginCss(authenticationScheme, "fa");
-        }
-
-        /// <summary>
-        /// Gets the CSS class to use for a social login.
-        /// </summary>
-        /// <param name="html">The <see cref="IHtmlHelper"/> to use.</param>
-        /// <param name="authenticationScheme">The Id/name of the authentication scheme.</param>
-        /// <param name="prefix">The CSS prefix to use.</param>
-        /// <returns>
-        /// The CSS class to use for the authentication scheme.
-        /// </returns>
-        private static string GetSocialLoginCss(this IHtmlHelper html, string authenticationScheme, string prefix)
-        {
             if (string.IsNullOrEmpty(authenticationScheme))
             {
                 return string.Empty;
@@ -69,9 +55,9 @@ namespace MartinCostello.LondonTravel.Site.Extensions
 
             string iconClass = string.Empty;
 
-            if (_iconClassMap.TryGetValue(authenticationScheme, out string modifier))
+            if (_iconImageMap.TryGetValue(authenticationScheme, out string modifier))
             {
-                iconClass = $"{prefix}-{modifier}";
+                iconClass = $"fa-{modifier}";
             }
 
             return iconClass;
