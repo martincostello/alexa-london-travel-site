@@ -1,0 +1,14 @@
+﻿@if (string.Equals(Context.Request.Query["Message"].FirstOrDefault(), nameof(SiteMessage.LinkDenied), StringComparison.OrdinalIgnoreCase))
+{
+    <div class="alert alert-warning" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <p class="lead">
+            Account link permission denied
+        </p>
+        <p>
+            You did not grant permission for London Travel to access your other account.
+        </p>
+    </div>
+}

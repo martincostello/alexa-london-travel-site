@@ -1,0 +1,20 @@
+﻿@if (string.Equals(ViewData["Message"] as string, nameof(SiteMessage.AlreadyRegistered), StringComparison.OrdinalIgnoreCase))
+{
+    <div class="alert alert-warning" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <p class="lead">
+            Already registered
+        </p>
+        <p>
+            You have already created a London Travel account by signing in with a
+            different service to the one you just tried to sign in with.
+        </p>
+        <p>
+            Sign in with one of the service(s) you've already used to sign-in,
+            then you'll be able to link other service(s) to your account
+            from the <a asp-route="@SiteRoutes.Manage" class="alert-link">account mangement</a> page.
+        </p>
+    </div>
+}

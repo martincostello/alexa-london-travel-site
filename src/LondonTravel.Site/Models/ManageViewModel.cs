@@ -12,5 +12,9 @@ namespace MartinCostello.LondonTravel.Site.Models
         public IList<UserLoginInfo> CurrentLogins { get; set; }
 
         public IList<AuthenticationDescription> OtherLogins { get; set; }
+
+        public bool CanAddMoreLogins => OtherLogins?.Count > 0;
+
+        public bool ShowRemoveButton => CurrentLogins?.Count > 1;
     }
 }

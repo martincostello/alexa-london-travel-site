@@ -57,13 +57,16 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 return View("Error");
             }
 
-            var userLogins = await _userManager.GetLoginsAsync(user);
+            var userLogins = (await _userManager.GetLoginsAsync(user))
+                .OrderBy((p) => p.ProviderDisplayName)
+                .ThenBy((p) => p.LoginProvider)
+                .ToList();
 
             var otherLogins = _signInManager.GetExternalAuthenticationSchemes()
                 .Where((p) => userLogins.All((r) => p.AuthenticationScheme != r.LoginProvider))
+                .OrderBy((p) => p.DisplayName)
+                .ThenBy((p) => p.AuthenticationScheme)
                 .ToList();
-
-            ViewBag.ShowRemoveButton = userLogins.Count > 1;
 
             var model = new ManageViewModel()
             {

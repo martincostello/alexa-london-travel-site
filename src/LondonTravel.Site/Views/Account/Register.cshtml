@@ -1,73 +1,8 @@
-﻿@inject Microsoft.AspNetCore.Identity.SignInManager<LondonTravelUser> SignInManager
-@{
+﻿@{
     ViewBag.MetaDescription = "Register for a London Travel account.";
     ViewBag.Title = "Register";
 }
-@if (string.Equals(ViewData["Message"] as string, nameof(SiteMessage.PermissionDenied), StringComparison.OrdinalIgnoreCase))
-{
-    <div class="alert alert-warning" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-        <p class="lead">
-            Permission denied
-        </p>
-        <p>
-            You did not grant permission for London Travel to access your email address when you signed in.
-        </p>
-        <p>
-            An email address is required to register.
-        </p>
-    </div>
-}
-else if (string.Equals(ViewData["Message"] as string, nameof(SiteMessage.AlreadyRegistered), StringComparison.OrdinalIgnoreCase))
-{
-    <div class="alert alert-warning" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-        <p class="lead">
-            Already registered
-        </p>
-        <p>
-            You have already created a London Travel account by signing in with a
-            different service to the one you just tried to sign in with.
-        </p>
-        <p>
-            Sign in with one of the service(s) you've already used to sign-in,
-            then you'll be able to link other service(s) to your account
-            from the <a asp-route="@SiteRoutes.Manage" class="alert-link">account mangement</a> page.
-        </p>
-    </div>
-}
-else if (string.Equals(Context.Request.Query["Message"].FirstOrDefault(), nameof(SiteMessage.LinkDenied), StringComparison.OrdinalIgnoreCase))
-{
-    <div class="alert alert-warning" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-        <p class="lead">
-            Permission denied
-        </p>
-        <p>
-            You did not grant permission for London Travel to access your other account.
-        </p>
-    </div>
-}
-else if (string.Equals(Context.Request.Query["Message"].FirstOrDefault(), nameof(SiteMessage.LinkFailed), StringComparison.OrdinalIgnoreCase))
-{
-    <div class="alert alert-warning" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-        <p class="lead">
-            Account link failed
-        </p>
-        <p>
-            Something went wrong when attempting to link your other account.
-        </p>
-    </div>
-}
+@await Html.PartialAsync("_SignInErrors")
 <div class="row">
     <div class="col-md-12">
         <section>
@@ -105,16 +40,7 @@ else if (string.Equals(Context.Request.Query["Message"].FirstOrDefault(), nameof
 <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-4">
         <section>
-            <form asp-route="@SiteRoutes.ExternalSignIn" method="post" class="form-horizontal">
-                <div>
-                    <p>
-                        @foreach (var provider in SignInManager.GetExternalAuthenticationSchemes().OrderBy((p) => p.DisplayName).ThenBy((p) => p.AuthenticationScheme))
-                        {
-                            @await Html.PartialAsync("_SocialButton", provider)
-                        }
-                    </p>
-                </div>
-            </form>
+            @await Html.PartialAsync("_SignInForm")
         </section>
     </div>
 </div>

@@ -1,0 +1,59 @@
+﻿<noscript>
+    <hr />
+    <form asp-route="@SiteRoutes.DeleteAccount" method="post" class="form-horizontal">
+        <div>
+            <input type="submit" class="btn btn-danger" value="Delete your account" title="Permanently delete your London Travel account" />
+        </div>
+    </form>
+</noscript>
+<div id="delete-account" class="hide">
+    <hr />
+    <button class="btn btn-danger" title="Permanently delete your London Travel account" data-toggle="modal" data-target=".delete-account-modal">
+        Delete your account
+    </button>
+</div>
+<div class="modal fade delete-account-modal" tabindex="-1" role="dialog" aria-describedby="delete-account-modal-description" aria-labelledby="delete-account-modal-title">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close js-delete-content" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="remove-link-modal-title">Delete your account</h4>
+            </div>
+            <div class="modal-body">
+                <div class="js-delete-content">
+                    <div id="remove-link-modal-description" class="alert alert-warning" role="alert">
+                        <p class="lead">
+                            <strong>Warning!</strong>
+                        </p>
+                    </div>
+                    <p>
+                        Clicking the <strong>Delete</strong> button will <strong><em>permanently</em></strong>
+                        delete your London Travel account and any data associated with it.
+                    </p>
+                    <p>
+                        If you have linked the London Travel Alexa skill to this account you will
+                        no longer be able to ask Alexa about your commute using the skill unless you
+                        create a new account and re-link the skill using an Alexa-enabled device.
+                    </p>
+                    <p>
+                        Are you sure you want to delete your account? This action <strong>cannot</strong> be undone.
+                    </p>
+                </div>
+                <div class="js-delete-loader hide">
+                    <p class="lead text-center">
+                        Your account is being deleted...
+                    </p>
+                    <p>
+                        <div class="center-block loader" aria-hidden="true"></div>
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <form id="delete-account-js" asp-route="@SiteRoutes.DeleteAccount" method="post" class="form-horizontal">
+                    <button type="button" class="btn btn-default js-delete-control" title="Cancel" data-dismiss="modal">Cancel</button>
+                    <input type="submit" class="btn btn-danger disabled js-delete-control js-delete-confirm" value="Delete" title="Permanently delete your account" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

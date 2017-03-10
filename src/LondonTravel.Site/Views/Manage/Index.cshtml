@@ -3,15 +3,10 @@
     ViewBag.MetaDescription = "Manage your account details for the London Travel skill.";
     ViewBag.MetaRobots = "NOINDEX";
     ViewBag.Title = "Manage your account";
-
-    bool canAddMoreLogins = Model.OtherLogins.Count > 0;
 }
 <h2>@ViewBag.Title</h2>
-
-<p class="text-success">@ViewData["StatusMessage"]</p>
-
 <div class="row">
-    <div class="col-md-@(canAddMoreLogins ? "8" : "12")">
+    <div class="col-md-@(Model.CanAddMoreLogins ? "8" : "12")">
         <h4>Linked Accounts</h4>
         <hr />
         <p>
@@ -19,7 +14,7 @@
         </p>
         <table class="table">
             <tbody>
-                @foreach (var provider in Model.CurrentLogins.OrderBy((p) => p.ProviderDisplayName).ThenBy((p) => p.LoginProvider))
+                @foreach (var provider in Model?.CurrentLogins)
                 {
                     <tr>
                         <td class="lead">
@@ -27,7 +22,7 @@
                             @provider.LoginProvider
                         </td>
                         <td>
-                            @if (ViewBag.ShowRemoveButton == true)
+                            @if (Model.ShowRemoveButton)
                             {
                                 <form asp-route="@SiteRoutes.RemoveAccountLink" method="post" class="form-horizontal">
                                     <div>
@@ -47,7 +42,7 @@
             </tbody>
         </table>
     </div>
-    @if (canAddMoreLogins)
+    @if (Model.CanAddMoreLogins)
     {
         <div class="col-md-4">
             <h4>Link another account</h4>
@@ -55,7 +50,7 @@
             <form asp-route="@SiteRoutes.LinkAccount" method="post" class="form-horizontal">
                 <div>
                     <p>
-                        @foreach (var provider in Model.OtherLogins.OrderBy((p) => p.DisplayName).ThenBy((p) => p.AuthenticationScheme))
+                        @foreach (var provider in Model?.OtherLogins)
                         {
                             @await Html.PartialAsync("_SocialButton", provider)
                         }
@@ -65,82 +60,10 @@
         </div>
     }
 </div>
-<div id="delete-account" class="hide">
-    <hr />
-    <button class="btn btn-danger" title="Permanently delete your London Travel account" data-toggle="modal" data-target=".delete-account-modal">
-        Delete your account
-    </button>
-</div>
-<noscript>
-    <hr />
-    <form asp-route="@SiteRoutes.DeleteAccount" method="post" class="form-horizontal">
-        <div>
-            <input type="submit" class="btn btn-danger" value="Delete your account" title="Permanently delete your London Travel account" />
-        </div>
-    </form>
-</noscript>
+@await Html.PartialAsync("_DeleteAccount")
 @await Html.PartialAsync("_SignInModal")
-<div class="modal fade remove-link-modal" tabindex="-1" role="dialog" aria-describedby="remove-link-modal-description" aria-labelledby="remove-link-modal-title">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="remove-link-modal-title">Removing account link...</h4>
-                <div class="sr-only" id="remove-link-modal-description">Please wait while your account link is removed.</div>
-            </div>
-            <div class="modal-body">
-                <p>
-                    <div class="center-block loader" aria-hidden="true"></div>
-                </p>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade delete-account-modal" tabindex="-1" role="dialog" aria-describedby="delete-account-modal-description" aria-labelledby="delete-account-modal-title">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close js-delete-content" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="remove-link-modal-title">Delete your account</h4>
-            </div>
-            <div class="modal-body">
-                <div class="js-delete-content">
-                    <div id="remove-link-modal-description" class="alert alert-warning" role="alert">
-                        <p class="lead">
-                            <strong>Warning!</strong>
-                        </p>
-                    </div>
-                    <p>
-                        Clicking the <strong>Delete</strong> button will <strong><em>permanently</em></strong>
-                        delete your London Travel account and any data associated with it.
-                    </p>
-                    <p>
-                        If you have linked the London Travel Alexa skill to this account you will
-                        no longer be able to ask Alexa about your commute using the skill unless you
-                        create a new account and re-link the skill using an Alexa-enabled device.
-                    </p>
-                    <p>
-                        Are you sure you want to delete your account? This action <strong>cannot</strong> be undone.
-                    </p>
-                </div>
-                <div class="js-delete-loader hide">
-                    <p class="lead text-center">
-                        Your account is being deleted...
-                    </p>
-                    <p>
-                        <div class="center-block loader" aria-hidden="true"></div>
-                    </p>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <form id="delete-account-js" asp-route="@SiteRoutes.DeleteAccount" method="post" class="form-horizontal">
-                    <button type="button" class="btn btn-default js-delete-control" title="Cancel" data-dismiss="modal">Cancel</button>
-                    <input type="submit" class="btn btn-danger disabled js-delete-control js-delete-confirm" value="Delete" title="Permanently delete your account" />
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-@if (Model.OtherLogins.Count > 0)
+@await Html.PartialAsync("_RemoveAccountLinkModal")
+@if (Model.OtherLogins.Any())
 {
     @section stylesBody {
         @await Html.PartialAsync("_SocialButtonsScripts")

@@ -1,0 +1,16 @@
+﻿@inject Microsoft.AspNetCore.Identity.SignInManager<LondonTravelUser> SignInManager
+@{
+    var providers = SignInManager.GetExternalAuthenticationSchemes()
+        .OrderBy((p) => p.DisplayName)
+        .ThenBy((p) => p.AuthenticationScheme);
+}
+<form asp-route="@SiteRoutes.ExternalSignIn" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+    <div>
+        <p>
+            @foreach (var provider in providers)
+            {
+                @await Html.PartialAsync("_SocialButton", provider)
+            }
+        </p>
+    </div>
+</form>
