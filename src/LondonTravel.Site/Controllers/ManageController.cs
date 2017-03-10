@@ -3,6 +3,7 @@
 
 namespace MartinCostello.LondonTravel.Site.Controllers
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using MartinCostello.LondonTravel.Site.Identity;
@@ -213,6 +214,11 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
         private async Task<IdentityResult> UpdateClaimsAsync(LondonTravelUser user, ExternalLoginInfo info)
         {
+            if (user.RoleClaims == null)
+            {
+                user.RoleClaims = new List<LondonTravelRole>();
+            }
+
             foreach (var claim in info.Principal.Claims)
             {
                 bool hasClaim = user?.RoleClaims
