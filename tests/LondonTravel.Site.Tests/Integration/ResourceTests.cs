@@ -36,6 +36,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         [InlineData("/.well-known/assetlinks.json", "application/json")]
         [InlineData("/BingSiteAuth.xml", "text/xml")]
         [InlineData("/browserconfig.xml", "text/xml")]
+        [InlineData("/error.html", "text/html")]
         [InlineData("/favicon.ico", "image/x-icon")]
         [InlineData("/googled1107923138d0b79.html", "text/html")]
         [InlineData("/help/", "text/html")]
