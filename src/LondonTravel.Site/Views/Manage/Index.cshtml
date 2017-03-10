@@ -70,29 +70,10 @@
     }
 }
 @section scripts {
-    <script>
-        (function () {
-            var setupDelete = function () {
-                $("#delete-account")
-                    .fadeIn("slow")
-                    .removeClass("hide");
-                $("#delete-account-js").on("submit", function () {
-                    $(".js-delete-control").addClass("disabled");
-                    $(".js-delete-content").addClass("hide");
-                    $(".js-delete-loader").removeClass("hide");
-                });
-                $(".delete-account-modal").on("show.bs.modal", function () {
-                    setTimeout(function () {
-                        $(".js-delete-confirm").removeClass("disabled");
-                    }, 3000);
-                });
-            };
-            if ("jQuery" in window) {
-                setupDelete();
-            }
-            else {
-                setTimeout(setupDelete, 1000);
-            }
-        })();
-    </script>
+    <environment names="Development">
+        <script src="~/assets/js/site.manage.js" asp-append-version="true" defer></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/assets/js/site.manage.min.js" asp-append-version="true" defer></script>
+    </environment>
 }
