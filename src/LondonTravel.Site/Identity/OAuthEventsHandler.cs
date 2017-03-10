@@ -74,22 +74,12 @@ namespace MartinCostello.LondonTravel.Site.Identity
             string errors = string.Join(";", context.Request.Query.Select((p) => $"'{p.Key}' = '{p.Value}'"));
             logger?.LogError(default(EventId), context.Failure, $"Failed to sign-in using '{provider}': '{context.Failure.Message}'. Errors: {errors}.");
 
-            string siteContext = GetSiteContext(context, secureDataFormat, propertiesProvider);
-            string path = null;
+            string path = GetSiteErrorRedirect(context, secureDataFormat, propertiesProvider);
 
-            // TODO It would be better to leverage routing to get the paths
-            if (string.Equals(siteContext, SiteContext.LinkAccount, StringComparison.Ordinal))
+            if (string.IsNullOrEmpty(path) ||
+                !Uri.TryCreate(path, UriKind.Relative, out Uri notUsed))
             {
-                path = "manage";
-            }
-            else if (string.Equals(siteContext, SiteContext.Register, StringComparison.Ordinal))
-            {
-                path = "account/register";
-            }
-
-            if (string.IsNullOrEmpty(path))
-            {
-                path = "account/sign-in";
+                path = "/";
             }
 
             SiteMessage message;
@@ -105,14 +95,14 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 message = SiteMessage.LinkFailed;
             }
 
-            context.Response.Redirect($"/{path}/?Message={message}");
+            context.Response.Redirect($"{path}?Message={message}");
             context.HandleResponse();
 
             return Task.CompletedTask;
         }
 
         /// <summary>
-        /// Gets the site context associated with the current request, if any.
+        /// Gets the value of the site context error redirect URL associated with the current request, if any.
         /// </summary>
         /// <typeparam name="T">The type of the secure data.</typeparam>
         /// <param name="context">The failure context.</param>
@@ -121,7 +111,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <returns>
         /// The site context associated with the current request, if any.
         /// </returns>
-        private static string GetSiteContext<T>(
+        private static string GetSiteErrorRedirect<T>(
             FailureContext context,
             ISecureDataFormat<T> secureDataFormat,
             Func<T, IDictionary<string, string>> propertiesProvider)
@@ -130,15 +120,15 @@ namespace MartinCostello.LondonTravel.Site.Identity
             var stateData = secureDataFormat.Unprotect(state);
             var properties = propertiesProvider?.Invoke(stateData);
 
-            string siteContext;
+            string value;
 
             if (properties == null ||
-                !properties.TryGetValue(SiteContext.PropertyName, out siteContext))
+                !properties.TryGetValue(SiteContext.ErrorRedirectPropertyName, out value))
             {
-                siteContext = null;
+                value = null;
             }
 
-            return siteContext;
+            return value;
         }
 
         /// <summary>

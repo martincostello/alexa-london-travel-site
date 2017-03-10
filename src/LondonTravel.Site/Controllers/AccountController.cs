@@ -141,7 +141,8 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             var redirectUrl = Url.RouteUrl(SiteRoutes.ExternalSignInCallback, new { ReturnUrl = returnUrl });
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
 
-            SiteContext.SetSiteContext(properties, IsReferrerRegistrationPage() ? SiteContext.Register : SiteContext.SignIn);
+            string errorRedirectUrl = Url.RouteUrl(IsReferrerRegistrationPage() ? SiteRoutes.Register : SiteRoutes.SignIn);
+            SiteContext.SetErrorRedirect(properties, errorRedirectUrl);
 
             return Challenge(properties, provider);
         }

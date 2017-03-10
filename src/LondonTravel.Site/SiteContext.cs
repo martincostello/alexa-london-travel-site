@@ -11,9 +11,9 @@ namespace MartinCostello.LondonTravel.Site
     public static class SiteContext
     {
         /// <summary>
-        /// The name of the property to store the site context in.
+        /// The name of the property to store the site context error redirect URL in.
         /// </summary>
-        public const string PropertyName = "london-travel-context";
+        public const string ErrorRedirectPropertyName = "london-travel-context-error-redirect";
 
         /// <summary>
         /// The context for linking an account.
@@ -31,13 +31,13 @@ namespace MartinCostello.LondonTravel.Site
         public const string SignIn = nameof(SignIn);
 
         /// <summary>
-        /// Sets the site context in the specified authentication properties.
+        /// Sets the site context error redirect URL in the specified authentication properties.
         /// </summary>
-        /// <param name="properties">The authentication properties to set the site context in.</param>
+        /// <param name="properties">The authentication properties to set the site context error redirect URL in.</param>
         /// <param name="value">The value for the site context.</param>
-        public static void SetSiteContext(AuthenticationProperties properties, string value)
+        public static void SetErrorRedirect(AuthenticationProperties properties, string value)
         {
-            properties.Items[PropertyName] = value ?? string.Empty;
+            properties.Items[ErrorRedirectPropertyName] = value ?? "/";
         }
     }
 }
