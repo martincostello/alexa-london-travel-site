@@ -53,10 +53,12 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 throw new ArgumentNullException(nameof(login));
             }
 
-            if (!user.Logins.Any((p) => p.LoginProvider == login.LoginProvider))
+            if (user.Logins.Any((p) => p.LoginProvider == login.LoginProvider))
             {
-                user.Logins.Add(LondonTravelLoginInfo.FromUserLoginInfo(login));
+                throw new InvalidOperationException($"Failed to add login for provider '{login.LoginProvider}' for user '{user.Id}' as a login for that provider already exists.");
             }
+
+            user.Logins.Add(LondonTravelLoginInfo.FromUserLoginInfo(login));
 
             var result = await UpdateAsync(user, cancellationToken);
 
