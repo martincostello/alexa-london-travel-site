@@ -202,7 +202,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
         }
 
         /// <inheritdoc />
-        public async Task<IList<UserLoginInfo>> GetLoginsAsync(LondonTravelUser user, CancellationToken cancellationToken)
+        public Task<IList<UserLoginInfo>> GetLoginsAsync(LondonTravelUser user, CancellationToken cancellationToken)
         {
             ThrowIfDisposed();
 
@@ -211,12 +211,11 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 throw new ArgumentNullException(nameof(user));
             }
 
-            var results = await _client.GetAsync<LondonTravelUser>((p) => p.Logins != null, cancellationToken);
-
-            return results
-                .SelectMany((p) => p.Logins)
+            IList<UserLoginInfo> logins = user.Logins
                 .Select((p) => new UserLoginInfo(p.LoginProvider, p.ProviderKey, p.ProviderDisplayName))
                 .ToList();
+
+            return Task.FromResult(logins);
         }
 
         /// <inheritdoc />
