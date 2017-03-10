@@ -71,6 +71,11 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 return NotFound();
             }
 
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToRoute(SiteRoutes.Home);
+            }
+
             await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
 
             ViewData["ReturnUrl"] = returnUrl;
