@@ -110,7 +110,7 @@ namespace MartinCostello.LondonTravel.Site
 
             app.UseHttpMethodOverride();
 
-            app.UseIdentity(options.Value);
+            app.UseIdentity(options.Value, loggerFactory);
 
             app.UseMvc(
                 (routes) =>

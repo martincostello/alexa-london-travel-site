@@ -18,6 +18,10 @@ namespace MartinCostello.LondonTravel.Site
 
         Error,
 
+        LinkDenied,
+
+        LinkFailed,
+
         LinkSuccess,
 
         PermissionDenied,

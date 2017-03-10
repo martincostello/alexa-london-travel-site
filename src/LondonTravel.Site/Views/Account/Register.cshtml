@@ -40,6 +40,34 @@ else if (string.Equals(ViewData["Message"] as string, nameof(SiteMessage.Already
         </p>
     </div>
 }
+else if (string.Equals(Context.Request.Query["Message"].FirstOrDefault(), nameof(SiteMessage.LinkDenied), StringComparison.OrdinalIgnoreCase))
+{
+    <div class="alert alert-warning" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <p class="lead">
+            Permission denied
+        </p>
+        <p>
+            You did not grant permission for London Travel to access your other account.
+        </p>
+    </div>
+}
+else if (string.Equals(Context.Request.Query["Message"].FirstOrDefault(), nameof(SiteMessage.LinkFailed), StringComparison.OrdinalIgnoreCase))
+{
+    <div class="alert alert-warning" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <p class="lead">
+            Account link failed
+        </p>
+        <p>
+            Something went wrong when attempting to link your other account.
+        </p>
+    </div>
+}
 <div class="row">
     <div class="col-md-12">
         <section>

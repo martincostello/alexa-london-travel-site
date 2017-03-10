@@ -3,11 +3,15 @@
 
 namespace MartinCostello.LondonTravel.Site.Extensions
 {
+    using System;
+    using MartinCostello.LondonTravel.Site.Identity;
     using MartinCostello.LondonTravel.Site.Identity.Amazon;
     using MartinCostello.LondonTravel.Site.Identity.GitHub;
+    using Microsoft.AspNetCore.Authentication.Twitter;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
     using Middleware;
     using Options;
@@ -41,7 +45,8 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         /// </summary>
         /// <param name="app">The <see cref="IApplicationBuilder"/> to configure.</param>
         /// <param name="options">The current site configuration.</param>
-        public static void UseIdentity(this IApplicationBuilder app, SiteOptions options)
+        /// <param name="loggerFactory">The <see cref="ILoggerFactory"/> to use.</param>
+        public static void UseIdentity(this IApplicationBuilder app, SiteOptions options, ILoggerFactory loggerFactory)
         {
             if (options?.Authentication?.IsEnabled == true)
             {
@@ -51,34 +56,74 @@ namespace MartinCostello.LondonTravel.Site.Extensions
 
                 if (TryGetProvider("Amazon", options, out provider))
                 {
-                    app.UseAmazonAuthentication(new AmazonOptions() { ClientId = provider.ClientId, ClientSecret = provider.ClientSecret });
+                    app.UseAmazonAuthentication(CreateOAuthOptions<AmazonOptions>(provider, loggerFactory));
                 }
 
                 if (TryGetProvider("Facebook", options, out provider))
                 {
-                    app.UseFacebookAuthentication(new FacebookOptions() { ClientId = provider.ClientId, ClientSecret = provider.ClientSecret });
+                    app.UseFacebookAuthentication(CreateOAuthOptions<FacebookOptions>(provider, loggerFactory));
                 }
 
                 if (TryGetProvider("Google", options, out provider))
                 {
-                    app.UseGoogleAuthentication(new GoogleOptions() { ClientId = provider.ClientId, ClientSecret = provider.ClientSecret });
+                    app.UseGoogleAuthentication(CreateOAuthOptions<GoogleOptions>(provider, loggerFactory));
                 }
 
                 if (TryGetProvider("GitHub", options, out provider))
                 {
-                    app.UseGitHubAuthentication(new GitHubOptions() { ClientId = provider.ClientId, ClientSecret = provider.ClientSecret });
+                    app.UseGitHubAuthentication(CreateOAuthOptions<GitHubOptions>(provider, loggerFactory));
                 }
 
                 if (TryGetProvider("Microsoft", options, out provider))
                 {
-                    app.UseMicrosoftAccountAuthentication(new MicrosoftAccountOptions() { ClientId = provider.ClientId, ClientSecret = provider.ClientSecret });
+                    app.UseMicrosoftAccountAuthentication(CreateOAuthOptions<MicrosoftAccountOptions>(provider, loggerFactory));
                 }
 
                 if (TryGetProvider("Twitter", options, out provider))
                 {
-                    app.UseTwitterAuthentication(new TwitterOptions() { ConsumerKey = provider.ClientId, ConsumerSecret = provider.ClientSecret, RetrieveUserDetails = true });
+                    var twitterOptions = new TwitterOptions()
+                    {
+                        ConsumerKey = provider.ClientId,
+                        ConsumerSecret = provider.ClientSecret,
+                        RetrieveUserDetails = true,
+                    };
+
+                    var twitterEvents = twitterOptions.Events as TwitterEvents;
+
+                    if (twitterEvents != null)
+                    {
+                        twitterEvents.OnRemoteFailure = (p) => OAuthEventsHandler.HandleRemoteFailure(p, twitterOptions.AuthenticationScheme, loggerFactory.CreateLogger("Twitter"));
+                    }
+
+                    app.UseTwitterAuthentication(twitterOptions);
                 }
             }
+        }
+
+        /// <summary>
+        /// Creates an instance of <typeparamref name="T"/> for an OAuth provider.
+        /// </summary>
+        /// <typeparam name="T">The type of the OAuth options to create.</typeparam>
+        /// <param name="options">The <see cref="ExternalSignInOptions"/> to use to create the instance.</param>
+        /// <param name="loggerFactory">The <see cref="ILoggerFactory"/> to use.</param>
+        /// <param name="setup">An optional delegate to use to customize the options before they are returned.</param>
+        /// <returns>
+        /// The created instance of <typeparamref name="T"/>.
+        /// </returns>
+        private static T CreateOAuthOptions<T>(ExternalSignInOptions options, ILoggerFactory loggerFactory, Action<T> setup = null)
+            where T : OAuthOptions, new()
+        {
+            var result = new T()
+            {
+                ClientId = options.ClientId,
+                ClientSecret = options.ClientSecret,
+            };
+
+            result.Events = new OAuthEventsHandler(result, loggerFactory);
+
+            setup?.Invoke(result);
+
+            return result;
         }
 
         /// <summary>
