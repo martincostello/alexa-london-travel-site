@@ -67,7 +67,8 @@ namespace MartinCostello.LondonTravel.Site.Identity
 
             SiteMessage message;
 
-            if (string.Equals(context.Request.Query["error_reason"].FirstOrDefault(), "user_denied", StringComparison.Ordinal))
+            if (string.Equals(context.Request.Query["error"].FirstOrDefault(), "access_denied", StringComparison.Ordinal) ||
+                string.Equals(context.Request.Query["error_reason"].FirstOrDefault(), "user_denied", StringComparison.Ordinal))
             {
                 message = SiteMessage.LinkDenied;
             }
