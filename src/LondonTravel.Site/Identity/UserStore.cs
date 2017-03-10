@@ -53,7 +53,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 throw new ArgumentNullException(nameof(login));
             }
 
-            if (!user.Logins.Any((p) => p.LoginProvider == login.LoginProvider && p.ProviderKey == login.ProviderKey))
+            if (!user.Logins.Any((p) => p.LoginProvider == login.LoginProvider))
             {
                 user.Logins.Add(LondonTravelLoginInfo.FromUserLoginInfo(login));
             }
