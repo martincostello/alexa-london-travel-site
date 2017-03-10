@@ -11,10 +11,10 @@
 <div class="row">
     <div class="col-md-8">
         <h4>Linked Accounts</h4>
+        <hr />
         <p>
             Listed below are the accounts you have linked to your London Travel account for signing in with.
         </p>
-        <hr />
         <table class="table">
             <tbody>
                 @foreach (var provider in Model.CurrentLogins.OrderBy((p) => p.ProviderDisplayName).ThenBy((p) => p.LoginProvider))
