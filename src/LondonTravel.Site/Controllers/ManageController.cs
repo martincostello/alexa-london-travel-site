@@ -89,6 +89,8 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl, userId);
 
+            SiteContext.SetSiteContext(properties, SiteContext.LinkAccount);
+
             _logger?.LogInformation($"Attempting to link user '{userId}' to provider '{provider}'.");
 
             return Challenge(properties, provider);

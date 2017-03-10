@@ -92,7 +92,13 @@ namespace MartinCostello.LondonTravel.Site.Extensions
 
                     if (twitterEvents != null)
                     {
-                        twitterEvents.OnRemoteFailure = (p) => OAuthEventsHandler.HandleRemoteFailure(p, twitterOptions.AuthenticationScheme, loggerFactory.CreateLogger("Twitter"));
+                        twitterEvents.OnRemoteFailure =
+                            (context) => OAuthEventsHandler.HandleRemoteFailure(
+                                context,
+                                twitterOptions.AuthenticationScheme,
+                                twitterOptions.StateDataFormat,
+                                loggerFactory.CreateLogger("Twitter"),
+                                (token) => token?.Properties?.Items);
                     }
 
                     app.UseTwitterAuthentication(twitterOptions);

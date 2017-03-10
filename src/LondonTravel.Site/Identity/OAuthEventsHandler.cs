@@ -4,6 +4,7 @@
 namespace MartinCostello.LondonTravel.Site.Identity
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authentication;
@@ -17,9 +18,9 @@ namespace MartinCostello.LondonTravel.Site.Identity
     public class OAuthEventsHandler : OAuthEvents
     {
         /// <summary>
-        /// The authentication provider assocaited with the instance. This field is read-only.
+        /// The authentication provider options associated with the instance. This field is read-only.
         /// </summary>
-        private readonly string _provider;
+        private readonly OAuthOptions _options;
 
         /// <summary>
         /// The <see cref="IOAuthEvents"/> wrapped by this instance for events it does not handle itself. This field is read-only.
@@ -38,11 +39,11 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <param name="loggerFactory">The <see cref="ILoggerFactory"/> to use.</param>
         public OAuthEventsHandler(OAuthOptions options, ILoggerFactory loggerFactory)
         {
-            _provider = options.AuthenticationScheme;
+            _options = options;
             _wrapped = options.Events;
             _logger = loggerFactory.CreateLogger<OAuthEventsHandler>();
 
-            // Setup custom handler
+            // Setup custom handlers
             OnRemoteFailure = HandleRemoteFailure;
 
             // Assign delegated handlers
@@ -54,16 +55,42 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <summary>
         /// Handles a remote failure.
         /// </summary>
+        /// <typeparam name="T">The type of the secure data.</typeparam>
         /// <param name="context">The failure context.</param>
         /// <param name="provider">The authentication provider.</param>
+        /// <param name="secureDataFormat">The secure data format.</param>
         /// <param name="logger">The <see cref="ILogger"/> to use.</param>
+        /// <param name="propertiesProvider">A delegate to a method to retrieve authentication properties from the secure data.</param>
         /// <returns>
         /// A <see cref="Task"/> representing the completion of the operation.
         /// </returns>
-        internal static Task HandleRemoteFailure(FailureContext context, string provider, ILogger logger)
+        internal static Task HandleRemoteFailure<T>(
+            FailureContext context,
+            string provider,
+            ISecureDataFormat<T> secureDataFormat,
+            ILogger logger,
+            Func<T, IDictionary<string, string>> propertiesProvider)
         {
             string errors = string.Join(";", context.Request.Query.Select((p) => $"'{p.Key}' = '{p.Value}'"));
             logger?.LogError(default(EventId), context.Failure, $"Failed to sign-in using '{provider}': '{context.Failure.Message}'. Errors: {errors}.");
+
+            string siteContext = GetSiteContext(context, secureDataFormat, propertiesProvider);
+            string path = null;
+
+            // TODO It would be better to leverage routing to get the paths
+            if (string.Equals(siteContext, SiteContext.LinkAccount, StringComparison.Ordinal))
+            {
+                path = "manage";
+            }
+            else if (string.Equals(siteContext, SiteContext.Register, StringComparison.Ordinal))
+            {
+                path = "account/register";
+            }
+
+            if (string.IsNullOrEmpty(path))
+            {
+                path = "account/sign-in";
+            }
 
             SiteMessage message;
 
@@ -78,10 +105,40 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 message = SiteMessage.LinkFailed;
             }
 
-            context.Response.Redirect($"/account/sign-in/?Message={message}");
+            context.Response.Redirect($"/{path}/?Message={message}");
             context.HandleResponse();
 
             return Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// Gets the site context associated with the current request, if any.
+        /// </summary>
+        /// <typeparam name="T">The type of the secure data.</typeparam>
+        /// <param name="context">The failure context.</param>
+        /// <param name="secureDataFormat">The secure data format.</param>
+        /// <param name="propertiesProvider">A delegate to a method to retrieve authentication properties from the secure data.</param>
+        /// <returns>
+        /// The site context associated with the current request, if any.
+        /// </returns>
+        private static string GetSiteContext<T>(
+            FailureContext context,
+            ISecureDataFormat<T> secureDataFormat,
+            Func<T, IDictionary<string, string>> propertiesProvider)
+        {
+            var state = context.Request.Query["state"];
+            var stateData = secureDataFormat.Unprotect(state);
+            var properties = propertiesProvider?.Invoke(stateData);
+
+            string siteContext;
+
+            if (properties == null ||
+                !properties.TryGetValue(SiteContext.PropertyName, out siteContext))
+            {
+                siteContext = null;
+            }
+
+            return siteContext;
         }
 
         /// <summary>
@@ -95,7 +152,12 @@ namespace MartinCostello.LondonTravel.Site.Identity
         {
             try
             {
-                await HandleRemoteFailure(context, _provider, _logger);
+                await HandleRemoteFailure(
+                    context,
+                    _options.AuthenticationScheme,
+                    _options.StateDataFormat,
+                    _logger,
+                    (p) => p?.Items);
             }
             catch (Exception ex)
             {

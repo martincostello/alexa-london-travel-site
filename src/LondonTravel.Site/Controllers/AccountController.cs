@@ -3,6 +3,7 @@
 
 namespace MartinCostello.LondonTravel.Site.Controllers
 {
+    using System;
     using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
@@ -139,6 +140,8 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             var redirectUrl = Url.RouteUrl(SiteRoutes.ExternalSignInCallback, new { ReturnUrl = returnUrl });
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+
+            SiteContext.SetSiteContext(properties, IsReferrerRegistrationPage() ? SiteContext.Register : SiteContext.SignIn);
 
             return Challenge(properties, provider);
         }
@@ -289,6 +292,21 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             }
 
             return user;
+        }
+
+        private bool IsReferrerRegistrationPage()
+        {
+            string referrer = HttpContext.Request.Headers["referer"];
+
+            if (string.IsNullOrWhiteSpace(referrer) ||
+                !Uri.TryCreate(referrer, UriKind.Absolute, out Uri referrerUri))
+            {
+                return false;
+            }
+
+            string registerUrl = Url.RouteUrl(SiteRoutes.Register);
+
+            return string.Equals(referrerUri.AbsolutePath, registerUrl, StringComparison.OrdinalIgnoreCase);
         }
     }
 }
