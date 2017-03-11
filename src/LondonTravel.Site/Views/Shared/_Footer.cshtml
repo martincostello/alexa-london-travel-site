@@ -3,19 +3,19 @@
 <footer>
     <p class="hidden-sm hidden-xs">
         &copy; @Model.Metadata.Author.Name @DateTimeOffset.UtcNow.Year |
-        <a asp-route="@SiteRoutes.Help" title="View help and support information for the London Travel Alexa skill and this website">
+        <a asp-route="@SiteRoutes.Help" title="View help and support information for the London Travel Alexa skill and this website" data-ga-label="Help Footer">
             Help &amp; Support
         </a>
         |
-        <a asp-route="@SiteRoutes.PrivacyPolicy" title="View the London Travel Alexa skill's Privacy Policy">
+        <a asp-route="@SiteRoutes.PrivacyPolicy" title="View the London Travel Alexa skill's Privacy Policy" data-ga-label="Privacy Policy Footer">
             Privacy Policy
         </a>
         |
-        <a asp-route="@SiteRoutes.TermsOfService" title="View the London Travel Alexa skill's Terms of Service">
+        <a asp-route="@SiteRoutes.TermsOfService" title="View the London Travel Alexa skill's Terms of Service" data-ga-label="Terms of Service Footer">
             Terms of Service
         </a>
         |
-        <a href="@Model.ExternalLinks.Status.AbsoluteUri" rel="noopener" target="_blank" title="View site uptime information">
+        <a href="@Model.ExternalLinks.Status.AbsoluteUri" rel="noopener" target="_blank" title="View site uptime information" data-ga-label="Site Uptime">
             Site Status &amp; Uptime
         </a>
         <span id="build-date" data-format="YYYY-MM-DD HH:mm Z" data-timestamp="@GitMetadata.Timestamp.ToString("u", CultureInfo.InvariantCulture)"></span>
@@ -25,15 +25,15 @@
             &copy; @Model.Metadata.Author.Name @DateTimeOffset.UtcNow.Year
         </div>
         <div class="col-sm-12 col-xs-12">
-            <a asp-route="@SiteRoutes.Help" title="View help and support information for the London Travel Alexa skill and this website">
+            <a asp-route="@SiteRoutes.Help" title="View help and support information for the London Travel Alexa skill and this website" data-ga-label="Help Footer">
                 Help &amp; Support
             </a>
             |
-            <a asp-route="@SiteRoutes.PrivacyPolicy" title="View the London Travel Alexa skill's Privacy Policy">
+            <a asp-route="@SiteRoutes.PrivacyPolicy" title="View the London Travel Alexa skill's Privacy Policy" data-ga-label="Privacy Policy Footer">
                 Privacy Policy
             </a>
             |
-            <a asp-route="@SiteRoutes.TermsOfService" title="View the London Travel Alexa skill's Terms of Service">
+            <a asp-route="@SiteRoutes.TermsOfService" title="View the London Travel Alexa skill's Terms of Service" data-ga-label="Terms of Service Footer">
                 Terms of Service
             </a>
         </div>

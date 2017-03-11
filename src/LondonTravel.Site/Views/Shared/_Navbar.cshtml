@@ -2,7 +2,7 @@
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
-            <a asp-controller="Home" asp-action="Index" class="navbar-brand" title="View the homepage">
+            <a asp-controller="Home" asp-action="Index" class="navbar-brand" title="View the homepage" data-ga-label="Homepage Navbar">
                 <span>
                     <lazyimg src="@Url.CdnContent("avatar.png", Options)" alt="London Travel" title="London Travel" aria-hidden="true" />
                     <noscript>
@@ -11,7 +11,7 @@
                     @Options.Metadata.Name
                 </span>
             </a>
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" data-ga-label="Navbar Collapse">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -21,13 +21,13 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" data-ga-label="Navbar Menu">
                         Menu
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="@Options?.ExternalLinks?.Skill" rel="noopener" target="_blank" title="Install London Travel for Amazon Alexa from amazon.co.uk">
+                            <a href="@Options?.ExternalLinks?.Skill" rel="noopener" target="_blank" title="Install London Travel for Amazon Alexa from amazon.co.uk" data-ga-label="Install Navbar">
                                 Install
                                 <i class="fa fa-external-link" aria-hidden="true"></i>
                             </a>
@@ -36,7 +36,7 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li>
-                                <a asp-route="@SiteRoutes.Manage" title="Manage your account">
+                                <a asp-route="@SiteRoutes.Manage" title="Manage your account" data-ga-label="Manage Account Navbar">
                                     Manage account <i class="fa fa-user" aria-hidden="true"></i>
                                 </a>
                             </li>
@@ -44,22 +44,22 @@
                         else
                         {
                             <li>
-                                <a asp-route="@SiteRoutes.Register" title="Register for a London Travel account">Register <i class="fa fa-user-plus" aria-hidden="true"></i></a>
+                                <a asp-route="@SiteRoutes.Register" title="Register for a London Travel account" data-ga-label="Register Navbar">Register <i class="fa fa-user-plus" aria-hidden="true"></i></a>
                             </li>
                         }
                         <li role="separator" class="divider"></li>
                         <li>
-                            <a asp-route="@SiteRoutes.Help" title="View help and support information for the London Travel Alexa skill and this website">
+                            <a asp-route="@SiteRoutes.Help" title="View help and support information for the London Travel Alexa skill and this website" data-ga-label="Help Navbar">
                                 Help &amp; Support <i class="fa fa-question-circle" aria-hidden="true"></i>
                             </a>
                         </li>
                         <li>
-                            <a asp-route="@SiteRoutes.PrivacyPolicy" title="View the London Travel Alexa skill's Privacy Policy">
+                            <a asp-route="@SiteRoutes.PrivacyPolicy" title="View the London Travel Alexa skill's Privacy Policy" data-ga-label="Privacy Policy Navbar">
                                 Privacy Policy
                             </a>
                         </li>
                         <li>
-                            <a asp-route="@SiteRoutes.TermsOfService" title="View the London Travel Alexa skill's Terms of Service">
+                            <a asp-route="@SiteRoutes.TermsOfService" title="View the London Travel Alexa skill's Terms of Service" data-ga-label="Terms of Service Navbar">
                                 Terms of Service
                             </a>
                         </li>

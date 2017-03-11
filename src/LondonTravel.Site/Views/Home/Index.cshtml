@@ -10,18 +10,18 @@
         An Amazon Alexa skill for checking the status of travel in London.
     </p>
     <p>
-        <a class="btn btn-primary" href="@Options?.ExternalLinks?.Skill" rel="noopener" target="_blank" title="Install London Travel for Amazon Alexa from amazon.co.uk">Install <i class="fa fa-external-link" aria-hidden="true"></i></a>
+        <a class="btn btn-primary" href="@Options?.ExternalLinks?.Skill" rel="noopener" target="_blank" title="Install London Travel for Amazon Alexa from amazon.co.uk">Install <i class="fa fa-external-link" aria-hidden="true" data-ga-label="Install Skill CTA"></i></a>
         @if (!User.Identity.IsAuthenticated)
         {
-            <a class="btn btn-primary hidden-xs" asp-route="@SiteRoutes.Register" title="Register for a London Travel account">Register <i class="fa fa-user-plus" aria-hidden="true"></i></a>
-            <a class="btn btn-primary hidden-xs" asp-route="@SiteRoutes.SignIn" title="Sign in to your London Travel account">Sign In <i class="fa fa-sign-in" aria-hidden="true"></i></a>
+            <a class="btn btn-primary hidden-xs" asp-route="@SiteRoutes.Register" title="Register for a London Travel account">Register <i class="fa fa-user-plus" aria-hidden="true" data-ga-label="Register CTA"></i></a>
+            <a class="btn btn-primary hidden-xs" asp-route="@SiteRoutes.SignIn" title="Sign in to your London Travel account">Sign In <i class="fa fa-sign-in" aria-hidden="true" data-ga-label="Sign-in CTA"></i></a>
         }
     </p>
     @if (!User.Identity.IsAuthenticated)
     {
         <p class="visible-xs">
-            <a class="btn btn-primary" asp-route="@SiteRoutes.Register" title="Register for a London Travel account">Register <i class="fa fa-user-plus" aria-hidden="true"></i></a>
-            <a class="btn btn-primary" asp-route="@SiteRoutes.SignIn" title="Sign in to your London Travel account">Sign In <i class="fa fa-sign-in" aria-hidden="true"></i></a>
+            <a class="btn btn-primary" asp-route="@SiteRoutes.Register" title="Register for a London Travel account">Register <i class="fa fa-user-plus" aria-hidden="true" data-ga-label="Register CTA"></i></a>
+            <a class="btn btn-primary" asp-route="@SiteRoutes.SignIn" title="Sign in to your London Travel account">Sign In <i class="fa fa-sign-in" aria-hidden="true" data-ga-label="Sign-in CTA"></i></a>
         </p>
     }
 </div>

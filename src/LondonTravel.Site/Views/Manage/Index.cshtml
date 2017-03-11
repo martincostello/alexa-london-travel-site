@@ -29,7 +29,7 @@
                                     <div>
                                         <input asp-for="@provider.LoginProvider" name="LoginProvider" type="hidden" />
                                         <input asp-for="@provider.ProviderKey" name="ProviderKey" type="hidden" />
-                                        <input type="submit" class="btn btn-default" value="Remove" title="Remove link to @provider.LoginProvider from your account" data-toggle="modal" data-target=".remove-link-modal" />
+                                        <input type="submit" class="btn btn-default" value="Remove" title="Remove link to @provider.LoginProvider from your account" data-ga-label="Remove Account Link - @provider.LoginProvider" data-toggle="modal" data-target=".remove-link-modal" />
                                     </div>
                                 </form>
                             }

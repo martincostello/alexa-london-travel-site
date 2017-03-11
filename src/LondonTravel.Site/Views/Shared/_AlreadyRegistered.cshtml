@@ -1,7 +1,7 @@
 ﻿@if (string.Equals(ViewData["Message"] as string, nameof(SiteMessage.AlreadyRegistered), StringComparison.OrdinalIgnoreCase))
 {
     <div class="alert alert-warning" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close" data-ga-label="Already Registered Dismiss">
             <span aria-hidden="true">&times;</span>
         </button>
         <p class="lead">
@@ -14,7 +14,7 @@
         <p>
             Sign in with one of the service(s) you've already used to sign-in,
             then you'll be able to link other service(s) to your account
-            from the <a asp-route="@SiteRoutes.Manage" class="alert-link">account mangement</a> page.
+            from the <a asp-route="@SiteRoutes.Manage" class="alert-link" data-ga-label="Manage Account For Registered">account mangement</a> page.
         </p>
     </div>
 }

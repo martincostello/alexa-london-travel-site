@@ -1,5 +1,5 @@
 ﻿@model Microsoft.AspNetCore.Http.Authentication.AuthenticationDescription
-<button type="submit" class="btn btn-block btn-social @Html.GetSocialLoginButtonCss(Model.AuthenticationScheme)" name="provider" value="@Model.AuthenticationScheme" title="Sign in using your @Model.DisplayName account" data-toggle="modal" data-target=".sign-in-modal">
+<button type="submit" class="btn btn-block btn-social @Html.GetSocialLoginButtonCss(Model.AuthenticationScheme)" name="provider" value="@Model.AuthenticationScheme" title="Sign in using your @Model.DisplayName account" data-ga-label="Sign-In - @Model.DisplayName" data-toggle="modal" data-target=".sign-in-modal">
     @await Html.PartialAsync("_SocialIcon", Model.AuthenticationScheme)
     Sign in using your @Model.DisplayName account
 </button>

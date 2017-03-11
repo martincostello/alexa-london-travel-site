@@ -2,13 +2,13 @@
     <hr />
     <form asp-route="@SiteRoutes.DeleteAccount" method="post" class="form-horizontal">
         <div>
-            <input type="submit" class="btn btn-danger" value="Delete your account" title="Permanently delete your London Travel account" />
+            <input type="submit" class="btn btn-danger" value="Delete your account" title="Permanently delete your London Travel account" data-ga-label="Delete Account" />
         </div>
     </form>
 </noscript>
 <div id="delete-account" class="hide">
     <hr />
-    <button class="btn btn-danger" title="Permanently delete your London Travel account" data-toggle="modal" data-target=".delete-account-modal">
+    <button class="btn btn-danger" title="Permanently delete your London Travel account" data-ga-label="Delete Account" data-toggle="modal" data-target=".delete-account-modal">
         Delete your account
     </button>
 </div>
@@ -16,7 +16,9 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close js-delete-content" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close js-delete-content" data-dismiss="modal" aria-label="Close" data-ga-label="Delete Account Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
                 <h4 class="modal-title" id="remove-link-modal-title">Delete your account</h4>
             </div>
             <div class="modal-body">
@@ -50,8 +52,8 @@
             </div>
             <div class="modal-footer">
                 <form id="delete-account-js" asp-route="@SiteRoutes.DeleteAccount" method="post" class="form-horizontal">
-                    <button type="button" class="btn btn-default js-delete-control" title="Cancel" data-dismiss="modal">Cancel</button>
-                    <input type="submit" class="btn btn-danger disabled js-delete-control js-delete-confirm" value="Delete" title="Permanently delete your account" disabled />
+                    <button type="button" class="btn btn-default js-delete-control" title="Cancel" data-dismiss="modal" data-ga-label="Delete Account Cancel">Cancel</button>
+                    <input type="submit" class="btn btn-danger disabled js-delete-control js-delete-confirm" value="Delete" title="Permanently delete your account" data-ga-label="Delete Account Confirm" disabled />
                 </form>
             </div>
         </div>
