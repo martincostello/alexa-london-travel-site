@@ -9,4 +9,4 @@ martinCostello = {
 
 (function () {
     console.log("%cDownload the London Travel Alexa skill from Amazon: https://www.amazon.co.uk/dp/B01NB0T86R", "color: #2c3e50;");
-}());
+})();

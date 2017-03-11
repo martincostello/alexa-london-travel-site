@@ -55,7 +55,13 @@ describe("Google Analytics", function () {
             var result = martinCostello.londonTravel.track(category, action, label, value, fields);
 
             expect(result).toBe(true);
-            expect(ga).toHaveBeenCalledWith("send", "event", category, action, label, value, fields);
+            expect(ga).toHaveBeenCalledWith("send", jasmine.objectContaining({
+                hitType: "event",
+                eventCategory: category,
+                eventAction: action,
+                eventLabel: label,
+                eventValue: value
+            }));
         });
     });
 });

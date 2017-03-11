@@ -12,9 +12,29 @@
  */
 martinCostello.londonTravel.track = function (category, action, label, value, fields) {
     if ("ga" in window) {
-        ga("send", "event", category, action, label, value, fields);
+        ga("send", {
+            hitType: "event",
+            eventCategory: category,
+            eventAction: action,
+            eventLabel: label,
+            eventValue: value
+        });
         return true;
     } else {
         return false;
     }
 };
+
+(function () {
+    $("a, button, input, .ga-track-click").on("click", function () {
+        var element = $(this);
+        var label = element.attr("data-ga-label");
+        if (label) {
+            martinCostello.londonTravel.track(
+                element.attr("data-ga-category") || "General",
+                element.attr("data-ga-action") || "clicked",
+                label,
+                element.attr("data-ga-value") || element.attr("id") || "");
+        }
+    });
+})();
