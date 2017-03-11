@@ -241,7 +241,15 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         [AllowAnonymous]
         [HttpGet]
         [Route("register", Name = SiteRoutes.Register)]
-        public IActionResult Register() => View();
+        public IActionResult Register()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToRoute(SiteRoutes.Home);
+            }
+
+            return View();
+        }
 
         private void AddErrors(IdentityResult result)
         {
