@@ -216,6 +216,7 @@ namespace MartinCostello.LondonTravel.Site
             services.AddSingleton<IConfiguration>((_) => Configuration);
             services.AddScoped((p) => p.GetRequiredService<IHttpContextAccessor>().HttpContext);
             services.AddScoped((p) => p.GetRequiredService<IOptionsSnapshot<SiteOptions>>().Value);
+            services.AddScoped<SiteResources>();
 
             services.AddScoped<IDocumentClient>(
                 (p) => new DocumentClientWrapper(

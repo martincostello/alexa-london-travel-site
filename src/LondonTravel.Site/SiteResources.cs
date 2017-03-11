@@ -3,10 +3,23 @@
 
 namespace MartinCostello.LondonTravel.Site
 {
+    using Microsoft.Extensions.Localization;
+
     /// <summary>
     /// A class representing the container for site resource strings.
     /// </summary>
     public class SiteResources
     {
+        private readonly IStringLocalizer<SiteResources> _localizer;
+
+        public SiteResources(IStringLocalizer<SiteResources> localizer)
+        {
+            _localizer = localizer;
+        }
+
+        public string HomepageLead()
+        {
+            return _localizer["An Amazon Alexa skill for checking the status of travel in London."];
+        }
     }
 }
