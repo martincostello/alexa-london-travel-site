@@ -4,6 +4,7 @@
 namespace MartinCostello.LondonTravel.Site
 {
     using System;
+    using System.Globalization;
     using Autofac;
     using Autofac.Extensions.DependencyInjection;
     using Extensions;
@@ -15,7 +16,9 @@ namespace MartinCostello.LondonTravel.Site
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.HttpOverrides;
+    using Microsoft.AspNetCore.Localization;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Razor;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
@@ -74,6 +77,20 @@ namespace MartinCostello.LondonTravel.Site
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
 
             app.UseCustomHttpHeaders(environment, Configuration, options);
+
+            var supportedCultures = new[]
+            {
+                new CultureInfo("en-GB"),
+                new CultureInfo("en-US"),
+            };
+
+            app.UseRequestLocalization(
+                new RequestLocalizationOptions()
+                {
+                    DefaultRequestCulture = new RequestCulture("en-GB"),
+                    SupportedCultures = supportedCultures,
+                    SupportedUICultures = supportedCultures,
+                });
 
             if (environment.IsDevelopment())
             {
@@ -178,7 +195,11 @@ namespace MartinCostello.LondonTravel.Site
                 .AddUserStore<UserStore>()
                 .AddDefaultTokenProviders();
 
-            services.AddMvc(ConfigureMvc)
+            services
+                .AddLocalization()
+                .AddMvc(ConfigureMvc)
+                .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+                .AddDataAnnotationsLocalization()
                 .AddJsonOptions((p) => services.AddSingleton(ConfigureJsonFormatter(p)));
 
             services.AddRouting(
