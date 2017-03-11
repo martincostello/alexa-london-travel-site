@@ -25,6 +25,7 @@
       "assets/scripts/js/martinCostello/londonTravel/debug.js",
       "assets/scripts/js/martinCostello/londonTravel/track.js",
       "assets/scripts/js/analytics.js",
+      "assets/scripts/js/locale.js",
       "assets/scripts/js/footer.js",
       "assets/scripts/js/lazyload.js",
       "assets/scripts/js/serviceWorker.js"
@@ -43,6 +44,7 @@
       "assets/scripts/js/martinCostello/londonTravel/debug.js",
       "assets/scripts/js/martinCostello/londonTravel/track.js",
       "assets/scripts/js/analytics.js",
+      "assets/scripts/js/locale.js",
       "assets/scripts/js/footer.js",
       "assets/scripts/js/lazyload.js",
       "assets/scripts/js/serviceWorker.js"
