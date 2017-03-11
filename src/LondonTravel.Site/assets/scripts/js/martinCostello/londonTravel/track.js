@@ -25,7 +25,7 @@ martinCostello.londonTravel.track = function (category, action, label) {
 (function () {
     $("a, button, input, .ga-track-click").on("click", function () {
         var element = $(this);
-        var label = element.attr("data-ga-label");
+        var label = element.attr("data-ga-label") || element.attr("id");
         if (label) {
             martinCostello.londonTravel.track(
                 element.attr("data-ga-category") || "General",
