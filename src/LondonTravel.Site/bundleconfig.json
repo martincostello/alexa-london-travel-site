@@ -2,7 +2,8 @@
   {
     "outputFileName": "wwwroot/assets/css/site.css",
     "inputFiles": [
-      "assets/styles/css/site.css"
+      "assets/styles/css/site.css",
+      "assets/styles/css/travel.css"
     ],
     "minify": {
       "enabled": false
@@ -11,7 +12,8 @@
   {
     "outputFileName": "wwwroot/assets/css/site.min.css",
     "inputFiles": [
-      "assets/styles/css/site.css"
+      "assets/styles/css/site.css",
+      "assets/styles/css/travel.css"
     ],
     "minify": {
       "enabled": true
