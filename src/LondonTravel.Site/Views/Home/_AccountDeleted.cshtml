@@ -2,14 +2,14 @@
      string.Equals(Context.Request.Query["Message"], nameof(SiteMessage.AccountDeleted), StringComparison.OrdinalIgnoreCase))
 {
     <div class="alert alert-success" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close" data-ga-label="Dismiss Account Deleted">
+        <button type="button" class="close" data-dismiss="alert" aria-label="@SR.CloseButtonText" data-ga-label="Dismiss Account Deleted">
             <span aria-hidden="true">&times;</span>
         </button>
         <p class="lead">
-            Your London Travel account has been deleted.
+            @SR.AccountDeletedTitle
         </p>
         <p>
-            Sorry to see you go.
+            @SR.AccountDeletedContent
         </p>
     </div>
 }

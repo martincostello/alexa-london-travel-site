@@ -1,41 +1,49 @@
 ﻿@{
-    ViewBag.MetaDescription = "Register for a London Travel account.";
-    ViewBag.Title = "Register";
+    ViewBag.MetaDescription = SR.RegisterMetaDescription;
+    ViewBag.Title = SR.RegisterTitle;
 }
 @await Html.PartialAsync("_SignInErrors")
 <div class="row">
     <div class="col-md-12">
         <section>
-            <h2>Register for an account</h2>
+            <h2>@SR.RegisterSubtitle</h2>
             <p class="lead">
-                Registering for an account for the London Travel skill allows you to save
-                your tube line and station preferences so that you can ask about your commute.
+                @SR.RegisterLead
             </p>
             <blockquote>
-                <p><i>&quot;Alexa, ask London Travel what my commute's like today?&quot;</i></p>
+                <p>
+                    <i>
+                        @SR.RegisterQuote
+                    </i>
+                </p>
             </blockquote>
             <p>
-                If you do not already have a London Travel account, you can create one by signing in with one of the services below.
+                @SR.RegisterParagraph1
             </p>
             <p>
-                The London Travel account created will use with email address associated with the service you sign in with.
+                @SR.RegisterParagraph2
             </p>
             <p>
-                Accounts and their data are managed by this service in line with the
-                <a asp-route="@SiteRoutes.PrivacyPolicy" rel="noopener" title="View the London Travel Alexa skill's Privacy Policy" data-ga-label="Privacy Policy (Register)">
-                    Privacy Policy
-                </a>
-                and
-                <a asp-route="@SiteRoutes.TermsOfService" rel="noopener" title="View the London Travel Alexa skill's Terms of Service" data-ga-label="Terms of Service (Register)">
-                    Terms of Service
-                </a>.
+                @SR.RegisterParagraph3
+                <ul>
+                    <li>
+                        <a asp-route="@SiteRoutes.PrivacyPolicy" class="small" rel="noopener" title="@SR.PrivacyPolicyLinkAltText" data-ga-label="Privacy Policy (Register)">
+                            @SR.PrivacyPolicyLinkText
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-route="@SiteRoutes.TermsOfService" class="small" rel="noopener" title="@SR.TermsOfServiceLinkAltText" data-ga-label="Terms of Service (Register)">
+                            @SR.TermsOfServiceLinkText
+                        </a>
+                    </li>
+                </ul>
             </p>
         </section>
     </div>
 </div>
 <hr />
 <h4>
-    Choose a service to sign-in with:
+    @SR.RegisterSignInSubtitle
 </h4>
 <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-4">

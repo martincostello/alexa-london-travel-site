@@ -1,14 +1,14 @@
 ﻿@{
-    ViewBag.MetaDescription = "Sign in to your London Travel account.";
+    ViewBag.MetaDescription = SR.SignInMetaDescription;
     ViewBag.MetaRobots = "NOINDEX";
-    ViewBag.Title = "Sign in";
+    ViewBag.Title = SR.SignInTitle;
 }
 @await Html.PartialAsync("_SignInErrors")
 <h2>@ViewBag.Title</h2>
 <div class="row">
     <div class="col-md-4">
         <section>
-            <h4>Choose a service to sign in with:</h4>
+            <h4>@SR.SignInSubtitle</h4>
             <hr />
             @await Html.PartialAsync("_SignInForm")
         </section>
@@ -16,12 +16,15 @@
     <hr class="hidden-md hidden-lg" />
     <div class="col-md-8">
         <section>
-            <h3>...or register a new account</h3>
+            <h3>@SR.SignInRegisterSubtitle</h3>
             <p>
-                If you do not already have a London Travel account, register for one <a asp-route="@SiteRoutes.Register" title="Register for a London Travel account" data-ga-label="Register (Link)">here</a>.
+                @SR.SignInRegisterText
             </p>
             <p>
-                <a class="btn btn-primary btn-lg" asp-route="@SiteRoutes.Register" title="Register for a London Travel account">Register <i class="fa fa-user-plus" aria-hidden="true" data-ga-label="Register (Button)"></i></a>
+                <a class="btn btn-primary btn-lg" asp-route="@SiteRoutes.Register" title="@SR.RegisterLinkAltText">
+                    @SR.RegisterLinkText
+                    <i class="fa fa-user-plus" aria-hidden="true" data-ga-label="Register (Button)"></i>
+                </a>
             </p>
         </section>
     </div>
