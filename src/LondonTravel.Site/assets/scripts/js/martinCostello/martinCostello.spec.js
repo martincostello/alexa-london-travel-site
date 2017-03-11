@@ -21,12 +21,8 @@ describe("Google Analytics", function () {
             var category = "category";
             var action = "action";
             var label = "label";
-            var value = 1;
-            var fields = {
-                foo: "bar"
-            };
 
-            var result = martinCostello.londonTravel.track(category, action, label, value, fields);
+            var result = martinCostello.londonTravel.track(category, action, label);
 
             expect(result).toBe(false);
         });
@@ -47,20 +43,15 @@ describe("Google Analytics", function () {
             var category = "category";
             var action = "action";
             var label = "label";
-            var value = 1;
-            var fields = {
-                foo: "bar"
-            };
 
-            var result = martinCostello.londonTravel.track(category, action, label, value, fields);
+            var result = martinCostello.londonTravel.track(category, action, label);
 
             expect(result).toBe(true);
             expect(ga).toHaveBeenCalledWith("send", jasmine.objectContaining({
                 hitType: "event",
                 eventCategory: category,
                 eventAction: action,
-                eventLabel: label,
-                eventValue: value
+                eventLabel: label
             }));
         });
     });
