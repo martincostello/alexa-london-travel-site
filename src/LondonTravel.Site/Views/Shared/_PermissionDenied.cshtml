@@ -1,17 +1,14 @@
 ﻿@if (string.Equals(ViewData["Message"] as string, nameof(SiteMessage.PermissionDenied), StringComparison.OrdinalIgnoreCase))
 {
     <div class="alert alert-warning" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close" data-ga-label="Permission Denied Dismiss">
+        <button type="button" class="close" data-dismiss="alert" aria-label="@SR.CloseButtonText" data-ga-label="Permission Denied Dismiss">
             <span aria-hidden="true">&times;</span>
         </button>
         <p class="lead">
-            Permission denied
+            @SR.PermissionDeniedTitle
         </p>
         <p>
-            You did not grant permission for London Travel to access your email address when you signed in.
-        </p>
-        <p>
-            An email address is required to register.
+            @SR.PermissionDeniedContent
         </p>
     </div>
 }

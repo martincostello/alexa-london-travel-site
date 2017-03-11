@@ -2,8 +2,8 @@
 @{
     ViewBag.MetaDescription = string.Empty;
     ViewBag.MetaRobots = "NOINDEX";
-    ViewBag.Title = "Error";
-    ViewBag.Message = ViewBag.Message ?? "An error occurred while processing your request.";
+    ViewBag.Title = SR.ErrorTitle;
+    ViewBag.Message = ViewBag.Message ?? SR.ErrorMessage;
 }
-<h1 class="text-danger">Error (HTTP @(Model ?? 500))</h1>
+<h1 class="text-danger">@SR.ErrorSubtitle(Model)</h1>
 <h2 class="text-danger">@ViewBag.Message</h2>

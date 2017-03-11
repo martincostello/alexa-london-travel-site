@@ -1,14 +1,14 @@
 ﻿@if (string.Equals(Context.Request.Query["Message"].FirstOrDefault(), nameof(SiteMessage.LinkFailed), StringComparison.OrdinalIgnoreCase))
 {
     <div class="alert alert-warning" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close" data-ga-label="Account Link Failed Dismiss">
+        <button type="button" class="close" data-dismiss="alert" aria-label="@SR.CloseButtonText" data-ga-label="Account Link Failed Dismiss">
             <span aria-hidden="true">&times;</span>
         </button>
         <p class="lead">
-            Account link failed
+            @SR.AccountLinkFailedTitle
         </p>
         <p>
-            Something went wrong when attempting to link your other account.
+            @SR.AccountLinkFailedContent
         </p>
     </div>
 }

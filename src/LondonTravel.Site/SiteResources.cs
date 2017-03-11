@@ -3,6 +3,8 @@
 
 namespace MartinCostello.LondonTravel.Site
 {
+    using System;
+    using MartinCostello.LondonTravel.Site.Options;
     using Microsoft.AspNetCore.Mvc.Localization;
     using Microsoft.Extensions.Localization;
 
@@ -13,11 +15,16 @@ namespace MartinCostello.LondonTravel.Site
     {
         private readonly IHtmlLocalizer<SiteResources> _htmlLocalizer;
         private readonly IStringLocalizer<SiteResources> _localizer;
+        private readonly SiteOptions _options;
 
-        public SiteResources(IHtmlLocalizer<SiteResources> htmlLocalizer, IStringLocalizer<SiteResources> localizer)
+        public SiteResources(
+            IHtmlLocalizer<SiteResources> htmlLocalizer,
+            IStringLocalizer<SiteResources> localizer,
+            SiteOptions options)
         {
             _htmlLocalizer = htmlLocalizer;
             _localizer = localizer;
+            _options = options;
         }
 
         public string AccountCreatedTitle => _localizer["Your London Travel account has been created."];
@@ -30,9 +37,23 @@ namespace MartinCostello.LondonTravel.Site
 
         public string AccessDeniedSubtitle => _localizer["You do not have access to this resource."];
 
+        public string AccountLinkDeniedTitle => _localizer["Account link permission denied"];
+
+        public string AccountLinkDeniedContent => _localizer["You did not grant permission for London Travel to access your other account."];
+
+        public string AccountLinkFailedTitle => _localizer["Account link failed"];
+
+        public string AccountLinkFailedContent => _localizer["Something went wrong when attempting to link your other account."];
+
         public string AccountLockedTitle => _localizer["Account locked"];
 
         public string AccountLockedSubtitle => _localizer["This account has been locked out. Please try again later."];
+
+        public string AlreadyRegisteredTitle => _localizer["Already registered"];
+
+        public string AlreadyRegisteredContent1 => _localizer["You have already created a London Travel account by signing in with a different service to the one you just tried to sign in with."];
+
+        public string AlreadyRegisteredContent2 => _localizer["Sign in with one of the service(s) you've already used to sign-in, then you'll be able to link other service(s) to your account."];
 
         public string BrandName => _localizer["London Travel"];
 
@@ -41,6 +62,8 @@ namespace MartinCostello.LondonTravel.Site
         public string CancelButtonAltText => CancelButtonText;
 
         public string CloseButtonText => _localizer["Close"];
+
+        public LocalizedHtmlString CopyrightText => _htmlLocalizer["&copy; {0} {1}", _options.Metadata.Author.Name, DateTimeOffset.UtcNow.Year];
 
         public string DeleteAccountButtonText => _localizer["Delete your account"];
 
@@ -62,11 +85,23 @@ namespace MartinCostello.LondonTravel.Site
 
         public string DeleteInProgressText => _localizer["Your account is being deleted..."];
 
+        public string ErrorTitle => _localizer["Error"];
+
+        public string ErrorMessage => _localizer["Sorry, something went wrong."];
+
         public string HelpTitle => _localizer["Help and Support"];
 
         public string HelpMetaDescription => _localizer["Help and support for the London Travel Alexa skill."];
 
+        public string HelpLinkText => _localizer["Help & Support"];
+
+        public string HelpLinkAltText => _localizer["View help and support information for the London Travel Alexa skill and this website"];
+
         public string HomepageTitle => _localizer["Home"];
+
+        public string HomepageLinkText => HomepageTitle;
+
+        public string HomepageLinkAltText => _localizer["View the homepage"];
 
         public string HomepageLead => _localizer["An Amazon Alexa skill for checking the status of travel in London."];
 
@@ -76,6 +111,10 @@ namespace MartinCostello.LondonTravel.Site
 
         public string ManageTitle => _localizer["Manage your account"];
 
+        public string ManageLinkText => _localizer["Manage account"];
+
+        public string ManageLinkAltText => _localizer["Manage your account"];
+
         public string ManageMetaDescription => _localizer["Manage your account details for the London Travel skill."];
 
         public string ManageLinkedAccountsSubtitle => _localizer["Linked Accounts"];
@@ -83,6 +122,14 @@ namespace MartinCostello.LondonTravel.Site
         public string ManageLinkedAccountsContent => _localizer["Listed below are the accounts you have linked to your London Travel account for signing in with."];
 
         public string ManageLinkOtherAccountsSubtitle => _localizer["Link another account"];
+
+        public string NavbarCollapseAltText => _localizer["Toggle navigation"];
+
+        public string NavbarMenuText => _localizer["Menu"];
+
+        public string PermissionDeniedTitle => _localizer["Permission denied"];
+
+        public string PermissionDeniedContent => _localizer["You did not grant permission for London Travel to access your email address when you signed in. An email address is required to register."];
 
         public string PrivacyPolicyTitle => _localizer["London Travel Privacy Policy"];
 
@@ -140,6 +187,16 @@ namespace MartinCostello.LondonTravel.Site
 
         public string SignInErrorSubtitle => _localizer["Sorry, you couldn't be signed in. Please try again later."];
 
+        public string SigningInModalTitle => _localizer["Signing in..."];
+
+        public string SigningInModalDescription => _localizer["Please wait while you are redirected to sign-in."];
+
+        public string SignOutLinkText => _localizer["Sign out"];
+
+        public string StatusLinkText => _localizer["Site Status & Uptime"];
+
+        public string StatusLinkAltText => _localizer["View site uptime information"];
+
         public string TermsOfServiceTitle => _localizer["London Travel Terms of Service"];
 
         public string TermsOfServiceMetaDescription => _localizer["The Terms of Service for the London Travel Alexa skill and website."];
@@ -150,6 +207,12 @@ namespace MartinCostello.LondonTravel.Site
 
         public string TermsOfServiceLinkAltText => _localizer["View the London Travel Alexa skill's Terms of Service"];
 
+        public string ErrorSubtitle(int? httpCode) => _localizer["Error (HTTP {0})", httpCode ?? 500];
+
         public string RemoveAccountButtonAltText(string provider) => _localizer["Remove link to {0} from your account", provider];
+
+        public string SignInButtonText(string diplayName) => _localizer["Sign in with {0}", diplayName];
+
+        public string SignInButtonAltText(string diplayName) => _localizer["Sign in using your {0} account", diplayName];
     }
 }

@@ -6,10 +6,10 @@
 }
 @if (SignInManager.IsSignedIn(User))
 {
-    <form asp-route="@SiteRoutes.SignOut" method="post" id="signOutForm" class="navbar-right">
+    <form asp-route="@SiteRoutes.SignOut" method="post" class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
             <li>
-                <a asp-route="@SiteRoutes.Manage" title="Manage your London Travel account" data-ga-label="Manage Account Navbar">
+                <a asp-route="@SiteRoutes.Manage" title="@SR.ManageLinkAltText" data-ga-label="Manage Account Navbar">
                     @displayName
                     <lazyimg alt="@displayName" title="@displayName" src="@avatarUrl" aria-hidden="true" />
                     <noscript>
@@ -19,7 +19,7 @@
             </li>
             <li>
                 <button type="submit" class="btn btn-link navbar-btn navbar-link" data-ga-label="Sign-Out Navbar">
-                    Sign out
+                    @SR.SignOutLinkText
                     <i class="fa fa-sign-out" aria-hidden="true"></i>
                 </button>
             </li>
@@ -29,7 +29,7 @@
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li><a asp-route="@SiteRoutes.SignIn" rel="nofollow" title="Sign in to your London Travel account" data-ga-label="Sign-In Navbar">Sign in</a></li>
+        <li><a asp-route="@SiteRoutes.SignIn" rel="nofollow" title="@SR.SignInLinkAltText" data-ga-label="Sign-In Navbar">@SR.SignInLinkText</a></li>
         <li><a asp-route="@SiteRoutes.Register" title="@SR.RegisterLinkAltText" data-ga-label="Register Navbar">@SR.RegisterLinkText</a></li>
     </ul>
 }

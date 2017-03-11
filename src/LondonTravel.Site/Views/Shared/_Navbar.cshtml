@@ -2,17 +2,17 @@
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
-            <a asp-controller="Home" asp-action="Index" class="navbar-brand" title="View the homepage" data-ga-label="Homepage Navbar">
+            <a asp-route="@SiteRoutes.Home" class="navbar-brand" title="@SR.HomepageLinkAltText" data-ga-label="Homepage Navbar">
                 <span>
-                    <lazyimg src="@Url.CdnContent("avatar.png", Options)" alt="London Travel" title="London Travel" aria-hidden="true" />
+                    <lazyimg src="@Url.CdnContent("avatar.png", Options)" alt="@SR.BrandName" title="@SR.BrandName" aria-hidden="true" />
                     <noscript>
-                        <img src="@Url.CdnContent("avatar.png", Options)" alt="London Travel" title="London Travel" aria-hidden="true" />
+                        <img src="@Url.CdnContent("avatar.png", Options)" alt="@SR.BrandName" title="@SR.BrandName" aria-hidden="true" />
                     </noscript>
-                    @Options.Metadata.Name
+                    @SR.BrandName
                 </span>
             </a>
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" data-ga-label="Navbar Collapse">
-                <span class="sr-only">Toggle navigation</span>
+                <span class="sr-only">@SR.NavbarCollapseAltText</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -22,13 +22,12 @@
             <ul class="nav navbar-nav">
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" data-ga-label="Navbar Menu">
-                        Menu
-                        <span class="caret"></span>
+                        @SR.NavbarMenuText <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="@Options?.ExternalLinks?.Skill" rel="noopener" target="_blank" title="Install London Travel for Amazon Alexa from amazon.co.uk" data-ga-label="Install Navbar">
-                                Install
+                            <a href="@Options?.ExternalLinks?.Skill" rel="noopener" target="_blank" title="@SR.InstallLinkAltText" data-ga-label="Install Navbar">
+                                @SR.InstallLinkText
                                 <i class="fa fa-external-link" aria-hidden="true"></i>
                             </a>
                         </li>
@@ -36,8 +35,8 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li>
-                                <a asp-route="@SiteRoutes.Manage" title="Manage your account" data-ga-label="Manage Account Navbar">
-                                    Manage account <i class="fa fa-user" aria-hidden="true"></i>
+                                <a asp-route="@SiteRoutes.Manage" title="@SR.ManageLinkAltText" data-ga-label="Manage Account Navbar">
+                                    @SR.ManageLinkText <i class="fa fa-user" aria-hidden="true"></i>
                                 </a>
                             </li>
                         }
@@ -49,18 +48,18 @@
                         }
                         <li role="separator" class="divider"></li>
                         <li>
-                            <a asp-route="@SiteRoutes.Help" title="View help and support information for the London Travel Alexa skill and this website" data-ga-label="Help Navbar">
-                                Help &amp; Support <i class="fa fa-question-circle" aria-hidden="true"></i>
+                            <a asp-route="@SiteRoutes.Help" title="@SR.HelpLinkAltText" data-ga-label="Help Navbar">
+                                @SR.HelpLinkText <i class="fa fa-question-circle" aria-hidden="true"></i>
                             </a>
                         </li>
                         <li>
-                            <a asp-route="@SiteRoutes.PrivacyPolicy" title="View the London Travel Alexa skill's Privacy Policy" data-ga-label="Privacy Policy Navbar">
-                                Privacy Policy
+                            <a asp-route="@SiteRoutes.PrivacyPolicy" title="@SR.PrivacyPolicyLinkAltText" data-ga-label="Privacy Policy Navbar">
+                                @SR.PrivacyPolicyLinkText
                             </a>
                         </li>
                         <li>
-                            <a asp-route="@SiteRoutes.TermsOfService" title="View the London Travel Alexa skill's Terms of Service" data-ga-label="Terms of Service Navbar">
-                                Terms of Service
+                            <a asp-route="@SiteRoutes.TermsOfService" title="@SR.TermsOfServiceLinkAltText" data-ga-label="Terms of Service Navbar">
+                                @SR.TermsOfServiceLinkText
                             </a>
                         </li>
                     </ul>
