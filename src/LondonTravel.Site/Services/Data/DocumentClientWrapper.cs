@@ -22,24 +22,24 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
     public sealed class DocumentClientWrapper : IDocumentClient, IDisposable
     {
         /// <summary>
+        /// The <see cref="IDocumentCollectionInitializer"/> to use. This field is read-only.
+        /// </summary>
+        private readonly IDocumentCollectionInitializer _initializer;
+
+        /// <summary>
         /// The <see cref="DocumentClient"/> being wrapped. This field is read-only.
         /// </summary>
         private readonly DocumentClient _client;
 
         /// <summary>
+        /// The <see cref="UserStoreOptions"/> to use. This field is read-only.
+        /// </summary>
+        private readonly UserStoreOptions _options;
+
+        /// <summary>
         /// The logger to use. This field is read-only.
         /// </summary>
         private readonly ILogger<DocumentClientWrapper> _logger;
-
-        /// <summary>
-        /// The name of the Azure DocumentDb database. This field is read-only.
-        /// </summary>
-        private readonly string _databaseName;
-
-        /// <summary>
-        /// The name of the Azure DocumentDb collection in the database. This field is read-only.
-        /// </summary>
-        private readonly string _collectionName;
 
         /// <summary>
         /// Whether the instance has been disposed.
@@ -49,6 +49,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// <summary>
         /// Initializes a new instance of the <see cref="DocumentClientWrapper"/> class.
         /// </summary>
+        /// <param name="initializer">The <see cref="IDocumentCollectionInitializer"/> to use.</param>
         /// <param name="options">The <see cref="UserStoreOptions"/> to use.</param>
         /// <param name="logger">The <see cref="ILogger{DocumentClientWrapper}"/> to use.</param>
         /// <exception cref="ArgumentNullException">
@@ -57,42 +58,13 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// <exception cref="ArgumentException">
         /// <paramref name="options"/> is invalid.
         /// </exception>
-        public DocumentClientWrapper(UserStoreOptions options, ILogger<DocumentClientWrapper> logger)
+        public DocumentClientWrapper(IDocumentCollectionInitializer initializer, UserStoreOptions options, ILogger<DocumentClientWrapper> logger)
         {
-            if (options == null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
+            _initializer = initializer ?? throw new ArgumentNullException(nameof(initializer));
+            _client = DocumentHelpers.CreateClient(options);
 
-            if (options.ServiceUri == null)
-            {
-                throw new ArgumentException("No DocumentDb URI is configured.", nameof(options));
-            }
-
-            if (!options.ServiceUri.IsAbsoluteUri)
-            {
-                throw new ArgumentException("The configured DocumentDb URI is as it is not an absolute URI.", nameof(options));
-            }
-
-            if (string.IsNullOrEmpty(options.AccessKey))
-            {
-                throw new ArgumentException("No DocumentDb access key is configured.", nameof(options));
-            }
-
-            if (string.IsNullOrEmpty(options.DatabaseName))
-            {
-                throw new ArgumentException("No DocumentDb database name is configured.", nameof(options));
-            }
-
-            if (string.IsNullOrEmpty(options.CollectionName))
-            {
-                throw new ArgumentException("No DocumentDb collection name is configured.", nameof(options));
-            }
-
-            _client = new DocumentClient(options.ServiceUri, options.AccessKey);
+            _options = options;
             _logger = logger;
-            _databaseName = options.DatabaseName;
-            _collectionName = options.CollectionName;
         }
 
         /// <inheritdoc />
@@ -115,11 +87,11 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
             await EnsureCollectionExistsAsync();
 
-            _logger?.LogInformation($"Creating document in collection '{_collectionName}' of database '{_databaseName}'.");
+            _logger?.LogInformation($"Creating document in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'.");
 
             var result = await _client.CreateDocumentAsync(BuildCollectionUri(), document);
 
-            _logger?.LogInformation($"Created document in collection '{_collectionName}' of database '{_databaseName}'. Id: '{result.Resource.Id}'.");
+            _logger?.LogInformation($"Created document in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'. Id: '{result.Resource.Id}'.");
 
             return result.Resource.Id;
         }
@@ -188,7 +160,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
             var documents = new List<T>();
 
-            _logger?.LogTrace($"Querying documents in collection '{_collectionName}' of database '{_databaseName}'.");
+            _logger?.LogTrace($"Querying documents in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'.");
 
             using (var query = _client.CreateDocumentQuery<T>(BuildCollectionUri()).Where(predicate).AsDocumentQuery())
             {
@@ -198,7 +170,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
                 }
             }
 
-            _logger?.LogTrace($"Found {documents.Count:N0} document(s) in collection '{_collectionName}' of database '{_databaseName}' that matched query.");
+            _logger?.LogTrace($"Found {documents.Count:N0} document(s) in collection '{_options.CollectionName}' of database '{_options.DatabaseName}' that matched query.");
 
             return documents;
         }
@@ -213,7 +185,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
             await EnsureCollectionExistsAsync();
 
-            _logger?.LogInformation($"Replacing document with Id '{id}' in collection '{_collectionName}' of database '{_databaseName}'.");
+            _logger?.LogInformation($"Replacing document with Id '{id}' in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'.");
 
             RequestOptions options = GetOptionsForETag(etag);
             bool updated = false;
@@ -222,7 +194,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             {
                 await _client.ReplaceDocumentAsync(BuildDocumentUri(id), document, options);
 
-                _logger?.LogInformation($"Replaced document with Id '{id}' in collection '{_collectionName}' of database '{_databaseName}'.");
+                _logger?.LogInformation($"Replaced document with Id '{id}' in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'.");
 
                 updated = true;
             }
@@ -230,11 +202,11 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             {
                 if (ex.StatusCode != HttpStatusCode.PreconditionFailed)
                 {
-                    _logger?.LogError(default(EventId), ex, $"Failed to replace document with Id '{id}' in collection '{_collectionName}' of database '{_databaseName}'.");
+                    _logger?.LogError(default(EventId), ex, $"Failed to replace document with Id '{id}' in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'.");
                     throw;
                 }
 
-                _logger?.LogWarning($"Failed to replace document with Id '{id}' in collection '{_collectionName}' of database '{_databaseName}' as the write would conflict. ETag: '{etag}'.");
+                _logger?.LogWarning($"Failed to replace document with Id '{id}' in collection '{_options.CollectionName}' of database '{_options.DatabaseName}' as the write would conflict. ETag: '{etag}'.");
             }
 
             return updated;
@@ -267,51 +239,6 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         }
 
         /// <summary>
-        /// Ensures that the database exists as an asynchronous operation.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="Task"/> representing the asynchronous operation to ensure the database exists.
-        /// </returns>
-        private async Task EnsureDatabaseExistsAsync()
-        {
-            bool databaseExists;
-
-            try
-            {
-                await _client.ReadDatabaseAsync(BuildDatabaseUri());
-                databaseExists = true;
-            }
-            catch (DocumentClientException ex)
-            {
-                if (ex.StatusCode != HttpStatusCode.NotFound)
-                {
-                    _logger?.LogError(default(EventId), ex, $"Failed to read database '{_databaseName}'.");
-                    throw;
-                }
-
-                _logger?.LogInformation($"Database '{_databaseName}' does not exist.");
-                databaseExists = false;
-            }
-
-            if (!databaseExists)
-            {
-                try
-                {
-                    _logger?.LogInformation($"Creating database '{_databaseName}'.");
-
-                    await _client.CreateDatabaseIfNotExistsAsync(new Database() { Id = _databaseName });
-
-                    _logger?.LogInformation($"Created database '{_databaseName}'.");
-                }
-                catch (Exception ex)
-                {
-                    _logger?.LogError(default(EventId), ex, $"Failed to create database '{_databaseName}'.");
-                    throw;
-                }
-            }
-        }
-
-        /// <summary>
         /// Ensures that the collection exists as an asynchronous operation.
         /// </summary>
         /// <returns>
@@ -319,55 +246,8 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// </returns>
         private async Task EnsureCollectionExistsAsync()
         {
-            await EnsureDatabaseExistsAsync();
-
-            bool collectionExists;
-
-            try
-            {
-                await _client.ReadDocumentCollectionAsync(BuildCollectionUri());
-                collectionExists = true;
-            }
-            catch (DocumentClientException ex)
-            {
-                if (ex.StatusCode != HttpStatusCode.NotFound)
-                {
-                    _logger?.LogError(default(EventId), ex, $"Failed to read collection '{_collectionName}' in database '{_databaseName}'.");
-                    throw;
-                }
-
-                _logger?.LogInformation($"Collection '{_collectionName}' does not exist in database '{_databaseName}'.");
-                collectionExists = false;
-            }
-
-            if (!collectionExists)
-            {
-                try
-                {
-                    _logger?.LogInformation($"Creating collection '{_collectionName}' in database '{_databaseName}'.");
-
-                    await _client.CreateDocumentCollectionIfNotExistsAsync(
-                        BuildDatabaseUri(),
-                        new DocumentCollection() { Id = _collectionName },
-                        new RequestOptions() { OfferThroughput = 400 });
-
-                    _logger?.LogInformation($"Created collection '{_collectionName}' in database '{_databaseName}'.");
-                }
-                catch (Exception ex)
-                {
-                    _logger?.LogError(default(EventId), ex, $"Failed to create collection '{_collectionName}' in database '{_databaseName}'.");
-                    throw;
-                }
-            }
+            await _initializer.EnsureCollectionExistsAsync(_options.CollectionName);
         }
-
-        /// <summary>
-        /// Builds a URI for the database.
-        /// </summary>
-        /// <returns>
-        /// The URI to use for the database.
-        /// </returns>
-        private Uri BuildDatabaseUri() => UriFactory.CreateDatabaseUri(_databaseName);
 
         /// <summary>
         /// Builds a URI for the collection.
@@ -375,7 +255,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// <returns>
         /// The URI to use for the collection.
         /// </returns>
-        private Uri BuildCollectionUri() => UriFactory.CreateDocumentCollectionUri(_databaseName, _collectionName);
+        private Uri BuildCollectionUri() => UriFactory.CreateDocumentCollectionUri(_options.DatabaseName, _options.CollectionName);
 
         /// <summary>
         /// Builds a URI for the specified document Id.
@@ -384,6 +264,6 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// <returns>
         /// The URI to use for the specified document.
         /// </returns>
-        private Uri BuildDocumentUri(string id) => UriFactory.CreateDocumentUri(_databaseName, _collectionName, id);
+        private Uri BuildDocumentUri(string id) => UriFactory.CreateDocumentUri(_options.DatabaseName, _options.CollectionName, id);
     }
 }

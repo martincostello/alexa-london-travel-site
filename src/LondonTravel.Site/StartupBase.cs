@@ -216,6 +216,7 @@ namespace MartinCostello.LondonTravel.Site
                 .AddResponseCompression();
 
             services.AddSingleton<IConfiguration>((_) => Configuration);
+            services.AddSingleton<IDocumentCollectionInitializer, DocumentCollectionInitializer>();
             services.AddSingleton<ITflServiceFactory, TflServiceFactory>();
 
             services.AddScoped((p) => p.GetRequiredService<IHttpContextAccessor>().HttpContext);
