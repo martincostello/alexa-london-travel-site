@@ -8,6 +8,10 @@ body {
     padding-top: 70px;
 }
 
+.btn-wrapper {
+    margin-bottom: 5px;
+}
+
 .btn-amazon {
     background-color: #FF9900;
     border-color: rgba(0,0,0,0.2);
