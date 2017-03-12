@@ -1,30 +1,15 @@
 ﻿@model LinePreferencesViewModel
-@inject SiteOptions Options
 @{
     ViewBag.Title = SR.HomepageTitle;
 }
 @await Html.PartialAsync("_Alerts", Model)
 @if (!Model.IsAuthenticated)
 {
-    <div class="jumbotron">
-        <h1>@SR.BrandName</h1>
-        <p class="lead">
-            @SR.HomepageLead
-        </p>
-        <p>
-            <a class="btn btn-primary" href="@Options?.ExternalLinks?.Skill" rel="noopener" target="_blank" title="@SR.InstallLinkAltText">@SR.InstallLinkText <i class="fa fa-external-link" aria-hidden="true" data-ga-label="Install Skill CTA"></i></a>
-            <a class="btn btn-primary hidden-xs" asp-route="@SiteRoutes.Register" title="@SR.RegisterLinkAltText">@SR.RegisterLinkText <i class="fa fa-user-plus" aria-hidden="true" data-ga-label="Register CTA"></i></a>
-            <a class="btn btn-primary hidden-xs" asp-route="@SiteRoutes.SignIn" title="@SR.SignInLinkAltText">@SR.SignInLinkText <i class="fa fa-sign-in" aria-hidden="true" data-ga-label="Sign-in CTA"></i></a>
-        </p>
-        <p class="visible-xs">
-            <a class="btn btn-primary" asp-route="@SiteRoutes.Register" title="@SR.RegisterLinkAltText">@SR.RegisterLinkText <i class="fa fa-user-plus" aria-hidden="true" data-ga-label="Register CTA"></i></a>
-            <a class="btn btn-primary" asp-route="@SiteRoutes.SignIn" title="@SR.SignInLinkAltText">@SR.SignInLinkText <i class="fa fa-sign-in" aria-hidden="true" data-ga-label="Sign-in CTA"></i></a>
-        </p>
-    </div>
+    @await Html.PartialAsync("_Jumbotron")
 }
 else if (Model.AllLines.Any())
 {
-    <h2>Manage Line Preferences</h2>
+    <h2>@SR.ManagePreferencesTitle</h2>
     <hr />
     <section>
         @if (Model.HasFavourites)
@@ -32,24 +17,23 @@ else if (Model.AllLines.Any())
             @if (Model.SelectedLineCount == 1)
             {
                 <p>
-                    The selected line will be used by the London Travel skill to tell you about your commute.
+                    @SR.LinePreferencesSingular
                 </p>
             }
             else
             {
                 <p>
-                    The @Model.SelectedLineCount selected lines will be used by the London Travel skill to tell you about your commute.
+                    @SR.LinePreferencesPlural(Model.SelectedLineCount)
                 </p>
             }
         }
         else
         {
             <p class="lead">
-                It looks like you haven't chosen any favourite lines yet. Select some below to get started.
+                @SR.LinePreferencesNoneLead
             </p>
             <p>
-                Once you have chosen at least one favourite line, you will be able to ask the London Travel
-                skill about your commute once you have linked your account.
+                @SR.LinePreferencesNoneContent
             </p>
             <blockquote>
                 <p>
@@ -60,53 +44,9 @@ else if (Model.AllLines.Any())
             </blockquote>
         }
         <hr />
-        <form asp-route="@SiteRoutes.UpdateLinePreferences" class="js-preferences-container" method="post">
-            <input type="hidden" name="@(nameof(UpdateLinePreferencesViewModel.ETag))" value="@Model.ETag" />
-            @if (Model.HasFavourites)
-            {
-                <div class="row">
-                    <h4 class="col-xs-offset-1">Favourite Lines <span class="hide js-favorites-count">(@(Model.FavouriteLines.Count()))</span></h4>
-                    @await Html.PartialAsync("_Lines", Model.FavouriteLines)
-                </div>
-            }
-            @if (Model.OtherLines.Any())
-            {
-                <div class="row">
-                    <h4 class="col-xs-offset-1">@(Model.HasFavourites ? "Other Lines" : "Available Lines") <span class="hide js-other-count">(@(Model.OtherLines.Count()))</span></h4>
-                    @await Html.PartialAsync("_Lines", Model.OtherLines)
-                </div>
-            }
-            <div class="row">
-                <div class="col-xs-10 col-xs-offset-1 col-md-3 col-md-offset-1 btn-wrapper">
-                    <button type="submit" class="btn btn-primary btn-block js-preferences-save" data-toggle="modal" data-target=".update-preferences-modal">Save preferences</button>
-                </div>
-                <div class="col-xs-10 col-xs-offset-1 col-md-3 col-md-offset-0 btn-wrapper">
-                    <button type="button" class="btn btn-info hide btn-block js-preferences-clear">Clear all</button>
-                </div>
-                <div class="col-xs-10 col-xs-offset-1 col-md-3 col-md-offset-0 btn-wrapper">
-                    <button type="button" class="btn btn-info hide btn-block js-preferences-reset">Reset</button>
-                </div>
-            </div>
-        </form>
+        @await Html.PartialAsync("_UpdateForm", Model)
     </section>
-    <div class="modal update-preferences-modal" tabindex="-1" role="dialog" aria-describedby="update-preferences-description" aria-labelledby="update-preferences-modal-title">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="@SR.CloseButtonText" data-ga-label="Updating Preferences Dismiss">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h4 class="modal-title" id="update-preferences-modal-title">Updating preferences...</h4>
-                    <div class="sr-only" id="update-preferences-modal-description">Updating your preferences.</div>
-                </div>
-                <div class="modal-body">
-                    <p>
-                        <div class="center-block loader" aria-hidden="true"></div>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
+    @await Html.PartialAsync("_UpdateModal")
 }
 @if (Model.IsAuthenticated)
 {

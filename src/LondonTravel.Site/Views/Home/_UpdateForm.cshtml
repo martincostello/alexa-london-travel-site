@@ -1,0 +1,36 @@
+﻿@model LinePreferencesViewModel
+<form asp-route="@SiteRoutes.UpdateLinePreferences" class="js-preferences-container" method="post">
+    <input type="hidden" name="@(nameof(UpdateLinePreferencesViewModel.ETag))" value="@Model.ETag" />
+    @if (Model.HasFavourites)
+    {
+        <div class="row">
+            <h4 class="col-xs-offset-1">@SR.FavoriteLinesTitle("hide js-favorites-count", Model.FavouriteLines.Count())</h4>
+            @await Html.PartialAsync("_Lines", Model.FavouriteLines)
+        </div>
+    }
+    @if (Model.OtherLines.Any())
+    {
+        <div class="row">
+            @{
+                var classes = "hide js-other-count";
+                var count = Model.OtherLines.Count();
+                var otherTitle = Model.HasFavourites ?
+                    SR.OtherLinesTitle(classes, count) :
+                    SR.AvailableLinesTitle(classes, count);
+            }
+            <h4 class="col-xs-offset-1">@otherTitle</h4>
+            @await Html.PartialAsync("_Lines", Model.OtherLines)
+        </div>
+    }
+    <div class="row">
+        <div class="col-xs-10 col-xs-offset-1 col-md-3 col-md-offset-1 btn-wrapper">
+            <button type="submit" class="btn btn-primary btn-block js-preferences-save" title="@SR.SavePreferencesButtonAltText" data-toggle="modal" data-target=".update-preferences-modal">@SR.SavePreferencesButtonText</button>
+        </div>
+        <div class="col-xs-10 col-xs-offset-1 col-md-3 col-md-offset-0 btn-wrapper">
+            <button type="button" class="btn btn-info hide btn-block js-preferences-clear" title="@SR.ClearPreferencesButtonAltText">@SR.ClearPreferencesButtonText</button>
+        </div>
+        <div class="col-xs-10 col-xs-offset-1 col-md-3 col-md-offset-0 btn-wrapper">
+            <button type="button" class="btn btn-info hide btn-block js-preferences-reset" title="@SR.ResetPreferencesButtonAltText">@SR.ResetPreferencesButtonText</button>
+        </div>
+    </div>
+</form>

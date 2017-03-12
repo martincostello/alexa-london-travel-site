@@ -1,13 +1,13 @@
 ﻿@model LinePreferencesViewModel
 @if (Model.UpdateResult == true)
 {
-    <div class="sr-only">Your preferences have been saved.</div>
+    <div class="sr-only">@SR.UpdateSuccessModalTitle</div>
     <div class="alert alert-success" role="alert" aria-hidden="true">
         <button type="button" class="close" data-dismiss="alert" aria-label="@SR.CloseButtonText" data-ga-label="Save Preferences Success Dismissed">
             <span aria-hidden="true">&times;</span>
         </button>
         <p class="lead">
-            Your preferences have been saved.
+            @SR.UpdateSuccessModalTitle
         </p>
     </div>
 }

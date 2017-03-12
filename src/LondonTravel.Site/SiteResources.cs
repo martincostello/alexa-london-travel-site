@@ -63,6 +63,8 @@ namespace MartinCostello.LondonTravel.Site
 
         public string CloseButtonText => _localizer["Close"];
 
+        public string CommuteSkillInvocation => _localizer["\"Alexa, ask London Travel what my commute's like today?\""];
+
         public LocalizedHtmlString CopyrightText => _htmlLocalizer["&copy; {0} {1}", _options.Metadata.Author.Name, DateTimeOffset.UtcNow.Year];
 
         public string DeleteAccountButtonText => _localizer["Delete your account"];
@@ -123,6 +125,8 @@ namespace MartinCostello.LondonTravel.Site
 
         public string ManageLinkOtherAccountsSubtitle => _localizer["Link another account"];
 
+        public string ManagePreferencesTitle => _localizer["Manage Line Preferences"];
+
         public string NavbarCollapseAltText => _localizer["Toggle navigation"];
 
         public string NavbarMenuText => _localizer["Menu"];
@@ -159,8 +163,6 @@ namespace MartinCostello.LondonTravel.Site
 
         public string RegisterLinkAltText => _localizer["Register for a London Travel account"];
 
-        public string CommuteSkillInvocation => _localizer["\"Alexa, ask London Travel what my commute's like today?\""];
-
         public string RegisterSignInSubtitle => _localizer["Choose a service to register using:"];
 
         public string RemoveAccountButtonText => _localizer["Remove"];
@@ -168,6 +170,18 @@ namespace MartinCostello.LondonTravel.Site
         public string RemoveAccountLinkModalTitle => _localizer["Removing account link..."];
 
         public string RemoveAccountLinkModalDescription => _localizer["Please wait while your account link is removed."];
+
+        public string SavePreferencesButtonText => _localizer["Save preferences"];
+
+        public string SavePreferencesButtonAltText => _localizer["Save the changes to your line preferences."];
+
+        public string ClearPreferencesButtonText => _localizer["Deselect all"];
+
+        public string ClearPreferencesButtonAltText => _localizer["Deselect all lines."];
+
+        public string ResetPreferencesButtonText => _localizer["Reset"];
+
+        public string ResetPreferencesButtonAltText => _localizer["Reset all line selections to their original values."];
 
         public string SignInTitle => _localizer["Sign in"];
 
@@ -207,7 +221,31 @@ namespace MartinCostello.LondonTravel.Site
 
         public string TermsOfServiceLinkAltText => _localizer["View the London Travel Alexa skill's Terms of Service"];
 
+        public string UpdateFailureModalTitle => _localizer["Your preferences were not saved"];
+
+        public string UpdateFailureModalDescription => _localizer["Your preferences were not been saved as they have since been saved elsewhere and might have been overwritten. Please try again."];
+
+        public string UpdateSuccessModalTitle => _localizer["Your preferences have been saved"];
+
+        public string UpdateProgressModalTitle => _localizer["Saving preferences..."];
+
+        public string UpdateProgressModalDescription => _localizer["Saving your preferences."];
+
+        public string LinePreferencesNoneLead => _localizer["It looks like you haven't chosen any favourite lines yet. Select some below to get started."];
+
+        public string LinePreferencesNoneContent => _localizer["Once you have chosen at least one favourite line, you will be able to ask the {0} skill about your commute if you have linked your account.", BrandName];
+
+        public string LinePreferencesSingular => _localizer["The selected line will be used by the London Travel skill to tell you about your commute."];
+
         public string ErrorSubtitle(int? httpCode) => _localizer["Error (HTTP {0})", httpCode ?? 500];
+
+        public LocalizedHtmlString AvailableLinesTitle(string classes, int count) => _htmlLocalizer["Available Liness <span class=\"{0}\">({1})</span>", classes, count];
+
+        public LocalizedHtmlString FavoriteLinesTitle(string classes, int count) => _htmlLocalizer["Favourite Lines <span class=\"{0}\">({1})</span>", classes, count];
+
+        public string LinePreferencesPlural(int count) => _localizer["The {0} selected lines will be used by the London Travel skill to tell you about your commute.", count];
+
+        public LocalizedHtmlString OtherLinesTitle(string classes, int count) => _htmlLocalizer["Other Lines <span class=\"{0}\">({1})</span>", classes, count];
 
         public string RemoveAccountButtonAltText(string provider) => _localizer["Remove link to {0} from your account", provider];
 
