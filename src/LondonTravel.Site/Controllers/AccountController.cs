@@ -248,6 +248,11 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         [Route("register", Name = SiteRoutes.Register)]
         public IActionResult Register()
         {
+            if (!_isEnabled)
+            {
+                return NotFound();
+            }
+
             if (User.Identity.IsAuthenticated)
             {
                 return RedirectToRoute(SiteRoutes.Home);

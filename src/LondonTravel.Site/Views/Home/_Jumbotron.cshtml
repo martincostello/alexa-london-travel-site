@@ -1,15 +1,24 @@
-﻿<div class="jumbotron">
+﻿@{
+    bool authenticationEnabled = Options?.Authentication.IsEnabled == true;
+}
+<div class="jumbotron">
     <h1>@SR.BrandName</h1>
     <p class="lead">
         @SR.HomepageLead
     </p>
     <p>
         <a class="btn btn-primary" href="@Options?.ExternalLinks?.Skill" rel="noopener" target="_blank" title="@SR.InstallLinkAltText">@SR.InstallLinkText <i class="fa fa-external-link" aria-hidden="true" data-ga-label="Install Skill CTA"></i></a>
-        <a class="btn btn-primary hidden-xs" asp-route="@SiteRoutes.Register" title="@SR.RegisterLinkAltText">@SR.RegisterLinkText <i class="fa fa-user-plus" aria-hidden="true" data-ga-label="Register CTA"></i></a>
-        <a class="btn btn-primary hidden-xs" asp-route="@SiteRoutes.SignIn" title="@SR.SignInLinkAltText">@SR.SignInLinkText <i class="fa fa-sign-in" aria-hidden="true" data-ga-label="Sign-in CTA"></i></a>
+        @if (authenticationEnabled)
+        {
+            <a class="btn btn-primary hidden-xs" asp-route="@SiteRoutes.Register" title="@SR.RegisterLinkAltText">@SR.RegisterLinkText <i class="fa fa-user-plus" aria-hidden="true" data-ga-label="Register CTA"></i></a>
+            <a class="btn btn-primary hidden-xs" asp-route="@SiteRoutes.SignIn" title="@SR.SignInLinkAltText">@SR.SignInLinkText <i class="fa fa-sign-in" aria-hidden="true" data-ga-label="Sign-in CTA"></i></a>
+        }
     </p>
-    <p class="visible-xs">
-        <a class="btn btn-primary" asp-route="@SiteRoutes.Register" title="@SR.RegisterLinkAltText">@SR.RegisterLinkText <i class="fa fa-user-plus" aria-hidden="true" data-ga-label="Register CTA"></i></a>
-        <a class="btn btn-primary" asp-route="@SiteRoutes.SignIn" title="@SR.SignInLinkAltText">@SR.SignInLinkText <i class="fa fa-sign-in" aria-hidden="true" data-ga-label="Sign-in CTA"></i></a>
-    </p>
+    @if (authenticationEnabled)
+    {
+        <p class="visible-xs">
+            <a class="btn btn-primary" asp-route="@SiteRoutes.Register" title="@SR.RegisterLinkAltText">@SR.RegisterLinkText <i class="fa fa-user-plus" aria-hidden="true" data-ga-label="Register CTA"></i></a>
+            <a class="btn btn-primary" asp-route="@SiteRoutes.SignIn" title="@SR.SignInLinkAltText">@SR.SignInLinkText <i class="fa fa-sign-in" aria-hidden="true" data-ga-label="Sign-in CTA"></i></a>
+        </p>
+    }
 </div>

@@ -30,20 +30,23 @@
                                 <i class="fa fa-external-link" aria-hidden="true"></i>
                             </a>
                         </li>
-                        <li role="separator" class="divider"></li>
-                        @if (User.Identity.IsAuthenticated)
+                        @if (Options?.Authentication.IsEnabled == true)
                         {
-                            <li>
-                                <a asp-route="@SiteRoutes.Manage" title="@SR.ManageLinkAltText" data-ga-label="Manage Account Navbar">
-                                    @SR.ManageLinkText <i class="fa fa-user" aria-hidden="true"></i>
-                                </a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li>
-                                <a asp-route="@SiteRoutes.Register" title="@SR.RegisterLinkAltText" data-ga-label="Register Navbar">@SR.RegisterLinkText <i class="fa fa-user-plus" aria-hidden="true"></i></a>
-                            </li>
+                            <li role="separator" class="divider"></li>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <li>
+                                    <a asp-route="@SiteRoutes.Manage" title="@SR.ManageLinkAltText" data-ga-label="Manage Account Navbar">
+                                        @SR.ManageLinkText <i class="fa fa-user" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li>
+                                    <a asp-route="@SiteRoutes.Register" title="@SR.RegisterLinkAltText" data-ga-label="Register Navbar">@SR.RegisterLinkText <i class="fa fa-user-plus" aria-hidden="true"></i></a>
+                                </li>
+                            }
                         }
                         <li role="separator" class="divider"></li>
                         <li>
