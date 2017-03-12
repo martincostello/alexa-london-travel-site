@@ -8,12 +8,12 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-    using MartinCostello.LondonTravel.Site.Identity;
-    using MartinCostello.LondonTravel.Site.Models;
-    using MartinCostello.LondonTravel.Site.Tfl;
+    using Identity;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
+    using Models;
+    using Services.Tfl;
 
     /// <summary>
     /// A class representing the controller for the <c>/</c> resource.

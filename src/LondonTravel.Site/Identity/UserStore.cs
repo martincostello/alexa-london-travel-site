@@ -8,8 +8,8 @@ namespace MartinCostello.LondonTravel.Site.Identity
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-    using MartinCostello.LondonTravel.Site.Services;
     using Microsoft.AspNetCore.Identity;
+    using Services.Data;
 
     /// <summary>
     /// A class representing a custom implementation of a user store. This class cannot be inherited.

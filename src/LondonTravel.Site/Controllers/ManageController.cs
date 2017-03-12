@@ -14,7 +14,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
     using Models;
-    using Services;
+    using Services.Data;
 
     /// <summary>
     /// A class representing the controller for the <c>/manage/</c> resource.

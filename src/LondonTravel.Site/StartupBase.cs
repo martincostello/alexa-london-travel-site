@@ -9,9 +9,7 @@ namespace MartinCostello.LondonTravel.Site
     using Autofac;
     using Autofac.Extensions.DependencyInjection;
     using Extensions;
-    using MartinCostello.LondonTravel.Site.Identity;
-    using MartinCostello.LondonTravel.Site.Services;
-    using MartinCostello.LondonTravel.Site.Tfl;
+    using Identity;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.CookiePolicy;
     using Microsoft.AspNetCore.Cors.Infrastructure;
@@ -28,6 +26,8 @@ namespace MartinCostello.LondonTravel.Site
     using Microsoft.Net.Http.Headers;
     using Newtonsoft.Json;
     using Options;
+    using Services.Data;
+    using Services.Tfl;
 
     /// <summary>
     /// A class representing the base class for startup logic for the application.
