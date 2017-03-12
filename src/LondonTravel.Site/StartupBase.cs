@@ -5,11 +5,13 @@ namespace MartinCostello.LondonTravel.Site
 {
     using System;
     using System.Globalization;
+    using System.Net.Http;
     using Autofac;
     using Autofac.Extensions.DependencyInjection;
     using Extensions;
     using MartinCostello.LondonTravel.Site.Identity;
     using MartinCostello.LondonTravel.Site.Services;
+    using MartinCostello.LondonTravel.Site.Tfl;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.CookiePolicy;
     using Microsoft.AspNetCore.Cors.Infrastructure;
@@ -214,14 +216,18 @@ namespace MartinCostello.LondonTravel.Site
                 .AddResponseCompression();
 
             services.AddSingleton<IConfiguration>((_) => Configuration);
+            services.AddSingleton<ITflServiceFactory, TflServiceFactory>();
+
             services.AddScoped((p) => p.GetRequiredService<IHttpContextAccessor>().HttpContext);
             services.AddScoped((p) => p.GetRequiredService<IOptionsSnapshot<SiteOptions>>().Value);
-            services.AddScoped<SiteResources>();
+            services.AddScoped((p) => p.GetRequiredService<SiteOptions>().Authentication.UserStore);
+            services.AddScoped((p) => p.GetRequiredService<SiteOptions>().Tfl);
 
-            services.AddScoped<IDocumentClient>(
-                (p) => new DocumentClientWrapper(
-                    p.GetRequiredService<SiteOptions>().Authentication.UserStore,
-                    p.GetRequiredService<ILogger<DocumentClientWrapper>>()));
+            services.AddScoped<SiteResources>();
+            services.AddScoped<IDocumentClient, DocumentClientWrapper>();
+
+            services.AddTransient<HttpClient>();
+            services.AddTransient<ITflService, TflService>();
 
             var builder = new ContainerBuilder();
 
