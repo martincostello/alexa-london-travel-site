@@ -66,9 +66,12 @@ namespace MartinCostello.LondonTravel.Site.Services
         /// </summary>
         /// <param name="id">The Id of the document to replace.</param>
         /// <param name="document">The replacement document.</param>
+        /// <param name="etag">The ETag associated with the document being updated.</param>
         /// <returns>
-        /// A <see cref="Task"/> representing the operation to update the document.
+        /// A <see cref="Task{T}"/> representing the operation to replace the document
+        /// which returns <see langword="true"/> if it was successfully replaced or
+        /// <see langword="false"/> if the replacement failed due to a write conflict.
         /// </returns>
-        Task ReplaceAsync(string id, object document);
+        Task<bool> ReplaceAsync(string id, object document, string etag);
     }
 }

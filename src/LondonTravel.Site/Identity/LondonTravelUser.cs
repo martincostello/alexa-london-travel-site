@@ -16,6 +16,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// </summary>
         public LondonTravelUser()
         {
+            FavoriteLines = new List<string>();
             Logins = new List<LondonTravelLoginInfo>();
             RoleClaims = new List<LondonTravelRole>();
         }
@@ -25,6 +26,12 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ETag of the underlying document.
+        /// </summary>
+        [JsonProperty(PropertyName = "_etag")]
+        public string ETag { get; set; }
 
         /// <summary>
         /// Gets or sets the user's email address.
@@ -79,5 +86,11 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// </summary>
         [JsonProperty(PropertyName = "roleClaims")]
         public IList<LondonTravelRole> RoleClaims { get; set; }
+
+        /// <summary>
+        /// Gets or sets the user's favorite line Ids.
+        /// </summary>
+        [JsonProperty(PropertyName = "favoriteLines")]
+        public IList<string> FavoriteLines { get; set; }
     }
 }

@@ -159,7 +159,7 @@ namespace MartinCostello.LondonTravel.Site
 
         public string RegisterLinkAltText => _localizer["Register for a London Travel account"];
 
-        public string RegisterQuote => _localizer["\"Alexa, ask London Travel what my commute's like today?\""];
+        public string CommuteSkillInvocation => _localizer["\"Alexa, ask London Travel what my commute's like today?\""];
 
         public string RegisterSignInSubtitle => _localizer["Choose a service to register using:"];
 

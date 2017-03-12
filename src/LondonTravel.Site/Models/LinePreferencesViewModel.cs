@@ -16,7 +16,7 @@ namespace MartinCostello.LondonTravel.Site.Models
         /// </summary>
         public LinePreferencesViewModel()
         {
-            FavoriteLines = new List<FavoriteLineItem>();
+            AllLines = new List<FavoriteLineItem>();
         }
 
         /// <summary>
@@ -32,17 +32,27 @@ namespace MartinCostello.LondonTravel.Site.Models
         /// <summary>
         /// Gets a value indicating whether a user has selected any favorite lines.
         /// </summary>
-        public bool HasFavourites => FavoriteLines.Any((p) => p.IsFavorite);
+        public bool HasFavourites => FavouriteLines.Any((p) => p.IsFavorite);
 
         /// <summary>
         /// Gets the number of favorite lines the user has selected.
         /// </summary>
-        public int SelectedLineCount => FavoriteLines.Count((p) => p.IsFavorite);
+        public int SelectedLineCount => FavouriteLines.Count();
 
         /// <summary>
-        /// Gets or sets the user's favorite line(s).
+        /// Gets or sets all the line(s).
         /// </summary>
-        public IList<FavoriteLineItem> FavoriteLines { get; set; }
+        public IList<FavoriteLineItem> AllLines { get; set; }
+
+        /// <summary>
+        /// Gets the user's favorite line(s).
+        /// </summary>
+        public IEnumerable<FavoriteLineItem> FavouriteLines => AllLines.Where((p) => p.IsFavorite);
+
+        /// <summary>
+        /// Gets the other line(s).
+        /// </summary>
+        public IEnumerable<FavoriteLineItem> OtherLines => AllLines.Where((p) => !p.IsFavorite);
 
         /// <summary>
         /// Gets or sets a value indicating whether the preferences were successfully updated.

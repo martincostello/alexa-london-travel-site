@@ -4,12 +4,13 @@
 namespace MartinCostello.LondonTravel.Site.Tfl
 {
     using System;
+    using System.Collections.Generic;
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
     using MartinCostello.LondonTravel.Site.Options;
     using Microsoft.Extensions.Caching.Memory;
-    using Newtonsoft.Json.Linq;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// A class representing the default implementation of <see cref="ITflService"/>.
@@ -62,11 +63,11 @@ namespace MartinCostello.LondonTravel.Site.Tfl
         }
 
         /// <inheritdoc />
-        public async Task<JArray> GetLinesAsync(CancellationToken cancellationToken)
+        public async Task<ICollection<LineInfo>> GetLinesAsync(CancellationToken cancellationToken)
         {
             const string CacheKey = "TfL.AvailableLines";
 
-            if (!_cache.TryGetValue(CacheKey, out JArray lines))
+            if (!_cache.TryGetValue(CacheKey, out ICollection<LineInfo> lines))
             {
                 string requestUrl = $"Line/Mode/{string.Join(",", _options.SupportedModes)}?app_id={_options.AppId}&app_key={_options.AppKey}";
 
@@ -74,7 +75,9 @@ namespace MartinCostello.LondonTravel.Site.Tfl
                 {
                     response.EnsureSuccessStatusCode();
 
-                    lines = JArray.Parse(await response.Content.ReadAsStringAsync());
+                    string json = await response.Content.ReadAsStringAsync();
+
+                    lines = JsonConvert.DeserializeObject<ICollection<LineInfo>>(json);
 
                     if (response.Headers.CacheControl.MaxAge.HasValue)
                     {

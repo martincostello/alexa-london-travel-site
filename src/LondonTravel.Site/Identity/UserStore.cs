@@ -102,7 +102,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
 
             return deleted ?
                 IdentityResult.Success :
-                IdentityResult.Failed(new IdentityError() { Code = "UserNotFound", Description = $"User with Id '{user.Id}' does not exist." });
+                ResultForError("UserNotFound", $"User with Id '{user.Id}' does not exist.");
         }
 
         /// <inheritdoc />
@@ -371,9 +371,9 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 throw new ArgumentNullException(nameof(user));
             }
 
-            await _client.ReplaceAsync(user.Id, user);
+            bool updated = await _client.ReplaceAsync(user.Id, user, user.ETag);
 
-            return IdentityResult.Success;
+            return updated ? IdentityResult.Success : ResultForError("Conflict", "The user could not be updated as the ETag value is out-of-date.");
         }
 
         /// <summary>
@@ -385,6 +385,25 @@ namespace MartinCostello.LondonTravel.Site.Identity
             {
                 throw new ObjectDisposedException(nameof(UserStore));
             }
+        }
+
+        /// <summary>
+        /// Creates an <see cref="IdentityResult"/> for the specified error.
+        /// </summary>
+        /// <param name="code">The error code.</param>
+        /// <param name="description">The error description.</param>
+        /// <returns>
+        /// The created instance of <see cref="IdentityResult"/>.
+        /// </returns>
+        private IdentityResult ResultForError(string code, string description)
+        {
+            var error = new IdentityError()
+            {
+                Code = code,
+                Description = description,
+            };
+
+            return IdentityResult.Failed(error);
         }
     }
 }

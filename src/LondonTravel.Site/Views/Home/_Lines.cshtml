@@ -1,0 +1,11 @@
+﻿@model IEnumerable<FavoriteLineItem>
+@foreach (var line in Model)
+{
+    <div class="col-xs-offset-1 col-xs-10 checkbox js-travel-line travel-line travel-line-@line.Id">
+        <label for="preference-@line.Id">
+            <input class="js-line-preference" type="checkbox" id="preference-@line.Id" name="@(nameof(UpdateLinePreferencesViewModel.FavoriteLines))" value="@line.Id" data-line-id="@line.Id" data-line-name="@line.DisplayName" @(line.IsFavorite ? "checked" : string.Empty)>
+            <span class="cr"><i class="cr-icon fa fa-check"></i></span>
+            <span class="js-travel-line">@line.DisplayName</span>
+        </label>
+    </div>
+}

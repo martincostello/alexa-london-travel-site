@@ -8,9 +8,12 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+    using MartinCostello.LondonTravel.Site.Identity;
+    using MartinCostello.LondonTravel.Site.Models;
     using MartinCostello.LondonTravel.Site.Tfl;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using Newtonsoft.Json.Linq;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// A class representing the controller for the <c>/</c> resource.
@@ -18,17 +21,34 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     public class HomeController : Controller
     {
         /// <summary>
+        /// The <see cref="UserManager{TUser}"/> to use. This field is read-only.
+        /// </summary>
+        private readonly UserManager<LondonTravelUser> _userManager;
+
+        /// <summary>
         /// The <see cref="ITflServiceFactory"/> to use. This field is read-only.
         /// </summary>
         private readonly ITflServiceFactory _tflFactory;
 
         /// <summary>
+        /// The <see cref="ILogger"/> to use. This field is read-only.
+        /// </summary>
+        private readonly ILogger<HomeController> _logger;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="HomeController"/> class.
         /// </summary>
+        /// <param name="userManager">The <see cref="UserManager{TUser}"/> to use.</param>
         /// <param name="tflFactory">The <see cref="ITflServiceFactory"/> to use.</param>
-        public HomeController(ITflServiceFactory tflFactory)
+        /// <param name="logger">The <see cref="ILogger"/> to use.</param>
+        public HomeController(
+            UserManager<LondonTravelUser> userManager,
+            ITflServiceFactory tflFactory,
+            ILogger<HomeController> logger)
         {
+            _userManager = userManager;
             _tflFactory = tflFactory;
+            _logger = logger;
         }
 
         /// <summary>
@@ -42,28 +62,14 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         [Route("", Name = SiteRoutes.Home)]
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
-            IList<Tuple<string, string>> lineInfo = Array.Empty<Tuple<string, string>>();
+            var model = new LinePreferencesViewModel();
 
             if (User.Identity.IsAuthenticated)
             {
-                using (var client = _tflFactory.CreateService())
-                {
-                    var lines = await client.GetLinesAsync(cancellationToken);
-
-                    var lineNames = new List<Tuple<string, string>>(lines.Count);
-
-                    foreach (JObject line in lines)
-                    {
-                        lineNames.Add(Tuple.Create((string)line["id"], (string)line["name"]));
-                    }
-
-                    lineInfo = lineNames
-                        .OrderBy((p) => p.Item2)
-                        .ToList();
-                }
+                await MapPreferencesAsync(model, cancellationToken);
             }
 
-            return View(lineInfo);
+            return View(model);
         }
 
         /// <summary>
@@ -76,5 +82,84 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         [Route("/register")]
         [Route("/sign-up")]
         public IActionResult Register() => RedirectToRoute(SiteRoutes.Register);
+
+        /// <summary>
+        /// Maps the user's preferences onto the specified view model as an asynchronous operation.
+        /// </summary>
+        /// <param name="model">The view model to map.</param>
+        /// <param name="cancellationToken">The cancellation token to use.</param>
+        /// <returns>
+        /// A <see cref="Task"/> representing the asynchronous operation to map the view model.
+        /// </returns>
+        private async Task MapPreferencesAsync(LinePreferencesViewModel model, CancellationToken cancellationToken)
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                _logger?.LogError($"Failed to get user to render preferences.");
+                return;
+            }
+
+            model.ETag = user.ETag;
+            model.IsAuthenticated = true;
+
+            ICollection<LineInfo> lines;
+
+            using (ITflService service = _tflFactory.CreateService())
+            {
+                lines = await service.GetLinesAsync(cancellationToken);
+            }
+
+            MapFavoriteLines(model, lines, user.FavoriteLines);
+
+            string updateResult = HttpContext.Request.Query["UpdateSuccess"].FirstOrDefault();
+
+            if (!string.IsNullOrEmpty(updateResult))
+            {
+                model.UpdateResult = string.Equals(updateResult, bool.TrueString, StringComparison.OrdinalIgnoreCase);
+            }
+        }
+
+        /// <summary>
+        /// Maps the user's favorite lines to the specified view model.
+        /// </summary>
+        /// <param name="model">The view model to map.</param>
+        /// <param name="tflLines">The lines reported by the TfL service.</param>
+        /// <param name="userFavorites">The user's favorite lines.</param>
+        private void MapFavoriteLines(
+            LinePreferencesViewModel model,
+            ICollection<LineInfo> tflLines,
+            ICollection<string> userFavorites)
+        {
+            if (tflLines.Count == 0)
+            {
+                _logger?.LogError($"Failed to map TfL lines as there were no values.");
+                return;
+            }
+
+            foreach (LineInfo line in tflLines)
+            {
+                var favorite = new FavoriteLineItem()
+                {
+                    DisplayName = line.Name,
+                    Id = line.Id,
+                };
+
+                model.AllLines.Add(favorite);
+            }
+
+            model.AllLines
+                .OrderBy((p) => p.DisplayName, StringComparer.Ordinal)
+                .ToList();
+
+            if (userFavorites?.Count > 0)
+            {
+                foreach (var favorite in model.AllLines)
+                {
+                    favorite.IsFavorite = userFavorites.Contains(favorite.Id, StringComparer.Ordinal);
+                }
+            }
+        }
     }
 }

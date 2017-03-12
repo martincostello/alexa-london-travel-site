@@ -108,6 +108,11 @@ namespace MartinCostello.LondonTravel.Site.Services
         /// <inheritdoc />
         public async Task<string> CreateAsync(object document)
         {
+            if (document == null)
+            {
+                throw new ArgumentNullException(nameof(document));
+            }
+
             await EnsureCollectionExistsAsync();
 
             _logger?.LogInformation($"Creating document in collection '{_collectionName}' of database '{_databaseName}'.");
@@ -122,6 +127,11 @@ namespace MartinCostello.LondonTravel.Site.Services
         /// <inheritdoc />
         public async Task<bool> DeleteAsync(string id)
         {
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+
             await EnsureCollectionExistsAsync();
 
             try
@@ -145,6 +155,11 @@ namespace MartinCostello.LondonTravel.Site.Services
         public async Task<T> GetAsync<T>(string id)
             where T : class
         {
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+
             await EnsureCollectionExistsAsync();
             T result = null;
 
@@ -189,15 +204,66 @@ namespace MartinCostello.LondonTravel.Site.Services
         }
 
         /// <inheritdoc />
-        public async Task ReplaceAsync(string id, object document)
+        public async Task<bool> ReplaceAsync(string id, object document, string etag)
         {
+            if (document == null)
+            {
+                throw new ArgumentNullException(nameof(document));
+            }
+
             await EnsureCollectionExistsAsync();
 
             _logger?.LogInformation($"Replacing document with Id '{id}' in collection '{_collectionName}' of database '{_databaseName}'.");
 
-            await _client.ReplaceDocumentAsync(BuildDocumentUri(id), document);
+            RequestOptions options = GetOptionsForETag(etag);
+            bool updated = false;
 
-            _logger?.LogInformation($"Replaced document wuth Id '{id}' in collection '{_collectionName}' of database '{_databaseName}'.");
+            try
+            {
+                await _client.ReplaceDocumentAsync(BuildDocumentUri(id), document, options);
+
+                _logger?.LogInformation($"Replaced document with Id '{id}' in collection '{_collectionName}' of database '{_databaseName}'.");
+
+                updated = true;
+            }
+            catch (DocumentClientException ex)
+            {
+                if (ex.StatusCode != HttpStatusCode.PreconditionFailed)
+                {
+                    _logger?.LogError(default(EventId), ex, $"Failed to replace document with Id '{id}' in collection '{_collectionName}' of database '{_databaseName}'.");
+                    throw;
+                }
+
+                _logger?.LogWarning($"Failed to replace document with Id '{id}' in collection '{_collectionName}' of database '{_databaseName}' as the write would conflict. ETag: '{etag}'.");
+            }
+
+            return updated;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="RequestOptions"/> to use for the specified ETag value.
+        /// </summary>
+        /// <param name="etag">The value of the ETag.</param>
+        /// <returns>
+        /// The created instance of <see cref="RequestOptions"/>, if any.
+        /// </returns>
+        private RequestOptions GetOptionsForETag(string etag)
+        {
+            if (etag == null)
+            {
+                return null;
+            }
+
+            var accessCondition = new AccessCondition()
+            {
+                Condition = etag,
+                Type = AccessConditionType.IfMatch
+            };
+
+            return new RequestOptions()
+            {
+                AccessCondition = accessCondition,
+            };
         }
 
         /// <summary>
@@ -217,7 +283,7 @@ namespace MartinCostello.LondonTravel.Site.Services
             }
             catch (DocumentClientException ex)
             {
-                if (ex.StatusCode != System.Net.HttpStatusCode.NotFound)
+                if (ex.StatusCode != HttpStatusCode.NotFound)
                 {
                     _logger?.LogError(default(EventId), ex, $"Failed to read database '{_databaseName}'.");
                     throw;

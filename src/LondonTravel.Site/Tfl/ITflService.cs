@@ -4,9 +4,9 @@
 namespace MartinCostello.LondonTravel.Site.Tfl
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
-    using Newtonsoft.Json.Linq;
 
     /// <summary>
     /// Defines the TfL API service.
@@ -21,6 +21,6 @@ namespace MartinCostello.LondonTravel.Site.Tfl
         /// A <see cref="Task{TResult}"/> representing the asynchronous
         /// operation to get the available lines.
         /// </returns>
-        Task<JArray> GetLinesAsync(CancellationToken cancellationToken);
+        Task<ICollection<LineInfo>> GetLinesAsync(CancellationToken cancellationToken);
     }
 }

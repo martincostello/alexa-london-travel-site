@@ -3,16 +3,18 @@
 
 namespace MartinCostello.LondonTravel.Site.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using MartinCostello.LondonTravel.Site.Identity;
-    using MartinCostello.LondonTravel.Site.Models;
+    using Identity;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
+    using Models;
+    using Services;
 
     /// <summary>
     /// A class representing the controller for the <c>/manage/</c> resource.
@@ -26,18 +28,22 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         private readonly string _applicationCookieScheme;
         private readonly string _externalCookieScheme;
         private readonly ILogger<ManageController> _logger;
+        private readonly IDocumentClient _documentClient;
 
         public ManageController(
           UserManager<LondonTravelUser> userManager,
           SignInManager<LondonTravelUser> signInManager,
+          IDocumentClient documentClient,
           IOptions<IdentityCookieOptions> identityCookieOptions,
-          ILoggerFactory loggerFactory)
+          ILogger<ManageController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _documentClient = documentClient;
+
             _applicationCookieScheme = identityCookieOptions.Value.ApplicationCookieAuthenticationScheme;
             _externalCookieScheme = identityCookieOptions.Value.ExternalCookieAuthenticationScheme;
-            _logger = loggerFactory.CreateLogger<ManageController>();
+            _logger = logger;
         }
 
         /// <summary>
@@ -49,7 +55,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var user = await GetCurrentUserAsync();
 
             if (user == null)
             {
@@ -82,6 +88,11 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LinkAccount(string provider)
         {
+            if (string.IsNullOrWhiteSpace(provider))
+            {
+                return BadRequest();
+            }
+
             await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
 
             var redirectUrl = Url.RouteUrl(SiteRoutes.LinkAccountCallback);
@@ -100,7 +111,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         [Route("link-account-callback", Name = SiteRoutes.LinkAccountCallback)]
         public async Task<ActionResult> LinkAccountCallback()
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var user = await GetCurrentUserAsync();
 
             if (user == null)
             {
@@ -155,7 +166,14 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveAccountLink(RemoveExternalService account)
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (account == null ||
+                string.IsNullOrWhiteSpace(account.LoginProvider) ||
+                string.IsNullOrWhiteSpace(account.ProviderKey))
+            {
+                return BadRequest();
+            }
+
+            var user = await GetCurrentUserAsync();
             var message = SiteMessage.Error;
 
             if (user != null && account != null)
@@ -186,7 +204,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteAccount()
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var user = await GetCurrentUserAsync();
 
             if (user != null)
             {
@@ -217,10 +235,64 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             return RedirectToRoute(SiteRoutes.Manage, new { Message = SiteMessage.Error });
         }
 
-        [ValidateAntiForgeryToken]
         [HttpPost]
         [Route("update-line-preferences", Name = SiteRoutes.UpdateLinePreferences)]
-        public IActionResult UpdateLinePreferences() => RedirectToRoute(SiteRoutes.Home);
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateLinePreferences(
+            [Bind(nameof(UpdateLinePreferencesViewModel.ETag), nameof(UpdateLinePreferencesViewModel.FavoriteLines))] UpdateLinePreferencesViewModel model)
+        {
+            if (model == null || string.IsNullOrWhiteSpace(model.ETag))
+            {
+                return BadRequest();
+            }
+
+            var user = await GetCurrentUserAsync();
+
+            if (user == null)
+            {
+                _logger?.LogError($"Failed to get user to update line preferences.");
+                return View("Error");
+            }
+
+            bool? updated = null;
+
+            // Do not bother updating the preferences if they are they same
+            bool hasModelBeenUpdated =
+                model.FavoriteLines == null ||
+                !model.FavoriteLines.SequenceEqual(user.FavoriteLines);
+
+            if (hasModelBeenUpdated)
+            {
+                _logger.LogInformation($"Updating line preferences for user '{user.Id}'.");
+
+                user.FavoriteLines = (model.FavoriteLines ?? Array.Empty<string>())
+                    .OrderBy((p) => p, StringComparer.Ordinal)
+                    .ToArray();
+
+                // Override the ETag with the one in the model to ensure write consistency
+                user.ETag = model.ETag;
+
+                var result = await _userManager.UpdateAsync(user);
+
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation($"Updated line preferences for user '{user.Id}'.");
+                }
+                else
+                {
+                    _logger.LogWarning($"Failed to update line preferences for user '{user.Id}' as it would cause a write conflict. ETag: '{model.ETag}'.");
+                }
+
+                updated = result.Succeeded;
+            }
+
+            return RedirectToRoute(SiteRoutes.Home, new { UpdateSuccess = updated });
+        }
+
+        private async Task<LondonTravelUser> GetCurrentUserAsync()
+        {
+            return await _userManager.GetUserAsync(HttpContext.User);
+        }
 
         private async Task<IdentityResult> UpdateClaimsAsync(LondonTravelUser user, ExternalLoginInfo info)
         {
