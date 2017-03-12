@@ -173,15 +173,15 @@ namespace MartinCostello.LondonTravel.Site
 
         public string SavePreferencesButtonText => _localizer["Save preferences"];
 
-        public string SavePreferencesButtonAltText => _localizer["Save the changes to your line preferences."];
+        public string SavePreferencesButtonAltText => _localizer["Save the changes to your line preferences"];
 
         public string ClearPreferencesButtonText => _localizer["Deselect all"];
 
-        public string ClearPreferencesButtonAltText => _localizer["Deselect all lines."];
+        public string ClearPreferencesButtonAltText => _localizer["Deselect all lines"];
 
         public string ResetPreferencesButtonText => _localizer["Reset"];
 
-        public string ResetPreferencesButtonAltText => _localizer["Reset all line selections to their original values."];
+        public string ResetPreferencesButtonAltText => _localizer["Reset all line selections to their original values"];
 
         public string SignInTitle => _localizer["Sign in"];
 
@@ -239,7 +239,7 @@ namespace MartinCostello.LondonTravel.Site
 
         public string ErrorSubtitle(int? httpCode) => _localizer["Error (HTTP {0})", httpCode ?? 500];
 
-        public LocalizedHtmlString AvailableLinesTitle(string classes, int count) => _htmlLocalizer["Available Liness <span class=\"{0}\">({1})</span>", classes, count];
+        public LocalizedHtmlString AvailableLinesTitle(string classes, int count) => _htmlLocalizer["Available Lines <span class=\"{0}\">({1})</span>", classes, count];
 
         public LocalizedHtmlString FavoriteLinesTitle(string classes, int count) => _htmlLocalizer["Favourite Lines <span class=\"{0}\">({1})</span>", classes, count];
 
