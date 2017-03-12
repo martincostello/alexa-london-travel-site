@@ -1,0 +1,52 @@
+﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
+
+namespace MartinCostello.LondonTravel.Site.Models
+{
+    using System.Collections.Generic;
+    using System.Linq;
+
+    /// <summary>
+    /// A class representing the view model for a user's line preferences.
+    /// </summary>
+    public class LinePreferencesViewModel
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LinePreferencesViewModel"/> class.
+        /// </summary>
+        public LinePreferencesViewModel()
+        {
+            FavoriteLines = new List<FavoriteLineItem>();
+        }
+
+        /// <summary>
+        /// Gets or sets the ETag associated with the preferences.
+        /// </summary>
+        public string ETag { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the user is authenticated.
+        /// </summary>
+        public bool IsAuthenticated { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether a user has selected any favorite lines.
+        /// </summary>
+        public bool HasFavourites => FavoriteLines.Any((p) => p.IsFavorite);
+
+        /// <summary>
+        /// Gets the number of favorite lines the user has selected.
+        /// </summary>
+        public int SelectedLineCount => FavoriteLines.Count((p) => p.IsFavorite);
+
+        /// <summary>
+        /// Gets or sets the user's favorite line(s).
+        /// </summary>
+        public IList<FavoriteLineItem> FavoriteLines { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the preferences were successfully updated.
+        /// </summary>
+        public bool? UpdateResult { get; set; }
+    }
+}
