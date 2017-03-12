@@ -133,6 +133,11 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult ExternalSignIn(string provider, string returnUrl = null)
         {
+            if (string.IsNullOrWhiteSpace(provider))
+            {
+                return BadRequest();
+            }
+
             if (!_isEnabled)
             {
                 return NotFound();
