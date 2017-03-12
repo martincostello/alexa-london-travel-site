@@ -39,5 +39,7 @@ namespace MartinCostello.LondonTravel.Site
         public const string SignOut = nameof(SignOut);
 
         public const string TermsOfService = nameof(TermsOfService);
+
+        public const string UpdateLinePreferences = nameof(UpdateLinePreferences);
     }
 }

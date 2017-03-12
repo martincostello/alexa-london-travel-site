@@ -1,4 +1,5 @@
-﻿@inject SiteOptions Options
+﻿@model IList<Tuple<string, string>>
+@inject SiteOptions Options
 @{
     ViewBag.Title = SR.HomepageTitle;
 }
@@ -9,19 +10,51 @@
     <p class="lead">
         @SR.HomepageLead
     </p>
-    <p>
-        <a class="btn btn-primary" href="@Options?.ExternalLinks?.Skill" rel="noopener" target="_blank" title="@SR.InstallLinkAltText">@SR.InstallLinkText <i class="fa fa-external-link" aria-hidden="true" data-ga-label="Install Skill CTA"></i></a>
-        @if (!User.Identity.IsAuthenticated)
-        {
-            <a class="btn btn-primary hidden-xs" asp-route="@SiteRoutes.Register" title="@SR.RegisterLinkAltText">@SR.RegisterLinkText <i class="fa fa-user-plus" aria-hidden="true" data-ga-label="Register CTA"></i></a>
-            <a class="btn btn-primary hidden-xs" asp-route="@SiteRoutes.SignIn" title="@SR.SignInLinkAltText">@SR.SignInLinkText <i class="fa fa-sign-in" aria-hidden="true" data-ga-label="Sign-in CTA"></i></a>
-        }
-    </p>
     @if (!User.Identity.IsAuthenticated)
     {
+        <p>
+            <a class="btn btn-primary" href="@Options?.ExternalLinks?.Skill" rel="noopener" target="_blank" title="@SR.InstallLinkAltText">@SR.InstallLinkText <i class="fa fa-external-link" aria-hidden="true" data-ga-label="Install Skill CTA"></i></a>
+            <a class="btn btn-primary hidden-xs" asp-route="@SiteRoutes.Register" title="@SR.RegisterLinkAltText">@SR.RegisterLinkText <i class="fa fa-user-plus" aria-hidden="true" data-ga-label="Register CTA"></i></a>
+            <a class="btn btn-primary hidden-xs" asp-route="@SiteRoutes.SignIn" title="@SR.SignInLinkAltText">@SR.SignInLinkText <i class="fa fa-sign-in" aria-hidden="true" data-ga-label="Sign-in CTA"></i></a>
+        </p>
         <p class="visible-xs">
             <a class="btn btn-primary" asp-route="@SiteRoutes.Register" title="@SR.RegisterLinkAltText">@SR.RegisterLinkText <i class="fa fa-user-plus" aria-hidden="true" data-ga-label="Register CTA"></i></a>
             <a class="btn btn-primary" asp-route="@SiteRoutes.SignIn" title="@SR.SignInLinkAltText">@SR.SignInLinkText <i class="fa fa-sign-in" aria-hidden="true" data-ga-label="Sign-in CTA"></i></a>
         </p>
     }
 </div>
+@if (User.Identity.IsAuthenticated && Model.Any())
+{
+    <hr />
+    <section>
+        <p class="lead">
+            Select your favourite lines for use with the London Travel skill below.
+        </p>
+        <form asp-route="@SiteRoutes.UpdateLinePreferences" method="post">
+            <div class="row">
+                @foreach (var line in Model)
+                {
+                    <div class="col-xs-offset-1 col-xs-10 checkbox js-travel-line travel-line travel-line-@line.Item1">
+                        <label for="preference-@line.Item1">
+                            <input type="checkbox" id="preference-@line.Item1" name="@line.Item1" data-line-id="@line.Item1" data-line-name="@line.Item2">
+                            <span class="cr"><i class="cr-icon fa fa-check"></i></span>
+                            @line.Item2
+                        </label>
+                    </div>
+                }
+            </div>
+            <button type="submit" class="btn btn-primary col-xs-offset-1">Update favourites</button>
+        </form>
+    </section>
+}
+@if (User.Identity.IsAuthenticated)
+{
+    @section scripts {
+        <environment names="Development">
+            <script src="~/assets/js/site.preferences.js" asp-append-version="true" defer></script>
+        </environment>
+        <environment names="Staging,Production">
+            <script src="~/assets/js/site.preferences.min.js" asp-append-version="true" defer></script>
+        </environment>
+    }
+}

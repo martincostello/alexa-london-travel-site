@@ -217,6 +217,11 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             return RedirectToRoute(SiteRoutes.Manage, new { Message = SiteMessage.Error });
         }
 
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        [Route("update-line-preferences", Name = SiteRoutes.UpdateLinePreferences)]
+        public IActionResult UpdateLinePreferences() => RedirectToRoute(SiteRoutes.Home);
+
         private async Task<IdentityResult> UpdateClaimsAsync(LondonTravelUser user, ExternalLoginInfo info)
         {
             if (user.RoleClaims == null)

@@ -78,5 +78,27 @@
       "renameLocals": true
     },
     "sourceMap": true
+  },
+  {
+    "outputFileName": "wwwroot/assets/js/site.preferences.js",
+    "inputFiles": [
+      "assets/scripts/js/martinCostello/londonTravel/preferences.js"
+    ],
+    "minify": {
+      "enabled": false,
+      "renameLocals": false
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/assets/js/site.preferences.min.js",
+    "inputFiles": [
+      "assets/scripts/js/martinCostello/londonTravel/preferences.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": true
   }
 ]

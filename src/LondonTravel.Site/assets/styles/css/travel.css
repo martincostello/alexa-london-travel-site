@@ -3,58 +3,111 @@
     Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 */
 
+.travel-line {
+    border: 1px solid #eee;
+    border-left-color: #2070B0;
+    border-left-width: 5px;
+    border-radius: 3px;
+    cursor: pointer;
+    padding: 20px;
+}
+
 .travel-line-bakerloo {
-    background: #894e24;
+    border-left-color: #894e24;
 }
 
 .travel-line-central {
-    background: #dc241f;
+    border-left-color: #dc241f;
 }
 
 .travel-line-circle {
-    background: #ffce00;
+    border-left-color: #ffce00;
 }
 
 .travel-line-district {
-    background: #007229;
+    border-left-color: #007229;
 }
 
 .travel-line-dlr {
-    background: #00afad;
+    border-left-color: #00afad;
 }
 
 .travel-line-hammersmith-city {
-    background: #d799af;
+    border-left-color: #d799af;
 }
 
 .travel-line-jubilee {
-    background: #6a7278;
+    border-left-color: #6a7278;
 }
 
 .travel-line-london-overground {
-    background: #e86a10;
+    border-left-color: #e86a10;
 }
 
 .travel-line-metropolitan {
-    background: #751056;
+    border-left-color: #751056;
 }
 
 .travel-line-northern {
-    background: #000;
+    border-left-color: #000;
 }
 
 .travel-line-piccadilly {
-    background: #0019a8;
+    border-left-color: #0019a8;
 }
 
 .travel-line-tram {
-    background: #6c0;
+    border-left-color: #6c0;
 }
 
 .travel-line-victoria {
-    background: #00a0e2;
+    border-left-color: #00a0e2;
 }
 
 .travel-line-waterloo-city {
-    background: #76d0bd;
+    border-left-color: #76d0bd;
+}
+
+.checkbox label:after {
+    clear: both;
+    content: "";
+    display: table;
+}
+
+.checkbox .cr {
+    border: 1px solid #a9a9a9;
+    border-radius: .25em;
+    display: inline-block;
+    float: left;
+    height: 1.3em;
+    margin-right: .5em;
+    position: relative;
+    width: 1.3em;
+}
+
+.checkbox .cr .cr-icon {
+    font-size: .8em;
+    left: 20%;
+    line-height: 0;
+    top: 50%;
+    position: absolute;
+}
+
+.checkbox label input[type="checkbox"] {
+    display: none;
+}
+
+.checkbox label input[type="checkbox"] + .cr > .cr-icon {
+    transform: scale(3) rotateZ(-20deg);
+    transition: all .3s ease-in;
+    opacity: 0;
+}
+
+.checkbox label input[type="checkbox"]:checked + .cr > .cr-icon {
+    transform: scale(1) rotateZ(0deg);
+    opacity: 1;
+}
+
+.checkbox label input[type="checkbox"]:disabled + .cr {
+    opacity: .5;
 }
