@@ -231,9 +231,9 @@ namespace MartinCostello.LondonTravel.Site
 
         public string UpdateProgressModalDescription => _localizer["Saving your preferences."];
 
-        public string LinePreferencesNoneLead => _localizer["It looks like you haven't chosen any favourite lines yet. Select some below to get started."];
+        public string LinePreferencesNoneLead => _localizer[nameof(LinePreferencesNoneLead)];
 
-        public string LinePreferencesNoneContent => _localizer["Once you have chosen at least one favourite line, you will be able to ask the {0} skill about your commute if you have linked your account.", BrandName];
+        public string LinePreferencesNoneContent => _localizer[nameof(LinePreferencesNoneContent), BrandName];
 
         public string LinePreferencesSingular => _localizer["The selected line will be used by the London Travel skill to tell you about your commute."];
 
@@ -241,7 +241,7 @@ namespace MartinCostello.LondonTravel.Site
 
         public LocalizedHtmlString AvailableLinesTitle(string classes, int count) => _htmlLocalizer["Available Lines <span class=\"{0}\">({1})</span>", classes, count];
 
-        public LocalizedHtmlString FavoriteLinesTitle(string classes, int count) => _htmlLocalizer["Favourite Lines <span class=\"{0}\">({1})</span>", classes, count];
+        public LocalizedHtmlString FavoriteLinesTitle(string classes, int count) => _htmlLocalizer[nameof(FavoriteLinesTitle), classes, count];
 
         public string LinePreferencesPlural(int count) => _localizer["The {0} selected lines will be used by the London Travel skill to tell you about your commute.", count];
 

@@ -32,12 +32,12 @@ namespace MartinCostello.LondonTravel.Site.Models
         /// <summary>
         /// Gets a value indicating whether a user has selected any favorite lines.
         /// </summary>
-        public bool HasFavourites => FavouriteLines.Any((p) => p.IsFavorite);
+        public bool HasFavorites => FavoriteLines.Any((p) => p.IsFavorite);
 
         /// <summary>
         /// Gets the number of favorite lines the user has selected.
         /// </summary>
-        public int SelectedLineCount => FavouriteLines.Count();
+        public int SelectedLineCount => FavoriteLines.Count();
 
         /// <summary>
         /// Gets or sets all the line(s).
@@ -47,7 +47,7 @@ namespace MartinCostello.LondonTravel.Site.Models
         /// <summary>
         /// Gets the user's favorite line(s).
         /// </summary>
-        public IEnumerable<FavoriteLineItem> FavouriteLines => AllLines.Where((p) => p.IsFavorite);
+        public IEnumerable<FavoriteLineItem> FavoriteLines => AllLines.Where((p) => p.IsFavorite);
 
         /// <summary>
         /// Gets the other line(s).
