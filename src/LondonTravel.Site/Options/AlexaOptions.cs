@@ -11,14 +11,14 @@ namespace MartinCostello.LondonTravel.Site.Options
     public class AlexaOptions
     {
         /// <summary>
-        /// Gets or sets a value indicating whether Alexa account linking is enabled.
-        /// </summary>
-        public bool IsLinkingEnabled { get; set; }
-
-        /// <summary>
         /// Gets or sets the client Id for the Alexa skill.
         /// </summary>
         public string ClientId { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether Alexa account linking is enabled.
+        /// </summary>
+        public bool IsLinkingEnabled { get; set; }
 
         /// <summary>
         /// Gets or sets the allowed redirection URLs for account linking.
