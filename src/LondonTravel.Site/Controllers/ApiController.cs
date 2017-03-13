@@ -64,15 +64,10 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 return Unauthorized("No access token specified.");
             }
 
-            LondonTravelUser user = null;
+            string accessToken = GetAccessTokenFromAuthorizationHeader(authorizationHeader);
+            LondonTravelUser user = await FindUserByAccessTokenAsync(accessToken, cancellationToken);
 
-            if (AuthenticationHeaderValue.TryParse(authorizationHeader, out AuthenticationHeaderValue authorization) ||
-                string.Equals(authorization.Scheme, "bearer", StringComparison.OrdinalIgnoreCase))
-            {
-                user = (await _client.GetAsync<LondonTravelUser>((p) => p.AlexaToken == authorization.Parameter, cancellationToken)).FirstOrDefault();
-            }
-
-            if (!string.Equals(user?.AlexaToken, authorization.Parameter, StringComparison.Ordinal))
+            if (user == null || !string.Equals(user.AlexaToken, accessToken, StringComparison.Ordinal))
             {
                 return Unauthorized("Unauthorized.");
             }
@@ -83,7 +78,30 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 UserId = user.Id,
             };
 
-            return Json(data);
+            return Ok(data);
+        }
+
+        private static string GetAccessTokenFromAuthorizationHeader(string authorizationHeader)
+        {
+            if (!AuthenticationHeaderValue.TryParse(authorizationHeader, out AuthenticationHeaderValue authorization) ||
+                !string.Equals(authorization.Scheme, "bearer", StringComparison.OrdinalIgnoreCase))
+            {
+                return null;
+            }
+
+            return authorization.Parameter;
+        }
+
+        private async Task<LondonTravelUser> FindUserByAccessTokenAsync(string accessToken, CancellationToken cancellationToken)
+        {
+            LondonTravelUser user = null;
+
+            if (!string.IsNullOrEmpty(accessToken))
+            {
+                user = (await _client.GetAsync<LondonTravelUser>((p) => p.AlexaToken == accessToken, cancellationToken)).FirstOrDefault();
+            }
+
+            return user;
         }
 
         private ObjectResult Unauthorized(string message)
