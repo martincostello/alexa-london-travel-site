@@ -125,7 +125,7 @@ namespace MartinCostello.LondonTravel.Site
 
         public string ManageLinkOtherAccountsSubtitle => _localizer["Link another account"];
 
-        public string ManagePreferencesTitle => _localizer["Manage Line Preferences"];
+        public string ManagePreferencesTitle => _localizer["Line Preferences"];
 
         public string NavbarCollapseAltText => _localizer["Toggle navigation"];
 
