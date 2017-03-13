@@ -3,11 +3,11 @@
         <div class="navbar-header">
             <a asp-route="@SiteRoutes.Home" class="navbar-brand" title="@SR.HomepageLinkAltText" data-ga-label="Homepage Navbar">
                 <span>
+                    @SR.BrandName
                     <lazyimg src="@Url.CdnContent("avatar.png", Options)" alt="@SR.BrandName" title="@SR.BrandName" aria-hidden="true" />
                     <noscript>
                         <img src="@Url.CdnContent("avatar.png", Options)" alt="@SR.BrandName" title="@SR.BrandName" aria-hidden="true" />
                     </noscript>
-                    @SR.BrandName
                 </span>
             </a>
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" data-ga-label="Navbar Collapse">
