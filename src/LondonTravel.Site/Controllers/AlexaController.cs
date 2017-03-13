@@ -70,7 +70,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             [FromQuery(Name = "state")] string state,
             [FromQuery(Name = "client_id")] string clientId,
             [FromQuery(Name = "response_type")] string responseType,
-            [FromQuery(Name = "scope")] ICollection<string> scopes,
+            [FromQuery(Name = "scope")] string scopes,
             [FromQuery(Name = "redirect_uri")] Uri redirectUri)
         {
             if (_options?.IsLinkingEnabled != true)

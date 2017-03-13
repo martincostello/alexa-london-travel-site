@@ -49,7 +49,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             string state = "Some State";
             string clientId = "SomeClientId";
             string responseType = "token";
-            ICollection<string> scopes = Array.Empty<string>();
+            string scopes = "a b c";
             Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel");
 
             SiteOptions options = CreateValidSiteOptions();
@@ -76,7 +76,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             // Arrange
             string state = "Some State";
             string responseType = "token";
-            ICollection<string> scopes = Array.Empty<string>();
+            string scopes = "a b c";
             Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel");
 
             using (var target = CreateTarget())
@@ -100,7 +100,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             // Arrange
             string state = "Some State";
             string clientId = "my-client-id";
-            ICollection<string> scopes = Array.Empty<string>();
+            string scopes = "a b c";
             Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel");
 
             using (var target = CreateTarget())
@@ -126,7 +126,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             string state = "Some State";
             string clientId = "my-client-id";
             string responseType = "token";
-            ICollection<string> scopes = Array.Empty<string>();
+            string scopes = "a b c";
             Uri redirectUri = redirectUrl == null ? null : new Uri(redirectUrl, UriKind.RelativeOrAbsolute);
 
             using (var target = CreateTarget())
@@ -147,7 +147,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             string state = "Some State";
             string clientId = "my-client-id";
             string responseType = "token";
-            ICollection<string> scopes = Array.Empty<string>();
+            string scopes = "a b c";
             Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel");
 
             using (var target = CreateTarget())
@@ -171,7 +171,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             string state = "Some State";
             string clientId = "my-client-id";
             string responseType = "token";
-            ICollection<string> scopes = Array.Empty<string>();
+            string scopes = "a b c";
             Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel");
 
             var user = new LondonTravelUser();
@@ -202,7 +202,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             string state = "Some State";
             string clientId = "my-client-id";
             string responseType = "token";
-            ICollection<string> scopes = Array.Empty<string>();
+            string scopes = "a b c";
             Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel");
 
             var user = new LondonTravelUser()
