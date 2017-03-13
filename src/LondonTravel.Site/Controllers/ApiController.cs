@@ -46,6 +46,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// <summary>
         /// Gets the result for the <c>/api/preferences</c> action.
         /// </summary>
+        /// <param name="authorizationHeader">The value of the authorization header.</param>
         /// <param name="cancellationToken">The cancellation token to use.</param>
         /// <returns>
         /// The result for the <c>/api/preference</c> action.
@@ -53,11 +54,11 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         [HttpGet]
         [Produces("application/json", Type = typeof(PreferencesResponse))]
         [Route("preferences")]
-        public async Task<IActionResult> GetPreferences(CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<IActionResult> GetPreferences(
+            [FromHeader(Name = "Authorization")] string authorizationHeader,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
             // TODO Consider allowing implicit access if the user is signed-in (i.e. access from a browser)
-            string authorizationHeader = Request.Headers["Authorization"].FirstOrDefault();
-
             if (string.IsNullOrWhiteSpace(authorizationHeader))
             {
                 return Unauthorized("No access token specified.");
