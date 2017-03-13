@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FavoriteLinesTitle" xml:space="preserve">
-    <value>Favourite Lines &lt;span class=\"{0}\"&gt;({1})&lt;/span&gt;</value>
+    <value>Favourite Lines &lt;span class="{0}"&gt;({1})&lt;/span&gt;</value>
   </data>
   <data name="LinePreferencesNoneContent" xml:space="preserve">
     <value>Once you have chosen at least one favourite line, you will be able to ask the {0} skill about your commute if you have linked your account.</value>
