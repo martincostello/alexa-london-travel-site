@@ -58,9 +58,12 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             [FromHeader(Name = "Authorization")] string authorizationHeader,
             CancellationToken cancellationToken = default(CancellationToken))
         {
+            _logger?.LogInformation("Received API request for user preferences.");
+
             // TODO Consider allowing implicit access if the user is signed-in (i.e. access from a browser)
             if (string.IsNullOrWhiteSpace(authorizationHeader))
             {
+                _logger?.LogInformation("API request for preferences denied as no Authorization header/value was specified.");
                 return Unauthorized("No access token specified.");
             }
 
@@ -69,8 +72,11 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             if (user == null || !string.Equals(user.AlexaToken, accessToken, StringComparison.Ordinal))
             {
+                _logger?.LogInformation("API request for preferences denied as the specified access token is unknown.");
                 return Unauthorized("Unauthorized.");
             }
+
+            _logger?.LogInformation($"Successfully authorized API request for preferences for user '{user.Id}'.");
 
             var data = new PreferencesResponse()
             {
@@ -81,6 +87,13 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             return Ok(data);
         }
 
+        /// <summary>
+        /// Extracts the Alexa access token from the specified Authorize HTTP header value.
+        /// </summary>
+        /// <param name="authorizationHeader">The raw Authorization HTTP request header value.</param>
+        /// <returns>
+        /// The Alexa access token extracted from <paramref name="authorizationHeader"/>, if anyl otherwise <see langword="null"/>.
+        /// </returns>
         private static string GetAccessTokenFromAuthorizationHeader(string authorizationHeader)
         {
             if (!AuthenticationHeaderValue.TryParse(authorizationHeader, out AuthenticationHeaderValue authorization) ||
@@ -92,18 +105,42 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             return authorization.Parameter;
         }
 
+        /// <summary>
+        /// Finds the user with the specified access token, if any, as an asynchronous operation.
+        /// </summary>
+        /// <param name="accessToken">The access token to find the associated user for.</param>
+        /// <param name="cancellationToken">The cancellation token to use.</param>
+        /// <returns>
+        /// A <see cref="Task{TResult}"/> representing the asynchronous operation to
+        /// find the London Travel user with the specified Alexa access token.
+        /// </returns>
         private async Task<LondonTravelUser> FindUserByAccessTokenAsync(string accessToken, CancellationToken cancellationToken)
         {
             LondonTravelUser user = null;
 
             if (!string.IsNullOrEmpty(accessToken))
             {
-                user = (await _client.GetAsync<LondonTravelUser>((p) => p.AlexaToken == accessToken, cancellationToken)).FirstOrDefault();
+                try
+                {
+                    user = (await _client.GetAsync<LondonTravelUser>((p) => p.AlexaToken == accessToken, cancellationToken)).FirstOrDefault();
+                }
+                catch (Exception ex)
+                {
+                    _logger?.LogError(default(EventId), ex, "Failed to find user by access token.");
+                    throw;
+                }
             }
 
             return user;
         }
 
+        /// <summary>
+        /// Returns a response to use for an unauthorized API request.
+        /// </summary>
+        /// <param name="message">The error message.</param>
+        /// <returns>
+        /// The created instance of <see cref="ObjectResult"/>.
+        /// </returns>
         private ObjectResult Unauthorized(string message)
         {
             var error = new ErrorResponse()
