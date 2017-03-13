@@ -6,10 +6,12 @@ namespace MartinCostello.LondonTravel.Site
     using System;
     using System.Globalization;
     using System.Net.Http;
+    using System.Threading.Tasks;
     using Autofac;
     using Autofac.Extensions.DependencyInjection;
     using Extensions;
     using Identity;
+    using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.CookiePolicy;
     using Microsoft.AspNetCore.Cors.Infrastructure;
@@ -180,6 +182,18 @@ namespace MartinCostello.LondonTravel.Site
                     options.Cookies.ApplicationCookie.LoginPath = "/account/sign-in/";
                     options.Cookies.ApplicationCookie.LogoutPath = "/account/sign-out/";
                     options.Cookies.ApplicationCookie.SlidingExpiration = true;
+
+                    (options.Cookies.ApplicationCookie.Events as CookieAuthenticationEvents).OnRedirectToLogin =
+                        (p) =>
+                        {
+                            // Only redirect to the sign-in page if a non-API request
+                            if (!p.Request.Path.StartsWithSegments("/api"))
+                            {
+                                p.Response.Redirect(p.RedirectUri);
+                            }
+
+                            return Task.CompletedTask;
+                        };
 
                     options.Cookies.ExternalCookie.AccessDeniedPath = options.Cookies.ApplicationCookie.AccessDeniedPath;
                     options.Cookies.ExternalCookie.CookieName = "london-travel-auth-external";

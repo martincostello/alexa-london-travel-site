@@ -92,5 +92,11 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// </summary>
         [JsonProperty(PropertyName = "favoriteLines")]
         public IList<string> FavoriteLines { get; set; }
+
+        /// <summary>
+        /// Gets or sets the user's Amazon Alexa access token.
+        /// </summary>
+        [JsonProperty(PropertyName = "alexaToken")]
+        public string AlexaToken { get; set; }
     }
 }

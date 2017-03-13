@@ -81,6 +81,17 @@ namespace MartinCostello.LondonTravel.Site.Integration
             }
         }
 
+        [Theory]
+        [InlineData("/api/preferences")]
+        public async Task Cannot_Load_Api_Resource_Unauthenticated(string requestUri)
+        {
+            using (var response = await Fixture.Client.GetAsync(requestUri))
+            {
+                Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+                Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
+            }
+        }
+
         [Fact]
         public async Task Response_Headers_Contains_Expected_Headers()
         {
