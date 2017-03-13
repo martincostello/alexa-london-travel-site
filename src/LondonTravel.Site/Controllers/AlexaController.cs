@@ -7,7 +7,6 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     using System.Collections.Generic;
     using System.Linq;
     using System.Security.Cryptography;
-    using System.Threading;
     using System.Threading.Tasks;
     using MartinCostello.LondonTravel.Site.Identity;
     using MartinCostello.LondonTravel.Site.Options;
@@ -61,7 +60,6 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// <param name="responseType">The response type.</param>
         /// <param name="scopes">The access scope(s) requested.</param>
         /// <param name="redirectUri">The URL to redirect the user to once linked.</param>
-        /// <param name="cancellationToken">The cancellation token to use.</param>
         /// <returns>
         /// The result for the <c>/alexa/authorize/</c> action.
         /// </returns>
@@ -73,10 +71,9 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             [FromQuery(Name = "client_id")] string clientId,
             [FromQuery(Name = "response_type")] string responseType,
             [FromQuery(Name = "scope")] ICollection<string> scopes,
-            [FromQuery(Name = "redirect_uri")] Uri redirectUri,
-            CancellationToken cancellationToken)
+            [FromQuery(Name = "redirect_uri")] Uri redirectUri)
         {
-            if (!_options.IsLinkingEnabled)
+            if (_options?.IsLinkingEnabled != true)
             {
                 return NotFound();
             }
@@ -111,7 +108,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// <returns>
         /// A <see cref="string"/> containing the generated access token.
         /// </returns>
-        internal static string GenerateAccessToken()
+        public static string GenerateAccessToken()
         {
             byte[] entropy = new byte[64];
 
@@ -135,11 +132,12 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// </returns>
         private static string BuildRedirectUrl(Uri redirectUri, string state, string accessToken, string responseType)
         {
-            UriBuilder builder = new UriBuilder(redirectUri);
+            UriBuilder builder = new UriBuilder(redirectUri)
+            {
+                Query = $"state={(state == null ? string.Empty : Uri.EscapeDataString(state))}&access_token={Uri.EscapeDataString(accessToken)}&token_type={Uri.EscapeDataString(responseType)}"
+            };
 
-            builder.Query = $"state={(state == null ? string.Empty : Uri.EscapeDataString(state))}&access_token={Uri.EscapeDataString(accessToken)}&token_type={Uri.EscapeDataString(responseType)}";
-
-            return builder.Uri.ToString();
+            return builder.Uri.AbsoluteUri.ToString();
         }
 
         /// <summary>
