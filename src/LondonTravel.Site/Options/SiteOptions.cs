@@ -11,6 +11,11 @@ namespace MartinCostello.LondonTravel.Site.Options
     public sealed class SiteOptions
     {
         /// <summary>
+        /// Gets or sets the Alexa options for the site.
+        /// </summary>
+        public AlexaOptions Alexa { get; set; }
+
+        /// <summary>
         /// Gets or sets the analytics options for the site.
         /// </summary>
         public AnalyticsOptions Analytics { get; set; }

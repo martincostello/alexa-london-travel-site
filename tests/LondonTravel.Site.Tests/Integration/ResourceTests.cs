@@ -71,6 +71,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         }
 
         [Theory]
+        [InlineData("/alexa/authorize")]
         [InlineData("/manage/")]
         public async Task Cannot_Load_Resource_Unauthenticated(string requestUri)
         {

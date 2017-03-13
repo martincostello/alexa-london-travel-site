@@ -12,6 +12,8 @@ namespace MartinCostello.LondonTravel.Site
 
         public const string AccessDenied = nameof(AccessDenied);
 
+        public const string AuthorizeAlexa = nameof(AuthorizeAlexa);
+
         public const string DeleteAccount = nameof(DeleteAccount);
 
         public const string ExternalSignIn = nameof(ExternalSignIn);
