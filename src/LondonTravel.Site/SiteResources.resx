@@ -117,13 +117,367 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AccessDeniedSubtitle" xml:space="preserve">
+    <value>You do not have access to this resource.</value>
+  </data>
+  <data name="AccessDeniedTitle" xml:space="preserve">
+    <value>Access denied</value>
+  </data>
+  <data name="AccountCreatedTitle" xml:space="preserve">
+    <value>Your London Travel account has been created.</value>
+  </data>
+  <data name="AccountDeletedContent" xml:space="preserve">
+    <value>Sorry to see you go.</value>
+  </data>
+  <data name="AccountDeletedTitle" xml:space="preserve">
+    <value>Your London Travel account has been deleted.</value>
+  </data>
+  <data name="AccountLinkDeniedContent" xml:space="preserve">
+    <value>You did not grant permission for London Travel to access your other account.</value>
+  </data>
+  <data name="AccountLinkDeniedTitle" xml:space="preserve">
+    <value>Account link permission denied</value>
+  </data>
+  <data name="AccountLinkFailedContent" xml:space="preserve">
+    <value>Something went wrong when attempting to link your other account.</value>
+  </data>
+  <data name="AccountLinkFailedTitle" xml:space="preserve">
+    <value>Account link failed</value>
+  </data>
+  <data name="AccountLockedSubtitle" xml:space="preserve">
+    <value>This account has been locked out. Please try again later.</value>
+  </data>
+  <data name="AccountLockedTitle" xml:space="preserve">
+    <value>Account locked</value>
+  </data>
+  <data name="AlexaSignInFormTitle" xml:space="preserve">
+    <value>Choose a service to sign-in with:</value>
+  </data>
+  <data name="AlexaSignInMetaDescription" xml:space="preserve">
+    <value>Link your London Travel account with Alexa.</value>
+  </data>
+  <data name="AlexaSignInParagraph1" xml:space="preserve">
+    <value>Sign in to link an existing London Travel account to the Alexa skill.</value>
+  </data>
+  <data name="AlexaSignInParagraph2" xml:space="preserve">
+    <value>If you do not already have one set up, an account will be created once you have signed in.</value>
+  </data>
+  <data name="AlexaSignInParagraph3" xml:space="preserve">
+    <value>Once you've linked your account to the skill you'll be able to ask Alexa for information about your commute.</value>
+  </data>
+  <data name="AlexaSignInTitle" xml:space="preserve">
+    <value>Sign In or Register</value>
+  </data>
+  <data name="AlreadyRegisteredContent1" xml:space="preserve">
+    <value>You have already created a London Travel account by signing in with a different service to the one you just tried to sign in with.</value>
+  </data>
+  <data name="AlreadyRegisteredContent2" xml:space="preserve">
+    <value>Sign in with one of the service(s) you've already used to sign-in, then you'll be able to link other service(s) to your account.</value>
+  </data>
+  <data name="AlreadyRegisteredTitle" xml:space="preserve">
+    <value>Already registered</value>
+  </data>
+  <data name="AvailableLinesTitle" xml:space="preserve">
+    <value>Available Lines &lt;span class="{0}"&gt;({1})&lt;/span&gt;</value>
+  </data>
+  <data name="BrandName" xml:space="preserve">
+    <value>London Travel</value>
+  </data>
+  <data name="CancelButtonAltText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="CancelButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="ClearPreferencesButtonAltText" xml:space="preserve">
+    <value>Deselect all lines</value>
+  </data>
+  <data name="ClearPreferencesButtonText" xml:space="preserve">
+    <value>Deselect all</value>
+  </data>
+  <data name="CloseButtonText" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="CommuteSkillInvocation" xml:space="preserve">
+    <value>"Alexa, ask London Travel what my commute's like today?"</value>
+  </data>
+  <data name="CopyrightText" xml:space="preserve">
+    <value>&amp;copy; {0} {1}</value>
+  </data>
+  <data name="DeleteAccountButtonAltText" xml:space="preserve">
+    <value>Permanently delete your London Travel account</value>
+  </data>
+  <data name="DeleteAccountButtonText" xml:space="preserve">
+    <value>Delete your account</value>
+  </data>
+  <data name="DeleteAccountConfirmationButtonAltText" xml:space="preserve">
+    <value>Permanently delete your account</value>
+  </data>
+  <data name="DeleteAccountConfirmationButtonText" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="DeleteAccountModalTitle" xml:space="preserve">
+    <value>Delete your account</value>
+  </data>
+  <data name="DeleteAccountParagraph1Html" xml:space="preserve">
+    <value>Clicking the &lt;strong&gt;Delete&lt;/strong&gt; button will &lt;strong&gt;&lt;em&gt;permanently&lt;/em&gt;&lt;/strong&gt; delete your London Travel account and any data associated with it.</value>
+  </data>
+  <data name="DeleteAccountParagraph2" xml:space="preserve">
+    <value>If you have linked the London Travel Alexa skill to this account you will no longer be able to ask Alexa about your commute using the skill unless you create a new account and re-link the skill using an Alexa-enabled device.</value>
+  </data>
+  <data name="DeleteAccountParagraph3Html" xml:space="preserve">
+    <value>Are you sure you want to delete your account? This action &lt;strong&gt;cannot&lt;/strong&gt; be undone.</value>
+  </data>
+  <data name="DeleteAccountWarning" xml:space="preserve">
+    <value>Warning!</value>
+  </data>
+  <data name="DeleteInProgressText" xml:space="preserve">
+    <value>Your account is being deleted...</value>
+  </data>
+  <data name="ErrorMessage" xml:space="preserve">
+    <value>Sorry, something went wrong.</value>
+  </data>
+  <data name="ErrorSubtitle" xml:space="preserve">
+    <value>Error (HTTP {0})</value>
+  </data>
+  <data name="ErrorTitle" xml:space="preserve">
+    <value>Error</value>
+  </data>
   <data name="FavoriteLinesTitle" xml:space="preserve">
     <value>Favourite Lines &lt;span class="{0}"&gt;({1})&lt;/span&gt;</value>
+  </data>
+  <data name="HelpLinkAltText" xml:space="preserve">
+    <value>View help and support information for the London Travel Alexa skill and this website</value>
+  </data>
+  <data name="HelpLinkText" xml:space="preserve">
+    <value>Help &amp; Support</value>
+  </data>
+  <data name="HelpMetaDescription" xml:space="preserve">
+    <value>Help and support for the London Travel Alexa skill.</value>
+  </data>
+  <data name="HelpTitle" xml:space="preserve">
+    <value>Help and Support</value>
+  </data>
+  <data name="HomepageLead" xml:space="preserve">
+    <value>An Amazon Alexa skill for checking the status of travel in London.</value>
+  </data>
+  <data name="HomepageLinkAltText" xml:space="preserve">
+    <value>View the homepage</value>
+  </data>
+  <data name="HomepageLinkText" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="HomepageTitle" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="InstallLinkAltText" xml:space="preserve">
+    <value>Install London Travel for Amazon Alexa from amazon.co.uk</value>
+  </data>
+  <data name="InstallLinkText" xml:space="preserve">
+    <value>Install</value>
   </data>
   <data name="LinePreferencesNoneContent" xml:space="preserve">
     <value>Once you have chosen at least one favourite line, you will be able to ask the {0} skill about your commute if you have linked your account.</value>
   </data>
   <data name="LinePreferencesNoneLead" xml:space="preserve">
     <value>It looks like you haven't chosen any favourite lines yet. Select some below to get started.</value>
+  </data>
+  <data name="LinePreferencesPlural" xml:space="preserve">
+    <value>The {0} selected lines will be used by the London Travel skill to tell you about your commute.</value>
+  </data>
+  <data name="LinePreferencesSingular" xml:space="preserve">
+    <value>The selected line will be used by the London Travel skill to tell you about your commute.</value>
+  </data>
+  <data name="ManageLinkAltText" xml:space="preserve">
+    <value>Manage your account</value>
+  </data>
+  <data name="ManageLinkedAccountsContent" xml:space="preserve">
+    <value>Listed below are the accounts you have linked to your London Travel account for signing in with.</value>
+  </data>
+  <data name="ManageLinkedAccountsSubtitle" xml:space="preserve">
+    <value>Linked Accounts</value>
+  </data>
+  <data name="ManageLinkOtherAccountsSubtitle" xml:space="preserve">
+    <value>Link another account</value>
+  </data>
+  <data name="ManageLinkText" xml:space="preserve">
+    <value>Manage account</value>
+  </data>
+  <data name="ManageMetaDescription" xml:space="preserve">
+    <value>Manage your account details for the London Travel skill.</value>
+  </data>
+  <data name="ManagePreferencesTitle" xml:space="preserve">
+    <value>Line Preferences</value>
+  </data>
+  <data name="ManageTitle" xml:space="preserve">
+    <value>Manage your account</value>
+  </data>
+  <data name="NavbarCollapseAltText" xml:space="preserve">
+    <value>Toggle navigation</value>
+  </data>
+  <data name="NavbarMenuText" xml:space="preserve">
+    <value>Menu</value>
+  </data>
+  <data name="OtherLinesTitle" xml:space="preserve">
+    <value>Other Lines &lt;span class="{0}"&gt;({1})&lt;/span&gt;</value>
+  </data>
+  <data name="PermissionDeniedContent" xml:space="preserve">
+    <value>You did not grant permission for London Travel to access your email address when you signed in. An email address is required to register.</value>
+  </data>
+  <data name="PermissionDeniedTitle" xml:space="preserve">
+    <value>Permission denied</value>
+  </data>
+  <data name="PrivacyPolicyLinkAltText" xml:space="preserve">
+    <value>View the London Travel Alexa skill's Privacy Policy</value>
+  </data>
+  <data name="PrivacyPolicyLinkText" xml:space="preserve">
+    <value>Privacy Policy</value>
+  </data>
+  <data name="PrivacyPolicyMetaDescription" xml:space="preserve">
+    <value>Privacy policy for user data with the London Travel Alexa skill.</value>
+  </data>
+  <data name="PrivacyPolicyMetaTitle" xml:space="preserve">
+    <value>Privacy Policy</value>
+  </data>
+  <data name="PrivacyPolicyTitle" xml:space="preserve">
+    <value>London Travel Privacy Policy</value>
+  </data>
+  <data name="RegisterLead" xml:space="preserve">
+    <value>Registering for an account for the London Travel skill allows you to save your tube line and station preferences so that you can ask about your commute.</value>
+  </data>
+  <data name="RegisterLinkAltText" xml:space="preserve">
+    <value>Register for a London Travel account</value>
+  </data>
+  <data name="RegisterLinkText" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="RegisterMetaDescription" xml:space="preserve">
+    <value>Register for a London Travel account.</value>
+  </data>
+  <data name="RegisterParagraph1" xml:space="preserve">
+    <value>If you do not already have a London Travel account, you can create one by signing in with one of the services below.</value>
+  </data>
+  <data name="RegisterParagraph2" xml:space="preserve">
+    <value>The London Travel account created will use with email address associated with the service you sign in with.</value>
+  </data>
+  <data name="RegisterParagraph3" xml:space="preserve">
+    <value>Accounts and their data are managed by this service in line with the Privacy Policy and Terms of Service.</value>
+  </data>
+  <data name="RegisterSignInSubtitle" xml:space="preserve">
+    <value>Choose a service to register using:</value>
+  </data>
+  <data name="RegisterSubtitle" xml:space="preserve">
+    <value>Register for an account</value>
+  </data>
+  <data name="RegisterTitle" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="RemoveAccountButtonAltText" xml:space="preserve">
+    <value>Remove link to {0} from your account</value>
+  </data>
+  <data name="RemoveAccountButtonText" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="RemoveAccountLinkModalDescription" xml:space="preserve">
+    <value>Please wait while your account link is removed.</value>
+  </data>
+  <data name="RemoveAccountLinkModalTitle" xml:space="preserve">
+    <value>Removing account link...</value>
+  </data>
+  <data name="ResetPreferencesButtonAltText" xml:space="preserve">
+    <value>Reset all line selections to their original values</value>
+  </data>
+  <data name="ResetPreferencesButtonText" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="SavePreferencesButtonAltText" xml:space="preserve">
+    <value>Save the changes to your line preferences</value>
+  </data>
+  <data name="SavePreferencesButtonText" xml:space="preserve">
+    <value>Save preferences</value>
+  </data>
+  <data name="SignInButtonAltText" xml:space="preserve">
+    <value>Sign in using your {0} account</value>
+  </data>
+  <data name="SignInButtonText" xml:space="preserve">
+    <value>Sign in with {0}</value>
+  </data>
+  <data name="SignInErrorSubtitle" xml:space="preserve">
+    <value>Sorry, you couldn't be signed in. Please try again later.</value>
+  </data>
+  <data name="SignInErrorTitle" xml:space="preserve">
+    <value>Sign-in error</value>
+  </data>
+  <data name="SigningInModalDescription" xml:space="preserve">
+    <value>Please wait while you are redirected to sign-in.</value>
+  </data>
+  <data name="SigningInModalTitle" xml:space="preserve">
+    <value>Signing in...</value>
+  </data>
+  <data name="SignInLinkAltText" xml:space="preserve">
+    <value>Sign in to your London Travel account</value>
+  </data>
+  <data name="SignInLinkText" xml:space="preserve">
+    <value>Sign In</value>
+  </data>
+  <data name="SignInMetaDescription" xml:space="preserve">
+    <value>Sign in to your London Travel account.</value>
+  </data>
+  <data name="SignInRegisterSubtitle" xml:space="preserve">
+    <value>...or register a new account</value>
+  </data>
+  <data name="SignInRegisterText" xml:space="preserve">
+    <value>If you do not already have a London Travel account, register for one by clicking the button below.</value>
+  </data>
+  <data name="SignInSubtitle" xml:space="preserve">
+    <value>Choose a service to sign in with:</value>
+  </data>
+  <data name="SignInTitle" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+  <data name="SignOutLinkText" xml:space="preserve">
+    <value>Sign out</value>
+  </data>
+  <data name="SkillNotLinkedDescription" xml:space="preserve">
+    <value>Link your account with the London Travel skill using the Alexa app to access your preferences from the skill to ask about your commute.</value>
+  </data>
+  <data name="SkillNotLinkedTitle" xml:space="preserve">
+    <value>You have not linked your account with the Alexa app</value>
+  </data>
+  <data name="StatusLinkAltText" xml:space="preserve">
+    <value>View site uptime information</value>
+  </data>
+  <data name="StatusLinkText" xml:space="preserve">
+    <value>Site Status &amp; Uptime</value>
+  </data>
+  <data name="TermsOfServiceLinkAltText" xml:space="preserve">
+    <value>View the London Travel Alexa skill's Terms of Service</value>
+  </data>
+  <data name="TermsOfServiceLinkText" xml:space="preserve">
+    <value>Terms of Service</value>
+  </data>
+  <data name="TermsOfServiceMetaDescription" xml:space="preserve">
+    <value>The Terms of Service for the London Travel Alexa skill and website.</value>
+  </data>
+  <data name="TermsOfServiceMetaTitle" xml:space="preserve">
+    <value>Terms of Service</value>
+  </data>
+  <data name="TermsOfServiceTitle" xml:space="preserve">
+    <value>London Travel Terms of Service</value>
+  </data>
+  <data name="UpdateFailureModalDescription" xml:space="preserve">
+    <value>Your preferences were not been saved as they have since been saved elsewhere and might have been overwritten. Please try again.</value>
+  </data>
+  <data name="UpdateFailureModalTitle" xml:space="preserve">
+    <value>Your preferences were not saved</value>
+  </data>
+  <data name="UpdateProgressModalDescription" xml:space="preserve">
+    <value>Saving your preferences.</value>
+  </data>
+  <data name="UpdateProgressModalTitle" xml:space="preserve">
+    <value>Saving preferences...</value>
+  </data>
+  <data name="UpdateSuccessModalTitle" xml:space="preserve">
+    <value>Your preferences have been saved</value>
   </data>
 </root>
