@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26206.0
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DD7EA67A-4FE1-4D4F-825E-51FF842107AB}"
 	ProjectSection(SolutionItems) = preProject
@@ -16,7 +16,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		CommonAssemblyInfo.cs = CommonAssemblyInfo.cs
 		global.json = global.json
 		LICENSE = LICENSE
+		LondonTravel.Site.Common.props = LondonTravel.Site.Common.props
 		LondonTravel.Site.ruleset = LondonTravel.Site.ruleset
+		NuGet.config = NuGet.config
 		README.md = README.md
 		stylecop.json = stylecop.json
 	EndProjectSection
