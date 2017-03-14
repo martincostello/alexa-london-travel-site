@@ -50,7 +50,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             string clientId = "SomeClientId";
             string responseType = "token";
             string scopes = "a b c";
-            Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel");
+            Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
 
             SiteOptions options = CreateValidSiteOptions();
             options.Alexa.IsLinkingEnabled = false;
@@ -77,7 +77,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             string state = "Some State";
             string responseType = "token";
             string scopes = "a b c";
-            Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel");
+            Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
 
             using (var target = CreateTarget())
             {
@@ -101,7 +101,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             string state = "Some State";
             string clientId = "my-client-id";
             string scopes = "a b c";
-            Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel");
+            Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
 
             using (var target = CreateTarget())
             {
@@ -118,6 +118,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         [InlineData(null)]
         [InlineData("/local")]
         [InlineData("http://alexa.amazon.com/alexa-london-travel")]
+        [InlineData("http://alexa.amazon.com/alexa-london-travel/?foo=baz")]
         [InlineData("https://alexa.amazon.com/alexa-london-travel/unknown")]
         [InlineData("https://bbc.co.uk")]
         public static async Task AuthorizeSkill_Returns_Bad_Request_If_Redirect_Uri_Is_Invalid(string redirectUrl)
@@ -148,7 +149,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             string clientId = "my-client-id";
             string responseType = "token";
             string scopes = "a b c";
-            Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel");
+            Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
 
             using (var target = CreateTarget())
             {
@@ -172,7 +173,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             string clientId = "my-client-id";
             string responseType = "token";
             string scopes = "a b c";
-            Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel");
+            Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
 
             var user = new LondonTravelUser();
             var result = IdentityResult.Failed(new IdentityError() { Code = "Error", Description = "Problem" });
@@ -203,7 +204,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             string clientId = "my-client-id";
             string responseType = "token";
             string scopes = "a b c";
-            Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel");
+            Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
 
             var user = new LondonTravelUser()
             {
@@ -226,7 +227,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 viewResult.Permanent.ShouldBeFalse();
 
                 viewResult.Url.ShouldNotBeNullOrWhiteSpace();
-                viewResult.Url.ShouldStartWith("https://alexa.amazon.com/alexa-london-travel?state=Some%20State&access_token=");
+                viewResult.Url.ShouldStartWith("https://alexa.amazon.com/alexa-london-travel?foo=bar#state=Some%20State&access_token=");
                 viewResult.Url.ShouldEndWith("&token_type=token");
 
                 if (alexaToken != null)
@@ -325,7 +326,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                     IsLinkingEnabled = true,
                     RedirectUrls = new[]
                     {
-                        "https://alexa.amazon.com/alexa-london-travel",
+                        "https://alexa.amazon.com/alexa-london-travel?foo=bar",
                         "https://alexa.amazon.com/alexa-london-travel/link",
                     },
                 },
