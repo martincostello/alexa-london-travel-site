@@ -226,7 +226,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 return false;
             }
 
-            if (_options?.RedirectUrls.Contains(redirectUri.ToString(), StringComparer.OrdinalIgnoreCase) == false)
+            if (_options?.RedirectUrls?.Contains(redirectUri.ToString(), StringComparer.OrdinalIgnoreCase) == false)
             {
                 _logger.LogWarning($"The specified redirection URI '{redirectUri}' is an authorized redirection URI.");
                 return false;
