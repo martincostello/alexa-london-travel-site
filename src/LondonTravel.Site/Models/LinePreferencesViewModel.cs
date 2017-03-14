@@ -30,6 +30,11 @@ namespace MartinCostello.LondonTravel.Site.Models
         public bool IsAuthenticated { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the user is linked to the Alexa app.
+        /// </summary>
+        public bool IsLinkedToAlexa { get; set; }
+
+        /// <summary>
         /// Gets a value indicating whether a user has selected any favorite lines.
         /// </summary>
         public bool HasFavorites => FavoriteLines.Any((p) => p.IsFavorite);

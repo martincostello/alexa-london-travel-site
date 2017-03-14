@@ -103,6 +103,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             model.ETag = user.ETag;
             model.IsAuthenticated = true;
+            model.IsLinkedToAlexa = !string.IsNullOrWhiteSpace(user.AlexaToken);
 
             ICollection<LineInfo> lines;
 

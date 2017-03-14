@@ -11,6 +11,10 @@ else if (Model.AllLines.Any())
 {
     <h2>@SR.ManagePreferencesTitle</h2>
     <hr />
+    @if (!Model.IsLinkedToAlexa)
+    {
+        @await Html.PartialAsync("_SkillNotLinked")
+    }
     <section>
         @if (Model.HasFavorites)
         {

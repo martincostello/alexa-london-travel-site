@@ -175,6 +175,10 @@ namespace MartinCostello.LondonTravel.Site
 
         public string SavePreferencesButtonAltText => _localizer["Save the changes to your line preferences"];
 
+        public string SkillNotLinkedTitle => _localizer["You have not linked your account with the Alexa app"];
+
+        public string SkillNotLinkedDescription => _localizer["Link your account with the London Travel skill using the Alexa app to access your preferences from the skill to ask about your commute."];
+
         public string ClearPreferencesButtonText => _localizer["Deselect all"];
 
         public string ClearPreferencesButtonAltText => _localizer["Deselect all lines"];
