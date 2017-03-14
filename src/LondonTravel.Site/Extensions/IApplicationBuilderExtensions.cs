@@ -52,9 +52,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
             {
                 app.UseIdentity();
 
-                ExternalSignInOptions provider;
-
-                if (TryGetProvider("Amazon", options, out provider))
+                if (TryGetProvider("Amazon", options, out ExternalSignInOptions provider))
                 {
                     app.UseAmazonAuthentication(CreateOAuthOptions<AmazonOptions>(provider, loggerFactory));
                 }
@@ -88,9 +86,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
                         RetrieveUserDetails = true,
                     };
 
-                    var twitterEvents = twitterOptions.Events as TwitterEvents;
-
-                    if (twitterEvents != null)
+                    if (twitterOptions.Events is TwitterEvents twitterEvents)
                     {
                         twitterEvents.OnRemoteFailure =
                             (context) => OAuthEventsHandler.HandleRemoteFailure(
