@@ -80,6 +80,13 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
 
             ViewData["ReturnUrl"] = returnUrl;
+
+            if (IsRedirectAlexaAuthorization(returnUrl))
+            {
+                // Google is not supported for embedded in-app browsers; the others don't work at the moment
+                ViewData["AuthenticationSchemesToShow"] = new string[] { "amazon", "facebook" };
+            }
+
             return View();
         }
 
@@ -146,7 +153,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             var redirectUrl = Url.RouteUrl(SiteRoutes.ExternalSignInCallback, new { ReturnUrl = returnUrl });
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
 
-            string errorRedirectUrl = Url.RouteUrl(IsReferrerRegistrationPage() ? SiteRoutes.Register : SiteRoutes.SignIn);
+            string errorRedirectUrl = GetErrorRedirectUrl();
             SiteContext.SetErrorRedirect(properties, errorRedirectUrl);
 
             return Challenge(properties, provider);
@@ -313,19 +320,47 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             return user;
         }
 
-        private bool IsReferrerRegistrationPage()
+        private string GetErrorRedirectUrl()
         {
-            string referrer = HttpContext.Request.Headers["referer"];
+            return Url.RouteUrl(IsReferrerRegistrationPage() ? SiteRoutes.Register : SiteRoutes.SignIn);
+        }
 
-            if (string.IsNullOrWhiteSpace(referrer) ||
-                !Uri.TryCreate(referrer, UriKind.Absolute, out Uri referrerUri))
+        private bool IsReferrerRegistrationPage() => IsReferrerRoute(SiteRoutes.Register);
+
+        private bool IsRedirectAlexaAuthorization(string returnUrl) => IsUrlRoute(returnUrl, SiteRoutes.AuthorizeAlexa);
+
+        private bool IsReferrerRoute(string routeName)
+        {
+            return IsUrlRoute(HttpContext.Request.Headers["referer"], routeName);
+        }
+
+        private bool IsUrlRoute(string url, string routeName)
+        {
+            if (string.IsNullOrWhiteSpace(url) ||
+                !Uri.TryCreate(url, UriKind.RelativeOrAbsolute, out Uri uri))
             {
                 return false;
             }
 
-            string registerUrl = Url.RouteUrl(SiteRoutes.Register);
+            string routeUrl = Url.RouteUrl(routeName);
 
-            return string.Equals(referrerUri.AbsolutePath, registerUrl, StringComparison.OrdinalIgnoreCase);
+            if (uri.IsAbsoluteUri)
+            {
+                return string.Equals(uri.AbsolutePath, routeUrl, StringComparison.OrdinalIgnoreCase);
+            }
+            else
+            {
+                int indexOfQuery = url.IndexOf('?');
+
+                if (indexOfQuery > -1)
+                {
+                    url = url.Substring(0, indexOfQuery);
+                }
+
+                var toTrim = new[] { '/' };
+
+                return string.Equals(url.TrimEnd(toTrim), routeUrl.TrimEnd(toTrim), StringComparison.OrdinalIgnoreCase);
+            }
         }
     }
 }
