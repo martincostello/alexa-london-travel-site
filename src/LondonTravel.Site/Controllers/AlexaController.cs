@@ -131,7 +131,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         {
             UriBuilder builder = new UriBuilder(redirectUri)
             {
-                Fragment = $"state={(state == null ? string.Empty : Uri.EscapeDataString(state))}&access_token={Uri.EscapeDataString(accessToken)}&token_type={Uri.EscapeDataString(responseType)}"
+                Fragment = $"state={(state == null ? string.Empty : Uri.EscapeDataString(state))}&access_token={Uri.EscapeDataString(accessToken)}&token_type=Bearer"
             };
 
             return builder.Uri.AbsoluteUri.ToString();

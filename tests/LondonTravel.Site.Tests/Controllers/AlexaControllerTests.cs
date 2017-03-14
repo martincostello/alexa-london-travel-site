@@ -221,7 +221,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
                 viewResult.Url.ShouldNotBeNullOrWhiteSpace();
                 viewResult.Url.ShouldStartWith("https://alexa.amazon.com/alexa-london-travel?foo=bar#state=Some%20State&access_token=");
-                viewResult.Url.ShouldEndWith("&token_type=token");
+                viewResult.Url.ShouldEndWith("&token_type=Bearer");
 
                 if (alexaToken != null)
                 {
