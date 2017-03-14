@@ -49,7 +49,6 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             string state = "Some State";
             string clientId = "SomeClientId";
             string responseType = "token";
-            string scopes = "a b c";
             Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
 
             SiteOptions options = CreateValidSiteOptions();
@@ -58,7 +57,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             using (var target = CreateTarget(options: options))
             {
                 // Act
-                IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, scopes, redirectUri);
+                IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, redirectUri);
 
                 // Assert
                 actual.ShouldNotBeNull();
@@ -76,13 +75,12 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             // Arrange
             string state = "Some State";
             string responseType = "token";
-            string scopes = "a b c";
             Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
 
             using (var target = CreateTarget())
             {
                 // Act
-                IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, scopes, redirectUri);
+                IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, redirectUri);
 
                 // Assert
                 actual.ShouldNotBeNull();
@@ -100,13 +98,12 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             // Arrange
             string state = "Some State";
             string clientId = "my-client-id";
-            string scopes = "a b c";
             Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
 
             using (var target = CreateTarget())
             {
                 // Act
-                IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, scopes, redirectUri);
+                IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, redirectUri);
 
                 // Assert
                 actual.ShouldNotBeNull();
@@ -127,13 +124,12 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             string state = "Some State";
             string clientId = "my-client-id";
             string responseType = "token";
-            string scopes = "a b c";
             Uri redirectUri = redirectUrl == null ? null : new Uri(redirectUrl, UriKind.RelativeOrAbsolute);
 
             using (var target = CreateTarget())
             {
                 // Act
-                IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, scopes, redirectUri);
+                IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, redirectUri);
 
                 // Assert
                 actual.ShouldNotBeNull();
@@ -148,13 +144,12 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             string state = "Some State";
             string clientId = "my-client-id";
             string responseType = "token";
-            string scopes = "a b c";
             Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
 
             using (var target = CreateTarget())
             {
                 // Act
-                IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, scopes, redirectUri);
+                IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, redirectUri);
 
                 // Assert
                 actual.ShouldNotBeNull();
@@ -172,7 +167,6 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             string state = "Some State";
             string clientId = "my-client-id";
             string responseType = "token";
-            string scopes = "a b c";
             Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
 
             var user = new LondonTravelUser();
@@ -183,7 +177,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             using (var target = CreateTarget(userManager))
             {
                 // Act
-                IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, scopes, redirectUri);
+                IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, redirectUri);
 
                 // Assert
                 actual.ShouldNotBeNull();
@@ -203,7 +197,6 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             string state = "Some State";
             string clientId = "my-client-id";
             string responseType = "token";
-            string scopes = "a b c";
             Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
 
             var user = new LondonTravelUser()
@@ -218,7 +211,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             using (var target = CreateTarget(userManager))
             {
                 // Act
-                IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, scopes, redirectUri);
+                IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, redirectUri);
 
                 // Assert
                 actual.ShouldNotBeNull();

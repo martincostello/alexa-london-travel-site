@@ -75,7 +75,6 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// <param name="state">The state from the Alexa service.</param>
         /// <param name="clientId">The client Id.</param>
         /// <param name="responseType">The response type.</param>
-        /// <param name="scopes">The access scope(s) requested.</param>
         /// <param name="redirectUri">The URL to redirect the user to once linked.</param>
         /// <returns>
         /// The result for the <c>/alexa/authorize/</c> action.
@@ -87,7 +86,6 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             [FromQuery(Name = "state")] string state,
             [FromQuery(Name = "client_id")] string clientId,
             [FromQuery(Name = "response_type")] string responseType,
-            [FromQuery(Name = "scope")] string scopes,
             [FromQuery(Name = "redirect_uri")] Uri redirectUri)
         {
             if (_options?.IsLinkingEnabled != true)
