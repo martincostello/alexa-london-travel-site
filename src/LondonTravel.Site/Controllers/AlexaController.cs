@@ -52,6 +52,24 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         }
 
         /// <summary>
+        /// Generates a new random access token.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="string"/> containing the generated access token.
+        /// </returns>
+        public static string GenerateAccessToken()
+        {
+            byte[] entropy = new byte[64];
+
+            using (var random = RandomNumberGenerator.Create())
+            {
+                random.GetBytes(entropy);
+            }
+
+            return Convert.ToBase64String(entropy);
+        }
+
+        /// <summary>
         /// Gets the result for the <c>/alexa/authorize/</c> action.
         /// </summary>
         /// <param name="state">The state from the Alexa service.</param>
@@ -99,24 +117,6 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             string tokenRedirectUrl = BuildRedirectUrl(redirectUri, state, accessToken, responseType);
             return Redirect(tokenRedirectUrl);
-        }
-
-        /// <summary>
-        /// Generates a new random access token.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="string"/> containing the generated access token.
-        /// </returns>
-        public static string GenerateAccessToken()
-        {
-            byte[] entropy = new byte[64];
-
-            using (var random = RandomNumberGenerator.Create())
-            {
-                random.GetBytes(entropy);
-            }
-
-            return Convert.ToBase64String(entropy);
         }
 
         /// <summary>
