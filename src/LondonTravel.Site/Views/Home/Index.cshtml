@@ -9,48 +9,7 @@
 }
 else if (Model.AllLines.Any())
 {
-    <h2>@SR.ManagePreferencesTitle</h2>
-    <hr />
-    @if (!Model.IsLinkedToAlexa)
-    {
-        @await Html.PartialAsync("_SkillNotLinked")
-    }
-    <section>
-        @if (Model.HasFavorites)
-        {
-            @if (Model.SelectedLineCount == 1)
-            {
-                <p>
-                    @SR.LinePreferencesSingular
-                </p>
-            }
-            else
-            {
-                <p>
-                    @SR.LinePreferencesPlural(Model.SelectedLineCount)
-                </p>
-            }
-        }
-        else
-        {
-            <p class="lead">
-                @SR.LinePreferencesNoneLead
-            </p>
-            <p>
-                @SR.LinePreferencesNoneContent
-            </p>
-            <blockquote>
-                <p>
-                    <i>
-                        @SR.CommuteSkillInvocation
-                    </i>
-                </p>
-            </blockquote>
-        }
-        <hr />
-        @await Html.PartialAsync("_UpdateForm", Model)
-    </section>
-    @await Html.PartialAsync("_UpdateModal")
+    @await Html.PartialAsync("_Preferences", Model)
 }
 @if (Model.IsAuthenticated)
 {
