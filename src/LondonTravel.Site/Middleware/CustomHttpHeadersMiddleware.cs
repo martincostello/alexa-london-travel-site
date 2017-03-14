@@ -170,10 +170,9 @@ namespace MartinCostello.LondonTravel.Site.Middleware
                 builder.Append(pair.Key);
 
                 IList<string> origins = pair.Value;
-                IList<string> configOrigins;
 
                 if (options.ContentSecurityPolicyOrigins != null &&
-                    options.ContentSecurityPolicyOrigins.TryGetValue(pair.Key, out configOrigins))
+                    options.ContentSecurityPolicyOrigins.TryGetValue(pair.Key, out IList<string> configOrigins))
                 {
                     origins = origins.Concat(configOrigins).ToList();
                 }

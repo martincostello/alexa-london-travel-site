@@ -120,10 +120,8 @@ namespace MartinCostello.LondonTravel.Site.Identity
             var stateData = secureDataFormat.Unprotect(state);
             var properties = propertiesProvider?.Invoke(stateData);
 
-            string value;
-
             if (properties == null ||
-                !properties.TryGetValue(SiteContext.ErrorRedirectPropertyName, out value))
+                !properties.TryGetValue(SiteContext.ErrorRedirectPropertyName, out string value))
             {
                 value = null;
             }
