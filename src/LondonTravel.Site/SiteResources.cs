@@ -241,6 +241,18 @@ namespace MartinCostello.LondonTravel.Site
 
         public string LinePreferencesSingular => _localizer["The selected line will be used by the London Travel skill to tell you about your commute."];
 
+        public string AlexaSignInTitle => _localizer["Sign In or Register"];
+
+        public string AlexaSignInMetaDescription => _localizer["Link your London Travel account with Alexa."];
+
+        public string AlexaSignInParagraph1 => _localizer["Sign in to link an existing London Travel account to the Alexa skill."];
+
+        public string AlexaSignInParagraph2 => _localizer["If you do not already have one set up, an account will be created once you have signed in."];
+
+        public string AlexaSignInParagraph3 => _localizer["Once you've linked your account to the skill you'll be able to ask Alexa for information about your commute."];
+
+        public string AlexaSignInFormTitle => _localizer["Choose a service to sign-in with:"];
+
         public string ErrorSubtitle(int? httpCode) => _localizer["Error (HTTP {0})", httpCode ?? 500];
 
         public LocalizedHtmlString AvailableLinesTitle(string classes, int count) => _htmlLocalizer["Available Lines <span class=\"{0}\">({1})</span>", classes, count];

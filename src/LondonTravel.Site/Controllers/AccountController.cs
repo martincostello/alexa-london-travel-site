@@ -81,13 +81,17 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             ViewData["ReturnUrl"] = returnUrl;
 
+            string view = nameof(SignIn);
+
             if (IsRedirectAlexaAuthorization(returnUrl))
             {
+                view += "Alexa";
+
                 // Google is not supported for embedded in-app browsers; the others don't work at the moment
                 ViewData["AuthenticationSchemesToShow"] = new string[] { "amazon", "facebook" };
             }
 
-            return View();
+            return View(view);
         }
 
         /// <summary>
@@ -223,7 +227,14 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
                     _logger.LogInformation($"New user account '{user.Id}' created through '{info.LoginProvider}'.");
 
-                    return RedirectToRoute(SiteRoutes.Home, new { Message = SiteMessage.AccountCreated });
+                    if (IsRedirectAlexaAuthorization(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
+                    else
+                    {
+                        return RedirectToRoute(SiteRoutes.Home, new { Message = SiteMessage.AccountCreated });
+                    }
                 }
 
                 bool isUserAlreadyRegistered = identityResult.Errors.Any((p) => p.Code.StartsWith("Duplicate"));
