@@ -26,6 +26,8 @@ namespace MartinCostello.LondonTravel.Site
 
         PermissionDenied,
 
-        RemoveSuccess,
+        RemoveAccountLinkSuccess,
+
+        RemoveAlexaLinkSuccess,
     }
 }

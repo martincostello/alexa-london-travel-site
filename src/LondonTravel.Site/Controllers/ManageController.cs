@@ -77,6 +77,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             var model = new ManageViewModel()
             {
                 CurrentLogins = userLogins,
+                ETag = user.ETag,
                 IsLinkedToAlexa = !string.IsNullOrWhiteSpace(user.AlexaToken),
                 OtherLogins = otherLogins,
             };
@@ -188,12 +189,49 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                     _logger.LogInformation($"Removed login for '{account.LoginProvider}' from user '{user.Id}'.");
 
                     await _signInManager.SignInAsync(user, isPersistent: true);
-                    message = SiteMessage.RemoveSuccess;
+                    message = SiteMessage.RemoveAccountLinkSuccess;
                 }
                 else
                 {
                     _logger?.LogError(
                         $"Failed to remove external login info from user '{user.Id}' for provider '{account.LoginProvider}': {string.Join(";", result.Errors.Select((p) => $"{p.Code}: {p.Description}"))}.");
+                }
+            }
+
+            return RedirectToRoute(SiteRoutes.Manage, new { Message = message });
+        }
+
+        [HttpPost]
+        [Route("remove-alexa-link", Name = SiteRoutes.RemoveAlexaLink)]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveAlexaLink(string etag)
+        {
+            if (string.IsNullOrWhiteSpace(etag))
+            {
+                return BadRequest();
+            }
+
+            var user = await GetCurrentUserAsync();
+            var message = SiteMessage.Error;
+
+            if (user != null)
+            {
+                _logger.LogInformation($"Removing Alexa link from user '{user.Id}'.");
+
+                user.AlexaToken = null;
+                user.ETag = etag;
+
+                var result = await _userManager.UpdateAsync(user);
+
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation($"Removed Alexa link from user '{user.Id}'.");
+                    message = SiteMessage.RemoveAlexaLinkSuccess;
+                }
+                else
+                {
+                    _logger?.LogError(
+                        $"Failed to remove Alexa link from user '{user.Id}': {string.Join(";", result.Errors.Select((p) => $"{p.Code}: {p.Description}"))}.");
                 }
             }
 

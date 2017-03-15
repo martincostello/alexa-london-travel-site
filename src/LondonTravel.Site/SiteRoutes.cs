@@ -36,6 +36,8 @@ namespace MartinCostello.LondonTravel.Site
 
         public const string RemoveAccountLink = nameof(RemoveAccountLink);
 
+        public const string RemoveAlexaLink = nameof(RemoveAlexaLink);
+
         public const string SignIn = nameof(SignIn);
 
         public const string SignOut = nameof(SignOut);

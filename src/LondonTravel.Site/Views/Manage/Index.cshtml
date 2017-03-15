@@ -15,6 +15,7 @@
         @if (Model.IsLinkedToAlexa)
         {
             @SR.ManageLinkedToAlexa <i class="fa fa-check text-success" aria-hidden="true"></i>
+            @await Html.PartialAsync("_RemoveAlexaLinkModal", Model)
         }
         else
         {

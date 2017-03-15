@@ -15,6 +15,8 @@ namespace MartinCostello.LondonTravel.Site.Models
 
         public bool CanAddMoreLogins => OtherLogins?.Count > 0;
 
+        public string ETag { get; set; }
+
         public bool IsLinkedToAlexa { get; set; }
 
         public bool ShowRemoveButton => CurrentLogins?.Count > 1;

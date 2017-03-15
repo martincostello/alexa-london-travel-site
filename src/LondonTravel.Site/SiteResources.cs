@@ -131,6 +131,22 @@ namespace MartinCostello.LondonTravel.Site
 
         public string ManageNotLinkedToAlexa => _localizer[nameof(ManageNotLinkedToAlexa)];
 
+        public string ManageUnlinkAlexaButtonText => _localizer[nameof(ManageUnlinkAlexaButtonText)];
+
+        public string ManageUnlinkAlexaButtonAltText => _localizer[nameof(ManageUnlinkAlexaButtonAltText)];
+
+        public string ManageUnlinkAlexaModalTitle => _localizer[nameof(ManageUnlinkAlexaModalTitle)];
+
+        public string ManageUnlinkAlexaModalContent1 => _localizer[nameof(ManageUnlinkAlexaModalContent1)];
+
+        public string ManageUnlinkAlexaModalContent2 => _localizer[nameof(ManageUnlinkAlexaModalContent2)];
+
+        public string ManageUnlinkAlexaModalLoading => _localizer[nameof(ManageUnlinkAlexaModalLoading)];
+
+        public string ManageUnlinkAlexaModalConfirmButtonText => _localizer[nameof(ManageUnlinkAlexaModalConfirmButtonText)];
+
+        public string ManageUnlinkAlexaModalConfirmButtonAltText => _localizer[nameof(ManageUnlinkAlexaModalConfirmButtonAltText)];
+
         public string NavbarCollapseAltText => _localizer[nameof(NavbarCollapseAltText)];
 
         public string NavbarMenuText => _localizer[nameof(NavbarMenuText)];

@@ -6,13 +6,13 @@
         </div>
     </form>
 </noscript>
-<div id="delete-account" class="hide">
+<div class="hide js-hidden-control">
     <hr />
-    <button class="btn btn-danger" title="@SR.DeleteAccountButtonAltText" data-ga-label="Delete Account" data-toggle="modal" data-target=".delete-account-modal">
+    <button class="btn btn-danger" title="@SR.DeleteAccountButtonAltText" data-ga-label="Delete Account" data-toggle="modal" data-target="#delete-account-modal">
         @SR.DeleteAccountButtonText
     </button>
 </div>
-<div class="modal delete-account-modal" tabindex="-1" role="dialog" aria-describedby="delete-account-modal-description" aria-labelledby="delete-account-modal-title">
+<div id="delete-account-modal" class="modal js-modal" tabindex="-1" role="dialog" aria-describedby="delete-account-modal-description" aria-labelledby="delete-account-modal-title">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -48,9 +48,9 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <form id="delete-account-js" asp-route="@SiteRoutes.DeleteAccount" method="post" class="form-horizontal">
+                <form asp-route="@SiteRoutes.DeleteAccount" method="post" class="form-horizontal js-modal-form">
                     <button type="button" class="btn btn-default js-delete-control" title="@SR.CancelButtonAltText" data-dismiss="modal" data-ga-label="Delete Account Cancel">@SR.CancelButtonText</button>
-                    <input type="submit" class="btn btn-danger disabled js-delete-control js-delete-confirm" value="@SR.DeleteAccountConfirmationButtonText" title="@SR.DeleteAccountConfirmationButtonAltText" data-ga-label="Delete Account Confirm" disabled />
+                    <input type="submit" class="btn btn-danger disabled js-delete-control js-modal-confirm" value="@SR.DeleteAccountConfirmationButtonText" title="@SR.DeleteAccountConfirmationButtonAltText" data-ga-label="Delete Account Confirm" disabled />
                 </form>
             </div>
         </div>

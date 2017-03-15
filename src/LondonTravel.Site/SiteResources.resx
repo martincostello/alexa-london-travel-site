@@ -486,4 +486,28 @@
   <data name="ManageNotLinkedToAlexa" xml:space="preserve">
     <value>Your account is not linked to the Alexa skill</value>
   </data>
+  <data name="ManageUnlinkAlexaButtonAltText" xml:space="preserve">
+    <value>Unlink your account from the Alexa skill</value>
+  </data>
+  <data name="ManageUnlinkAlexaButtonText" xml:space="preserve">
+    <value>Unlink</value>
+  </data>
+  <data name="ManageUnlinkAlexaModalConfirmButtonAltText" xml:space="preserve">
+    <value>Unlink your account from the London Travel Alexa skill</value>
+  </data>
+  <data name="ManageUnlinkAlexaModalConfirmButtonText" xml:space="preserve">
+    <value>Unlink</value>
+  </data>
+  <data name="ManageUnlinkAlexaModalContent1" xml:space="preserve">
+    <value>Unlinking your account from the London Travel Alexa skill will prevent you from asking about your commute.</value>
+  </data>
+  <data name="ManageUnlinkAlexaModalContent2" xml:space="preserve">
+    <value>You can re-link your account at any time by using the Alexa app.</value>
+  </data>
+  <data name="ManageUnlinkAlexaModalLoading" xml:space="preserve">
+    <value>Unlinking the Alexa skill</value>
+  </data>
+  <data name="ManageUnlinkAlexaModalTitle" xml:space="preserve">
+    <value>Unlink Alexa skill</value>
+  </data>
 </root>
