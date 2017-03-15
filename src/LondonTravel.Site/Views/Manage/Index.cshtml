@@ -6,9 +6,20 @@
 }
 @await Html.PartialAsync("_SignInErrors")
 <h2>@SR.ManageTitle</h2>
+<hr />
 <div class="row">
     <div class="col-md-@(Model.CanAddMoreLogins ? "8" : "12")">
-        <h4>@SR.ManageLinkedAccountsSubtitle</h4>
+        <h3>@SR.ManageLinkedAccountsSubtitle</h3>
+        <hr />
+        <p>
+        @if (Model.IsLinkedToAlexa)
+        {
+            @SR.ManageLinkedToAlexa <i class="fa fa-check text-success" aria-hidden="true"></i>
+        }
+        else
+        {
+            @SR.ManageNotLinkedToAlexa <i class="fa fa-times text-danger" aria-hidden="true"></i>
+        }
         <hr />
         <p>
             @SR.ManageLinkedAccountsContent
@@ -46,7 +57,7 @@
     @if (Model.CanAddMoreLogins)
     {
         <div class="col-md-4">
-            <h4>@SR.ManageLinkOtherAccountsSubtitle</h4>
+            <h3>@SR.ManageLinkOtherAccountsSubtitle</h3>
             <hr />
             <form asp-route="@SiteRoutes.LinkAccount" method="post" class="form-horizontal">
                 <div>

@@ -127,6 +127,10 @@ namespace MartinCostello.LondonTravel.Site
 
         public string ManagePreferencesTitle => _localizer[nameof(ManagePreferencesTitle)];
 
+        public string ManageLinkedToAlexa => _localizer[nameof(ManageLinkedToAlexa)];
+
+        public string ManageNotLinkedToAlexa => _localizer[nameof(ManageNotLinkedToAlexa)];
+
         public string NavbarCollapseAltText => _localizer[nameof(NavbarCollapseAltText)];
 
         public string NavbarMenuText => _localizer[nameof(NavbarMenuText)];

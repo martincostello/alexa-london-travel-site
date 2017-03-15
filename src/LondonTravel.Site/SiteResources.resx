@@ -480,4 +480,10 @@
   <data name="UpdateSuccessModalTitle" xml:space="preserve">
     <value>Your preferences have been saved</value>
   </data>
+  <data name="ManageLinkedToAlexa" xml:space="preserve">
+    <value>Your account is linked to the Alexa skill</value>
+  </data>
+  <data name="ManageNotLinkedToAlexa" xml:space="preserve">
+    <value>Your account is not linked to the Alexa skill</value>
+  </data>
 </root>

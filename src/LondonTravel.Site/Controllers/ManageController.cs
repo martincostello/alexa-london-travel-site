@@ -77,7 +77,8 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             var model = new ManageViewModel()
             {
                 CurrentLogins = userLogins,
-                OtherLogins = otherLogins
+                IsLinkedToAlexa = !string.IsNullOrWhiteSpace(user.AlexaToken),
+                OtherLogins = otherLogins,
             };
 
             return View(model);
