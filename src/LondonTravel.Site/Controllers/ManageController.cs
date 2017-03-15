@@ -6,6 +6,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
     using Identity;
     using Microsoft.AspNetCore.Authorization;
@@ -15,6 +16,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     using Microsoft.Extensions.Options;
     using Models;
     using Services.Data;
+    using Services.Tfl;
 
     /// <summary>
     /// A class representing the controller for the <c>/manage/</c> resource.
@@ -25,21 +27,24 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     {
         private readonly UserManager<LondonTravelUser> _userManager;
         private readonly SignInManager<LondonTravelUser> _signInManager;
+        private readonly IDocumentClient _documentClient;
+        private readonly ITflServiceFactory _tflServiceFactory;
         private readonly string _applicationCookieScheme;
         private readonly string _externalCookieScheme;
         private readonly ILogger<ManageController> _logger;
-        private readonly IDocumentClient _documentClient;
 
         public ManageController(
           UserManager<LondonTravelUser> userManager,
           SignInManager<LondonTravelUser> signInManager,
           IDocumentClient documentClient,
+          ITflServiceFactory tflServiceFactory,
           IOptions<IdentityCookieOptions> identityCookieOptions,
           ILogger<ManageController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _documentClient = documentClient;
+            _tflServiceFactory = tflServiceFactory;
 
             _applicationCookieScheme = identityCookieOptions.Value.ApplicationCookieAuthenticationScheme;
             _externalCookieScheme = identityCookieOptions.Value.ExternalCookieAuthenticationScheme;
@@ -278,7 +283,9 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         [Route("update-line-preferences", Name = SiteRoutes.UpdateLinePreferences)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateLinePreferences(
-            [Bind(nameof(UpdateLinePreferencesViewModel.ETag), nameof(UpdateLinePreferencesViewModel.FavoriteLines))] UpdateLinePreferencesViewModel model)
+            [Bind(nameof(UpdateLinePreferencesViewModel.ETag), nameof(UpdateLinePreferencesViewModel.FavoriteLines))]
+            UpdateLinePreferencesViewModel model,
+            CancellationToken cancellationToken)
         {
             if (model == null || string.IsNullOrWhiteSpace(model.ETag))
             {
@@ -302,6 +309,11 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             if (hasModelBeenUpdated)
             {
+                if (!await AreLinesValidAsync(model, cancellationToken))
+                {
+                    return BadRequest();
+                }
+
                 _logger.LogInformation($"Updating line preferences for user '{user.Id}'.");
 
                 user.FavoriteLines = (model.FavoriteLines ?? Array.Empty<string>())
@@ -326,6 +338,23 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             }
 
             return RedirectToRoute(SiteRoutes.Home, new { UpdateSuccess = updated });
+        }
+
+        private async Task<bool> AreLinesValidAsync(UpdateLinePreferencesViewModel model, CancellationToken cancellationToken)
+        {
+            if (model.FavoriteLines != null)
+            {
+                IList<string> validLines;
+
+                using (var service = _tflServiceFactory.CreateService())
+                {
+                    validLines = (await service.GetLinesAsync(cancellationToken)).Select((p) => p.Id).ToList();
+                }
+
+                return model.FavoriteLines.All((p) => validLines.Contains(p));
+            }
+
+            return true;
         }
 
         private async Task<LondonTravelUser> GetCurrentUserAsync()
