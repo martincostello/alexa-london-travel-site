@@ -2,7 +2,7 @@
     <hr />
     <form asp-route="@SiteRoutes.DeleteAccount" method="post" class="form-horizontal">
         <div>
-            <input type="submit" class="btn btn-danger" value="@SR.DeleteAccountButtonText" title="@SR.DeleteAccountButtonAltText" data-ga-label="Delete Account" />
+            <input type="submit" class="btn btn-danger" value="@SR.DeleteAccountButtonText" title="@SR.DeleteAccountButtonAltText" />
         </div>
     </form>
 </noscript>
@@ -23,7 +23,7 @@
             </div>
             <div class="modal-body">
                 <div class="js-delete-content">
-                    <div id="remove-link-modal-description" class="alert alert-warning" role="alert">
+                    <div id="delete-account-modal-description" class="alert alert-warning" role="alert">
                         <p class="lead">
                             <strong>@SR.DeleteAccountWarning</strong>
                         </p>
