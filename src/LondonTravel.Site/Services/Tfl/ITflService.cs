@@ -22,5 +22,16 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
         /// operation to get the available lines.
         /// </returns>
         Task<ICollection<LineInfo>> GetLinesAsync(CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Gets the available stop points for the specified line Id as an asynchronous operation.
+        /// </summary>
+        /// <param name="lineId">The Id of the line to get the stop points for.</param>
+        /// <param name="cancellationToken">The cancellation token to use.</param>
+        /// <returns>
+        /// A <see cref="Task{TResult}"/> representing the asynchronous operation to get
+        /// the available stop points for the line specified by <paramref name="lineId"/>.
+        /// </returns>
+        Task<ICollection<StopPoint>> GetStopPointsByLineAsync(string lineId, CancellationToken cancellationToken);
     }
 }

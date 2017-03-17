@@ -6,6 +6,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
     using System;
     using System.Collections.Generic;
     using System.Net.Http;
+    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.Extensions.Caching.Memory;
@@ -66,30 +67,81 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
         public async Task<ICollection<LineInfo>> GetLinesAsync(CancellationToken cancellationToken)
         {
             const string CacheKey = "TfL.AvailableLines";
+            Uri requestUri = BuildRequestUri($"Line/Mode/{string.Join(",", _options.SupportedModes)}");
 
-            if (!_cache.TryGetValue(CacheKey, out ICollection<LineInfo> lines))
+            return await GetAsJsonWithCacheAsync<ICollection<LineInfo>>(requestUri, CacheKey, cancellationToken);
+        }
+
+        /// <inheritdoc />
+        public async Task<ICollection<StopPoint>> GetStopPointsByLineAsync(string lineId, CancellationToken cancellationToken)
+        {
+            string cacheKey = $"TfL.{lineId}.AvailableLines";
+            Uri requestUri = BuildRequestUri($"Line/{lineId}/StopPoints");
+
+            return await GetAsJsonWithCacheAsync<ICollection<StopPoint>>(requestUri, cacheKey, cancellationToken);
+        }
+
+        /// <summary>
+        /// Builds the URI for the specified request URL.
+        /// </summary>
+        /// <param name="relativeUrl">The relative URL to build the URI for.</param>
+        /// <returns>
+        /// The <see cref="Uri"/> to use for the specified relative URL with the required query string parameters appended.
+        /// </returns>
+        private Uri BuildRequestUri(string relativeUrl)
+        {
+            var builder = new StringBuilder(relativeUrl);
+
+            if (relativeUrl.IndexOf('?') > -1)
             {
-                string requestUrl = $"Line/Mode/{string.Join(",", _options.SupportedModes)}?app_id={_options.AppId}&app_key={_options.AppKey}";
+                builder.Append('&');
+            }
+            else
+            {
+                builder.Append('?');
+            }
 
-                using (var response = await _client.GetAsync(requestUrl, cancellationToken))
+            builder.Append($"app_id={_options.AppId}&app_key={_options.AppKey}");
+
+            return new Uri(builder.ToString(), UriKind.Relative);
+        }
+
+        /// <summary>
+        /// Performs an HTTP to the specified URI as an asynchronous operation,
+        /// storing the result if the cache if the response is cacheable.
+        /// </summary>
+        /// <typeparam name="T">The type of the resource to get.</typeparam>
+        /// <param name="requestUri">The URI of the resource to get.</param>
+        /// <param name="cacheKey">The cache key to use for the resource.</param>
+        /// <param name="cancellationToken">The cancellation token to use.</param>
+        /// <returns>
+        /// A <see cref="Task{TResult}"/> representing the asychronous operation to get the
+        /// resource of <typeparamref name="T"/> at the specified request URI.
+        /// </returns>
+        private async Task<T> GetAsJsonWithCacheAsync<T>(Uri requestUri, string cacheKey, CancellationToken cancellationToken)
+        {
+            if (!_cache.TryGetValue(cacheKey, out T result))
+            {
+                using (var response = await _client.GetAsync(requestUri, cancellationToken))
                 {
                     response.EnsureSuccessStatusCode();
 
                     string json = await response.Content.ReadAsStringAsync();
 
-                    lines = JsonConvert.DeserializeObject<ICollection<LineInfo>>(json);
+                    result = JsonConvert.DeserializeObject<T>(json);
 
-                    if (response.Headers.CacheControl.MaxAge.HasValue)
+                    if (!string.IsNullOrEmpty(cacheKey) &&
+                        response.Headers.CacheControl.MaxAge.HasValue)
                     {
                         var options = new MemoryCacheEntryOptions()
                             .SetAbsoluteExpiration(response.Headers.CacheControl.MaxAge.Value);
 
-                        _cache.Set(CacheKey, lines, options);
+                        _cache.Set(cacheKey, result, options);
                     }
                 }
             }
 
-            return lines;
+            return result;
         }
     }
 }
