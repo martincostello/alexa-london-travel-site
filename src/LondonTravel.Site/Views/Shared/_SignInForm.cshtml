@@ -5,7 +5,6 @@
         .ThenBy((p) => p.AuthenticationScheme)
         .ToList();
 
-    /*
     var schemesToShow = ViewData["AuthenticationSchemesToShow"] as IEnumerable<string>;
 
     if (schemesToShow != null)
@@ -14,7 +13,6 @@
             .Where((p) => schemesToShow.Contains(p.AuthenticationScheme, StringComparer.OrdinalIgnoreCase))
             .ToList();
     }
-    */
 }
 <form asp-route="@SiteRoutes.ExternalSignIn" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
     <div>
