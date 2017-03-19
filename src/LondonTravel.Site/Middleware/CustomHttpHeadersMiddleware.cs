@@ -162,7 +162,7 @@ namespace MartinCostello.LondonTravel.Site.Middleware
                 { "font-src", new[] { Csp.Self } },
                 { "connect-src", new[] { Csp.Self } },
                 { "media-src", new[] { Csp.None } },
-                { "object-src", Array.Empty<string>() },
+                { "object-src", new[] { Csp.None } },
                 { "child-src", new[] { Csp.Self } },
                 { "frame-ancestors", new[] { Csp.None } },
                 { "form-action", new[] { Csp.Self } },
