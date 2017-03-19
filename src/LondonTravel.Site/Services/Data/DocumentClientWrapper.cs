@@ -176,7 +176,8 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         }
 
         /// <inheritdoc />
-        public async Task<bool> ReplaceAsync(string id, object document, string etag)
+        public async Task<T> ReplaceAsync<T>(string id, T document, string etag)
+            where T : class
         {
             if (document == null)
             {
@@ -188,15 +189,14 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             _logger?.LogInformation($"Replacing document with Id '{id}' in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'.");
 
             RequestOptions options = GetOptionsForETag(etag);
-            bool updated = false;
 
             try
             {
-                await _client.ReplaceDocumentAsync(BuildDocumentUri(id), document, options);
+                Document response = await _client.ReplaceDocumentAsync(BuildDocumentUri(id), document, options);
 
                 _logger?.LogInformation($"Replaced document with Id '{id}' in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'.");
 
-                updated = true;
+                return (T)(dynamic)response;
             }
             catch (DocumentClientException ex)
             {
@@ -209,7 +209,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
                 _logger?.LogWarning($"Failed to replace document with Id '{id}' in collection '{_options.CollectionName}' of database '{_options.DatabaseName}' as the write would conflict. ETag: '{etag}'.");
             }
 
-            return updated;
+            return null;
         }
 
         /// <summary>

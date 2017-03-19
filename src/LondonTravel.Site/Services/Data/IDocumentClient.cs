@@ -64,14 +64,16 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// Replaces the document with the specified Id with the
         /// specified new document as an asynchronous operation.
         /// </summary>
+        /// <typeparam name="T">The type of the updated document.</typeparam>
         /// <param name="id">The Id of the document to replace.</param>
         /// <param name="document">The replacement document.</param>
         /// <param name="etag">The ETag associated with the document being updated.</param>
         /// <returns>
         /// A <see cref="Task{T}"/> representing the operation to replace the document
-        /// which returns <see langword="true"/> if it was successfully replaced or
-        /// <see langword="false"/> if the replacement failed due to a write conflict.
+        /// which returns the updated document if it was successfully replaced or
+        /// <see langword="null"/> if the replacement failed due to a write conflict.
         /// </returns>
-        Task<bool> ReplaceAsync(string id, object document, string etag);
+        Task<T> ReplaceAsync<T>(string id, T document, string etag)
+            where T : class;
     }
 }

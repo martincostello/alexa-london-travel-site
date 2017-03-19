@@ -371,9 +371,17 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 throw new ArgumentNullException(nameof(user));
             }
 
-            bool updated = await _client.ReplaceAsync(user.Id, user, user.ETag);
+            LondonTravelUser updated = await _client.ReplaceAsync(user.Id, user, user.ETag);
 
-            return updated ? IdentityResult.Success : ResultForError("Conflict", "The user could not be updated as the ETag value is out-of-date.");
+            if (updated != null)
+            {
+                user.ETag = updated.ETag;
+                return IdentityResult.Success;
+            }
+            else
+            {
+                return ResultForError("Conflict", "The user could not be updated as the ETag value is out-of-date.");
+            }
         }
 
         /// <summary>
