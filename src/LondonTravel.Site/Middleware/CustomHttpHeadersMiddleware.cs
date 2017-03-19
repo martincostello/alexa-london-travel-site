@@ -41,6 +41,11 @@ namespace MartinCostello.LondonTravel.Site.Middleware
         private readonly string _contentSecurityPolicy;
 
         /// <summary>
+        /// The current <c>Content-Security-Policy-Report-Only</c> HTTP response header value. This field is read-only.
+        /// </summary>
+        private readonly string _contentSecurityPolicyReportOnly;
+
+        /// <summary>
         /// The current <c>Public-Key-Pins</c> HTTP response header value. This field is read-only.
         /// </summary>
         private readonly string _publicKeyPins;
@@ -74,8 +79,10 @@ namespace MartinCostello.LondonTravel.Site.Middleware
 
             _isProduction = environment.IsProduction();
             _environmentName = _isProduction ? null : environment.EnvironmentName;
-            _contentSecurityPolicy = BuildContentSecurityPolicy(_isProduction, options.Value);
             _publicKeyPins = BuildPublicKeyPins(options.Value);
+
+            _contentSecurityPolicy = BuildContentSecurityPolicy(_isProduction, false, options.Value);
+            _contentSecurityPolicyReportOnly = BuildContentSecurityPolicy(_isProduction, true, options.Value);
         }
 
         /// <summary>
@@ -93,7 +100,7 @@ namespace MartinCostello.LondonTravel.Site.Middleware
                     context.Response.Headers.Remove("X-Powered-By");
 
                     context.Response.Headers.Add("Content-Security-Policy", _contentSecurityPolicy);
-                    context.Response.Headers.Add("Content-Security-Policy-Report-Only", _contentSecurityPolicy);
+                    context.Response.Headers.Add("Content-Security-Policy-Report-Only", _contentSecurityPolicyReportOnly);
                     context.Response.Headers.Add("Referrer-Policy", "origin-when-cross-origin");
                     context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
                     context.Response.Headers.Add("X-Download-Options", "noopen");
@@ -137,11 +144,12 @@ namespace MartinCostello.LondonTravel.Site.Middleware
         /// Builds the Content Security Policy to use for the website.
         /// </summary>
         /// <param name="isProduction">Whether the current environment is production.</param>
+        /// <param name="isReport">Whether the policy is being generated for the report.</param>
         /// <param name="options">The current site configuration options.</param>
         /// <returns>
         /// A <see cref="string"/> containing the Content Security Policy to use.
         /// </returns>
-        private static string BuildContentSecurityPolicy(bool isProduction, SiteOptions options)
+        private static string BuildContentSecurityPolicy(bool isProduction, bool isReport, SiteOptions options)
         {
             var cdn = GetCdnOriginForContentSecurityPolicy(options);
 
@@ -188,7 +196,7 @@ namespace MartinCostello.LondonTravel.Site.Middleware
                 builder.Append(";");
             }
 
-            if (isProduction)
+            if (!isReport && isProduction)
             {
                 builder.Append("upgrade-insecure-requests;");
             }
