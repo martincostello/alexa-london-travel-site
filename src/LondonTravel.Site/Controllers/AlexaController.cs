@@ -93,28 +93,41 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 return NotFound();
             }
 
-            if (!VerifyClientId(clientId) || !VerifyResponseType(responseType) || !VerifyRedirectUri(redirectUri))
+            if (!VerifyRequest(clientId, responseType, out string error))
+            {
+                return RedirectForError(redirectUri, state, error);
+            }
+
+            if (!VerifyRedirectUri(redirectUri))
             {
                 return BadRequest();
             }
 
-            var user = await _userManager.GetUserAsync(User);
-
-            if (user == null)
+            try
             {
-                _logger.LogError($"Failed to get user to link account to Alexa.");
-                return View("Error", 500);
+                var user = await _userManager.GetUserAsync(User);
+
+                if (user == null)
+                {
+                    _logger.LogError($"Failed to get user to link account to Alexa.");
+                    return RedirectForError(redirectUri, state);
+                }
+
+                string accessToken = GenerateAccessToken();
+
+                if (!await CreateOrUpdateAccessToken(user, accessToken))
+                {
+                    return RedirectForError(redirectUri, state);
+                }
+
+                string tokenRedirectUrl = BuildRedirectUrl(redirectUri, state, accessToken, responseType);
+                return Redirect(tokenRedirectUrl);
             }
-
-            string accessToken = GenerateAccessToken();
-
-            if (!await CreateOrUpdateAccessToken(user, accessToken))
+            catch (Exception ex)
             {
-                return View("Error", 500);
+                _logger.LogError(default(EventId), ex, "Failed to link account to Alexa.");
+                return RedirectForError(redirectUri, state);
             }
-
-            string tokenRedirectUrl = BuildRedirectUrl(redirectUri, state, accessToken, responseType);
-            return Redirect(tokenRedirectUrl);
         }
 
         /// <summary>
@@ -186,17 +199,59 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         }
 
         /// <summary>
-        /// Verifies the client Id.
+        /// Returns the redirection for an error for the specified parameters.
         /// </summary>
-        /// <param name="clientId">The client Id to verify.</param>
+        /// <param name="redirectUri">The base redirection URI.</param>
+        /// <param name="state">The value of the state parameter.</param>
+        /// <param name="errorCode">The optional error code.</param>
         /// <returns>
-        /// <see langword="true"/> if the specified client Id is valid; otherwise <see langword="false"/>.
+        /// The URI to redirect the user to.
         /// </returns>
-        private bool VerifyClientId(string clientId)
+        private IActionResult RedirectForError(Uri redirectUri, string state, string errorCode = null)
         {
+            UriBuilder builder = new UriBuilder(redirectUri)
+            {
+                Fragment = $"state={(state == null ? string.Empty : Uri.EscapeDataString(state))}&error={errorCode ?? "server_error"}"
+            };
+
+            string url = builder.Uri.AbsoluteUri.ToString();
+            return Redirect(url);
+        }
+
+        /// <summary>
+        /// Verifies the request as-per RFC-6749 section 4.2.2.1.
+        /// </summary>
+        /// <param name="clientId">The client Id.</param>
+        /// <param name="responseType">The response type.</param>
+        /// <param name="error">When the method returns, contains the error parameter, if any.</param>
+        /// <returns>
+        /// <see langword="true"/> if the specified parameter values are valid; otherwise <see langword="false"/>.
+        /// </returns>
+        private bool VerifyRequest(string clientId, string responseType, out string error)
+        {
+            error = null;
+
+            if (string.IsNullOrEmpty(clientId) || string.IsNullOrEmpty(responseType))
+            {
+                error = "invalid_request";
+                return false;
+            }
+
             if (!string.Equals(clientId, _options.ClientId, StringComparison.Ordinal))
             {
-                _logger.LogError($"Invalid client Id '{clientId}' specified.");
+                _logger.LogWarning($"Invalid client Id '{clientId}' specified.");
+
+                error = "unauthorized_client";
+                return false;
+            }
+
+            const string ImplicitFlowResponseType = "token";
+
+            if (!string.Equals(responseType, ImplicitFlowResponseType, StringComparison.Ordinal))
+            {
+                _logger.LogWarning($"Invalid response type '{responseType}' specified.");
+
+                error = "unsupported_response_type";
                 return false;
             }
 

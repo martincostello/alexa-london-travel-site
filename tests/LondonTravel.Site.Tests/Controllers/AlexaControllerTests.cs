@@ -68,9 +68,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         [Theory]
         [InlineData(null)]
         [InlineData("")]
-        [InlineData(" ")]
-        [InlineData("some-invalid-value")]
-        public static async Task AuthorizeSkill_Returns_Bad_Request_If_Client_Id_Is_Invalid(string clientId)
+        public static async Task AuthorizeSkill_Returns_Correct_Location_If_Client_Id_Is_Invalid(string clientId)
         {
             // Arrange
             string state = "Some State";
@@ -83,17 +81,34 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, redirectUri);
 
                 // Assert
-                actual.ShouldNotBeNull();
-                actual.ShouldBeOfType<BadRequestResult>();
+                AssertRedirect(actual, "https://alexa.amazon.com/alexa-london-travel?foo=bar#state=Some%20State&error=invalid_request");
+            }
+        }
+
+        [Theory]
+        [InlineData(" ")]
+        [InlineData("some-invalid-value")]
+        public static async Task AuthorizeSkill_Returns_Correct_Location_If_Client_Id_Is_Unauthorized(string clientId)
+        {
+            // Arrange
+            string state = "Some State";
+            string responseType = "token";
+            Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
+
+            using (var target = CreateTarget())
+            {
+                // Act
+                IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, redirectUri);
+
+                // Assert
+                AssertRedirect(actual, "https://alexa.amazon.com/alexa-london-travel?foo=bar#state=Some%20State&error=unauthorized_client");
             }
         }
 
         [Theory]
         [InlineData(null)]
         [InlineData("")]
-        [InlineData(" ")]
-        [InlineData("code")]
-        public static async Task AuthorizeSkill_Returns_Bad_Request_If_Response_Type_Is_Invalid(string responseType)
+        public static async Task AuthorizeSkill_Returns_Correct_Location_If_Response_Type_Is_Invalid(string responseType)
         {
             // Arrange
             string state = "Some State";
@@ -106,8 +121,27 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, redirectUri);
 
                 // Assert
-                actual.ShouldNotBeNull();
-                actual.ShouldBeOfType<BadRequestResult>();
+                AssertRedirect(actual, "https://alexa.amazon.com/alexa-london-travel?foo=bar#state=Some%20State&error=invalid_request");
+            }
+        }
+
+        [Theory]
+        [InlineData(" ")]
+        [InlineData("code")]
+        public static async Task AuthorizeSkill_Returns_Correct_Location_If_Response_Type_Is_Not_Supported(string responseType)
+        {
+            // Arrange
+            string state = "Some State";
+            string clientId = "my-client-id";
+            Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
+
+            using (var target = CreateTarget())
+            {
+                // Act
+                IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, redirectUri);
+
+                // Assert
+                AssertRedirect(actual, "https://alexa.amazon.com/alexa-london-travel?foo=bar#state=Some%20State&error=unsupported_response_type");
             }
         }
 
@@ -152,11 +186,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, redirectUri);
 
                 // Assert
-                actual.ShouldNotBeNull();
-
-                var viewResult = actual.ShouldBeOfType<ViewResult>();
-                viewResult.ViewName.ShouldBe("Error");
-                viewResult.Model.ShouldBe(500);
+                AssertRedirect(actual, "https://alexa.amazon.com/alexa-london-travel?foo=bar#state=Some%20State&error=server_error");
             }
         }
 
@@ -180,11 +210,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, redirectUri);
 
                 // Assert
-                actual.ShouldNotBeNull();
-
-                var viewResult = actual.ShouldBeOfType<ViewResult>();
-                viewResult.ViewName.ShouldBe("Error");
-                viewResult.Model.ShouldBe(500);
+                AssertRedirect(actual, "https://alexa.amazon.com/alexa-london-travel?foo=bar#state=Some%20State&error=server_error");
             }
         }
 
@@ -232,6 +258,22 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 user.AlexaToken.ShouldNotBe(alexaToken);
                 user.AlexaToken.Length.ShouldBeGreaterThanOrEqualTo(64);
             }
+        }
+
+        private static RedirectResult AssertRedirect(IActionResult actual, string url = null)
+        {
+            actual.ShouldNotBeNull();
+
+            var result = actual.ShouldBeOfType<RedirectResult>();
+
+            result.Permanent.ShouldBeFalse();
+
+            if (url != null)
+            {
+                result.Url.ShouldBe(url);
+            }
+
+            return result;
         }
 
         /// <summary>
