@@ -22,6 +22,12 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     [Route("account", Name = SiteRoutes.Account)]
     public class AccountController : Controller
     {
+        /// <summary>
+        /// The names of the authentication schemes that are disallowed for
+        /// sign-in to link Alexa to an account. This field is read-only.
+        /// </summary>
+        private static readonly string[] AuthenticationSchemesDisabledForAlexa = new[] { "google" };
+
         private readonly UserManager<LondonTravelUser> _userManager;
         private readonly SignInManager<LondonTravelUser> _signInManager;
         private readonly string _externalCookieScheme;
@@ -81,17 +87,15 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             ViewData["ReturnUrl"] = returnUrl;
 
-            string view = nameof(SignIn);
+            string viewName = nameof(SignIn);
 
             if (IsRedirectAlexaAuthorization(returnUrl))
             {
-                view += "Alexa";
-
-                // Google is not supported for embedded in-app browsers; the others don't work at the moment
-                ViewData["AuthenticationSchemesToShow"] = new string[] { "amazon", "facebook" };
+                viewName += "Alexa";
+                ViewData["AuthenticationSchemesToHide"] = AuthenticationSchemesDisabledForAlexa;
             }
 
-            return View(view);
+            return View(viewName);
         }
 
         /// <summary>

@@ -5,12 +5,12 @@
         .ThenBy((p) => p.AuthenticationScheme)
         .ToList();
 
-    var schemesToShow = ViewData["AuthenticationSchemesToShow"] as IEnumerable<string>;
+    var schemesToHide = ViewData["AuthenticationSchemesToHide"] as IEnumerable<string>;
 
-    if (schemesToShow != null)
+    if (schemesToHide != null)
     {
         providers = providers
-            .Where((p) => schemesToShow.Contains(p.AuthenticationScheme, StringComparer.OrdinalIgnoreCase))
+            .Where((p) => !schemesToHide.Contains(p.AuthenticationScheme, StringComparer.OrdinalIgnoreCase))
             .ToList();
     }
 }
