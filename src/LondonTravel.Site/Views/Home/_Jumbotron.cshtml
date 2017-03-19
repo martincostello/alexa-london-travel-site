@@ -7,18 +7,18 @@
         @SR.HomepageLead
     </p>
     <p>
-        <a class="btn btn-primary" href="@Options?.ExternalLinks?.Skill" rel="noopener" target="_blank" title="@SR.InstallLinkAltText">@SR.InstallLinkText <i class="fa fa-external-link" aria-hidden="true" data-ga-label="Install Skill CTA"></i></a>
+        <a class="btn btn-primary" href="@Options?.ExternalLinks?.Skill" rel="noopener" target="_blank" title="@SR.InstallLinkAltText" data-ga-label="Install Skill CTA">@SR.InstallLinkText <i class="fa fa-external-link" aria-hidden="true"></i></a>
         @if (authenticationEnabled)
         {
-            <a class="btn btn-primary hidden-xs" asp-route="@SiteRoutes.Register" title="@SR.RegisterLinkAltText">@SR.RegisterLinkText <i class="fa fa-user-plus" aria-hidden="true" data-ga-label="Register CTA"></i></a>
-            <a class="btn btn-primary hidden-xs" asp-route="@SiteRoutes.SignIn" title="@SR.SignInLinkAltText">@SR.SignInLinkText <i class="fa fa-sign-in" aria-hidden="true" data-ga-label="Sign-in CTA"></i></a>
+            <a class="btn btn-primary hidden-xs" asp-route="@SiteRoutes.Register" title="@SR.RegisterLinkAltText" data-ga-label="Register CTA">@SR.RegisterLinkText <i class="fa fa-user-plus" aria-hidden="true"></i></a>
+            <a class="btn btn-primary hidden-xs" asp-route="@SiteRoutes.SignIn" title="@SR.SignInLinkAltText" data-ga-label="Sign-in CTA">@SR.SignInLinkText <i class="fa fa-sign-in" aria-hidden="true"></i></a>
         }
     </p>
     @if (authenticationEnabled)
     {
         <p class="visible-xs">
-            <a class="btn btn-primary" asp-route="@SiteRoutes.Register" title="@SR.RegisterLinkAltText">@SR.RegisterLinkText <i class="fa fa-user-plus" aria-hidden="true" data-ga-label="Register CTA"></i></a>
-            <a class="btn btn-primary" asp-route="@SiteRoutes.SignIn" title="@SR.SignInLinkAltText">@SR.SignInLinkText <i class="fa fa-sign-in" aria-hidden="true" data-ga-label="Sign-in CTA"></i></a>
+            <a class="btn btn-primary" asp-route="@SiteRoutes.Register" title="@SR.RegisterLinkAltText" data-ga-label="Register CTA">@SR.RegisterLinkText <i class="fa fa-user-plus" aria-hidden="true"></i></a>
+            <a class="btn btn-primary" asp-route="@SiteRoutes.SignIn" title="@SR.SignInLinkAltText" data-ga-label="Sign-in CTA">@SR.SignInLinkText <i class="fa fa-sign-in" aria-hidden="true"></i></a>
         </p>
     }
 </div>
