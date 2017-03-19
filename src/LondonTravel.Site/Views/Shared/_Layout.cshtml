@@ -2,8 +2,6 @@
 <!DOCTYPE html>
 <html lang="en-gb">
 <head prefix="og:http://ogp.me/ns#">
-    @await Html.PartialAsync("_StylesHead")
-    @await RenderSectionAsync("stylesHead", required: false)
 @{
     string canonicalUri = Context.Request.Canonical();
     string image = ViewBag.MetaImage ?? string.Empty;
@@ -25,6 +23,8 @@
     @await Html.PartialAsync("_Meta", model)
     @await Html.PartialAsync("_Links", Tuple.Create(canonicalUri, Options))
     @await RenderSectionAsync("meta", required: false)
+    @await Html.PartialAsync("_StylesHead")
+    @await RenderSectionAsync("stylesHead", required: false)
     @Html.Raw(JavaScriptSnippet.FullScript)
     <script type="text/javascript">
         if (self == top) {
