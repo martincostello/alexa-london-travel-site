@@ -26,13 +26,13 @@ To build and test the website run one of the following commands:
 **Linux/OS X**
 
 ```sh
-    ./build.sh
+./build.sh
 ```
 
 **Windows**
 
 ```batchfile
-    .\Build.ps1
+.\Build.ps1
 ```
 
 ## License
