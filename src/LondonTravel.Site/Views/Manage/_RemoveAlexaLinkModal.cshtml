@@ -2,10 +2,10 @@
 <noscript>
     <form asp-route="@SiteRoutes.RemoveAlexaLink" method="post" class="form-horizontal">
         <input type="hidden" name="@(nameof(ManageViewModel.ETag))" value="@Model.ETag" />
-        <input type="submit" class="btn btn-sm" value="@SR.ManageUnlinkAlexaButtonText" title="@SR.ManageUnlinkAlexaButtonAltText" />
+        <input type="submit" class="btn btn-default btn-sm" value="@SR.ManageUnlinkAlexaButtonText" title="@SR.ManageUnlinkAlexaButtonAltText" />
     </form>
 </noscript>
-<button class="btn btn-sm hide js-hidden-control" title="@SR.ManageUnlinkAlexaButtonAltText" data-ga-label="Unlink Alexa Skill" data-toggle="modal" data-target="#unlink-alexa-modal">
+<button class="btn btn-default btn-sm hide js-hidden-control" title="@SR.ManageUnlinkAlexaButtonAltText" data-ga-label="Unlink Alexa Skill" data-toggle="modal" data-target="#unlink-alexa-modal">
     @SR.ManageUnlinkAlexaButtonText
 </button>
 <div id="unlink-alexa-modal" class="modal js-modal" tabindex="-1" role="dialog" aria-describedby="unlink-alexa-modal-description" aria-labelledby="unlink-alexa-modal-title">
