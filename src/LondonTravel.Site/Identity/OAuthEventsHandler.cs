@@ -45,11 +45,11 @@ namespace MartinCostello.LondonTravel.Site.Identity
 
             // Setup custom handlers
             OnRemoteFailure = HandleRemoteFailure;
+            OnTicketReceived = HandleTicketReceived;
 
             // Assign delegated handlers
             OnCreatingTicket = _wrapped.CreatingTicket;
             OnRedirectToAuthorizationEndpoint = _wrapped.RedirectToAuthorizationEndpoint;
-            OnTicketReceived = _wrapped.TicketReceived;
         }
 
         /// <summary>
@@ -156,6 +156,21 @@ namespace MartinCostello.LondonTravel.Site.Identity
                     await _wrapped.RemoteFailure(context);
                 }
             }
+        }
+
+        /// <summary>
+        /// Handles a ticket being received.
+        /// </summary>
+        /// <param name="context">The ticket receipt context.</param>
+        /// <returns>
+        /// A <see cref="Task"/> representing the completion of the operation.
+        /// </returns>
+        private async Task HandleTicketReceived(TicketReceivedContext context)
+        {
+            context.Properties.ExpiresUtc = DateTime.UtcNow.AddDays(150);
+            context.Properties.IsPersistent = true;
+
+            await _wrapped.TicketReceived(context);
         }
     }
 }
