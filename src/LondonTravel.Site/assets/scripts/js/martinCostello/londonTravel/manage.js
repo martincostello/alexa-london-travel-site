@@ -1,6 +1,6 @@
 ﻿(function () {
     $(".js-hidden-control")
-        .fadeIn("slow")
+        .fadeIn()
         .removeClass("hide");
     $(".js-modal-form").on("submit", function () {
         var form = $(this);
