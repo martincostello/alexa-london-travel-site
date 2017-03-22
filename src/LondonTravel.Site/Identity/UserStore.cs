@@ -14,7 +14,11 @@ namespace MartinCostello.LondonTravel.Site.Identity
     /// <summary>
     /// A class representing a custom implementation of a user store. This class cannot be inherited.
     /// </summary>
-    public sealed class UserStore : IUserStore<LondonTravelUser>, IUserLoginStore<LondonTravelUser>, IUserEmailStore<LondonTravelUser>
+    public sealed class UserStore :
+        IUserStore<LondonTravelUser>,
+        IUserEmailStore<LondonTravelUser>,
+        IUserLoginStore<LondonTravelUser>,
+        IUserSecurityStampStore<LondonTravelUser>
     {
         /// <summary>
         /// The <see cref="IDocumentClient"/> to use. This field is read-only.
@@ -241,6 +245,17 @@ namespace MartinCostello.LondonTravel.Site.Identity
         }
 
         /// <inheritdoc />
+        public Task<string> GetSecurityStampAsync(LondonTravelUser user, CancellationToken cancellationToken)
+        {
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            return Task.FromResult(user.SecurityStamp);
+        }
+
+        /// <inheritdoc />
         public Task<string> GetUserIdAsync(LondonTravelUser user, CancellationToken cancellationToken)
         {
             if (user == null)
@@ -351,6 +366,20 @@ namespace MartinCostello.LondonTravel.Site.Identity
             return Task.CompletedTask;
         }
 
+        /// <inheritdoc />
+        public Task SetSecurityStampAsync(LondonTravelUser user, string stamp, CancellationToken cancellationToken)
+        {
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            user.SecurityStamp = stamp;
+
+            return Task.CompletedTask;
+        }
+
+        /// <inheritdoc />
         public Task SetUserNameAsync(LondonTravelUser user, string userName, CancellationToken cancellationToken)
         {
             if (user == null)

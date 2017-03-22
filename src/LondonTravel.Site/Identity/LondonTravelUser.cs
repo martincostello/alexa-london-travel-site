@@ -98,5 +98,11 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// </summary>
         [JsonProperty(PropertyName = "alexaToken")]
         public string AlexaToken { get; set; }
+
+        /// <summary>
+        /// Gets or sets the user's security stamp.
+        /// </summary>
+        [JsonProperty(PropertyName = "securityStamp")]
+        public string SecurityStamp { get; set; }
     }
 }
