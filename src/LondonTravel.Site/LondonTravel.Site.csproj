@@ -55,11 +55,11 @@
   </ItemGroup>
   <Target Name="BundleAssets" BeforeTargets="PrepareForPublish">
     <Exec Command="bower install --loglevel=error" />
+    <Exec Command="npm install --loglevel=error" />
     <Exec Command="gulp build:ts" />
     <Exec Command="dotnet bundle" />
   </Target>
   <Target Name="PrepublishScript" DependsOnTargets="BundleAssets" BeforeTargets="Publish">
-    <Exec Command="npm install --loglevel=error" />
     <Exec Command="gulp publish" />
   </Target>
   <Target Name="AddGeneratedContentItems" BeforeTargets="AssignTargetPaths" DependsOnTargets="PrepareForPublish">
