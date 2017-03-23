@@ -10,13 +10,13 @@ var jasmine = require("gulp-jasmine");
 var jshint = require("gulp-jshint");
 var karmaServer = require("karma").Server;
 
-var webroot = "./wwwroot/assets/";
 var assets = "./assets/";
-var scripts = assets + "js/";
+var scripts = assets + "scripts/";
+var js = scripts + "js/";
 
 var paths = {
-    js: scripts + "**/*.js",
-    testsJs: scripts + "**/*.spec.js"
+    js: js + "**/*.js",
+    testsJs: js + "**/*.spec.js"
 };
 
 gulp.task("lint:js", function () {
