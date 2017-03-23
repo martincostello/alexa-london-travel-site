@@ -3,7 +3,6 @@
   "compilerOptions": {
     "noImplicitAny": true,
     "noEmitOnError": true,
-    "outDir": "./assets/scripts/ts/build",
     "removeComments": true,
     "sourceMap": true,
     "target": "es5"
