@@ -1,4 +1,4 @@
-﻿sudo: required
+sudo: required
 dist: trusty
 
 env:
