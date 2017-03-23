@@ -9,7 +9,6 @@ var gulp = require("gulp");
 var jasmine = require("gulp-jasmine");
 var jshint = require("gulp-jshint");
 var karmaServer = require("karma").Server;
-var merge = require("merge2");
 var path = require("path");
 var sourcemaps = require("gulp-sourcemaps");
 var ts = require("gulp-typescript");

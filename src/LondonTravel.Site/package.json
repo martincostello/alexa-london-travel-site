@@ -16,7 +16,6 @@
     "karma-html-detailed-reporter": "1.1.15",
     "karma-jasmine": "1.1.0",
     "karma-phantomjs-launcher": "1.0.2",
-    "merge2": "1.0.3",
     "path": "0.12.7",
     "phantomjs-prebuilt": "2.1.14",
     "gulp-sourcemaps": "2.4.1",
