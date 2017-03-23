@@ -14,8 +14,6 @@ install:
   - ps: npm install -g bower --loglevel=error
   - ps: npm install -g gulp --loglevel=error
   - ps: npm install -g typescript --loglevel=error
-  - ps: npm install -g typings
-  - ps: typings install
 
 build_script:
   - ps: .\Build.ps1

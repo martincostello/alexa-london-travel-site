@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-/// <reference path="../../../../../typings/globals/jquery/index.d.ts" />
+/// <reference path="../../../../../node_modules/@types/jquery/index.d.ts" />
 
 namespace martinCostello.londonTravel {
 
