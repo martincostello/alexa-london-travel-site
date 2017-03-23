@@ -33,7 +33,7 @@ martinCostello.londonTravel.preferences = function () {
     if (this.initialState === "") {
         this.clearButton
             .addClass("disabled")
-            .prop("disabled", true)
+            .prop("disabled", true);
     }
 
     // Add handler for clearing the selections and show the button
