@@ -60,6 +60,8 @@ namespace MartinCostello.LondonTravel.Site.Integration
             {
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
                 Assert.Equal(contentType, response.Content.Headers.ContentType?.MediaType);
+                Assert.NotNull(response.Content.Headers.ContentLength);
+                Assert.NotEqual(0, response.Content.Headers.ContentLength);
             }
         }
 
@@ -96,6 +98,8 @@ namespace MartinCostello.LondonTravel.Site.Integration
             {
                 Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
                 Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
+                Assert.NotNull(response.Content.Headers.ContentLength);
+                Assert.NotEqual(0, response.Content.Headers.ContentLength);
             }
         }
 
