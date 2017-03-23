@@ -10,7 +10,7 @@ namespace martinCostello.londonTravel {
      */
     export class Manage {
 
-        private confirmationTimeout: number;
+        private readonly confirmationTimeout: number;
 
         /**
          * Initializes a new instance of the martinCostello.londonTravel.Manage class.
