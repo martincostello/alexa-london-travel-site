@@ -9,15 +9,34 @@ var gulp = require("gulp");
 var jasmine = require("gulp-jasmine");
 var jshint = require("gulp-jshint");
 var karmaServer = require("karma").Server;
+var merge = require("merge2");
+var path = require("path");
+var sourcemaps = require("gulp-sourcemaps");
+var ts = require("gulp-typescript");
+var tsProject = ts.createProject("tsconfig.json");
 
 var assets = "./assets/";
 var scripts = assets + "scripts/";
-var js = scripts + "js/";
+var jsSrc = scripts + "js/";
+var tsSrc = scripts + "ts/";
 
 var paths = {
-    js: js + "**/*.js",
-    testsJs: js + "**/*.spec.js"
+    js: jsSrc + "**/*.js",
+    ts: tsSrc + "**/*.ts",
+    testsJs: jsSrc + "**/*.spec.js"
 };
+
+gulp.task("build:ts", function () {
+
+    var tsResult = gulp
+        .src(paths.ts, { base: tsSrc })
+        .pipe(sourcemaps.init({ loadMaps: true }))
+        .pipe(tsProject());
+
+    return tsResult.js
+        .pipe(sourcemaps.write("."))
+        .pipe(gulp.dest(tsSrc));
+});
 
 gulp.task("lint:js", function () {
     return gulp.src(paths.js)

@@ -1,4 +1,4 @@
-.DS_Store
+﻿.DS_Store
 .dotnetcli
 .metadata
 .settings
@@ -16,6 +16,8 @@ node_modules
 obj
 packages
 project.lock.json
+src/LondonTravel.Site/assets/scripts/ts/**/*.js
+src/LondonTravel.Site/assets/scripts/ts/**/*.js.map
 src/LondonTravel.Site/wwwroot/assets/*
 !src/LondonTravel.Site/wwwroot/assets/img/
 src/LondonTravel.Site/wwwroot/lib/*

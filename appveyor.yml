@@ -13,6 +13,7 @@ branches:
 install:
   - ps: npm install -g bower --loglevel=error
   - ps: npm install -g gulp --loglevel=error
+  - ps: npm install -g typescript --loglevel=error
 
 build_script:
   - ps: .\Build.ps1

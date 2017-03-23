@@ -60,7 +60,8 @@
   {
     "outputFileName": "wwwroot/assets/js/site.manage.js",
     "inputFiles": [
-      "assets/scripts/js/martinCostello/londonTravel/manage.js"
+      "assets/scripts/js/martinCostello/londonTravel/manage.js",
+      "assets/scripts/ts/martinCostello/londonTravel/manage.js"
     ],
     "minify": {
       "enabled": false,
@@ -71,7 +72,8 @@
   {
     "outputFileName": "wwwroot/assets/js/site.manage.min.js",
     "inputFiles": [
-      "assets/scripts/js/martinCostello/londonTravel/manage.js"
+      "assets/scripts/js/martinCostello/londonTravel/manage.js",
+      "assets/scripts/ts/martinCostello/londonTravel/manage.js"
     ],
     "minify": {
       "enabled": true,
@@ -82,7 +84,8 @@
   {
     "outputFileName": "wwwroot/assets/js/site.preferences.js",
     "inputFiles": [
-      "assets/scripts/js/martinCostello/londonTravel/preferences.js"
+      "assets/scripts/js/martinCostello/londonTravel/preferences.js",
+      "assets/scripts/ts/martinCostello/londonTravel/preferences.js"
     ],
     "minify": {
       "enabled": false,
@@ -93,7 +96,8 @@
   {
     "outputFileName": "wwwroot/assets/js/site.preferences.min.js",
     "inputFiles": [
-      "assets/scripts/js/martinCostello/londonTravel/preferences.js"
+      "assets/scripts/js/martinCostello/londonTravel/preferences.js",
+      "assets/scripts/ts/martinCostello/londonTravel/preferences.js"
     ],
     "minify": {
       "enabled": true,
