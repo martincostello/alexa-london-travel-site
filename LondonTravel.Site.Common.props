@@ -25,4 +25,7 @@
     <VersionPrefix>1.0.0</VersionPrefix>
     <VersionSuffix></VersionSuffix>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(CI)' != '' or '$(TF_BUILD)' != '' ">
+    <InstallWebPackages>true</InstallWebPackages>
+  </PropertyGroup>
 </Project>

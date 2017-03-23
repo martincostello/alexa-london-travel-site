@@ -54,8 +54,8 @@
     <PackageReference Include="StyleCop.Analyzers" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
   <Target Name="BundleAssets" BeforeTargets="PrepareForPublish">
-    <Exec Command="bower install --loglevel=error" />
-    <Exec Command="npm install --loglevel=error" />
+    <Exec Command="bower install --loglevel=error" Condition=" '$(InstallWebPackages)' == 'true' " />
+    <Exec Command="npm install --loglevel=error" Condition=" '$(InstallWebPackages)' == 'true' " />
     <Exec Command="gulp build:ts" />
     <Exec Command="dotnet bundle" />
   </Target>
