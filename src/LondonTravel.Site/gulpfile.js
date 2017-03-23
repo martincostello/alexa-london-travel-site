@@ -12,6 +12,7 @@ var karmaServer = require("karma").Server;
 var path = require("path");
 var sourcemaps = require("gulp-sourcemaps");
 var ts = require("gulp-typescript");
+var tslint = require("gulp-tslint");
 var tsProject = ts.createProject("tsconfig.json");
 
 var assets = "./assets/";
@@ -44,7 +45,15 @@ gulp.task("lint:js", function () {
         .pipe(jshint.reporter("fail"));
 });
 
-gulp.task("lint", ["lint:js"]);
+gulp.task("lint:ts", function () {
+    gulp.src(paths.ts)
+        .pipe(tslint({
+            formatter: "msbuild"
+        }))
+        .pipe(tslint.report());
+});
+
+gulp.task("lint", ["lint:js", "lint:ts"]);
 
 gulp.task("test:js:karma", function (done) {
     new karmaServer({
@@ -64,7 +73,7 @@ gulp.task("test:js:chrome", function (done) {
 gulp.task("test:js", ["test:js:karma"]);
 gulp.task("test", ["test:js"]);
 
-gulp.task("build", ["lint"]);
+gulp.task("build", ["lint", "build:ts"]);
 gulp.task("publish", ["build", "test"]);
 
 gulp.task("default", ["build"]);

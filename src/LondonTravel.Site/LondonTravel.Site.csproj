@@ -56,7 +56,7 @@
   <Target Name="BundleAssets" BeforeTargets="PrepareForPublish">
     <Exec Command="bower install --loglevel=error" Condition=" '$(InstallWebPackages)' == 'true' " />
     <Exec Command="npm install --loglevel=error" Condition=" '$(InstallWebPackages)' == 'true' " />
-    <Exec Command="gulp build:ts" />
+    <Exec Command="gulp build" />
     <Exec Command="dotnet bundle" />
   </Target>
   <Target Name="PrepublishScript" DependsOnTargets="BundleAssets" BeforeTargets="Publish">
