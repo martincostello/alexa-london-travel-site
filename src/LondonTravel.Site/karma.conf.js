@@ -12,10 +12,7 @@ module.exports = function (config) {
 
         files: [
             "wwwroot/lib/**/dist/*.js",
-            "assets/scripts/ts/martinCostello/londonTravel/Debug.js",
-            "assets/scripts/ts/martinCostello/londonTravel/Manage.js",
-            "assets/scripts/ts/martinCostello/londonTravel/Preferences.js",
-            "assets/scripts/ts/martinCostello/londonTravel/Tracking.js",
+            "assets/scripts/ts/**/*.js",
             "assets/scripts/**/*.spec.js"
         ],
 
