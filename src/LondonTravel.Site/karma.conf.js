@@ -12,7 +12,6 @@ module.exports = function (config) {
 
         files: [
             "wwwroot/lib/**/dist/*.js",
-            "assets/scripts/js/martinCostello/martinCostello.js",
             "assets/scripts/ts/martinCostello/londonTravel/Debug.js",
             "assets/scripts/ts/martinCostello/londonTravel/Manage.js",
             "assets/scripts/ts/martinCostello/londonTravel/Preferences.js",
