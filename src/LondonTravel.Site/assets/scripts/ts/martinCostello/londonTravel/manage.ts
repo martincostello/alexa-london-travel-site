@@ -54,7 +54,7 @@ namespace martinCostello.londonTravel {
         }
     }
 }
-(function(): any {
+((): any => {
     let manage: martinCostello.londonTravel.Manage = new martinCostello.londonTravel.Manage();
     manage.initialize();
 })();

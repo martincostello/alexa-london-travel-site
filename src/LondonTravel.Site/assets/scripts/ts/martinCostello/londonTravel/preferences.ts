@@ -183,6 +183,6 @@ namespace martinCostello.londonTravel {
         }
     }
 }
-(function () {
+(() => {
     let preferences: martinCostello.londonTravel.Preferences = new martinCostello.londonTravel.Preferences();
 })();
