@@ -2,6 +2,7 @@
   "compileOnSave": true,
   "compilerOptions": {
     "noImplicitAny": true,
+    "noImplicitThis": true,
     "noEmitOnError": true,
     "removeComments": true,
     "sourceMap": true,
