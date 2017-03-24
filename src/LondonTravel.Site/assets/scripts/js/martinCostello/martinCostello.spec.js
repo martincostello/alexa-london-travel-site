@@ -14,20 +14,6 @@ describe("Given the namespaces are defined", function () {
 
 describe("Google Analytics", function () {
 
-    describe("Given ga is not defined", function () {
-
-        it("then an event is not published", function () {
-
-            var category = "category";
-            var action = "action";
-            var label = "label";
-
-            var result = martinCostello.londonTravel.Tracking.track(category, action, label);
-
-            expect(result).toBe(false);
-        });
-    });
-
     describe("Given ga is defined", function () {
 
         beforeEach(function () {
