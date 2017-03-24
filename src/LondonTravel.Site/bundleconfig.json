@@ -23,9 +23,8 @@
     "outputFileName": "wwwroot/assets/js/site.js",
     "inputFiles": [
       "assets/scripts/js/martinCostello/martinCostello.js",
-      "assets/scripts/js/martinCostello/londonTravel/londonTravel.js",
       "assets/scripts/ts/martinCostello/londonTravel/Debug.js",
-      "assets/scripts/js/martinCostello/londonTravel/track.js",
+      "assets/scripts/ts/martinCostello/londonTravel/Tracking.js",
       "assets/scripts/js/analytics.js",
       "assets/scripts/js/locale.js",
       "assets/scripts/js/footer.js",
@@ -42,9 +41,8 @@
     "outputFileName": "wwwroot/assets/js/site.min.js",
     "inputFiles": [
       "assets/scripts/js/martinCostello/martinCostello.js",
-      "assets/scripts/js/martinCostello/londonTravel/londonTravel.js",
       "assets/scripts/ts/martinCostello/londonTravel/Debug.js",
-      "assets/scripts/js/martinCostello/londonTravel/track.js",
+      "assets/scripts/ts/martinCostello/londonTravel/Tracking.js",
       "assets/scripts/js/analytics.js",
       "assets/scripts/js/locale.js",
       "assets/scripts/js/footer.js",

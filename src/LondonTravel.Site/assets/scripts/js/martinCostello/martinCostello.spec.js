@@ -22,7 +22,7 @@ describe("Google Analytics", function () {
             var action = "action";
             var label = "label";
 
-            var result = martinCostello.londonTravel.track(category, action, label);
+            var result = martinCostello.londonTravel.Tracking.track(category, action, label);
 
             expect(result).toBe(false);
         });
@@ -44,7 +44,7 @@ describe("Google Analytics", function () {
             var action = "action";
             var label = "label";
 
-            var result = martinCostello.londonTravel.track(category, action, label);
+            var result = martinCostello.londonTravel.Tracking.track(category, action, label);
 
             expect(result).toBe(true);
             expect(ga).toHaveBeenCalledWith("send", jasmine.objectContaining({
@@ -59,7 +59,7 @@ describe("Google Analytics", function () {
 
 describe("Debugging", function () {
 
-    xdescribe("Given meta tags containing the site version", function () {
+    describe("Given meta tags containing the site version", function () {
 
         beforeAll(function () {
             $("head").append("<meta name='x-site-branch'] content='master' />");

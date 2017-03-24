@@ -13,9 +13,8 @@ module.exports = function (config) {
         files: [
             "wwwroot/lib/**/dist/*.js",
             "assets/scripts/js/martinCostello/martinCostello.js",
-            "assets/scripts/js/martinCostello/londonTravel/londonTravel.js",
             "assets/scripts/ts/martinCostello/londonTravel/Debug.js",
-            "assets/scripts/js/martinCostello/londonTravel/track.js",
+            "assets/scripts/ts/martinCostello/londonTravel/Tracking.js",
             "assets/scripts/**/*.spec.js"
         ],
 
@@ -35,5 +34,5 @@ module.exports = function (config) {
             "progress",
             "appveyor"
         ]
-    })
-}
+    });
+};
