@@ -12,7 +12,7 @@
     {
         <div class="row">
             @{
-                var classes = "hide js-other-count";
+                var classes = Model.HasFavorites ? "hide js-other-count" : string.Empty;
                 var count = Model.OtherLines.Count();
                 var otherTitle = Model.HasFavorites ?
                     SR.OtherLinesTitle(classes, count) :

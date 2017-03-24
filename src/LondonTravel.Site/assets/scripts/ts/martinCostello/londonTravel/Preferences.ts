@@ -84,12 +84,14 @@ namespace martinCostello.londonTravel {
             this.setButtonState(this.saveButton, isDirty);
             this.setButtonState(this.clearButton, currentState !== "");
 
-            let total: number = this.getAllCheckboxes().length;
-            let favorites: number = this.getSelectedCheckboxes().length;
-            let others: number = total - favorites;
+            if (this.otherCount.length > 0) {
+                let total: number = this.getAllCheckboxes().length;
+                let favorites: number = this.getSelectedCheckboxes().length;
+                let others: number = total - favorites;
 
-            this.favoritesCount.text(`(${favorites.toString(10)})`);
-            this.otherCount.text(`(${others.toString(10)})`);
+                this.favoritesCount.text(`(${favorites.toString(10)})`);
+                this.otherCount.text(`(${others.toString(10)})`);
+            }
         }
 
         /**
