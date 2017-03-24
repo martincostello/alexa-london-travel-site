@@ -12,7 +12,9 @@ module.exports = function (config) {
 
         files: [
             "wwwroot/lib/**/dist/*.js",
-            "assets/scripts/ts/**/*.js",
+            "wwwroot/assets/js/site.js",
+            "wwwroot/assets/js/site.manage.js",
+            "wwwroot/assets/js/site.preferences.js",
             "assets/scripts/**/*.spec.js"
         ],
 

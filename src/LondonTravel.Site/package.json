@@ -3,12 +3,19 @@
   "private": true,
   "version": "1.0.0",
   "devDependencies": {
+    "@types/google.analytics": "0.0.30",
+    "@types/jquery": "2.0.41",
     "bower": "1.8.0",
+    "del": "2.2.2",
     "gulp": "3.9.1",
+    "gulp-concat": "2.6.1",
+    "gulp-cssmin": "0.1.7",
     "gulp-jasmine": "2.4.2",
     "gulp-jshint": "2.0.4",
+    "gulp-sourcemaps": "2.4.1",
     "gulp-tslint": "7.1.0",
     "gulp-typescript": "3.1.6",
+    "gulp-uglify": "2.1.2",
     "jasmine-core": "2.5.2",
     "jshint": "2.9.4",
     "karma": "1.4.1",
@@ -17,12 +24,10 @@
     "karma-html-detailed-reporter": "1.1.15",
     "karma-jasmine": "1.1.0",
     "karma-phantomjs-launcher": "1.0.2",
+    "merge-stream": "1.0.1",
     "path": "0.12.7",
     "phantomjs-prebuilt": "2.1.14",
-    "gulp-sourcemaps": "2.4.1",
     "tslint": "4.5.1",
-    "typescript": "2.2.1",
-    "@types/google.analytics": "0.0.30",
-    "@types/jquery": "2.0.41"
+    "typescript": "2.2.1"
   }
 }
