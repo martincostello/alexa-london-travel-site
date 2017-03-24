@@ -18,7 +18,6 @@ var path = require("path");
 var sourcemaps = require("gulp-sourcemaps");
 var ts = require("gulp-typescript");
 var tslint = require("gulp-tslint");
-var tsProject = ts.createProject("tsconfig.json");
 var uglify = require("gulp-uglify");
 
 var assets = "./assets/";
@@ -42,19 +41,6 @@ function getBundles(regexPattern) {
         return regexPattern.test(bundle.outputFileName);
     });
 }
-
-gulp.task("build:ts", ["lint:ts"], function () {
-
-    var tsResult = gulp
-        .src(paths.ts, { base: tsSrc })
-        .pipe(gulp.dest("./wwwroot/assets/js"))
-        .pipe(sourcemaps.init())
-        .pipe(tsProject());
-
-    return tsResult.js
-        .pipe(sourcemaps.write())
-        .pipe(gulp.dest("./wwwroot/assets/js"));
-});
 
 gulp.task("clean", function () {
     var files = bundleconfig.map(function (bundle) {
@@ -90,10 +76,15 @@ gulp.task("min:css", function () {
     return merge(tasks);
 });
 
-gulp.task("min:js", ["build:ts", "lint:js"], function () {
+gulp.task("min:js", ["lint:js", "lint:ts"], function () {
     var tasks = getBundles(regex.js).map(function (bundle) {
-        return gulp.src(bundle.inputFiles, { base: "." })
+
+        var tsProject = ts.createProject("tsconfig.json");
+        var tsResult = gulp.src(bundle.inputFiles, { base: "." })
             .pipe(sourcemaps.init())
+            .pipe(tsProject());
+
+        return tsResult.js
             .pipe(concat(bundle.outputFileName))
             .pipe(uglify())
             .pipe(sourcemaps.write())
