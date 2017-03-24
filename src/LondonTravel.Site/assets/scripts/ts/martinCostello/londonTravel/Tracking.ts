@@ -19,7 +19,7 @@ namespace martinCostello.londonTravel {
 
             let tracked: boolean = false;
 
-            if ("ga" in window) {
+            if ("ga" in window && ga) {
 
                 let command: string = "send";
                 let fields: any = {

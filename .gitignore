@@ -12,6 +12,7 @@ Backup*/
 bin
 Bin
 BuildOutput
+coverage
 node_modules
 obj
 packages

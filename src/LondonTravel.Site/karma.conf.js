@@ -8,15 +8,16 @@ module.exports = function (config) {
         concurrency: Infinity,
 
         browsers: ["PhantomJS"],
-        frameworks: ["jasmine"],
+        frameworks: ["jasmine", "karma-typescript"],
 
         files: [
             "wwwroot/lib/**/dist/*.js",
-            "wwwroot/assets/js/site.js",
-            "wwwroot/assets/js/site.manage.js",
-            "wwwroot/assets/js/site.preferences.js",
-            "assets/scripts/**/*.spec.js"
+            "assets/scripts/**/*.ts"
         ],
+
+        preprocessors: {
+            "**/*.ts": ["karma-typescript"]
+        },
 
         htmlDetailed: {
             splitResults: false
@@ -27,12 +28,14 @@ module.exports = function (config) {
             "karma-chrome-launcher",
             "karma-html-detailed-reporter",
             "karma-jasmine",
-            "karma-phantomjs-launcher"
+            "karma-phantomjs-launcher",
+            "karma-typescript"
         ],
 
         reporters: [
             "progress",
-            "appveyor"
+            "appveyor",
+            "karma-typescript"
         ]
     });
 };
