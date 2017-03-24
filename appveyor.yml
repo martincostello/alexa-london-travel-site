@@ -11,6 +11,7 @@ branches:
     - master
 
 install:
+  - ps: npm install -g npm --loglevel=error
   - ps: npm install -g bower --loglevel=error
   - ps: npm install -g gulp --loglevel=error
   - ps: npm install -g typescript --loglevel=error
