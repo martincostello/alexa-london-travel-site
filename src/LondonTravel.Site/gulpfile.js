@@ -43,7 +43,7 @@ function getBundles(regexPattern) {
     });
 }
 
-gulp.task("build:ts", function () {
+gulp.task("build:ts", ["lint:ts"], function () {
 
     var tsResult = gulp
         .src(paths.ts, { base: tsSrc })
@@ -90,7 +90,7 @@ gulp.task("min:css", function () {
     return merge(tasks);
 });
 
-gulp.task("min:js", ["build:ts"], function () {
+gulp.task("min:js", ["build:ts", "lint:js"], function () {
     var tasks = getBundles(regex.js).map(function (bundle) {
         return gulp.src(bundle.inputFiles, { base: "." })
             .pipe(sourcemaps.init())
@@ -104,14 +104,14 @@ gulp.task("min:js", ["build:ts"], function () {
 
 gulp.task("min", ["min:css", "min:js"]);
 
-gulp.task("test:js:karma", function (done) {
+gulp.task("test:js:karma", ["min:js"], function (done) {
     new karmaServer({
         configFile: __dirname + "/karma.conf.js",
         singleRun: true
     }, done).start();
 });
 
-gulp.task("test:js:chrome", function (done) {
+gulp.task("test:js:chrome", ["min:js"], function (done) {
     new karmaServer({
         configFile: __dirname + "/karma.conf.js",
         browsers: ["Chrome"],
