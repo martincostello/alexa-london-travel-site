@@ -1,13 +1,13 @@
 ﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-(function () {
+(() => {
     if ("serviceWorker" in navigator) {
-        navigator.serviceWorker
+        (navigator as any).serviceWorker
             .register("/service-worker.js")
-            .then(function () {
+            .then(() => {
             })
-            .catch(function (e) {
+            .catch((e: any) => {
                 console.error("Failed to register Service Worker: ", e);
             });
     }

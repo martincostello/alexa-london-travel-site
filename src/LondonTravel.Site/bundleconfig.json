@@ -29,7 +29,7 @@
       "assets/scripts/ts/Locale.js",
       "assets/scripts/ts/Footer.js",
       "assets/scripts/js/lazyload.js",
-      "assets/scripts/js/serviceWorker.js"
+      "assets/scripts/ts/ServiceWorker.js"
     ],
     "minify": {
       "enabled": false,
@@ -47,7 +47,7 @@
       "assets/scripts/ts/Locale.js",
       "assets/scripts/ts/Footer.js",
       "assets/scripts/js/lazyload.js",
-      "assets/scripts/js/serviceWorker.js"
+      "assets/scripts/ts/ServiceWorker.js"
     ],
     "minify": {
       "enabled": true,
