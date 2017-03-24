@@ -67,11 +67,11 @@ describe("Debugging", function () {
         });
 
         it("then the branch is correct", function () {
-            expect(martinCostello.londonTravel.debug.branch()).toBe("master");
+            expect(martinCostello.londonTravel.Debug.branch()).toBe("master");
         });
 
         it("then the revision is correct", function () {
-            expect(martinCostello.londonTravel.debug.revision()).toBe("012345ab");
+            expect(martinCostello.londonTravel.Debug.revision()).toBe("012345ab");
         });
     });
 
@@ -82,7 +82,7 @@ describe("Debugging", function () {
         });
 
         it("then a message is logged", function () {
-            martinCostello.londonTravel.debug.log("2 + 2 = ", 2 + 2);
+            martinCostello.londonTravel.Debug.log("2 + 2 = ", 2 + 2);
             expect(console.log).toHaveBeenCalledWith("2 + 2 = ", 4);
         });
     });

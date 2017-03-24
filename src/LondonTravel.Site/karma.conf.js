@@ -1,4 +1,4 @@
-// Copyright (c) Martin Costello, 2017. All rights reserved.
+﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 module.exports = function (config) {
@@ -14,7 +14,7 @@ module.exports = function (config) {
             "wwwroot/lib/**/dist/*.js",
             "assets/scripts/js/martinCostello/martinCostello.js",
             "assets/scripts/js/martinCostello/londonTravel/londonTravel.js",
-            "assets/scripts/js/martinCostello/londonTravel/debug.js",
+            "assets/scripts/ts/martinCostello/londonTravel/debug.js",
             "assets/scripts/js/martinCostello/londonTravel/track.js",
             "assets/scripts/**/*.spec.js"
         ],

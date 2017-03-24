@@ -24,7 +24,7 @@
     "inputFiles": [
       "assets/scripts/js/martinCostello/martinCostello.js",
       "assets/scripts/js/martinCostello/londonTravel/londonTravel.js",
-      "assets/scripts/js/martinCostello/londonTravel/debug.js",
+      "assets/scripts/ts/martinCostello/londonTravel/Debug.js",
       "assets/scripts/js/martinCostello/londonTravel/track.js",
       "assets/scripts/js/analytics.js",
       "assets/scripts/js/locale.js",
@@ -43,7 +43,7 @@
     "inputFiles": [
       "assets/scripts/js/martinCostello/martinCostello.js",
       "assets/scripts/js/martinCostello/londonTravel/londonTravel.js",
-      "assets/scripts/js/martinCostello/londonTravel/debug.js",
+      "assets/scripts/ts/martinCostello/londonTravel/Debug.js",
       "assets/scripts/js/martinCostello/londonTravel/track.js",
       "assets/scripts/js/analytics.js",
       "assets/scripts/js/locale.js",
