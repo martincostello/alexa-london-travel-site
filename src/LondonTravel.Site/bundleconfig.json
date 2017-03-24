@@ -22,14 +22,14 @@
   {
     "outputFileName": "wwwroot/assets/js/site.js",
     "inputFiles": [
-      "assets/scripts/ts/martinCostello/londonTravel/Debug.js",
-      "assets/scripts/ts/martinCostello/londonTravel/Tracking.js",
-      "assets/scripts/ts/Banner.js",
-      "assets/scripts/ts/Analytics.js",
-      "assets/scripts/ts/Locale.js",
-      "assets/scripts/ts/Footer.js",
-      "assets/scripts/ts/LazyLoad.js",
-      "assets/scripts/ts/ServiceWorker.js"
+      "assets/scripts/ts/martinCostello/londonTravel/Debug.ts",
+      "assets/scripts/ts/martinCostello/londonTravel/Tracking.ts",
+      "assets/scripts/ts/Banner.ts",
+      "assets/scripts/ts/Analytics.ts",
+      "assets/scripts/ts/Locale.ts",
+      "assets/scripts/ts/Footer.ts",
+      "assets/scripts/ts/LazyLoad.ts",
+      "assets/scripts/ts/ServiceWorker.ts"
     ],
     "minify": {
       "enabled": false,
@@ -40,14 +40,14 @@
   {
     "outputFileName": "wwwroot/assets/js/site.min.js",
     "inputFiles": [
-      "assets/scripts/ts/martinCostello/londonTravel/Debug.js",
-      "assets/scripts/ts/martinCostello/londonTravel/Tracking.js",
-      "assets/scripts/ts/Banner.js",
-      "assets/scripts/ts/Analytics.js",
-      "assets/scripts/ts/Locale.js",
-      "assets/scripts/ts/Footer.js",
-      "assets/scripts/ts/LazyLoad.js",
-      "assets/scripts/ts/ServiceWorker.js"
+      "assets/scripts/ts/martinCostello/londonTravel/Debug.ts",
+      "assets/scripts/ts/martinCostello/londonTravel/Tracking.ts",
+      "assets/scripts/ts/Banner.ts",
+      "assets/scripts/ts/Analytics.ts",
+      "assets/scripts/ts/Locale.ts",
+      "assets/scripts/ts/Footer.ts",
+      "assets/scripts/ts/LazyLoad.ts",
+      "assets/scripts/ts/ServiceWorker.ts"
     ],
     "minify": {
       "enabled": true,
@@ -58,7 +58,7 @@
   {
     "outputFileName": "wwwroot/assets/js/site.manage.js",
     "inputFiles": [
-      "assets/scripts/ts/martinCostello/londonTravel/Manage.js"
+      "assets/scripts/ts/martinCostello/londonTravel/Manage.ts"
     ],
     "minify": {
       "enabled": false,
@@ -69,7 +69,7 @@
   {
     "outputFileName": "wwwroot/assets/js/site.manage.min.js",
     "inputFiles": [
-      "assets/scripts/ts/martinCostello/londonTravel/Manage.js"
+      "assets/scripts/ts/martinCostello/londonTravel/Manage.ts"
     ],
     "minify": {
       "enabled": true,
@@ -80,7 +80,7 @@
   {
     "outputFileName": "wwwroot/assets/js/site.preferences.js",
     "inputFiles": [
-      "assets/scripts/ts/martinCostello/londonTravel/Preferences.js"
+      "assets/scripts/ts/martinCostello/londonTravel/Preferences.ts"
     ],
     "minify": {
       "enabled": false,
@@ -91,7 +91,7 @@
   {
     "outputFileName": "wwwroot/assets/js/site.preferences.min.js",
     "inputFiles": [
-      "assets/scripts/ts/martinCostello/londonTravel/Preferences.js"
+      "assets/scripts/ts/martinCostello/londonTravel/Preferences.ts"
     ],
     "minify": {
       "enabled": true,
