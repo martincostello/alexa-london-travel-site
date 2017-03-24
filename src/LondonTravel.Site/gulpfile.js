@@ -87,7 +87,7 @@ gulp.task("min:js", ["lint:js", "lint:ts"], function () {
         return tsResult.js
             .pipe(concat(bundle.outputFileName))
             .pipe(uglify())
-            .pipe(sourcemaps.write())
+            .pipe(sourcemaps.write("."))
             .pipe(gulp.dest("."));
     });
     return merge(tasks);
