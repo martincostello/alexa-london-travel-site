@@ -28,7 +28,7 @@
       "assets/scripts/ts/Analytics.js",
       "assets/scripts/ts/Locale.js",
       "assets/scripts/ts/Footer.js",
-      "assets/scripts/js/lazyload.js",
+      "assets/scripts/ts/LazyLoad.js",
       "assets/scripts/ts/ServiceWorker.js"
     ],
     "minify": {
@@ -46,7 +46,7 @@
       "assets/scripts/ts/Analytics.js",
       "assets/scripts/ts/Locale.js",
       "assets/scripts/ts/Footer.js",
-      "assets/scripts/js/lazyload.js",
+      "assets/scripts/ts/LazyLoad.js",
       "assets/scripts/ts/ServiceWorker.js"
     ],
     "minify": {
