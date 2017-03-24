@@ -95,14 +95,14 @@ gulp.task("min:js", ["lint:js", "lint:ts"], function () {
 
 gulp.task("min", ["min:css", "min:js"]);
 
-gulp.task("test:js:karma", ["min:js"], function (done) {
+gulp.task("test:js:karma", function (done) {
     new karmaServer({
         configFile: __dirname + "/karma.conf.js",
         singleRun: true
     }, done).start();
 });
 
-gulp.task("test:js:chrome", ["min:js"], function (done) {
+gulp.task("test:js:chrome", function (done) {
     new karmaServer({
         configFile: __dirname + "/karma.conf.js",
         browsers: ["Chrome"],
