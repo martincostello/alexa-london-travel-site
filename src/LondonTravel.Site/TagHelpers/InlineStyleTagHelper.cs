@@ -95,10 +95,9 @@ namespace MartinCostello.LondonTravel.Site.TagHelpers
                 return;
             }
 
-            string css;
             string cacheKey = $"inline-css-{fileInfo.PhysicalPath}-{MinifyInlined == true}";
 
-            if (!Cache.TryGetValue(cacheKey, out css))
+            if (!Cache.TryGetValue(cacheKey, out string css))
             {
                 using (var stream = File.OpenRead(fileInfo.PhysicalPath))
                 {
