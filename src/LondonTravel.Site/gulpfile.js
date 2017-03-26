@@ -92,10 +92,14 @@ gulp.task("min:js", ["lint:js", "lint:ts"], function () {
             .pipe(sourcemaps.init())
             .pipe(tsProject());
 
-        return tsResult.js
-            .pipe(concat(bundle.outputFileName))
-            .pipe(uglify())
-            .pipe(sourcemaps.write("."))
+        var compiled = tsResult.js
+            .pipe(concat(bundle.outputFileName));
+
+        if (bundle.minify.enabled === true) {
+            compiled = compiled.pipe(uglify());
+        }
+
+        return compiled.pipe(sourcemaps.write("."))
             .pipe(gulp.dest("."));
     });
     return merge(tasks);
