@@ -8,6 +8,7 @@
 var gulp = require("gulp");
 var bundleconfig = require("./bundleconfig.json");
 var concat = require("gulp-concat");
+var csslint = require("gulp-csslint");
 var cssmin = require("gulp-cssmin");
 var del = require("del");
 var jasmine = require("gulp-jasmine");
@@ -24,8 +25,11 @@ var assets = "./assets/";
 var scripts = assets + "scripts/";
 var jsSrc = scripts + "js/";
 var tsSrc = scripts + "ts/";
+var styles = assets + "styles/";
+var cssSrc = styles + "css/";
 
 var paths = {
+    css: cssSrc + "**/*.css",
     js: jsSrc + "**/*.js",
     ts: tsSrc + "**/*.ts",
     testsJs: jsSrc + "**/*.spec.js"
@@ -49,6 +53,13 @@ gulp.task("clean", function () {
     return del(files);
 });
 
+gulp.task("lint:css", function () {
+    return gulp.src(paths.css)
+        .pipe(csslint())
+        .pipe(csslint.formatter())
+        .pipe(csslint.formatter("fail"));
+});
+
 gulp.task("lint:js", function () {
     return gulp.src(paths.js)
         .pipe(jshint())
@@ -64,14 +75,14 @@ gulp.task("lint:ts", function () {
         .pipe(tslint.report());
 });
 
-gulp.task("lint", ["lint:js", "lint:ts"]);
+gulp.task("lint", ["lint:css", "lint:js", "lint:ts"]);
 
-gulp.task("min:css", function () {
+gulp.task("min:css", ["lint:css"], function () {
     var tasks = getBundles(regex.css).map(function (bundle) {
 
         var css = gulp.src(bundle.inputFiles, { base: "." })
             .pipe(sourcemaps.init())
-            .pipe(concat(bundle.outputFileName))
+            .pipe(concat(bundle.outputFileName));
 
         if (bundle.minify.enabled === true) {
             css = css.pipe(cssmin());

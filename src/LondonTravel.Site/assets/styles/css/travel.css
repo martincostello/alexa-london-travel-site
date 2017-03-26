@@ -75,7 +75,9 @@
 }
 
 .checkbox .cr {
+    /* csslint ignore:start */
     border: 1px solid #a9a9a9;
+    /* csslint ignore:end */
     border-radius: .25em;
     float: left;
     height: 1.3em;
@@ -88,8 +90,8 @@
     font-size: .8em;
     left: 20%;
     line-height: 0;
-    top: 50%;
     position: absolute;
+    top: 50%;
 }
 
 .checkbox label input[type="checkbox"] {
@@ -97,14 +99,14 @@
 }
 
 .checkbox label input[type="checkbox"] + .cr > .cr-icon {
+    opacity: 0;
     transform: scale(3) rotateZ(-20deg);
     transition: all .3s ease-in;
-    opacity: 0;
 }
 
 .checkbox label input[type="checkbox"]:checked + .cr > .cr-icon {
-    transform: scale(1) rotateZ(0deg);
     opacity: 1;
+    transform: scale(1) rotateZ(0deg);
 }
 
 .checkbox label input[type="checkbox"]:disabled + .cr {
