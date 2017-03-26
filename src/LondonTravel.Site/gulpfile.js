@@ -68,9 +68,17 @@ gulp.task("lint", ["lint:js", "lint:ts"]);
 
 gulp.task("min:css", function () {
     var tasks = getBundles(regex.css).map(function (bundle) {
-        return gulp.src(bundle.inputFiles, { base: "." })
+
+        var css = gulp.src(bundle.inputFiles, { base: "." })
+            .pipe(sourcemaps.init())
             .pipe(concat(bundle.outputFileName))
-            .pipe(cssmin())
+
+        if (bundle.minify.enabled === true) {
+            css = css.pipe(cssmin());
+        }
+
+        return css
+            .pipe(sourcemaps.write("."))
             .pipe(gulp.dest("."));
     });
     return merge(tasks);
