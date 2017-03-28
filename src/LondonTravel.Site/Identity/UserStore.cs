@@ -400,6 +400,11 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 throw new ArgumentNullException(nameof(user));
             }
 
+            if (user.CreatedAt == DateTime.MinValue)
+            {
+                user.CreatedAt = new DateTime(2017, 03, 28, 0, 0, 0, DateTimeKind.Utc);
+            }
+
             LondonTravelUser updated = await _client.ReplaceAsync(user.Id, user, user.ETag);
 
             if (updated != null)

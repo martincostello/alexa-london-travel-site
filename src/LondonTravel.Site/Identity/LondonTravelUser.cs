@@ -3,6 +3,7 @@
 
 namespace MartinCostello.LondonTravel.Site.Identity
 {
+    using System;
     using System.Collections.Generic;
     using Newtonsoft.Json;
 
@@ -104,5 +105,11 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// </summary>
         [JsonProperty(PropertyName = "securityStamp")]
         public string SecurityStamp { get; set; }
+
+        /// <summary>
+        /// Gets or sets the date and time the user was created.
+        /// </summary>
+        [JsonProperty(PropertyName = "createdAt")]
+        public DateTime CreatedAt { get; set; }
     }
 }

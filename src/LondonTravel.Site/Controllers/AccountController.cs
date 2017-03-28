@@ -14,6 +14,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
+    using NodaTime;
 
     /// <summary>
     /// A class representing the controller for the <c>/account/</c> resource.
@@ -30,6 +31,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
         private readonly UserManager<LondonTravelUser> _userManager;
         private readonly SignInManager<LondonTravelUser> _signInManager;
+        private readonly IClock _clock;
         private readonly string _externalCookieScheme;
         private readonly bool _isEnabled;
         private readonly ILogger<AccountController> _logger;
@@ -37,12 +39,14 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         public AccountController(
             UserManager<LondonTravelUser> userManager,
             SignInManager<LondonTravelUser> signInManager,
+            IClock clock,
             IOptionsSnapshot<IdentityCookieOptions> identityCookieOptions,
             SiteOptions siteOptions,
             ILogger<AccountController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _clock = clock;
             _externalCookieScheme = identityCookieOptions.Value.ExternalCookieAuthenticationScheme;
             _logger = logger;
 
@@ -318,6 +322,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             var user = new LondonTravelUser()
             {
+                CreatedAt = _clock.GetCurrentInstant().ToDateTimeUtc(),
                 Email = email,
                 GivenName = givenName,
                 Surname = surname,

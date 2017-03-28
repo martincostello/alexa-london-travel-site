@@ -27,6 +27,7 @@ namespace MartinCostello.LondonTravel.Site
     using Microsoft.Extensions.Options;
     using Microsoft.Net.Http.Headers;
     using Newtonsoft.Json;
+    using NodaTime;
     using Options;
     using Services.Data;
     using Services.Tfl;
@@ -229,6 +230,7 @@ namespace MartinCostello.LondonTravel.Site
                 .AddResponseCaching()
                 .AddResponseCompression();
 
+            services.AddSingleton<IClock>((_) => SystemClock.Instance);
             services.AddSingleton<IConfiguration>((_) => Configuration);
             services.AddSingleton<IDocumentCollectionInitializer, DocumentCollectionInitializer>();
             services.AddSingleton<ITflServiceFactory, TflServiceFactory>();
