@@ -111,5 +111,11 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// </summary>
         [JsonProperty(PropertyName = "createdAt")]
         public DateTime CreatedAt { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Unix timestamp of the user document.
+        /// </summary>
+        [JsonProperty(PropertyName = "_ts")]
+        internal long Timestamp { get; set; }
     }
 }

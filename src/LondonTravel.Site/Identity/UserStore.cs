@@ -402,7 +402,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
 
             if (user.CreatedAt == DateTime.MinValue)
             {
-                user.CreatedAt = new DateTime(2017, 03, 28, 0, 0, 0, DateTimeKind.Utc);
+                user.CreatedAt = DateTimeOffset.FromUnixTimeSeconds(user.Timestamp).UtcDateTime;
             }
 
             LondonTravelUser updated = await _client.ReplaceAsync(user.Id, user, user.ETag);
