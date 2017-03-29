@@ -15,9 +15,9 @@
     <ProjectReference Include="..\..\src\LondonTravel.Site\LondonTravel.Site.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="1.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="1.1.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
-    <PackageReference Include="Moq" Version="4.7.1" />
+    <PackageReference Include="Moq" Version="4.7.8" />
     <PackageReference Include="Shouldly" Version="2.8.2" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.0.0" PrivateAssets="All" />
     <PackageReference Include="xunit" Version="2.2.0" />
