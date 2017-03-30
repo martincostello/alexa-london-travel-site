@@ -47,9 +47,11 @@
     @await RenderSectionAsync("scripts", required: false)
 </body>
 <!--
-    Datacenter: @Config["Azure:Datacenter"]
-    Instance:   @Environment.MachineName
-    Commit:     @GitMetadata.Commit
-    Timestamp:  @GitMetadata.Timestamp.ToString("u", CultureInfo.InvariantCulture)
+    
+    Environment: @Config["Azure:Environment"]
+    Datacenter:  @Config["Azure:Datacenter"]
+    Instance:    @Environment.MachineName
+    Commit:      @GitMetadata.Commit
+    Timestamp:   @GitMetadata.Timestamp.ToString("u", CultureInfo.InvariantCulture)
 -->
 </html>
