@@ -27,6 +27,7 @@ namespace MartinCostello.LondonTravel.Site
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
     using Microsoft.Net.Http.Headers;
+    using Microsoft.WindowsAzure.Storage;
     using Newtonsoft.Json;
     using NodaTime;
     using Options;
@@ -159,9 +160,7 @@ namespace MartinCostello.LondonTravel.Site
             services.AddOptions();
             services.Configure<SiteOptions>(Configuration.GetSection("Site"));
 
-            services
-                .AddDataProtection()
-                .SetApplicationName($"londontravel-{(Configuration["Azure:Environment"] ?? "local").ToLowerInvariant()}");
+            ConfigureDataProtection(services);
 
             services.AddAntiforgery(
                 (p) =>
@@ -308,6 +307,28 @@ namespace MartinCostello.LondonTravel.Site
                         builder.WithOrigins(siteOptions?.Api?.Cors?.Origins ?? Array.Empty<string>());
                     }
                 });
+        }
+
+        /// <summary>
+        /// Configures Data Protection.
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection"/> to configure.</param>
+        private void ConfigureDataProtection(IServiceCollection services)
+        {
+            string environment = (Configuration["Azure:Environment"] ?? "local").ToLowerInvariant();
+
+            var dataProtection = services
+                .AddDataProtection()
+                .SetApplicationName($"londontravel-{environment}");
+
+            string connectionString = Configuration["ConnectionStrings:AzureStorage"];
+            string relativePath = $"/data-protection/london-travel/{environment}/keys.xml";
+
+            if (!string.IsNullOrWhiteSpace(connectionString) &&
+                CloudStorageAccount.TryParse(connectionString, out CloudStorageAccount account))
+            {
+                dataProtection.PersistKeysToAzureBlobStorage(account, relativePath);
+            }
         }
 
         /// <summary>
