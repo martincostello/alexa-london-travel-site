@@ -5,7 +5,6 @@ namespace MartinCostello.LondonTravel.Site.Middleware
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
@@ -78,7 +77,7 @@ namespace MartinCostello.LondonTravel.Site.Middleware
             _options = options;
 
             _isProduction = environment.IsProduction();
-            _environmentName = _isProduction ? null : environment.EnvironmentName;
+            _environmentName = _isProduction ? config["Azure:Environment"] : "local";
             _publicKeyPins = BuildPublicKeyPins(options.Value);
 
             _contentSecurityPolicy = BuildContentSecurityPolicy(_isProduction, false, options.Value);

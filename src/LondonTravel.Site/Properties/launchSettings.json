@@ -1,4 +1,4 @@
-{
+﻿{
   "iisSettings": {
     "anonymousAuthentication": true,
     "windowsAuthentication": false,
@@ -14,6 +14,7 @@
       "launchUrl": "https://localhost:44310/",
       "environmentVariables": {
         "Azure:Datacenter": "Local",
+        "Azure:Environment": "Local",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
@@ -23,6 +24,7 @@
       "launchUrl": "http://127.0.0.1:5000/",
       "environmentVariables": {
         "Azure:Datacenter": "Local",
+        "Azure:Environment": "Local",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     }

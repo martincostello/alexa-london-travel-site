@@ -15,6 +15,7 @@ namespace MartinCostello.LondonTravel.Site
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.CookiePolicy;
     using Microsoft.AspNetCore.Cors.Infrastructure;
+    using Microsoft.AspNetCore.DataProtection;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.HttpOverrides;
@@ -157,6 +158,10 @@ namespace MartinCostello.LondonTravel.Site
             services.AddApplicationInsightsTelemetry(Configuration);
             services.AddOptions();
             services.Configure<SiteOptions>(Configuration.GetSection("Site"));
+
+            services
+                .AddDataProtection()
+                .SetApplicationName($"londontravel-{(Configuration["Azure:Environment"] ?? "local").ToLowerInvariant()}");
 
             services.AddAntiforgery(
                 (p) =>
