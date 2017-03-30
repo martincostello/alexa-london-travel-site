@@ -162,11 +162,11 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 throw new ArgumentNullException(nameof(providerKey));
             }
 
-            var results = await _client.GetAsync<LondonTravelUser>((p) => p.Logins != null, cancellationToken);
+            var results = await _client.GetAsync<LondonTravelUser>(
+                (p) => p.Logins.Contains(new LondonTravelLoginInfo() { LoginProvider = loginProvider, ProviderKey = providerKey }),
+                cancellationToken);
 
-            return results
-                .Where((p) => p.Logins.Where((r) => r.LoginProvider == loginProvider && r.ProviderKey == providerKey).Any())
-                .FirstOrDefault();
+            return results.FirstOrDefault();
         }
 
         /// <inheritdoc />
