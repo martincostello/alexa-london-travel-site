@@ -33,6 +33,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="1.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.AzureAppServicesIntegration" Version="1.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.CookiePolicy" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.DataProtection.AzureStorage" Version="1.0.1" />
