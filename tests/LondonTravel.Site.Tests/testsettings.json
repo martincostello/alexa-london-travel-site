@@ -38,6 +38,9 @@
       "Reports": {
         "ContentSecurityPolicy": null,
         "ContentSecurityPolicyReportOnly": null,
+        "ExpectCTEnforce": null,
+        "ExpectCTReportOnly": null,
+        "ExpectStaple": null,
         "PublicKeyPins": null,
         "PublicKeyPinsReportOnly": null
       }
