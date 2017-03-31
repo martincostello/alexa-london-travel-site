@@ -21,6 +21,21 @@ namespace MartinCostello.LondonTravel.Site.Options
         public Uri ContentSecurityPolicyReportOnly { get; set; }
 
         /// <summary>
+        /// Gets or sets the URI to use for <c>Expect-CT</c>.
+        /// </summary>
+        public Uri ExpectCTEnforce { get; set; }
+
+        /// <summary>
+        /// Gets or sets the URI to use for <c>Expect-CT</c> when not enforced.
+        /// </summary>
+        public Uri ExpectCTReportOnly { get; set; }
+
+        /// <summary>
+        /// Gets or sets the URI to use for <c>Expect-Staple</c>.
+        /// </summary>
+        public Uri ExpectStaple { get; set; }
+
+        /// <summary>
         /// Gets or sets the URI to use for <c>Public-Key-Pins</c>.
         /// </summary>
         public Uri PublicKeyPins { get; set; }
