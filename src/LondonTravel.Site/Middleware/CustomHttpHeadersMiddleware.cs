@@ -45,6 +45,11 @@ namespace MartinCostello.LondonTravel.Site.Middleware
         private readonly string _contentSecurityPolicyReportOnly;
 
         /// <summary>
+        /// The current <c>Expect-CT</c> HTTP response header value. This field is read-only.
+        /// </summary>
+        private readonly string _expectCTValue;
+
+        /// <summary>
         /// The current <c>Public-Key-Pins</c> HTTP response header value. This field is read-only.
         /// </summary>
         private readonly string _publicKeyPins;
@@ -78,10 +83,11 @@ namespace MartinCostello.LondonTravel.Site.Middleware
 
             _isProduction = environment.IsProduction();
             _environmentName = _isProduction ? config["Azure:Environment"] : "local";
-            _publicKeyPins = BuildPublicKeyPins(options.Value);
 
             _contentSecurityPolicy = BuildContentSecurityPolicy(_isProduction, false, options.Value);
             _contentSecurityPolicyReportOnly = BuildContentSecurityPolicy(_isProduction, true, options.Value);
+            _expectCTValue = BuildExpectCT(options.Value);
+            _publicKeyPins = BuildPublicKeyPins(options.Value);
         }
 
         /// <summary>
@@ -203,6 +209,44 @@ namespace MartinCostello.LondonTravel.Site.Middleware
             if (options?.ExternalLinks?.Reports?.ContentSecurityPolicy != null)
             {
                 builder.Append($"report-uri {options.ExternalLinks.Reports.ContentSecurityPolicy};");
+            }
+
+            return builder.ToString();
+        }
+
+        /// <summary>
+        /// Builds the value to use for the <c>Expect-CT</c> HTTP response header.
+        /// </summary>
+        /// <param name="options">The current site configuration options.</param>
+        /// <returns>
+        /// A <see cref="string"/> containing the <c>Expect-CT</c> value to use.
+        /// </returns>
+        private static string BuildExpectCT(SiteOptions options)
+        {
+            var builder = new StringBuilder();
+
+            bool enforce = options.CertificateTransparency?.Enforce == true;
+
+            if (enforce)
+            {
+                builder.Append("enforce; ");
+            }
+
+            builder.AppendFormat("max-age={0};", (int)options.CertificateTransparency?.MaxAge.TotalSeconds);
+
+            if (enforce)
+            {
+                if (options?.ExternalLinks?.Reports?.ExpectCTEnforce != null)
+                {
+                    builder.Append($" report-uri {options.ExternalLinks.Reports.ExpectCTEnforce}");
+                }
+            }
+            else
+            {
+                if (options?.ExternalLinks?.Reports?.ExpectCTReportOnly != null)
+                {
+                    builder.Append($" report-uri {options.ExternalLinks.Reports.ExpectCTReportOnly}");
+                }
             }
 
             return builder.ToString();
