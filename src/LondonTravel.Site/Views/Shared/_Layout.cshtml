@@ -48,8 +48,8 @@
 </body>
 <!--
     
-    Environment: @Config["Azure:Environment"]
-    Datacenter:  @Config["Azure:Datacenter"]
+    Environment: @Config.AzureEnvironment()
+    Datacenter:  @Config.AzureDatacenter()
     Instance:    @Environment.MachineName
     Commit:      @GitMetadata.Commit
     Timestamp:   @GitMetadata.Timestamp.ToString("u", CultureInfo.InvariantCulture)

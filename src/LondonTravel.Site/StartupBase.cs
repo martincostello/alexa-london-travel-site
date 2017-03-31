@@ -319,13 +319,13 @@ namespace MartinCostello.LondonTravel.Site
         /// <param name="services">The <see cref="IServiceCollection"/> to configure.</param>
         private void ConfigureDataProtection(IServiceCollection services)
         {
-            string environment = (Configuration["Azure:Environment"] ?? "local").ToLowerInvariant();
+            string environment = Configuration.AzureEnvironment().ToLowerInvariant();
 
             var dataProtection = services
                 .AddDataProtection()
                 .SetApplicationName($"londontravel-{environment}");
 
-            string connectionString = Configuration["ConnectionStrings:AzureStorage"];
+            string connectionString = Configuration.AzureStorageConnectionString();
             string relativePath = $"/data-protection/london-travel/{environment}/keys.xml";
 
             if (!string.IsNullOrWhiteSpace(connectionString) &&

@@ -3,6 +3,7 @@
 
 namespace MartinCostello.LondonTravel.Site
 {
+    using Extensions;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -49,11 +50,11 @@ namespace MartinCostello.LondonTravel.Site
             var loggerConfig = new LoggerConfiguration()
                 .Enrich.FromLogContext()
                 .Enrich.WithProperty("AspNetCoreEnvironment", environment.EnvironmentName)
-                .Enrich.WithProperty("AzureDatacenter", configuration["Azure:Datacenter"] ?? "local")
-                .Enrich.WithProperty("AzureEnvironment", configuration["Azure:Environment"] ?? "local")
+                .Enrich.WithProperty("AzureDatacenter", configuration.AzureDatacenter())
+                .Enrich.WithProperty("AzureEnvironment", configuration.AzureEnvironment())
                 .Enrich.WithProperty("Version", GitMetadata.Commit)
                 .ReadFrom.Configuration(configuration)
-                .WriteTo.ApplicationInsightsEvents(configuration["ApplicationInsights:InstrumentationKey"]);
+                .WriteTo.ApplicationInsightsEvents(configuration.ApplicationInsightsKey());
 
             if (environment.IsDevelopment())
             {
