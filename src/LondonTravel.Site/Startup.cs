@@ -60,6 +60,13 @@ namespace MartinCostello.LondonTravel.Site
                 loggerConfig = loggerConfig.WriteTo.LiterateConsole();
             }
 
+            string papertrailHostname = configuration.PapertrailHostname();
+
+            if (!string.IsNullOrWhiteSpace(papertrailHostname))
+            {
+                loggerConfig.WriteTo.Papertrail(papertrailHostname, configuration.PapertrailPort());
+            }
+
             Log.Logger = loggerConfig.CreateLogger();
         }
     }
