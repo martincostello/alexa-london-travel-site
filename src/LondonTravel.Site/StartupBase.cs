@@ -87,6 +87,11 @@ namespace MartinCostello.LondonTravel.Site
             loggerFactory.AddSerilog();
             appLifetime.ApplicationStopped.Register(Log.CloseAndFlush);
 
+            if (environment.IsDevelopment())
+            {
+                loggerFactory.AddDebug();
+            }
+
             app.UseCustomHttpHeaders(environment, Configuration, options);
 
             var supportedCultures = new[]
