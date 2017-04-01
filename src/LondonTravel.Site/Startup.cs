@@ -53,8 +53,7 @@ namespace MartinCostello.LondonTravel.Site
                 .Enrich.WithProperty("AzureDatacenter", configuration.AzureDatacenter())
                 .Enrich.WithProperty("AzureEnvironment", configuration.AzureEnvironment())
                 .Enrich.WithProperty("Version", GitMetadata.Commit)
-                .ReadFrom.Configuration(configuration)
-                .WriteTo.ApplicationInsightsEvents(configuration.ApplicationInsightsKey());
+                .ReadFrom.Configuration(configuration);
 
             if (environment.IsDevelopment())
             {
