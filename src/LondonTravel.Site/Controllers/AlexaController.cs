@@ -163,7 +163,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// </returns>
         private async Task<bool> CreateOrUpdateAccessToken(LondonTravelUser user, string accessToken)
         {
-            bool hasExistingToken = string.IsNullOrEmpty(user.AlexaToken);
+            bool hasExistingToken = !string.IsNullOrEmpty(user.AlexaToken);
 
             if (hasExistingToken)
             {
