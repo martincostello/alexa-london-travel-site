@@ -57,7 +57,19 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
                 throw new ArgumentException("No DocumentDb collection name is configured.", nameof(options));
             }
 
-            return new DocumentClient(options.ServiceUri, options.AccessKey);
+            ConnectionPolicy connectionPolicy = null;
+
+            if (options.PreferredLocations?.Length > 0)
+            {
+                connectionPolicy = new ConnectionPolicy();
+
+                foreach (string location in options.PreferredLocations)
+                {
+                    connectionPolicy.PreferredLocations.Add(location);
+                }
+            }
+
+            return new DocumentClient(options.ServiceUri, options.AccessKey, connectionPolicy);
         }
     }
 }

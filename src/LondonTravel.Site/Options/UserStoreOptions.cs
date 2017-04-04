@@ -29,5 +29,10 @@ namespace MartinCostello.LondonTravel.Site.Options
         /// Gets or sets the name of the Azure DocumentDb collection to use.
         /// </summary>
         public string CollectionName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the preferred Azure DocumentDb locations to use, if any.
+        /// </summary>
+        public string[] PreferredLocations { get; set; }
     }
 }
