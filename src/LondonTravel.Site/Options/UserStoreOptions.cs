@@ -4,6 +4,7 @@
 namespace MartinCostello.LondonTravel.Site.Options
 {
     using System;
+    using System.Collections.Generic;
 
     /// <summary>
     /// A class representing the authentication user store options for the site. This class cannot be inherited.
@@ -33,6 +34,6 @@ namespace MartinCostello.LondonTravel.Site.Options
         /// <summary>
         /// Gets or sets the preferred Azure DocumentDb locations to use, if any.
         /// </summary>
-        public string[] PreferredLocations { get; set; }
+        public ICollection<string> PreferredLocations { get; set; }
     }
 }

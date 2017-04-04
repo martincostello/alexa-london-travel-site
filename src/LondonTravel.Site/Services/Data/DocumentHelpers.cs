@@ -8,7 +8,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
     using Options;
 
     /// <summary>
-    /// A class containing helper methods for DocumentDb operations. This class cannot be inherited.
+    /// A class containing helper methods for DocumentDB operations. This class cannot be inherited.
     /// </summary>
     internal static class DocumentHelpers
     {
@@ -34,32 +34,32 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
             if (options.ServiceUri == null)
             {
-                throw new ArgumentException("No DocumentDb URI is configured.", nameof(options));
+                throw new ArgumentException("No DocumentDB URI is configured.", nameof(options));
             }
 
             if (!options.ServiceUri.IsAbsoluteUri)
             {
-                throw new ArgumentException("The configured DocumentDb URI is as it is not an absolute URI.", nameof(options));
+                throw new ArgumentException("The configured DocumentDB URI is as it is not an absolute URI.", nameof(options));
             }
 
             if (string.IsNullOrEmpty(options.AccessKey))
             {
-                throw new ArgumentException("No DocumentDb access key is configured.", nameof(options));
+                throw new ArgumentException("No DocumentDB access key is configured.", nameof(options));
             }
 
             if (string.IsNullOrEmpty(options.DatabaseName))
             {
-                throw new ArgumentException("No DocumentDb database name is configured.", nameof(options));
+                throw new ArgumentException("No DocumentDB database name is configured.", nameof(options));
             }
 
             if (string.IsNullOrEmpty(options.CollectionName))
             {
-                throw new ArgumentException("No DocumentDb collection name is configured.", nameof(options));
+                throw new ArgumentException("No DocumentDB collection name is configured.", nameof(options));
             }
 
             ConnectionPolicy connectionPolicy = null;
 
-            if (options.PreferredLocations?.Length > 0)
+            if (options.PreferredLocations?.Count > 0)
             {
                 connectionPolicy = new ConnectionPolicy();
 
