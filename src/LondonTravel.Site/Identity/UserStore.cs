@@ -43,7 +43,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
         }
 
         /// <inheritdoc />
-        public async Task AddLoginAsync(LondonTravelUser user, UserLoginInfo login, CancellationToken cancellationToken)
+        public Task AddLoginAsync(LondonTravelUser user, UserLoginInfo login, CancellationToken cancellationToken)
         {
             ThrowIfDisposed();
 
@@ -64,12 +64,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
 
             user.Logins.Add(LondonTravelLoginInfo.FromUserLoginInfo(login));
 
-            var result = await UpdateAsync(user, cancellationToken);
-
-            if (!result.Succeeded)
-            {
-                throw new InvalidOperationException($"Failed to add login for provider '{login.LoginProvider}' for user '{user.Id}'.");
-            }
+            return Task.CompletedTask;
         }
 
         /// <inheritdoc />
