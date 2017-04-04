@@ -58,7 +58,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             [FromHeader(Name = "Authorization")] string authorizationHeader,
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            _logger?.LogInformation("Received API request for user preferences.");
+            _logger?.LogTrace("Received API request for user preferences.");
 
             // TODO Consider allowing implicit access if the user is signed-in (i.e. access from a browser)
             if (string.IsNullOrWhiteSpace(authorizationHeader))
