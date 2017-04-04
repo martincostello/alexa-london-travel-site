@@ -29,7 +29,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         private readonly ILogger<DocumentCollectionInitializer> _logger;
 
         /// <summary>
-        /// The name of the Azure DocumentDb database. This field is read-only.
+        /// The name of the Azure DocumentDB database. This field is read-only.
         /// </summary>
         private readonly string _databaseName;
 

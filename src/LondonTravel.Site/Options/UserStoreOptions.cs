@@ -12,27 +12,27 @@ namespace MartinCostello.LondonTravel.Site.Options
     public sealed class UserStoreOptions
     {
         /// <summary>
-        /// Gets or sets the Azure DocumentDb service URI to use.
+        /// Gets or sets the Azure DocumentDB service URI to use.
         /// </summary>
         public Uri ServiceUri { get; set; }
 
         /// <summary>
-        /// Gets or sets the Azure DocumentDb access key to use.
+        /// Gets or sets the Azure DocumentDB access key to use.
         /// </summary>
         public string AccessKey { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of the Azure DocumentDb database to use.
+        /// Gets or sets the name of the Azure DocumentDB database to use.
         /// </summary>
         public string DatabaseName { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of the Azure DocumentDb collection to use.
+        /// Gets or sets the name of the Azure DocumentDB collection to use.
         /// </summary>
         public string CollectionName { get; set; }
 
         /// <summary>
-        /// Gets or sets the preferred Azure DocumentDb locations to use, if any.
+        /// Gets or sets the preferred Azure DocumentDB locations to use, if any.
         /// </summary>
         public ICollection<string> PreferredLocations { get; set; }
     }
