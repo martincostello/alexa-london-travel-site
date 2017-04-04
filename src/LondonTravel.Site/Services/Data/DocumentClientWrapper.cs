@@ -87,11 +87,11 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
             await EnsureCollectionExistsAsync();
 
-            _logger?.LogInformation($"Creating document in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'.");
+            _logger?.LogTrace($"Creating document in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'.");
 
             var result = await _client.CreateDocumentAsync(BuildCollectionUri(), document);
 
-            _logger?.LogInformation($"Created document in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'. Id: '{result.Resource.Id}'.");
+            _logger?.LogTrace($"Created document in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'. Id: '{result.Resource.Id}'.");
 
             return result.Resource.Id;
         }
@@ -186,7 +186,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
             await EnsureCollectionExistsAsync();
 
-            _logger?.LogInformation($"Replacing document with Id '{id}' in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'.");
+            _logger?.LogTrace($"Replacing document with Id '{id}' in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'.");
 
             RequestOptions options = GetOptionsForETag(etag);
 
@@ -194,7 +194,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             {
                 Document response = await _client.ReplaceDocumentAsync(BuildDocumentUri(id), document, options);
 
-                _logger?.LogInformation($"Replaced document with Id '{id}' in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'.");
+                _logger?.LogTrace($"Replaced document with Id '{id}' in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'.");
 
                 return (T)(dynamic)response;
             }

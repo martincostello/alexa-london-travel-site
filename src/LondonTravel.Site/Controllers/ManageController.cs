@@ -364,9 +364,12 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
         private async Task<IdentityResult> UpdateClaimsAsync(LondonTravelUser user, ExternalLoginInfo info)
         {
+            bool commitUpdate = false;
+
             if (user.RoleClaims == null)
             {
                 user.RoleClaims = new List<LondonTravelRole>();
+                commitUpdate = true;
             }
 
             foreach (var claim in info.Principal.Claims)
@@ -381,10 +384,18 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 if (!hasClaim)
                 {
                     user.RoleClaims.Add(LondonTravelRole.FromClaim(claim));
+                    commitUpdate = true;
                 }
             }
 
-            return await _userManager.UpdateAsync(user);
+            if (commitUpdate)
+            {
+                return await _userManager.UpdateAsync(user);
+            }
+            else
+            {
+                return IdentityResult.Success;
+            }
         }
     }
 }
