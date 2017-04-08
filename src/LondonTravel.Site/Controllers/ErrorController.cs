@@ -61,12 +61,16 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// The result for the action.
         /// </returns>
         [Route("admin.php")]
+        [Route("admin-console")]
         [Route("admin/login.php")]
         [Route("administrator/index.php")]
         [Route("ajaxproxy/proxy.php")]
         [Route("bitrix/admin/index.php")]
         [Route("index.php")]
+        [Route("invoker/JMXInvokerServlet")]
+        [Route("jmx-console/HtmlAdaptor")]
         [Route("magmi/web/magmi.php")]
+        [Route("web-console/Invoker")]
         [Route("wp-admin/admin-ajax.php")]
         [Route("wp-admin/includes/themes.php")]
         [Route("wp-admin/options-link.php")]
