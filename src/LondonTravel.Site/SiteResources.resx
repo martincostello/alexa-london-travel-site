@@ -510,4 +510,49 @@
   <data name="ManageUnlinkAlexaModalTitle" xml:space="preserve">
     <value>Unlink Alexa skill</value>
   </data>
+  <data name="ErrorMessage400" xml:space="preserve">
+    <value>The request was invalid.</value>
+  </data>
+  <data name="ErrorMessage403" xml:space="preserve">
+    <value>You are not permitted to access this resource.</value>
+  </data>
+  <data name="ErrorMessage404" xml:space="preserve">
+    <value>The page you requested could not be found.</value>
+  </data>
+  <data name="ErrorMessage405" xml:space="preserve">
+    <value>The specified HTTP method was not allowed.</value>
+  </data>
+  <data name="ErrorMessage408" xml:space="preserve">
+    <value>Your request took too long to process.</value>
+  </data>
+  <data name="ErrorSubtitle400" xml:space="preserve">
+    <value>Bad request (HTTP 400)</value>
+  </data>
+  <data name="ErrorSubtitle403" xml:space="preserve">
+    <value>Forbidden (HTTP 403)</value>
+  </data>
+  <data name="ErrorSubtitle404" xml:space="preserve">
+    <value>Page not found (HTTP 404)</value>
+  </data>
+  <data name="ErrorSubtitle405" xml:space="preserve">
+    <value>HTTP method not allowed (HTTP 405)</value>
+  </data>
+  <data name="ErrorSubtitle408" xml:space="preserve">
+    <value>Request timeout (HTTP 408)</value>
+  </data>
+  <data name="ErrorTitle400" xml:space="preserve">
+    <value>Bad request</value>
+  </data>
+  <data name="ErrorTitle403" xml:space="preserve">
+    <value>Forbidden</value>
+  </data>
+  <data name="ErrorTitle404" xml:space="preserve">
+    <value>Not found</value>
+  </data>
+  <data name="ErrorTitle405" xml:space="preserve">
+    <value>Method not allowed</value>
+  </data>
+  <data name="ErrorTitle408" xml:space="preserve">
+    <value>Request timeout</value>
+  </data>
 </root>

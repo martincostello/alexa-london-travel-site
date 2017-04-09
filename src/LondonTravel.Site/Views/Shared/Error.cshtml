@@ -2,8 +2,11 @@
 @{
     ViewBag.MetaDescription = string.Empty;
     ViewBag.MetaRobots = "NOINDEX";
-    ViewBag.Title = SR.ErrorTitle;
+    ViewBag.Title = ViewBag.Title ?? SR.ErrorTitle;
+    ViewBag.Subtitle = ViewBag.Subtitle ?? SR.ErrorSubtitle(Model ?? 500);
     ViewBag.Message = ViewBag.Message ?? SR.ErrorMessage;
+
+    string modifier = (ViewBag.IsUserError ?? false) ? "primary" : "danger";
 }
-<h1 class="text-danger">@SR.ErrorSubtitle(Model)</h1>
-<h2 class="text-danger">@ViewBag.Message</h2>
+<h1 class="text-@modifier">@ViewBag.Subtitle</h1>
+<h2 class="text-@modifier">@ViewBag.Message</h2>

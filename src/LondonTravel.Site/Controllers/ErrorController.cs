@@ -4,6 +4,7 @@
 namespace MartinCostello.LondonTravel.Site.Controllers
 {
     using System;
+    using System.Net;
     using Microsoft.AspNetCore.Mvc;
 
     /// <summary>
@@ -45,6 +46,20 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         };
 
         /// <summary>
+        /// The <see cref="SiteResources"/> to use. This field is read-only.
+        /// </summary>
+        private readonly SiteResources _resources;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ErrorController"/> class.
+        /// </summary>
+        /// <param name="resources">The <see cref="SiteResources"/> to use.</param>
+        public ErrorController(SiteResources resources)
+        {
+            _resources = resources;
+        }
+
+        /// <summary>
         /// Gets the result for the <c>/error</c> action.
         /// </summary>
         /// <param name="id">The optional HTTP status code associated with the error.</param>
@@ -52,7 +67,64 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// The result for the <c>/error</c> action.
         /// </returns>
         [HttpGet]
-        public IActionResult Index(int? id) => View("Error", id ?? 500);
+        public IActionResult Index(int? id)
+        {
+            int httpCode = id ?? 500;
+
+            if (!Enum.IsDefined(typeof(HttpStatusCode), (HttpStatusCode)httpCode))
+            {
+                httpCode = (int)HttpStatusCode.InternalServerError;
+            }
+
+            string title = _resources.ErrorTitle;
+            string subtitle = _resources.ErrorSubtitle(httpCode);
+            string message = _resources.ErrorMessage;
+            bool isUserError = false;
+
+            switch (httpCode)
+            {
+                case (int)HttpStatusCode.BadRequest:
+                    title = _resources.ErrorTitle400;
+                    subtitle = _resources.ErrorSubtitle400;
+                    message = _resources.ErrorMessage400;
+                    break;
+
+                case (int)HttpStatusCode.Forbidden:
+                    title = _resources.ErrorTitle403;
+                    subtitle = _resources.ErrorSubtitle403;
+                    message = _resources.ErrorMessage403;
+                    break;
+
+                case (int)HttpStatusCode.MethodNotAllowed:
+                    title = _resources.ErrorTitle405;
+                    subtitle = _resources.ErrorSubtitle405;
+                    message = _resources.ErrorMessage405;
+                    break;
+
+                case (int)HttpStatusCode.NotFound:
+                    title = _resources.ErrorTitle404;
+                    subtitle = _resources.ErrorSubtitle404;
+                    message = _resources.ErrorMessage404;
+                    isUserError = true;
+                    break;
+
+                case (int)HttpStatusCode.RequestTimeout:
+                    title = _resources.ErrorTitle408;
+                    subtitle = _resources.ErrorSubtitle408;
+                    message = _resources.ErrorMessage408;
+                    break;
+
+                default:
+                    break;
+            }
+
+            ViewBag.Title = title;
+            ViewBag.Subtitle = subtitle;
+            ViewBag.Message = message;
+            ViewBag.IsUserError = isUserError;
+
+            return View("Error", httpCode);
+        }
 
         /// <summary>
         /// Gets the result for various routes that scrapers probe.
