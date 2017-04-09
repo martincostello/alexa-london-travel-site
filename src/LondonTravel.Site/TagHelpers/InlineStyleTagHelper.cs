@@ -112,6 +112,8 @@ namespace MartinCostello.LondonTravel.Site.TagHelpers
                     css = MinifyCss(css);
                 }
 
+                css = FixSourceMapPath(css, filePath);
+
                 Cache.Set(cacheKey, css);
             }
 
@@ -166,6 +168,49 @@ namespace MartinCostello.LondonTravel.Site.TagHelpers
             }
 
             return builder.ToString();
+        }
+
+        /// <summary>
+        /// Attempts to fix the source map path for the specified CSS.
+        /// </summary>
+        /// <param name="css">The CSS that may contain a source map path.</param>
+        /// <param name="filePath">The path of the file containing the CSS.</param>
+        /// <returns>
+        /// The CSS that may have had the source map path fixed.
+        /// </returns>
+        /// <remarks>
+        /// Rendering the CSS inline with an embedded source map path in a comment
+        /// may result in 404 errors from trying to fetch the map file with a relative
+        /// path to the document where the CSS is inlined, which is unlikely to match
+        /// the relative path from the original CSS file that the map file has.
+        /// </remarks>
+        private string FixSourceMapPath(string css, string filePath)
+        {
+            // Is there a map file?
+            string mapFilePath = $"{filePath}.map";
+            IFileInfo fileInfo = HostingEnvironment.WebRootFileProvider.GetFileInfo(mapFilePath);
+
+            if (fileInfo.Exists)
+            {
+                const string SourceMapPreamble = "sourceMappingURL=";
+
+                int startIndex = css.IndexOf(SourceMapPreamble);
+
+                if (startIndex > -1)
+                {
+                    startIndex += SourceMapPreamble.Length;
+
+                    int endIndex = css.IndexOf(" ", startIndex);
+
+                    if (endIndex > -1)
+                    {
+                        css = css.Remove(startIndex, endIndex - startIndex);
+                        css = css.Insert(startIndex, mapFilePath);
+                    }
+                }
+            }
+
+            return css;
         }
     }
 }
