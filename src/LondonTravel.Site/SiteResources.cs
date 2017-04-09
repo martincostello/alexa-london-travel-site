@@ -273,6 +273,36 @@ namespace MartinCostello.LondonTravel.Site
 
         public string AlexaSignInFormTitle => _localizer[nameof(AlexaSignInFormTitle)];
 
+        public string ErrorTitle400 => _localizer[nameof(ErrorTitle400)];
+
+        public string ErrorSubtitle400 => _localizer[nameof(ErrorSubtitle400)];
+
+        public string ErrorMessage400 => _localizer[nameof(ErrorMessage400)];
+
+        public string ErrorTitle403 => _localizer[nameof(ErrorTitle403)];
+
+        public string ErrorSubtitle403 => _localizer[nameof(ErrorSubtitle403)];
+
+        public string ErrorMessage403 => _localizer[nameof(ErrorMessage403)];
+
+        public string ErrorTitle404 => _localizer[nameof(ErrorTitle404)];
+
+        public string ErrorSubtitle404 => _localizer[nameof(ErrorSubtitle404)];
+
+        public string ErrorMessage404 => _localizer[nameof(ErrorMessage404)];
+
+        public string ErrorTitle405 => _localizer[nameof(ErrorTitle405)];
+
+        public string ErrorSubtitle405 => _localizer[nameof(ErrorSubtitle405)];
+
+        public string ErrorMessage405 => _localizer[nameof(ErrorMessage405)];
+
+        public string ErrorTitle408 => _localizer[nameof(ErrorTitle408)];
+
+        public string ErrorSubtitle408 => _localizer[nameof(ErrorSubtitle408)];
+
+        public string ErrorMessage408 => _localizer[nameof(ErrorMessage408)];
+
         public string ErrorSubtitle(int? httpCode) => _localizer[nameof(ErrorSubtitle), httpCode ?? 500];
 
         public LocalizedHtmlString AvailableLinesTitle(string classes, int count) => _htmlLocalizer[nameof(AvailableLinesTitle), classes, count];
