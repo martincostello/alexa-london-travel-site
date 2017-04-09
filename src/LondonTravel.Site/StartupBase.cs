@@ -11,6 +11,7 @@ namespace MartinCostello.LondonTravel.Site
     using Autofac.Extensions.DependencyInjection;
     using Extensions;
     using Identity;
+    using Microsoft.ApplicationInsights.Extensibility;
     using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.CookiePolicy;
@@ -165,7 +166,10 @@ namespace MartinCostello.LondonTravel.Site
         /// </returns>
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddApplicationInsightsTelemetry(Configuration);
+            services
+                .AddApplicationInsightsTelemetry(Configuration)
+                .AddApplicationInsightsTelemetry((p) => p.ApplicationVersion = GitMetadata.Commit);
+
             services.AddOptions();
             services.Configure<SiteOptions>(Configuration.GetSection("Site"));
 
@@ -246,6 +250,7 @@ namespace MartinCostello.LondonTravel.Site
             services.AddSingleton<IClock>((_) => SystemClock.Instance);
             services.AddSingleton<IConfiguration>((_) => Configuration);
             services.AddSingleton<IDocumentCollectionInitializer, DocumentCollectionInitializer>();
+            services.AddSingleton<ITelemetryInitializer, SiteTelemetryInitializer>();
             services.AddSingleton<ITflServiceFactory, TflServiceFactory>();
 
             services.AddScoped((p) => p.GetRequiredService<IHttpContextAccessor>().HttpContext);

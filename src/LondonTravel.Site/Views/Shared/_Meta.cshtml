@@ -62,6 +62,10 @@
     <meta name="x-request-locale" content="@CultureInfo.CurrentUICulture.Name" />
     <meta name="x-site-branch" content="@GitMetadata.Branch" />
     <meta name="x-site-revision" content="@GitMetadata.Commit" />
+    @if (User.Identity.IsAuthenticated)
+    {
+    <meta name="x-site-user-id" content="@User.GetUserId()" />
+    }
     <script type="application/ld+json">
     {
         "@@context": "http://schema.org",

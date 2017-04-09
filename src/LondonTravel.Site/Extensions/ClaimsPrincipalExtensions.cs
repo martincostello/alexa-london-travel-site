@@ -103,6 +103,26 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         }
 
         /// <summary>
+        /// Gets the user Id for the specified claims principal.
+        /// </summary>
+        /// <param name="value">The user to get the Id for.</param>
+        /// <returns>
+        /// The Id of the specified user.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="value"/> is <see langword="null"/>.
+        /// </exception>
+        public static string GetUserId(this ClaimsPrincipal value)
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
+            return value.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        }
+
+        /// <summary>
         /// Returns the string representation of the specified hash bytes.
         /// </summary>
         /// <param name="hash">An array containing the hash to convert to a string.</param>
