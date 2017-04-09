@@ -1,6 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Hosting
 @model MetaModel
+@inject IConfiguration Config
 @inject IHostingEnvironment Hosting
+@{
+    bool renderGA = string.Equals(Config.AzureEnvironment(), "production", StringComparison.OrdinalIgnoreCase);
+}
     <title>@Model.Title</title>
     <meta http-equiv="cache-control" content="no-cache, no-store" />
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -48,7 +52,7 @@
     <meta name="twitter:title" content="@Model.Title" />
     <meta name="twitter:url" content="@Model.CanonicalUri" />
     <meta name="application-name" content="@Model.SiteName" />
-    <meta name="google-analytics" content="@(Hosting.IsProduction() ? Options.Analytics.Google : string.Empty)" />
+    <meta name="google-analytics" content="@(renderGA ? Options.Analytics.Google : string.Empty)" />
     <meta name="google-site-verification" content="ji6SNsPQEbNQmF252sQgQFswh-b6cDnNOa3AHvgo4J0" />
     <meta name="msapplication-config" content="@Url.Content("~/browserconfig.xml")" />
     <meta name="msapplication-navbutton-color" content="#2b5797" />
