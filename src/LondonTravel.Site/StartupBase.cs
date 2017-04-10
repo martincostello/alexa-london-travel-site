@@ -250,7 +250,7 @@ namespace MartinCostello.LondonTravel.Site
             services.AddSingleton<IClock>((_) => SystemClock.Instance);
             services.AddSingleton<IConfiguration>((_) => Configuration);
             services.AddSingleton<IDocumentCollectionInitializer, DocumentCollectionInitializer>();
-            services.AddSingleton<ITelemetryInitializer, SiteTelemetryInitializer>();
+            services.AddSingleton<ITelemetryInitializer, Telemetry.SiteTelemetryInitializer>();
             services.AddSingleton<ITflServiceFactory, TflServiceFactory>();
 
             services.AddScoped((p) => p.GetRequiredService<IHttpContextAccessor>().HttpContext);
