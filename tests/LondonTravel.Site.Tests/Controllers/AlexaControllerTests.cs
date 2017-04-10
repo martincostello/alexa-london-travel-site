@@ -18,6 +18,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     using Moq;
     using Options;
     using Shouldly;
+    using Telemetry;
     using Xunit;
 
     /// <summary>
@@ -303,7 +304,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             var controllerContext = new ControllerContext(actionContext);
 
-            return new AlexaController(userManager ?? CreateUserManager(), options ?? CreateValidSiteOptions(), Mock.Of<ILogger<AlexaController>>())
+            return new AlexaController(userManager ?? CreateUserManager(), Mock.Of<ISiteTelemetry>(), options ?? CreateValidSiteOptions(), Mock.Of<ILogger<AlexaController>>())
             {
                 ControllerContext = controllerContext,
             };

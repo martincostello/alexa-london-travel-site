@@ -7,14 +7,15 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
-    using MartinCostello.LondonTravel.Site.Identity;
-    using MartinCostello.LondonTravel.Site.Options;
+    using Identity;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
     using NodaTime;
+    using Options;
+    using Telemetry;
 
     /// <summary>
     /// A class representing the controller for the <c>/account/</c> resource.
@@ -31,6 +32,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
         private readonly UserManager<LondonTravelUser> _userManager;
         private readonly SignInManager<LondonTravelUser> _signInManager;
+        private readonly ISiteTelemetry _telemetry;
         private readonly IClock _clock;
         private readonly string _externalCookieScheme;
         private readonly bool _isEnabled;
@@ -39,6 +41,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         public AccountController(
             UserManager<LondonTravelUser> userManager,
             SignInManager<LondonTravelUser> signInManager,
+            ISiteTelemetry telemetry,
             IClock clock,
             IOptionsSnapshot<IdentityCookieOptions> identityCookieOptions,
             SiteOptions siteOptions,
@@ -46,6 +49,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _telemetry = telemetry;
             _clock = clock;
             _externalCookieScheme = identityCookieOptions.Value.ExternalCookieAuthenticationScheme;
             _logger = logger;
@@ -129,11 +133,13 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 return NotFound();
             }
 
-            string userName = _userManager.GetUserName(User);
+            string userId = _userManager.GetUserId(User);
 
             await _signInManager.SignOutAsync();
 
-            _logger.LogInformation($"User '{userName}' signed out.");
+            _logger.LogInformation($"User '{userId}' signed out.");
+
+            _telemetry.TrackSignOut(userId);
 
             return RedirectToRoute(SiteRoutes.Home);
         }
@@ -206,7 +212,10 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             if (result.Succeeded)
             {
-                _logger.LogInformation($"User '{_userManager.GetUserName(info.Principal)}' signed in with '{info.LoginProvider}' provider.");
+                string userId = _userManager.GetUserId(info.Principal);
+
+                _logger.LogInformation($"User '{userId}' signed in with '{info.LoginProvider}' provider.");
+                _telemetry.TrackSignIn(userId, info.LoginProvider);
 
                 return RedirectToLocal(returnUrl);
             }
@@ -234,6 +243,8 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                     await _signInManager.SignInAsync(user, isPersistent: true);
 
                     _logger.LogInformation($"New user account '{user.Id}' created through '{info.LoginProvider}'.");
+
+                    _telemetry.TrackAccountCreated(user.Id, user.Email, info.LoginProvider);
 
                     if (IsRedirectAlexaAuthorization(returnUrl))
                     {

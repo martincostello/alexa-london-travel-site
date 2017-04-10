@@ -5,6 +5,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 {
     using System;
     using System.Net;
+    using MartinCostello.LondonTravel.Site.Telemetry;
     using Microsoft.AspNetCore.Mvc;
 
     /// <summary>
@@ -51,12 +52,19 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         private readonly SiteResources _resources;
 
         /// <summary>
+        /// The <see cref="ISiteTelemetry"/> to use. This field is read-only.
+        /// </summary>
+        private readonly ISiteTelemetry _telemetry;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ErrorController"/> class.
         /// </summary>
         /// <param name="resources">The <see cref="SiteResources"/> to use.</param>
-        public ErrorController(SiteResources resources)
+        /// <param name="telemetry">The <see cref="ISiteTelemetry"/> to use.</param>
+        public ErrorController(SiteResources resources, ISiteTelemetry telemetry)
         {
             _resources = resources;
+            _telemetry = telemetry;
         }
 
         /// <summary>
@@ -149,6 +157,10 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         [Route("wp-admin/post-new.php")]
         [Route("wp-login.php")]
         [Route("xmlrpc.php")]
-        public ActionResult No() => Redirect(Videos[new Random().Next(0, Videos.Length)]);
+        public ActionResult No()
+        {
+            _telemetry.TrackSuspiciousCrawler();
+            return Redirect(Videos[new Random().Next(0, Videos.Length)]);
+        }
     }
 }

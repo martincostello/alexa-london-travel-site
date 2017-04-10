@@ -17,6 +17,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     using Models;
     using Services.Data;
     using Services.Tfl;
+    using Telemetry;
 
     /// <summary>
     /// A class representing the controller for the <c>/manage/</c> resource.
@@ -29,6 +30,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         private readonly SignInManager<LondonTravelUser> _signInManager;
         private readonly IDocumentClient _documentClient;
         private readonly ITflServiceFactory _tflServiceFactory;
+        private readonly ISiteTelemetry _telemetry;
         private readonly string _applicationCookieScheme;
         private readonly string _externalCookieScheme;
         private readonly ILogger<ManageController> _logger;
@@ -38,6 +40,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
           SignInManager<LondonTravelUser> signInManager,
           IDocumentClient documentClient,
           ITflServiceFactory tflServiceFactory,
+          ISiteTelemetry telemetry,
           IOptions<IdentityCookieOptions> identityCookieOptions,
           ILogger<ManageController> logger)
         {
@@ -45,6 +48,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             _signInManager = signInManager;
             _documentClient = documentClient;
             _tflServiceFactory = tflServiceFactory;
+            _telemetry = telemetry;
 
             _applicationCookieScheme = identityCookieOptions.Value.ApplicationCookieAuthenticationScheme;
             _externalCookieScheme = identityCookieOptions.Value.ExternalCookieAuthenticationScheme;
@@ -110,6 +114,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             SiteContext.SetErrorRedirect(properties, Url.RouteUrl(SiteRoutes.Manage));
 
             _logger?.LogInformation($"Attempting to link user '{userId}' to provider '{provider}'.");
+            _telemetry.TrackLinkExternalAccountStart(userId, provider);
 
             return Challenge(properties, provider);
         }
@@ -142,6 +147,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             if (result.Succeeded)
             {
+                _telemetry.TrackLinkExternalAccountSuccess(userId, info.LoginProvider);
                 _logger.LogInformation($"Added login for '{info.LoginProvider}' to user '{userId}'.");
 
                 message = SiteMessage.LinkSuccess;
@@ -161,6 +167,8 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             }
             else
             {
+                _telemetry.TrackLinkExternalAccountFailed(userId, info.LoginProvider);
+
                 _logger?.LogError(
                     $"Failed to add external login info for user '{userId}': {string.Join(";", result.Errors.Select((p) => $"{p.Code}: {p.Description}"))}.");
             }
@@ -194,6 +202,9 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                     _logger.LogInformation($"Removed login for '{account.LoginProvider}' from user '{user.Id}'.");
 
                     await _signInManager.SignInAsync(user, isPersistent: true);
+
+                    _telemetry.TrackRemoveExternalAccountLink(user.Id, account.LoginProvider);
+
                     message = SiteMessage.RemoveAccountLinkSuccess;
                 }
                 else
@@ -230,7 +241,9 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
                 if (result.Succeeded)
                 {
+                    _telemetry.TrackRemoveAlexaLink(user.Id);
                     _logger.LogInformation($"Removed Alexa link from user '{user.Id}'.");
+
                     message = SiteMessage.RemoveAlexaLinkSuccess;
                 }
                 else
@@ -262,6 +275,8 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
                     await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
                     await HttpContext.Authentication.SignOutAsync(_applicationCookieScheme);
+
+                    _telemetry.TrackAccountDeleted(user.Id, user.Email);
 
                     return RedirectToRoute(SiteRoutes.Home, new { Message = SiteMessage.AccountDeleted });
                 }
@@ -316,7 +331,8 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
                 _logger.LogInformation($"Updating line preferences for user '{user.Id}'.");
 
-                user.FavoriteLines = (model.FavoriteLines ?? Array.Empty<string>())
+                var existingLines = user.FavoriteLines;
+                var newLines = user.FavoriteLines = (model.FavoriteLines ?? Array.Empty<string>())
                     .OrderBy((p) => p, StringComparer.Ordinal)
                     .ToArray();
 
@@ -327,6 +343,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
                 if (result.Succeeded)
                 {
+                    _telemetry.TrackLinePreferencesUpdated(user.Id, existingLines, newLines);
                     _logger.LogInformation($"Updated line preferences for user '{user.Id}'.");
                 }
                 else
@@ -390,7 +407,14 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             if (commitUpdate)
             {
-                return await _userManager.UpdateAsync(user);
+                var result = await _userManager.UpdateAsync(user);
+
+                if (result.Succeeded)
+                {
+                    _telemetry.TrackClaimsUpdated(user.Id);
+                }
+
+                return result;
             }
             else
             {

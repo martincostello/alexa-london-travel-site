@@ -7,12 +7,13 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     using System.Linq;
     using System.Security.Cryptography;
     using System.Threading.Tasks;
-    using MartinCostello.LondonTravel.Site.Identity;
-    using MartinCostello.LondonTravel.Site.Options;
+    using Identity;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
+    using Options;
+    using Telemetry;
 
     /// <summary>
     /// A class representing the controller for the <c>/alexa</c> resource.
@@ -24,6 +25,11 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// The <see cref="UserManager{TUser}"/> to use. This field is read-only.
         /// </summary>
         private readonly UserManager<LondonTravelUser> _userManager;
+
+        /// <summary>
+        /// The <see cref="ISiteTelemetry"/> to use. This field is read-only.
+        /// </summary>
+        private readonly ISiteTelemetry _telemetry;
 
         /// <summary>
         /// The <see cref="AlexaOptions"/> to use. This field is read-only.
@@ -39,14 +45,17 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// Initializes a new instance of the <see cref="AlexaController"/> class.
         /// </summary>
         /// <param name="userManager">The <see cref="UserManager{TUser}"/> to use.</param>
+        /// <param name="telemetry">The <see cref="ISiteTelemetry"/> to use.</param>
         /// <param name="siteOptions">The current site options.</param>
         /// <param name="logger">The <see cref="ILogger"/> to use.</param>
         public AlexaController(
             UserManager<LondonTravelUser> userManager,
+            ISiteTelemetry telemetry,
             SiteOptions siteOptions,
             ILogger<AlexaController> logger)
         {
             _userManager = userManager;
+            _telemetry = telemetry;
             _options = siteOptions?.Alexa;
             _logger = logger;
         }
@@ -119,6 +128,8 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 {
                     return RedirectForError(redirectUri, state);
                 }
+
+                _telemetry.TrackAlexaLink(user.Id);
 
                 string tokenRedirectUrl = BuildRedirectUrl(redirectUri, state, accessToken, responseType);
                 return Redirect(tokenRedirectUrl);

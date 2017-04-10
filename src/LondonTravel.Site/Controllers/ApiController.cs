@@ -15,6 +15,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     using Microsoft.Extensions.Logging;
     using Models;
     using Services.Data;
+    using Telemetry;
 
     /// <summary>
     /// A class representing the controller for the <c>/api</c> resource.
@@ -28,6 +29,11 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         private readonly IDocumentClient _client;
 
         /// <summary>
+        /// The <see cref="ISiteTelemetry"/> to use. This field is read-only.
+        /// </summary>
+        private readonly ISiteTelemetry _telemetry;
+
+        /// <summary>
         /// The <see cref="ILogger"/> to use. This field is read-only.
         /// </summary>
         private readonly ILogger<ApiController> _logger;
@@ -36,10 +42,12 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// Initializes a new instance of the <see cref="ApiController"/> class.
         /// </summary>
         /// <param name="client">The <see cref="IDocumentClient"/> to use.</param>
+        /// <param name="telemetry">The <see cref="ISiteTelemetry"/> to use.</param>
         /// <param name="logger">The <see cref="ILogger"/> to use.</param>
-        public ApiController(IDocumentClient client, ILogger<ApiController> logger)
+        public ApiController(IDocumentClient client, ISiteTelemetry telemetry, ILogger<ApiController> logger)
         {
             _client = client;
+            _telemetry = telemetry;
             _logger = logger;
         }
 
@@ -64,6 +72,8 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             if (string.IsNullOrWhiteSpace(authorizationHeader))
             {
                 _logger?.LogInformation("API request for preferences denied as no Authorization header/value was specified.");
+                _telemetry.TrackApiPreferencesUnauthorized();
+
                 return Unauthorized("No access token specified.");
             }
 
@@ -73,6 +83,8 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             if (user == null || !string.Equals(user.AlexaToken, accessToken, StringComparison.Ordinal))
             {
                 _logger?.LogInformation("API request for preferences denied as the specified access token is unknown.");
+                _telemetry.TrackApiPreferencesUnauthorized();
+
                 return Unauthorized("Unauthorized.");
             }
 
@@ -83,6 +95,8 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 FavoriteLines = user.FavoriteLines,
                 UserId = user.Id,
             };
+
+            _telemetry.TrackApiPreferencesSuccess(data.UserId);
 
             return Ok(data);
         }

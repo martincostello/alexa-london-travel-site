@@ -9,16 +9,17 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     using System.Linq.Expressions;
     using System.Threading;
     using System.Threading.Tasks;
-    using MartinCostello.LondonTravel.Site.Identity;
-    using MartinCostello.LondonTravel.Site.Models;
-    using MartinCostello.LondonTravel.Site.Services.Data;
+    using Identity;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Controllers;
     using Microsoft.AspNetCore.Routing;
     using Microsoft.Extensions.Logging;
+    using Models;
     using Moq;
+    using Services.Data;
     using Shouldly;
+    using Telemetry;
     using Xunit;
 
     /// <summary>
@@ -214,7 +215,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             var controllerContext = new ControllerContext(actionContext);
 
-            return new ApiController(client ?? Mock.Of<IDocumentClient>(), Mock.Of<ILogger<ApiController>>())
+            return new ApiController(client ?? Mock.Of<IDocumentClient>(), Mock.Of<ISiteTelemetry>(), Mock.Of<ILogger<ApiController>>())
             {
                 ControllerContext = controllerContext,
             };
