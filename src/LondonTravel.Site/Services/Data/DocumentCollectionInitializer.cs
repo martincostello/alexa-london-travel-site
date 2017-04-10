@@ -7,11 +7,11 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
     using System.Collections.Concurrent;
     using System.Net;
     using System.Threading.Tasks;
-    using MartinCostello.LondonTravel.Site.Telemetry;
     using Microsoft.Azure.Documents;
     using Microsoft.Azure.Documents.Client;
     using Microsoft.Extensions.Logging;
     using Options;
+    using Telemetry;
 
     /// <summary>
     /// A class representing the default implementation of
@@ -99,8 +99,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
             await EnsureDatabaseExistsAsync();
 
-            var response = await _telemetry.TrackDependencyAsync(
-                "DocumentDB",
+            var response = await _telemetry.TrackDocumentDbAsync(
                 "CreateDocumentCollectionIfNotExists",
                 () =>
                 {
@@ -143,8 +142,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// </returns>
         private async Task EnsureDatabaseExistsAsync()
         {
-            var response = await _telemetry.TrackDependencyAsync(
-                "DocumentDB",
+            var response = await _telemetry.TrackDocumentDbAsync(
                 "CreateDatabaseIfNotExists",
                 () => _documentClient.CreateDatabaseIfNotExistsAsync(new Database() { Id = _databaseName }),
                 IsSuccessfulRequest);

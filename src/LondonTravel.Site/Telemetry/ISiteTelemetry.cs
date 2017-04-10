@@ -19,7 +19,7 @@ namespace MartinCostello.LondonTravel.Site.Telemetry
         /// <param name="dependencyName">External dependency name.</param>
         /// <param name="commandName">Dependency call command name.</param>
         /// <param name="operation">A delegate to a method that represents the external dependency call.</param>
-        /// <param name="wasResultSuccessful">An optional delegate to a method that determines whether the result is successful.</param>
+        /// <param name="wasSuccessful">An optional delegate to a method that determines whether the result is successful.</param>
         /// <returns>
         /// A <see cref="Task{TResult}"/> representing the result from invoking <paramref name="operation"/>.
         /// </returns>
@@ -27,7 +27,7 @@ namespace MartinCostello.LondonTravel.Site.Telemetry
             string dependencyName,
             string commandName,
             Func<Task<T>> operation,
-            Predicate<T> wasResultSuccessful = null);
+            Predicate<T> wasSuccessful = null);
 
         /// <summary>
         /// Tracks an event.

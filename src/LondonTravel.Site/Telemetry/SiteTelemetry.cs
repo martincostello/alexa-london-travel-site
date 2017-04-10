@@ -33,7 +33,7 @@ namespace MartinCostello.LondonTravel.Site.Telemetry
             string dependencyName,
             string commandName,
             Func<Task<T>> operation,
-            Predicate<T> wasResultSuccessful = null)
+            Predicate<T> wasSuccessful = null)
         {
             var startTime = DateTimeOffset.UtcNow;
             var stopwatch = Stopwatch.StartNew();
@@ -52,9 +52,9 @@ namespace MartinCostello.LondonTravel.Site.Telemetry
                     stopwatch.Stop();
                 }
 
-                if (wasResultSuccessful != null)
+                if (wasSuccessful != null)
                 {
-                    success = wasResultSuccessful(result);
+                    success = wasSuccessful(result);
                 }
             }
             catch (Exception)
