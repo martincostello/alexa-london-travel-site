@@ -41,12 +41,8 @@ namespace MartinCostello.LondonTravel.Site.Telemetry
         /// <param name="provider">The provider used to create the account.</param>
         public static void TrackAccountCreated(this ISiteTelemetry telemetry, string userId, string emailAddress, string provider)
         {
-            var properties = new Dictionary<string, string>()
-            {
-                { "UserId", userId },
-                { "EmailAddress", emailAddress },
-                { "Provider", provider },
-            };
+            var properties = CreateProperties(userId, provider);
+            properties["EmailAddress"] = emailAddress;
 
             telemetry.TrackEvent("AccountCreated", properties);
         }
@@ -59,11 +55,8 @@ namespace MartinCostello.LondonTravel.Site.Telemetry
         /// <param name="emailAddress">The email address.</param>
         public static void TrackAccountDeleted(this ISiteTelemetry telemetry, string userId, string emailAddress)
         {
-            var properties = new Dictionary<string, string>()
-            {
-                { "UserId", userId },
-                { "EmailAddress", emailAddress },
-            };
+            var properties = CreatePropertiesForUser(userId);
+            properties["EmailAddress"] = emailAddress;
 
             telemetry.TrackEvent("AccountDeleted", properties);
         }
@@ -75,10 +68,7 @@ namespace MartinCostello.LondonTravel.Site.Telemetry
         /// <param name="userId">The user Id.</param>
         public static void TrackAlexaLink(this ISiteTelemetry telemetry, string userId)
         {
-            var properties = new Dictionary<string, string>()
-            {
-                { "UserId", userId },
-            };
+            var properties = CreatePropertiesForUser(userId);
 
             telemetry.TrackEvent("AlexaLink", properties);
         }
@@ -90,10 +80,7 @@ namespace MartinCostello.LondonTravel.Site.Telemetry
         /// <param name="userId">The user Id.</param>
         public static void TrackApiPreferencesSuccess(this ISiteTelemetry telemetry, string userId)
         {
-            var properties = new Dictionary<string, string>()
-            {
-                { "UserId", userId },
-            };
+            var properties = CreatePropertiesForUser(userId);
 
             telemetry.TrackEvent("ApiPreferencesSuccess", properties);
         }
@@ -114,10 +101,7 @@ namespace MartinCostello.LondonTravel.Site.Telemetry
         /// <param name="userId">The user Id.</param>
         public static void TrackClaimsUpdated(this ISiteTelemetry telemetry, string userId)
         {
-            var properties = new Dictionary<string, string>()
-            {
-                { "UserId", userId },
-            };
+            var properties = CreatePropertiesForUser(userId);
 
             telemetry.TrackEvent("ClaimsUpdated", properties);
         }
@@ -135,12 +119,10 @@ namespace MartinCostello.LondonTravel.Site.Telemetry
             ICollection<string> oldLines,
             ICollection<string> newLines)
         {
-            var properties = new Dictionary<string, string>()
-            {
-                { "UserId", userId },
-                { "OldLines", string.Join(",", oldLines ?? Array.Empty<string>()) },
-                { "NewLines", string.Join(",", newLines ?? Array.Empty<string>()) },
-            };
+            var properties = CreatePropertiesForUser(userId);
+
+            properties["OldLines"] = string.Join(",", oldLines ?? Array.Empty<string>());
+            properties["NewLines"] = string.Join(",", newLines ?? Array.Empty<string>());
 
             telemetry.TrackEvent("LinePreferencesUpdated", properties);
         }
@@ -153,11 +135,7 @@ namespace MartinCostello.LondonTravel.Site.Telemetry
         /// <param name="provider">The external provider.</param>
         public static void TrackLinkExternalAccountFailed(this ISiteTelemetry telemetry, string userId, string provider)
         {
-            var properties = new Dictionary<string, string>()
-            {
-                { "UserId", userId },
-                { "Provider", provider },
-            };
+            var properties = CreateProperties(userId, provider);
 
             telemetry.TrackEvent("LinkExternalAccountFailed", properties);
         }
@@ -170,11 +148,7 @@ namespace MartinCostello.LondonTravel.Site.Telemetry
         /// <param name="provider">The external provider.</param>
         public static void TrackLinkExternalAccountStart(this ISiteTelemetry telemetry, string userId, string provider)
         {
-            var properties = new Dictionary<string, string>()
-            {
-                { "UserId", userId },
-                { "Provider", provider },
-            };
+            var properties = CreateProperties(userId, provider);
 
             telemetry.TrackEvent("LinkExternalAccountStart", properties);
         }
@@ -187,11 +161,7 @@ namespace MartinCostello.LondonTravel.Site.Telemetry
         /// <param name="provider">The external provider.</param>
         public static void TrackLinkExternalAccountSuccess(this ISiteTelemetry telemetry, string userId, string provider)
         {
-            var properties = new Dictionary<string, string>()
-            {
-                { "UserId", userId },
-                { "Provider", provider },
-            };
+            var properties = CreateProperties(userId, provider);
 
             telemetry.TrackEvent("LinkExternalAccountSuccess", properties);
         }
@@ -203,10 +173,7 @@ namespace MartinCostello.LondonTravel.Site.Telemetry
         /// <param name="userId">The user Id.</param>
         public static void TrackRemoveAlexaLink(this ISiteTelemetry telemetry, string userId)
         {
-            var properties = new Dictionary<string, string>()
-            {
-                { "UserId", userId },
-            };
+            var properties = CreatePropertiesForUser(userId);
 
             telemetry.TrackEvent("RemoveAlexaLink", properties);
         }
@@ -219,11 +186,7 @@ namespace MartinCostello.LondonTravel.Site.Telemetry
         /// <param name="provider">The external provider.</param>
         public static void TrackRemoveExternalAccountLink(this ISiteTelemetry telemetry, string userId, string provider)
         {
-            var properties = new Dictionary<string, string>()
-            {
-                { "UserId", userId },
-                { "Provider", provider },
-            };
+            var properties = CreateProperties(userId, provider);
 
             telemetry.TrackEvent("RemoveExternalAccountLink", properties);
         }
@@ -236,11 +199,7 @@ namespace MartinCostello.LondonTravel.Site.Telemetry
         /// <param name="provider">The external provider.</param>
         public static void TrackSignIn(this ISiteTelemetry telemetry, string userId, string provider)
         {
-            var properties = new Dictionary<string, string>()
-            {
-                { "UserId", userId },
-                { "Provider", provider },
-            };
+            var properties = CreateProperties(userId, provider);
 
             telemetry.TrackEvent("SignIn", properties);
         }
@@ -252,10 +211,7 @@ namespace MartinCostello.LondonTravel.Site.Telemetry
         /// <param name="userId">The user Id.</param>
         public static void TrackSignOut(this ISiteTelemetry telemetry, string userId)
         {
-            var properties = new Dictionary<string, string>()
-            {
-                { "UserId", userId },
-            };
+            var properties = CreatePropertiesForUser(userId);
 
             telemetry.TrackEvent("SignOut", properties);
         }
@@ -267,6 +223,38 @@ namespace MartinCostello.LondonTravel.Site.Telemetry
         public static void TrackSuspiciousCrawler(this ISiteTelemetry telemetry)
         {
             telemetry.TrackEvent("SuspiciousCrawler");
+        }
+
+        /// <summary>
+        /// Creates a properties dictionary container the specified user Id.
+        /// </summary>
+        /// <param name="userId">The user Id.</param>
+        /// <returns>
+        /// An <see cref="IDictionary{TKey, TValue}"/> containing the specified user Id.
+        /// </returns>
+        private static IDictionary<string, string> CreatePropertiesForUser(string userId)
+        {
+            return new Dictionary<string, string>()
+            {
+                { "UserId", userId },
+            };
+        }
+
+        /// <summary>
+        /// Creates a properties dictionary container the specified user Id and provider.
+        /// </summary>
+        /// <param name="userId">The user Id.</param>
+        /// <param name="provider">The provider.</param>
+        /// <returns>
+        /// An <see cref="IDictionary{TKey, TValue}"/> containing the specified user Id and provider.
+        /// </returns>
+        private static IDictionary<string, string> CreateProperties(string userId, string provider)
+        {
+            var properties = CreatePropertiesForUser(userId);
+
+            properties["Provider"] = provider;
+
+            return properties;
         }
     }
 }
