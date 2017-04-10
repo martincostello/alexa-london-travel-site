@@ -15,6 +15,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
     using Microsoft.Azure.Documents.Linq;
     using Microsoft.Extensions.Logging;
     using Options;
+    using Telemetry;
 
     /// <summary>
     /// A class representing an implementation of <see cref="IDocumentClient"/>. This class cannot be inherited.
@@ -30,6 +31,11 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// The <see cref="DocumentClient"/> being wrapped. This field is read-only.
         /// </summary>
         private readonly DocumentClient _client;
+
+        /// <summary>
+        /// The <see cref="ISiteTelemetry"/> to use. This field is read-only.
+        /// </summary>
+        private readonly ISiteTelemetry _telemetry;
 
         /// <summary>
         /// The <see cref="UserStoreOptions"/> to use. This field is read-only.
@@ -50,6 +56,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// Initializes a new instance of the <see cref="DocumentClientWrapper"/> class.
         /// </summary>
         /// <param name="initializer">The <see cref="IDocumentCollectionInitializer"/> to use.</param>
+        /// <param name="telemetry">The <see cref="ISiteTelemetry"/> to use.</param>
         /// <param name="options">The <see cref="UserStoreOptions"/> to use.</param>
         /// <param name="logger">The <see cref="ILogger{DocumentClientWrapper}"/> to use.</param>
         /// <exception cref="ArgumentNullException">
@@ -58,11 +65,16 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// <exception cref="ArgumentException">
         /// <paramref name="options"/> is invalid.
         /// </exception>
-        public DocumentClientWrapper(IDocumentCollectionInitializer initializer, UserStoreOptions options, ILogger<DocumentClientWrapper> logger)
+        public DocumentClientWrapper(
+            IDocumentCollectionInitializer initializer,
+            ISiteTelemetry telemetry,
+            UserStoreOptions options,
+            ILogger<DocumentClientWrapper> logger)
         {
             _initializer = initializer ?? throw new ArgumentNullException(nameof(initializer));
             _client = DocumentHelpers.CreateClient(options);
 
+            _telemetry = telemetry;
             _options = options;
             _logger = logger;
         }
@@ -89,7 +101,9 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
             _logger?.LogTrace($"Creating document in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'.");
 
-            var result = await _client.CreateDocumentAsync(BuildCollectionUri(), document);
+            var result = await _telemetry.TrackDocumentDbAsync(
+                "CreateDocument",
+                () => _client.CreateDocumentAsync(BuildCollectionUri(), document));
 
             _logger?.LogTrace($"Created document in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'. Id: '{result.Resource.Id}'.");
 
@@ -108,7 +122,10 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
             try
             {
-                await _client.DeleteDocumentAsync(BuildDocumentUri(id));
+                await _telemetry.TrackDocumentDbAsync(
+                    "DeleteDocument",
+                    () => _client.DeleteDocumentAsync(BuildDocumentUri(id)));
+
                 return true;
             }
             catch (DocumentClientException ex)
@@ -137,7 +154,8 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
             try
             {
-                Document document = await _client.ReadDocumentAsync(BuildDocumentUri(id));
+                Document document = await _telemetry.TrackDocumentDbAsync("ReadDocument", () => _client.ReadDocumentAsync(BuildDocumentUri(id)));
+
                 return (T)(dynamic)document;
             }
             catch (DocumentClientException ex)
@@ -166,7 +184,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             {
                 while (query.HasMoreResults)
                 {
-                    documents.AddRange(await query.ExecuteNextAsync<T>(cancellationToken));
+                    documents.AddRange(await _telemetry.TrackDocumentDbAsync("ExecuteNext", () => query.ExecuteNextAsync<T>(cancellationToken)));
                 }
             }
 
@@ -192,7 +210,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
             try
             {
-                Document response = await _client.ReplaceDocumentAsync(BuildDocumentUri(id), document, options);
+                Document response = await _telemetry.TrackDocumentDbAsync("ReplaceDocument", () => _client.ReplaceDocumentAsync(BuildDocumentUri(id), document, options));
 
                 _logger?.LogTrace($"Replaced document with Id '{id}' in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'.");
 
