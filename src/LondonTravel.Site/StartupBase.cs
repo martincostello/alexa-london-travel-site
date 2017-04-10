@@ -35,6 +35,7 @@ namespace MartinCostello.LondonTravel.Site
     using Serilog;
     using Services.Data;
     using Services.Tfl;
+    using Telemetry;
 
     /// <summary>
     /// A class representing the base class for startup logic for the application.
@@ -250,7 +251,8 @@ namespace MartinCostello.LondonTravel.Site
             services.AddSingleton<IClock>((_) => SystemClock.Instance);
             services.AddSingleton<IConfiguration>((_) => Configuration);
             services.AddSingleton<IDocumentCollectionInitializer, DocumentCollectionInitializer>();
-            services.AddSingleton<ITelemetryInitializer, Telemetry.SiteTelemetryInitializer>();
+            services.AddSingleton<ISiteTelemetry, SiteTelemetry>();
+            services.AddSingleton<ITelemetryInitializer, SiteTelemetryInitializer>();
             services.AddSingleton<ITflServiceFactory, TflServiceFactory>();
 
             services.AddScoped((p) => p.GetRequiredService<IHttpContextAccessor>().HttpContext);
