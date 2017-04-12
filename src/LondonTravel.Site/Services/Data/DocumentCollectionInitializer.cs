@@ -21,16 +21,6 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
     public sealed class DocumentCollectionInitializer : IDocumentCollectionInitializer
     {
         /// <summary>
-        /// The relative URI to create a database. This field is read-only.
-        /// </summary>
-        private static readonly Uri CreateDatabaseUri = new Uri("dbs", UriKind.Relative);
-
-        /// <summary>
-        /// The relative URI to create a collection. This field is read-only.
-        /// </summary>
-        private static readonly Uri CreateCollectionUri = new Uri("colls", UriKind.Relative);
-
-        /// <summary>
         /// The <see cref="DocumentClient"/> being wrapped. This field is read-only.
         /// </summary>
         private readonly DocumentClient _client;
@@ -111,7 +101,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             await EnsureDatabaseExistsAsync();
 
             Uri uri = BuildDatabaseUri();
-            Uri createUri = new Uri($"{uri}/{CreateCollectionUri}", UriKind.Relative);
+            Uri createUri = new Uri($"{uri}/{DocumentHelpers.CollectionsUriFragment}", UriKind.Relative);
 
             var response = await TrackAsync(
                 createUri,
@@ -143,7 +133,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// </returns>
         private async Task EnsureDatabaseExistsAsync()
         {
-            var response = await TrackAsync(CreateDatabaseUri, () => _client.CreateDatabaseIfNotExistsAsync(new Database() { Id = _databaseName }));
+            var response = await TrackAsync(DocumentHelpers.DatabasesUriFragment, () => _client.CreateDatabaseIfNotExistsAsync(new Database() { Id = _databaseName }));
 
             bool created = response.StatusCode == HttpStatusCode.Created;
 

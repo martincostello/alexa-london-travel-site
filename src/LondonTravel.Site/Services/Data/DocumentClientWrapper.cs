@@ -184,13 +184,13 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             _logger?.LogTrace($"Querying documents in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'.");
 
             Uri uri = BuildCollectionUri();
+            Uri queryUri = new Uri($"{uri}/{DocumentHelpers.DocumentsUriFragment}", UriKind.Relative);
 
-            // TODO Need to track queries again
             using (var query = _client.CreateDocumentQuery<T>(uri).Where(predicate).AsDocumentQuery())
             {
                 while (query.HasMoreResults)
                 {
-                    documents.AddRange(await query.ExecuteNextAsync<T>(cancellationToken));
+                    documents.AddRange(await TrackQueryAsync(queryUri, () => query.ExecuteNextAsync<T>(cancellationToken)));
                 }
             }
 
@@ -307,6 +307,21 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             where T : IResourceResponseBase
         {
             return DocumentHelpers.TrackAsync(_telemetry, _client.ServiceEndpoint, method, relativeUri, request);
+        }
+
+        /// <summary>
+        /// Tracks the specified query as an asynchronous operation.
+        /// </summary>
+        /// <typeparam name="T">The type of the query result.</typeparam>
+        /// <param name="relativeUri">The relative URI associated with the query.</param>
+        /// <param name="request">A delegate to a method representing the query.</param>
+        /// <returns>
+        /// A <see cref="Task{TResult}"/> representing the asynchronous operation which
+        /// returns an feed response of <typeparamref name="T"/> representing the result of the query.
+        /// </returns>
+        private Task<FeedResponse<T>> TrackQueryAsync<T>(Uri relativeUri, Func<Task<FeedResponse<T>>> request)
+        {
+            return DocumentHelpers.TrackQueryAsync(_telemetry, _client.ServiceEndpoint, relativeUri, request);
         }
     }
 }
