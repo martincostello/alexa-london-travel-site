@@ -12,7 +12,6 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
     using Microsoft.Extensions.Caching.Memory;
     using Newtonsoft.Json;
     using Options;
-    using Telemetry;
 
     /// <summary>
     /// A class representing the default implementation of <see cref="ITflService"/>.
@@ -23,11 +22,6 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
         /// The <see cref="HttpClient"/> to use. This field is read-only.
         /// </summary>
         private readonly HttpClient _client;
-
-        /// <summary>
-        /// The <see cref="ISiteTelemetry"/> to use. This field is read-only.
-        /// </summary>
-        private readonly ISiteTelemetry _telemetry;
 
         /// <summary>
         /// The <see cref="IMemoryCache"/> to use. This field is read-only.
@@ -48,13 +42,11 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
         /// Initializes a new instance of the <see cref="TflService"/> class.
         /// </summary>
         /// <param name="httpClient">The <see cref="HttpClient"/> to use.</param>
-        /// <param name="telemetry">The <see cref="ISiteTelemetry"/> to use.</param>
         /// <param name="cache">The <see cref="IMemoryCache"/> to use.</param>
         /// <param name="options">The <see cref="TflOptions"/> to use.</param>
-        public TflService(HttpClient httpClient, ISiteTelemetry telemetry, IMemoryCache cache, TflOptions options)
+        public TflService(HttpClient httpClient, IMemoryCache cache, TflOptions options)
         {
             _client = httpClient;
-            _telemetry = telemetry;
             _cache = cache;
             _options = options;
 
@@ -78,7 +70,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
             string relativeUrl = $"Line/Mode/{string.Join(",", _options.SupportedModes)}";
             Uri requestUri = BuildRequestUri(relativeUrl);
 
-            return await GetAsJsonWithCacheAsync<ICollection<LineInfo>>(requestUri, relativeUrl, CacheKey, cancellationToken);
+            return await GetAsJsonWithCacheAsync<ICollection<LineInfo>>(requestUri, CacheKey, cancellationToken);
         }
 
         /// <inheritdoc />
@@ -88,7 +80,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
             string relativeUrl = $"Line/{lineId}/StopPoints";
             Uri requestUri = BuildRequestUri(relativeUrl);
 
-            return await GetAsJsonWithCacheAsync<ICollection<StopPoint>>(requestUri, relativeUrl, cacheKey, cancellationToken);
+            return await GetAsJsonWithCacheAsync<ICollection<StopPoint>>(requestUri, cacheKey, cancellationToken);
         }
 
         /// <summary>
@@ -122,7 +114,6 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
         /// </summary>
         /// <typeparam name="T">The type of the resource to get.</typeparam>
         /// <param name="requestUri">The URI of the resource to get.</param>
-        /// <param name="commandName">The command name for dependency tracking.</param>
         /// <param name="cacheKey">The cache key to use for the resource.</param>
         /// <param name="cancellationToken">The cancellation token to use.</param>
         /// <returns>
@@ -131,13 +122,12 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
         /// </returns>
         private async Task<T> GetAsJsonWithCacheAsync<T>(
             Uri requestUri,
-            string commandName,
             string cacheKey,
             CancellationToken cancellationToken)
         {
             if (!_cache.TryGetValue(cacheKey, out T result))
             {
-                using (var response = await GetAsync(requestUri, commandName, cancellationToken))
+                using (var response = await _client.GetAsync(requestUri, cancellationToken))
                 {
                     response.EnsureSuccessStatusCode();
 
@@ -157,25 +147,6 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
             }
 
             return result;
-        }
-
-        /// <summary>
-        /// Performs an HTTP GET request to the TfL API as an asychronous operation.
-        /// </summary>
-        /// <param name="requestUri">The URI of the resource to get.</param>
-        /// <param name="commandName">The command name for dependency tracking.</param>
-        /// <param name="cancellationToken">The cancellation token to use.</param>
-        /// <returns>
-        /// A <see cref="Task{TResult}"/> representing the asychronous operation to get
-        /// the resource at the specified request URI.
-        /// </returns>
-        private Task<HttpResponseMessage> GetAsync(Uri requestUri, string commandName, CancellationToken cancellationToken)
-        {
-            return _telemetry.TrackDependencyAsync(
-                "TfL",
-                commandName,
-                () => _client.GetAsync(requestUri, cancellationToken),
-                (r) => r.IsSuccessStatusCode);
         }
     }
 }
