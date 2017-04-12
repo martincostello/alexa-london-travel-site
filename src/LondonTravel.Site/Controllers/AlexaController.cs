@@ -220,12 +220,24 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// </returns>
         private IActionResult RedirectForError(Uri redirectUri, string state, string errorCode = null)
         {
-            UriBuilder builder = new UriBuilder(redirectUri)
-            {
-                Fragment = $"state={(state == null ? string.Empty : Uri.EscapeDataString(state))}&error={errorCode ?? "server_error"}"
-            };
+            string fragment = $"state={(state == null ? string.Empty : Uri.EscapeDataString(state))}&error={errorCode ?? "server_error"}";
 
-            string url = builder.Uri.AbsoluteUri.ToString();
+            string url;
+
+            if (redirectUri == null)
+            {
+                url = $"{Url.RouteUrl(SiteRoutes.Home)}#{fragment}";
+            }
+            else
+            {
+                UriBuilder builder = new UriBuilder(redirectUri)
+                {
+                    Fragment = fragment
+                };
+
+                url = builder.Uri.AbsoluteUri.ToString();
+            }
+
             return Redirect(url);
         }
 

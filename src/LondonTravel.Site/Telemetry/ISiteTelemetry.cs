@@ -3,32 +3,13 @@
 
 namespace MartinCostello.LondonTravel.Site.Telemetry
 {
-    using System;
     using System.Collections.Generic;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// Defines the interface for recording telemetry.
     /// </summary>
     public interface ISiteTelemetry
     {
-        /// <summary>
-        /// Send information about external dependency call in the application as an asynchronous operation.
-        /// </summary>
-        /// <typeparam name="T">The type of the result of the external dependency.</typeparam>
-        /// <param name="dependencyName">External dependency name.</param>
-        /// <param name="commandName">Dependency call command name.</param>
-        /// <param name="operation">A delegate to a method that represents the external dependency call.</param>
-        /// <param name="wasSuccessful">An optional delegate to a method that determines whether the result is successful.</param>
-        /// <returns>
-        /// A <see cref="Task{TResult}"/> representing the result from invoking <paramref name="operation"/>.
-        /// </returns>
-        Task<T> TrackDependencyAsync<T>(
-            string dependencyName,
-            string commandName,
-            Func<Task<T>> operation,
-            Predicate<T> wasSuccessful = null);
-
         /// <summary>
         /// Tracks an event.
         /// </summary>
