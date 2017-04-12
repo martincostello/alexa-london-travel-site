@@ -108,46 +108,24 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// </returns>
         internal static async Task<FeedResponse<T>> TrackQueryAsync<T>(TelemetryClient client, Uri serviceEndpoint, Uri relativeUri, Func<Task<FeedResponse<T>>> request)
         {
-            var httpMethod = HttpMethod.Post.Method;
-            var requestUri = new Uri(serviceEndpoint, relativeUri);
-            var resourceName = requestUri.AbsolutePath;
-
-            resourceName = $"{httpMethod} {resourceName}";
-
-            var telemetry = new DependencyTelemetry();
-
-            client.Initialize(telemetry);
-
-            telemetry.Data = requestUri.OriginalString;
-            telemetry.Name = resourceName;
-            telemetry.Target = requestUri.Host;
-            telemetry.Type = "Http";
-
-            telemetry.Properties["httpMethod"] = httpMethod;
+            DependencyTelemetry telemetry = CreateTelemetry(client, serviceEndpoint, HttpMethod.Post, relativeUri);
 
             FeedResponse<T> result;
-            int statusCode = 0;
-
-            telemetry.Start();
+            HttpStatusCode statusCode = default(HttpStatusCode);
 
             try
             {
                 result = await request();
-                statusCode = (int)HttpStatusCode.OK;
+                statusCode = HttpStatusCode.OK;
             }
             catch (DocumentClientException ex)
             {
-                statusCode = (int)ex.StatusCode;
+                statusCode = ex.StatusCode ?? default(HttpStatusCode);
                 throw;
             }
             finally
             {
-                telemetry.Stop();
-
-                telemetry.ResultCode = statusCode > 0 ? statusCode.ToString(CultureInfo.InvariantCulture) : string.Empty;
-                telemetry.Success = statusCode > 0 && statusCode < 400;
-
-                client.TrackDependency(telemetry);
+                TrackDependency(statusCode, client, telemetry);
             }
 
             return result;
@@ -169,6 +147,45 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         internal static async Task<T> TrackAsync<T>(TelemetryClient client, Uri serviceEndpoint, HttpMethod method, Uri relativeUri, Func<Task<T>> request)
             where T : IResourceResponseBase
         {
+            DependencyTelemetry telemetry = CreateTelemetry(client, serviceEndpoint, method, relativeUri);
+
+            T result;
+            HttpStatusCode statusCode = default(HttpStatusCode);
+
+            try
+            {
+                result = await request();
+                statusCode = result.StatusCode;
+            }
+            catch (DocumentClientException ex)
+            {
+                statusCode = ex.StatusCode ?? default(HttpStatusCode);
+                throw;
+            }
+            finally
+            {
+                TrackDependency(statusCode, client, telemetry);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Creates a <see cref="DependencyTelemetry"/> for the specified request information.
+        /// </summary>
+        /// <param name="client">The <see cref="TelemetryClient"/> to use.</param>
+        /// <param name="serviceEndpoint">The DocumentDB service endpoint.</param>
+        /// <param name="method">The HTTP method.</param>
+        /// <param name="relativeUri">The relative URI.</param>
+        /// <returns>
+        /// The created instance of <see cref="DependencyTelemetry"/>.
+        /// </returns>
+        private static DependencyTelemetry CreateTelemetry(
+            TelemetryClient client,
+            Uri serviceEndpoint,
+            HttpMethod method,
+            Uri relativeUri)
+        {
             var httpMethod = method.Method;
             var requestUri = new Uri(serviceEndpoint, relativeUri);
             var resourceName = requestUri.AbsolutePath;
@@ -186,32 +203,27 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
             telemetry.Properties["httpMethod"] = httpMethod;
 
-            T result;
-            int statusCode = 0;
-
             telemetry.Start();
 
-            try
-            {
-                result = await request();
-                statusCode = (int)result.StatusCode;
-            }
-            catch (DocumentClientException ex)
-            {
-                statusCode = (int)ex.StatusCode;
-                throw;
-            }
-            finally
-            {
-                telemetry.Stop();
+            return telemetry;
+        }
 
-                telemetry.ResultCode = statusCode > 0 ? statusCode.ToString(CultureInfo.InvariantCulture) : string.Empty;
-                telemetry.Success = statusCode > 0 && statusCode < 400;
+        /// <summary>
+        /// Tracks the specified HTTP response for the specified telemetry.
+        /// </summary>
+        /// <param name="httpStatusCode">The HTTP status code associated with the result.</param>
+        /// <param name="client">The <see cref="TelemetryClient"/> to use.</param>
+        /// <param name="telemetry">The populated telemetry data.</param>
+        private static void TrackDependency(HttpStatusCode httpStatusCode, TelemetryClient client, DependencyTelemetry telemetry)
+        {
+            telemetry.Stop();
 
-                client.TrackDependency(telemetry);
-            }
+            int statusCode = (int)httpStatusCode;
 
-            return result;
+            telemetry.ResultCode = statusCode > 0 ? statusCode.ToString(CultureInfo.InvariantCulture) : string.Empty;
+            telemetry.Success = statusCode > 0 && statusCode < 400;
+
+            client.TrackDependency(telemetry);
         }
     }
 }
