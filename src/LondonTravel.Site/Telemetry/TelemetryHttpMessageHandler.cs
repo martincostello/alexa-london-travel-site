@@ -68,7 +68,7 @@ namespace MartinCostello.LondonTravel.Site.Telemetry
             _telemetryClient.Initialize(telemetry);
 
             telemetry.Data = requestUri.OriginalString;
-            telemetry.Name = request.RequestUri.AbsolutePath;
+            telemetry.Name = resourceName;
             telemetry.Target = requestUri.Host;
             telemetry.Type = "Http";
 
