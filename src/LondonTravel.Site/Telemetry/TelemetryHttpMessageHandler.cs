@@ -72,6 +72,8 @@ namespace MartinCostello.LondonTravel.Site.Telemetry
             telemetry.Target = requestUri.Host;
             telemetry.Type = "Http";
 
+            telemetry.Properties["httpMethod"] = httpMethod;
+
             telemetry.Start();
 
             return telemetry;
