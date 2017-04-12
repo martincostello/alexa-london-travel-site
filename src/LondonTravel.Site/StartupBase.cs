@@ -11,6 +11,7 @@ namespace MartinCostello.LondonTravel.Site
     using Autofac.Extensions.DependencyInjection;
     using Extensions;
     using Identity;
+    using Microsoft.ApplicationInsights.AspNetCore.Extensions;
     using Microsoft.ApplicationInsights.Extensibility;
     using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Builder;
@@ -167,12 +168,11 @@ namespace MartinCostello.LondonTravel.Site
         /// </returns>
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services
-                .AddApplicationInsightsTelemetry(Configuration)
-                .AddApplicationInsightsTelemetry((p) => p.ApplicationVersion = GitMetadata.Commit);
+            services.AddApplicationInsightsTelemetry(Configuration);
 
             services.AddOptions();
             services.Configure<SiteOptions>(Configuration.GetSection("Site"));
+            services.Configure<ApplicationInsightsServiceOptions>((p) => p.ApplicationVersion = GitMetadata.Commit);
 
             ConfigureDataProtection(services);
 
