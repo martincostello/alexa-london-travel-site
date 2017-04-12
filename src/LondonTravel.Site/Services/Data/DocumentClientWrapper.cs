@@ -8,14 +8,15 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
     using System.Linq;
     using System.Linq.Expressions;
     using System.Net;
+    using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
+    using Microsoft.ApplicationInsights;
     using Microsoft.Azure.Documents;
     using Microsoft.Azure.Documents.Client;
     using Microsoft.Azure.Documents.Linq;
     using Microsoft.Extensions.Logging;
     using Options;
-    using Telemetry;
 
     /// <summary>
     /// A class representing an implementation of <see cref="IDocumentClient"/>. This class cannot be inherited.
@@ -33,9 +34,9 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         private readonly DocumentClient _client;
 
         /// <summary>
-        /// The <see cref="ISiteTelemetry"/> to use. This field is read-only.
+        /// The <see cref="TelemetryClient"/> to use. This field is read-only.
         /// </summary>
-        private readonly ISiteTelemetry _telemetry;
+        private readonly TelemetryClient _telemetry;
 
         /// <summary>
         /// The <see cref="UserStoreOptions"/> to use. This field is read-only.
@@ -56,7 +57,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// Initializes a new instance of the <see cref="DocumentClientWrapper"/> class.
         /// </summary>
         /// <param name="initializer">The <see cref="IDocumentCollectionInitializer"/> to use.</param>
-        /// <param name="telemetry">The <see cref="ISiteTelemetry"/> to use.</param>
+        /// <param name="telemetry">The <see cref="TelemetryClient"/> to use.</param>
         /// <param name="options">The <see cref="UserStoreOptions"/> to use.</param>
         /// <param name="logger">The <see cref="ILogger{DocumentClientWrapper}"/> to use.</param>
         /// <exception cref="ArgumentNullException">
@@ -67,7 +68,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// </exception>
         public DocumentClientWrapper(
             IDocumentCollectionInitializer initializer,
-            ISiteTelemetry telemetry,
+            TelemetryClient telemetry,
             UserStoreOptions options,
             ILogger<DocumentClientWrapper> logger)
         {
@@ -101,9 +102,9 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
             _logger?.LogTrace($"Creating document in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'.");
 
-            var result = await _telemetry.TrackDocumentDbAsync(
-                "CreateDocument",
-                () => _client.CreateDocumentAsync(BuildCollectionUri(), document));
+            Uri uri = BuildCollectionUri();
+
+            var result = await TrackAsync(HttpMethod.Post, uri, () => _client.CreateDocumentAsync(uri, document));
 
             _logger?.LogTrace($"Created document in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'. Id: '{result.Resource.Id}'.");
 
@@ -122,9 +123,9 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
             try
             {
-                await _telemetry.TrackDocumentDbAsync(
-                    "DeleteDocument",
-                    () => _client.DeleteDocumentAsync(BuildDocumentUri(id)));
+                Uri uri = BuildDocumentUri(id);
+
+                await TrackAsync(HttpMethod.Delete, uri, () => _client.DeleteDocumentAsync(uri));
 
                 return true;
             }
@@ -154,7 +155,9 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
             try
             {
-                Document document = await _telemetry.TrackDocumentDbAsync("ReadDocument", () => _client.ReadDocumentAsync(BuildDocumentUri(id)));
+                Uri uri = BuildDocumentUri(id);
+
+                Document document = await TrackAsync(HttpMethod.Get, uri, () => _client.ReadDocumentAsync(uri));
 
                 return (T)(dynamic)document;
             }
@@ -180,11 +183,14 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
             _logger?.LogTrace($"Querying documents in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'.");
 
-            using (var query = _client.CreateDocumentQuery<T>(BuildCollectionUri()).Where(predicate).AsDocumentQuery())
+            Uri uri = BuildCollectionUri();
+
+            // TODO Need to track queries again
+            using (var query = _client.CreateDocumentQuery<T>(uri).Where(predicate).AsDocumentQuery())
             {
                 while (query.HasMoreResults)
                 {
-                    documents.AddRange(await _telemetry.TrackDocumentDbAsync("ExecuteNext", () => query.ExecuteNextAsync<T>(cancellationToken)));
+                    documents.AddRange(await query.ExecuteNextAsync<T>(cancellationToken));
                 }
             }
 
@@ -210,7 +216,9 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
             try
             {
-                Document response = await _telemetry.TrackDocumentDbAsync("ReplaceDocument", () => _client.ReplaceDocumentAsync(BuildDocumentUri(id), document, options));
+                Uri uri = BuildDocumentUri(id);
+
+                Document response = await TrackAsync(HttpMethod.Put, uri, () => _client.ReplaceDocumentAsync(uri, document, options));
 
                 _logger?.LogTrace($"Replaced document with Id '{id}' in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'.");
 
@@ -283,5 +291,22 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// The URI to use for the specified document.
         /// </returns>
         private Uri BuildDocumentUri(string id) => UriFactory.CreateDocumentUri(_options.DatabaseName, _options.CollectionName, id);
+
+        /// <summary>
+        /// Tracks the specified request as an asynchronous operation.
+        /// </summary>
+        /// <typeparam name="T">The type of the response.</typeparam>
+        /// <param name="method">The HTTP method associated with the request.</param>
+        /// <param name="relativeUri">The relative URI associated with the request.</param>
+        /// <param name="request">A delegate to a method representing the request.</param>
+        /// <returns>
+        /// A <see cref="Task{TResult}"/> representing the asynchronous operation which
+        /// returns an instance of <typeparamref name="T"/> representing the result of the request.
+        /// </returns>
+        private Task<T> TrackAsync<T>(HttpMethod method, Uri relativeUri, Func<Task<T>> request)
+            where T : IResourceResponseBase
+        {
+            return DocumentHelpers.TrackAsync(_telemetry, _client.ServiceEndpoint, method, relativeUri, request);
+        }
     }
 }

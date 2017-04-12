@@ -6,12 +6,13 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
     using System;
     using System.Collections.Concurrent;
     using System.Net;
+    using System.Net.Http;
     using System.Threading.Tasks;
+    using Microsoft.ApplicationInsights;
     using Microsoft.Azure.Documents;
     using Microsoft.Azure.Documents.Client;
     using Microsoft.Extensions.Logging;
     using Options;
-    using Telemetry;
 
     /// <summary>
     /// A class representing the default implementation of
@@ -20,14 +21,24 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
     public sealed class DocumentCollectionInitializer : IDocumentCollectionInitializer
     {
         /// <summary>
-        /// The <see cref="DocumentClient"/> being wrapped. This field is read-only.
+        /// The relative URI to create a database. This field is read-only.
         /// </summary>
-        private readonly DocumentClient _documentClient;
+        private static readonly Uri CreateDatabaseUri = new Uri("dbs", UriKind.Relative);
 
         /// <summary>
-        /// The <see cref="ISiteTelemetry"/> to use. This field is read-only.
+        /// The relative URI to create a collection. This field is read-only.
         /// </summary>
-        private readonly ISiteTelemetry _telemetry;
+        private static readonly Uri CreateCollectionUri = new Uri("colls", UriKind.Relative);
+
+        /// <summary>
+        /// The <see cref="DocumentClient"/> being wrapped. This field is read-only.
+        /// </summary>
+        private readonly DocumentClient _client;
+
+        /// <summary>
+        /// The <see cref="TelemetryClient"/> to use. This field is read-only.
+        /// </summary>
+        private readonly TelemetryClient _telemetry;
 
         /// <summary>
         /// The logger to use. This field is read-only.
@@ -52,7 +63,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// <summary>
         /// Initializes a new instance of the <see cref="DocumentCollectionInitializer"/> class.
         /// </summary>
-        /// <param name="telemetry">The <see cref="ISiteTelemetry"/> to use.</param>
+        /// <param name="telemetry">The <see cref="TelemetryClient"/> to use.</param>
         /// <param name="options">The <see cref="UserStoreOptions"/> to use.</param>
         /// <param name="logger">The <see cref="ILogger{DocumentCollectionInitializer}"/> to use.</param>
         /// <exception cref="ArgumentNullException">
@@ -62,11 +73,11 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// <paramref name="options"/> is invalid.
         /// </exception>
         public DocumentCollectionInitializer(
-            ISiteTelemetry telemetry,
+            TelemetryClient telemetry,
             UserStoreOptions options,
             ILogger<DocumentCollectionInitializer> logger)
         {
-            _documentClient = DocumentHelpers.CreateClient(options);
+            _client = DocumentHelpers.CreateClient(options);
             _existingCollections = new ConcurrentDictionary<string, bool>();
 
             _telemetry = telemetry;
@@ -79,7 +90,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         {
             if (!_disposed)
             {
-                _documentClient?.Dispose();
+                _client?.Dispose();
                 _disposed = true;
             }
         }
@@ -99,16 +110,18 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
             await EnsureDatabaseExistsAsync();
 
-            var response = await _telemetry.TrackDocumentDbAsync(
-                "CreateDocumentCollectionIfNotExists",
+            Uri uri = BuildDatabaseUri();
+            Uri createUri = new Uri($"{uri}/{CreateCollectionUri}", UriKind.Relative);
+
+            var response = await TrackAsync(
+                createUri,
                 () =>
                 {
-                    return _documentClient.CreateDocumentCollectionIfNotExistsAsync(
-                        BuildDatabaseUri(),
+                    return _client.CreateDocumentCollectionIfNotExistsAsync(
+                        uri,
                         new DocumentCollection() { Id = collectionName },
                         new RequestOptions() { OfferThroughput = 400 });
-                },
-                IsSuccessfulRequest);
+                });
 
             bool created = response.StatusCode == HttpStatusCode.Created;
 
@@ -123,18 +136,6 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         }
 
         /// <summary>
-        /// Returns whether the specified resource request was successful.
-        /// </summary>
-        /// <param name="response">The <see cref="IResourceResponseBase"/> to test for success.</param>
-        /// <returns>
-        /// <see langword="true"/> if <paramref name="response"/> was successful; otherwise <see langword="false"/>.
-        /// </returns>
-        private static bool IsSuccessfulRequest(IResourceResponseBase response)
-        {
-            return response.StatusCode >= HttpStatusCode.OK && response.StatusCode < HttpStatusCode.BadRequest;
-        }
-
-        /// <summary>
         /// Ensures that the database exists as an asynchronous operation.
         /// </summary>
         /// <returns>
@@ -142,10 +143,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// </returns>
         private async Task EnsureDatabaseExistsAsync()
         {
-            var response = await _telemetry.TrackDocumentDbAsync(
-                "CreateDatabaseIfNotExists",
-                () => _documentClient.CreateDatabaseIfNotExistsAsync(new Database() { Id = _databaseName }),
-                IsSuccessfulRequest);
+            var response = await TrackAsync(CreateDatabaseUri, () => _client.CreateDatabaseIfNotExistsAsync(new Database() { Id = _databaseName }));
 
             bool created = response.StatusCode == HttpStatusCode.Created;
 
@@ -164,12 +162,19 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         private Uri BuildDatabaseUri() => UriFactory.CreateDatabaseUri(_databaseName);
 
         /// <summary>
-        /// Builds a URI for the collection.
+        /// Tracks the specified request as an asynchronous operation.
         /// </summary>
-        /// <param name="collectionName">The name of the collection.</param>
+        /// <typeparam name="T">The type of the response.</typeparam>
+        /// <param name="relativeUri">The relative URI associated with the request.</param>
+        /// <param name="request">A delegate to a method representing the request.</param>
         /// <returns>
-        /// The URI to use for the collection.
+        /// A <see cref="Task{TResult}"/> representing the asynchronous operation which
+        /// returns an instance of <typeparamref name="T"/> representing the result of the request.
         /// </returns>
-        private Uri BuildCollectionUri(string collectionName) => UriFactory.CreateDocumentCollectionUri(_databaseName, collectionName);
+        private Task<T> TrackAsync<T>(Uri relativeUri, Func<Task<T>> request)
+            where T : IResourceResponseBase
+        {
+            return DocumentHelpers.TrackAsync(_telemetry, _client.ServiceEndpoint, HttpMethod.Post, relativeUri, request);
+        }
     }
 }

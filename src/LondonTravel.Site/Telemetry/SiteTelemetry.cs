@@ -3,10 +3,7 @@
 
 namespace MartinCostello.LondonTravel.Site.Telemetry
 {
-    using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Threading.Tasks;
     using Microsoft.ApplicationInsights;
 
     /// <summary>
@@ -26,48 +23,6 @@ namespace MartinCostello.LondonTravel.Site.Telemetry
         public SiteTelemetry(TelemetryClient client)
         {
             _client = client;
-        }
-
-        /// <inheritdoc />
-        public async Task<T> TrackDependencyAsync<T>(
-            string dependencyName,
-            string commandName,
-            Func<Task<T>> operation,
-            Predicate<T> wasSuccessful = null)
-        {
-            var startTime = DateTimeOffset.UtcNow;
-            var stopwatch = Stopwatch.StartNew();
-            var success = true;
-
-            T result;
-
-            try
-            {
-                try
-                {
-                    result = await operation();
-                }
-                finally
-                {
-                    stopwatch.Stop();
-                }
-
-                if (wasSuccessful != null)
-                {
-                    success = wasSuccessful(result);
-                }
-            }
-            catch (Exception)
-            {
-                success = false;
-                throw;
-            }
-            finally
-            {
-                _client.TrackDependency(dependencyName, commandName, startTime, stopwatch.Elapsed, success);
-            }
-
-            return result;
         }
 
         /// <inheritdoc />
