@@ -110,22 +110,31 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         {
             DependencyTelemetry telemetry = CreateTelemetry(client, serviceEndpoint, HttpMethod.Post, relativeUri);
 
-            FeedResponse<T> result;
+            string activityId = null;
+            double requestCharge = default(double);
             HttpStatusCode statusCode = default(HttpStatusCode);
+
+            FeedResponse<T> result;
 
             try
             {
                 result = await request();
+
+                activityId = result.ActivityId;
+                requestCharge = result.RequestCharge;
                 statusCode = HttpStatusCode.OK;
             }
             catch (DocumentClientException ex)
             {
+                activityId = ex.ActivityId;
+                requestCharge = ex.RequestCharge;
                 statusCode = ex.StatusCode ?? default(HttpStatusCode);
+
                 throw;
             }
             finally
             {
-                TrackDependency(statusCode, client, telemetry);
+                TrackDependency(statusCode, client, telemetry, requestCharge, activityId);
             }
 
             return result;
@@ -150,21 +159,30 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             DependencyTelemetry telemetry = CreateTelemetry(client, serviceEndpoint, method, relativeUri);
 
             T result;
+
+            string activityId = null;
+            double requestCharge = default(double);
             HttpStatusCode statusCode = default(HttpStatusCode);
 
             try
             {
                 result = await request();
+
+                activityId = result.ActivityId;
+                requestCharge = result.RequestCharge;
                 statusCode = result.StatusCode;
             }
             catch (DocumentClientException ex)
             {
+                activityId = ex.ActivityId;
+                requestCharge = ex.RequestCharge;
                 statusCode = ex.StatusCode ?? default(HttpStatusCode);
+
                 throw;
             }
             finally
             {
-                TrackDependency(statusCode, client, telemetry);
+                TrackDependency(statusCode, client, telemetry, requestCharge, activityId);
             }
 
             return result;
@@ -214,7 +232,14 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// <param name="httpStatusCode">The HTTP status code associated with the result.</param>
         /// <param name="client">The <see cref="TelemetryClient"/> to use.</param>
         /// <param name="telemetry">The populated telemetry data.</param>
-        private static void TrackDependency(HttpStatusCode httpStatusCode, TelemetryClient client, DependencyTelemetry telemetry)
+        /// <param name="requestCharge">The number of request units consumed, if known.</param>
+        /// <param name="activityId">The activity Id.</param>
+        private static void TrackDependency(
+            HttpStatusCode httpStatusCode,
+            TelemetryClient client,
+            DependencyTelemetry telemetry,
+            double requestCharge,
+            string activityId)
         {
             telemetry.Stop();
 
@@ -222,6 +247,16 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
             telemetry.ResultCode = statusCode > 0 ? statusCode.ToString(CultureInfo.InvariantCulture) : string.Empty;
             telemetry.Success = statusCode > 0 && statusCode < 400;
+
+            if (activityId != null)
+            {
+                telemetry.Properties["ActivityId"] = activityId;
+            }
+
+            if (requestCharge > default(double))
+            {
+                telemetry.Properties["RequestCharge"] = requestCharge.ToString(CultureInfo.InvariantCulture);
+            }
 
             client.TrackDependency(telemetry);
         }

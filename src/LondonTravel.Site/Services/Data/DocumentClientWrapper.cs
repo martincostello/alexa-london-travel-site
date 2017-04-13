@@ -100,13 +100,13 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
             await EnsureCollectionExistsAsync();
 
-            _logger?.LogTrace($"Creating document in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'.");
+            _logger.LogTrace($"Creating document in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'.");
 
             Uri uri = BuildCollectionUri();
 
             var result = await TrackAsync(HttpMethod.Post, uri, () => _client.CreateDocumentAsync(uri, document));
 
-            _logger?.LogTrace($"Created document in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'. Id: '{result.Resource.Id}'.");
+            _logger.LogTrace($"Created document in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'. Id: '{result.Resource.Id}'.");
 
             return result.Resource.Id;
         }
@@ -133,7 +133,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             {
                 if (ex.StatusCode != HttpStatusCode.NotFound)
                 {
-                    _logger?.LogError(default(EventId), ex, $"Failed to delete document with Id '{id}'.");
+                    _logger.LogError(default(EventId), ex, $"Failed to delete document with Id '{id}'.");
                     throw;
                 }
 
@@ -159,13 +159,13 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
                 Document document = await TrackAsync(HttpMethod.Get, uri, () => _client.ReadDocumentAsync(uri));
 
-                return (T)(dynamic)document;
+                result = (T)(dynamic)document;
             }
             catch (DocumentClientException ex)
             {
                 if (ex.StatusCode != HttpStatusCode.NotFound)
                 {
-                    _logger?.LogError(default(EventId), ex, $"Failed to query document with Id '{id}'.");
+                    _logger.LogError(default(EventId), ex, $"Failed to query document with Id '{id}'.");
                     throw;
                 }
             }
@@ -181,7 +181,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
             var documents = new List<T>();
 
-            _logger?.LogTrace($"Querying documents in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'.");
+            _logger.LogTrace($"Querying documents in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'.");
 
             Uri uri = BuildCollectionUri();
             Uri queryUri = new Uri($"{uri}/{DocumentHelpers.DocumentsUriFragment}", UriKind.Relative);
@@ -194,7 +194,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
                 }
             }
 
-            _logger?.LogTrace($"Found {documents.Count:N0} document(s) in collection '{_options.CollectionName}' of database '{_options.DatabaseName}' that matched query.");
+            _logger.LogTrace($"Found {documents.Count:N0} document(s) in collection '{_options.CollectionName}' of database '{_options.DatabaseName}' that matched query.");
 
             return documents;
         }
@@ -210,7 +210,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
             await EnsureCollectionExistsAsync();
 
-            _logger?.LogTrace($"Replacing document with Id '{id}' in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'.");
+            _logger.LogTrace($"Replacing document with Id '{id}' in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'.");
 
             RequestOptions options = GetOptionsForETag(etag);
 
@@ -220,7 +220,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
                 Document response = await TrackAsync(HttpMethod.Put, uri, () => _client.ReplaceDocumentAsync(uri, document, options));
 
-                _logger?.LogTrace($"Replaced document with Id '{id}' in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'.");
+                _logger.LogTrace($"Replaced document with Id '{id}' in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'.");
 
                 return (T)(dynamic)response;
             }
@@ -228,11 +228,11 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             {
                 if (ex.StatusCode != HttpStatusCode.PreconditionFailed)
                 {
-                    _logger?.LogError(default(EventId), ex, $"Failed to replace document with Id '{id}' in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'.");
+                    _logger.LogError(default(EventId), ex, $"Failed to replace document with Id '{id}' in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'.");
                     throw;
                 }
 
-                _logger?.LogWarning($"Failed to replace document with Id '{id}' in collection '{_options.CollectionName}' of database '{_options.DatabaseName}' as the write would conflict. ETag: '{etag}'.");
+                _logger.LogWarning($"Failed to replace document with Id '{id}' in collection '{_options.CollectionName}' of database '{_options.DatabaseName}' as the write would conflict. ETag: '{etag}'.");
             }
 
             return null;
