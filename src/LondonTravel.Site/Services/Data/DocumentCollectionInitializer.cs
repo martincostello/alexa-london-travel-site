@@ -117,7 +117,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
             if (created)
             {
-                _logger?.LogInformation($"Created collection '{collectionName}' in database '{_databaseName}'.");
+                _logger.LogInformation($"Created collection '{collectionName}' in database '{_databaseName}'.");
             }
 
             _existingCollections.AddOrUpdate(collectionName, created, (p, r) => true);
@@ -133,13 +133,15 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// </returns>
         private async Task EnsureDatabaseExistsAsync()
         {
-            var response = await TrackAsync(DocumentHelpers.DatabasesUriFragment, () => _client.CreateDatabaseIfNotExistsAsync(new Database() { Id = _databaseName }));
+            var response = await TrackAsync(
+                DocumentHelpers.DatabasesUriFragment,
+                () => _client.CreateDatabaseIfNotExistsAsync(new Database() { Id = _databaseName }));
 
             bool created = response.StatusCode == HttpStatusCode.Created;
 
             if (created)
             {
-                _logger?.LogInformation($"Created database '{_databaseName}'.");
+                _logger.LogInformation($"Created database '{_databaseName}'.");
             }
         }
 
