@@ -138,8 +138,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 throw new ArgumentNullException(nameof(userId));
             }
 
-            var results = await _client.GetAsync<LondonTravelUser>((p) => p.Id == userId, cancellationToken);
-            return results.FirstOrDefault();
+            return await _client.GetAsync<LondonTravelUser>(userId);
         }
 
         /// <inheritdoc />
