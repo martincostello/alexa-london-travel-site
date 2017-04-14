@@ -71,9 +71,6 @@ namespace MartinCostello.LondonTravel.Site.Identity
             ILogger logger,
             Func<T, IDictionary<string, string>> propertiesProvider)
         {
-            string errors = string.Join(";", context.Request.Query.Select((p) => $"'{p.Key}' = '{p.Value}'"));
-            logger?.LogError(default(EventId), context.Failure, $"Failed to sign-in using '{provider}': '{context.Failure.Message}'. Errors: {errors}.");
-
             string path = GetSiteErrorRedirect(context, secureDataFormat, propertiesProvider);
 
             if (string.IsNullOrEmpty(path) ||
@@ -84,15 +81,28 @@ namespace MartinCostello.LondonTravel.Site.Identity
 
             SiteMessage message;
 
-            if (string.Equals(context.Request.Query["error"].FirstOrDefault(), "access_denied", StringComparison.Ordinal) ||
-                string.Equals(context.Request.Query["error_reason"].FirstOrDefault(), "user_denied", StringComparison.Ordinal) ||
-                context.Request.Query.ContainsKey("denied"))
+            if (WasPermissionDenied(context))
             {
                 message = SiteMessage.LinkDenied;
+                logger.LogTrace("User denied permission.");
             }
             else
             {
                 message = SiteMessage.LinkFailed;
+
+                var eventId = default(EventId);
+                string errors = string.Join(";", context.Request.Query.Select((p) => $"'{p.Key}' = '{p.Value}'"));
+                string logMessage = $"Failed to sign-in using '{provider}': '{context.Failure.Message}'. Errors: {errors}.";
+
+                if (IsCorrelationFailure(context))
+                {
+                    // Not a server-side problem, so do not create log noise
+                    logger.LogTrace(eventId, context.Failure, logMessage);
+                }
+                else
+                {
+                    logger.LogError(eventId, context.Failure, logMessage);
+                }
             }
 
             context.Response.Redirect($"{path}?Message={message}");
@@ -130,6 +140,36 @@ namespace MartinCostello.LondonTravel.Site.Identity
         }
 
         /// <summary>
+        /// Returns whether the specified failure context indicates that request correlation for XSRF failed.
+        /// </summary>
+        /// <param name="context">The current failure context.</param>
+        /// <returns>
+        /// <see langword="true"/> if request correlation failed; otherwise <see langword="false"/>.
+        /// </returns>
+        private static bool IsCorrelationFailure(FailureContext context)
+        {
+            // See https://github.com/aspnet/Security/blob/ad425163b29b1e09a41e84423b0dcbac797c9164/src/Microsoft.AspNetCore.Authentication.OAuth/OAuthHandler.cs#L66
+            // and https://github.com/aspnet/Security/blob/2d1c56ce5ccfc15c78dd49cee772f6be473f3ee2/src/Microsoft.AspNetCore.Authentication/RemoteAuthenticationHandler.cs#L203
+            // This effectively means that the user did not pass their cookies along correctly to correlate the request.
+            return string.Equals(context.Failure.Message, "Correlation failed.", StringComparison.Ordinal);
+        }
+
+        /// <summary>
+        /// Returns whether the specified failure context indicates the user denied account linking permission.
+        /// </summary>
+        /// <param name="context">The current failure context.</param>
+        /// <returns>
+        /// <see langword="true"/> if account linking permission was denied; otherwise <see langword="false"/>.
+        /// </returns>
+        private static bool WasPermissionDenied(FailureContext context)
+        {
+            return
+                string.Equals(context.Request.Query["error"].FirstOrDefault(), "access_denied", StringComparison.Ordinal) ||
+                string.Equals(context.Request.Query["error_reason"].FirstOrDefault(), "user_denied", StringComparison.Ordinal) ||
+                context.Request.Query.ContainsKey("denied");
+        }
+
+        /// <summary>
         /// Handles a remote failure.
         /// </summary>
         /// <param name="context">The failure context.</param>
@@ -149,7 +189,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
             }
             catch (Exception ex)
             {
-                _logger?.LogError(default(EventId), ex, $"Failed to handle remote failure: {ex.Message}.");
+                _logger.LogError(default(EventId), ex, $"Failed to handle remote failure: {ex.Message}.");
 
                 if (!context.HandledResponse)
                 {
