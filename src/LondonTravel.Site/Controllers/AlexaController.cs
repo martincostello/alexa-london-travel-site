@@ -178,11 +178,11 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             if (hasExistingToken)
             {
-                _logger.LogInformation($"Regenerating Alexa acccess token for user '{user.Id}'.");
+                _logger.LogTrace($"Regenerating Alexa acccess token for user '{user.Id}'.");
             }
             else
             {
-                _logger.LogInformation($"Generating Alexa acccess token for user '{user.Id}'.");
+                _logger.LogTrace($"Generating Alexa acccess token for user '{user.Id}'.");
             }
 
             user.AlexaToken = accessToken;
