@@ -329,7 +329,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                     return BadRequest();
                 }
 
-                _logger.LogInformation($"Updating line preferences for user '{user.Id}'.");
+                _logger.LogTrace($"Updating line preferences for user '{user.Id}'.");
 
                 var existingLines = user.FavoriteLines;
                 var newLines = user.FavoriteLines = (model.FavoriteLines ?? Array.Empty<string>())
