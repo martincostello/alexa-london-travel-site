@@ -26,7 +26,6 @@ install:
   - export PATH="$DOTNET_INSTALL_DIR:$PATH"
   - dotnet --info
   - npm install -g npm
-  - npm install -g bower
   - npm install -g gulp
   - npm install -g typescript
 

@@ -64,7 +64,6 @@
     <PackageReference Include="WindowsAzure.Storage" Version="8.1.1" />
   </ItemGroup>
   <Target Name="BundleAssets" BeforeTargets="PrepareForPublish">
-    <Exec Command="bower install --loglevel=error" Condition=" '$(InstallWebPackages)' == 'true' " />
     <Exec Command="npm install --loglevel=error" Condition=" '$(InstallWebPackages)' == 'true' " />
     <Exec Command="gulp build" />
   </Target>
