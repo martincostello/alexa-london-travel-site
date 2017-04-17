@@ -10,6 +10,11 @@ branches:
   only:
     - master
 
+cache:
+  - src\LondonTravel.Site\node_modules
+  - '%APPDATA%\npm-cache'
+  - '%USERPROFILE%\.nuget\packages'
+
 install:
   - ps: npm install -g npm --loglevel=error
   - ps: npm install -g gulp --loglevel=error
