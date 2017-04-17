@@ -11,7 +11,7 @@ branches:
     - master
 
 cache:
-  - node_modules
+  - src\LondonTravel.Site\node_modules
   - '%APPDATA%\npm-cache'
   - '%USERPROFILE%\.nuget\packages'
 

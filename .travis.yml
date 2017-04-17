@@ -13,7 +13,7 @@ branches:
 
 cache:
   directories:
-    - node_modules
+    - src/LondonTravel.Site/node_modules
 
 addons:
   apt:
