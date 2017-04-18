@@ -13,6 +13,7 @@ branches:
 
 cache:
   directories:
+    - /home/travis/.npm
     - src/LondonTravel.Site/node_modules
 
 addons:
