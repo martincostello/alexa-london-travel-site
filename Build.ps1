@@ -63,9 +63,9 @@ function DotNetRestore { param([string]$Project)
 
 function DotNetBuild { param([string]$Project, [string]$Configuration, [string]$VersionSuffix)
     if ($VersionSuffix) {
-        & $dotnet build $Project --output $OutputPath --framework $framework --configuration $Configuration --version-suffix "$VersionSuffix"
+        & $dotnet build $Project --output $OutputPath --framework $framework --configuration $Configuration --version-suffix "$VersionSuffix" /maxcpucount:1
     } else {
-        & $dotnet build $Project --output $OutputPath --framework $framework --configuration $Configuration
+        & $dotnet build $Project --output $OutputPath --framework $framework --configuration $Configuration /maxcpucount:1
     }
     if ($LASTEXITCODE -ne 0) {
         throw "dotnet build failed with exit code $LASTEXITCODE"
