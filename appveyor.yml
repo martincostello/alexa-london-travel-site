@@ -18,7 +18,6 @@ cache:
 install:
   - ps: npm install -g npm@4.5.0 --loglevel=error
   - ps: npm install -g gulp@3.9.1 --loglevel=error
-  - ps: npm install -g typescript@2.2.2 --loglevel=error
 
 build_script:
   - ps: .\Build.ps1
