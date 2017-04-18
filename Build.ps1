@@ -1,11 +1,11 @@
 ﻿param(
-    [Parameter(Mandatory=$false)][bool]   $RestorePackages  = $false,
-    [Parameter(Mandatory=$false)][string] $Configuration    = "Release",
-    [Parameter(Mandatory=$false)][string] $VersionSuffix    = "",
-    [Parameter(Mandatory=$false)][string] $OutputPath       = "",
-    [Parameter(Mandatory=$false)][bool]   $PatchVersion     = $false,
-    [Parameter(Mandatory=$false)][bool]   $RunTests         = $true,
-    [Parameter(Mandatory=$false)][bool]   $PublishWebsite   = $true
+    [Parameter(Mandatory=$false)][bool]   $RestorePackages = $false,
+    [Parameter(Mandatory=$false)][string] $Configuration   = "Release",
+    [Parameter(Mandatory=$false)][string] $VersionSuffix   = "",
+    [Parameter(Mandatory=$false)][string] $OutputPath      = "",
+    [Parameter(Mandatory=$false)][bool]   $PatchVersion    = $false,
+    [Parameter(Mandatory=$false)][bool]   $RunTests        = $true,
+    [Parameter(Mandatory=$false)][bool]   $PublishWebsite  = $true
 )
 
 $ErrorActionPreference = "Stop"
@@ -26,7 +26,7 @@ if ($env:CI -ne $null -Or $env:TF_BUILD -ne $null) {
 
 $installDotNetSdk = $false;
 
-if (((Get-Command "dotnet.exe" -ErrorAction SilentlyContinue) -eq $null) -and ((Get-Command "dotnet" -ErrorAction SilentlyContinue) -eq $null))  {
+if (((Get-Command "dotnet.exe" -ErrorAction SilentlyContinue) -eq $null) -and ((Get-Command "dotnet" -ErrorAction SilentlyContinue) -eq $null)) {
     Write-Host "The .NET Core SDK is not installed."
     $installDotNetSdk = $true
 }
@@ -49,9 +49,9 @@ if ($installDotNetSdk -eq $true) {
     }
 
     $env:PATH = "$env:DOTNET_INSTALL_DIR;$env:PATH"
-    $dotnet   = Join-Path "$env:DOTNET_INSTALL_DIR" "dotnet"
+    $dotnet = Join-Path "$env:DOTNET_INSTALL_DIR" "dotnet"
 } else {
-    $dotnet   = "dotnet"
+    $dotnet = "dotnet"
 }
 
 function DotNetRestore { param([string]$Project)
@@ -108,11 +108,6 @@ if ($PatchVersion -eq $true) {
     Set-Content ".\AssemblyVersion.cs" $assemblyVersionWithMetadata -Encoding utf8
 }
 
-$projects = @(
-    (Join-Path $solutionPath "src\LondonTravel.Site\LondonTravel.Site.csproj"),
-    (Join-Path $solutionPath "tests\LondonTravel.Site.Tests\LondonTravel.Site.Tests.csproj")
-)
-
 $testProjects = @(
     (Join-Path $solutionPath "tests\LondonTravel.Site.Tests\LondonTravel.Site.Tests.csproj")
 )
@@ -126,10 +121,8 @@ if ($RestorePackages -eq $true) {
     DotNetRestore $solutionFile
 }
 
-Write-Host "Building $($projects.Count) projects..." -ForegroundColor Green
-ForEach ($project in $projects) {
-    DotNetBuild $project $Configuration $PrereleaseSuffix
-}
+Write-Host "Building solution..." -ForegroundColor Green
+DotNetBuild $solutionFile $Configuration $PrereleaseSuffix
 
 if ($RunTests -eq $true) {
     Write-Host "Testing $($testProjects.Count) project(s)..." -ForegroundColor Green
