@@ -133,6 +133,8 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// </returns>
         private async Task EnsureDatabaseExistsAsync()
         {
+            await _client.OpenAsync();
+
             var response = await TrackAsync(
                 DocumentHelpers.DatabasesUriFragment,
                 () => _client.CreateDatabaseIfNotExistsAsync(new Database() { Id = _databaseName }));
