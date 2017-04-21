@@ -26,11 +26,6 @@ namespace MartinCostello.LondonTravel.Site.Identity
         private readonly IDocumentClient _client;
 
         /// <summary>
-        /// Whether the instance has been disposed.
-        /// </summary>
-        private bool _disposed;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="UserStore"/> class.
         /// </summary>
         /// <param name="client">The <see cref="IDocumentClient"/> to use.</param>
@@ -45,8 +40,6 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <inheritdoc />
         public Task AddLoginAsync(LondonTravelUser user, UserLoginInfo login, CancellationToken cancellationToken)
         {
-            ThrowIfDisposed();
-
             if (user == null)
             {
                 throw new ArgumentNullException(nameof(user));
@@ -70,8 +63,6 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <inheritdoc />
         public async Task<IdentityResult> CreateAsync(LondonTravelUser user, CancellationToken cancellationToken)
         {
-            ThrowIfDisposed();
-
             if (user == null)
             {
                 throw new ArgumentNullException(nameof(user));
@@ -85,8 +76,6 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <inheritdoc />
         public async Task<IdentityResult> DeleteAsync(LondonTravelUser user, CancellationToken cancellationToken)
         {
-            ThrowIfDisposed();
-
             if (user == null)
             {
                 throw new ArgumentNullException(nameof(user));
@@ -107,18 +96,12 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <inheritdoc />
         public void Dispose()
         {
-            if (!_disposed)
-            {
-                _client?.Dispose();
-                _disposed = true;
-            }
+            // Not used
         }
 
         /// <inheritdoc />
         public async Task<LondonTravelUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
         {
-            ThrowIfDisposed();
-
             if (normalizedEmail == null)
             {
                 throw new ArgumentNullException(nameof(normalizedEmail));
@@ -131,8 +114,6 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <inheritdoc />
         public async Task<LondonTravelUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
-            ThrowIfDisposed();
-
             if (userId == null)
             {
                 throw new ArgumentNullException(nameof(userId));
@@ -144,8 +125,6 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <inheritdoc />
         public async Task<LondonTravelUser> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
         {
-            ThrowIfDisposed();
-
             if (loginProvider == null)
             {
                 throw new ArgumentNullException(nameof(loginProvider));
@@ -166,8 +145,6 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <inheritdoc />
         public async Task<LondonTravelUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
-            ThrowIfDisposed();
-
             if (normalizedUserName == null)
             {
                 throw new ArgumentNullException(nameof(normalizedUserName));
@@ -202,8 +179,6 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <inheritdoc />
         public Task<IList<UserLoginInfo>> GetLoginsAsync(LondonTravelUser user, CancellationToken cancellationToken)
         {
-            ThrowIfDisposed();
-
             if (user == null)
             {
                 throw new ArgumentNullException(nameof(user));
@@ -409,17 +384,6 @@ namespace MartinCostello.LondonTravel.Site.Identity
             else
             {
                 return ResultForError("Conflict", "The user could not be updated as the ETag value is out-of-date.");
-            }
-        }
-
-        /// <summary>
-        /// Throws an exception if the instance has been disposed.
-        /// </summary>
-        private void ThrowIfDisposed()
-        {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException(nameof(UserStore));
             }
         }
 

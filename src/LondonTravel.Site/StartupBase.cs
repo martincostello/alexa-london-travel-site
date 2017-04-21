@@ -251,6 +251,7 @@ namespace MartinCostello.LondonTravel.Site
             services.AddSingleton<IClock>((_) => SystemClock.Instance);
             services.AddSingleton<IConfiguration>((_) => Configuration);
             services.AddSingleton<IDocumentCollectionInitializer, DocumentCollectionInitializer>();
+            services.AddSingleton<IDocumentClient, DocumentClientWrapper>();
             services.AddSingleton<ISiteTelemetry, SiteTelemetry>();
             services.AddSingleton<ITelemetryInitializer, SiteTelemetryInitializer>();
             services.AddSingleton<ITflServiceFactory, TflServiceFactory>();
@@ -261,8 +262,6 @@ namespace MartinCostello.LondonTravel.Site
             services.AddScoped((p) => p.GetRequiredService<SiteOptions>().Tfl);
 
             services.AddScoped<SiteResources>();
-            services.AddScoped<IDocumentClient, DocumentClientWrapper>();
-
             services.AddTransient<TelemetryHttpMessageHandler>();
             services.AddTransient((p) => new HttpClient(p.GetRequiredService<TelemetryHttpMessageHandler>()));
             services.AddTransient<ITflService, TflService>();

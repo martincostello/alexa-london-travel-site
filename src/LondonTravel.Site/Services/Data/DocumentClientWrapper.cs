@@ -21,7 +21,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
     /// <summary>
     /// A class representing an implementation of <see cref="IDocumentClient"/>. This class cannot be inherited.
     /// </summary>
-    public sealed class DocumentClientWrapper : IDocumentClient, IDisposable
+    public sealed class DocumentClientWrapper : IDocumentClient
     {
         /// <summary>
         /// The <see cref="IDocumentCollectionInitializer"/> to use. This field is read-only.
@@ -49,11 +49,6 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         private readonly ILogger<DocumentClientWrapper> _logger;
 
         /// <summary>
-        /// Whether the instance has been disposed.
-        /// </summary>
-        private bool _disposed;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="DocumentClientWrapper"/> class.
         /// </summary>
         /// <param name="initializer">The <see cref="IDocumentCollectionInitializer"/> to use.</param>
@@ -78,16 +73,6 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             _telemetry = telemetry;
             _options = options;
             _logger = logger;
-        }
-
-        /// <inheritdoc />
-        public void Dispose()
-        {
-            if (!_disposed)
-            {
-                _client?.Dispose();
-                _disposed = true;
-            }
         }
 
         /// <inheritdoc />

@@ -96,26 +96,25 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             string authorizationHeader = "bearer BAR";
 
-            using (var client = CreateClient(users))
+            var client = CreateClient(users);
+
+            using (var target = CreateTarget(client))
             {
-                using (var target = CreateTarget(client))
-                {
-                    // Act
-                    IActionResult actual = await target.GetPreferences(authorizationHeader, default(CancellationToken));
+                // Act
+                IActionResult actual = await target.GetPreferences(authorizationHeader, default(CancellationToken));
 
-                    // Assert
-                    actual.ShouldNotBeNull();
+                // Assert
+                actual.ShouldNotBeNull();
 
-                    var objectResult = actual.ShouldBeOfType<ObjectResult>();
+                var objectResult = actual.ShouldBeOfType<ObjectResult>();
 
-                    objectResult.StatusCode.ShouldBe(401);
-                    objectResult.Value.ShouldNotBeNull();
+                objectResult.StatusCode.ShouldBe(401);
+                objectResult.Value.ShouldNotBeNull();
 
-                    var data = objectResult.Value.ShouldBeOfType<ErrorResponse>();
+                var data = objectResult.Value.ShouldBeOfType<ErrorResponse>();
 
-                    data.Message.ShouldBe("Unauthorized.");
-                    data.StatusCode.ShouldBe(401);
-                }
+                data.Message.ShouldBe("Unauthorized.");
+                data.StatusCode.ShouldBe(401);
             }
         }
 
@@ -134,26 +133,25 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             string authorizationHeader = "bearer BAR";
 
-            using (var client = CreateClient(users))
+            var client = CreateClient(users);
+
+            using (var target = CreateTarget(client))
             {
-                using (var target = CreateTarget(client))
-                {
-                    // Act
-                    IActionResult actual = await target.GetPreferences(authorizationHeader, default(CancellationToken));
+                // Act
+                IActionResult actual = await target.GetPreferences(authorizationHeader, default(CancellationToken));
 
-                    // Assert
-                    actual.ShouldNotBeNull();
+                // Assert
+                actual.ShouldNotBeNull();
 
-                    var objectResult = actual.ShouldBeOfType<ObjectResult>();
+                var objectResult = actual.ShouldBeOfType<ObjectResult>();
 
-                    objectResult.StatusCode.ShouldBe(401);
-                    objectResult.Value.ShouldNotBeNull();
+                objectResult.StatusCode.ShouldBe(401);
+                objectResult.Value.ShouldNotBeNull();
 
-                    var data = objectResult.Value.ShouldBeOfType<ErrorResponse>();
+                var data = objectResult.Value.ShouldBeOfType<ErrorResponse>();
 
-                    data.Message.ShouldBe("Unauthorized.");
-                    data.StatusCode.ShouldBe(401);
-                }
+                data.Message.ShouldBe("Unauthorized.");
+                data.StatusCode.ShouldBe(401);
             }
         }
 
@@ -174,26 +172,25 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             string authorizationHeader = "BEARER BAR";
 
-            using (var client = CreateClient(users))
+            var client = CreateClient(users);
+
+            using (var target = CreateTarget(client))
             {
-                using (var target = CreateTarget(client))
-                {
-                    // Act
-                    IActionResult actual = await target.GetPreferences(authorizationHeader, default(CancellationToken));
+                // Act
+                IActionResult actual = await target.GetPreferences(authorizationHeader, default(CancellationToken));
 
-                    // Assert
-                    actual.ShouldNotBeNull();
+                // Assert
+                actual.ShouldNotBeNull();
 
-                    var objectResult = actual.ShouldBeOfType<OkObjectResult>();
+                var objectResult = actual.ShouldBeOfType<OkObjectResult>();
 
-                    objectResult.StatusCode.ShouldBe(200);
-                    objectResult.Value.ShouldNotBeNull();
+                objectResult.StatusCode.ShouldBe(200);
+                objectResult.Value.ShouldNotBeNull();
 
-                    var data = objectResult.Value.ShouldBeOfType<PreferencesResponse>();
+                var data = objectResult.Value.ShouldBeOfType<PreferencesResponse>();
 
-                    data.FavoriteLines.ShouldBe(new[] { "district" });
-                    data.UserId.ShouldBe("6");
-                }
+                data.FavoriteLines.ShouldBe(new[] { "district" });
+                data.UserId.ShouldBe("6");
             }
         }
 

@@ -12,7 +12,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
     /// <summary>
     /// Defines a document database client.
     /// </summary>
-    public interface IDocumentClient : IDisposable
+    public interface IDocumentClient
     {
         /// <summary>
         /// Creates a new document in the store as an asynchronous operation.
