@@ -114,14 +114,8 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
                 return true;
             }
-            catch (DocumentClientException ex)
+            catch (DocumentClientException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
             {
-                if (ex.StatusCode != HttpStatusCode.NotFound)
-                {
-                    _logger.LogError(default(EventId), ex, $"Failed to delete document with Id '{id}'.");
-                    throw;
-                }
-
                 return false;
             }
         }
@@ -136,7 +130,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             }
 
             await EnsureCollectionExistsAsync();
-            T result = null;
+            T result;
 
             try
             {
@@ -146,13 +140,9 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
                 result = (T)(dynamic)document;
             }
-            catch (DocumentClientException ex)
+            catch (DocumentClientException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
             {
-                if (ex.StatusCode != HttpStatusCode.NotFound)
-                {
-                    _logger.LogError(default(EventId), ex, $"Failed to query document with Id '{id}'.");
-                    throw;
-                }
+                result = null;
             }
 
             return result;
@@ -209,14 +199,8 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
                 return (T)(dynamic)response;
             }
-            catch (DocumentClientException ex)
+            catch (DocumentClientException ex) when (ex.StatusCode == HttpStatusCode.PreconditionFailed)
             {
-                if (ex.StatusCode != HttpStatusCode.PreconditionFailed)
-                {
-                    _logger.LogError(default(EventId), ex, $"Failed to replace document with Id '{id}' in collection '{_options.CollectionName}' of database '{_options.DatabaseName}'.");
-                    throw;
-                }
-
                 _logger.LogWarning($"Failed to replace document with Id '{id}' in collection '{_options.CollectionName}' of database '{_options.DatabaseName}' as the write would conflict. ETag: '{etag}'.");
             }
 
