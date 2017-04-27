@@ -140,6 +140,8 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// <returns>
         /// The result for the action.
         /// </returns>
+        [HttpGet]
+        [HttpHead]
         [Route("admin.php")]
         [Route("admin-console")]
         [Route("admin/login.php")]
