@@ -32,6 +32,6 @@
     "path": "0.12.7",
     "phantomjs-prebuilt": "2.1.14",
     "tslint": "4.5.1",
-    "typescript": "2.2.2"
+    "typescript": "2.3.2"
   }
 }
