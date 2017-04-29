@@ -3,12 +3,11 @@
   "compilerOptions": {
     "inlineSources": true,
     "inlineSourceMap": true,
-    "noImplicitAny": true,
-    "noImplicitThis": true,
     "noEmitOnError": true,
     "outDir": "./wwwroot/assets/js",
     "removeComments": true,
     "sourceMap": false,
+    "strict": true,
     "target": "es5"
   },
   "exclude": [
