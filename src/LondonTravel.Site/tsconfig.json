@@ -4,10 +4,11 @@
     "inlineSources": true,
     "inlineSourceMap": true,
     "noEmitOnError": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
     "outDir": "./wwwroot/assets/js",
     "removeComments": true,
     "sourceMap": false,
-    "strict": true,
     "target": "es5"
   },
   "exclude": [
