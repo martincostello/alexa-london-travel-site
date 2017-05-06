@@ -68,7 +68,8 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             if (user == null)
             {
-                _logger?.LogError($"Failed to get user to manage account.");
+                _logger.LogError("Failed to get user to manage account.");
+
                 return View("Error");
             }
 
@@ -113,7 +114,8 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             SiteContext.SetErrorRedirect(properties, Url.RouteUrl(SiteRoutes.Manage));
 
-            _logger?.LogInformation($"Attempting to link user '{userId}' to provider '{provider}'.");
+            _logger.LogInformation("Attempting to link user Id {UserId} to provider {ProviderName}.", userId, provider);
+
             _telemetry.TrackLinkExternalAccountStart(userId, provider);
 
             return Challenge(properties, provider);
@@ -127,7 +129,8 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             if (user == null)
             {
-                _logger?.LogError($"Failed to get user to link account.");
+                _logger.LogError("Failed to get user to link account.");
+
                 return View("Error");
             }
 
@@ -136,11 +139,12 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             if (info == null)
             {
-                _logger?.LogError($"Failed to get external login info for user '{userId}' to link account.");
+                _logger.LogError("Failed to get external login info for user Id {UserId} to link account.", userId);
+
                 return RedirectToRoute(SiteRoutes.Manage, new { Message = SiteMessage.Error });
             }
 
-            _logger.LogInformation($"Adding login for '{info.LoginProvider}' to user '{userId}'.");
+            _logger.LogTrace("Adding login for provider {ProviderName} to user Id {UserId}.", info.LoginProvider, userId);
 
             var result = await _userManager.AddLoginAsync(user, info);
             var message = SiteMessage.Error;
@@ -148,7 +152,8 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             if (result.Succeeded)
             {
                 _telemetry.TrackLinkExternalAccountSuccess(userId, info.LoginProvider);
-                _logger.LogInformation($"Added login for '{info.LoginProvider}' to user '{userId}'.");
+
+                _logger.LogInformation("Added login for provider {ProviderName} to user Id {UserId}.", info.LoginProvider, userId);
 
                 message = SiteMessage.LinkSuccess;
 
@@ -156,11 +161,15 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation($"Updated claims for user '{userId}' for provider '{info.LoginProvider}'.");
+                    _logger.LogInformation("Updated claims for user Id {UserId} for provider {ProviderName}.", userId, info.LoginProvider);
                 }
                 else
                 {
-                    _logger?.LogError($"Failed to update user '{userId}' with additional role claims.");
+                    _logger.LogError(
+                        "Failed to update user Id {UserId} with additional role claims for provider {ProviderName}: {Errors}.",
+                        userId,
+                        info.LoginProvider,
+                        FormatErrors(result));
                 }
 
                 await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
@@ -169,8 +178,10 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             {
                 _telemetry.TrackLinkExternalAccountFailed(userId, info.LoginProvider);
 
-                _logger?.LogError(
-                    $"Failed to add external login info for user '{userId}': {string.Join(";", result.Errors.Select((p) => $"{p.Code}: {p.Description}"))}.");
+                _logger.LogError(
+                    "Failed to add external login info for user Id {UserId}: {Errors}.",
+                    userId,
+                    FormatErrors(result));
             }
 
             return RedirectToRoute(SiteRoutes.Manage, new { Message = message });
@@ -193,13 +204,16 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             if (user != null && account != null)
             {
-                _logger.LogInformation($"Removing login for '{account.LoginProvider}' from user '{user.Id}'.");
+                _logger.LogTrace("Removing login for provider {ProviderName} from user Id {UserId}.", account.LoginProvider, user.Id);
 
                 var result = await _userManager.RemoveLoginAsync(user, account.LoginProvider, account.ProviderKey);
 
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation($"Removed login for '{account.LoginProvider}' from user '{user.Id}'.");
+                    _logger.LogInformation(
+                        "Removed login for {ProviderName} from user Id {UserId}.",
+                        account.LoginProvider,
+                        user.Id);
 
                     await _signInManager.SignInAsync(user, isPersistent: true);
 
@@ -209,8 +223,11 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 }
                 else
                 {
-                    _logger?.LogError(
-                        $"Failed to remove external login info from user '{user.Id}' for provider '{account.LoginProvider}': {string.Join(";", result.Errors.Select((p) => $"{p.Code}: {p.Description}"))}.");
+                    _logger.LogError(
+                        "Failed to remove external login info from user Id {UserId} for provider {ProviderName}: {Errors}.",
+                        user.Id,
+                        account.LoginProvider,
+                        FormatErrors(result));
                 }
             }
 
@@ -232,7 +249,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             if (user != null)
             {
-                _logger.LogInformation($"Removing Alexa link from user '{user.Id}'.");
+                _logger.LogTrace("Removing Alexa link from user Id {UserId}.", user.Id);
 
                 user.AlexaToken = null;
                 user.ETag = etag;
@@ -242,14 +259,17 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 if (result.Succeeded)
                 {
                     _telemetry.TrackRemoveAlexaLink(user.Id);
-                    _logger.LogInformation($"Removed Alexa link from user '{user.Id}'.");
+
+                    _logger.LogInformation("Removed Alexa link from user Id {UserId}.", user.Id);
 
                     message = SiteMessage.RemoveAlexaLinkSuccess;
                 }
                 else
                 {
-                    _logger?.LogError(
-                        $"Failed to remove Alexa link from user '{user.Id}': {string.Join(";", result.Errors.Select((p) => $"{p.Code}: {p.Description}"))}.");
+                    _logger.LogError(
+                        "Failed to remove Alexa link from user Id {UserId}: {Errors}.",
+                        user.Id,
+                        FormatErrors(result));
                 }
             }
 
@@ -265,13 +285,13 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             if (user != null)
             {
-                _logger.LogInformation($"Deleting user '{user.Id}'.");
+                _logger.LogTrace("Deleting user Id {UserId}.", user.Id);
 
                 var result = await _userManager.DeleteAsync(user);
 
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation($"Deleted user '{user.Id}'.");
+                    _logger.LogInformation("Deleted user Id {UserId}.", user.Id);
 
                     await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
                     await HttpContext.Authentication.SignOutAsync(_applicationCookieScheme);
@@ -282,13 +302,15 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 }
                 else
                 {
-                    _logger?.LogError(
-                        $"Failed to delete user '{user.Id}': {string.Join(";", result.Errors.Select((p) => $"{p.Code}: {p.Description}"))}.");
+                    _logger.LogError(
+                        "Failed to delete user Id {UserId}: {Errors}.",
+                        user.Id,
+                        FormatErrors(result));
                 }
             }
             else
             {
-                _logger?.LogError($"Failed to get user to delete account.");
+                _logger.LogError("Failed to get user to delete account.");
             }
 
             return RedirectToRoute(SiteRoutes.Manage, new { Message = SiteMessage.Error });
@@ -311,7 +333,8 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             if (user == null)
             {
-                _logger?.LogError($"Failed to get user to update line preferences.");
+                _logger.LogError("Failed to get user to update line preferences.");
+
                 return View("Error");
             }
 
@@ -329,7 +352,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                     return BadRequest();
                 }
 
-                _logger.LogTrace($"Updating line preferences for user '{user.Id}'.");
+                _logger.LogTrace("Updating line preferences for user Id {UserId}.", user.Id);
 
                 var existingLines = user.FavoriteLines;
                 var newLines = user.FavoriteLines = (model.FavoriteLines ?? Array.Empty<string>())
@@ -344,17 +367,26 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 if (result.Succeeded)
                 {
                     _telemetry.TrackLinePreferencesUpdated(user.Id, existingLines, newLines);
-                    _logger.LogInformation($"Updated line preferences for user '{user.Id}'.");
+
+                    _logger.LogInformation("Updated line preferences for user Id {UserId}.", user.Id);
                 }
                 else
                 {
-                    _logger.LogWarning($"Failed to update line preferences for user '{user.Id}' as it would cause a write conflict. ETag: '{model.ETag}'.");
+                    _logger.LogWarning(
+                        "Failed to update line preferences for user '{UserId}' as it would cause a write conflict. ETag: {ETag}.",
+                        user.Id,
+                        model.ETag);
                 }
 
                 updated = result.Succeeded;
             }
 
             return RedirectToRoute(SiteRoutes.Home, new { UpdateSuccess = updated });
+        }
+
+        private static string FormatErrors(IdentityResult result)
+        {
+            return string.Join(";", result.Errors.Select((p) => $"{p.Code}: {p.Description}"));
         }
 
         private async Task<bool> AreLinesValidAsync(UpdateLinePreferencesViewModel model, CancellationToken cancellationToken)
