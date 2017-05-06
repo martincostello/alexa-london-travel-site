@@ -88,7 +88,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 return Unauthorized("Unauthorized.");
             }
 
-            _logger?.LogInformation($"Successfully authorized API request for preferences for user '{user.Id}'.");
+            _logger?.LogInformation("Successfully authorized API request for preferences for user Id {UserId}.", user.Id);
 
             var data = new PreferencesResponse()
             {

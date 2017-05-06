@@ -117,7 +117,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
             if (created)
             {
-                _logger.LogInformation($"Created collection '{collectionName}' in database '{_databaseName}'.");
+                _logger.LogInformation("Created collection {CollectionName} in database {DatabaseName}.", collectionName, _databaseName);
             }
 
             _existingCollections.AddOrUpdate(collectionName, created, (p, r) => true);
@@ -143,7 +143,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
             if (created)
             {
-                _logger.LogInformation($"Created database '{_databaseName}'.");
+                _logger.LogInformation("Created database {DatabaseName}.", _databaseName);
             }
         }
 

@@ -189,7 +189,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
             }
             catch (Exception ex)
             {
-                _logger.LogError(default(EventId), ex, $"Failed to handle remote failure: {ex.Message}.");
+                _logger.LogError(default(EventId), ex, "Failed to handle remote failure: {Message}.", ex.Message);
 
                 if (!context.HandledResponse)
                 {
