@@ -137,7 +137,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             await _signInManager.SignOutAsync();
 
-            _logger.LogInformation($"User '{userId}' signed out.");
+            _logger.LogInformation("User Id {UserId} signed out.", userId);
 
             _telemetry.TrackSignOut(userId);
 
@@ -214,7 +214,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             {
                 string userId = _userManager.GetUserId(info.Principal);
 
-                _logger.LogInformation($"User '{userId}' signed in with '{info.LoginProvider}' provider.");
+                _logger.LogInformation("User Id {UserId} signed in with provider {LoginProvider}.", userId, info.LoginProvider);
                 _telemetry.TrackSignIn(userId, info.LoginProvider);
 
                 return RedirectToLocal(returnUrl);
@@ -242,7 +242,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 {
                     await _signInManager.SignInAsync(user, isPersistent: true);
 
-                    _logger.LogInformation($"New user account '{user.Id}' created through '{info.LoginProvider}'.");
+                    _logger.LogInformation("New user account {UserId} created through {LoginProvider}.", user.Id, info.LoginProvider);
 
                     _telemetry.TrackAccountCreated(user.Id, user.Email, info.LoginProvider);
 
@@ -302,7 +302,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         {
             foreach (var error in result.Errors)
             {
-                _logger?.LogWarning($"{error.Code}: {error.Description}");
+                _logger?.LogWarning("{ErrorCode}: {ErrorDescription}", error.Code, error.Description);
                 ModelState.AddModelError(string.Empty, error.Description);
             }
         }

@@ -1,6 +1,6 @@
 # Alexa London Travel Site
 
-[![London Travel](https://martincostello.azureedge.net/london-travel-108x108.png "London Travel")](https://www.amazon.co.uk/dp/B01NB0T86R)
+[![London Travel](https://cdn.martincostello.com/london-travel-108x108.png "London Travel")](https://www.amazon.co.uk/dp/B01NB0T86R)
 
 | | Linux | Windows |
 |:-:|:-:|:-:|

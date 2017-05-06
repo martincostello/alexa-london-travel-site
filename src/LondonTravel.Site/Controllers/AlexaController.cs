@@ -118,7 +118,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
                 if (user == null)
                 {
-                    _logger.LogError($"Failed to get user to link account to Alexa.");
+                    _logger.LogError("Failed to get user to link account to Alexa.");
                     return RedirectForError(redirectUri, state);
                 }
 
@@ -178,11 +178,11 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             if (hasExistingToken)
             {
-                _logger.LogTrace($"Regenerating Alexa acccess token for user '{user.Id}'.");
+                _logger.LogTrace("Regenerating Alexa acccess token for user Id {UserId}.", user.Id);
             }
             else
             {
-                _logger.LogTrace($"Generating Alexa acccess token for user '{user.Id}'.");
+                _logger.LogTrace("Generating Alexa acccess token for user Id {UserId}.", user.Id);
             }
 
             user.AlexaToken = accessToken;
@@ -193,17 +193,19 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             {
                 if (hasExistingToken)
                 {
-                    _logger.LogInformation($"Regenerated Alexa acccess token for user '{user.Id}'.");
+                    _logger.LogInformation("Regenerated Alexa acccess token for user Id {UserId}.", user.Id);
                 }
                 else
                 {
-                    _logger.LogInformation($"Generated Alexa acccess token for user '{user.Id}'.");
+                    _logger.LogInformation("Generated Alexa acccess token for user Id {UserId}.", user.Id);
                 }
             }
             else
             {
                 _logger.LogError(
-                    $"Failed to generate Alexa access token for user '{user.Id}': {string.Join(";", result.Errors.Select((p) => $"{p.Code}: {p.Description}"))}.");
+                    "Failed to generate Alexa access token for user Id {UserId}: {Errors}.",
+                    user.Id,
+                    string.Join(";", result.Errors.Select((p) => $"{p.Code}: {p.Description}")));
             }
 
             return result.Succeeded;
@@ -262,7 +264,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             if (!string.Equals(clientId, _options.ClientId, StringComparison.Ordinal))
             {
-                _logger.LogWarning($"Invalid client Id '{clientId}' specified.");
+                _logger.LogWarning("Invalid client Id {ClientId} specified.", clientId);
 
                 error = "unauthorized_client";
                 return false;
@@ -272,7 +274,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             if (!string.Equals(responseType, ImplicitFlowResponseType, StringComparison.Ordinal))
             {
-                _logger.LogWarning($"Invalid response type '{responseType}' specified.");
+                _logger.LogWarning("Invalid response type {ResponseType} specified.", responseType);
 
                 error = "unsupported_response_type";
                 return false;
@@ -292,19 +294,19 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         {
             if (redirectUri == null)
             {
-                _logger.LogWarning($"No redirection URI '{redirectUri}' specified.");
+                _logger.LogWarning("No redirection URI specified.");
                 return false;
             }
 
             if (!redirectUri.IsAbsoluteUri)
             {
-                _logger.LogWarning($"The specified redirection URI '{redirectUri}' is not an absolute URI.");
+                _logger.LogWarning("The specified redirection URI {RedirectionUri} is not an absolute URI.", redirectUri);
                 return false;
             }
 
             if (_options?.RedirectUrls?.Contains(redirectUri.ToString(), StringComparer.OrdinalIgnoreCase) == false)
             {
-                _logger.LogWarning($"The specified redirection URI '{redirectUri}' is an authorized redirection URI.");
+                _logger.LogWarning("The specified redirection URI {RedirectionUri} is not authorized.", redirectUri);
                 return false;
             }
 
@@ -324,7 +326,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             if (!string.Equals(responseType, ImplicitFlowResponseType, StringComparison.Ordinal))
             {
-                _logger.LogError($"Invalid response type '{responseType}' specified.");
+                _logger.LogError("Invalid response type {ResponseType} specified.", responseType);
                 return false;
             }
 
