@@ -12,6 +12,11 @@ namespace MartinCostello.LondonTravel.Site.Options
     public sealed class PublicKeyPinsOptions
     {
         /// <summary>
+        /// Gets or sets a value indicating whether public key pins is enabled, rather than report-only.
+        /// </summary>
+        public bool IsEnabled { get; set; }
+
+        /// <summary>
         /// Gets or sets the maximum period of time to cache pins for.
         /// </summary>
         public TimeSpan MaxAge { get; set; }
