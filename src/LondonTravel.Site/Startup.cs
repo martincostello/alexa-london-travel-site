@@ -152,7 +152,7 @@ namespace MartinCostello.LondonTravel.Site
             /// <inheritdoc />
             public string GetKey(SecretBundle secret)
             {
-                return secret.SecretIdentifier.Name.Substring(_prefix.Length);
+                return secret.SecretIdentifier.Name.Substring(_prefix.Length).Replace("-", ":");
             }
 
             /// <inheritdoc />
