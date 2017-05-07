@@ -114,7 +114,10 @@ namespace MartinCostello.LondonTravel.Site.Integration
             string[] expectedHeaders = new[]
             {
                 "content-security-policy",
+                "content-security-policy-report-only",
+                "Referrer-Policy",
                 "X-Content-Type-Options",
+                "X-CSP-Nonce",
                 "X-Datacenter",
                 "X-Download-Options",
                 "X-Frame-Options",
