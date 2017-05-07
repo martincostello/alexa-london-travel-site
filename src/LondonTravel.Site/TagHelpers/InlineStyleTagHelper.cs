@@ -22,6 +22,7 @@ namespace MartinCostello.LondonTravel.Site.TagHelpers
     /// </summary>
     [HtmlTargetElement("link", Attributes = InlineAttributeName, TagStructure = TagStructure.WithoutEndTag)]
     [HtmlTargetElement("link", Attributes = MinifyInlinedAttributeName, TagStructure = TagStructure.WithoutEndTag)]
+    [HtmlTargetElement("link", Attributes = NonceAttributeName, TagStructure = TagStructure.WithoutEndTag)]
     public class InlineStyleTagHelper : LinkTagHelper
     {
         /// <summary>
@@ -33,6 +34,11 @@ namespace MartinCostello.LondonTravel.Site.TagHelpers
         /// The name of the <c>asp-inline</c> attribute.
         /// </summary>
         private const string MinifyInlinedAttributeName = "asp-minify-inlined";
+
+        /// <summary>
+        /// The name of the <c>asp-csp-nonce</c> attribute.
+        /// </summary>
+        private const string NonceAttributeName = "asp-csp-nonce";
 
         /// <summary>
         /// An array containing the <see cref="Environment.NewLine"/> string.
@@ -120,6 +126,11 @@ namespace MartinCostello.LondonTravel.Site.TagHelpers
             output.Content.SetHtmlContent(css);
 
             output.Attributes.Clear();
+
+            if (context.AllAttributes.TryGetAttribute(NonceAttributeName, out TagHelperAttribute nonceAttribute))
+            {
+                output.Attributes.Add("nonce", nonceAttribute.Value.ToString());
+            }
 
             output.TagName = "style";
             output.TagMode = TagMode.StartTagAndEndTag;
