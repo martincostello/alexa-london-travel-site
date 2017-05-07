@@ -152,11 +152,13 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         [Route("invoker/JMXInvokerServlet")]
         [Route("jmx-console/HtmlAdaptor")]
         [Route("magmi/web/magmi.php")]
+        [Route("readme.html")]
         [Route("web-console/Invoker")]
         [Route("wp-admin/admin-ajax.php")]
         [Route("wp-admin/includes/themes.php")]
         [Route("wp-admin/options-link.php")]
         [Route("wp-admin/post-new.php")]
+        [Route("wp-links-opml.php")]
         [Route("wp-login.php")]
         [Route("xmlrpc.php")]
         public ActionResult No()

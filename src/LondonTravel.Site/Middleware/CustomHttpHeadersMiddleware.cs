@@ -36,16 +36,6 @@ namespace MartinCostello.LondonTravel.Site.Middleware
         private readonly IOptionsSnapshot<SiteOptions> _options;
 
         /// <summary>
-        /// The current <c>Content-Security-Policy</c> HTTP response header value. This field is read-only.
-        /// </summary>
-        private readonly string _contentSecurityPolicy;
-
-        /// <summary>
-        /// The current <c>Content-Security-Policy-Report-Only</c> HTTP response header value. This field is read-only.
-        /// </summary>
-        private readonly string _contentSecurityPolicyReportOnly;
-
-        /// <summary>
         /// The current <c>Expect-CT</c> HTTP response header value. This field is read-only.
         /// </summary>
         private readonly string _expectCTValue;
@@ -90,9 +80,6 @@ namespace MartinCostello.LondonTravel.Site.Middleware
             _isProduction = environment.IsProduction();
             _environmentName = config.AzureEnvironment();
 
-            _contentSecurityPolicy = BuildContentSecurityPolicy(_isProduction, false, options.Value);
-            _contentSecurityPolicyReportOnly = BuildContentSecurityPolicy(_isProduction, true, options.Value);
-
             _expectCTValue = BuildExpectCT(options.Value);
 
             _publicKeyPins = BuildPublicKeyPins(options.Value, reportOnly: false);
@@ -113,8 +100,6 @@ namespace MartinCostello.LondonTravel.Site.Middleware
                     context.Response.Headers.Remove("Server");
                     context.Response.Headers.Remove("X-Powered-By");
 
-                    context.Response.Headers.Add("Content-Security-Policy", _contentSecurityPolicy);
-                    context.Response.Headers.Add("Content-Security-Policy-Report-Only", _contentSecurityPolicyReportOnly);
                     context.Response.Headers.Add("Referrer-Policy", "no-referrer-when-downgrade");
                     context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
                     context.Response.Headers.Add("X-Download-Options", "noopen");
@@ -122,6 +107,19 @@ namespace MartinCostello.LondonTravel.Site.Middleware
 
                     // Middleware (e.g. Identity) may have already set X-Frame-Options
                     context.Response.Headers["X-Frame-Options"] = "DENY";
+
+                    string nonce = context.GetCspNonce();
+
+                    if (nonce != null)
+                    {
+                        context.Response.Headers.Add("x-csp-nonce", nonce);
+                    }
+
+                    string csp = BuildContentSecurityPolicy(isReport: false, nonce: nonce);
+                    string cspReport = BuildContentSecurityPolicy(isReport: true, nonce: nonce);
+
+                    context.Response.Headers.Add("Content-Security-Policy", csp);
+                    context.Response.Headers.Add("Content-Security-Policy-Report-Only", cspReport);
 
                     if (context.Request.IsHttps)
                     {
@@ -158,75 +156,6 @@ namespace MartinCostello.LondonTravel.Site.Middleware
                 });
 
             await _next(context);
-        }
-
-        /// <summary>
-        /// Builds the Content Security Policy to use for the website.
-        /// </summary>
-        /// <param name="isProduction">Whether the current environment is production.</param>
-        /// <param name="isReport">Whether the policy is being generated for the report.</param>
-        /// <param name="options">The current site configuration options.</param>
-        /// <returns>
-        /// A <see cref="string"/> containing the Content Security Policy to use.
-        /// </returns>
-        private static string BuildContentSecurityPolicy(bool isProduction, bool isReport, SiteOptions options)
-        {
-            var cdn = GetCdnOriginForContentSecurityPolicy(options);
-
-            var policies = new Dictionary<string, IList<string>>()
-            {
-                { "default-src", new[] { Csp.Self, Csp.Data } },
-                { "script-src", new[] { Csp.Self, Csp.Inline } },
-                { "style-src", new[] { Csp.Self, Csp.Inline } },
-                { "img-src", new[] { Csp.Self, Csp.Data, cdn } },
-                { "font-src", new[] { Csp.Self } },
-                { "connect-src", new[] { Csp.Self } },
-                { "media-src", new[] { Csp.None } },
-                { "object-src", new[] { Csp.None } },
-                { "child-src", new[] { Csp.Self } },
-                { "frame-ancestors", new[] { Csp.None } },
-                { "form-action", new[] { Csp.Self } },
-                { "block-all-mixed-content", Array.Empty<string>() },
-                { "base-uri", new[] { Csp.Self } },
-                { "manifest-src", new[] { Csp.Self } },
-            };
-
-            var builder = new StringBuilder();
-
-            foreach (var pair in policies)
-            {
-                builder.Append(pair.Key);
-
-                IList<string> origins = pair.Value;
-
-                if (options.ContentSecurityPolicyOrigins != null &&
-                    options.ContentSecurityPolicyOrigins.TryGetValue(pair.Key, out IList<string> configOrigins))
-                {
-                    origins = origins.Concat(configOrigins).ToList();
-                }
-
-                origins = origins.Where((p) => !string.IsNullOrWhiteSpace(p)).ToList();
-
-                if (origins.Count > 0)
-                {
-                    builder.Append(" ");
-                    builder.Append(string.Join(" ", origins));
-                }
-
-                builder.Append(";");
-            }
-
-            if (!isReport && isProduction)
-            {
-                builder.Append("upgrade-insecure-requests;");
-            }
-
-            if (options?.ExternalLinks?.Reports?.ContentSecurityPolicy != null)
-            {
-                builder.Append($"report-uri {options.ExternalLinks.Reports.ContentSecurityPolicy};");
-            }
-
-            return builder.ToString();
         }
 
         /// <summary>
@@ -344,6 +273,93 @@ namespace MartinCostello.LondonTravel.Site.Middleware
         }
 
         /// <summary>
+        /// Builds the Content Security Policy to use for the website.
+        /// </summary>
+        /// <param name="isReport">Whether the policy is being generated for the report.</param>
+        /// <param name="nonce">The nonce value to use, if any.</param>
+        /// <returns>
+        /// A <see cref="string"/> containing the Content Security Policy to use.
+        /// </returns>
+        private string BuildContentSecurityPolicy(bool isReport, string nonce)
+        {
+            var options = _options.Value;
+            var cdn = GetCdnOriginForContentSecurityPolicy(options);
+
+            var scriptDirectives = new List<string>()
+            {
+                Csp.Self,
+            };
+
+            var styleDirectives = new List<string>()
+            {
+                Csp.Self,
+            };
+
+            var policies = new Dictionary<string, IList<string>>()
+            {
+                { "default-src", new[] { Csp.Self, Csp.Data } },
+                { "script-src", scriptDirectives },
+                { "style-src", styleDirectives },
+                { "img-src", new[] { Csp.Self, Csp.Data, cdn } },
+                { "font-src", new[] { Csp.Self } },
+                { "connect-src", new[] { Csp.Self } },
+                { "media-src", new[] { Csp.None } },
+                { "object-src", new[] { Csp.None } },
+                { "child-src", new[] { Csp.Self } },
+                { "frame-ancestors", new[] { Csp.None } },
+                { "form-action", new[] { Csp.Self } },
+                { "block-all-mixed-content", Array.Empty<string>() },
+                { "base-uri", new[] { Csp.Self } },
+                { "manifest-src", new[] { Csp.Self } },
+            };
+
+            if (nonce != null)
+            {
+                string nonceDirective = $"'nonce-{nonce}'";
+
+                scriptDirectives.Add(nonceDirective);
+                styleDirectives.Add(nonceDirective);
+            }
+
+            var builder = new StringBuilder();
+
+            foreach (var pair in policies)
+            {
+                builder.Append(pair.Key);
+
+                IList<string> origins = pair.Value;
+
+                if (options.ContentSecurityPolicyOrigins != null &&
+                    options.ContentSecurityPolicyOrigins.TryGetValue(pair.Key, out IList<string> configOrigins))
+                {
+                    origins = origins.Concat(configOrigins).ToList();
+                }
+
+                origins = origins.Where((p) => !string.IsNullOrWhiteSpace(p)).ToList();
+
+                if (origins.Count > 0)
+                {
+                    builder.Append(" ");
+                    builder.Append(string.Join(" ", origins));
+                }
+
+                builder.Append(";");
+            }
+
+            if (!isReport && _isProduction)
+            {
+                builder.Append("upgrade-insecure-requests;");
+            }
+
+            if (options?.ExternalLinks?.Reports?.ContentSecurityPolicy != null)
+            {
+                builder.Append($"report-uri {options.ExternalLinks.Reports.ContentSecurityPolicy};");
+            }
+
+            return builder.ToString();
+        }
+
+        /// <summary>
         /// A class containing Content Security Policy constants.
         /// </summary>
         private static class Csp
@@ -352,11 +368,6 @@ namespace MartinCostello.LondonTravel.Site.Middleware
             /// The origin for a data URI.
             /// </summary>
             internal const string Data = "data:";
-
-            /// <summary>
-            /// The directive to allow inline content.
-            /// </summary>
-            internal const string Inline = "'unsafe-inline'";
 
             /// <summary>
             /// The directive to allow no origins.
