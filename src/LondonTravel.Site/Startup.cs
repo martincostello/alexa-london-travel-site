@@ -146,7 +146,7 @@ namespace MartinCostello.LondonTravel.Site
             /// <param name="isDevelopment">Whether the application is running in development.</param>
             public AzureEnvironmentSecretManager(string azureEnvironment, bool isDevelopment)
             {
-                _prefix = (isDevelopment ? "Development" : azureEnvironment) + "-";
+                _prefix = $"LondonTravel-{(isDevelopment ? "Development" : azureEnvironment)}-";
             }
 
             /// <inheritdoc />
