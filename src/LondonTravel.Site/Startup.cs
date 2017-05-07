@@ -50,20 +50,17 @@ namespace MartinCostello.LondonTravel.Site
 
             builder.AddApplicationInsightsSettings(developerMode: isDevelopment);
 
-            return TryConfigureAzureKeyVault(environment, builder);
+            return TryConfigureAzureKeyVault(builder);
         }
 
         /// <summary>
         /// Tries to configure Azure Key Vault.
         /// </summary>
-        /// <param name="environment">The <see cref="IHostingEnvironment"/> to use.</param>
         /// <param name="builder">The current <see cref="IConfigurationBuilder"/>.</param>
         /// <returns>
         /// The <see cref="IConfigurationRoot"/> to use for the application.
         /// </returns>
-        private static IConfigurationRoot TryConfigureAzureKeyVault(
-            IHostingEnvironment environment,
-            IConfigurationBuilder builder)
+        private static IConfigurationRoot TryConfigureAzureKeyVault(IConfigurationBuilder builder)
         {
             // Build the main configuration
             IConfigurationRoot config = builder.Build();
@@ -81,9 +78,7 @@ namespace MartinCostello.LondonTravel.Site
             if (canUseKeyVault)
             {
                 // Add Azure Key Vault and replace the configuration built already
-                var manager = new AzureEnvironmentSecretManager(
-                    config.AzureEnvironment(),
-                    environment.IsDevelopment());
+                var manager = new AzureEnvironmentSecretManager(config.AzureEnvironment());
 
                 builder.AddAzureKeyVault(
                     vault,
@@ -143,10 +138,9 @@ namespace MartinCostello.LondonTravel.Site
             /// Initializes a new instance of the <see cref="AzureEnvironmentSecretManager"/> class.
             /// </summary>
             /// <param name="azureEnvironment">The name of the Azure environment.</param>
-            /// <param name="isDevelopment">Whether the application is running in development.</param>
-            public AzureEnvironmentSecretManager(string azureEnvironment, bool isDevelopment)
+            public AzureEnvironmentSecretManager(string azureEnvironment)
             {
-                _prefix = $"LondonTravel-{(isDevelopment ? "Development" : azureEnvironment)}-";
+                _prefix = $"LondonTravel-{azureEnvironment}-";
             }
 
             /// <inheritdoc />
