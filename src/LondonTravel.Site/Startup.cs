@@ -5,7 +5,9 @@ namespace MartinCostello.LondonTravel.Site
 {
     using Extensions;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Azure.KeyVault.Models;
     using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Configuration.AzureKeyVault;
     using Microsoft.Extensions.DependencyInjection;
     using Serilog;
 
@@ -21,12 +23,25 @@ namespace MartinCostello.LondonTravel.Site
         public Startup(IHostingEnvironment env)
             : base(env)
         {
+            Configuration = BuildConfiguration(env);
+            ConfigureSerilog(env, Configuration);
+        }
+
+        /// <summary>
+        /// Builds the <see cref="IConfigurationRoot"/> to use for the application.
+        /// </summary>
+        /// <param name="environment">The <see cref="IHostingEnvironment"/> to use.</param>
+        /// <returns>
+        /// The <see cref="IConfigurationRoot"/> to use.
+        /// </returns>
+        private static IConfigurationRoot BuildConfiguration(IHostingEnvironment environment)
+        {
             var builder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
 
-            bool isDevelopment = env.IsDevelopment();
+            bool isDevelopment = environment.IsDevelopment();
 
             if (isDevelopment)
             {
@@ -35,9 +50,46 @@ namespace MartinCostello.LondonTravel.Site
 
             builder.AddApplicationInsightsSettings(developerMode: isDevelopment);
 
-            Configuration = builder.Build();
+            return TryConfigureAzureKeyVault(builder);
+        }
 
-            ConfigureSerilog(env, Configuration);
+        /// <summary>
+        /// Tries to configure Azure Key Vault.
+        /// </summary>
+        /// <param name="builder">The current <see cref="IConfigurationBuilder"/>.</param>
+        /// <returns>
+        /// The <see cref="IConfigurationRoot"/> to use for the application.
+        /// </returns>
+        private static IConfigurationRoot TryConfigureAzureKeyVault(IConfigurationBuilder builder)
+        {
+            // Build the main configuration
+            IConfigurationRoot config = builder.Build();
+
+            // Get the settings for Azure Key Vault
+            string vault = config["AzureKeyVault:Uri"];
+            string clientId = config["AzureKeyVault:ClientId"];
+            string clientSecret = config["AzureKeyVault:ClientSecret"];
+
+            bool canUseKeyVault =
+                !string.IsNullOrEmpty(vault) &&
+                !string.IsNullOrEmpty(clientId) &&
+                !string.IsNullOrEmpty(clientSecret);
+
+            if (canUseKeyVault)
+            {
+                // Add Azure Key Vault and replace the configuration built already
+                var manager = new AzureEnvironmentSecretManager(config.AzureEnvironment());
+
+                builder.AddAzureKeyVault(
+                    vault,
+                    clientId,
+                    clientSecret,
+                    manager);
+
+                config = builder.Build();
+            }
+
+            return config;
         }
 
         /// <summary>
@@ -69,6 +121,41 @@ namespace MartinCostello.LondonTravel.Site
             }
 
             Log.Logger = loggerConfig.CreateLogger();
+        }
+
+        /// <summary>
+        /// A class representing an implementation of <see cref="IKeyVaultSecretManager"/>
+        /// that selects keys based on the Azure environment name.
+        /// </summary>
+        private sealed class AzureEnvironmentSecretManager : IKeyVaultSecretManager
+        {
+            /// <summary>
+            /// The secret prefix to use for the environment.
+            /// </summary>
+            private readonly string _prefix;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="AzureEnvironmentSecretManager"/> class.
+            /// </summary>
+            /// <param name="azureEnvironment">The name of the Azure environment.</param>
+            public AzureEnvironmentSecretManager(string azureEnvironment)
+            {
+                _prefix = $"LondonTravel-{azureEnvironment}-";
+            }
+
+            /// <inheritdoc />
+            public string GetKey(SecretBundle secret)
+            {
+                return secret.SecretIdentifier.Name.Substring(_prefix.Length)
+                    .Replace("--", "_")
+                    .Replace("-", ":");
+            }
+
+            /// <inheritdoc />
+            public bool Load(SecretItem secret)
+            {
+                return secret.Identifier.Name.StartsWith(_prefix);
+            }
         }
     }
 }
