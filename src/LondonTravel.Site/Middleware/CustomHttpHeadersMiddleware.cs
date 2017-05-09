@@ -320,6 +320,12 @@ namespace MartinCostello.LondonTravel.Site.Middleware
                 scriptDirectives.Add(nonceDirective);
                 styleDirectives.Add(nonceDirective);
             }
+            else if (!_isProduction)
+            {
+                // Fix developer exception pages
+                scriptDirectives.Add(Csp.UnsafeInline);
+                styleDirectives.Add(Csp.UnsafeInline);
+            }
 
             var builder = new StringBuilder();
 
@@ -378,6 +384,11 @@ namespace MartinCostello.LondonTravel.Site.Middleware
             /// The origin for the site itself.
             /// </summary>
             internal const string Self = "'self'";
+
+            /// <summary>
+            /// The directive to allow inline content.
+            /// </summary>
+            internal const string UnsafeInline = "'unsafe-inline'";
         }
     }
 }
