@@ -1,14 +1,15 @@
 ﻿param(
-    [Parameter(Mandatory=$false)][bool]   $RestorePackages = $false,
+    [Parameter(Mandatory=$false)][switch] $RestorePackages,
     [Parameter(Mandatory=$false)][string] $Configuration   = "Release",
     [Parameter(Mandatory=$false)][string] $VersionSuffix   = "",
     [Parameter(Mandatory=$false)][string] $OutputPath      = "",
-    [Parameter(Mandatory=$false)][bool]   $PatchVersion    = $false,
-    [Parameter(Mandatory=$false)][bool]   $RunTests        = $true,
-    [Parameter(Mandatory=$false)][bool]   $PublishWebsite  = $true
+    [Parameter(Mandatory=$false)][switch] $PatchVersion,
+    [Parameter(Mandatory=$false)][switch] $SkipTests
 )
 
 $ErrorActionPreference = "Stop"
+
+$RunTests = $SkipTests -eq $false
 
 $solutionPath  = Split-Path $MyInvocation.MyCommand.Definition
 $solutionFile  = Join-Path $solutionPath "LondonTravel.Site.sln"
@@ -131,11 +132,9 @@ if ($RunTests -eq $true) {
     }
 }
 
-if ($PublishWebsite -eq $true) {
-    Write-Host "Publishing $($publishProjects.Count) projects..." -ForegroundColor Green
-    ForEach ($project in $publishProjects) {
-        DotNetPublish $project $Configuration $PrereleaseSuffix
-    }
+Write-Host "Publishing $($publishProjects.Count) projects..." -ForegroundColor Green
+ForEach ($project in $publishProjects) {
+    DotNetPublish $project $Configuration $PrereleaseSuffix
 }
 
 if ($PatchVersion -eq $true) {
