@@ -12,7 +12,7 @@ $ErrorActionPreference = "Stop"
 $solutionPath = Split-Path $MyInvocation.MyCommand.Definition
 $solutionFile = Join-Path $solutionPath "LondonTravel.Site.sln"
 $framework = "netcoreapp1.1"
-$dotnetVersion = "1.0.1"
+$dotnetVersion = "1.0.4"
 
 if ($OutputPath -eq "") {
     $OutputPath = Join-Path "$(Convert-Path "$PSScriptRoot")" "artifacts"
