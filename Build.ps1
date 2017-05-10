@@ -1,18 +1,17 @@
 ﻿param(
-    [Parameter(Mandatory=$false)][bool]   $RestorePackages = $false,
-    [Parameter(Mandatory=$false)][string] $Configuration   = "Release",
-    [Parameter(Mandatory=$false)][string] $VersionSuffix   = "",
-    [Parameter(Mandatory=$false)][string] $OutputPath      = "",
-    [Parameter(Mandatory=$false)][bool]   $PatchVersion    = $false,
-    [Parameter(Mandatory=$false)][bool]   $RunTests        = $true,
-    [Parameter(Mandatory=$false)][bool]   $PublishWebsite  = $true
+    [Parameter(Mandatory = $false)][switch] $RestorePackages,
+    [Parameter(Mandatory = $false)][string] $Configuration = "Release",
+    [Parameter(Mandatory = $false)][string] $VersionSuffix = "",
+    [Parameter(Mandatory = $false)][string] $OutputPath = "",
+    [Parameter(Mandatory = $false)][switch] $PatchVersion,
+    [Parameter(Mandatory = $false)][switch] $SkipTests
 )
 
 $ErrorActionPreference = "Stop"
 
-$solutionPath  = Split-Path $MyInvocation.MyCommand.Definition
-$solutionFile  = Join-Path $solutionPath "LondonTravel.Site.sln"
-$framework     = "netcoreapp1.1"
+$solutionPath = Split-Path $MyInvocation.MyCommand.Definition
+$solutionFile = Join-Path $solutionPath "LondonTravel.Site.sln"
+$framework = "netcoreapp1.1"
 $dotnetVersion = "1.0.1"
 
 if ($OutputPath -eq "") {
@@ -50,40 +49,34 @@ if ($installDotNetSdk -eq $true) {
 
     $env:PATH = "$env:DOTNET_INSTALL_DIR;$env:PATH"
     $dotnet = Join-Path "$env:DOTNET_INSTALL_DIR" "dotnet"
-} else {
+}
+else {
     $dotnet = "dotnet"
 }
 
-function DotNetRestore { param([string]$Project)
+function DotNetRestore {
+    param([string]$Project)
     & $dotnet restore $Project --verbosity minimal
     if ($LASTEXITCODE -ne 0) {
         throw "dotnet restore failed with exit code $LASTEXITCODE"
     }
 }
 
-function DotNetBuild { param([string]$Project, [string]$Configuration, [string]$VersionSuffix)
-    if ($VersionSuffix) {
-        & $dotnet build $Project --output $OutputPath --framework $framework --configuration $Configuration --version-suffix "$VersionSuffix" /maxcpucount:1
-    } else {
-        & $dotnet build $Project --output $OutputPath --framework $framework --configuration $Configuration /maxcpucount:1
-    }
-    if ($LASTEXITCODE -ne 0) {
-        throw "dotnet build failed with exit code $LASTEXITCODE"
-    }
-}
-
-function DotNetTest { param([string]$Project)
-    & $dotnet test $Project --output $OutputPath --framework $framework --no-build
+function DotNetTest {
+    param([string]$Project)
+    & $dotnet test $Project --output $OutputPath --framework $framework
     if ($LASTEXITCODE -ne 0) {
         throw "dotnet test failed with exit code $LASTEXITCODE"
     }
 }
 
-function DotNetPublish { param([string]$Project)
+function DotNetPublish {
+    param([string]$Project)
     $publishPath = (Join-Path $OutputPath "publish")
     if ($VersionSuffix) {
         & $dotnet publish $Project --output $publishPath --framework $framework --configuration $Configuration --version-suffix "$VersionSuffix"
-    } else {
+    }
+    else {
         & $dotnet publish $Project --output $publishPath --framework $framework --configuration $Configuration
     }
     if ($LASTEXITCODE -ne 0) {
@@ -100,7 +93,7 @@ if ($PatchVersion -eq $true) {
     }
 
     $gitRevision = (git rev-parse HEAD | Out-String).Trim()
-    $timestamp   = [DateTime]::UtcNow.ToString("yyyy-MM-ddTHH:mm:ssK")
+    $timestamp = [DateTime]::UtcNow.ToString("yyyy-MM-ddTHH:mm:ssK")
 
     $assemblyVersion = Get-Content ".\AssemblyVersion.cs" -Raw
     $assemblyVersionWithMetadata = "{0}using System.Reflection;`r`n`r`n[assembly: AssemblyMetadata(""CommitHash"", ""{1}"")]`r`n[assembly: AssemblyMetadata(""CommitBranch"", ""{2}"")]`r`n[assembly: AssemblyMetadata(""BuildTimestamp"", ""{3}"")]" -f $assemblyVersion, $gitRevision, $gitBranch, $timestamp
@@ -121,20 +114,15 @@ if ($RestorePackages -eq $true) {
     DotNetRestore $solutionFile
 }
 
-Write-Host "Building solution..." -ForegroundColor Green
-DotNetBuild $solutionFile $Configuration $PrereleaseSuffix
+Write-Host "Publishing solution..." -ForegroundColor Green
+ForEach ($project in $publishProjects) {
+    DotNetPublish $project $Configuration $PrereleaseSuffix
+}
 
-if ($RunTests -eq $true) {
+if ($SkipTests -eq $false) {
     Write-Host "Testing $($testProjects.Count) project(s)..." -ForegroundColor Green
     ForEach ($project in $testProjects) {
         DotNetTest $project
-    }
-}
-
-if ($PublishWebsite -eq $true) {
-    Write-Host "Publishing $($publishProjects.Count) projects..." -ForegroundColor Green
-    ForEach ($project in $publishProjects) {
-        DotNetPublish $project $Configuration $PrereleaseSuffix
     }
 }
 
