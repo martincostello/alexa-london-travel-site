@@ -9,8 +9,6 @@
 
 $ErrorActionPreference = "Stop"
 
-$RunTests = $SkipTests -eq $false
-
 $solutionPath  = Split-Path $MyInvocation.MyCommand.Definition
 $solutionFile  = Join-Path $solutionPath "LondonTravel.Site.sln"
 $framework     = "netcoreapp1.1"
@@ -59,17 +57,6 @@ function DotNetRestore { param([string]$Project)
     & $dotnet restore $Project --verbosity minimal
     if ($LASTEXITCODE -ne 0) {
         throw "dotnet restore failed with exit code $LASTEXITCODE"
-    }
-}
-
-function DotNetBuild { param([string]$Project, [string]$Configuration, [string]$VersionSuffix)
-    if ($VersionSuffix) {
-        & $dotnet build $Project --output $OutputPath --framework $framework --configuration $Configuration --version-suffix "$VersionSuffix" /maxcpucount:1
-    } else {
-        & $dotnet build $Project --output $OutputPath --framework $framework --configuration $Configuration /maxcpucount:1
-    }
-    if ($LASTEXITCODE -ne 0) {
-        throw "dotnet build failed with exit code $LASTEXITCODE"
     }
 }
 
@@ -122,19 +109,16 @@ if ($RestorePackages -eq $true) {
     DotNetRestore $solutionFile
 }
 
-Write-Host "Building solution..." -ForegroundColor Green
-DotNetBuild $solutionFile $Configuration $PrereleaseSuffix
+Write-Host "Publishing solution..." -ForegroundColor Green
+ForEach ($project in $publishProjects) {
+    DotNetPublish $project $Configuration $PrereleaseSuffix
+}
 
-if ($RunTests -eq $true) {
+if ($SkipTests -eq $false) {
     Write-Host "Testing $($testProjects.Count) project(s)..." -ForegroundColor Green
     ForEach ($project in $testProjects) {
         DotNetTest $project
     }
-}
-
-Write-Host "Publishing $($publishProjects.Count) projects..." -ForegroundColor Green
-ForEach ($project in $publishProjects) {
-    DotNetPublish $project $Configuration $PrereleaseSuffix
 }
 
 if ($PatchVersion -eq $true) {
