@@ -1,29 +1,30 @@
 $ProgressPreference="SilentlyContinue"
 
-$CertPath = (Join-Path "." ".dockershare")
+$RepoPath = Split-Path $MyInvocation.MyCommand.Definition
+$CertPath = (Join-Path $RepoPath ".dockershare")
 $Image = "microsoft/azure-documentdb-emulator"
 
-# Switch to Windows daemon
-& (Join-Path $env:ProgramFiles "Docker\Docker\dockercli.exe") -SwitchDaemon
-
 # Get the image
+Write-Host "Downloading $($Image) docker image for Azure Cosmos DB emulator..." -ForegroundColor Green
 docker pull $Image
 
 # Create directory to put the certificate in
 mkdir $CertPath -Force | Out-Null
-$CertPath = (Resolve-Path $CertPath).Path
 
 # Run the image, mapping its certificate directory to the directory above
+Write-Host "Staring Azure Cosmos DB emulator..." -ForegroundColor Green
 docker run --volume "$($CertPath):c:\DocumentDBEmulator\DocumentDBEmulatorCert" --publish-all --tty --interactive --detach $Image | Out-Null
 
 # Import the certificate from the emulator
 pushd $CertPath
 $CertFile = (Join-Path $CertPath "importcert.ps1")
 
+Write-Host "Waiting for Azure Cosmos DB emulator to export TLS certificate..." -ForegroundColor Green
 while ((Test-Path $CertFile) -ne $True) {
     Start-Sleep 2
 }
 
+Write-Host "Installing Azure Cosmos DB emulator TLS certificate..." -ForegroundColor Green
 & ".\importcert.ps1"
 popd
 
@@ -34,13 +35,17 @@ $ContainerName = (docker ps --format "{{.Names}}")
 $ContainerIP = (docker inspect --format '{{ .NetworkSettings.Networks.nat.IPAddress }}' $ContainerName)
 
 # Set the Cosmos DB endpoint
-$env:Site:Authentication:UserStore:ServiceUri = "https://$($ContainerIP):8081/"
+$ServiceUri = "https://$($ContainerIP):8081/"
+$env:Site:Authentication:UserStore:ServiceUri = $ServiceUri
 
 # Verify the emulator is running
-(Invoke-WebRequest "$($env:Site:Authentication:UserStore:ServiceUri)/_explorer/index.html" -UseBasicParsing).StatusCode
+if ((Invoke-WebRequest "$($env:Site:Authentication:UserStore:ServiceUri)/_explorer/index.html" -UseBasicParsing).StatusCode -ne 200) {
+    Write-Host "Failed to verify Azure Cosmos DB emulator at $($ServiceUri)." -ForegroundColor Red
+}
 
 # Do stuff
 # ...
 
 # Stop the container
+Write-Host "Stopping Azure Cosmos DB emulator..." -ForegroundColor Green
 docker stop $ContainerName | Out-Null
