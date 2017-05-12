@@ -41,11 +41,6 @@ $env:Site:Authentication:UserStore:ServiceUri = $ServiceUri
 # Verify the emulator is running
 if ((Invoke-WebRequest "$($env:Site:Authentication:UserStore:ServiceUri)/_explorer/index.html" -UseBasicParsing).StatusCode -ne 200) {
     Write-Host "Failed to verify Azure Cosmos DB emulator at $($ServiceUri)." -ForegroundColor Red
+} else {
+    Write-Host "Azure Cosmos DB emulator is listening on $($ServiceUri)."
 }
-
-# Do stuff
-# ...
-
-# Stop the container
-Write-Host "Stopping Azure Cosmos DB emulator..." -ForegroundColor Green
-docker stop $ContainerName | Out-Null
