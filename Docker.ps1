@@ -1,3 +1,4 @@
+$ErrorActionPreference = "Stop"
 $ProgressPreference="SilentlyContinue"
 
 $RepoPath = Split-Path $MyInvocation.MyCommand.Definition
@@ -6,7 +7,7 @@ $Image = "microsoft/azure-documentdb-emulator"
 
 # Get the image
 Write-Host "Downloading $($Image) docker image for Azure Cosmos DB emulator..." -ForegroundColor Green
-docker pull $Image | Out-Null
+docker pull $Image
 
 # Create directory to put the certificate in
 mkdir $CertPath -Force | Out-Null
