@@ -6,13 +6,13 @@ $Image = "microsoft/azure-documentdb-emulator"
 
 # Get the image
 Write-Host "Downloading $($Image) docker image for Azure Cosmos DB emulator..." -ForegroundColor Green
-docker pull $Image
+docker pull $Image | Out-Null
 
 # Create directory to put the certificate in
 mkdir $CertPath -Force | Out-Null
 
 # Run the image, mapping its certificate directory to the directory above
-Write-Host "Staring Azure Cosmos DB emulator..." -ForegroundColor Green
+Write-Host "Starting Azure Cosmos DB emulator..." -ForegroundColor Green
 docker run --volume "$($CertPath):c:\DocumentDBEmulator\DocumentDBEmulatorCert" --publish-all --tty --interactive --detach $Image | Out-Null
 
 # Import the certificate from the emulator
