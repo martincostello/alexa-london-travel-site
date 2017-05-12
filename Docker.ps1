@@ -43,5 +43,5 @@ $ServiceUri = "https://$($ContainerIP):8081/"
 if ((Invoke-WebRequest "$($ServiceUri)_explorer/index.html" -UseBasicParsing).StatusCode -ne 200) {
     Write-Host "Failed to verify Azure Cosmos DB emulator at $($ServiceUri)." -ForegroundColor Red
 } else {
-    Write-Host "Azure Cosmos DB emulator is listening on $($ServiceUri)."
+    Write-Host "Azure Cosmos DB emulator is listening on $($ServiceUri)." -ForegroundColor Green
 }
