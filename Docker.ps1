@@ -8,7 +8,7 @@ $Image = "microsoft/azure-documentdb-emulator"
 # Get the image
 Write-Host "Downloading $($Image) docker image for Azure Cosmos DB emulator..." -ForegroundColor Green
 $job = Start-Job -ScriptBlock { docker pull "microsoft/azure-documentdb-emulator" }
-$job | Wait-Job -Timeout 600
+$job | Wait-Job -Timeout 600 | Out-Null
 if ($job.State -eq "Running") {
   $job.StopJob()
   throw "Failed to download $($Image) docker image within 10 minutes."
