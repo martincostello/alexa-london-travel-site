@@ -1,12 +1,14 @@
 $ErrorActionPreference = "Stop"
 $ProgressPreference="SilentlyContinue"
 
+Write-Host "Setting up Azure Cosmos DB emulator..." -ForegroundColor Green
+
 $RepoPath = Split-Path $MyInvocation.MyCommand.Definition
 $CertPath = (Join-Path $RepoPath ".dockershare")
 $Image = "microsoft/azure-documentdb-emulator"
 
 # Get the image
-Write-Host "Downloading $($Image) docker image for Azure Cosmos DB emulator..." -ForegroundColor Green
+Write-Host "Downloading $($Image) docker image for Azure Cosmos DB emulator..."
 $job = Start-Job -ScriptBlock { docker pull "microsoft/azure-documentdb-emulator" }
 $job | Wait-Job -Timeout 600 | Out-Null
 if ($job.State -eq "Running") {
@@ -18,19 +20,19 @@ if ($job.State -eq "Running") {
 mkdir $CertPath -Force | Out-Null
 
 # Run the image, mapping its certificate directory to the directory above
-Write-Host "Starting Azure Cosmos DB emulator..." -ForegroundColor Green
+Write-Host "Starting Azure Cosmos DB emulator..."
 docker run --volume "$($CertPath):c:\DocumentDBEmulator\DocumentDBEmulatorCert" --publish-all --tty --interactive --detach $Image | Out-Null
 
 # Import the certificate from the emulator
 pushd $CertPath
 $CertFile = (Join-Path $CertPath "importcert.ps1")
 
-Write-Host "Waiting for Azure Cosmos DB emulator to export TLS certificate..." -ForegroundColor Green
+Write-Host "Waiting for Azure Cosmos DB emulator to export TLS certificate..."
 while ((Test-Path $CertFile) -ne $True) {
     Start-Sleep 2
 }
 
-Write-Host "Installing Azure Cosmos DB emulator TLS certificate..." -ForegroundColor Green
+Write-Host "Installing Azure Cosmos DB emulator TLS certificate..."
 & ".\importcert.ps1"
 popd
 
