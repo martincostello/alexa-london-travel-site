@@ -7,7 +7,12 @@ $Image = "microsoft/azure-documentdb-emulator"
 
 # Get the image
 Write-Host "Downloading $($Image) docker image for Azure Cosmos DB emulator..." -ForegroundColor Green
-docker pull $Image
+$job = Start-Job { docker pull $Image }
+$job | Wait-Job -Timeout 600
+if ($job.State -eq "Running") {
+  $job.StopJob()
+  throw "Failed to download $($Image) docker image within 10 minutes."
+}
 
 # Create directory to put the certificate in
 mkdir $CertPath -Force | Out-Null
