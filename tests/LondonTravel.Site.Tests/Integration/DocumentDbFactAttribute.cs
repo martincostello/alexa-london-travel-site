@@ -17,7 +17,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         /// </summary>
         public DocumentDbFactAttribute()
         {
-            if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("Site:Authentication:UserStore:ServiceUri")))
+            if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("Site__Authentication__UserStore__ServiceUri")))
             {
                 Skip = "No URI for Azure Cosmos DB is configured.";
             }
