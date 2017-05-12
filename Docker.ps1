@@ -36,7 +36,7 @@ $ContainerIP = (docker inspect --format '{{ .NetworkSettings.Networks.nat.IPAddr
 
 # Set the Cosmos DB endpoint
 $ServiceUri = "https://$($ContainerIP):8081/"
-$env:Site:Authentication:UserStore:ServiceUri = $ServiceUri
+[Environment]::SetEnvironmentVariable("Site:Authentication:UserStore:ServiceUri", $ServiceUri, [System.EnvironmentVariableTarget]::Machine)
 
 # Verify the emulator is running
 if ((Invoke-WebRequest "$($env:Site:Authentication:UserStore:ServiceUri)/_explorer/index.html" -UseBasicParsing).StatusCode -ne 200) {
