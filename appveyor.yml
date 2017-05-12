@@ -18,7 +18,7 @@ cache:
 install:
   - ps: npm install -g npm@4.5.0 --loglevel=error
   - ps: npm install -g gulp@3.9.1 --loglevel=error
-  - ps: .\Docker.ps1
+  - ps: .\Install-Emulator.ps1
 
 build_script:
   - ps: .\Build.ps1

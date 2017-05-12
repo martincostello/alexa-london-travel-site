@@ -29,7 +29,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         {
         }
 
-        [Fact(Skip = "Needs to be conditionally enabled based on the Azure Cosmos Document DB emulator running.")]
+        [DocumentDbFact]
         public async Task Can_Perform_Operations_On_Users_And_Get_Preferences_From_Api()
         {
             // Arrange
