@@ -12,7 +12,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
     public abstract class IntegrationTest
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="HttpServerFixture"/> class.
+        /// Initializes a new instance of the <see cref="IntegrationTest"/> class.
         /// </summary>
         /// <param name="fixture">The fixture to use.</param>
         protected IntegrationTest(HttpServerFixture fixture)
