@@ -20,18 +20,22 @@ if ($job.State -eq "Running") {
 mkdir $CertPath -Force | Out-Null
 
 # Run the image, mapping its certificate directory to the directory above
-Write-Host "Starting Azure Cosmos DB emulator..."
+Write-Host "Starting the Azure Cosmos DB emulator..."
 docker run --volume "$($CertPath):c:\DocumentDBEmulator\DocumentDBEmulatorCert" --publish-all --tty --interactive --detach $Image | Out-Null
 
 # Import the certificate from the emulator
-pushd $CertPath
 $CertFile = (Join-Path $CertPath "importcert.ps1")
 
 Write-Host "Waiting for Azure Cosmos DB emulator to export TLS certificate..."
-while ((Test-Path $CertFile) -ne $True) {
-    Start-Sleep 2
+
+$job = Start-Job -ScriptBlock { while ((Test-Path $args[0]) -ne $True) { Start-Sleep 2 } } -ArgumentList $CertFile
+$job | Wait-Job -Timeout 60 | Out-Null
+if ($job.State -eq "Running") {
+  $job.StopJob()
+  throw "The Azure Cosmos DB emulator did not export the TLS certificate within 60 seconds."
 }
 
+pushd $CertPath
 Write-Host "Installing Azure Cosmos DB emulator TLS certificate..."
 & ".\importcert.ps1"
 popd
