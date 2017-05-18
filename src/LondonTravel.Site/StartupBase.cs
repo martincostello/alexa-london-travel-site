@@ -262,8 +262,7 @@ namespace MartinCostello.LondonTravel.Site
             services.AddScoped((p) => p.GetRequiredService<SiteOptions>().Tfl);
 
             services.AddScoped<SiteResources>();
-            services.AddTransient<TelemetryHttpMessageHandler>();
-            services.AddTransient((p) => new HttpClient(p.GetRequiredService<TelemetryHttpMessageHandler>()));
+            services.AddTransient<HttpClient>();
             services.AddTransient<ITflService, TflService>();
 
             var builder = new ContainerBuilder();

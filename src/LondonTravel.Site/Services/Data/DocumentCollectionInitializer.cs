@@ -6,7 +6,6 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
     using System;
     using System.Collections.Concurrent;
     using System.Net;
-    using System.Net.Http;
     using System.Threading.Tasks;
     using Microsoft.ApplicationInsights;
     using Microsoft.Azure.Documents;
@@ -103,15 +102,10 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             Uri uri = BuildDatabaseUri();
             Uri createUri = new Uri($"{uri}/{DocumentHelpers.CollectionsUriFragment}", UriKind.Relative);
 
-            var response = await TrackAsync(
-                createUri,
-                () =>
-                {
-                    return _client.CreateDocumentCollectionIfNotExistsAsync(
-                        uri,
-                        new DocumentCollection() { Id = collectionName },
-                        new RequestOptions() { OfferThroughput = 400 });
-                });
+            var response = await _client.CreateDocumentCollectionIfNotExistsAsync(
+                uri,
+                new DocumentCollection() { Id = collectionName },
+                new RequestOptions() { OfferThroughput = 400 });
 
             bool created = response.StatusCode == HttpStatusCode.Created;
 
@@ -135,9 +129,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         {
             await _client.OpenAsync();
 
-            var response = await TrackAsync(
-                DocumentHelpers.DatabasesUriFragment,
-                () => _client.CreateDatabaseIfNotExistsAsync(new Database() { Id = _databaseName }));
+            var response = await _client.CreateDatabaseIfNotExistsAsync(new Database() { Id = _databaseName });
 
             bool created = response.StatusCode == HttpStatusCode.Created;
 
@@ -154,21 +146,5 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// The URI to use for the database.
         /// </returns>
         private Uri BuildDatabaseUri() => UriFactory.CreateDatabaseUri(_databaseName);
-
-        /// <summary>
-        /// Tracks the specified request as an asynchronous operation.
-        /// </summary>
-        /// <typeparam name="T">The type of the response.</typeparam>
-        /// <param name="relativeUri">The relative URI associated with the request.</param>
-        /// <param name="request">A delegate to a method representing the request.</param>
-        /// <returns>
-        /// A <see cref="Task{TResult}"/> representing the asynchronous operation which
-        /// returns an instance of <typeparamref name="T"/> representing the result of the request.
-        /// </returns>
-        private Task<T> TrackAsync<T>(Uri relativeUri, Func<Task<T>> request)
-            where T : IResourceResponseBase
-        {
-            return DocumentHelpers.TrackAsync(_telemetry, _client.ServiceEndpoint, HttpMethod.Post, relativeUri, request);
-        }
     }
 }
