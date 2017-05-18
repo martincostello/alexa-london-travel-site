@@ -8,7 +8,6 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
     using System.Linq;
     using System.Linq.Expressions;
     using System.Net;
-    using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.ApplicationInsights;
@@ -92,7 +91,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
             Uri uri = BuildCollectionUri();
 
-            var result = await TrackAsync(HttpMethod.Post, uri, () => _client.CreateDocumentAsync(uri, document));
+            var result = await _client.CreateDocumentAsync(uri, document);
 
             _logger.LogTrace(
                 "Created document in collection {CollectionName} of database {DatabaseName}. Id: {ResourceId}.",
@@ -117,7 +116,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             {
                 Uri uri = BuildDocumentUri(id);
 
-                await TrackAsync(HttpMethod.Delete, uri, () => _client.DeleteDocumentAsync(uri));
+                await _client.DeleteDocumentAsync(uri);
 
                 return true;
             }
@@ -143,7 +142,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             {
                 Uri uri = BuildDocumentUri(id);
 
-                Document document = await TrackAsync(HttpMethod.Get, uri, () => _client.ReadDocumentAsync(uri));
+                Document document = await _client.ReadDocumentAsync(uri);
 
                 result = (T)(dynamic)document;
             }
@@ -175,7 +174,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             {
                 while (query.HasMoreResults)
                 {
-                    documents.AddRange(await TrackQueryAsync(queryUri, () => query.ExecuteNextAsync<T>(cancellationToken)));
+                    documents.AddRange(await query.ExecuteNextAsync<T>(cancellationToken));
                 }
             }
 
@@ -211,7 +210,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             {
                 Uri uri = BuildDocumentUri(id);
 
-                Document response = await TrackAsync(HttpMethod.Put, uri, () => _client.ReplaceDocumentAsync(uri, document, options));
+                Document response = await _client.ReplaceDocumentAsync(uri, document, options);
 
                 _logger.LogTrace(
                     "Replaced document with Id {Id} in collection {CollectionName} of database {DatabaseName}.",
@@ -287,37 +286,5 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// The URI to use for the specified document.
         /// </returns>
         private Uri BuildDocumentUri(string id) => UriFactory.CreateDocumentUri(_options.DatabaseName, _options.CollectionName, id);
-
-        /// <summary>
-        /// Tracks the specified request as an asynchronous operation.
-        /// </summary>
-        /// <typeparam name="T">The type of the response.</typeparam>
-        /// <param name="method">The HTTP method associated with the request.</param>
-        /// <param name="relativeUri">The relative URI associated with the request.</param>
-        /// <param name="request">A delegate to a method representing the request.</param>
-        /// <returns>
-        /// A <see cref="Task{TResult}"/> representing the asynchronous operation which
-        /// returns an instance of <typeparamref name="T"/> representing the result of the request.
-        /// </returns>
-        private Task<T> TrackAsync<T>(HttpMethod method, Uri relativeUri, Func<Task<T>> request)
-            where T : IResourceResponseBase
-        {
-            return DocumentHelpers.TrackAsync(_telemetry, _client.ServiceEndpoint, method, relativeUri, request);
-        }
-
-        /// <summary>
-        /// Tracks the specified query as an asynchronous operation.
-        /// </summary>
-        /// <typeparam name="T">The type of the query result.</typeparam>
-        /// <param name="relativeUri">The relative URI associated with the query.</param>
-        /// <param name="request">A delegate to a method representing the query.</param>
-        /// <returns>
-        /// A <see cref="Task{TResult}"/> representing the asynchronous operation which
-        /// returns an feed response of <typeparamref name="T"/> representing the result of the query.
-        /// </returns>
-        private Task<FeedResponse<T>> TrackQueryAsync<T>(Uri relativeUri, Func<Task<FeedResponse<T>>> request)
-        {
-            return DocumentHelpers.TrackQueryAsync(_telemetry, _client.ServiceEndpoint, relativeUri, request);
-        }
     }
 }
