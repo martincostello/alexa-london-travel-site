@@ -71,7 +71,11 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             // TODO Consider allowing implicit access if the user is signed-in (i.e. access from a browser)
             if (string.IsNullOrWhiteSpace(authorizationHeader))
             {
-                _logger?.LogInformation("API request for preferences denied as no Authorization header/value was specified.");
+                _logger?.LogInformation(
+                    "API request for preferences denied as no Authorization header/value was specified. IP: {RemoteIP}; User Agent: {UserAgent}.",
+                    HttpContext.Connection.RemoteIpAddress,
+                    Request.Headers["User-Agent"]);
+
                 _telemetry.TrackApiPreferencesUnauthorized();
 
                 return Unauthorized("No access token specified.");
@@ -82,13 +86,21 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             if (user == null || !string.Equals(user.AlexaToken, accessToken, StringComparison.Ordinal))
             {
-                _logger?.LogInformation("API request for preferences denied as the specified access token is unknown.");
+                _logger?.LogInformation(
+                    "API request for preferences denied as the specified access token is unknown. IP: {RemoteIP}; User Agent: {UserAgent}.",
+                    HttpContext.Connection.RemoteIpAddress,
+                    Request.Headers["User-Agent"]);
+
                 _telemetry.TrackApiPreferencesUnauthorized();
 
                 return Unauthorized("Unauthorized.");
             }
 
-            _logger?.LogInformation("Successfully authorized API request for preferences for user Id {UserId}.", user.Id);
+            _logger?.LogInformation(
+                "Successfully authorized API request for preferences for user Id {UserId}. IP: {RemoteIP}; User Agent: {UserAgent}.",
+                user.Id,
+                HttpContext.Connection.RemoteIpAddress,
+                Request.Headers["User-Agent"]);
 
             var data = new PreferencesResponse()
             {
