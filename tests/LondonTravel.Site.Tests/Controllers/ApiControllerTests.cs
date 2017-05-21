@@ -203,10 +203,19 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// </returns>
         private static ApiController CreateTarget(IDocumentClient client = null)
         {
+            var httpRequest = new Mock<HttpRequest>();
+
+            httpRequest.Setup((p) => p.Headers).Returns(new HeaderDictionary());
+
+            var httpContext = new Mock<HttpContext>();
+
+            httpContext.Setup((p) => p.Connection).Returns(Mock.Of<ConnectionInfo>());
+            httpContext.Setup((p) => p.Request).Returns(httpRequest.Object);
+
             var actionContext = new ActionContext()
             {
                 ActionDescriptor = new ControllerActionDescriptor(),
-                HttpContext = Mock.Of<HttpContext>(),
+                HttpContext = httpContext.Object,
                 RouteData = new RouteData(),
             };
 
