@@ -4,9 +4,9 @@
 namespace MartinCostello.LondonTravel.Site.Extensions
 {
     using System;
+    using AspNet.Security.OAuth.Amazon;
+    using AspNet.Security.OAuth.GitHub;
     using MartinCostello.LondonTravel.Site.Identity;
-    using MartinCostello.LondonTravel.Site.Identity.Amazon;
-    using MartinCostello.LondonTravel.Site.Identity.GitHub;
     using Microsoft.AspNetCore.Authentication.Twitter;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -54,7 +54,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
 
                 if (TryGetProvider("Amazon", options, out ExternalSignInOptions provider))
                 {
-                    app.UseAmazonAuthentication(CreateOAuthOptions<AmazonOptions>(provider, loggerFactory));
+                    app.UseAmazonAuthentication(CreateOAuthOptions<AmazonAuthenticationOptions>(provider, loggerFactory));
                 }
 
                 if (TryGetProvider("Facebook", options, out provider))
@@ -69,7 +69,10 @@ namespace MartinCostello.LondonTravel.Site.Extensions
 
                 if (TryGetProvider("GitHub", options, out provider))
                 {
-                    app.UseGitHubAuthentication(CreateOAuthOptions<GitHubOptions>(provider, loggerFactory));
+                    var githubOptions = CreateOAuthOptions<GitHubAuthenticationOptions>(provider, loggerFactory);
+                    githubOptions.Scope.Add("user:email");
+
+                    app.UseGitHubAuthentication(githubOptions);
                 }
 
                 if (TryGetProvider("Microsoft", options, out provider))
