@@ -124,7 +124,11 @@ namespace MartinCostello.LondonTravel.Site.Middleware
                     if (context.Request.IsHttps)
                     {
                         context.Response.Headers.Add("Expect-CT", _expectCTValue);
-                        context.Response.Headers.Add("Strict-Transport-Security", "max-age=31536000");
+
+                        if (_isProduction)
+                        {
+                            context.Response.Headers.Add("Strict-Transport-Security", "max-age=31536000");
+                        }
 
                         if (_options.Value.PublicKeyPins?.IsEnabled == true && !string.IsNullOrWhiteSpace(_publicKeyPins))
                         {
