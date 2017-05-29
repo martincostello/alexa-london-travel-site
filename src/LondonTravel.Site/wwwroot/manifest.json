@@ -4,6 +4,8 @@
   "start_url": "/",
   "background_color": "#ffffff",
   "theme_color": "#2c3e50",
+  "display": "minimal-ui",
+  "lang": "en-GB",
   "icons": [
     {
       "src": "https://cdn.martincostello.com/london-travel_android-chrome-36x36.png",
@@ -46,6 +48,12 @@
       "sizes": "250x250",
       "type": "image/png",
       "density": 5.0
+    },
+    {
+      "src": "https://cdn.martincostello.com/london-travel_android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "density": 6.0
     }
   ]
 }
