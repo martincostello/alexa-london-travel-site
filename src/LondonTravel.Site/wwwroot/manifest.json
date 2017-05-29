@@ -5,6 +5,7 @@
   "background_color": "#ffffff",
   "theme_color": "#2c3e50",
   "display": "minimal-ui",
+  "lang": "en-GB",
   "icons": [
     {
       "src": "https://cdn.martincostello.com/london-travel_android-chrome-36x36.png",
