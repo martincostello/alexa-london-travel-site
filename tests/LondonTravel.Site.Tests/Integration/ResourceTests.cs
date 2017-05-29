@@ -6,6 +6,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using System;
     using System.Net;
     using System.Threading.Tasks;
+    using Newtonsoft.Json.Linq;
     using Xunit;
 
     /// <summary>
@@ -105,6 +106,20 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
                 Assert.NotNull(response.Content.Headers.ContentLength);
                 Assert.NotEqual(0, response.Content.Headers.ContentLength);
+            }
+        }
+
+        [Fact]
+        public async Task Manifest_Is_Valid_Json()
+        {
+            using (var response = await Fixture.Client.GetAsync("/manifest.json"))
+            {
+                response.EnsureSuccessStatusCode();
+
+                string json = await response.Content.ReadAsStringAsync();
+                JObject manifest = JObject.Parse(json);
+
+                Assert.Equal("London Travel", (string)manifest["name"]);
             }
         }
 

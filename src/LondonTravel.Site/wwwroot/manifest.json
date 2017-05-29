@@ -46,6 +46,12 @@
       "sizes": "250x250",
       "type": "image/png",
       "density": 5.0
+    },
+    {
+      "src": "https://cdn.martincostello.com/london-travel_android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "density": 6.0
     }
   ]
 }
