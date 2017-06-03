@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.4
+VisualStudioVersion = 15.0.26430.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DD7EA67A-4FE1-4D4F-825E-51FF842107AB}"
 	ProjectSection(SolutionItems) = preProject
@@ -32,6 +32,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LondonTravel.Site", "src\Lo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LondonTravel.Site.Tests", "tests\LondonTravel.Site.Tests\LondonTravel.Site.Tests.csproj", "{0106CA34-73B0-4F30-8BDF-AF8D7AB22A4A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".vscode", ".vscode", "{DB85B1E3-701B-456F-AEE1-3B2F1DA23BC2}"
+	ProjectSection(SolutionItems) = preProject
+		.vscode\launch.json = .vscode\launch.json
+		.vscode\tasks.json = .vscode\tasks.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,5 +59,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{F1A4074F-A8DE-4A9A-97EF-91830AEC59B3} = {0EED3EF2-37DE-4E6E-B766-3E641D163515}
 		{0106CA34-73B0-4F30-8BDF-AF8D7AB22A4A} = {668E07A5-C40F-4694-9D3C-EBC1180656CF}
+		{DB85B1E3-701B-456F-AEE1-3B2F1DA23BC2} = {DD7EA67A-4FE1-4D4F-825E-51FF842107AB}
 	EndGlobalSection
 EndGlobal
