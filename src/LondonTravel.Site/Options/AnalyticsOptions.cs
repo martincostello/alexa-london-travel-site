@@ -12,5 +12,10 @@ namespace MartinCostello.LondonTravel.Site.Options
         /// Gets or sets the Google property Id.
         /// </summary>
         public string Google { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Pingdom real-user monitoring Id.
+        /// </summary>
+        public string Pingdom { get; set; }
     }
 }
