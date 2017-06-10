@@ -3,7 +3,6 @@
 
 namespace MartinCostello.LondonTravel.Site.Controllers
 {
-    using System;
     using Microsoft.AspNetCore.Mvc;
 
     /// <summary>
