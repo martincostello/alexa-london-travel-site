@@ -555,4 +555,19 @@
   <data name="ErrorTitle408" xml:space="preserve">
     <value>Request timeout</value>
   </data>
+  <data name="TechnologyLinkAltText" xml:space="preserve">
+    <value>Information about the technologies behind the London Travel Alexa skill</value>
+  </data>
+  <data name="TechnologyLinkText" xml:space="preserve">
+    <value>Technology</value>
+  </data>
+  <data name="TechnologyMetaDescription" xml:space="preserve">
+    <value>Information about the technologies behind the London Travel Alexa skill.</value>
+  </data>
+  <data name="TechnologyMetaTitle" xml:space="preserve">
+    <value>London Travel Technologies</value>
+  </data>
+  <data name="TechnologyTitle" xml:space="preserve">
+    <value>London Travel Technologies</value>
+  </data>
 </root>

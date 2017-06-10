@@ -303,6 +303,16 @@ namespace MartinCostello.LondonTravel.Site
 
         public string ErrorMessage408 => _localizer[nameof(ErrorMessage408)];
 
+        public string TechnologyTitle => _localizer[nameof(TechnologyTitle)];
+
+        public string TechnologyMetaDescription => _localizer[nameof(TechnologyMetaDescription)];
+
+        public string TechnologyMetaTitle => _localizer[nameof(TechnologyMetaTitle)];
+
+        public string TechnologyLinkText => _localizer[nameof(TechnologyLinkText)];
+
+        public string TechnologyLinkAltText => _localizer[nameof(TechnologyLinkAltText)];
+
         public string ErrorSubtitle(int? httpCode) => _localizer[nameof(ErrorSubtitle), httpCode ?? 500];
 
         public LocalizedHtmlString AvailableLinesTitle(string classes, int count) => _htmlLocalizer[nameof(AvailableLinesTitle), classes, count];
