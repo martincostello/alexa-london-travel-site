@@ -6,16 +6,16 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     using Microsoft.AspNetCore.Mvc;
 
     /// <summary>
-    /// A class representing the controller for the <c>/terms-of-service/</c> resource.
+    /// A class representing the controller for the <c>/technology/</c> resource.
     /// </summary>
-    [Route("terms-of-service", Name = SiteRoutes.TermsOfService)]
-    public class TermsController : Controller
+    [Route("technology", Name = SiteRoutes.Technology)]
+    public class TechnologyController : Controller
     {
         /// <summary>
-        /// Gets the result for the <c>/terms-of-service/</c> action.
+        /// Gets the result for the <c>/technology/</c> action.
         /// </summary>
         /// <returns>
-        /// The result for the <c>/terms-of-service/</c> action.
+        /// The result for the <c>/technology/</c> action.
         /// </returns>
         [HttpGet]
         public IActionResult Index() => View();

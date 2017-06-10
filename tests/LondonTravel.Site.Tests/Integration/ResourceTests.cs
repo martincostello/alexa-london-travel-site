@@ -59,6 +59,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         [InlineData("/robots.txt", "text/plain")]
         [InlineData("/service-worker.js", "application/javascript")]
         [InlineData("/sitemap.xml", "text/xml")]
+        [InlineData("/technology/", "text/html")]
         [InlineData("/terms-of-service/", "text/html")]
         public async Task Can_Load_Resource(string requestUri, string contentType)
         {
