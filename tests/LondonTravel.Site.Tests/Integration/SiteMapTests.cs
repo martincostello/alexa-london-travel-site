@@ -33,8 +33,12 @@ namespace MartinCostello.LondonTravel.Site.Integration
             // Act
             using (var response = await Fixture.Client.GetAsync("sitemap.xml"))
             {
-                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+                response.StatusCode.ShouldBe(HttpStatusCode.OK);
+                response.Content.Headers.ContentType?.MediaType.ShouldBe("text/xml");
+
                 string xml = await response.Content.ReadAsStringAsync();
+
+                xml.ShouldNotBeNullOrWhiteSpace();
                 locations = GetSitemapLocations(xml);
             }
 
@@ -45,7 +49,9 @@ namespace MartinCostello.LondonTravel.Site.Integration
             foreach (XmlNode location in locations)
             {
                 string url = location.InnerText;
-                Assert.True(Uri.TryCreate(url, UriKind.Absolute, out Uri uri));
+
+                url.ShouldNotBeNullOrWhiteSpace();
+                Uri.TryCreate(url, UriKind.Absolute, out Uri uri).ShouldBeTrue();
 
                 uri.Scheme.ShouldBe("https");
                 uri.Port.ShouldBe(443);
@@ -54,7 +60,10 @@ namespace MartinCostello.LondonTravel.Site.Integration
 
                 using (var response = await Fixture.Client.GetAsync(uri.PathAndQuery))
                 {
-                    Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+                    response.StatusCode.ShouldBe(HttpStatusCode.OK);
+                    response.Content.Headers.ContentType?.MediaType.ShouldBe("text/html");
+                    response.Content.Headers.ContentLength.ShouldNotBeNull();
+                    response.Content.Headers.ContentLength.Value.ShouldBeGreaterThan(0);
                 }
             }
         }
