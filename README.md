@@ -4,7 +4,7 @@
 
 | | Linux | Windows |
 |:-:|:-:|:-:|
-| **Build Status** | [![Build status](https://img.shields.io/travis/martincostello/alexa-london-travel-site/master.svg)](https://travis-ci.org/martincostello/alexa-london-travel-site) | [![Build status](https://img.shields.io/appveyor/ci/martincostello/alexa-london-travel-site/master.svg)](https://ci.appveyor.com/project/martincostello/alexa-london-travel-site) |
+| **Build Status** | [![Build status](https://img.shields.io/travis/martincostello/alexa-london-travel-site/master.svg)](https://travis-ci.org/martincostello/alexa-london-travel-site) | [![Build status](https://img.shields.io/appveyor/ci/martincostello/alexa-london-travel-site/master.svg)](https://ci.appveyor.com/project/martincostello/alexa-london-travel-site) [![codecov](https://codecov.io/gh/martincostello/alexa-london-travel-site/branch/master/graph/badge.svg)](https://codecov.io/gh/martincostello/alexa-london-travel-site) |
 | **Build History** | [![Build history](https://buildstats.info/travisci/chart/martincostello/alexa-london-travel-site?branch=master&includeBuildsFromPullRequest=false)](https://travis-ci.org/martincostello/alexa-london-travel-site) |  [![Build history](https://buildstats.info/appveyor/chart/martincostello/alexa-london-travel-site?branch=master&includeBuildsFromPullRequest=false)](https://ci.appveyor.com/project/martincostello/alexa-london-travel-site) |
 
 ## Overview

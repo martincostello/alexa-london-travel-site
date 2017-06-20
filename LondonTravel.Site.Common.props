@@ -7,8 +7,6 @@
     <CodeAnalysisRuleSet>../../LondonTravel.Site.ruleset</CodeAnalysisRuleSet>
     <Company>https://github.com/martincostello/alexa-london-travel-site</Company>
     <Copyright>Martin Costello (c) 2017</Copyright>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>embedded</DebugType>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
