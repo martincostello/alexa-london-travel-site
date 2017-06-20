@@ -4,7 +4,8 @@
     [Parameter(Mandatory = $false)][string] $VersionSuffix = "",
     [Parameter(Mandatory = $false)][string] $OutputPath = "",
     [Parameter(Mandatory = $false)][switch] $PatchVersion,
-    [Parameter(Mandatory = $false)][switch] $SkipTests
+    [Parameter(Mandatory = $false)][switch] $SkipTests,
+    [Parameter(Mandatory = $false)][switch] $DisableCodeCoverage
 )
 
 $ErrorActionPreference = "Stop"
@@ -48,7 +49,7 @@ if ($installDotNetSdk -eq $true) {
     }
 
     $env:PATH = "$env:DOTNET_INSTALL_DIR;$env:PATH"
-    $dotnet = Join-Path "$env:DOTNET_INSTALL_DIR" "dotnet"
+    $dotnet = Join-Path "$env:DOTNET_INSTALL_DIR" "dotnet.exe"
 }
 else {
     $dotnet = "dotnet"
@@ -64,7 +65,35 @@ function DotNetRestore {
 
 function DotNetTest {
     param([string]$Project)
-    & $dotnet test $Project --output $OutputPath --framework $framework
+
+    if ($DisableCodeCoverage -eq $true) {
+        & $dotnet test $Project --output $OutputPath --framework $framework
+    }
+    else {
+
+        if ($installDotNetSdk -eq $true) {
+            $dotnetPath = $dotnet
+        } else {
+            $dotnetPath = (Get-Command "dotnet.exe").Source
+        }
+
+        $nugetPath = Join-Path $env:USERPROFILE ".nuget\packages"
+        $openCoverVersion = "4.6.519"
+        $openCoverPath = Join-Path $nugetPath "OpenCover\$openCoverVersion\tools\OpenCover.Console.exe"
+        $coverageOutput = Join-Path $OutputPath "code-coverage.xml"
+
+        & $openCoverPath `
+            `"-target:$dotnetPath`" `
+            `"-targetargs:test $Project --output $OutputPath`" `
+            -output:$coverageOutput `
+            -hideskipped:All `
+            -mergebyhash `
+            -oldstyle `
+            -register:user `
+            -skipautoprops `
+            `"-filter:+[LondonTravel.Site]* -[LondonTravel.Site.Tests]*`"
+    }
+
     if ($LASTEXITCODE -ne 0) {
         throw "dotnet test failed with exit code $LASTEXITCODE"
     }
