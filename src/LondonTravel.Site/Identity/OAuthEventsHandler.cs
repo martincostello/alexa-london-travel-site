@@ -64,7 +64,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <returns>
         /// A <see cref="Task"/> representing the completion of the operation.
         /// </returns>
-        internal static Task HandleRemoteFailure<T>(
+        public static Task HandleRemoteFailure<T>(
             FailureContext context,
             string provider,
             ISecureDataFormat<T> secureDataFormat,
