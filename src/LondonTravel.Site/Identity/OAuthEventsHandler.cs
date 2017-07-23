@@ -64,7 +64,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <returns>
         /// A <see cref="Task"/> representing the completion of the operation.
         /// </returns>
-        internal static Task HandleRemoteFailure<T>(
+        public static Task HandleRemoteFailure<T>(
             FailureContext context,
             string provider,
             ISecureDataFormat<T> secureDataFormat,
@@ -163,10 +163,30 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// </returns>
         private static bool WasPermissionDenied(FailureContext context)
         {
-            return
-                string.Equals(context.Request.Query["error"].FirstOrDefault(), "access_denied", StringComparison.Ordinal) ||
-                string.Equals(context.Request.Query["error_reason"].FirstOrDefault(), "user_denied", StringComparison.Ordinal) ||
-                context.Request.Query.ContainsKey("denied");
+            string error = context.Request.Query["error"].FirstOrDefault();
+
+            if (string.Equals(error, "access_denied", StringComparison.Ordinal) ||
+                string.Equals(error, "consent_required", StringComparison.Ordinal))
+            {
+                return true;
+            }
+
+            string reason = context.Request.Query["error_reason"].FirstOrDefault();
+
+            if (string.Equals(reason, "user_denied", StringComparison.Ordinal))
+            {
+                return true;
+            }
+
+            string description = context.Request.Query["error_description"].FirstOrDefault();
+
+            if (!string.IsNullOrEmpty(description) &&
+                description.Contains("denied"))
+            {
+                return true;
+            }
+
+            return context.Request.Query.ContainsKey("denied");
         }
 
         /// <summary>
