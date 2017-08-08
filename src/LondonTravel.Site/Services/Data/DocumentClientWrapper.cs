@@ -5,6 +5,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Linq.Expressions;
     using System.Net;
@@ -188,6 +189,15 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         }
 
         /// <inheritdoc />
+        public async Task<long> GetDocumentCountAsync()
+        {
+            var uri = BuildCollectionUri();
+            var collection = await _client.ReadDocumentCollectionAsync(uri);
+
+            return GetDocumentCount(collection.CurrentResourceQuotaUsage);
+        }
+
+        /// <inheritdoc />
         public async Task<T> ReplaceAsync<T>(string id, T document, string etag)
             where T : class
         {
@@ -231,6 +241,41 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Returns the document count from the specified current resource quota usage string.
+        /// </summary>
+        /// <param name="currentResourceQuotaUsage">A string containing the current resource quota usage.</param>
+        /// <returns>
+        /// The current document count, if successfully determined; otherwise -1.
+        /// </returns>
+        private static long GetDocumentCount(string currentResourceQuotaUsage)
+        {
+            long count = -1;
+
+            const string Key = "documentsCount=";
+            int indexOfCountKey = currentResourceQuotaUsage?.IndexOf(Key) ?? -1;
+
+            if (indexOfCountKey > -1)
+            {
+                int searchFromIndex = indexOfCountKey + Key.Length;
+                int endOfCountIndex = currentResourceQuotaUsage.IndexOf(';', searchFromIndex);
+
+                if (endOfCountIndex > -1)
+                {
+                    string countAsString = currentResourceQuotaUsage.Substring(
+                        searchFromIndex,
+                        endOfCountIndex - searchFromIndex);
+
+                    if (!long.TryParse(countAsString, NumberStyles.Integer, CultureInfo.InvariantCulture, out count))
+                    {
+                        count = -1;
+                    }
+                }
+            }
+
+            return count;
         }
 
         /// <summary>
