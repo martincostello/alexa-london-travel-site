@@ -30,9 +30,8 @@ namespace MartinCostello.LondonTravel.Site.Identity
         public async override Task<ClaimsPrincipal> CreateAsync(LondonTravelUser user)
         {
             var principal = await base.CreateAsync(user);
-            var identity = principal.Identity as ClaimsIdentity;
 
-            if (identity != null)
+            if (principal.Identity is ClaimsIdentity identity)
             {
                 foreach (LondonTravelRole role in user?.RoleClaims)
                 {

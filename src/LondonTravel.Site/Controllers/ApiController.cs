@@ -10,6 +10,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     using System.Threading;
     using System.Threading.Tasks;
     using Identity;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
@@ -49,6 +50,28 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             _client = client;
             _telemetry = telemetry;
             _logger = logger;
+        }
+
+        /// <summary>
+        /// Gets the result for the <c>/api/_count</c> action.
+        /// </summary>
+        /// <returns>
+        /// The result for the <c>/api/_count</c> action.
+        /// </returns>
+        [Authorize(Roles = "ADMINISTRATOR")]
+        [HttpGet]
+        [Produces("application/json")]
+        [Route("_count")]
+        public async Task<IActionResult> GetDocumentCount()
+        {
+            long count = await _client.GetDocumentCountAsync();
+
+            var value = new
+            {
+                count = count
+            };
+
+            return Ok(value);
         }
 
         /// <summary>

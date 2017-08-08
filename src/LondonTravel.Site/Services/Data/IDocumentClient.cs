@@ -61,6 +61,14 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             where T : class;
 
         /// <summary>
+        /// Gets the count of documents in the collection as an asynchronous operation.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="Task{TResult}"/> representing the asynchronous operation to get the count of documents in the collection.
+        /// </returns>
+        Task<long> GetDocumentCountAsync();
+
+        /// <summary>
         /// Replaces the document with the specified Id with the
         /// specified new document as an asynchronous operation.
         /// </summary>
