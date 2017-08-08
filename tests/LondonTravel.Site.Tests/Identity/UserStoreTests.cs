@@ -431,10 +431,10 @@ namespace MartinCostello.LondonTravel.Site.Identity
             // Arrange
             var user = new LondonTravelUser();
 
-            user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, "admin", ClaimValueTypes.String, "london-travel")));
-            user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, "not-a-string", ClaimValueTypes.Email, "london-travel")));
+            user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, "admin", ClaimValueTypes.String, "https://londontravel.martincostello.com/")));
+            user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, "not-a-string", ClaimValueTypes.Email, "https://londontravel.martincostello.com/")));
             user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, "wrong-issuer", ClaimValueTypes.String, "google")));
-            user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, string.Empty, ClaimValueTypes.String, "london-travel")));
+            user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, string.Empty, ClaimValueTypes.String, "https://londontravel.martincostello.com/")));
 
             var expected = new[]
             {
@@ -458,8 +458,8 @@ namespace MartinCostello.LondonTravel.Site.Identity
             var user = new LondonTravelUser();
             var cancellationToken = CancellationToken.None;
 
-            user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, "admin", ClaimValueTypes.String, "london-travel")));
-            user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, "not-a-string", ClaimValueTypes.Email, "london-travel")));
+            user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, "admin", ClaimValueTypes.String, "https://londontravel.martincostello.com/")));
+            user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, "not-a-string", ClaimValueTypes.Email, "https://londontravel.martincostello.com/")));
             user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, "wrong-issuer", ClaimValueTypes.String, "google")));
 
             var expected = new[]

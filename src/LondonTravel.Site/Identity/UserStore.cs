@@ -25,7 +25,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <summary>
         /// The issuer to use for roles.
         /// </summary>
-        private const string RoleClaimIssuer = "london-travel";
+        private const string RoleClaimIssuer = "https://londontravel.martincostello.com/";
 
         /// <summary>
         /// The <see cref="IDocumentClient"/> to use. This field is read-only.
