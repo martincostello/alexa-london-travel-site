@@ -6,6 +6,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Security.Claims;
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Identity;
@@ -18,8 +19,14 @@ namespace MartinCostello.LondonTravel.Site.Identity
         IUserStore<LondonTravelUser>,
         IUserEmailStore<LondonTravelUser>,
         IUserLoginStore<LondonTravelUser>,
+        IUserRoleStore<LondonTravelUser>,
         IUserSecurityStampStore<LondonTravelUser>
     {
+        /// <summary>
+        /// The issuer to use for roles.
+        /// </summary>
+        private const string RoleClaimIssuer = "london-travel";
+
         /// <summary>
         /// The <see cref="IDocumentClient"/> to use. This field is read-only.
         /// </summary>
@@ -385,6 +392,76 @@ namespace MartinCostello.LondonTravel.Site.Identity
             {
                 return ResultForError("Conflict", "The user could not be updated as the ETag value is out-of-date.");
             }
+        }
+
+        /// <inheritdoc />
+        public Task AddToRoleAsync(LondonTravelUser user, string roleName, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <inheritdoc />
+        public Task<IList<string>> GetRolesAsync(LondonTravelUser user, CancellationToken cancellationToken)
+        {
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            IList<string> roles = Array.Empty<string>();
+
+            if (user.RoleClaims?.Count > 0)
+            {
+                roles = user.RoleClaims
+                    .Where((p) => string.Equals(p.Issuer, RoleClaimIssuer, StringComparison.Ordinal))
+                    .Where((p) => string.Equals(p.ClaimType, ClaimTypes.Role, StringComparison.Ordinal))
+                    .Where((p) => string.Equals(p.ValueType, ClaimValueTypes.String, StringComparison.Ordinal))
+                    .Where((p) => !string.IsNullOrEmpty(p.Value))
+                    .Select((p) => p.Value)
+                    .ToArray();
+            }
+
+            return Task.FromResult(roles);
+        }
+
+        /// <inheritdoc />
+        public Task<IList<LondonTravelUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <inheritdoc />
+        public Task<bool> IsInRoleAsync(LondonTravelUser user, string roleName, CancellationToken cancellationToken)
+        {
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            if (roleName == null)
+            {
+                throw new ArgumentNullException(nameof(roleName));
+            }
+
+            bool isInRole = false;
+
+            if (user.RoleClaims?.Count > 0)
+            {
+                isInRole = user.RoleClaims
+                    .Where((p) => string.Equals(p.Issuer, RoleClaimIssuer, StringComparison.Ordinal))
+                    .Where((p) => string.Equals(p.ClaimType, ClaimTypes.Role, StringComparison.Ordinal))
+                    .Where((p) => string.Equals(p.ValueType, ClaimValueTypes.String, StringComparison.Ordinal))
+                    .Where((p) => string.Equals(p.Value, roleName, StringComparison.Ordinal))
+                    .Any();
+            }
+
+            return Task.FromResult(isInRole);
+        }
+
+        /// <inheritdoc />
+        public Task RemoveFromRoleAsync(LondonTravelUser user, string roleName, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

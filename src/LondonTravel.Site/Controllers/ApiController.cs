@@ -58,7 +58,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// <returns>
         /// The result for the <c>/api/_count</c> action.
         /// </returns>
-        [Authorize(Roles = "administrator")]
+        [Authorize(Roles = "ADMINISTRATOR")]
         [HttpGet]
         [Produces("application/json")]
         [Route("_count")]
