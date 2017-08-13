@@ -52,7 +52,7 @@
     border-left-color: #000;
 }
 
-.travel-line-piccadilly {
+.travel-line-piccadilly, .travel-line-tfl-rail {
     border-left-color: #0019a8;
 }
 
