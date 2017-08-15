@@ -12,8 +12,7 @@ $ErrorActionPreference = "Stop"
 
 $solutionPath = Split-Path $MyInvocation.MyCommand.Definition
 $solutionFile = Join-Path $solutionPath "LondonTravel.Site.sln"
-$framework = "netcoreapp1.1"
-$dotnetVersion = "1.0.4"
+$dotnetVersion = "2.0.0"
 
 if ($OutputPath -eq "") {
     $OutputPath = Join-Path "$(Convert-Path "$PSScriptRoot")" "artifacts"
@@ -44,7 +43,7 @@ if ($installDotNetSdk -eq $true) {
     if (!(Test-Path $env:DOTNET_INSTALL_DIR)) {
         mkdir $env:DOTNET_INSTALL_DIR | Out-Null
         $installScript = Join-Path $env:DOTNET_INSTALL_DIR "install.ps1"
-        Invoke-WebRequest "https://raw.githubusercontent.com/dotnet/cli/rel/1.0.0/scripts/obtain/dotnet-install.ps1" -OutFile $installScript
+        Invoke-WebRequest "https://raw.githubusercontent.com/dotnet/cli/release/2.0.0/scripts/obtain/dotnet-install.ps1" -OutFile $installScript
         & $installScript -Version "$dotnetVersion" -InstallDir "$env:DOTNET_INSTALL_DIR" -NoPath
     }
 
@@ -67,7 +66,7 @@ function DotNetTest {
     param([string]$Project)
 
     if ($DisableCodeCoverage -eq $true) {
-        & $dotnet test $Project --output $OutputPath --framework $framework
+        & $dotnet test $Project --output $OutputPath
     }
     else {
 
@@ -103,10 +102,10 @@ function DotNetPublish {
     param([string]$Project)
     $publishPath = (Join-Path $OutputPath "publish")
     if ($VersionSuffix) {
-        & $dotnet publish $Project --output $publishPath --framework $framework --configuration $Configuration --version-suffix "$VersionSuffix"
+        & $dotnet publish $Project --output $publishPath --configuration $Configuration --version-suffix "$VersionSuffix"
     }
     else {
-        & $dotnet publish $Project --output $publishPath --framework $framework --configuration $Configuration
+        & $dotnet publish $Project --output $publishPath --configuration $Configuration
     }
     if ($LASTEXITCODE -ne 0) {
         throw "dotnet publish failed with exit code $LASTEXITCODE"

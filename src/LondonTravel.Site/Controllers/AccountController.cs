@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Controllers
@@ -8,11 +8,11 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     using System.Security.Claims;
     using System.Threading.Tasks;
     using Identity;
+    using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
-    using Microsoft.Extensions.Options;
     using NodaTime;
     using Options;
     using Telemetry;
@@ -34,7 +34,6 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         private readonly SignInManager<LondonTravelUser> _signInManager;
         private readonly ISiteTelemetry _telemetry;
         private readonly IClock _clock;
-        private readonly string _externalCookieScheme;
         private readonly bool _isEnabled;
         private readonly ILogger<AccountController> _logger;
 
@@ -43,7 +42,6 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             SignInManager<LondonTravelUser> signInManager,
             ISiteTelemetry telemetry,
             IClock clock,
-            IOptionsSnapshot<IdentityCookieOptions> identityCookieOptions,
             SiteOptions siteOptions,
             ILogger<AccountController> logger)
         {
@@ -51,7 +49,6 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             _signInManager = signInManager;
             _telemetry = telemetry;
             _clock = clock;
-            _externalCookieScheme = identityCookieOptions.Value.ExternalCookieAuthenticationScheme;
             _logger = logger;
 
             _isEnabled =
@@ -91,7 +88,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 return RedirectToRoute(SiteRoutes.Home);
             }
 
-            await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
+            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
             ViewData["ReturnUrl"] = returnUrl;
 

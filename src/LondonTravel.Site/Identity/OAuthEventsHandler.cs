@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Identity
@@ -9,7 +9,6 @@ namespace MartinCostello.LondonTravel.Site.Identity
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authentication.OAuth;
-    using Microsoft.AspNetCore.Builder;
     using Microsoft.Extensions.Logging;
 
     /// <summary>
@@ -25,7 +24,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <summary>
         /// The <see cref="IOAuthEvents"/> wrapped by this instance for events it does not handle itself. This field is read-only.
         /// </summary>
-        private readonly IOAuthEvents _wrapped;
+        private readonly OAuthEvents _wrapped;
 
         /// <summary>
         /// The <see cref="ILogger"/> to use. This field is read-only.
@@ -65,7 +64,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// A <see cref="Task"/> representing the completion of the operation.
         /// </returns>
         public static Task HandleRemoteFailure<T>(
-            FailureContext context,
+            RemoteFailureContext context,
             string provider,
             ISecureDataFormat<T> secureDataFormat,
             ILogger logger,
@@ -122,7 +121,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// The site context associated with the current request, if any.
         /// </returns>
         private static string GetSiteErrorRedirect<T>(
-            FailureContext context,
+            RemoteFailureContext context,
             ISecureDataFormat<T> secureDataFormat,
             Func<T, IDictionary<string, string>> propertiesProvider)
         {
@@ -146,7 +145,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <returns>
         /// <see langword="true"/> if request correlation failed; otherwise <see langword="false"/>.
         /// </returns>
-        private static bool IsCorrelationFailure(FailureContext context)
+        private static bool IsCorrelationFailure(RemoteFailureContext context)
         {
             // See https://github.com/aspnet/Security/blob/ad425163b29b1e09a41e84423b0dcbac797c9164/src/Microsoft.AspNetCore.Authentication.OAuth/OAuthHandler.cs#L66
             // and https://github.com/aspnet/Security/blob/2d1c56ce5ccfc15c78dd49cee772f6be473f3ee2/src/Microsoft.AspNetCore.Authentication/RemoteAuthenticationHandler.cs#L203
@@ -161,7 +160,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <returns>
         /// <see langword="true"/> if account linking permission was denied; otherwise <see langword="false"/>.
         /// </returns>
-        private static bool WasPermissionDenied(FailureContext context)
+        private static bool WasPermissionDenied(RemoteFailureContext context)
         {
             string error = context.Request.Query["error"].FirstOrDefault();
 
@@ -196,13 +195,13 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <returns>
         /// A <see cref="Task"/> representing the completion of the operation.
         /// </returns>
-        private async Task HandleRemoteFailure(FailureContext context)
+        private async Task HandleRemoteFailure(RemoteFailureContext context)
         {
             try
             {
                 await HandleRemoteFailure(
                     context,
-                    _options.AuthenticationScheme,
+                    _options.SignInScheme,
                     _options.StateDataFormat,
                     _logger,
                     (p) => p?.Items);
@@ -211,7 +210,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
             {
                 _logger.LogError(default(EventId), ex, "Failed to handle remote failure: {Message}.", ex.Message);
 
-                if (!context.HandledResponse)
+                if (!context.Result.Handled)
                 {
                     await _wrapped.RemoteFailure(context);
                 }

@@ -1,14 +1,15 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Identity.Amazon
 {
     using System.Collections.Generic;
-    using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Http;
+    using System.Security.Claims;
+    using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Authentication.OAuth;
 
     /// <summary>
-    /// Configuration options for <see cref="AmazonMiddleware"/>.
+    /// Configuration options for <see cref="AmazonHandler"/>.
     /// </summary>
     public class AmazonOptions : OAuthOptions
     {
@@ -17,13 +18,11 @@ namespace MartinCostello.LondonTravel.Site.Identity.Amazon
         /// </summary>
         public AmazonOptions()
         {
-            AuthenticationScheme = AmazonDefaults.AuthenticationScheme;
+            CallbackPath = "/signin-amazon";
+
             AuthorizationEndpoint = AmazonDefaults.AuthorizationEndpoint;
             TokenEndpoint = AmazonDefaults.TokenEndpoint;
             UserInformationEndpoint = AmazonDefaults.UserInformationEndpoint;
-
-            CallbackPath = new PathString("/signin-amazon");
-            DisplayName = AuthenticationScheme;
 
             Scope.Add("profile");
             Scope.Add("profile:user_id");
@@ -31,6 +30,11 @@ namespace MartinCostello.LondonTravel.Site.Identity.Amazon
             Fields.Add("email");
             Fields.Add("name");
             Fields.Add("user_id");
+
+            ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
+            ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
+            ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "user_id");
+            ClaimActions.MapJsonKey(ClaimTypes.PostalCode, "postal_code");
         }
 
         /// <summary>

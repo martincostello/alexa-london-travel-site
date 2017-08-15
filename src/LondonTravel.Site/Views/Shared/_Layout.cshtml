@@ -25,7 +25,6 @@
     @await RenderSectionAsync("meta", required: false)
     @await Html.PartialAsync("_StylesHead")
     @await RenderSectionAsync("stylesHead", required: false)
-    @Html.Raw(JavaScriptSnippet.FullScriptWithCspNonce(Context))
     <script type="text/javascript" nonce="@Context.EnsureCspNonce()">
         if (self == top) {
             document.documentElement.className = document.documentElement.className.replace(/\bjs-flash\b/, '');

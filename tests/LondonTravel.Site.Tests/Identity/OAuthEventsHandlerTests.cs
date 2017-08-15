@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Identity
@@ -6,6 +6,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Identity.Amazon;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Http.Internal;
@@ -28,13 +29,17 @@ namespace MartinCostello.LondonTravel.Site.Identity
         {
             // Arrange
             var httpContext = new DefaultHttpContext();
-            var request = new DefaultHttpRequest(httpContext);
 
-            request.QueryString = new QueryString(query);
+            var request = new DefaultHttpRequest(httpContext)
+            {
+                QueryString = new QueryString(query)
+            };
 
+            var scheme = new AuthenticationScheme("amazon-auth", "Amazon", typeof(AmazonHandler));
+            var options = new RemoteAuthenticationOptions();
             var failure = new InvalidOperationException();
 
-            var context = new FailureContext(httpContext, failure);
+            var context = new RemoteFailureContext(httpContext, scheme, options, failure);
             var provider = Guid.NewGuid().ToString();
             var secureDataFormat = Mock.Of<ISecureDataFormat<object>>();
             var logger = Mock.Of<ILogger>();

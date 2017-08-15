@@ -9,9 +9,14 @@ namespace MartinCostello.LondonTravel.Site.Identity.Amazon
     public static class AmazonDefaults
     {
         /// <summary>
-        /// The name of the authentication scheme.
+        /// The authentication scheme for Amazon.
         /// </summary>
         public const string AuthenticationScheme = "Amazon";
+
+        /// <summary>
+        /// The display name for Amazon.
+        /// </summary>
+        public const string DisplayName = "Amazon";
 
         /// <summary>
         /// The URL of the authorization endpoint. This field is read-only.

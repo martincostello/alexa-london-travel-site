@@ -4,11 +4,9 @@
 namespace MartinCostello.LondonTravel.Site
 {
     using System;
-    using System.IO;
-    using System.Threading;
     using Extensions;
+    using Microsoft.AspNetCore;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.Extensions.Configuration;
 
     /// <summary>
     /// A class representing the entry-point to the application. This class cannot be inherited.
@@ -22,47 +20,13 @@ namespace MartinCostello.LondonTravel.Site
         /// <returns>
         /// The exit code from the application.
         /// </returns>
-        public static int Main(string[] args) => Run(args);
-
-        /// <summary>
-        /// Runs ths application.
-        /// </summary>
-        /// <param name="args">The arguments to the application.</param>
-        /// <param name="cancellationToken">The optional cancellation token to use.</param>
-        /// <returns>
-        /// The exit code from the application.
-        /// </returns>
-        public static int Run(string[] args, CancellationToken cancellationToken = default(CancellationToken))
+        public static int Main(string[] args)
         {
             try
             {
-                var configuration = new ConfigurationBuilder()
-                    .AddEnvironmentVariables()
-                    .AddCommandLine(args)
-                    .Build();
-
-                var builder = new WebHostBuilder()
-                    .UseKestrel((p) => p.AddServerHeader = false)
-                    .UseAzureAppServices()
-                    .UseAutofac()
-                    .UseConfiguration(configuration)
-                    .UseContentRoot(Directory.GetCurrentDirectory())
-                    .UseIISIntegration()
-                    .UseStartup<Startup>()
-                    .CaptureStartupErrors(true);
-
-                using (var host = builder.Build())
+                using (var host = BuildWebHost(args))
                 {
-                    using (var tokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken))
-                    {
-                        Console.CancelKeyPress += (_, e) =>
-                        {
-                            tokenSource.Cancel();
-                            e.Cancel = true;
-                        };
-
-                        host.Run(tokenSource.Token);
-                    }
+                    host.Run();
                 }
 
                 return 0;
@@ -72,6 +36,17 @@ namespace MartinCostello.LondonTravel.Site
                 Console.Error.WriteLine($"Unhandled exception: {ex}");
                 return -1;
             }
+        }
+
+        private static IWebHost BuildWebHost(string[] args)
+        {
+            return WebHost.CreateDefaultBuilder(args)
+                .UseKestrel((p) => p.AddServerHeader = false)
+                .UseAutofac()
+                .UseAzureAppServices()
+                .UseStartup<Startup>()
+                .CaptureStartupErrors(true)
+                .Build();
         }
     }
 }
