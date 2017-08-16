@@ -194,6 +194,33 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             }
         }
 
+        [Fact]
+        public static async Task GetDocumentCount_Returns_Correct_Number_Of_Documents()
+        {
+            // Arrange
+            var mock = new Mock<IDocumentClient>();
+            mock.Setup((p) => p.GetDocumentCountAsync())
+                .ReturnsAsync(42);
+
+            using (var target = CreateTarget(mock.Object))
+            {
+                // Act
+                IActionResult actual = await target.GetDocumentCount();
+
+                // Assert
+                actual.ShouldNotBeNull();
+
+                var objectResult = actual.ShouldBeOfType<OkObjectResult>();
+
+                objectResult.StatusCode.ShouldBe(200);
+                objectResult.Value.ShouldNotBeNull();
+
+                var data = objectResult.Value as dynamic;
+
+                ((long)data.count).ShouldBe(42);
+            }
+        }
+
         /// <summary>
         /// Creates an instance of <see cref="ApiController"/> using mock dependencies.
         /// </summary>

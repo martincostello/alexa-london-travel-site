@@ -4,6 +4,7 @@
 namespace MartinCostello.LondonTravel.Site.Controllers
 {
     using System;
+    using System.Dynamic;
     using System.Linq;
     using System.Net;
     using System.Net.Http.Headers;
@@ -66,10 +67,8 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         {
             long count = await _client.GetDocumentCountAsync();
 
-            var value = new
-            {
-                count = count
-            };
+            dynamic value = new ExpandoObject();
+            value.count = count;
 
             return Ok(value);
         }
