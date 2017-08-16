@@ -312,25 +312,5 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             return true;
         }
-
-        /// <summary>
-        /// Verifies the response type.
-        /// </summary>
-        /// <param name="responseType">The response type to verify.</param>
-        /// <returns>
-        /// <see langword="true"/> if the specified response type is valid; otherwise <see langword="false"/>.
-        /// </returns>
-        private bool VerifyResponseType(string responseType)
-        {
-            const string ImplicitFlowResponseType = "token";
-
-            if (!string.Equals(responseType, ImplicitFlowResponseType, StringComparison.Ordinal))
-            {
-                _logger.LogError("Invalid response type {ResponseType} specified.", responseType);
-                return false;
-            }
-
-            return true;
-        }
     }
 }
