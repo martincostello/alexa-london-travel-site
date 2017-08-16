@@ -143,7 +143,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
             }
 
             var results = await _client.GetAsync<LondonTravelUser>(
-                (p) => p.Logins.Contains(new LondonTravelLoginInfo() { LoginProvider = loginProvider, ProviderKey = providerKey }),
+                (p) => p.Logins.Contains(new LondonTravelLoginInfo() { LoginProvider = loginProvider, ProviderKey = providerKey, ProviderDisplayName = loginProvider }),
                 cancellationToken);
 
             return results.FirstOrDefault();
