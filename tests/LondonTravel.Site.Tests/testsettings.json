@@ -1,4 +1,4 @@
-﻿{
+{
   "Logging": {
     "IncludeScopes": false,
     "LogLevel": {
@@ -15,6 +15,13 @@
       "IsEnabled": true,
       "ExternalProviders": {
         "Google": {
+          "ClientId": "google-id",
+          "ClientSecret": "google-secret",
+          "IsEnabled": true
+        },
+        "Twitter": {
+          "ClientId": "twitter-id",
+          "ClientSecret": "twitter-secret",
           "IsEnabled": true
         }
       },
