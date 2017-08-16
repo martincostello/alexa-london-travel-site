@@ -238,6 +238,8 @@ namespace MartinCostello.LondonTravel.Site
 
             services.UseIdentity();
 
+            services.RemoveApplicationInsightsTagHelper();
+
             var builder = new ContainerBuilder();
 
             builder.Populate(services);

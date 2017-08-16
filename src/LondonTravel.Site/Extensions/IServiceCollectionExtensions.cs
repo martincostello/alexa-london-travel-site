@@ -3,8 +3,10 @@
 
 namespace MartinCostello.LondonTravel.Site.Extensions
 {
+    using System.Linq;
     using Identity.Amazon;
     using MartinCostello.LondonTravel.Site.Identity;
+    using Microsoft.AspNetCore.ApplicationInsights.HostingStartup;
     using Microsoft.AspNetCore.Authentication.OAuth;
     using Microsoft.AspNetCore.Authentication.Twitter;
     using Microsoft.Extensions.DependencyInjection;
@@ -17,10 +19,35 @@ namespace MartinCostello.LondonTravel.Site.Extensions
     public static class IServiceCollectionExtensions
     {
         /// <summary>
+        /// Removes the registered Application Insights JavaScript tag helper.
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection"/> to configure.</param>
+        /// <returns>
+        /// The <see cref="IServiceCollection"/> specified by <paramref name="services"/>.
+        /// </returns>
+        public static IServiceCollection RemoveApplicationInsightsTagHelper(this IServiceCollection services)
+        {
+            // See https://github.com/aspnet/AzureIntegration/issues/88
+            var copy = services
+                .Where((p) => p.ImplementationType == typeof(JavaScriptSnippetTagHelperComponent))
+                .ToArray();
+
+            foreach (var item in copy)
+            {
+                services.Remove(item);
+            }
+
+            return services;
+        }
+
+        /// <summary>
         /// Configures identity services.
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection"/> to configure.</param>
-        public static void UseIdentity(this IServiceCollection services)
+        /// <returns>
+        /// The <see cref="IServiceCollection"/> specified by <paramref name="services"/>.
+        /// </returns>
+        public static IServiceCollection UseIdentity(this IServiceCollection services)
         {
             var provider = services.BuildServiceProvider();
             var options = provider.GetRequiredService<SiteOptions>();
@@ -72,6 +99,8 @@ namespace MartinCostello.LondonTravel.Site.Extensions
                         });
                 }
             }
+
+            return services;
         }
 
         /// <summary>
