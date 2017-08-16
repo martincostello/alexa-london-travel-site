@@ -22,41 +22,41 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         /// <param name="services">The <see cref="IServiceCollection"/> to configure.</param>
         public static void UseIdentity(this IServiceCollection services)
         {
-            var serviceProvider = services.BuildServiceProvider();
-            var options = serviceProvider.GetRequiredService<SiteOptions>();
+            var provider = services.BuildServiceProvider();
+            var options = provider.GetRequiredService<SiteOptions>();
 
             if (options?.Authentication?.IsEnabled == true)
             {
-                var loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
+                var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
                 var builder = services.AddAuthentication();
 
-                if (TryGetProvider("Amazon", options, out ExternalSignInOptions provider))
+                if (TryGetProvider("Amazon", options, out ExternalSignInOptions amazonOptions))
                 {
-                    builder.AddAmazon((p) => SetupOAuth(p, provider, loggerFactory));
+                    builder.AddAmazon((p) => SetupOAuth(p, amazonOptions, loggerFactory));
                 }
 
-                if (TryGetProvider("Facebook", options, out provider))
+                if (TryGetProvider("Facebook", options, out ExternalSignInOptions facebookOptions))
                 {
-                    builder.AddFacebook((p) => SetupOAuth(p, provider, loggerFactory));
+                    builder.AddFacebook((p) => SetupOAuth(p, facebookOptions, loggerFactory));
                 }
 
-                if (TryGetProvider("Google", options, out provider))
+                if (TryGetProvider("Google", options, out ExternalSignInOptions googleOptions))
                 {
-                    builder.AddGoogle((p) => SetupOAuth(p, provider, loggerFactory));
+                    builder.AddGoogle((p) => SetupOAuth(p, googleOptions, loggerFactory));
                 }
 
-                if (TryGetProvider("Microsoft", options, out provider))
+                if (TryGetProvider("Microsoft", options, out ExternalSignInOptions microsoftOptions))
                 {
-                    builder.AddMicrosoftAccount((p) => SetupOAuth(p, provider, loggerFactory));
+                    builder.AddMicrosoftAccount((p) => SetupOAuth(p, microsoftOptions, loggerFactory));
                 }
 
-                if (TryGetProvider("Twitter", options, out provider))
+                if (TryGetProvider("Twitter", options, out ExternalSignInOptions twitterOptions))
                 {
                     builder.AddTwitter(
                         (p) =>
                         {
-                            p.ConsumerKey = provider.ClientId;
-                            p.ConsumerSecret = provider.ClientSecret;
+                            p.ConsumerKey = twitterOptions.ClientId;
+                            p.ConsumerSecret = twitterOptions.ClientSecret;
                             p.RetrieveUserDetails = true;
 
                             if (p.Events is TwitterEvents twitterEvents)
@@ -82,7 +82,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         /// <param name="options">The <see cref="ExternalSignInOptions"/> to use to set up the instance.</param>
         /// <param name="loggerFactory">The <see cref="ILoggerFactory"/> to use.</param>
         private static void SetupOAuth<T>(T auth, ExternalSignInOptions options, ILoggerFactory loggerFactory)
-            where T : OAuthOptions, new()
+            where T : OAuthOptions
         {
             auth.ClientId = options.ClientId;
             auth.ClientSecret = options.ClientSecret;
