@@ -5,9 +5,7 @@ namespace MartinCostello.LondonTravel.Site.Identity.Amazon
 {
     using System;
     using Microsoft.AspNetCore.Authentication;
-    using Microsoft.AspNetCore.Builder;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Options;
 
     /// <summary>
     /// Extension methods to add Amazon authentication.
