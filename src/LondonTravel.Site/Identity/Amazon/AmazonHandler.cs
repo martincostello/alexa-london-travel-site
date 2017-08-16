@@ -24,6 +24,14 @@ namespace MartinCostello.LondonTravel.Site.Identity.Amazon
         {
         }
 
+        public Task<AuthenticationTicket> CreateAuthenticationTicketAsync(
+            ClaimsIdentity identity,
+            AuthenticationProperties properties,
+            OAuthTokenResponse tokens)
+        {
+            return CreateTicketAsync(identity, properties, tokens);
+        }
+
         /// <inheritdoc />
         protected override async Task<AuthenticationTicket> CreateTicketAsync(
             ClaimsIdentity identity,
