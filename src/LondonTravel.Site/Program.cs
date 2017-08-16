@@ -4,6 +4,7 @@
 namespace MartinCostello.LondonTravel.Site
 {
     using System;
+    using System.Threading.Tasks;
     using Extensions;
     using Microsoft.AspNetCore;
     using Microsoft.AspNetCore.Hosting;
@@ -18,15 +19,15 @@ namespace MartinCostello.LondonTravel.Site
         /// </summary>
         /// <param name="args">The arguments to the application.</param>
         /// <returns>
-        /// The exit code from the application.
+        /// A <see cref="Task{TResult}"/> that returns the exit code from the application.
         /// </returns>
-        public static int Main(string[] args)
+        public static async Task<int> Main(string[] args)
         {
             try
             {
                 using (var host = BuildWebHost(args))
                 {
-                    host.Run();
+                    await host.RunAsync();
                 }
 
                 return 0;
@@ -44,6 +45,7 @@ namespace MartinCostello.LondonTravel.Site
                 .UseKestrel((p) => p.AddServerHeader = false)
                 .UseAutofac()
                 .UseAzureAppServices()
+                .UseApplicationInsights()
                 .UseStartup<Startup>()
                 .CaptureStartupErrors(true)
                 .Build();

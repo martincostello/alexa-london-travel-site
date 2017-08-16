@@ -3,6 +3,7 @@
   <PropertyGroup>
     <DebugType>full</DebugType>
     <Description>https://londontravel.martincostello.com/</Description>
+    <LangVersion>latest</LangVersion>
     <OutputType>Exe</OutputType>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <RootNamespace>MartinCostello.LondonTravel.Site</RootNamespace>
