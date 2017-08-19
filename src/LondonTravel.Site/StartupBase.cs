@@ -87,9 +87,6 @@ namespace MartinCostello.LondonTravel.Site
             ILoggerFactory loggerFactory,
             IOptionsSnapshot<SiteOptions> options)
         {
-            loggerFactory.AddSerilog();
-            appLifetime.ApplicationStopped.Register(Log.CloseAndFlush);
-
             if (environment.IsDevelopment())
             {
                 loggerFactory.AddDebug();
@@ -168,6 +165,7 @@ namespace MartinCostello.LondonTravel.Site
         /// </returns>
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            services.AddLogging((p) => p.AddSerilog(dispose: true));
             services.AddApplicationInsightsTelemetry(Configuration);
 
             services.AddOptions();
