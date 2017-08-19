@@ -26,8 +26,8 @@ addons:
     - libunwind8
 
 install:
-  - npm install -g npm@4.5.0
-  - npm install -g gulp@3.9.1
+  - npm install -g npm
+  - npm install -g gulp
 
 script:
   - ./build.sh --restore-packages
