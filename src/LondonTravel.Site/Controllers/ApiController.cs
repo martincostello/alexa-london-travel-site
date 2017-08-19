@@ -1,9 +1,10 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Controllers
 {
     using System;
+    using System.Dynamic;
     using System.Linq;
     using System.Net;
     using System.Net.Http.Headers;
@@ -66,10 +67,8 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         {
             long count = await _client.GetDocumentCountAsync();
 
-            var value = new
-            {
-                count = count
-            };
+            dynamic value = new ExpandoObject();
+            value.count = count;
 
             return Ok(value);
         }
@@ -87,7 +86,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         [Route("preferences")]
         public async Task<IActionResult> GetPreferences(
             [FromHeader(Name = "Authorization")] string authorizationHeader,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             _logger?.LogTrace("Received API request for user preferences.");
 
@@ -175,7 +174,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 }
                 catch (Exception ex)
                 {
-                    _logger?.LogError(default(EventId), ex, "Failed to find user by access token.");
+                    _logger?.LogError(default, ex, "Failed to find user by access token.");
                     throw;
                 }
             }

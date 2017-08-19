@@ -1,29 +1,35 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Identity.Amazon
 {
     using System.Net.Http;
     using System.Security.Claims;
+    using System.Text.Encodings.Web;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authentication.OAuth;
-    using Microsoft.AspNetCore.Http.Authentication;
     using Microsoft.AspNetCore.WebUtilities;
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Options;
     using Newtonsoft.Json.Linq;
 
     /// <summary>
     /// A class representing an OAuth handler to use for Amazon.
     /// </summary>
-    internal class AmazonHandler : OAuthHandler<AmazonOptions>
+    public class AmazonHandler : OAuthHandler<AmazonOptions>
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AmazonHandler"/> class.
-        /// </summary>
-        /// <param name="httpClient">The <see cref="HttpClient"/> to use.</param>
-        public AmazonHandler(HttpClient httpClient)
-            : base(httpClient)
+        public AmazonHandler(IOptionsMonitor<AmazonOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock)
+            : base(options, logger, encoder, clock)
         {
+        }
+
+        public Task<AuthenticationTicket> CreateAuthenticationTicketAsync(
+            ClaimsIdentity identity,
+            AuthenticationProperties properties,
+            OAuthTokenResponse tokens)
+        {
+            return CreateTicketAsync(identity, properties, tokens);
         }
 
         /// <inheritdoc />
@@ -39,7 +45,7 @@ namespace MartinCostello.LondonTravel.Site.Identity.Amazon
                 endpoint = QueryHelpers.AddQueryString(endpoint, "fields", string.Join(",", Options.Fields));
             }
 
-            JObject payload;
+            JObject user;
 
             using (var response = await Backchannel.GetAsync(endpoint, Context.RequestAborted))
             {
@@ -48,43 +54,23 @@ namespace MartinCostello.LondonTravel.Site.Identity.Amazon
                     throw new HttpRequestException($"Failed to retrieve Amazon user information ({response.StatusCode}).");
                 }
 
-                payload = JObject.Parse(await response.Content.ReadAsStringAsync());
+                user = JObject.Parse(await response.Content.ReadAsStringAsync());
             }
 
-            var ticket = new AuthenticationTicket(new ClaimsPrincipal(identity), properties, Options.AuthenticationScheme);
-            var context = new OAuthCreatingTicketContext(ticket, Context, Options, Backchannel, tokens, payload);
+            var context = new OAuthCreatingTicketContext(
+                new ClaimsPrincipal(identity),
+                properties,
+                Context,
+                Scheme,
+                Options,
+                Backchannel,
+                tokens,
+                user);
 
-            string identifier = (string)payload["user_id"];
+            context.RunClaimActions();
 
-            if (!string.IsNullOrEmpty(identifier))
-            {
-                identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, identifier, ClaimValueTypes.String, Options.ClaimsIssuer));
-            }
-
-            string email = (string)payload["email"];
-
-            if (!string.IsNullOrEmpty(email))
-            {
-                identity.AddClaim(new Claim(ClaimTypes.Email, email, ClaimValueTypes.String, Options.ClaimsIssuer));
-            }
-
-            string name = (string)payload["name"];
-
-            if (!string.IsNullOrEmpty(name))
-            {
-                identity.AddClaim(new Claim(identity.NameClaimType, name, ClaimValueTypes.String, Options.ClaimsIssuer));
-            }
-
-            string postalCode = (string)payload["postal_code"];
-
-            if (!string.IsNullOrEmpty(postalCode))
-            {
-                identity.AddClaim(new Claim(ClaimTypes.PostalCode, postalCode, ClaimValueTypes.String, Options.ClaimsIssuer));
-            }
-
-            await Options.Events.CreatingTicket(context);
-
-            return context.Ticket;
+            await Events.CreatingTicket(context);
+            return new AuthenticationTicket(context.Principal, context.Properties, Scheme.Name);
         }
     }
 }

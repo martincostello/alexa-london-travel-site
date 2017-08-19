@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Controllers
@@ -37,7 +37,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             using (var target = CreateTarget())
             {
                 // Act
-                IActionResult actual = await target.GetPreferences(authorizationHeader, default(CancellationToken));
+                IActionResult actual = await target.GetPreferences(authorizationHeader, default);
 
                 // Assert
                 actual.ShouldNotBeNull();
@@ -64,7 +64,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             using (var target = CreateTarget())
             {
                 // Act
-                IActionResult actual = await target.GetPreferences(authorizationHeader, default(CancellationToken));
+                IActionResult actual = await target.GetPreferences(authorizationHeader, default);
 
                 // Assert
                 actual.ShouldNotBeNull();
@@ -101,7 +101,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             using (var target = CreateTarget(client))
             {
                 // Act
-                IActionResult actual = await target.GetPreferences(authorizationHeader, default(CancellationToken));
+                IActionResult actual = await target.GetPreferences(authorizationHeader, default);
 
                 // Assert
                 actual.ShouldNotBeNull();
@@ -138,7 +138,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             using (var target = CreateTarget(client))
             {
                 // Act
-                IActionResult actual = await target.GetPreferences(authorizationHeader, default(CancellationToken));
+                IActionResult actual = await target.GetPreferences(authorizationHeader, default);
 
                 // Assert
                 actual.ShouldNotBeNull();
@@ -177,7 +177,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             using (var target = CreateTarget(client))
             {
                 // Act
-                IActionResult actual = await target.GetPreferences(authorizationHeader, default(CancellationToken));
+                IActionResult actual = await target.GetPreferences(authorizationHeader, default);
 
                 // Assert
                 actual.ShouldNotBeNull();
@@ -191,6 +191,33 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
                 data.FavoriteLines.ShouldBe(new[] { "district" });
                 data.UserId.ShouldBe("6");
+            }
+        }
+
+        [Fact]
+        public static async Task GetDocumentCount_Returns_Correct_Number_Of_Documents()
+        {
+            // Arrange
+            var mock = new Mock<IDocumentClient>();
+            mock.Setup((p) => p.GetDocumentCountAsync())
+                .ReturnsAsync(42);
+
+            using (var target = CreateTarget(mock.Object))
+            {
+                // Act
+                IActionResult actual = await target.GetDocumentCount();
+
+                // Assert
+                actual.ShouldNotBeNull();
+
+                var objectResult = actual.ShouldBeOfType<OkObjectResult>();
+
+                objectResult.StatusCode.ShouldBe(200);
+                objectResult.Value.ShouldNotBeNull();
+
+                var data = objectResult.Value as dynamic;
+
+                ((long)data.count).ShouldBe(42);
             }
         }
 

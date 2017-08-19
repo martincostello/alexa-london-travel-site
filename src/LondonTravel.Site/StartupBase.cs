@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site
@@ -6,7 +6,6 @@ namespace MartinCostello.LondonTravel.Site
     using System;
     using System.Globalization;
     using System.Net.Http;
-    using System.Threading.Tasks;
     using Autofac;
     using Autofac.Extensions.DependencyInjection;
     using Extensions;
@@ -21,6 +20,7 @@ namespace MartinCostello.LondonTravel.Site
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.HttpOverrides;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Localization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Razor;
@@ -146,7 +146,7 @@ namespace MartinCostello.LondonTravel.Site
 
             app.UseHttpMethodOverride();
 
-            app.UseIdentity(options.Value, loggerFactory);
+            app.UseIdentity(options.Value);
 
             app.UseMvc(
                 (routes) =>
@@ -179,56 +179,16 @@ namespace MartinCostello.LondonTravel.Site
             services.AddAntiforgery(
                 (p) =>
                 {
-                    p.CookieName = "_anti-forgery";
+                    p.Cookie.Name = "_anti-forgery";
+                    p.Cookie.SecurePolicy = CookiePolicy();
                     p.FormFieldName = "_anti-forgery";
                     p.HeaderName = "x-anti-forgery";
-                    p.RequireSsl = !HostingEnvironment.IsDevelopment();
                 });
 
             services
                 .AddMemoryCache()
                 .AddDistributedMemoryCache()
                 .AddCors(ConfigureCors);
-
-            services.AddIdentity<LondonTravelUser, LondonTravelRole>(
-                (options) =>
-                {
-                    options.Cookies.ApplicationCookie.AccessDeniedPath = "/account/access-denied/";
-                    options.Cookies.ApplicationCookie.CookieName = "london-travel-auth-app";
-                    options.Cookies.ApplicationCookie.CookieHttpOnly = true;
-                    options.Cookies.ApplicationCookie.CookieSecure = CookiePolicy();
-                    options.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromDays(150);
-                    options.Cookies.ApplicationCookie.LoginPath = "/account/sign-in/";
-                    options.Cookies.ApplicationCookie.LogoutPath = "/account/sign-out/";
-                    options.Cookies.ApplicationCookie.SlidingExpiration = true;
-
-                    (options.Cookies.ApplicationCookie.Events as CookieAuthenticationEvents).OnRedirectToLogin =
-                        (p) =>
-                        {
-                            // Only redirect to the sign-in page if a non-API request
-                            if (!p.Request.Path.StartsWithSegments("/api"))
-                            {
-                                p.Response.Redirect(p.RedirectUri);
-                            }
-
-                            return Task.CompletedTask;
-                        };
-
-                    options.Cookies.ExternalCookie.AccessDeniedPath = options.Cookies.ApplicationCookie.AccessDeniedPath;
-                    options.Cookies.ExternalCookie.CookieName = "london-travel-auth-external";
-                    options.Cookies.ExternalCookie.CookieHttpOnly = options.Cookies.ApplicationCookie.CookieHttpOnly;
-                    options.Cookies.ExternalCookie.CookieSecure = options.Cookies.ApplicationCookie.CookieSecure;
-                    options.Cookies.ExternalCookie.ExpireTimeSpan = options.Cookies.ApplicationCookie.ExpireTimeSpan;
-                    options.Cookies.ExternalCookie.LoginPath = options.Cookies.ApplicationCookie.LoginPath;
-                    options.Cookies.ExternalCookie.LogoutPath = options.Cookies.ApplicationCookie.LogoutPath;
-                    options.Cookies.ExternalCookie.SlidingExpiration = options.Cookies.ApplicationCookie.SlidingExpiration;
-
-                    options.User.RequireUniqueEmail = true;
-                })
-                .AddClaimsPrincipalFactory<UserClaimsPrincipalFactory>()
-                .AddRoleStore<RoleStore>()
-                .AddUserStore<UserStore>()
-                .AddDefaultTokenProviders();
 
             services
                 .AddLocalization()
@@ -265,6 +225,21 @@ namespace MartinCostello.LondonTravel.Site
             services.AddTransient<HttpClient>();
             services.AddTransient<ITflService, TflService>();
 
+            services
+                .AddIdentity<LondonTravelUser, LondonTravelRole>((options) => options.User.RequireUniqueEmail = true)
+                .AddClaimsPrincipalFactory<UserClaimsPrincipalFactory>()
+                .AddRoleStore<RoleStore>()
+                .AddUserStore<UserStore>()
+                .AddDefaultTokenProviders();
+
+            services
+                .ConfigureApplicationCookie((options) => ConfigureAuthorizationCookie(options, "london-travel-auth-app"))
+                .ConfigureExternalCookie((options) => ConfigureAuthorizationCookie(options, "london-travel-auth-external"));
+
+            services.UseIdentity();
+
+            services.RemoveApplicationInsightsTagHelper();
+
             var builder = new ContainerBuilder();
 
             builder.Populate(services);
@@ -294,6 +269,23 @@ namespace MartinCostello.LondonTravel.Site
             options.SerializerSettings.DateFormatString = "yyyy'-'MM'-'dd'T'HH':'mm':'ssK";   // Only return DateTimes to a 1 second precision
 
             return options.SerializerSettings;
+        }
+
+        /// <summary>
+        /// Configures an authentication cookie.
+        /// </summary>
+        /// <param name="options">The cookie authentication options.</param>
+        /// <param name="cookieName">The name to use for the cookie.</param>
+        private void ConfigureAuthorizationCookie(CookieAuthenticationOptions options, string cookieName)
+        {
+            options.AccessDeniedPath = "/account/access-denied/";
+            options.Cookie.Name = cookieName;
+            options.Cookie.HttpOnly = true;
+            options.Cookie.SecurePolicy = CookiePolicy();
+            options.ExpireTimeSpan = TimeSpan.FromDays(150);
+            options.LoginPath = "/account/sign-in/";
+            options.LogoutPath = "/account/sign-out/";
+            options.SlidingExpiration = true;
         }
 
         /// <summary>

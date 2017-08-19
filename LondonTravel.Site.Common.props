@@ -1,4 +1,4 @@
-﻿<Project>
+<Project>
   <ItemGroup>
     <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" Link="stylecop.json" />
   </ItemGroup>
@@ -10,6 +10,7 @@
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <LangVersion>latest</LangVersion>
     <NeutralLanguage>en-US</NeutralLanguage>
     <PackageIconUrl>https://martincostello.com/favicon.ico</PackageIconUrl>
     <PackageProjectUrl>https://github.com/martincostello/alexa-london-travel-site</PackageProjectUrl>
@@ -20,7 +21,7 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>$(PackageProjectUrl).git</RepositoryUrl>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-    <VersionPrefix>1.0.0</VersionPrefix>
+    <VersionPrefix>2.0.0</VersionPrefix>
     <VersionSuffix></VersionSuffix>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(CI)' != '' or '$(TF_BUILD)' != '' ">

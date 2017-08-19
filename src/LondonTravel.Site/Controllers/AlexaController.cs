@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Controllers
@@ -136,7 +136,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(default(EventId), ex, "Failed to link account to Alexa.");
+                _logger.LogError(default, ex, "Failed to link account to Alexa.");
                 return RedirectForError(redirectUri, state);
             }
         }
@@ -307,26 +307,6 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             if (_options?.RedirectUrls?.Contains(redirectUri.ToString(), StringComparer.OrdinalIgnoreCase) == false)
             {
                 _logger.LogWarning("The specified redirection URI {RedirectionUri} is not authorized.", redirectUri);
-                return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Verifies the response type.
-        /// </summary>
-        /// <param name="responseType">The response type to verify.</param>
-        /// <returns>
-        /// <see langword="true"/> if the specified response type is valid; otherwise <see langword="false"/>.
-        /// </returns>
-        private bool VerifyResponseType(string responseType)
-        {
-            const string ImplicitFlowResponseType = "token";
-
-            if (!string.Equals(responseType, ImplicitFlowResponseType, StringComparison.Ordinal))
-            {
-                _logger.LogError("Invalid response type {ResponseType} specified.", responseType);
                 return false;
             }
 

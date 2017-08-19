@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Integration
@@ -8,7 +8,6 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using System.Net;
     using System.Net.Http;
     using System.Net.Http.Headers;
-    using System.Threading;
     using System.Threading.Tasks;
     using MartinCostello.LondonTravel.Site.Identity;
     using Microsoft.AspNetCore.Identity;
@@ -33,7 +32,6 @@ namespace MartinCostello.LondonTravel.Site.Integration
         public async Task Can_Perform_Operations_On_Users_And_Get_Preferences_From_Api()
         {
             // Arrange
-            var cancellationToken = default(CancellationToken);
             var emailAddress = $"some.user.{Guid.NewGuid()}@some.domain.com";
 
             var user = new LondonTravelUser()
@@ -54,7 +52,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             using (IUserStore<LondonTravelUser> store = GetUserStore())
             {
                 // Act
-                IdentityResult createResult = await store.CreateAsync(user, cancellationToken);
+                IdentityResult createResult = await store.CreateAsync(user, default);
 
                 // Assert
                 Assert.NotNull(createResult);
@@ -65,7 +63,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 userId = user.Id;
 
                 // Act
-                LondonTravelUser actual = await store.FindByIdAsync(userId, cancellationToken);
+                LondonTravelUser actual = await store.FindByIdAsync(userId, default);
 
                 // Assert
                 Assert.NotNull(actual);
@@ -88,14 +86,14 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 actual.FavoriteLines = favoriteLines;
 
                 // Act
-                IdentityResult updateResult = await store.UpdateAsync(actual, cancellationToken);
+                IdentityResult updateResult = await store.UpdateAsync(actual, default);
 
                 // Assert
                 Assert.NotNull(updateResult);
                 Assert.True(updateResult.Succeeded);
 
                 // Act
-                actual = await store.FindByNameAsync(emailAddress, cancellationToken);
+                actual = await store.FindByNameAsync(emailAddress, default);
 
                 // Assert
                 Assert.NotNull(actual);
@@ -112,7 +110,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 message.Headers.Authorization = new AuthenticationHeaderValue("bearer", accessToken);
 
                 // Act
-                using (var response = await Fixture.Client.SendAsync(message, cancellationToken))
+                using (var response = await Fixture.Client.SendAsync(message, default))
                 {
                     // Assert
                     Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -130,7 +128,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             using (IUserStore<LondonTravelUser> store = GetUserStore())
             {
                 // Act
-                IdentityResult updateResult = await store.DeleteAsync(new LondonTravelUser() { Id = userId }, cancellationToken);
+                IdentityResult updateResult = await store.DeleteAsync(new LondonTravelUser() { Id = userId }, default);
 
                 // Assert
                 Assert.NotNull(updateResult);
@@ -143,7 +141,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 message.Headers.Authorization = new AuthenticationHeaderValue("bearer", accessToken);
 
                 // Act
-                using (var response = await Fixture.Client.SendAsync(message, cancellationToken))
+                using (var response = await Fixture.Client.SendAsync(message, default))
                 {
                     // Assert
                     Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);

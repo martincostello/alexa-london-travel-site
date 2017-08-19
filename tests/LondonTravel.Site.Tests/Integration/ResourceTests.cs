@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Integration
@@ -87,6 +87,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
 
         [Theory]
         [InlineData("/alexa/authorize")]
+        [InlineData("/api/_count")]
         [InlineData("/manage/")]
         public async Task Cannot_Load_Resource_Unauthenticated(string requestUri)
         {

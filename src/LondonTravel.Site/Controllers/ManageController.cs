@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Controllers
@@ -9,11 +9,11 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     using System.Threading;
     using System.Threading.Tasks;
     using Identity;
+    using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
-    using Microsoft.Extensions.Options;
     using Models;
     using Services.Data;
     using Services.Tfl;
@@ -31,8 +31,6 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         private readonly IDocumentClient _documentClient;
         private readonly ITflServiceFactory _tflServiceFactory;
         private readonly ISiteTelemetry _telemetry;
-        private readonly string _applicationCookieScheme;
-        private readonly string _externalCookieScheme;
         private readonly ILogger<ManageController> _logger;
 
         public ManageController(
@@ -41,7 +39,6 @@ namespace MartinCostello.LondonTravel.Site.Controllers
           IDocumentClient documentClient,
           ITflServiceFactory tflServiceFactory,
           ISiteTelemetry telemetry,
-          IOptions<IdentityCookieOptions> identityCookieOptions,
           ILogger<ManageController> logger)
         {
             _userManager = userManager;
@@ -49,9 +46,6 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             _documentClient = documentClient;
             _tflServiceFactory = tflServiceFactory;
             _telemetry = telemetry;
-
-            _applicationCookieScheme = identityCookieOptions.Value.ApplicationCookieAuthenticationScheme;
-            _externalCookieScheme = identityCookieOptions.Value.ExternalCookieAuthenticationScheme;
             _logger = logger;
         }
 
@@ -78,10 +72,10 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 .ThenBy((p) => p.LoginProvider)
                 .ToList();
 
-            var otherLogins = _signInManager.GetExternalAuthenticationSchemes()
-                .Where((p) => userLogins.All((r) => p.AuthenticationScheme != r.LoginProvider))
+            var otherLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync())
+                .Where((p) => userLogins.All((r) => p.Name != r.LoginProvider))
                 .OrderBy((p) => p.DisplayName)
-                .ThenBy((p) => p.AuthenticationScheme)
+                .ThenBy((p) => p.Name)
                 .ToList();
 
             var model = new ManageViewModel()
@@ -105,7 +99,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 return BadRequest();
             }
 
-            await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
+            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
             var redirectUrl = Url.RouteUrl(SiteRoutes.LinkAccountCallback);
             var userId = _userManager.GetUserId(User);
@@ -172,7 +166,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                         FormatErrors(result));
                 }
 
-                await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
+                await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
             }
             else
             {
@@ -293,8 +287,8 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 {
                     _logger.LogInformation("Deleted user Id {UserId}.", user.Id);
 
-                    await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
-                    await HttpContext.Authentication.SignOutAsync(_applicationCookieScheme);
+                    await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+                    await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
 
                     _telemetry.TrackAccountDeleted(user.Id, user.Email);
 
