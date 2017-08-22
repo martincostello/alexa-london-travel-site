@@ -23,8 +23,8 @@
     <EmbeddedResource Update="SiteResources.resx" Generator="" />
   </ItemGroup>
   <ItemGroup>
-    <DotNetCliToolReference Include="dotnet-sourcelink" Version="2.1.2" />
-    <DotNetCliToolReference Include="dotnet-sourcelink-git" Version="2.1.2" />
+    <DotNetCliToolReference Include="dotnet-sourcelink" Version="2.2.0" />
+    <DotNetCliToolReference Include="dotnet-sourcelink-git" Version="2.2.0" />
     <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.0" />
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
   </ItemGroup>
