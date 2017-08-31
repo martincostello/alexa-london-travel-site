@@ -64,6 +64,8 @@ namespace MartinCostello.LondonTravel.Site.Extensions
                     {
                         p.RoutePrefix = "api";
                         p.DocExpansion("full");
+                        p.InjectStylesheet("https://fonts.googleapis.com/css?family=Lato:400,700,400italic");
+                        p.InjectStylesheet("swagger-custom.css");
                         p.ShowJsonEditor();
                         p.ShowRequestHeaders();
                         p.SwaggerEndpoint("/swagger/api/swagger.json", options.Metadata.Name);
