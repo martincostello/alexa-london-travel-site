@@ -201,7 +201,10 @@ namespace MartinCostello.LondonTravel.Site
                     p.LowercaseUrls = true;
                 });
 
-            services.AddSwagger(HostingEnvironment);
+            if (HostingEnvironment.IsDevelopment())
+            {
+                services.AddSwagger(HostingEnvironment);
+            }
 
             services
                 .AddResponseCaching()
