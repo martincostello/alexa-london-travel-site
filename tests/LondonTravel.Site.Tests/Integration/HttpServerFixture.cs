@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Integration
@@ -66,6 +66,14 @@ namespace MartinCostello.LondonTravel.Site.Integration
         /// Gets the <see cref="HttpClient"/> to use.
         /// </summary>
         public HttpClient Client => _client;
+
+        /// <summary>
+        /// Creates a new <see cref="HttpClient"/> to use to make requests.
+        /// </summary>
+        /// <returns>
+        /// An <see cref="HttpClient"/> that can be used to make requests to the server.
+        /// </returns>
+        public HttpClient CreateClient() => _server.CreateClient();
 
         /// <inheritdoc/>
         public void Dispose()

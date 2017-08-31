@@ -22,7 +22,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
         private readonly OAuthOptions _options;
 
         /// <summary>
-        /// The <see cref="IOAuthEvents"/> wrapped by this instance for events it does not handle itself. This field is read-only.
+        /// The <see cref="OAuthEvents"/> wrapped by this instance for events it does not handle itself. This field is read-only.
         /// </summary>
         private readonly OAuthEvents _wrapped;
 

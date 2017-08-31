@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Identity
@@ -36,7 +36,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// Initializes a new instance of the <see cref="UserStore"/> class.
         /// </summary>
         /// <param name="client">The <see cref="IDocumentClient"/> to use.</param>
-        /// <exception cref="">
+        /// <exception cref="ArgumentNullException">
         /// <paramref name="client"/> is <see langword="null"/>.
         /// </exception>
         public UserStore(IDocumentClient client)

@@ -51,13 +51,13 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
                 data.Message.ShouldBe("No access token specified.");
                 data.StatusCode.ShouldBe(401);
+                data.Details.ShouldNotBeNull();
+                data.Details.ShouldBeEmpty();
             }
         }
 
         [Theory]
-        [InlineData("bearer")]
-        [InlineData("bearer ")]
-        [InlineData("something token")]
+        [InlineData("not;auth")]
         public static async Task Preferences_Returns_Unauthorized_Json_If_Authorization_Header_Is_Invalid(string authorizationHeader)
         {
             // Arrange
@@ -78,6 +78,66 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
                 data.Message.ShouldBe("Unauthorized.");
                 data.StatusCode.ShouldBe(401);
+                data.Details.ShouldNotBeNull();
+                data.Details.ShouldHaveSingleItem();
+                data.Details.ShouldContain("The provided authorization value is not valid.");
+            }
+        }
+
+        [Theory]
+        [InlineData("bearer")]
+        [InlineData("bearer ")]
+        public static async Task Preferences_Returns_Unauthorized_Json_If_Authorization_Header_Has_No_Value(string authorizationHeader)
+        {
+            // Arrange
+            using (var target = CreateTarget())
+            {
+                // Act
+                IActionResult actual = await target.GetPreferences(authorizationHeader, default);
+
+                // Assert
+                actual.ShouldNotBeNull();
+
+                var objectResult = actual.ShouldBeOfType<ObjectResult>();
+
+                objectResult.StatusCode.ShouldBe(401);
+                objectResult.Value.ShouldNotBeNull();
+
+                var data = objectResult.Value.ShouldBeOfType<ErrorResponse>();
+
+                data.Message.ShouldBe("Unauthorized.");
+                data.StatusCode.ShouldBe(401);
+                data.Details.ShouldNotBeNull();
+                data.Details.ShouldBeEmpty();
+            }
+        }
+
+        [Theory]
+        [InlineData("something token")]
+        [InlineData("unknown token")]
+        public static async Task Preferences_Returns_Unauthorized_Json_If_Authorization_Header_Is_Incorrect_Scheme(string authorizationHeader)
+        {
+            // Arrange
+            using (var target = CreateTarget())
+            {
+                // Act
+                IActionResult actual = await target.GetPreferences(authorizationHeader, default);
+
+                // Assert
+                actual.ShouldNotBeNull();
+
+                var objectResult = actual.ShouldBeOfType<ObjectResult>();
+
+                objectResult.StatusCode.ShouldBe(401);
+                objectResult.Value.ShouldNotBeNull();
+
+                var data = objectResult.Value.ShouldBeOfType<ErrorResponse>();
+
+                data.Message.ShouldBe("Unauthorized.");
+                data.StatusCode.ShouldBe(401);
+                data.Details.ShouldNotBeNull();
+                data.Details.ShouldHaveSingleItem();
+                data.Details.ShouldContain("Only the bearer authorization scheme is supported.");
             }
         }
 
@@ -115,6 +175,8 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
                 data.Message.ShouldBe("Unauthorized.");
                 data.StatusCode.ShouldBe(401);
+                data.Details.ShouldNotBeNull();
+                data.Details.ShouldBeEmpty();
             }
         }
 
@@ -152,6 +214,8 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
                 data.Message.ShouldBe("Unauthorized.");
                 data.StatusCode.ShouldBe(401);
+                data.Details.ShouldNotBeNull();
+                data.Details.ShouldBeEmpty();
             }
         }
 

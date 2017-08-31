@@ -46,5 +46,30 @@ namespace MartinCostello.LondonTravel.Site.Extensions
                 app.UseAuthentication();
             }
         }
+
+        /// <summary>
+        /// Adds Swagger to the pipeline.
+        /// </summary>
+        /// <param name="value">The <see cref="IApplicationBuilder"/> to add the middleware to.</param>
+        /// <param name="options">The site options.</param>
+        /// <returns>
+        /// The value specified by <paramref name="value"/>.
+        /// </returns>
+        public static IApplicationBuilder UseSwagger(this IApplicationBuilder value, SiteOptions options)
+        {
+            return value
+                .UseSwagger()
+                .UseSwaggerUI(
+                    (p) =>
+                    {
+                        p.RoutePrefix = "api";
+                        p.DocExpansion("full");
+                        p.InjectStylesheet("https://fonts.googleapis.com/css?family=Lato:400,700,400italic");
+                        p.InjectStylesheet("swagger-custom.css");
+                        p.ShowJsonEditor();
+                        p.ShowRequestHeaders();
+                        p.SwaggerEndpoint("/swagger/api/swagger.json", options.Metadata.Name);
+                    });
+        }
     }
 }
