@@ -1,0 +1,21 @@
+digraph "Alexa London Travel" {
+
+  graph [
+    fontname = "Helvetica",
+    label = "\nLondon Travel Website\nMartin Costello (c) 2017"
+  ];
+
+  node [
+    fontname = "Consolas"
+  ];
+
+  "User" -> "DNSimple" [ label = "londontravel.martincostello.com", fontname = "Helvetica" ];
+  "DNSimple" -> "Azure Traffic Manager" [ label = "DNS resolution", fontname = "Helvetica" ];
+  "Azure Traffic Manager" -> "Azure App Service 1" [ label = "Load balancing", fontname = "Helvetica" ];
+  "Azure Traffic Manager" -> "Azure App Service 2";
+  "Azure App Service 1" -> "Azure Blob Storage" [ label = "Session Key Ring", fontname = "Helvetica" ];
+  "Azure App Service 1" -> "Azure Cosmos DB" [ label = "User store", fontname = "Helvetica" ];
+  "Azure App Service 1" -> "Azure Key Vault" [ label = "Secrets", fontname = "Helvetica" ];
+  "Azure App Service 1" -> "OAuth Services" [ label = "OAuth", fontname = "Helvetica" ];
+  "Azure App Service 1" -> "TfL API" [ label = "Line information", fontname = "Helvetica" ];
+}
