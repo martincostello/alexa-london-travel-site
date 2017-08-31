@@ -1,0 +1,24 @@
+digraph "London Travel Account Linking" {
+
+  rankdir=LR;
+
+  graph [
+    fontname = "Helvetica",
+    label = "\nLondon Travel - Alexa Account Linking\nMartin Costello (c) 2017"
+  ];
+
+  node [
+    fontname = "Consolas"
+  ];
+
+  "User" -> "Alexa App" [ label = "Load app", fontname = "Helvetica" ];
+  "Alexa App" -> "London Travel" [ label = "Open website", fontname = "Helvetica" ];
+  "London Travel" -> "Amazon Login" [ label = "Sign in", fontname = "Helvetica" ];
+  "Amazon Login" -> "London Travel" [ label = "OAuth token", fontname = "Helvetica" ];
+  "London Travel" -> "Amazon API" [ label = "OAuth token", fontname = "Helvetica" ];
+  "Amazon API" -> "London Travel" [ label = "User details", fontname = "Helvetica" ];
+  "London Travel" -> "Azure Cosmos DB" [ label = "Create user", fontname = "Helvetica" ];
+  "Azure Cosmos DB" -> "London Travel" [ label = "User Id", fontname = "Helvetica" ];
+  "London Travel" -> "Alexa App" [ label = "Access token", fontname = "Helvetica" ];
+  "Alexa App" -> "User" [ label = "Account and skill linked", fontname = "Helvetica" ];
+}

@@ -1,0 +1,22 @@
+digraph "Alexa London Travel" {
+
+  graph [
+    fontname = "Helvetica",
+    label = "\nLondon Travel Alexa Skill\nMartin Costello (c) 2017"
+  ];
+
+  node [
+    fontname = "Consolas"
+  ];
+
+  "User" -> "Echo" [ label = "Asks    ", fontname = "Helvetica" ];
+  "Echo" -> "Alexa Skills Kit";
+  "Alexa Skills Kit" -> "London Travel Skill Lambda" [ label = "Intent  ", fontname = "Helvetica" ];
+  "London Travel Skill Lambda" -> "London Travel API" [ label = "Access Token", fontname = "Helvetica" ];
+  "London Travel API" -> "London Travel Skill Lambda" [ label = "User preferences", fontname = "Helvetica" ];
+  "London Travel Skill Lambda" -> "TfL API" [ label = "Get line status(es)", fontname = "Helvetica" ];
+  "TfL API" -> "London Travel Skill Lambda" [ label = "   Line status(es)", fontname = "Helvetica" ];
+  "London Travel Skill Lambda" -> "Alexa Skills Kit" [ label = " SSML", fontname = "Helvetica" ];
+  "Alexa Skills Kit" -> "Echo";
+  "Echo" -> "User" [ label = "Replies", fontname = "Helvetica" ];
+}
