@@ -145,13 +145,12 @@ namespace MartinCostello.LondonTravel.Site
 
             app.UseIdentity(options.Value);
 
-            app.UseMvc(
-                (routes) =>
-                {
-                    routes.MapRoute(
-                        name: "default",
-                        template: "{controller=Home}/{action=Index}/{id?}");
-                });
+            app.UseMvcWithDefaultRoute();
+
+            if (HostingEnvironment.IsDevelopment())
+            {
+                app.UseSwagger(ServiceProvider.GetRequiredService<SiteOptions>());
+            }
 
             app.UseCookiePolicy(CreateCookiePolicy());
         }
@@ -193,7 +192,7 @@ namespace MartinCostello.LondonTravel.Site
                 .AddMvc(ConfigureMvc)
                 .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
                 .AddDataAnnotationsLocalization()
-                .AddJsonOptions((p) => services.AddSingleton(ConfigureJsonFormatter(p)));
+                .AddJsonOptions((p) => ConfigureJsonFormatter(p));
 
             services.AddRouting(
                 (p) =>
@@ -202,17 +201,19 @@ namespace MartinCostello.LondonTravel.Site
                     p.LowercaseUrls = true;
                 });
 
+            services.AddSwagger(HostingEnvironment);
+
             services
                 .AddResponseCaching()
                 .AddResponseCompression();
 
             services.AddSingleton<IClock>((_) => SystemClock.Instance);
-            services.AddSingleton<IConfiguration>((_) => Configuration);
             services.AddSingleton<IDocumentCollectionInitializer, DocumentCollectionInitializer>();
             services.AddSingleton<IDocumentClient, DocumentClientWrapper>();
             services.AddSingleton<ISiteTelemetry, SiteTelemetry>();
             services.AddSingleton<ITelemetryInitializer, SiteTelemetryInitializer>();
             services.AddSingleton<ITflServiceFactory, TflServiceFactory>();
+            services.AddSingleton((_) => ConfigureJsonFormatter(new JsonSerializerSettings()));
 
             services.AddScoped((p) => p.GetRequiredService<IHttpContextAccessor>().HttpContext);
             services.AddScoped((p) => p.GetRequiredService<IOptionsSnapshot<SiteOptions>>().Value);
@@ -234,7 +235,7 @@ namespace MartinCostello.LondonTravel.Site
                 .ConfigureApplicationCookie((options) => ConfigureAuthorizationCookie(options, "london-travel-auth-app"))
                 .ConfigureExternalCookie((options) => ConfigureAuthorizationCookie(options, "london-travel-auth-external"));
 
-            services.UseIdentity();
+            services.AddIdentity();
 
             services.RemoveApplicationInsightsTagHelper();
 
@@ -257,16 +258,28 @@ namespace MartinCostello.LondonTravel.Site
         /// </returns>
         private static JsonSerializerSettings ConfigureJsonFormatter(MvcJsonOptions options)
         {
+            return ConfigureJsonFormatter(options.SerializerSettings);
+        }
+
+        /// <summary>
+        /// Configures the JSON serializer.
+        /// </summary>
+        /// <param name="settings">The <see cref="JsonSerializerSettings"/> to configure.</param>
+        /// <returns>
+        /// The <see cref="JsonSerializerSettings"/> to use.
+        /// </returns>
+        private static JsonSerializerSettings ConfigureJsonFormatter(JsonSerializerSettings settings)
+        {
             // Make JSON easier to read for debugging at the expense of larger payloads
-            options.SerializerSettings.Formatting = Formatting.Indented;
+            settings.Formatting = Formatting.Indented;
 
             // Omit nulls to reduce payload size
-            options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+            settings.NullValueHandling = NullValueHandling.Ignore;
 
             // Explicitly define behavior when serializing DateTime values
-            options.SerializerSettings.DateFormatString = "yyyy'-'MM'-'dd'T'HH':'mm':'ssK";   // Only return DateTimes to a 1 second precision
+            settings.DateFormatString = "yyyy'-'MM'-'dd'T'HH':'mm':'ssK";   // Only return DateTimes to a 1 second precision
 
-            return options.SerializerSettings;
+            return settings;
         }
 
         /// <summary>
@@ -342,7 +355,11 @@ namespace MartinCostello.LondonTravel.Site
         /// <param name="options">The <see cref="MvcOptions"/> to configure.</param>
         private void ConfigureMvc(MvcOptions options)
         {
-            if (!HostingEnvironment.IsDevelopment())
+            if (HostingEnvironment.IsDevelopment())
+            {
+                options.Conventions.Add(new Swagger.ApiExplorerDisplayConvention());
+            }
+            else
             {
                 options.Filters.Add(new RequireHttpsAttribute());
             }

@@ -3,6 +3,7 @@
   <PropertyGroup>
     <DebugType>full</DebugType>
     <Description>https://londontravel.martincostello.com/</Description>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <OutputType>Exe</OutputType>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <RootNamespace>MartinCostello.LondonTravel.Site</RootNamespace>
@@ -48,6 +49,7 @@
     <PackageReference Include="Serilog.Sinks.UDP" Version="3.0.0" />
     <PackageReference Include="SourceLink.Create.GitHub" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.0.2" PrivateAssets="All" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="1.0.0" />
     <PackageReference Include="WindowsAzure.Storage" Version="8.3.0" />
   </ItemGroup>
   <Target Name="BundleAssets" BeforeTargets="PrepareForPublish">

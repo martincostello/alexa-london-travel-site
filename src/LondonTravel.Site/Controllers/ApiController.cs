@@ -11,6 +11,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     using System.Threading;
     using System.Threading.Tasks;
     using Identity;
+    using MartinCostello.LondonTravel.Site.Swagger;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
@@ -59,6 +60,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// <returns>
         /// The result for the <c>/api/_count</c> action.
         /// </returns>
+        [ApiExplorerSettings(IgnoreApi = true)]
         [Authorize(Roles = "ADMINISTRATOR")]
         [HttpGet]
         [Produces("application/json")]
@@ -74,16 +76,22 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         }
 
         /// <summary>
-        /// Gets the result for the <c>/api/preferences</c> action.
+        /// Gets the preferences for a user associated with an access token.
         /// </summary>
-        /// <param name="authorizationHeader">The value of the authorization header.</param>
+        /// <param name="authorizationHeader">The authorization header.</param>
         /// <param name="cancellationToken">The cancellation token to use.</param>
         /// <returns>
-        /// The result for the <c>/api/preference</c> action.
+        /// The preferences for a user.
         /// </returns>
+        /// <response code="200">The preferences associated with the provided access token.</response>
+        /// <response code="401">A valid access token was not provided.</response>
+        /// <response code="500">An internal error occurred.</response>
         [HttpGet]
         [Produces("application/json", Type = typeof(PreferencesResponse))]
+        [ProducesResponseType(typeof(PreferencesResponse), 200)]
+        [ProducesResponseType(typeof(ErrorResponse), 401)]
         [Route("preferences")]
+        [SwaggerResponseExample(typeof(PreferencesResponse), typeof(PreferencesResponseExampleProvider))]
         public async Task<IActionResult> GetPreferences(
             [FromHeader(Name = "Authorization")] string authorizationHeader,
             CancellationToken cancellationToken = default)
@@ -103,8 +111,13 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 return Unauthorized("No access token specified.");
             }
 
-            string accessToken = GetAccessTokenFromAuthorizationHeader(authorizationHeader);
-            LondonTravelUser user = await FindUserByAccessTokenAsync(accessToken, cancellationToken);
+            LondonTravelUser user = null;
+            string accessToken = GetAccessTokenFromAuthorizationHeader(authorizationHeader, out string errorDetail);
+
+            if (accessToken != null)
+            {
+                user = await FindUserByAccessTokenAsync(accessToken, cancellationToken);
+            }
 
             if (user == null || !string.Equals(user.AlexaToken, accessToken, StringComparison.Ordinal))
             {
@@ -115,7 +128,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
                 _telemetry.TrackApiPreferencesUnauthorized();
 
-                return Unauthorized("Unauthorized.");
+                return Unauthorized("Unauthorized.", errorDetail);
             }
 
             _logger?.LogInformation(
@@ -139,14 +152,23 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// Extracts the Alexa access token from the specified Authorize HTTP header value.
         /// </summary>
         /// <param name="authorizationHeader">The raw Authorization HTTP request header value.</param>
+        /// <param name="errorDetail">When the method returns contains details about an error if the access token is invalid.</param>
         /// <returns>
         /// The Alexa access token extracted from <paramref name="authorizationHeader"/>, if anyl otherwise <see langword="null"/>.
         /// </returns>
-        private static string GetAccessTokenFromAuthorizationHeader(string authorizationHeader)
+        private static string GetAccessTokenFromAuthorizationHeader(string authorizationHeader, out string errorDetail)
         {
-            if (!AuthenticationHeaderValue.TryParse(authorizationHeader, out AuthenticationHeaderValue authorization) ||
-                !string.Equals(authorization.Scheme, "bearer", StringComparison.OrdinalIgnoreCase))
+            errorDetail = null;
+
+            if (!AuthenticationHeaderValue.TryParse(authorizationHeader, out AuthenticationHeaderValue authorization))
             {
+                errorDetail = "The provided authorization value is not valid.";
+                return null;
+            }
+
+            if (!string.Equals(authorization.Scheme, "bearer", StringComparison.OrdinalIgnoreCase))
+            {
+                errorDetail = "Only the bearer authorization scheme is supported.";
                 return null;
             }
 
@@ -186,16 +208,18 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// Returns a response to use for an unauthorized API request.
         /// </summary>
         /// <param name="message">The error message.</param>
+        /// <param name="detail">The optional error detail.</param>
         /// <returns>
         /// The created instance of <see cref="ObjectResult"/>.
         /// </returns>
-        private ObjectResult Unauthorized(string message)
+        private ObjectResult Unauthorized(string message, string detail = null)
         {
             var error = new ErrorResponse()
             {
                 Message = message ?? string.Empty,
                 RequestId = HttpContext.TraceIdentifier,
                 StatusCode = (int)HttpStatusCode.Unauthorized,
+                Details = detail == null ? Array.Empty<string>() : new[] { detail },
             };
 
             return StatusCode((int)HttpStatusCode.Unauthorized, error);

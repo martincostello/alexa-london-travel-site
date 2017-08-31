@@ -4,6 +4,7 @@
 namespace MartinCostello.LondonTravel.Site.Extensions
 {
     using Microsoft.ApplicationInsights.AspNetCore;
+    using Microsoft.ApplicationInsights.Extensibility;
     using Microsoft.AspNetCore.Http;
 
     /// <summary>

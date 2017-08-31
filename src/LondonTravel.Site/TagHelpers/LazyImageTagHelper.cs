@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.TagHelpers
@@ -33,7 +33,7 @@ namespace MartinCostello.LondonTravel.Site.TagHelpers
         private const string SourceAttributeName = "src";
 
         /// <summary>
-        /// Creates a new <see cref="LazyImageTagHelper"/>.
+        /// Initializes a new instance of the <see cref="LazyImageTagHelper"/> class.
         /// </summary>
         /// <param name="hostingEnvironment">The <see cref="IHostingEnvironment"/>.</param>
         /// <param name="cache">The <see cref="IMemoryCache"/>.</param>

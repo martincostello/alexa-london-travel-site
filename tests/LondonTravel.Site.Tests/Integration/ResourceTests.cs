@@ -27,6 +27,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         [InlineData("/", "text/html")]
         [InlineData("/account/register/", "text/html")]
         [InlineData("/account/sign-in/", "text/html")]
+        [InlineData("/api/", "text/html")]
         [InlineData("/apple-app-site-association", "application/json")]
         [InlineData("/assets/css/site.css", "text/css")]
         [InlineData("/assets/css/site.css.map", "text/plain")]
@@ -59,6 +60,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         [InlineData("/robots.txt", "text/plain")]
         [InlineData("/service-worker.js", "application/javascript")]
         [InlineData("/sitemap.xml", "text/xml")]
+        [InlineData("/swagger/api/swagger.json", "application/json")]
         [InlineData("/technology/", "text/html")]
         [InlineData("/terms-of-service/", "text/html")]
         public async Task Can_Load_Resource(string requestUri, string contentType)
