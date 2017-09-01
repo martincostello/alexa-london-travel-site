@@ -3,6 +3,18 @@
     string canonical = Model.Item1;
     SiteOptions options = Model.Item2;
 }
+    <link rel="dns-prefetch" href="//@options?.ExternalLinks?.Cdn?.Host" />
+    <link rel="dns-prefetch" href="//cdn.cloudflare.com" />
+    <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="//fonts.gstatic.com" />
+    <link rel="dns-prefetch" href="//maxcdn.bootstrapcdn.com" />
+    <link rel="dns-prefetch" href="//www.google-analytics.com" />
+    <link rel="preconnect" href="//@options?.ExternalLinks?.Cdn?.Host" />
+    <link rel="preconnect" href="//cdn.cloudflare.com" />
+    <link rel="preconnect" href="//fonts.googleapis.com" />
+    <link rel="preconnect" href="//fonts.gstatic.com" />
+    <link rel="preconnect" href="//maxcdn.bootstrapcdn.com" />
+    <link rel="preconnect" href="//www.google-analytics.com" />
     <link rel="canonical" href="@canonical" />
     <link rel="manifest" href="@Url.Content("~/manifest.json")" asp-append-version="true" />
     <link rel="sitemap" type="application/xml" href="@Url.Content("~/sitemap.xml")" asp-append-version="true" />
@@ -35,15 +47,3 @@
     <link rel="apple-touch-icon-precomposed" href="@Url.CdnContent("apple-touch-icon.png", options)" />
     <link rel="apple-touch-icon-precomposed" sizes="152x152" href="@Url.CdnContent("apple-touch-icon-152x152.png", options)" />
     <link rel="apple-touch-icon-precomposed" sizes="180x180" href="@Url.CdnContent("apple-touch-icon-precomposed.png", options)" />
-    <link rel="dns-prefetch" href="//@options?.ExternalLinks?.Cdn?.Host" />
-    <link rel="dns-prefetch" href="//cdn.cloudflare.com" />
-    <link rel="dns-prefetch" href="//fonts.googleapis.com" />
-    <link rel="dns-prefetch" href="//fonts.gstatic.com" />
-    <link rel="dns-prefetch" href="//maxcdn.bootstrapcdn.com" />
-    <link rel="dns-prefetch" href="//www.google-analytics.com" />
-    <link rel="preconnect" href="//@options?.ExternalLinks?.Cdn?.Host" />
-    <link rel="preconnect" href="//cdn.cloudflare.com" />
-    <link rel="preconnect" href="//fonts.googleapis.com" />
-    <link rel="preconnect" href="//fonts.gstatic.com" />
-    <link rel="preconnect" href="//maxcdn.bootstrapcdn.com" />
-    <link rel="preconnect" href="//www.google-analytics.com" />
