@@ -9,7 +9,7 @@ namespace MartinCostello.LondonTravel.Site.Models
     using Newtonsoft.Json;
 
     /// <summary>
-    /// A class representing the error response from an API resource. This class cannot be inherited.
+    /// Represents an error from an API resource.
     /// </summary>
     [SwaggerTypeExample(typeof(ErrorResponseExampleProvider))]
     public sealed class ErrorResponse
