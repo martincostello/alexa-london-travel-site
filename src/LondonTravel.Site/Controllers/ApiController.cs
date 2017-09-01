@@ -55,6 +55,15 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         }
 
         /// <summary>
+        /// Gets the result for the <c>/api/</c> action.
+        /// </summary>
+        /// <returns>
+        /// The result for the <c>/api/</c> action.
+        /// </returns>
+        [HttpGet]
+        public IActionResult Index() => View();
+
+        /// <summary>
         /// Gets the result for the <c>/api/_count</c> action.
         /// </summary>
         /// <returns>

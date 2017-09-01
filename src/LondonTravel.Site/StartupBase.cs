@@ -147,10 +147,7 @@ namespace MartinCostello.LondonTravel.Site
 
             app.UseMvcWithDefaultRoute();
 
-            if (HostingEnvironment.IsDevelopment())
-            {
-                app.UseSwagger(ServiceProvider.GetRequiredService<SiteOptions>());
-            }
+            app.UseSwagger();
 
             app.UseCookiePolicy(CreateCookiePolicy());
         }
@@ -201,10 +198,7 @@ namespace MartinCostello.LondonTravel.Site
                     p.LowercaseUrls = true;
                 });
 
-            if (HostingEnvironment.IsDevelopment())
-            {
-                services.AddSwagger(HostingEnvironment);
-            }
+            services.AddSwagger(HostingEnvironment);
 
             services
                 .AddResponseCaching()
@@ -358,11 +352,9 @@ namespace MartinCostello.LondonTravel.Site
         /// <param name="options">The <see cref="MvcOptions"/> to configure.</param>
         private void ConfigureMvc(MvcOptions options)
         {
-            if (HostingEnvironment.IsDevelopment())
-            {
-                options.Conventions.Add(new Swagger.ApiExplorerDisplayConvention());
-            }
-            else
+            options.Conventions.Add(new Swagger.ApiExplorerDisplayConvention());
+
+            if (!HostingEnvironment.IsDevelopment())
             {
                 options.Filters.Add(new RequireHttpsAttribute());
             }

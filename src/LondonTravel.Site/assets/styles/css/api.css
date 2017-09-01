@@ -1,0 +1,9 @@
+.swagger-ui .btn:hover {
+    color: #3b4151;
+}
+
+.swagger-ui-svg {
+    height: 0;
+    position: absolute;
+    width: 0;
+}
