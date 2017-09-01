@@ -39,9 +39,6 @@ namespace MartinCostello.LondonTravel.Site.Swagger
                                     // Capitalize the first letter that's left over
                                     property.Description = char.ToUpperInvariant(property.Description[0]) + property.Description.Substring(1);
                                 }
-
-                                // Swagger displays properties as a comma-separated list, so remove the '.' as otherwise it looks odd
-                                property.Description = property.Description.TrimEnd('.');
                             }
                         }
                     }

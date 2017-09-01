@@ -8,7 +8,7 @@ namespace MartinCostello.LondonTravel.Site.Models
     using Newtonsoft.Json;
 
     /// <summary>
-    /// A class representing the API response for a user's preferences.
+    /// Represents the API response for a user's preferences.
     /// </summary>
     public sealed class PreferencesResponse
     {

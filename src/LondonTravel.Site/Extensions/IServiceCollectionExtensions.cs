@@ -76,8 +76,10 @@ namespace MartinCostello.LondonTravel.Site.Extensions
                 p.SwaggerDoc("api", info);
 
                 p.SchemaFilter<ExampleFilter>();
+
                 p.OperationFilter<ExampleFilter>();
                 p.OperationFilter<RemoveStyleCopPrefixesFilter>();
+                p.OperationFilter<SecurityRequirementsOperationFilter>();
 
                 var securityScheme = new ApiKeyScheme()
                 {
@@ -87,7 +89,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
                     Description = "Access token authentication using a bearer token."
                 };
 
-                p.AddSecurityDefinition("Access Token", securityScheme);
+                p.AddSecurityDefinition(SecurityRequirementsOperationFilter.SchemeName, securityScheme);
             });
 
             return value;
