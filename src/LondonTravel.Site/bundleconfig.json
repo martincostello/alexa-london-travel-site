@@ -1,9 +1,10 @@
-﻿[
+[
   {
     "outputFileName": "wwwroot/assets/css/site.css",
     "inputFiles": [
       "assets/styles/css/site.css",
-      "assets/styles/css/travel.css"
+      "assets/styles/css/travel.css",
+      "assets/styles/css/api.css"
     ],
     "minify": {
       "enabled": false
@@ -13,7 +14,8 @@
     "outputFileName": "wwwroot/assets/css/site.min.css",
     "inputFiles": [
       "assets/styles/css/site.css",
-      "assets/styles/css/travel.css"
+      "assets/styles/css/travel.css",
+      "assets/styles/css/api.css"
     ],
     "minify": {
       "enabled": true
@@ -86,6 +88,24 @@
     "outputFileName": "wwwroot/assets/js/site.preferences.min.js",
     "inputFiles": [
       "assets/scripts/ts/martinCostello/londonTravel/Preferences.ts"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/assets/js/site.swagger.js",
+    "inputFiles": [
+      "assets/scripts/ts/Swagger.ts"
+    ],
+    "minify": {
+      "enabled": false
+    }
+  },
+  {
+    "outputFileName": "wwwroot/assets/js/site.swagger.min.js",
+    "inputFiles": [
+      "assets/scripts/ts/Swagger.ts"
     ],
     "minify": {
       "enabled": true

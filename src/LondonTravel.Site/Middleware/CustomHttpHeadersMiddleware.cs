@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Middleware
@@ -115,8 +115,10 @@ namespace MartinCostello.LondonTravel.Site.Middleware
                         context.Response.Headers.Add("x-csp-nonce", nonce);
                     }
 
-                    string csp = BuildContentSecurityPolicy(isReport: false, nonce: nonce);
-                    string cspReport = BuildContentSecurityPolicy(isReport: true, nonce: nonce);
+                    bool allowInlineStyles = context.InlineStylesAllowed();
+
+                    string csp = BuildContentSecurityPolicy(nonce, allowInlineStyles, isReport: false);
+                    string cspReport = BuildContentSecurityPolicy(nonce, allowInlineStyles, isReport: true);
 
                     context.Response.Headers.Add("Content-Security-Policy", csp);
                     context.Response.Headers.Add("Content-Security-Policy-Report-Only", cspReport);
@@ -279,12 +281,13 @@ namespace MartinCostello.LondonTravel.Site.Middleware
         /// <summary>
         /// Builds the Content Security Policy to use for the website.
         /// </summary>
-        /// <param name="isReport">Whether the policy is being generated for the report.</param>
         /// <param name="nonce">The nonce value to use, if any.</param>
+        /// <param name="allowInlineStyles">Whether to allow the use of inline styles.</param>
+        /// <param name="isReport">Whether the policy is being generated for the report.</param>
         /// <returns>
         /// A <see cref="string"/> containing the Content Security Policy to use.
         /// </returns>
-        private string BuildContentSecurityPolicy(bool isReport, string nonce)
+        private string BuildContentSecurityPolicy(string nonce, bool allowInlineStyles, bool isReport)
         {
             var options = _options.Value;
             var cdn = GetCdnOriginForContentSecurityPolicy(options);
@@ -317,18 +320,33 @@ namespace MartinCostello.LondonTravel.Site.Middleware
                 { "manifest-src", new[] { Csp.Self } },
             };
 
+            if (allowInlineStyles)
+            {
+                styleDirectives.Add(Csp.UnsafeInline);
+            }
+
             if (nonce != null)
             {
                 string nonceDirective = $"'nonce-{nonce}'";
 
                 scriptDirectives.Add(nonceDirective);
-                styleDirectives.Add(nonceDirective);
+
+                // Unsafe inline does not work if a nonce is present
+                if (!allowInlineStyles)
+                {
+                    styleDirectives.Add(nonceDirective);
+                }
             }
             else if (!_isProduction)
             {
                 // Fix developer exception pages
                 scriptDirectives.Add(Csp.UnsafeInline);
-                styleDirectives.Add(Csp.UnsafeInline);
+
+                // Prevent duplicate directives
+                if (!styleDirectives.Contains(Csp.UnsafeInline))
+                {
+                    styleDirectives.Add(Csp.UnsafeInline);
+                }
             }
 
             var builder = new StringBuilder();

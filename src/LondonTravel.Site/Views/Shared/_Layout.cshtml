@@ -1,4 +1,4 @@
-﻿@inject IConfiguration Config
+@inject IConfiguration Config
 <!DOCTYPE html>
 <html lang="en-gb">
 <head prefix="og:http://ogp.me/ns#">
@@ -22,6 +22,7 @@
 }
     @await Html.PartialAsync("_Meta", model)
     @await Html.PartialAsync("_Links", Tuple.Create(canonicalUri, Options))
+    @await RenderSectionAsync("links", required: false)
     @await RenderSectionAsync("meta", required: false)
     @await Html.PartialAsync("_StylesHead")
     @await RenderSectionAsync("stylesHead", required: false)

@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site
@@ -312,6 +312,10 @@ namespace MartinCostello.LondonTravel.Site
         public string TechnologyLinkText => _localizer[nameof(TechnologyLinkText)];
 
         public string TechnologyLinkAltText => _localizer[nameof(TechnologyLinkAltText)];
+
+        public string ApiDocumentationMetaTitle => _localizer[nameof(ApiDocumentationMetaTitle)];
+
+        public string ApiDocumentationMetaDescription => _localizer[nameof(ApiDocumentationMetaDescription)];
 
         public string ErrorSubtitle(int? httpCode) => _localizer[nameof(ErrorSubtitle), httpCode ?? 500];
 

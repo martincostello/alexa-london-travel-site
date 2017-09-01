@@ -570,4 +570,10 @@
   <data name="TechnologyTitle" xml:space="preserve">
     <value>London Travel Technologies</value>
   </data>
+  <data name="ApiDocumentationMetaDescription" xml:space="preserve">
+    <value>Documentation for the London Travel REST API.</value>
+  </data>
+  <data name="ApiDocumentationMetaTitle" xml:space="preserve">
+    <value>API Documentation</value>
+  </data>
 </root>

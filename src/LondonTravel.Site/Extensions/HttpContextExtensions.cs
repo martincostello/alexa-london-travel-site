@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Extensions
@@ -16,6 +16,11 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         /// The name of the key for storing the CSP nonce.
         /// </summary>
         private const string CspNonceKey = "x-csp-nonce";
+
+        /// <summary>
+        /// The name of the key for allowing inline use of styles.
+        /// </summary>
+        private const string InlineStylesKey = "x-styles-unsafe-inline";
 
         /// <summary>
         /// Gets the CSP nonce value for the current HTTP context, generating one if not already set.
@@ -71,6 +76,35 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         public static void SetCspNonce(this HttpContext context, string nonce)
         {
             context.Items[CspNonceKey] = nonce;
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether inline styles may be used in the CSP.
+        /// </summary>
+        /// <param name="context">The HTTP context to get the value from.</param>
+        /// <returns>
+        /// <see langword="true"/> if inline styles may be used; otherwise <see langword="false"/>.
+        /// </returns>
+        public static bool InlineStylesAllowed(this HttpContext context)
+        {
+            bool result = false;
+
+            if (context.Items.TryGetValue(InlineStylesKey, out object value) &&
+                value is bool allowInlineStyles)
+            {
+                result = allowInlineStyles;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Sets that inline styles can be used for this HTTP request.
+        /// </summary>
+        /// <param name="context">The HTTP context to allow inline styles for.</param>
+        public static void AllowInlineStyles(this HttpContext context)
+        {
+            context.Items[InlineStylesKey] = true;
         }
     }
 }
