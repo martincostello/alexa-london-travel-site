@@ -37,7 +37,13 @@ window.onload = () => {
         jsonEditor: true,
         showRequestHeaders: true,
         supportedSubmitMethods: ["get"],
-        validatorUrl: null
+        validatorUrl: null,
+        responseInterceptor: (response: any): any => {
+            // Delete overly-verbose headers from the UI
+            delete response.headers["content-security-policy"];
+            delete response.headers["content-security-policy-report-only"];
+            delete response.headers["public-key-pins-report-only"];
+        }
     });
 
     (window as any).ui = ui;
