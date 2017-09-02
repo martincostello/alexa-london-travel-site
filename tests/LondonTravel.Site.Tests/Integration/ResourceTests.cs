@@ -7,6 +7,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using System.Net;
     using System.Threading.Tasks;
     using Newtonsoft.Json.Linq;
+    using Shouldly;
     using Xunit;
 
     /// <summary>
@@ -139,6 +140,18 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 {
                     Assert.True(response.Headers.Contains(expected), $"The '{expected}' response header was not found.");
                 }
+            }
+        }
+
+        [Theory]
+        [InlineData("/foo/", HttpStatusCode.NotFound)]
+        [InlineData("/error/", HttpStatusCode.InternalServerError)]
+        public async Task Error_Page_Returns_Correct_Status_Code(string requestUri, HttpStatusCode expected)
+        {
+            using (var response = await Fixture.Client.GetAsync(requestUri))
+            {
+                response.StatusCode.ShouldBe(expected);
+                response.Content.Headers.ContentType?.MediaType.ShouldBe("text/html");
             }
         }
     }
