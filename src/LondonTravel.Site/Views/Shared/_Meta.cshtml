@@ -1,4 +1,4 @@
-﻿@using Microsoft.AspNetCore.Hosting
+@using Microsoft.AspNetCore.Hosting
 @model MetaModel
 @inject IConfiguration Config
 @inject IHostingEnvironment Hosting
@@ -73,8 +73,48 @@
         "@@type": "WebSite",
         "name": "@Model.SiteName",
         "alternateName": "@Model.Description",
+        "author" : {
+            "@@type" : "Person",
+            "name" : "@Options.Metadata.Author.Name"
+        },
         "description": "@Model.Description",
         "image": "@Options.Metadata.Image",
         "url": "@Context.Request.Canonical("/")"
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@@context" : "http://schema.org",
+        "@@type" : "SoftwareApplication",
+        "name" : "@Model.SiteName",
+        "aggregateRating": {
+            "@@context": "http://schema.org",
+            "@@type": "AggregateRating",
+            "bestRating": 5,
+            "worstRating": 1,
+            "ratingValue": 4,
+            "reviewCount": 4
+        },
+        "applicationCategory": "Travel & Transportation",
+        "applicationSubCategory": "Public Transportation",
+        "author" : {
+            "@@type" : "Person",
+            "name" : "@Options.Metadata.Author.Name"
+        },
+        "countriesSupported": "gb",
+        "dateCreated": "2017-02-04",
+        "description": "The London Travel Alexa skill allows you to ask Alexa for information about disruption on public transport in London.",
+        "installUrl": "@Options.ExternalLinks.Skill",
+        "inLanguage": "en-GB",
+        "license": "https://github.com/martincostello/alexa-london-travel/blob/master/LICENSE",
+        "offers": {
+            "@@context": "http://schema.org",
+            "@@type": "Offer",
+            "price": "0.00",
+            "priceCurrency": "GBP"
+        },
+        "operatingSystem": "Amazon Echo",
+        "releaseNotes": "https://github.com/martincostello/alexa-london-travel/releases/latest",
+        "url": "https://github.com/martincostello/alexa-london-travel"
     }
     </script>
