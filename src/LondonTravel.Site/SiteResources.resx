@@ -352,7 +352,7 @@
     <value>Register</value>
   </data>
   <data name="RegisterMetaDescription" xml:space="preserve">
-    <value>Register for a London Travel account.</value>
+    <value>Register for a London Travel account to link your Alexa skill to and save your preferences.</value>
   </data>
   <data name="RegisterParagraph1" xml:space="preserve">
     <value>If you do not already have a London Travel account, you can create one by signing in with one of the services below.</value>
