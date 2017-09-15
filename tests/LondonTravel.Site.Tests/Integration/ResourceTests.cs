@@ -56,7 +56,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         [InlineData("/help/", "text/html")]
         [InlineData("/humans.txt", "text/plain")]
         [InlineData("/keybase.txt", "text/plain")]
-        [InlineData("/manifest.json", "application/json")]
+        [InlineData("/manifest.webmanifest", "application/manifest+json")]
         [InlineData("/privacy-policy/", "text/html")]
         [InlineData("/robots.txt", "text/plain")]
         [InlineData("/service-worker.js", "application/javascript")]
@@ -104,7 +104,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         [Fact]
         public async Task Manifest_Is_Valid_Json()
         {
-            using (var response = await Fixture.Client.GetAsync("/manifest.json"))
+            using (var response = await Fixture.Client.GetAsync("/manifest.webmanifest"))
             {
                 response.EnsureSuccessStatusCode();
 

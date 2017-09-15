@@ -1,7 +1,7 @@
 @inject IConfiguration Config
 <!DOCTYPE html>
 <html lang="en-gb">
-<head prefix="og:http://ogp.me/ns#">
+<head prefix="og: http://ogp.me/ns#">
 @{
     string canonicalUri = Context.Request.Canonical();
     string image = ViewBag.MetaImage ?? string.Empty;

@@ -157,6 +157,12 @@ namespace MartinCostello.LondonTravel.Site.Middleware
                     context.Response.Headers.Add("X-Instance", Environment.MachineName);
                     context.Response.Headers.Add("X-Request-Id", context.TraceIdentifier);
                     context.Response.Headers.Add("X-Revision", GitMetadata.Commit);
+                    context.Response.Headers.Add("X-UA-Compatible", "IE=edge");
+
+                    if (!context.Response.Headers.ContainsKey("Pragma"))
+                    {
+                        context.Response.Headers.Add("Pragma", "no-cache");
+                    }
 
                     return Task.CompletedTask;
                 });

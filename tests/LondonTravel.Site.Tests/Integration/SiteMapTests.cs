@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Integration
@@ -60,7 +60,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
 
                 using (var response = await Fixture.Client.GetAsync(uri.PathAndQuery))
                 {
-                    response.StatusCode.ShouldBe(HttpStatusCode.OK);
+                    response.StatusCode.ShouldBe(HttpStatusCode.OK, $"Failed to get {uri.PathAndQuery}.");
                     response.Content.Headers.ContentType?.MediaType.ShouldBe("text/html");
                     response.Content.Headers.ContentLength.ShouldNotBeNull();
                     response.Content.Headers.ContentLength.Value.ShouldBeGreaterThan(0);

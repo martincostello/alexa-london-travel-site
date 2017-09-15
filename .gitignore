@@ -13,6 +13,7 @@ Backup*/
 bin
 Bin
 BuildOutput
+cdp.pid
 coverage
 node_modules
 obj
