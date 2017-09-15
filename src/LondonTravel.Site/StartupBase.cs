@@ -24,6 +24,7 @@ namespace MartinCostello.LondonTravel.Site
     using Microsoft.AspNetCore.Localization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Razor;
+    using Microsoft.AspNetCore.StaticFiles;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
@@ -120,20 +121,7 @@ namespace MartinCostello.LondonTravel.Site
                    .UseStatusCodePagesWithReExecute("/error", "?id={0}");
             }
 
-            app.UseStaticFiles(
-                new StaticFileOptions()
-                {
-                    DefaultContentType = "application/json",
-                    ServeUnknownFileTypes = true,
-                    OnPrepareResponse = (context) =>
-                        {
-                            var headers = context.Context.Response.GetTypedHeaders();
-                            headers.CacheControl = new CacheControlHeaderValue()
-                            {
-                                MaxAge = TimeSpan.FromDays(7)
-                            };
-                        }
-                });
+            app.UseStaticFiles(CreateStaticFileOptions());
 
             app.UseForwardedHeaders(
                 new ForwardedHeadersOptions()
@@ -277,6 +265,27 @@ namespace MartinCostello.LondonTravel.Site
             settings.DateFormatString = "yyyy'-'MM'-'dd'T'HH':'mm':'ssK";   // Only return DateTimes to a 1 second precision
 
             return settings;
+        }
+
+        private static StaticFileOptions CreateStaticFileOptions()
+        {
+            var provider = new FileExtensionContentTypeProvider();
+            provider.Mappings[".webmanifest"] = "application/manifest+json";
+
+            return new StaticFileOptions()
+            {
+                ContentTypeProvider = provider,
+                DefaultContentType = "application/json",
+                ServeUnknownFileTypes = true,
+                OnPrepareResponse = (context) =>
+                {
+                    var headers = context.Context.Response.GetTypedHeaders();
+                    headers.CacheControl = new CacheControlHeaderValue()
+                    {
+                        MaxAge = TimeSpan.FromDays(7)
+                    };
+                }
+            };
         }
 
         /// <summary>
