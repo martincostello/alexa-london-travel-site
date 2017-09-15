@@ -1,6 +1,6 @@
 {
   "name": "London Travel",
-  "short_name": "London Travel",
+  "short_name": "LondonTravel",
   "description": "London Travel is an Amazon Alexa skill for checking the status for travel in London.",
   "start_url": "/",
   "background_color": "#ffffff",

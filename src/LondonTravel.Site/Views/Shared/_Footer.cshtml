@@ -1,4 +1,4 @@
-﻿@model SiteOptions
+@model SiteOptions
 <hr />
 <footer>
     <p class="hidden-sm hidden-xs">
@@ -19,7 +19,7 @@
             @SR.TechnologyLinkText
         </a>
         |
-        <a href="@Model.ExternalLinks.Status.AbsoluteUri" rel="noopener" target="_blank" title="@SR.StatusLinkAltText" data-ga-label="Site Uptime">
+        <a href="@Model.ExternalLinks.Status.AbsoluteUri" rel="noopener noreferrer" target="_blank" title="@SR.StatusLinkAltText" data-ga-label="Site Uptime">
             @SR.StatusLinkText
         </a>
         <span id="build-date" data-format="YYYY-MM-DD HH:mm Z" data-timestamp="@GitMetadata.Timestamp.ToString("u", CultureInfo.InvariantCulture)"></span>

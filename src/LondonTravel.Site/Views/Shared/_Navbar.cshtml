@@ -1,4 +1,4 @@
-﻿<nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
             <a asp-route="@SiteRoutes.Home" class="navbar-brand" title="@SR.HomepageLinkAltText" data-ga-label="Homepage Navbar">
@@ -25,7 +25,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="@Options?.ExternalLinks?.Skill" rel="noopener" target="_blank" title="@SR.InstallLinkAltText" data-ga-label="Install Navbar">
+                            <a href="@Options?.ExternalLinks?.Skill" rel="noopener noreferrer" target="_blank" title="@SR.InstallLinkAltText" data-ga-label="Install Navbar">
                                 @SR.InstallLinkText
                                 <i class="fa fa-external-link" aria-hidden="true"></i>
                             </a>

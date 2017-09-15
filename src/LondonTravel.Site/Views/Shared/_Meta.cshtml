@@ -1,15 +1,12 @@
-@using Microsoft.AspNetCore.Hosting
+﻿@using Microsoft.AspNetCore.Hosting
 @model MetaModel
 @inject IConfiguration Config
 @inject IHostingEnvironment Hosting
 @{
     bool renderAnalytics = string.Equals(Config.AzureEnvironment(), "production", StringComparison.OrdinalIgnoreCase);
 }
+    <meta charset="utf-8" />
     <title>@Model.Title</title>
-    <meta http-equiv="cache-control" content="no-cache, no-store" />
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <meta http-equiv="pragma" content="no-cache" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="author" content="@Model.Author" />
     <meta name="bitcoin" content="@Model.Bitcoin" />
     <meta name="copyright" content="@SR.CopyrightText" />
