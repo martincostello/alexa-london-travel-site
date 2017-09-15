@@ -1,4 +1,4 @@
-﻿@model Tuple<string, SiteOptions>
+@model Tuple<string, SiteOptions>
 @{
     string canonical = Model.Item1;
     SiteOptions options = Model.Item2;
@@ -16,7 +16,7 @@
     <link rel="preconnect" href="//maxcdn.bootstrapcdn.com" />
     <link rel="preconnect" href="//www.google-analytics.com" />
     <link rel="canonical" href="@canonical" />
-    <link rel="manifest" href="@Url.Content("~/manifest.json")" asp-append-version="true" />
+    <link rel="manifest" href="@Url.Content("~/manifest.webmanifest")" asp-append-version="true" />
     <link rel="sitemap" type="application/xml" href="@Url.Content("~/sitemap.xml")" asp-append-version="true" />
     <link rel="shortcut icon" type="image/x-icon" href="@Url.CdnContent("favicon.ico", options)" />
     <link rel="shortcut icon" sizes="196x196" href="@Url.CdnContent("favicon-196x196.png", options)" />
