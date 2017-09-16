@@ -3,6 +3,12 @@
   "compilerOptions": {
     "inlineSources": true,
     "inlineSourceMap": true,
+    "lib": [
+      "dom",
+      "es5",
+      "es2015.iterable",
+      "scripthost"
+    ],
     "noEmitOnError": true,
     "noImplicitAny": true,
     "noImplicitThis": true,

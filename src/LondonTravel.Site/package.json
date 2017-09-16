@@ -6,7 +6,7 @@
     "@types/applicationinsights-js": "1.0.2",
     "@types/google.analytics": "0.0.30",
     "@types/jasmine": "2.5.46",
-    "@types/jquery": "2.0.41",
+    "@types/jquery": "3.2.12",
     "del": "2.2.2",
     "gulp": "3.9.1",
     "gulp-concat": "2.6.1",

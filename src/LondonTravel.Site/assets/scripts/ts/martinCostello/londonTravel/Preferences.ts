@@ -144,7 +144,7 @@ namespace martinCostello.londonTravel {
          * Handles a line being clicked.
          * @param {JQueryEventObject} e - The event arguments.
          */
-        private onLineClicked = (e: JQueryEventObject): void => {
+        private onLineClicked = (e: JQuery.Event): void => {
 
             let element: JQuery = $(e.target);
             let checkbox: JQuery = element.find("input[type='checkbox']");

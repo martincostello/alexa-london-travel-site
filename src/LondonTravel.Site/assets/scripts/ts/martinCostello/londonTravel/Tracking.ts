@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace martinCostello.londonTravel {
@@ -40,7 +40,7 @@ namespace martinCostello.londonTravel {
 }
 
 (() => {
-    $("a, button, input, .ga-track-click").on("click", (e: JQueryEventObject): void => {
+    $("a, button, input, .ga-track-click").on("click", (e: JQuery.Event): void => {
 
         let element: JQuery = $(e.target);
         let label: string = element.attr("data-ga-label") || element.attr("id");
