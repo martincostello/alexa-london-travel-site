@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace martinCostello.londonTravel {
@@ -33,7 +33,7 @@ namespace martinCostello.londonTravel {
          * Handles the form being submitted.
          * @param {JQueryEventObject} e - The event object.
          */
-        private onFormSubmit = (e: JQueryEventObject): void => {
+        private onFormSubmit = (e: JQuery.Event): void => {
             let form: JQuery = $(e.target);
             form.find(".js-delete-control").addClass("disabled");
             form.find(".js-delete-content").addClass("hide");
@@ -44,7 +44,7 @@ namespace martinCostello.londonTravel {
          * Handles the modal being displayed.
          * @param {JQueryEventObject} e - The event object.
          */
-        private onModalShown = (e: JQueryEventObject): void => {
+        private onModalShown = (e: JQuery.Event): void => {
             let modal: JQuery = $(e.target);
             setTimeout(() => {
                 modal.find(".js-modal-confirm")

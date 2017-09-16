@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 module.exports = function (config) {
@@ -11,12 +11,16 @@ module.exports = function (config) {
         frameworks: ["jasmine", "karma-typescript"],
 
         files: [
-            "https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js",
+            "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js",
             "assets/scripts/**/*.ts"
         ],
 
         preprocessors: {
             "**/*.ts": ["karma-typescript"]
+        },
+
+        karmaTypescriptConfig: {
+            tsconfig: "tsconfig.json"
         },
 
         htmlDetailed: {
