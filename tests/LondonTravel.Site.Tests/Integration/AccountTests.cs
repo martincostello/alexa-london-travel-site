@@ -71,7 +71,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 Assert.Null(actual.AlexaToken);
                 Assert.Equal(user.CreatedAt, actual.CreatedAt);
                 Assert.Equal(user.Email, actual.Email);
-                Assert.Equal(false, actual.EmailConfirmed);
+                Assert.False(actual.EmailConfirmed);
                 Assert.NotEmpty(actual.ETag);
                 Assert.Equal(Array.Empty<string>(), actual.FavoriteLines);
                 Assert.Equal(user.GivenName, actual.GivenName);
