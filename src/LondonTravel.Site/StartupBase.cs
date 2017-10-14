@@ -5,7 +5,6 @@ namespace MartinCostello.LondonTravel.Site
 {
     using System;
     using System.Globalization;
-    using System.Net.Http;
     using Autofac;
     using Autofac.Extensions.DependencyInjection;
     using Extensions;
@@ -206,7 +205,7 @@ namespace MartinCostello.LondonTravel.Site
             services.AddScoped((p) => p.GetRequiredService<SiteOptions>().Tfl);
 
             services.AddScoped<SiteResources>();
-            services.AddTransient<HttpClient>();
+            services.AddHttpClient();
             services.AddTransient<ITflService, TflService>();
 
             services
