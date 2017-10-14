@@ -15,6 +15,7 @@
     <ProjectReference Include="..\..\src\LondonTravel.Site\LondonTravel.Site.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="JustEat.HttpClientInterception" Version="1.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
     <PackageReference Include="Moq" Version="4.7.142" />
