@@ -24,8 +24,6 @@
     <EmbeddedResource Update="SiteResources.resx" Generator="" />
   </ItemGroup>
   <ItemGroup>
-    <DotNetCliToolReference Include="dotnet-sourcelink" Version="2.4.0" />
-    <DotNetCliToolReference Include="dotnet-sourcelink-git" Version="2.4.0" />
     <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.0" />
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
   </ItemGroup>
@@ -47,7 +45,6 @@
     <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="2.2.1" />
     <PackageReference Include="Serilog.Sinks.Literate" Version="3.0.0" />
     <PackageReference Include="Serilog.Sinks.UDP" Version="3.3.0" />
-    <PackageReference Include="SourceLink.Create.GitHub" Version="2.4.0" PrivateAssets="All" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.0.2" PrivateAssets="All" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="1.0.0" />
     <PackageReference Include="WindowsAzure.Storage" Version="8.5.0" />
