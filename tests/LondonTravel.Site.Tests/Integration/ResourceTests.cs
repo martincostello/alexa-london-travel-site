@@ -5,6 +5,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
 {
     using System;
     using System.Net;
+    using System.Net.Http;
     using System.Threading.Tasks;
     using Newtonsoft.Json.Linq;
     using Shouldly;
@@ -66,8 +67,10 @@ namespace MartinCostello.LondonTravel.Site.Integration
         [InlineData("/terms-of-service/", "text/html")]
         public async Task Can_Load_Resource(string requestUri, string contentType)
         {
+            // Act
             using (var response = await Fixture.Client.GetAsync(requestUri))
             {
+                // Assert
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
                 Assert.Equal(contentType, response.Content.Headers.ContentType?.MediaType);
                 Assert.NotNull(response.Content.Headers.ContentLength);
@@ -81,8 +84,10 @@ namespace MartinCostello.LondonTravel.Site.Integration
         [InlineData("/support/", "/help/")]
         public async Task Resource_Is_Redirect(string requestUri, string location)
         {
+            // Act
             using (var response = await Fixture.Client.GetAsync(requestUri))
             {
+                // Assert
                 Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
                 Assert.Equal(location, response.Headers.Location?.OriginalString);
             }
@@ -94,8 +99,10 @@ namespace MartinCostello.LondonTravel.Site.Integration
         [InlineData("/manage/")]
         public async Task Cannot_Load_Resource_Unauthenticated(string requestUri)
         {
+            // Act
             using (var response = await Fixture.Client.GetAsync(requestUri))
             {
+                // Assert
                 Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
                 Assert.Equal($"/account/sign-in/?ReturnUrl={Uri.EscapeDataString(requestUri)}", response.Headers.Location?.PathAndQuery);
             }
@@ -104,8 +111,10 @@ namespace MartinCostello.LondonTravel.Site.Integration
         [Fact]
         public async Task Manifest_Is_Valid_Json()
         {
+            // Arrange
             using (var response = await Fixture.Client.GetAsync("/manifest.webmanifest"))
             {
+                // Assert
                 response.EnsureSuccessStatusCode();
 
                 string json = await response.Content.ReadAsStringAsync();
@@ -118,6 +127,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         [Fact]
         public async Task Response_Headers_Contains_Expected_Headers()
         {
+            // Arrange
             string[] expectedHeaders = new[]
             {
                 "content-security-policy",
@@ -134,8 +144,10 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 "X-XSS-Protection",
             };
 
+            // Act
             using (var response = await Fixture.Client.GetAsync("/"))
             {
+                // Assert
                 foreach (string expected in expectedHeaders)
                 {
                     Assert.True(response.Headers.Contains(expected), $"The '{expected}' response header was not found.");
@@ -146,12 +158,62 @@ namespace MartinCostello.LondonTravel.Site.Integration
         [Theory]
         [InlineData("/foo/", HttpStatusCode.NotFound)]
         [InlineData("/error/", HttpStatusCode.InternalServerError)]
+        [InlineData("/error/?id=200", HttpStatusCode.InternalServerError)]
+        [InlineData("/error/?id=400", HttpStatusCode.BadRequest)]
+        [InlineData("/error/?id=403", HttpStatusCode.Forbidden)]
+        [InlineData("/error/?id=404", HttpStatusCode.NotFound)]
+        [InlineData("/error/?id=405", HttpStatusCode.MethodNotAllowed)]
+        [InlineData("/error/?id=408", HttpStatusCode.RequestTimeout)]
+        [InlineData("/error/?id=500", HttpStatusCode.InternalServerError)]
+        [InlineData("/error/?id=599", HttpStatusCode.InternalServerError)]
+        [InlineData("/error/?id=600", HttpStatusCode.InternalServerError)]
         public async Task Error_Page_Returns_Correct_Status_Code(string requestUri, HttpStatusCode expected)
         {
+            // Act
             using (var response = await Fixture.Client.GetAsync(requestUri))
             {
+                // Assert
                 response.StatusCode.ShouldBe(expected);
                 response.Content.Headers.ContentType?.MediaType.ShouldBe("text/html");
+            }
+        }
+
+        [Theory]
+        [InlineData("/admin.php")]
+        [InlineData("/wp-admin/blah")]
+        [InlineData("/xmlrpc.php")]
+        public async Task Crawler_Spam_Is_Redirected_To_YouTube(string requestUri)
+        {
+            // Act
+            using (var response = await Fixture.Client.GetAsync(requestUri))
+            {
+                // Assert
+                Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+                Assert.Equal("www.youtube.com", response.Headers.Location?.Host);
+            }
+
+            // Arrange
+            using (var message = new HttpRequestMessage(HttpMethod.Head, requestUri))
+            {
+                // Act
+                using (var response = await Fixture.Client.SendAsync(message))
+                {
+                    // Assert
+                    Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+                    Assert.Equal("www.youtube.com", response.Headers.Location?.Host);
+                }
+            }
+
+            // Arrange
+            using (var content = new StringContent(string.Empty))
+            {
+                // Act
+                using (var response = await Fixture.Client.PostAsync(requestUri, content))
+                {
+                    // Assert
+                    Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+                    Assert.Equal("www.youtube.com", response.Headers.Location?.Host);
+                }
             }
         }
     }

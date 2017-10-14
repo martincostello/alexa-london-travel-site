@@ -79,7 +79,9 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         {
             int httpCode = id ?? 500;
 
-            if (!Enum.IsDefined(typeof(HttpStatusCode), (HttpStatusCode)httpCode))
+            if (!Enum.IsDefined(typeof(HttpStatusCode), (HttpStatusCode)httpCode) ||
+                id < 400 ||
+                id > 599)
             {
                 httpCode = (int)HttpStatusCode.InternalServerError;
             }

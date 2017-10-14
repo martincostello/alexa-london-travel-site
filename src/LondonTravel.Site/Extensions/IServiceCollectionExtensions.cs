@@ -6,6 +6,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
     using System;
     using System.IO;
     using System.Linq;
+    using System.Net.Http;
     using System.Reflection;
     using Identity.Amazon;
     using MartinCostello.LondonTravel.Site.Identity;
@@ -25,6 +26,39 @@ namespace MartinCostello.LondonTravel.Site.Extensions
     /// </summary>
     public static class IServiceCollectionExtensions
     {
+        /// <summary>
+        /// Adds <see cref="HttpClient"/> to the services.
+        /// </summary>
+        /// <param name="value">The <see cref="IServiceCollection"/> to add HTTP client to.</param>
+        /// <returns>
+        /// The value specified by <paramref name="value"/>.
+        /// </returns>
+        public static IServiceCollection AddHttpClient(this IServiceCollection value)
+        {
+            return value.AddTransient(
+                (p) =>
+                {
+                    HttpMessageHandler handler = new HttpClientHandler();
+                    var handlers = p.GetServices<DelegatingHandler>().ToList();
+
+                    if (handlers.Count > 0)
+                    {
+                        var previous = handlers.First();
+                        previous.InnerHandler = handler;
+
+                        foreach (var next in handlers.Skip(1))
+                        {
+                            next.InnerHandler = previous;
+                            previous = next;
+                        }
+
+                        handler = previous;
+                    }
+
+                    return new HttpClient(handler);
+                });
+        }
+
         /// <summary>
         /// Adds Swagger to the services.
         /// </summary>

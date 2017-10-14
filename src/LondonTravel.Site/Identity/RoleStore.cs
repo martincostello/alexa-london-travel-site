@@ -11,6 +11,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
     /// <summary>
     /// A class representing a custom implementation of <see cref="IRoleStore{LondonTravelRole}"/>. This class cannot be inherited.
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public sealed class RoleStore : IRoleStore<LondonTravelRole>
     {
         /// <inheritdoc />

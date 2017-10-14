@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Services.Tfl
@@ -6,7 +6,6 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
     using System;
     using System.Collections.Generic;
     using System.Net.Http;
-    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.Extensions.Caching.Memory;
@@ -49,8 +48,6 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
             _client = httpClient;
             _cache = cache;
             _options = options;
-
-            _client.BaseAddress = _options.BaseUri;
         }
 
         /// <inheritdoc />
@@ -64,7 +61,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
         }
 
         /// <inheritdoc />
-        public async Task<ICollection<LineInfo>> GetLinesAsync(CancellationToken cancellationToken)
+        public async Task<ICollection<LineInfo>> GetLinesAsync(CancellationToken cancellationToken = default)
         {
             const string CacheKey = "TfL.AvailableLines";
             string relativeUrl = $"Line/Mode/{string.Join(",", _options.SupportedModes)}";
@@ -74,9 +71,9 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
         }
 
         /// <inheritdoc />
-        public async Task<ICollection<StopPoint>> GetStopPointsByLineAsync(string lineId, CancellationToken cancellationToken)
+        public async Task<ICollection<StopPoint>> GetStopPointsByLineAsync(string lineId, CancellationToken cancellationToken = default)
         {
-            string cacheKey = $"TfL.{lineId}.AvailableLines";
+            string cacheKey = $"TfL.{lineId}.StopPoints";
             string relativeUrl = $"Line/{lineId}/StopPoints";
             Uri requestUri = BuildRequestUri(relativeUrl);
 
@@ -92,20 +89,13 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
         /// </returns>
         private Uri BuildRequestUri(string relativeUrl)
         {
-            var builder = new StringBuilder(relativeUrl);
-
-            if (relativeUrl.IndexOf('?') > -1)
+            var builder = new UriBuilder(_options.BaseUri)
             {
-                builder.Append('&');
-            }
-            else
-            {
-                builder.Append('?');
-            }
+                Path = relativeUrl,
+                Query = $"app_id={_options.AppId}&app_key={_options.AppKey}",
+            };
 
-            builder.Append($"app_id={_options.AppId}&app_key={_options.AppKey}");
-
-            return new Uri(builder.ToString(), UriKind.Relative);
+            return builder.Uri;
         }
 
         /// <summary>
@@ -136,6 +126,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
                     result = JsonConvert.DeserializeObject<T>(json);
 
                     if (!string.IsNullOrEmpty(cacheKey) &&
+                        response.Headers.CacheControl != null &&
                         response.Headers.CacheControl.MaxAge.HasValue)
                     {
                         var options = new MemoryCacheEntryOptions()
