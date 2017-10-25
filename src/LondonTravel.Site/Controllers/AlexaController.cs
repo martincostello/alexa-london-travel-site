@@ -178,11 +178,11 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             if (hasExistingToken)
             {
-                _logger.LogTrace("Regenerating Alexa acccess token for user Id {UserId}.", user.Id);
+                _logger.LogTrace("Regenerating Alexa access token for user Id {UserId}.", user.Id);
             }
             else
             {
-                _logger.LogTrace("Generating Alexa acccess token for user Id {UserId}.", user.Id);
+                _logger.LogTrace("Generating Alexa access token for user Id {UserId}.", user.Id);
             }
 
             user.AlexaToken = accessToken;
@@ -193,11 +193,11 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             {
                 if (hasExistingToken)
                 {
-                    _logger.LogInformation("Regenerated Alexa acccess token for user Id {UserId}.", user.Id);
+                    _logger.LogTrace("Regenerated Alexa access token for user Id {UserId}.", user.Id);
                 }
                 else
                 {
-                    _logger.LogInformation("Generated Alexa acccess token for user Id {UserId}.", user.Id);
+                    _logger.LogTrace("Generated Alexa access token for user Id {UserId}.", user.Id);
                 }
             }
             else
