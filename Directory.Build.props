@@ -1,14 +1,17 @@
 <Project>
   <ItemGroup>
     <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" Link="stylecop.json" />
+    <Compile Include="$(MSBuildThisFileDirectory)CommonAssemblyInfo.cs" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.0.2" PrivateAssets="All" />
   </ItemGroup>
   <PropertyGroup>
     <Authors>Martin Costello</Authors>
     <CodeAnalysisRuleSet>../../LondonTravel.Site.ruleset</CodeAnalysisRuleSet>
     <Company>https://github.com/martincostello/alexa-london-travel-site</Company>
-    <Copyright>Martin Costello (c) 2017</Copyright>
+    <Copyright>Martin Costello (c) $([System.DateTime]::UtcNow.ToString(yyyy))</Copyright>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <GenerateGitMetadata Condition=" '$(CI)' == 'true' and '$(GenerateGitMetadata)' == '' ">true</GenerateGitMetadata>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <LangVersion>latest</LangVersion>
     <NeutralLanguage>en-US</NeutralLanguage>
