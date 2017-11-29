@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\..\LondonTravel.Site.Common.props" />
   <PropertyGroup>
     <Description>Tests for https://londontravel.martincostello.com/</Description>
     <PreserveCompilationContext>true</PreserveCompilationContext>
@@ -8,7 +7,6 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\..\AssemblyVersion.cs;..\..\CommonAssemblyInfo.cs" />
     <Content Include="testsettings.json;xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
   <ItemGroup>
@@ -22,7 +20,6 @@
     <PackageReference Include="OpenCover" Version="4.6.519" />
     <PackageReference Include="ReportGenerator" Version="3.0.2" />
     <PackageReference Include="Shouldly" Version="2.8.3" />
-    <PackageReference Include="StyleCop.Analyzers" Version="1.0.2" PrivateAssets="All" />
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
   </ItemGroup>
