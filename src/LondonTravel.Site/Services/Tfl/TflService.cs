@@ -129,10 +129,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
                         response.Headers.CacheControl != null &&
                         response.Headers.CacheControl.MaxAge.HasValue)
                     {
-                        var options = new MemoryCacheEntryOptions()
-                            .SetAbsoluteExpiration(response.Headers.CacheControl.MaxAge.Value);
-
-                        _cache.Set(cacheKey, result, options);
+                        _cache.Set(cacheKey, result, absoluteExpirationRelativeToNow: response.Headers.CacheControl.MaxAge.Value);
                     }
                 }
             }
