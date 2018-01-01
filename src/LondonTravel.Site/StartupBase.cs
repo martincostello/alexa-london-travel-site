@@ -9,6 +9,7 @@ namespace MartinCostello.LondonTravel.Site
     using Autofac.Extensions.DependencyInjection;
     using Extensions;
     using Identity;
+    using MartinCostello.LondonTravel.Site.Services;
     using Microsoft.ApplicationInsights.AspNetCore.Extensions;
     using Microsoft.ApplicationInsights.Extensibility;
     using Microsoft.AspNetCore.Authentication.Cookies;
@@ -206,6 +207,7 @@ namespace MartinCostello.LondonTravel.Site
 
             services.AddScoped<SiteResources>();
             services.AddHttpClient();
+            services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<ITflService, TflService>();
 
             services

@@ -60,7 +60,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
 
                 using (var response = await Fixture.Client.GetAsync(uri.PathAndQuery))
                 {
-                    response.StatusCode.ShouldBe(HttpStatusCode.OK, $"Failed to get {uri.PathAndQuery}.");
+                    response.StatusCode.ShouldBe(HttpStatusCode.OK, $"Failed to get {uri.PathAndQuery}. {await response.Content.ReadAsStringAsync()}");
                     response.Content.Headers.ContentType?.MediaType.ShouldBe("text/html");
                     response.Content.Headers.ContentLength.ShouldNotBeNull();
                     response.Content.Headers.ContentLength.Value.ShouldBeGreaterThan(0);

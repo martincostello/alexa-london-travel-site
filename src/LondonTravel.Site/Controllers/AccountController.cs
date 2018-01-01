@@ -30,6 +30,8 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// </summary>
         private static readonly string[] AuthenticationSchemesDisabledForAlexa = new[] { "google" };
 
+        //// TODO Move more of the implementation into IAccountService
+
         private readonly UserManager<LondonTravelUser> _userManager;
         private readonly SignInManager<LondonTravelUser> _signInManager;
         private readonly ISiteTelemetry _telemetry;
@@ -269,30 +271,6 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
                 return View("SignIn");
             }
-        }
-
-        /// <summary>
-        /// Gets the result for the <c>/account/register/</c> action.
-        /// </summary>
-        /// <returns>
-        /// The result for the <c>/account/register/</c> action.
-        /// </returns>
-        [AllowAnonymous]
-        [HttpGet]
-        [Route("register", Name = SiteRoutes.Register)]
-        public IActionResult Register()
-        {
-            if (!_isEnabled)
-            {
-                return NotFound();
-            }
-
-            if (User.Identity.IsAuthenticated)
-            {
-                return RedirectToRoute(SiteRoutes.Home);
-            }
-
-            return View();
         }
 
         private void AddErrors(IdentityResult result)
