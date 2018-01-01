@@ -327,6 +327,8 @@ namespace MartinCostello.LondonTravel.Site
 
         public LocalizedHtmlString OtherLinesTitle(string classes, int count) => _htmlLocalizer[nameof(OtherLinesTitle), classes, count];
 
+        public string RegisterParagraph4(long count) => _localizer[nameof(RegisterParagraph4), count];
+
         public string RemoveAccountButtonAltText(string provider) => _localizer[nameof(RemoveAccountButtonAltText), provider];
 
         public string SignInButtonText(string diplayName) => _localizer[nameof(SignInButtonText), diplayName];
