@@ -1,0 +1,3 @@
+Contact: https://twitter.com/martin_costello
+Contact: https://keybase.io/encrypt#martincostello
+Encryption: https://londontravel.martincostello.com/pgp-key.txt
