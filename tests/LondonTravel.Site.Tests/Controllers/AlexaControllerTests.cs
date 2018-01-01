@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Controllers
@@ -278,12 +278,12 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         }
 
         /// <summary>
-        /// Creates an instance of <see cref="ApiController"/> using mock dependencies.
+        /// Creates an instance of <see cref="AlexaController"/> using mock dependencies.
         /// </summary>
         /// <param name="userManager">An optional instance of <see cref="UserManager{TUser}"/>.</param>
         /// <param name="options">An optional instance of <see cref="SiteOptions"/>.</param>
         /// <returns>
-        /// The created instance of <see cref=""/>.
+        /// The created instance of <see cref="AlexaController"/>.
         /// </returns>
         private static AlexaController CreateTarget(
             UserManager<LondonTravelUser> userManager = null,

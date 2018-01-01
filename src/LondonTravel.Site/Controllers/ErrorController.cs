@@ -6,6 +6,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     using System;
     using System.Net;
     using MartinCostello.LondonTravel.Site.Telemetry;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
     /// <summary>
@@ -77,13 +78,13 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         [HttpGet]
         public IActionResult Index(int? id)
         {
-            int httpCode = id ?? 500;
+            int httpCode = id ?? StatusCodes.Status500InternalServerError;
 
             if (!Enum.IsDefined(typeof(HttpStatusCode), (HttpStatusCode)httpCode) ||
-                id < 400 ||
+                id < StatusCodes.Status400BadRequest ||
                 id > 599)
             {
-                httpCode = (int)HttpStatusCode.InternalServerError;
+                httpCode = StatusCodes.Status500InternalServerError;
             }
 
             string title = _resources.ErrorTitle;
@@ -93,32 +94,32 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             switch (httpCode)
             {
-                case (int)HttpStatusCode.BadRequest:
+                case StatusCodes.Status400BadRequest:
                     title = _resources.ErrorTitle400;
                     subtitle = _resources.ErrorSubtitle400;
                     message = _resources.ErrorMessage400;
                     break;
 
-                case (int)HttpStatusCode.Forbidden:
+                case StatusCodes.Status403Forbidden:
                     title = _resources.ErrorTitle403;
                     subtitle = _resources.ErrorSubtitle403;
                     message = _resources.ErrorMessage403;
                     break;
 
-                case (int)HttpStatusCode.MethodNotAllowed:
+                case StatusCodes.Status405MethodNotAllowed:
                     title = _resources.ErrorTitle405;
                     subtitle = _resources.ErrorSubtitle405;
                     message = _resources.ErrorMessage405;
                     break;
 
-                case (int)HttpStatusCode.NotFound:
+                case StatusCodes.Status404NotFound:
                     title = _resources.ErrorTitle404;
                     subtitle = _resources.ErrorSubtitle404;
                     message = _resources.ErrorMessage404;
                     isUserError = true;
                     break;
 
-                case (int)HttpStatusCode.RequestTimeout:
+                case StatusCodes.Status408RequestTimeout:
                     title = _resources.ErrorTitle408;
                     subtitle = _resources.ErrorSubtitle408;
                     message = _resources.ErrorMessage408;

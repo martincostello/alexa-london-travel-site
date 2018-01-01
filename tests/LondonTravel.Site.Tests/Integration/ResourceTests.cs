@@ -71,10 +71,10 @@ namespace MartinCostello.LondonTravel.Site.Integration
             using (var response = await Fixture.Client.GetAsync(requestUri))
             {
                 // Assert
-                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-                Assert.Equal(contentType, response.Content.Headers.ContentType?.MediaType);
-                Assert.NotNull(response.Content.Headers.ContentLength);
-                Assert.NotEqual(0, response.Content.Headers.ContentLength);
+                response.StatusCode.ShouldBe(HttpStatusCode.OK, $"Failed to get {requestUri}. {await response.Content.ReadAsStringAsync()}");
+                response.Content.Headers.ContentType?.MediaType.ShouldBe(contentType);
+                response.Content.Headers.ContentLength.ShouldNotBeNull();
+                response.Content.Headers.ContentLength.ShouldNotBe(0);
             }
         }
 
@@ -88,8 +88,8 @@ namespace MartinCostello.LondonTravel.Site.Integration
             using (var response = await Fixture.Client.GetAsync(requestUri))
             {
                 // Assert
-                Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
-                Assert.Equal(location, response.Headers.Location?.OriginalString);
+                response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
+                response.Headers.Location?.OriginalString.ShouldBe(location);
             }
         }
 
@@ -103,8 +103,8 @@ namespace MartinCostello.LondonTravel.Site.Integration
             using (var response = await Fixture.Client.GetAsync(requestUri))
             {
                 // Assert
-                Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
-                Assert.Equal($"/account/sign-in/?ReturnUrl={Uri.EscapeDataString(requestUri)}", response.Headers.Location?.PathAndQuery);
+                response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
+                response.Headers.Location?.PathAndQuery.ShouldBe($"/account/sign-in/?ReturnUrl={Uri.EscapeDataString(requestUri)}");
             }
         }
 
@@ -120,7 +120,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 string json = await response.Content.ReadAsStringAsync();
                 JObject manifest = JObject.Parse(json);
 
-                Assert.Equal("London Travel", (string)manifest["name"]);
+                ((string)manifest["name"]).ShouldBe("London Travel");
             }
         }
 
@@ -150,7 +150,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 // Assert
                 foreach (string expected in expectedHeaders)
                 {
-                    Assert.True(response.Headers.Contains(expected), $"The '{expected}' response header was not found.");
+                    response.Headers.Contains(expected).ShouldBeTrue($"The '{expected}' response header was not found.");
                 }
             }
         }
@@ -188,8 +188,8 @@ namespace MartinCostello.LondonTravel.Site.Integration
             using (var response = await Fixture.Client.GetAsync(requestUri))
             {
                 // Assert
-                Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
-                Assert.Equal("www.youtube.com", response.Headers.Location?.Host);
+                response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
+                response.Headers.Location?.Host.ShouldBe("www.youtube.com");
             }
 
             // Arrange
@@ -199,8 +199,8 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 using (var response = await Fixture.Client.SendAsync(message))
                 {
                     // Assert
-                    Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
-                    Assert.Equal("www.youtube.com", response.Headers.Location?.Host);
+                    response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
+                    response.Headers.Location?.Host.ShouldBe("www.youtube.com");
                 }
             }
 
@@ -211,8 +211,8 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 using (var response = await Fixture.Client.PostAsync(requestUri, content))
                 {
                     // Assert
-                    Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
-                    Assert.Equal("www.youtube.com", response.Headers.Location?.Host);
+                    response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
+                    response.Headers.Location?.Host.ShouldBe("www.youtube.com");
                 }
             }
         }

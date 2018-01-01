@@ -10,13 +10,17 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     using System.Threading;
     using System.Threading.Tasks;
     using Identity;
+    using MartinCostello.LondonTravel.Site.Services;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Controllers;
     using Microsoft.AspNetCore.Routing;
+    using Microsoft.Extensions.Caching.Memory;
     using Microsoft.Extensions.Logging;
     using Models;
     using Moq;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
     using Services.Data;
     using Shouldly;
     using Telemetry;
@@ -262,8 +266,9 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         public static async Task GetDocumentCount_Returns_Correct_Number_Of_Documents()
         {
             // Arrange
-            var mock = new Mock<IDocumentClient>();
-            mock.Setup((p) => p.GetDocumentCountAsync())
+            var mock = new Mock<IAccountService>();
+
+            mock.Setup((p) => p.GetUserCountAsync(false))
                 .ReturnsAsync(42);
 
             using (var target = CreateTarget(mock.Object))
@@ -279,20 +284,21 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 objectResult.StatusCode.ShouldBe(200);
                 objectResult.Value.ShouldNotBeNull();
 
-                var data = objectResult.Value as dynamic;
+                string json = JsonConvert.SerializeObject(objectResult.Value);
+                JObject data = JObject.Parse(json);
 
-                ((long)data.count).ShouldBe(42);
+                data["count"].ShouldBe(42);
             }
         }
 
         /// <summary>
         /// Creates an instance of <see cref="ApiController"/> using mock dependencies.
         /// </summary>
-        /// <param name="client">An optional instance of <see cref="IDocumentClient"/>.</param>
+        /// <param name="service">An optional instance of <see cref="IAccountService"/>.</param>
         /// <returns>
-        /// The created instance of <see cref=""/>.
+        /// The created instance of <see cref="ApiController"/>.
         /// </returns>
-        private static ApiController CreateTarget(IDocumentClient client = null)
+        private static ApiController CreateTarget(IAccountService service = null)
         {
             var httpRequest = new Mock<HttpRequest>();
 
@@ -312,27 +318,31 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             var controllerContext = new ControllerContext(actionContext);
 
-            return new ApiController(client ?? Mock.Of<IDocumentClient>(), Mock.Of<ISiteTelemetry>(), Mock.Of<ILogger<ApiController>>())
+            return new ApiController(service ?? Mock.Of<IAccountService>(), Mock.Of<ISiteTelemetry>(), Mock.Of<ILogger<ApiController>>())
             {
                 ControllerContext = controllerContext,
             };
         }
 
         /// <summary>
-        /// Creates a mock implementation of <see cref="IDocumentClient"/>.
+        /// Creates a mocked implementation of <see cref="IAccountService"/>.
         /// </summary>
         /// <param name="users">The users to store in the mock implementation.</param>
         /// <returns>
-        /// The created mock instance of <see cref="IDocumentClient"/>.
+        /// The created mocked instance of <see cref="IAccountService"/>.
         /// </returns>
-        private static IDocumentClient CreateClient(IEnumerable<LondonTravelUser> users)
+        private static IAccountService CreateClient(IEnumerable<LondonTravelUser> users)
         {
             Mock<IDocumentClient> mock = new Mock<IDocumentClient>();
 
             mock.Setup((p) => p.GetAsync(It.IsAny<Expression<Func<LondonTravelUser, bool>>>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync((Expression<Func<LondonTravelUser, bool>> a, CancellationToken b) => users.Where(a.Compile()));
 
-            return mock.Object;
+            IDocumentClient client = mock.Object;
+            IMemoryCache cache = Mock.Of<IMemoryCache>();
+            ILogger<AccountService> logger = new LoggerFactory().CreateLogger<AccountService>();
+
+            return new AccountService(client, cache, logger);
         }
     }
 }

@@ -4,20 +4,17 @@
 namespace MartinCostello.LondonTravel.Site.Controllers
 {
     using System;
-    using System.Dynamic;
-    using System.Linq;
-    using System.Net;
     using System.Net.Http.Headers;
     using System.Threading;
     using System.Threading.Tasks;
     using Identity;
+    using MartinCostello.LondonTravel.Site.Services;
     using MartinCostello.LondonTravel.Site.Swagger;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using Models;
-    using Services.Data;
     using Telemetry;
 
     /// <summary>
@@ -27,9 +24,9 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     public class ApiController : Controller
     {
         /// <summary>
-        /// The <see cref="IDocumentClient"/> to use. This field is read-only.
+        /// The <see cref="IAccountService"/> to use. This field is read-only.
         /// </summary>
-        private readonly IDocumentClient _client;
+        private readonly IAccountService _service;
 
         /// <summary>
         /// The <see cref="ISiteTelemetry"/> to use. This field is read-only.
@@ -44,12 +41,12 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// <summary>
         /// Initializes a new instance of the <see cref="ApiController"/> class.
         /// </summary>
-        /// <param name="client">The <see cref="IDocumentClient"/> to use.</param>
+        /// <param name="service">The <see cref="IAccountService"/> to use.</param>
         /// <param name="telemetry">The <see cref="ISiteTelemetry"/> to use.</param>
         /// <param name="logger">The <see cref="ILogger"/> to use.</param>
-        public ApiController(IDocumentClient client, ISiteTelemetry telemetry, ILogger<ApiController> logger)
+        public ApiController(IAccountService service, ISiteTelemetry telemetry, ILogger<ApiController> logger)
         {
-            _client = client;
+            _service = service;
             _telemetry = telemetry;
             _logger = logger;
         }
@@ -76,10 +73,9 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         [Route("_count")]
         public async Task<IActionResult> GetDocumentCount()
         {
-            long count = await _client.GetDocumentCountAsync();
+            long count = await _service.GetUserCountAsync(useCache: false);
 
-            dynamic value = new ExpandoObject();
-            value.count = count;
+            var value = new { count };
 
             return Ok(value);
         }
@@ -97,8 +93,8 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// <response code="500">An internal error occurred.</response>
         [HttpGet]
         [Produces("application/json", Type = typeof(PreferencesResponse))]
-        [ProducesResponseType(typeof(PreferencesResponse), 200)]
-        [ProducesResponseType(typeof(ErrorResponse), 401)]
+        [ProducesResponseType(typeof(PreferencesResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
         [Route("preferences")]
         [SwaggerResponseExample(typeof(PreferencesResponse), typeof(PreferencesResponseExampleProvider))]
         public async Task<IActionResult> GetPreferences(
@@ -125,7 +121,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             if (accessToken != null)
             {
-                user = await FindUserByAccessTokenAsync(accessToken, cancellationToken);
+                user = await _service.GetUserByAccessTokenAsync(accessToken, cancellationToken);
             }
 
             if (user == null || !string.Equals(user.AlexaToken, accessToken, StringComparison.Ordinal))
@@ -185,35 +181,6 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         }
 
         /// <summary>
-        /// Finds the user with the specified access token, if any, as an asynchronous operation.
-        /// </summary>
-        /// <param name="accessToken">The access token to find the associated user for.</param>
-        /// <param name="cancellationToken">The cancellation token to use.</param>
-        /// <returns>
-        /// A <see cref="Task{TResult}"/> representing the asynchronous operation to
-        /// find the London Travel user with the specified Alexa access token.
-        /// </returns>
-        private async Task<LondonTravelUser> FindUserByAccessTokenAsync(string accessToken, CancellationToken cancellationToken)
-        {
-            LondonTravelUser user = null;
-
-            if (!string.IsNullOrEmpty(accessToken))
-            {
-                try
-                {
-                    user = (await _client.GetAsync<LondonTravelUser>((p) => p.AlexaToken == accessToken, cancellationToken)).FirstOrDefault();
-                }
-                catch (Exception ex)
-                {
-                    _logger?.LogError(default, ex, "Failed to find user by access token.");
-                    throw;
-                }
-            }
-
-            return user;
-        }
-
-        /// <summary>
         /// Returns a response to use for an unauthorized API request.
         /// </summary>
         /// <param name="message">The error message.</param>
@@ -227,11 +194,11 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             {
                 Message = message ?? string.Empty,
                 RequestId = HttpContext.TraceIdentifier,
-                StatusCode = (int)HttpStatusCode.Unauthorized,
+                StatusCode = StatusCodes.Status401Unauthorized,
                 Details = detail == null ? Array.Empty<string>() : new[] { detail },
             };
 
-            return StatusCode((int)HttpStatusCode.Unauthorized, error);
+            return StatusCode(error.StatusCode, error);
         }
     }
 }

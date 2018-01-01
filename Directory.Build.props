@@ -11,7 +11,7 @@
     <Copyright>Martin Costello (c) $([System.DateTime]::UtcNow.ToString(yyyy))</Copyright>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
-    <GenerateGitMetadata Condition=" '$(CI)' == 'true' and '$(GenerateGitMetadata)' == '' ">true</GenerateGitMetadata>
+    <GenerateGitMetadata Condition=" ('$(CI)' != '' or '$(TF_BUILD)' != '') and '$(GenerateGitMetadata)' == '' ">true</GenerateGitMetadata>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <LangVersion>latest</LangVersion>
     <NeutralLanguage>en-US</NeutralLanguage>
