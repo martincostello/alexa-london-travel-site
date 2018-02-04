@@ -1,11 +1,13 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site
 {
     using Extensions;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Azure.KeyVault;
     using Microsoft.Azure.KeyVault.Models;
+    using Microsoft.Azure.Services.AppAuthentication;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Configuration.AzureKeyVault;
     using Microsoft.Extensions.DependencyInjection;
@@ -67,24 +69,22 @@ namespace MartinCostello.LondonTravel.Site
 
             // Get the settings for Azure Key Vault
             string vault = config["AzureKeyVault:Uri"];
-            string clientId = config["AzureKeyVault:ClientId"];
-            string clientSecret = config["AzureKeyVault:ClientSecret"];
+            string msiEndpoint = config["MSI_ENDPOINT"];
+            string msiSecret = config["MSI_SECRET"];
 
             bool canUseKeyVault =
                 !string.IsNullOrEmpty(vault) &&
-                !string.IsNullOrEmpty(clientId) &&
-                !string.IsNullOrEmpty(clientSecret);
+                !string.IsNullOrEmpty(msiEndpoint) &&
+                !string.IsNullOrEmpty(msiSecret);
 
             if (canUseKeyVault)
             {
                 // Add Azure Key Vault and replace the configuration built already
                 var manager = new AzureEnvironmentSecretManager(config.AzureEnvironment());
 
-                builder.AddAzureKeyVault(
-                    vault,
-                    clientId,
-                    clientSecret,
-                    manager);
+                var provider = new AzureServiceTokenProvider();
+                var client = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(provider.KeyVaultTokenCallback));
+                builder.AddAzureKeyVault(vault, client, manager);
 
                 config = builder.Build();
             }
