@@ -41,7 +41,7 @@ This project is licensed under the [Apache 2.0](http://www.apache.org/licenses/L
 
 ## Copyright and Trademarks
 
-The London Travel skill and compantion website is copyright (&copy;) Martin Costello 2017.
+The London Travel skill and companion website is copyright (&copy;) Martin Costello 2017.
 
 Amazon Alexa is a trademark of Amazon.com, Inc.
 
