@@ -13,13 +13,13 @@
     <ProjectReference Include="..\..\src\LondonTravel.Site\LondonTravel.Site.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="JustEat.HttpClientInterception" Version="1.0.0" />
+    <PackageReference Include="JustEat.HttpClientInterception" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.0.1" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
-    <PackageReference Include="Moq" Version="4.8.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.6.0" />
+    <PackageReference Include="Moq" Version="4.8.2" />
     <PackageReference Include="OpenCover" Version="4.6.519" />
-    <PackageReference Include="ReportGenerator" Version="3.1.1" />
-    <PackageReference Include="Shouldly" Version="2.8.3" />
+    <PackageReference Include="ReportGenerator" Version="3.1.2" />
+    <PackageReference Include="Shouldly" Version="3.0.0" />
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
   </ItemGroup>
