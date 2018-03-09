@@ -39,7 +39,9 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
         {
             // Arrange
             var builder = CreateBuilder()
+                .Requests()
                 .ForPath("Line/Mode/dlr,overground,tflrail,tube")
+                .Responds()
                 .WithResponseHeader("Cache-Control", "max-age=3600")
                 .WithJsonContent(new[] { new { id = "waterloo-city", name = "Waterloo & City" } });
 
@@ -75,7 +77,9 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
         {
             // Arrange
             var builder = CreateBuilder()
+                .Requests()
                 .ForPath("Line/Mode/dlr,overground,tflrail,tube")
+                .Responds()
                 .WithJsonContent(new[] { new { id = "district", name = "District" } });
 
             _interceptor.Register(builder);
@@ -110,7 +114,9 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
         {
             // Arrange
             var builder = CreateBuilder()
+                .Requests()
                 .ForPath("Line/victoria/StopPoints")
+                .Responds()
                 .WithResponseHeader("Cache-Control", "max-age=3600")
                 .WithJsonContent(new[] { new { id = "940GZZLUOXC", commonName = "Oxford Circus Underground Station", lat = 51.515224, lon = -0.141903 } });
 
@@ -148,7 +154,9 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
         {
             // Arrange
             var builder = CreateBuilder()
+                .Requests()
                 .ForPath("Line/victoria/StopPoints")
+                .Responds()
                 .WithJsonContent(new[] { new { id = "940GZZLUGPK", commonName = "Green Park Underground Station", lat = 51.506947, lon = -0.142787 } });
 
             _interceptor.Register(builder);
