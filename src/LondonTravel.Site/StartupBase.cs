@@ -173,6 +173,7 @@ namespace MartinCostello.LondonTravel.Site
             services
                 .AddLocalization()
                 .AddMvc(ConfigureMvc)
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
                 .AddDataAnnotationsLocalization()
                 .AddJsonOptions((p) => ConfigureJsonFormatter(p));
@@ -205,9 +206,8 @@ namespace MartinCostello.LondonTravel.Site
             services.AddScoped((p) => p.GetRequiredService<SiteOptions>().Tfl);
 
             services.AddScoped<SiteResources>();
-            services.AddHttpClient();
+            services.AddHttpClient<ITflService, TflService>();
             services.AddTransient<IAccountService, AccountService>();
-            services.AddTransient<ITflService, TflService>();
 
             services
                 .AddIdentity<LondonTravelUser, LondonTravelRole>((options) => options.User.RequireUniqueEmail = true)

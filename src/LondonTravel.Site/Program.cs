@@ -19,17 +19,13 @@ namespace MartinCostello.LondonTravel.Site
         /// </summary>
         /// <param name="args">The arguments to the application.</param>
         /// <returns>
-        /// A <see cref="Task{TResult}"/> that returns the exit code from the application.
+        /// The exit code from the application.
         /// </returns>
-        public static async Task<int> Main(string[] args)
+        public static int Main(string[] args)
         {
             try
             {
-                using (var host = BuildWebHost(args))
-                {
-                    await host.RunAsync();
-                }
-
+                CreateWebHostBuilder(args).Build().Run();
                 return 0;
             }
             catch (Exception ex)
@@ -39,7 +35,7 @@ namespace MartinCostello.LondonTravel.Site
             }
         }
 
-        private static IWebHost BuildWebHost(string[] args)
+        private static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
             return WebHost.CreateDefaultBuilder(args)
                 .UseKestrel((p) => p.AddServerHeader = false)
@@ -47,8 +43,7 @@ namespace MartinCostello.LondonTravel.Site
                 .UseAzureAppServices()
                 .UseApplicationInsights()
                 .UseStartup<Startup>()
-                .CaptureStartupErrors(true)
-                .Build();
+                .CaptureStartupErrors(true);
         }
     }
 }
