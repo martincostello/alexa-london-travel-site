@@ -27,7 +27,7 @@
     "karma-html-detailed-reporter": "1.1.21",
     "karma-jasmine": "1.1.1",
     "karma-phantomjs-launcher": "1.0.4",
-    "karma-typescript": "3.0.12",
+    "karma-typescript": "3.0.8",
     "merge-stream": "1.0.1",
     "path": "0.12.7",
     "phantomjs-prebuilt": "2.1.16",
