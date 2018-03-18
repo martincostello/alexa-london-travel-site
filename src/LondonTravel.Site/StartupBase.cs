@@ -119,6 +119,9 @@ namespace MartinCostello.LondonTravel.Site
                    .UseStatusCodePagesWithReExecute("/error", "?id={0}");
             }
 
+            app.UseHsts()
+               .UseHttpsRedirection();
+
             app.UseStaticFiles(CreateStaticFileOptions());
 
             app.UseForwardedHeaders(
