@@ -188,6 +188,14 @@ namespace MartinCostello.LondonTravel.Site
                     p.LowercaseUrls = true;
                 });
 
+            services.AddHsts(
+                (p) =>
+                {
+                    p.MaxAge = TimeSpan.FromDays(365);
+                    p.IncludeSubDomains = false;
+                    p.Preload = false;
+                });
+
             services.AddSwagger(HostingEnvironment);
 
             services

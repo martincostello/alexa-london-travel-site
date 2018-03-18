@@ -128,11 +128,6 @@ namespace MartinCostello.LondonTravel.Site.Middleware
                     {
                         context.Response.Headers.Add("Expect-CT", _expectCTValue);
 
-                        if (_isProduction)
-                        {
-                            context.Response.Headers.Add("Strict-Transport-Security", "max-age=31536000");
-                        }
-
                         if (_options.Value.PublicKeyPins?.IsEnabled == true && !string.IsNullOrWhiteSpace(_publicKeyPins))
                         {
                             context.Response.Headers.Add("Public-Key-Pins", _publicKeyPins);
