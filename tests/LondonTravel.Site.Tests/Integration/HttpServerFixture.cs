@@ -18,6 +18,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         public HttpServerFixture()
             : base("src/LondonTravel.Site")
         {
+            Client.BaseAddress = new System.Uri("https://localhost");
         }
 
         /// <summary>
