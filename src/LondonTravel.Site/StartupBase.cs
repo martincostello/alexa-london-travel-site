@@ -217,8 +217,10 @@ namespace MartinCostello.LondonTravel.Site
             services.AddScoped((p) => p.GetRequiredService<SiteOptions>().Tfl);
 
             services.AddScoped<SiteResources>();
-            services.AddHttpClient<ITflService, TflService>();
             services.AddTransient<IAccountService, AccountService>();
+            services.AddTransient<ITflService, TflService>();
+
+            services.AddHttpClients();
 
             services
                 .AddIdentity<LondonTravelUser, LondonTravelRole>((options) => options.User.RequireUniqueEmail = true)
