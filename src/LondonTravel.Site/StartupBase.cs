@@ -197,6 +197,7 @@ namespace MartinCostello.LondonTravel.Site
             services.AddSingleton<IDocumentClient, DocumentClientWrapper>();
             services.AddSingleton<ISiteTelemetry, SiteTelemetry>();
             services.AddSingleton<ITelemetryInitializer, SiteTelemetryInitializer>();
+            services.AddSingleton<ITelemetryModule, SiteTelemetryModule>();
             services.AddSingleton<ITflServiceFactory, TflServiceFactory>();
             services.AddSingleton((_) => ConfigureJsonFormatter(new JsonSerializerSettings()));
 

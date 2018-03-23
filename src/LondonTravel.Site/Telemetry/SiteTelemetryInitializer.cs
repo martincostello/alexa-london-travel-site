@@ -1,10 +1,11 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Telemetry
 {
     using Extensions;
     using Microsoft.ApplicationInsights.Channel;
+    using Microsoft.ApplicationInsights.DataContracts;
     using Microsoft.ApplicationInsights.Extensibility;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Configuration;
@@ -47,6 +48,19 @@ namespace MartinCostello.LondonTravel.Site.Telemetry
                 if (_contextAccessor.HttpContext.User?.Identity?.IsAuthenticated == true)
                 {
                     telemetry.Context.User.AuthenticatedUserId = _contextAccessor.HttpContext.User.GetUserId();
+                }
+            }
+
+            if (telemetry is DependencyTelemetry dependency)
+            {
+                var activity = System.Diagnostics.Activity.Current;
+
+                if (activity != null)
+                {
+                    foreach (var item in activity.Tags)
+                    {
+                        dependency.Properties[item.Key] = item.Value;
+                    }
                 }
             }
         }
