@@ -8,7 +8,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
     using System.Linq;
     using System.Net.Http;
     using System.Reflection;
-    using Identity.Amazon;
+    using AspNet.Security.OAuth.Amazon;
     using MartinCostello.LondonTravel.Site.Identity;
     using MartinCostello.LondonTravel.Site.Swagger;
     using Microsoft.AspNetCore.ApplicationInsights.HostingStartup;
