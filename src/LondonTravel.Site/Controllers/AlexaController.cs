@@ -158,7 +158,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 Fragment = $"state={(state == null ? string.Empty : Uri.EscapeDataString(state))}&access_token={Uri.EscapeDataString(accessToken)}&token_type=Bearer"
             };
 
-            return builder.Uri.AbsoluteUri.ToString();
+            return builder.Uri.AbsoluteUri;
         }
 
         /// <summary>
@@ -237,7 +237,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                     Fragment = fragment
                 };
 
-                url = builder.Uri.AbsoluteUri.ToString();
+                url = builder.Uri.AbsoluteUri;
             }
 
             return Redirect(url);

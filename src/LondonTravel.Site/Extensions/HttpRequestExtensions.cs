@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Extensions
@@ -25,8 +25,10 @@ namespace MartinCostello.LondonTravel.Site.Extensions
             string host = request.Host.ToString();
             string[] hostSplit = host.Split(':');
 
-            var builder = new UriBuilder();
-            builder.Host = hostSplit[0];
+            var builder = new UriBuilder()
+            {
+                Host = hostSplit[0],
+            };
 
             if (hostSplit.Length > 1)
             {
@@ -37,9 +39,11 @@ namespace MartinCostello.LondonTravel.Site.Extensions
             builder.Query = string.Empty;
             builder.Scheme = "https";
 
+#pragma warning disable CA1308 // Normalize strings to uppercase
             string canonicalUri = builder.Uri.AbsoluteUri.ToLowerInvariant();
+#pragma warning restore CA1308 // Normalize strings to uppercase
 
-            if (!canonicalUri.EndsWith("/"))
+            if (!canonicalUri.EndsWith("/", StringComparison.Ordinal))
             {
                 canonicalUri += "/";
             }

@@ -34,7 +34,7 @@ namespace MartinCostello.LondonTravel.Site.Swagger
                                 if (property.Description.StartsWith(Prefix, StringComparison.Ordinal))
                                 {
                                     // Remove the StyleCop property prefix
-                                    property.Description = property.Description.Replace(Prefix, string.Empty);
+                                    property.Description = property.Description.Replace(Prefix, string.Empty, StringComparison.Ordinal);
 
                                     // Capitalize the first letter that's left over
                                     property.Description = char.ToUpperInvariant(property.Description[0]) + property.Description.Substring(1);

@@ -40,7 +40,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
                     byte[] data = new byte[32];
                     random.GetBytes(data);
 
-                    nonce = Convert.ToBase64String(data).Replace("+", "/"); // '+' causes encoding issues with TagHelpers
+                    nonce = Convert.ToBase64String(data).Replace("+", "/", StringComparison.Ordinal); // '+' causes encoding issues with TagHelpers
                 }
 
                 context.SetCspNonce(nonce);

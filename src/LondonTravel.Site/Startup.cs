@@ -1,8 +1,9 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site
 {
+    using System;
     using Extensions;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Azure.KeyVault.Models;
@@ -147,14 +148,14 @@ namespace MartinCostello.LondonTravel.Site
             public string GetKey(SecretBundle secret)
             {
                 return secret.SecretIdentifier.Name.Substring(_prefix.Length)
-                    .Replace("--", "_")
-                    .Replace("-", ":");
+                    .Replace("--", "_", StringComparison.Ordinal)
+                    .Replace("-", ":", StringComparison.Ordinal);
             }
 
             /// <inheritdoc />
             public bool Load(SecretItem secret)
             {
-                return secret.Identifier.Name.StartsWith(_prefix);
+                return secret.Identifier.Name.StartsWith(_prefix, StringComparison.Ordinal);
             }
         }
     }

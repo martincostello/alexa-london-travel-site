@@ -34,7 +34,9 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         /// </returns>
         public static string GetSocialLoginButtonCss(this IHtmlHelper html, string authenticationScheme)
         {
+#pragma warning disable CA1308 // Normalize strings to uppercase
             return $"btn-{authenticationScheme?.ToLowerInvariant()}";
+#pragma warning restore CA1308 // Normalize strings to uppercase
         }
 
         /// <summary>

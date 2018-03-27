@@ -3,6 +3,7 @@
 
 namespace MartinCostello.LondonTravel.Site.Extensions
 {
+    using System;
     using Microsoft.ApplicationInsights.AspNetCore;
     using Microsoft.ApplicationInsights.Extensibility;
     using Microsoft.AspNetCore.Http;
@@ -31,7 +32,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
 
             if (!string.IsNullOrEmpty(script))
             {
-                int index = script.IndexOf(OpeningScriptTag);
+                int index = script.IndexOf(OpeningScriptTag, StringComparison.OrdinalIgnoreCase);
 
                 if (index > -1)
                 {

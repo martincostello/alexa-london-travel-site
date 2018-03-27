@@ -341,7 +341,9 @@ namespace MartinCostello.LondonTravel.Site
         /// <param name="services">The <see cref="IServiceCollection"/> to configure.</param>
         private void ConfigureDataProtection(IServiceCollection services)
         {
+#pragma warning disable CA1308 // Normalize strings to uppercase
             string environment = Configuration.AzureEnvironment().ToLowerInvariant();
+#pragma warning restore CA1308 // Normalize strings to uppercase
 
             var dataProtection = services
                 .AddDataProtection()

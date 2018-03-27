@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.TagHelpers
@@ -205,13 +205,13 @@ namespace MartinCostello.LondonTravel.Site.TagHelpers
             {
                 const string SourceMapPreamble = "sourceMappingURL=";
 
-                int startIndex = css.IndexOf(SourceMapPreamble);
+                int startIndex = css.IndexOf(SourceMapPreamble, StringComparison.OrdinalIgnoreCase);
 
                 if (startIndex > -1)
                 {
                     startIndex += SourceMapPreamble.Length;
 
-                    int endIndex = css.IndexOf(" ", startIndex);
+                    int endIndex = css.IndexOf(" ", startIndex, StringComparison.OrdinalIgnoreCase);
 
                     if (endIndex > -1)
                     {

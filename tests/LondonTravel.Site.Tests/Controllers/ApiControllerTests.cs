@@ -229,9 +229,9 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             // Arrange
             var users = new[]
             {
-                new LondonTravelUser() { Id = "1", AlexaToken = null, FavoriteLines = new string[0] },
-                new LondonTravelUser() { Id = "2", AlexaToken = string.Empty, FavoriteLines = new string[0] },
-                new LondonTravelUser() { Id = "3", AlexaToken = "foo", FavoriteLines = new string[0] },
+                new LondonTravelUser() { Id = "1", AlexaToken = null, FavoriteLines = Array.Empty<string>() },
+                new LondonTravelUser() { Id = "2", AlexaToken = string.Empty, FavoriteLines = Array.Empty<string>() },
+                new LondonTravelUser() { Id = "3", AlexaToken = "foo", FavoriteLines = Array.Empty<string>() },
                 new LondonTravelUser() { Id = "4", AlexaToken = "bar", FavoriteLines = new[] { "central", "victoria" } },
                 new LondonTravelUser() { Id = "5", AlexaToken = "bar", FavoriteLines = new[] { "circle", "waterloo-city" } },
                 new LondonTravelUser() { Id = "6", AlexaToken = "BAR", FavoriteLines = new[] { "district" } },

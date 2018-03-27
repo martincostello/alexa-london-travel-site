@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Services.Data
@@ -255,12 +255,12 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             long count = -1;
 
             const string Key = "documentsCount=";
-            int indexOfCountKey = currentResourceQuotaUsage?.IndexOf(Key) ?? -1;
+            int indexOfCountKey = currentResourceQuotaUsage?.IndexOf(Key, StringComparison.Ordinal) ?? -1;
 
             if (indexOfCountKey > -1)
             {
                 int searchFromIndex = indexOfCountKey + Key.Length;
-                int endOfCountIndex = currentResourceQuotaUsage.IndexOf(';', searchFromIndex);
+                int endOfCountIndex = currentResourceQuotaUsage.IndexOf(";", searchFromIndex, StringComparison.Ordinal);
 
                 if (endOfCountIndex > -1)
                 {
