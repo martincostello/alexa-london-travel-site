@@ -49,8 +49,10 @@ namespace MartinCostello.LondonTravel.Site.Telemetry
             }
         }
 
+#pragma warning disable CA1801
         [DiagnosticName("System.Net.Http.HttpRequestOut.Stop")]
         public void OnHttpRequestOutStop(HttpRequestMessage request, HttpResponseMessage response, TaskStatus requestTaskStatus)
+#pragma warning restore CA1801
         {
             if (request != null && response != null && !_filter.IsApplicationInsightsUrl(request.RequestUri))
             {

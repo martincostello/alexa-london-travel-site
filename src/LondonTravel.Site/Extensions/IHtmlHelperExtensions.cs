@@ -32,7 +32,9 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         /// <returns>
         /// The CSS class to use for a button for the authentication scheme.
         /// </returns>
+#pragma warning disable CA1801
         public static string GetSocialLoginButtonCss(this IHtmlHelper html, string authenticationScheme)
+#pragma warning restore CA1801
         {
 #pragma warning disable CA1308 // Normalize strings to uppercase
             return $"btn-{authenticationScheme?.ToLowerInvariant()}";
@@ -47,7 +49,9 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         /// <returns>
         /// The CSS class to use for an icon for the authentication scheme.
         /// </returns>
+#pragma warning disable CA1801
         public static string GetSocialLoginIconCss(this IHtmlHelper html, string authenticationScheme)
+#pragma warning restore CA1801
         {
             if (string.IsNullOrEmpty(authenticationScheme))
             {

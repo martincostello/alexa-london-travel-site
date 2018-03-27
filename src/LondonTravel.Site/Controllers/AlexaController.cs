@@ -131,7 +131,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
                 _telemetry.TrackAlexaLink(user.Id);
 
-                string tokenRedirectUrl = BuildRedirectUrl(redirectUri, state, accessToken, responseType);
+                string tokenRedirectUrl = BuildRedirectUrl(redirectUri, state, accessToken);
                 return Redirect(tokenRedirectUrl);
             }
             catch (Exception ex)
@@ -147,11 +147,10 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// <param name="redirectUri">The base redirection URI.</param>
         /// <param name="state">The value of the state parameter.</param>
         /// <param name="accessToken">The value of the generated access token.</param>
-        /// <param name="responseType">The response type.</param>
         /// <returns>
         /// The URI to redirect the user to receive the generated access token.
         /// </returns>
-        private static string BuildRedirectUrl(Uri redirectUri, string state, string accessToken, string responseType)
+        private static string BuildRedirectUrl(Uri redirectUri, string state, string accessToken)
         {
             UriBuilder builder = new UriBuilder(redirectUri)
             {
