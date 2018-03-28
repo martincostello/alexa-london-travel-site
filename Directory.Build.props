@@ -21,7 +21,7 @@
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <LangVersion>latest</LangVersion>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <NoWarn>$(NoWarn);CA1054;CA1055;CA1056;CA1812;CA1819;CS1591;CA2007</NoWarn>
+    <NoWarn>$(NoWarn);CA1016;CA1054;CA1055;CA1056;CA1812;CA1819;CS1591;CA2007</NoWarn>
     <PackageIconUrl>https://martincostello.com/favicon.ico</PackageIconUrl>
     <PackageProjectUrl>https://github.com/martincostello/alexa-london-travel-site</PackageProjectUrl>
     <PackageLicenseUrl>$(PackageProjectUrl)/blob/master/LICENSE</PackageLicenseUrl>
