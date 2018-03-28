@@ -2,9 +2,13 @@
   <ItemGroup>
     <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" Link="stylecop.json" />
     <Compile Include="$(MSBuildThisFileDirectory)CommonAssemblyInfo.cs" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.0" />
+    <PackageReference Include="Microsoft.CodeQuality.Analyzers" Version="2.6.0" />
+    <PackageReference Include="Microsoft.NetCore.Analyzers" Version="2.6.0" />
     <PackageReference Include="OpenCover" Version="4.6.519" />
     <PackageReference Include="ReportGenerator" Version="3.1.2" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.0.2" PrivateAssets="All" />
+    <PackageReference Include="Text.Analyzers" Version="2.6.0" />
   </ItemGroup>
   <PropertyGroup>
     <Authors>Martin Costello</Authors>
@@ -17,7 +21,7 @@
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <LangVersion>latest</LangVersion>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <NoWarn>CS1591</NoWarn>
+    <NoWarn>$(NoWarn);CA1054;CA1055;CA1056;CA1812;CA1819;CS1591;CA2007</NoWarn>
     <PackageIconUrl>https://martincostello.com/favicon.ico</PackageIconUrl>
     <PackageProjectUrl>https://github.com/martincostello/alexa-london-travel-site</PackageProjectUrl>
     <PackageLicenseUrl>$(PackageProjectUrl)/blob/master/LICENSE</PackageLicenseUrl>

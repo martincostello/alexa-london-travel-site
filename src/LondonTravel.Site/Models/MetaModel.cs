@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Models
@@ -122,7 +122,7 @@ namespace MartinCostello.LondonTravel.Site.Models
                 Description = description ?? options.Description,
                 FacebookApp = options?.SocialMedia?.Facebook,
                 FacebookProfile = options?.Author?.SocialMedia?.Facebook,
-                HostName = options.Domain,
+                HostName = hostName ?? options.Domain,
                 ImageUri = imageUri ?? options.Image ?? string.Empty,
                 ImageAltText = imageAltText ?? options.Name,
                 Keywords = options.Keywords ?? "alexa,london travel",

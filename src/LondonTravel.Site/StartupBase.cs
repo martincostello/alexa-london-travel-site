@@ -78,13 +78,11 @@ namespace MartinCostello.LondonTravel.Site
         /// </summary>
         /// <param name="app">The <see cref="IApplicationBuilder"/> to use.</param>
         /// <param name="environment">The <see cref="IHostingEnvironment"/> to use.</param>
-        /// <param name="appLifetime">The <see cref="IApplicationLifetime"/> to use.</param>
         /// <param name="loggerFactory">The <see cref="ILoggerFactory"/> to use.</param>
         /// <param name="options">The snapshot of <see cref="SiteOptions"/> to use.</param>
         public void Configure(
             IApplicationBuilder app,
             IHostingEnvironment environment,
-            IApplicationLifetime appLifetime,
             ILoggerFactory loggerFactory,
             IOptionsSnapshot<SiteOptions> options)
         {
@@ -341,7 +339,9 @@ namespace MartinCostello.LondonTravel.Site
         /// <param name="services">The <see cref="IServiceCollection"/> to configure.</param>
         private void ConfigureDataProtection(IServiceCollection services)
         {
+#pragma warning disable CA1308 // Normalize strings to uppercase
             string environment = Configuration.AzureEnvironment().ToLowerInvariant();
+#pragma warning restore CA1308 // Normalize strings to uppercase
 
             var dataProtection = services
                 .AddDataProtection()

@@ -5,6 +5,7 @@ namespace MartinCostello.LondonTravel.Site.Middleware
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
@@ -188,7 +189,10 @@ namespace MartinCostello.LondonTravel.Site.Middleware
                 builder.Append("enforce; ");
             }
 
-            builder.AppendFormat("max-age={0};", (int)options.CertificateTransparency?.MaxAge.TotalSeconds);
+            builder.AppendFormat(
+                CultureInfo.InvariantCulture,
+                "max-age={0};",
+                (int)options.CertificateTransparency?.MaxAge.TotalSeconds);
 
             if (enforce)
             {
@@ -222,7 +226,10 @@ namespace MartinCostello.LondonTravel.Site.Middleware
 
             if (options?.PublicKeyPins?.Sha256Hashes?.Length > 0)
             {
-                builder.AppendFormat("max-age={0};", (int)options.PublicKeyPins.MaxAge.TotalSeconds);
+                builder.AppendFormat(
+                    CultureInfo.InvariantCulture,
+                    "max-age={0};",
+                    (int)options.PublicKeyPins.MaxAge.TotalSeconds);
 
                 foreach (var hash in options.PublicKeyPins.Sha256Hashes)
                 {

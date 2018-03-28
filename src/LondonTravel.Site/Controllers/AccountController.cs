@@ -255,7 +255,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                     }
                 }
 
-                bool isUserAlreadyRegistered = identityResult.Errors.Any((p) => p.Code.StartsWith("Duplicate"));
+                bool isUserAlreadyRegistered = identityResult.Errors.Any((p) => p.Code.StartsWith("Duplicate", StringComparison.Ordinal));
 
                 AddErrors(identityResult);
 

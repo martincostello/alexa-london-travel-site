@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Extensions
@@ -50,12 +50,16 @@ namespace MartinCostello.LondonTravel.Site.Extensions
                 return fallbackImageUrl;
             }
 
+#pragma warning disable CA1308 // Normalize strings to uppercase
             string normalized = email.Trim().ToLowerInvariant();
+#pragma warning restore CA1308 // Normalize strings to uppercase
             byte[] buffer = Encoding.UTF8.GetBytes(normalized);
 
             byte[] hash;
 
+#pragma warning disable CA5351 // Do not use insecure cryptographic algorithm MD5.
             using (var algorithm = System.Security.Cryptography.MD5.Create())
+#pragma warning restore CA5351 // Do not use insecure cryptographic algorithm MD5.
             {
                 hash = algorithm.ComputeHash(buffer);
             }

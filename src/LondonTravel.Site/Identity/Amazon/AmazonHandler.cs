@@ -47,7 +47,9 @@ namespace MartinCostello.LondonTravel.Site.Identity.Amazon
 
             JObject user;
 
+#pragma warning disable CA2234 // Pass system uri objects instead of strings
             using (var response = await Backchannel.GetAsync(endpoint, Context.RequestAborted))
+#pragma warning restore CA2234 // Pass system uri objects instead of strings
             {
                 if (!response.IsSuccessStatusCode)
                 {

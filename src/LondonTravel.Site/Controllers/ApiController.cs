@@ -154,6 +154,27 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         }
 
         /// <summary>
+        /// Returns a response to use for an unauthorized API request.
+        /// </summary>
+        /// <param name="message">The error message.</param>
+        /// <param name="detail">The optional error detail.</param>
+        /// <returns>
+        /// The created instance of <see cref="ObjectResult"/>.
+        /// </returns>
+        protected ObjectResult Unauthorized(string message, string detail = null)
+        {
+            var error = new ErrorResponse()
+            {
+                Message = message ?? string.Empty,
+                RequestId = HttpContext.TraceIdentifier,
+                StatusCode = StatusCodes.Status401Unauthorized,
+                Details = detail == null ? Array.Empty<string>() : new[] { detail },
+            };
+
+            return StatusCode(error.StatusCode, error);
+        }
+
+        /// <summary>
         /// Extracts the Alexa access token from the specified Authorize HTTP header value.
         /// </summary>
         /// <param name="authorizationHeader">The raw Authorization HTTP request header value.</param>
@@ -178,27 +199,6 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             }
 
             return authorization.Parameter;
-        }
-
-        /// <summary>
-        /// Returns a response to use for an unauthorized API request.
-        /// </summary>
-        /// <param name="message">The error message.</param>
-        /// <param name="detail">The optional error detail.</param>
-        /// <returns>
-        /// The created instance of <see cref="ObjectResult"/>.
-        /// </returns>
-        private ObjectResult Unauthorized(string message, string detail = null)
-        {
-            var error = new ErrorResponse()
-            {
-                Message = message ?? string.Empty,
-                RequestId = HttpContext.TraceIdentifier,
-                StatusCode = StatusCodes.Status401Unauthorized,
-                Details = detail == null ? Array.Empty<string>() : new[] { detail },
-            };
-
-            return StatusCode(error.StatusCode, error);
         }
     }
 }

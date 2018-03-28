@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Extensions
@@ -47,8 +47,12 @@ namespace MartinCostello.LondonTravel.Site.Extensions
                 return string.Empty;
             }
 
+#pragma warning disable CA1308 // Normalize strings to uppercase
+
             // Azure Blob storage is case-sensitive, so force all URLs to lowercase
             string url = value.ToAbsolute(cdn.Host, $"london-travel_{contentPath.ToLowerInvariant().TrimStart(ForwardSlash)}");
+
+#pragma warning restore CA1308 // Normalize strings to uppercase
 
             // asp-append-version="true" does not work for non-local resources
             if (appendVersion)

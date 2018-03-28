@@ -12,7 +12,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
     using Microsoft.Extensions.Caching.Memory;
     using Xunit;
 
-    public class TflServiceTests : IDisposable
+    public sealed class TflServiceTests : IDisposable
     {
         private readonly IMemoryCache _cache;
         private readonly HttpClientInterceptorOptions _interceptor;
