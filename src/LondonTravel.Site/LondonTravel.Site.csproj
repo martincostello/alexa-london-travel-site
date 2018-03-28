@@ -25,13 +25,18 @@
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.6.2" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.1" />
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.0-preview1-final" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.0-preview1-final" />
+    <PackageReference Include="Microsoft.AspNetCore.ApplicationInsights.HostingStartup" Version="2.1.0-preview1-final" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="2.1.0-preview1-final" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="2.1.0-preview1-final" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="2.1.0-preview1-final" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="2.1.0-preview1-final" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.AzureKeyVault" Version="2.1.0-preview1-final" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.AzureStorage" Version="2.1.0-preview1-final" />
     <PackageReference Include="Microsoft.Azure.DocumentDB.Core" Version="1.9.1" />
     <PackageReference Include="Microsoft.Azure.KeyVault.WebKey" Version="2.0.7" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.AzureKeyVault" Version="2.1.0-preview1-final" />
+    <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="2.1.0-preview1-final" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
     <PackageReference Include="NodaTime" Version="2.2.4" />
     <PackageReference Include="Refit" Version="4.3.0" />
