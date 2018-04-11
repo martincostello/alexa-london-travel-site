@@ -5,26 +5,21 @@ namespace MartinCostello.LondonTravel.Site.Integration
 {
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc.Testing;
-    using Microsoft.AspNetCore.TestHost;
 
     /// <summary>
     /// A test fixture representing an HTTP server hosting the website.
     /// </summary>
-    public class HttpServerFixture : WebApplicationTestFixture<TestStartup>
+    public class HttpServerFixture : WebApplicationFactory<Startup>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="HttpServerFixture"/> class.
         /// </summary>
         public HttpServerFixture()
-            : base("src/LondonTravel.Site")
+            : base()
         {
-            Client.BaseAddress = new System.Uri("https://localhost");
+            ClientOptions.AllowAutoRedirect = false;
+            ClientOptions.BaseAddress = new System.Uri("https://localhost");
         }
-
-        /// <summary>
-        /// Gets the <see cref="TestServer"/> in use.
-        /// </summary>
-        public TestServer Server { get; private set; }
 
         /// <inheritdoc />
         protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -33,9 +28,9 @@ namespace MartinCostello.LondonTravel.Site.Integration
         }
 
         /// <inheritdoc />
-        protected override TestServer CreateServer(IWebHostBuilder builder)
+        protected override IWebHostBuilder CreateWebHostBuilder()
         {
-            return Server = base.CreateServer(builder);
+            return base.CreateWebHostBuilder().UseStartup<TestStartup>();
         }
     }
 }
