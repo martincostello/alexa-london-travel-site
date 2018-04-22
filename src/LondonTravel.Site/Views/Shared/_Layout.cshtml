@@ -38,10 +38,10 @@
 </head>
 <body>
     @await Html.PartialAsync("_Navbar")
-    <div class="container body-content">
+    <main class="container body-content">
         @RenderBody()
         @await Html.PartialAsync("_Footer", Options)
-    </div>
+    </main>
     @await Html.PartialAsync("_StylesBody")
     @await RenderSectionAsync("stylesBody", required: false)
     @await Html.PartialAsync("_Scripts")
