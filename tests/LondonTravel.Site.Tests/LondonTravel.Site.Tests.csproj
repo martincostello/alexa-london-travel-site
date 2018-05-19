@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Description>Tests for https://londontravel.martincostello.com/</Description>
     <NoWarn>$(NoWarn);CA1707;CA2234</NoWarn>
@@ -15,9 +15,9 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="JustEat.HttpClientInterception" Version="1.2.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="2.1.0-preview2-final" />
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.1.0-preview2-final" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="2.1.0-rc1-final" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.1.0-rc1-final" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.2" />
     <PackageReference Include="Moq" Version="4.8.2" />
     <PackageReference Include="Shouldly" Version="3.0.0" />
     <PackageReference Include="xunit" Version="2.3.1" />
