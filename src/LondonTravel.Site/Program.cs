@@ -41,6 +41,8 @@ namespace MartinCostello.LondonTravel.Site
                 .UseAutofac()
                 .UseAzureAppServices()
                 .UseApplicationInsights()
+                .ConfigureAppConfiguration((context, builder) => builder.ConfigureApplication(context))
+                .ConfigureLogging((context, builder) => builder.ConfigureLogging(context))
                 .UseStartup<Startup>()
                 .CaptureStartupErrors(true);
         }

@@ -40,7 +40,7 @@ namespace MartinCostello.LondonTravel.Site
     using Telemetry;
 
     /// <summary>
-    /// A class representing the base class for startup logic for the application.
+    /// A class representing the startup logic for the application.
     /// </summary>
     public abstract class StartupBase
     {
@@ -52,21 +52,23 @@ namespace MartinCostello.LondonTravel.Site
         /// <summary>
         /// Initializes a new instance of the <see cref="StartupBase"/> class.
         /// </summary>
-        /// <param name="env">The <see cref="IHostingEnvironment"/> to use.</param>
-        protected StartupBase(IHostingEnvironment env)
+        /// <param name="configuration">The <see cref="IConfiguration"/> to use.</param>
+        /// <param name="hostingEnvironment">The <see cref="IHostingEnvironment"/> to use.</param>
+        protected StartupBase(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
-            HostingEnvironment = env;
+            Configuration = configuration;
+            HostingEnvironment = hostingEnvironment;
         }
 
         /// <summary>
-        /// Gets or sets the current configuration.
+        /// Gets the current configuration.
         /// </summary>
-        public IConfigurationRoot Configuration { get; set; }
+        public IConfiguration Configuration { get; }
 
         /// <summary>
-        /// Gets or sets the current hosting environment.
+        /// Gets the current hosting environment.
         /// </summary>
-        public IHostingEnvironment HostingEnvironment { get; set; }
+        public IHostingEnvironment HostingEnvironment { get; }
 
         /// <summary>
         /// Gets or sets the service provider.
