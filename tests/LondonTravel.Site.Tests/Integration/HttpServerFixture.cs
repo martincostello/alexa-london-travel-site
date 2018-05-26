@@ -26,9 +26,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         /// <inheritdoc />
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            builder
-                .UseEnvironment("Development")
-                .ConfigureAppConfiguration(ConfigureTests);
+            builder.ConfigureAppConfiguration(ConfigureTests);
         }
 
         private static void ConfigureTests(IConfigurationBuilder builder)
