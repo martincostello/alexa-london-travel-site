@@ -15,7 +15,7 @@ cache:
   - '%APPDATA%\npm-cache'
 
 install:
-  - ps: npm install -g npm@5.7.1 --loglevel=error
+  - ps: npm install -g npm@6.1.0 --loglevel=error
   - ps: npm install -g gulp@3.9.1 --loglevel=error
 
 build_script:
