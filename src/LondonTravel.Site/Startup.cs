@@ -27,7 +27,6 @@ namespace MartinCostello.LondonTravel.Site
     using Microsoft.AspNetCore.StaticFiles;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
     using Microsoft.Net.Http.Headers;
     using Microsoft.WindowsAzure.Storage;
@@ -79,21 +78,10 @@ namespace MartinCostello.LondonTravel.Site
         /// Configures the application.
         /// </summary>
         /// <param name="app">The <see cref="IApplicationBuilder"/> to use.</param>
-        /// <param name="environment">The <see cref="IHostingEnvironment"/> to use.</param>
-        /// <param name="loggerFactory">The <see cref="ILoggerFactory"/> to use.</param>
         /// <param name="options">The snapshot of <see cref="SiteOptions"/> to use.</param>
-        public void Configure(
-            IApplicationBuilder app,
-            IHostingEnvironment environment,
-            ILoggerFactory loggerFactory,
-            IOptionsSnapshot<SiteOptions> options)
+        public void Configure(IApplicationBuilder app, IOptionsSnapshot<SiteOptions> options)
         {
-            if (environment.IsDevelopment())
-            {
-                loggerFactory.AddDebug();
-            }
-
-            app.UseCustomHttpHeaders(environment, Configuration, options);
+            app.UseCustomHttpHeaders(HostingEnvironment, Configuration, options);
 
             var supportedCultures = new[]
             {
@@ -109,10 +97,8 @@ namespace MartinCostello.LondonTravel.Site
                     SupportedUICultures = supportedCultures,
                 });
 
-            if (environment.IsDevelopment())
+            if (HostingEnvironment.IsDevelopment())
             {
-                loggerFactory.AddDebug();
-
                 app.UseDeveloperExceptionPage();
             }
             else
