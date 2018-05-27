@@ -33,7 +33,6 @@ namespace MartinCostello.LondonTravel.Site
     using Newtonsoft.Json;
     using NodaTime;
     using Options;
-    using Serilog;
     using Services.Data;
     using Services.Tfl;
     using Telemetry;
@@ -138,7 +137,6 @@ namespace MartinCostello.LondonTravel.Site
         /// </returns>
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddLogging((p) => p.AddSerilog(dispose: true));
             services.AddApplicationInsightsTelemetry(Configuration);
 
             services.AddOptions();
