@@ -8,7 +8,7 @@
             .then(() => {
             })
             .catch((e: any) => {
-                console.error("Failed to register Service Worker: ", e);
+                console.warn("Failed to register Service Worker: ", e);
             });
     }
 })();
