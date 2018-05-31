@@ -7,9 +7,11 @@ namespace MartinCostello.LondonTravel.Site.Extensions
     using System.IO;
     using System.Linq;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Reflection;
     using Identity.Amazon;
     using MartinCostello.LondonTravel.Site.Identity;
+    using MartinCostello.LondonTravel.Site.Services.Tfl;
     using MartinCostello.LondonTravel.Site.Swagger;
     using Microsoft.AspNetCore.ApplicationInsights.HostingStartup;
     using Microsoft.AspNetCore.Authentication.OAuth;
@@ -18,6 +20,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Options;
+    using Refit;
     using Swashbuckle.AspNetCore.Swagger;
     using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -27,36 +30,19 @@ namespace MartinCostello.LondonTravel.Site.Extensions
     public static class IServiceCollectionExtensions
     {
         /// <summary>
-        /// Adds <see cref="HttpClient"/> to the services.
+        /// Adds HTTP clients to the services.
         /// </summary>
-        /// <param name="value">The <see cref="IServiceCollection"/> to add HTTP client to.</param>
+        /// <param name="services">The <see cref="IServiceCollection"/> to add the services to.</param>
         /// <returns>
-        /// The value specified by <paramref name="value"/>.
+        /// The value specified by <paramref name="services"/>.
         /// </returns>
-        public static IServiceCollection AddHttpClient(this IServiceCollection value)
+        public static IServiceCollection AddHttpClients(this IServiceCollection services)
         {
-            return value.AddTransient(
-                (p) =>
-                {
-                    HttpMessageHandler handler = new HttpClientHandler();
-                    var handlers = p.GetServices<DelegatingHandler>().ToList();
+            services
+                .AddHttpClient<ITflClient>()
+                .AddTypedClient(AddTfl);
 
-                    if (handlers.Count > 0)
-                    {
-                        var previous = handlers.First();
-                        previous.InnerHandler = handler;
-
-                        foreach (var next in handlers.Skip(1))
-                        {
-                            next.InnerHandler = previous;
-                            previous = next;
-                        }
-
-                        handler = previous;
-                    }
-
-                    return new HttpClient(handler);
-                });
+            return services;
         }
 
         /// <summary>
@@ -69,64 +55,63 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         /// </returns>
         public static IServiceCollection AddSwagger(this IServiceCollection value, IHostingEnvironment environment)
         {
-            value.AddSwaggerGen((p) =>
-            {
-                var provider = value.BuildServiceProvider();
-                var options = provider.GetRequiredService<SiteOptions>();
-
-                var terms = new UriBuilder()
+            return value.AddSwaggerGen(
+                (p) =>
                 {
-                    Scheme = "https",
-                    Host = options.Metadata.Domain,
-                    Path = "terms-of-service/",
-                };
+                    var provider = value.BuildServiceProvider();
+                    var options = provider.GetRequiredService<SiteOptions>();
 
-                var info = new Info()
-                {
-                    Contact = new Contact()
+                    var terms = new UriBuilder()
                     {
-                        Name = options.Metadata.Author.Name,
-                        Url = options.Metadata.Repository,
-                    },
-                    Description = options.Metadata.Description,
-                    License = new License()
+                        Scheme = "https",
+                        Host = options.Metadata.Domain,
+                        Path = "terms-of-service/",
+                    };
+
+                    var info = new Info()
                     {
-                        Name = "Apache 2.0",
-                        Url = "http://www.apache.org/licenses/LICENSE-2.0.html",
-                    },
-                    TermsOfService = terms.Uri.ToString(),
-                    Title = options.Metadata.Name,
-                    Version = string.Empty,
-                };
+                        Contact = new Contact()
+                        {
+                            Name = options.Metadata.Author.Name,
+                            Url = options.Metadata.Repository,
+                        },
+                        Description = options.Metadata.Description,
+                        License = new License()
+                        {
+                            Name = "Apache 2.0",
+                            Url = "http://www.apache.org/licenses/LICENSE-2.0.html",
+                        },
+                        TermsOfService = terms.Uri.ToString(),
+                        Title = options.Metadata.Name,
+                        Version = string.Empty,
+                    };
 
-                p.DescribeAllEnumsAsStrings();
-                p.DescribeStringEnumsInCamelCase();
+                    p.DescribeAllEnumsAsStrings();
+                    p.DescribeStringEnumsInCamelCase();
 
-                p.IgnoreObsoleteActions();
-                p.IgnoreObsoleteProperties();
+                    p.IgnoreObsoleteActions();
+                    p.IgnoreObsoleteProperties();
 
-                AddXmlCommentsIfExists(p, environment, "LondonTravel.Site.xml");
+                    AddXmlCommentsIfExists(p, environment, "LondonTravel.Site.xml");
 
-                p.SwaggerDoc("api", info);
+                    p.SwaggerDoc("api", info);
 
-                p.SchemaFilter<ExampleFilter>();
+                    p.SchemaFilter<ExampleFilter>();
 
-                p.OperationFilter<ExampleFilter>();
-                p.OperationFilter<RemoveStyleCopPrefixesFilter>();
-                p.OperationFilter<SecurityRequirementsOperationFilter>();
+                    p.OperationFilter<ExampleFilter>();
+                    p.OperationFilter<RemoveStyleCopPrefixesFilter>();
+                    p.OperationFilter<SecurityRequirementsOperationFilter>();
 
-                var securityScheme = new ApiKeyScheme()
-                {
-                    In = "header",
-                    Name = "Authorization",
-                    Type = "apiKey",
-                    Description = "Access token authentication using a bearer token."
-                };
+                    var securityScheme = new ApiKeyScheme()
+                    {
+                        In = "header",
+                        Name = "Authorization",
+                        Type = "apiKey",
+                        Description = "Access token authentication using a bearer token."
+                    };
 
-                p.AddSecurityDefinition(SecurityRequirementsOperationFilter.SchemeName, securityScheme);
-            });
-
-            return value;
+                    p.AddSecurityDefinition(SecurityRequirementsOperationFilter.SchemeName, securityScheme);
+                });
         }
 
         /// <summary>
@@ -283,6 +268,27 @@ namespace MartinCostello.LondonTravel.Site.Extensions
             }
 
             return isEnabled;
+        }
+
+        /// <summary>
+        /// Adds a typed client for the TfL API.
+        /// </summary>
+        /// <param name="client">The <see cref="HttpClient"/> to configure the client with.</param>
+        /// <param name="provider">The <see cref="IServiceProvider"/> to use.</param>
+        /// <returns>
+        /// The <see cref="ITflClient"/> to use.
+        /// </returns>
+        private static ITflClient AddTfl(HttpClient client, IServiceProvider provider)
+        {
+            var options = provider.GetRequiredService<TflOptions>();
+
+            client.BaseAddress = options.BaseUri;
+
+            string productName = "MartinCostello.LondonTravel";
+            string productVersion = typeof(StartupBase).GetTypeInfo().Assembly.GetName().Version.ToString(3);
+            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue(productName, productVersion));
+
+            return RestService.For<ITflClient>(client);
         }
     }
 }

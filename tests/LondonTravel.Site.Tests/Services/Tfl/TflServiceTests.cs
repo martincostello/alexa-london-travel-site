@@ -40,7 +40,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
             // Arrange
             var builder = CreateBuilder()
                 .Requests()
-                .ForPath("Line/Mode/dlr,overground,tflrail,tube")
+                .ForPath("Line/Mode/dlr%2Coverground%2Ctflrail%2Ctube")
                 .Responds()
                 .WithResponseHeader("Cache-Control", "max-age=3600")
                 .WithJsonContent(new[] { new { id = "waterloo-city", name = "Waterloo & City" } });
@@ -52,12 +52,14 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
 
             using (var httpClient = _interceptor.CreateHttpClient())
             {
-                using (var target = new TflService(httpClient, _cache, _options))
-                {
-                    // Act
-                    actual1 = await target.GetLinesAsync();
-                    actual2 = await target.GetLinesAsync();
-                }
+                httpClient.BaseAddress = _options.BaseUri;
+
+                var client = Refit.RestService.For<ITflClient>(httpClient);
+                var target = new TflService(client, _cache, _options);
+
+                // Act
+                actual1 = await target.GetLinesAsync();
+                actual2 = await target.GetLinesAsync();
             }
 
             // Assert
@@ -78,7 +80,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
             // Arrange
             var builder = CreateBuilder()
                 .Requests()
-                .ForPath("Line/Mode/dlr,overground,tflrail,tube")
+                .ForPath("Line/Mode/dlr%2Coverground%2Ctflrail%2Ctube")
                 .Responds()
                 .WithJsonContent(new[] { new { id = "district", name = "District" } });
 
@@ -89,12 +91,14 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
 
             using (var httpClient = _interceptor.CreateHttpClient())
             {
-                using (var target = new TflService(httpClient, _cache, _options))
-                {
-                    // Act
-                    actual1 = await target.GetLinesAsync();
-                    actual2 = await target.GetLinesAsync();
-                }
+                httpClient.BaseAddress = _options.BaseUri;
+
+                var client = Refit.RestService.For<ITflClient>(httpClient);
+                var target = new TflService(client, _cache, _options);
+
+                // Act
+                actual1 = await target.GetLinesAsync();
+                actual2 = await target.GetLinesAsync();
             }
 
             // Assert
@@ -127,12 +131,14 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
 
             using (var httpClient = _interceptor.CreateHttpClient())
             {
-                using (var target = new TflService(httpClient, _cache, _options))
-                {
-                    // Act
-                    actual1 = await target.GetStopPointsByLineAsync("victoria");
-                    actual2 = await target.GetStopPointsByLineAsync("victoria");
-                }
+                httpClient.BaseAddress = _options.BaseUri;
+
+                var client = Refit.RestService.For<ITflClient>(httpClient);
+                var target = new TflService(client, _cache, _options);
+
+                // Act
+                actual1 = await target.GetStopPointsByLineAsync("victoria");
+                actual2 = await target.GetStopPointsByLineAsync("victoria");
             }
 
             // Assert
@@ -166,12 +172,14 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
 
             using (var httpClient = _interceptor.CreateHttpClient())
             {
-                using (var target = new TflService(httpClient, _cache, _options))
-                {
-                    // Act
-                    actual1 = await target.GetStopPointsByLineAsync("victoria");
-                    actual2 = await target.GetStopPointsByLineAsync("victoria");
-                }
+                httpClient.BaseAddress = _options.BaseUri;
+
+                var client = Refit.RestService.For<ITflClient>(httpClient);
+                var target = new TflService(client, _cache, _options);
+
+                // Act
+                actual1 = await target.GetStopPointsByLineAsync("victoria");
+                actual2 = await target.GetStopPointsByLineAsync("victoria");
             }
 
             // Assert

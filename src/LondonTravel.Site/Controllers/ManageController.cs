@@ -387,12 +387,10 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         {
             if (model.FavoriteLines != null)
             {
-                IList<string> validLines;
+                ITflService service = _tflServiceFactory.CreateService();
+                ICollection<LineInfo> lines = await service.GetLinesAsync(cancellationToken);
 
-                using (var service = _tflServiceFactory.CreateService())
-                {
-                    validLines = (await service.GetLinesAsync(cancellationToken)).Select((p) => p.Id).ToList();
-                }
+                IList<string> validLines = lines.Select((p) => p.Id).ToList();
 
                 return model.FavoriteLines.All((p) => validLines.Contains(p));
             }

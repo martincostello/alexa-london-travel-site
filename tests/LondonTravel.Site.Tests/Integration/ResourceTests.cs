@@ -70,14 +70,18 @@ namespace MartinCostello.LondonTravel.Site.Integration
         [InlineData("/terms-of-service/", "text/html")]
         public async Task Can_Load_Resource(string requestUri, string contentType)
         {
-            // Act
-            using (var response = await Fixture.Client.GetAsync(requestUri))
+            // Arrange
+            using (var client = Fixture.CreateClient())
             {
-                // Assert
-                response.StatusCode.ShouldBe(HttpStatusCode.OK, $"Failed to get {requestUri}. {await response.Content.ReadAsStringAsync()}");
-                response.Content.Headers.ContentType?.MediaType.ShouldBe(contentType);
-                response.Content.Headers.ContentLength.ShouldNotBeNull();
-                response.Content.Headers.ContentLength.ShouldNotBe(0);
+                // Act
+                using (var response = await client.GetAsync(requestUri))
+                {
+                    // Assert
+                    response.StatusCode.ShouldBe(HttpStatusCode.OK, $"Failed to get {requestUri}. {await response.Content.ReadAsStringAsync()}");
+                    response.Content.Headers.ContentType?.MediaType.ShouldBe(contentType);
+                    response.Content.Headers.ContentLength.ShouldNotBeNull();
+                    response.Content.Headers.ContentLength.ShouldNotBe(0);
+                }
             }
         }
 
@@ -87,12 +91,16 @@ namespace MartinCostello.LondonTravel.Site.Integration
         [InlineData("/support/", "/help/")]
         public async Task Resource_Is_Redirect(string requestUri, string location)
         {
-            // Act
-            using (var response = await Fixture.Client.GetAsync(requestUri))
+            // Arrange
+            using (var client = Fixture.CreateClient())
             {
-                // Assert
-                response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
-                response.Headers.Location?.OriginalString.ShouldBe(location);
+                // Act
+                using (var response = await client.GetAsync(requestUri))
+                {
+                    // Assert
+                    response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
+                    response.Headers.Location?.OriginalString.ShouldBe(location);
+                }
             }
         }
 
@@ -102,12 +110,16 @@ namespace MartinCostello.LondonTravel.Site.Integration
         [InlineData("/manage/")]
         public async Task Cannot_Load_Resource_Unauthenticated(string requestUri)
         {
-            // Act
-            using (var response = await Fixture.Client.GetAsync(requestUri))
+            // Arrange
+            using (var client = Fixture.CreateClient())
             {
-                // Assert
-                response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
-                response.Headers.Location?.PathAndQuery.ShouldBe($"/account/sign-in/?ReturnUrl={Uri.EscapeDataString(requestUri)}");
+                // Act
+                using (var response = await client.GetAsync(requestUri))
+                {
+                    // Assert
+                    response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
+                    response.Headers.Location?.PathAndQuery.ShouldBe($"/account/sign-in/?ReturnUrl={Uri.EscapeDataString(requestUri)}");
+                }
             }
         }
 
@@ -115,15 +127,18 @@ namespace MartinCostello.LondonTravel.Site.Integration
         public async Task Manifest_Is_Valid_Json()
         {
             // Arrange
-            using (var response = await Fixture.Client.GetAsync("/manifest.webmanifest"))
+            using (var client = Fixture.CreateClient())
             {
-                // Assert
-                response.EnsureSuccessStatusCode();
+                using (var response = await client.GetAsync("/manifest.webmanifest"))
+                {
+                    // Assert
+                    response.EnsureSuccessStatusCode();
 
-                string json = await response.Content.ReadAsStringAsync();
-                JObject manifest = JObject.Parse(json);
+                    string json = await response.Content.ReadAsStringAsync();
+                    JObject manifest = JObject.Parse(json);
 
-                ((string)manifest["name"]).ShouldBe("London Travel");
+                    ((string)manifest["name"]).ShouldBe("London Travel");
+                }
             }
         }
 
@@ -148,12 +163,15 @@ namespace MartinCostello.LondonTravel.Site.Integration
             };
 
             // Act
-            using (var response = await Fixture.Client.GetAsync("/"))
+            using (var client = Fixture.CreateClient())
             {
-                // Assert
-                foreach (string expected in expectedHeaders)
+                using (var response = await client.GetAsync("/"))
                 {
-                    response.Headers.Contains(expected).ShouldBeTrue($"The '{expected}' response header was not found.");
+                    // Assert
+                    foreach (string expected in expectedHeaders)
+                    {
+                        response.Headers.Contains(expected).ShouldBeTrue($"The '{expected}' response header was not found.");
+                    }
                 }
             }
         }
@@ -172,12 +190,16 @@ namespace MartinCostello.LondonTravel.Site.Integration
         [InlineData("/error/?id=600", HttpStatusCode.InternalServerError)]
         public async Task Error_Page_Returns_Correct_Status_Code(string requestUri, HttpStatusCode expected)
         {
-            // Act
-            using (var response = await Fixture.Client.GetAsync(requestUri))
+            // Arrange
+            using (var client = Fixture.CreateClient())
             {
-                // Assert
-                response.StatusCode.ShouldBe(expected);
-                response.Content.Headers.ContentType?.MediaType.ShouldBe("text/html");
+                // Act
+                using (var response = await client.GetAsync(requestUri))
+                {
+                    // Assert
+                    response.StatusCode.ShouldBe(expected);
+                    response.Content.Headers.ContentType?.MediaType.ShouldBe("text/html");
+                }
             }
         }
 
@@ -187,35 +209,39 @@ namespace MartinCostello.LondonTravel.Site.Integration
         [InlineData("/xmlrpc.php")]
         public async Task Crawler_Spam_Is_Redirected_To_YouTube(string requestUri)
         {
-            // Act
-            using (var response = await Fixture.Client.GetAsync(requestUri))
-            {
-                // Assert
-                response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
-                response.Headers.Location?.Host.ShouldBe("www.youtube.com");
-            }
-
             // Arrange
-            using (var message = new HttpRequestMessage(HttpMethod.Head, requestUri))
+            using (var client = Fixture.CreateClient())
             {
                 // Act
-                using (var response = await Fixture.Client.SendAsync(message))
+                using (var response = await client.GetAsync(requestUri))
                 {
                     // Assert
                     response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
                     response.Headers.Location?.Host.ShouldBe("www.youtube.com");
                 }
-            }
 
-            // Arrange
-            using (var content = new StringContent(string.Empty))
-            {
-                // Act
-                using (var response = await Fixture.Client.PostAsync(requestUri, content))
+                // Arrange
+                using (var message = new HttpRequestMessage(HttpMethod.Head, requestUri))
                 {
-                    // Assert
-                    response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
-                    response.Headers.Location?.Host.ShouldBe("www.youtube.com");
+                    // Act
+                    using (var response = await client.SendAsync(message))
+                    {
+                        // Assert
+                        response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
+                        response.Headers.Location?.Host.ShouldBe("www.youtube.com");
+                    }
+                }
+
+                // Arrange
+                using (var content = new StringContent(string.Empty))
+                {
+                    // Act
+                    using (var response = await client.PostAsync(requestUri, content))
+                    {
+                        // Assert
+                        response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
+                        response.Headers.Location?.Host.ShouldBe("www.youtube.com");
+                    }
                 }
             }
         }

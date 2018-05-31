@@ -109,18 +109,21 @@ namespace MartinCostello.LondonTravel.Site.Integration
             {
                 message.Headers.Authorization = new AuthenticationHeaderValue("bearer", accessToken);
 
-                // Act
-                using (var response = await Fixture.Client.SendAsync(message, default))
+                using (var client = Fixture.CreateClient())
                 {
-                    // Assert
-                    Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-                    Assert.Equal("application/json", response.Content.Headers.ContentType.MediaType);
+                    // Act
+                    using (var response = await client.SendAsync(message, default))
+                    {
+                        // Assert
+                        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+                        Assert.Equal("application/json", response.Content.Headers.ContentType.MediaType);
 
-                    string json = await response.Content.ReadAsStringAsync();
-                    dynamic preferences = JObject.Parse(json);
+                        string json = await response.Content.ReadAsStringAsync();
+                        dynamic preferences = JObject.Parse(json);
 
-                    Assert.Equal(userId, (string)preferences.userId);
-                    Assert.Equal(favoriteLines, preferences.favoriteLines.ToObject<string[]>() as IList<string>);
+                        Assert.Equal(userId, (string)preferences.userId);
+                        Assert.Equal(favoriteLines, preferences.favoriteLines.ToObject<string[]>() as IList<string>);
+                    }
                 }
             }
 
@@ -140,12 +143,15 @@ namespace MartinCostello.LondonTravel.Site.Integration
             {
                 message.Headers.Authorization = new AuthenticationHeaderValue("bearer", accessToken);
 
-                // Act
-                using (var response = await Fixture.Client.SendAsync(message, default))
+                using (var client = Fixture.CreateClient())
                 {
-                    // Assert
-                    Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-                    Assert.Equal("application/json", response.Content.Headers.ContentType.MediaType);
+                    // Act
+                    using (var response = await client.SendAsync(message, default))
+                    {
+                        // Assert
+                        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+                        Assert.Equal("application/json", response.Content.Headers.ContentType.MediaType);
+                    }
                 }
             }
         }

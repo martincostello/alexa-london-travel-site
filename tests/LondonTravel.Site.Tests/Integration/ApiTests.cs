@@ -32,19 +32,23 @@ namespace MartinCostello.LondonTravel.Site.Integration
         [Fact]
         public async Task Cannot_Get_Preferences_Unauthenticated()
         {
-            // Act
-            using (var response = await Fixture.Client.GetAsync(RequestUri))
+            // Arrange
+            using (var client = Fixture.CreateClient())
             {
-                // Assert
-                response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+                // Act
+                using (var response = await client.GetAsync(RequestUri))
+                {
+                    // Assert
+                    response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
 
-                JObject result = await response.ReadAsObjectAsync();
+                    JObject result = await response.ReadAsObjectAsync();
 
-                result.Value<string>("requestId").ShouldNotBeNullOrWhiteSpace();
-                result.Value<string>("message").ShouldBe("No access token specified.");
-                result.Value<int>("statusCode").ShouldBe(401);
-                result.Value<JArray>("details").Values<string>().ShouldNotBeNull();
-                result.Value<JArray>("details").Values<string>().ShouldBeEmpty();
+                    result.Value<string>("requestId").ShouldNotBeNullOrWhiteSpace();
+                    result.Value<string>("message").ShouldBe("No access token specified.");
+                    result.Value<int>("statusCode").ShouldBe(401);
+                    result.Value<JArray>("details").Values<string>().ShouldNotBeNull();
+                    result.Value<JArray>("details").Values<string>().ShouldBeEmpty();
+                }
             }
         }
 

@@ -180,7 +180,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
             string description = context.Request.Query["error_description"].FirstOrDefault();
 
             if (!string.IsNullOrEmpty(description) &&
-                description.Contains("denied"))
+                description.Contains("denied", StringComparison.OrdinalIgnoreCase))
             {
                 return true;
             }

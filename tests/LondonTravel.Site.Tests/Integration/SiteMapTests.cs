@@ -30,16 +30,20 @@ namespace MartinCostello.LondonTravel.Site.Integration
         {
             XmlNodeList locations;
 
-            // Act
-            using (var response = await Fixture.Client.GetAsync("sitemap.xml"))
+            // Arrange
+            using (var client = Fixture.CreateClient())
             {
-                response.StatusCode.ShouldBe(HttpStatusCode.OK);
-                response.Content.Headers.ContentType?.MediaType.ShouldBe("text/xml");
+                // Act
+                using (var response = await client.GetAsync("sitemap.xml"))
+                {
+                    response.StatusCode.ShouldBe(HttpStatusCode.OK);
+                    response.Content.Headers.ContentType?.MediaType.ShouldBe("text/xml");
 
-                string xml = await response.Content.ReadAsStringAsync();
+                    string xml = await response.Content.ReadAsStringAsync();
 
-                xml.ShouldNotBeNullOrWhiteSpace();
-                locations = GetSitemapLocations(xml);
+                    xml.ShouldNotBeNullOrWhiteSpace();
+                    locations = GetSitemapLocations(xml);
+                }
             }
 
             // Assert
@@ -58,12 +62,15 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 uri.Host.ShouldBe("londontravel.martincostello.com");
                 uri.AbsolutePath.ShouldEndWith("/");
 
-                using (var response = await Fixture.Client.GetAsync(uri.PathAndQuery))
+                using (var client = Fixture.CreateClient())
                 {
-                    response.StatusCode.ShouldBe(HttpStatusCode.OK, $"Failed to get {uri.PathAndQuery}. {await response.Content.ReadAsStringAsync()}");
-                    response.Content.Headers.ContentType?.MediaType.ShouldBe("text/html");
-                    response.Content.Headers.ContentLength.ShouldNotBeNull();
-                    response.Content.Headers.ContentLength.Value.ShouldBeGreaterThan(0);
+                    using (var response = await client.GetAsync(uri.PathAndQuery))
+                    {
+                        response.StatusCode.ShouldBe(HttpStatusCode.OK, $"Failed to get {uri.PathAndQuery}. {await response.Content.ReadAsStringAsync()}");
+                        response.Content.Headers.ContentType?.MediaType.ShouldBe("text/html");
+                        response.Content.Headers.ContentLength.ShouldNotBeNull();
+                        response.Content.Headers.ContentLength.Value.ShouldBeGreaterThan(0);
+                    }
                 }
             }
         }

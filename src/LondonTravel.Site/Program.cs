@@ -1,10 +1,9 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site
 {
     using System;
-    using System.Threading.Tasks;
     using Extensions;
     using Microsoft.AspNetCore;
     using Microsoft.AspNetCore.Hosting;
@@ -19,17 +18,13 @@ namespace MartinCostello.LondonTravel.Site
         /// </summary>
         /// <param name="args">The arguments to the application.</param>
         /// <returns>
-        /// A <see cref="Task{TResult}"/> that returns the exit code from the application.
+        /// The exit code from the application.
         /// </returns>
-        public static async Task<int> Main(string[] args)
+        public static int Main(string[] args)
         {
             try
             {
-                using (var host = BuildWebHost(args))
-                {
-                    await host.RunAsync();
-                }
-
+                CreateWebHostBuilder(args).Build().Run();
                 return 0;
             }
             catch (Exception ex)
@@ -39,16 +34,17 @@ namespace MartinCostello.LondonTravel.Site
             }
         }
 
-        private static IWebHost BuildWebHost(string[] args)
+        private static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
             return WebHost.CreateDefaultBuilder(args)
                 .UseKestrel((p) => p.AddServerHeader = false)
                 .UseAutofac()
                 .UseAzureAppServices()
                 .UseApplicationInsights()
+                .ConfigureAppConfiguration((context, builder) => builder.ConfigureApplication(context))
+                .ConfigureLogging((context, builder) => builder.ConfigureLogging(context))
                 .UseStartup<Startup>()
-                .CaptureStartupErrors(true)
-                .Build();
+                .CaptureStartupErrors(true);
         }
     }
 }

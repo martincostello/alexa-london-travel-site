@@ -3,8 +3,17 @@
     "IncludeScopes": false,
     "LogLevel": {
       "Default": "Warning",
-      "Microsoft": "Warning",
-      "System": "Warning"
+      "Microsoft": "Error",
+      "System": "Error"
+    }
+  },
+  "Serilog": {
+    "MinimumLevel": {
+      "Default": "Warning",
+      "Override": {
+        "System": "Error",
+        "Microsoft": "Error"
+      }
     }
   },
   "Site": {

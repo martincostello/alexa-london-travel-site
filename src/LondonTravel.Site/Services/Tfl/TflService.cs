@@ -5,22 +5,21 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
 {
     using System;
     using System.Collections.Generic;
-    using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.Extensions.Caching.Memory;
-    using Newtonsoft.Json;
     using Options;
+    using Refit;
 
     /// <summary>
     /// A class representing the default implementation of <see cref="ITflService"/>.
     /// </summary>
-    public sealed class TflService : ITflService, IDisposable
+    public sealed class TflService : ITflService
     {
         /// <summary>
-        /// The <see cref="HttpClient"/> to use. This field is read-only.
+        /// The <see cref="ITflClient"/> to use. This field is read-only.
         /// </summary>
-        private readonly HttpClient _client;
+        private readonly ITflClient _client;
 
         /// <summary>
         /// The <see cref="IMemoryCache"/> to use. This field is read-only.
@@ -33,97 +32,59 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
         private readonly TflOptions _options;
 
         /// <summary>
-        /// Whether the instance has been disposed.
-        /// </summary>
-        private bool _disposed;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="TflService"/> class.
         /// </summary>
-        /// <param name="httpClient">The <see cref="HttpClient"/> to use.</param>
+        /// <param name="client">The <see cref="ITflClient"/> to use.</param>
         /// <param name="cache">The <see cref="IMemoryCache"/> to use.</param>
         /// <param name="options">The <see cref="TflOptions"/> to use.</param>
-        public TflService(HttpClient httpClient, IMemoryCache cache, TflOptions options)
+        public TflService(ITflClient client, IMemoryCache cache, TflOptions options)
         {
-            _client = httpClient;
+            _client = client;
             _cache = cache;
             _options = options;
         }
 
         /// <inheritdoc />
-        public void Dispose()
-        {
-            if (!_disposed)
-            {
-                _client?.Dispose();
-                _disposed = true;
-            }
-        }
-
-        /// <inheritdoc />
-        public async Task<ICollection<LineInfo>> GetLinesAsync(CancellationToken cancellationToken = default)
+        public Task<ICollection<LineInfo>> GetLinesAsync(CancellationToken cancellationToken = default)
         {
             const string CacheKey = "TfL.AvailableLines";
-            string relativeUrl = $"Line/Mode/{string.Join(",", _options.SupportedModes)}";
-            Uri requestUri = BuildRequestUri(relativeUrl);
+            string supportedModes = string.Join(",", _options.SupportedModes);
 
-            return await GetAsJsonWithCacheAsync<ICollection<LineInfo>>(requestUri, CacheKey, cancellationToken);
+            return GetWithCachingAsync(
+                CacheKey,
+                () => _client.GetLinesAsync(supportedModes, _options.AppId, _options.AppKey, cancellationToken));
         }
 
         /// <inheritdoc />
-        public async Task<ICollection<StopPoint>> GetStopPointsByLineAsync(string lineId, CancellationToken cancellationToken = default)
+        public Task<ICollection<StopPoint>> GetStopPointsByLineAsync(string lineId, CancellationToken cancellationToken = default)
         {
             string cacheKey = $"TfL.{lineId}.StopPoints";
-            string relativeUrl = $"Line/{lineId}/StopPoints";
-            Uri requestUri = BuildRequestUri(relativeUrl);
 
-            return await GetAsJsonWithCacheAsync<ICollection<StopPoint>>(requestUri, cacheKey, cancellationToken);
+            return GetWithCachingAsync(
+                cacheKey,
+                () => _client.GetStopPointsAsync(lineId, _options.AppId, _options.AppKey, cancellationToken));
         }
 
         /// <summary>
-        /// Builds the URI for the specified request URL.
+        /// Calls the specified delegate as an asynchronous operation,
+        /// storing the result in the cache if the response is cacheable.
         /// </summary>
-        /// <param name="relativeUrl">The relative URL to build the URI for.</param>
-        /// <returns>
-        /// The <see cref="Uri"/> to use for the specified relative URL with the required query string parameters appended.
-        /// </returns>
-        private Uri BuildRequestUri(string relativeUrl)
-        {
-            var builder = new UriBuilder(_options.BaseUri)
-            {
-                Path = relativeUrl,
-                Query = $"app_id={_options.AppId}&app_key={_options.AppKey}",
-            };
-
-            return builder.Uri;
-        }
-
-        /// <summary>
-        /// Performs an HTTP to the specified URI as an asynchronous operation,
-        /// storing the result if the cache if the response is cacheable.
-        /// </summary>
-        /// <typeparam name="T">The type of the resource to get.</typeparam>
-        /// <param name="requestUri">The URI of the resource to get.</param>
-        /// <param name="cacheKey">The cache key to use for the resource.</param>
-        /// <param name="cancellationToken">The cancellation token to use.</param>
+        /// <typeparam name="T">The type of the resource to return.</typeparam>
+        /// <param name="cacheKey">The cache key to use for the response.</param>
+        /// <param name="operation">A delegate to a method to use to get the API response.</param>
         /// <returns>
         /// A <see cref="Task{TResult}"/> representing the asychronous operation to get the
-        /// resource of <typeparamref name="T"/> at the specified request URI.
+        /// resource of <typeparamref name="T"/> from calling the specified delegate.
         /// </returns>
-        private async Task<T> GetAsJsonWithCacheAsync<T>(
-            Uri requestUri,
-            string cacheKey,
-            CancellationToken cancellationToken)
+        private async Task<T> GetWithCachingAsync<T>(string cacheKey, Func<Task<ApiResponse<T>>> operation)
         {
             if (!_cache.TryGetValue(cacheKey, out T result))
             {
-                using (var response = await _client.GetAsync(requestUri, cancellationToken))
+                using (var response = await operation())
                 {
-                    response.EnsureSuccessStatusCode();
+                    await response.EnsureSuccessStatusCodeAsync();
 
-                    string json = await response.Content.ReadAsStringAsync();
-
-                    result = JsonConvert.DeserializeObject<T>(json);
+                    result = response.Content;
 
                     if (!string.IsNullOrEmpty(cacheKey) &&
                         response.Headers.CacheControl != null &&

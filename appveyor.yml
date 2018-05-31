@@ -1,5 +1,5 @@
 os: Visual Studio 2017
-version: 2.0.{build}
+version: 2.1.{build}
 
 environment:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
@@ -15,8 +15,8 @@ cache:
   - '%APPDATA%\npm-cache'
 
 install:
-  - ps: npm install -g npm@5.3.0 --loglevel=error
-  - ps: npm install -g gulp --loglevel=error
+  - ps: npm install -g npm@6.1.0 --loglevel=error
+  - ps: npm install -g gulp@3.9.1 --loglevel=error
 
 build_script:
   - ps: .\Build.ps1

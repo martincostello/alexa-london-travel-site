@@ -356,7 +356,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             }
             else
             {
-                int indexOfQuery = url.IndexOf('?');
+                int indexOfQuery = url.IndexOf('?', StringComparison.Ordinal);
 
                 if (indexOfQuery > -1)
                 {
