@@ -6,12 +6,9 @@ namespace MartinCostello.LondonTravel.Site.Extensions
     using System;
     using System.IO;
     using System.Linq;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
     using System.Reflection;
     using Identity.Amazon;
     using MartinCostello.LondonTravel.Site.Identity;
-    using MartinCostello.LondonTravel.Site.Services.Tfl;
     using MartinCostello.LondonTravel.Site.Swagger;
     using Microsoft.AspNetCore.ApplicationInsights.HostingStartup;
     using Microsoft.AspNetCore.Authentication.OAuth;
@@ -20,7 +17,6 @@ namespace MartinCostello.LondonTravel.Site.Extensions
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Options;
-    using Refit;
     using Swashbuckle.AspNetCore.Swagger;
     using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -29,22 +25,6 @@ namespace MartinCostello.LondonTravel.Site.Extensions
     /// </summary>
     public static class IServiceCollectionExtensions
     {
-        /// <summary>
-        /// Adds HTTP clients to the services.
-        /// </summary>
-        /// <param name="services">The <see cref="IServiceCollection"/> to add the services to.</param>
-        /// <returns>
-        /// The value specified by <paramref name="services"/>.
-        /// </returns>
-        public static IServiceCollection AddHttpClients(this IServiceCollection services)
-        {
-            services
-                .AddHttpClient<ITflClient>()
-                .AddTypedClient(AddTfl);
-
-            return services;
-        }
-
         /// <summary>
         /// Adds Swagger to the services.
         /// </summary>
@@ -268,27 +248,6 @@ namespace MartinCostello.LondonTravel.Site.Extensions
             }
 
             return isEnabled;
-        }
-
-        /// <summary>
-        /// Adds a typed client for the TfL API.
-        /// </summary>
-        /// <param name="client">The <see cref="HttpClient"/> to configure the client with.</param>
-        /// <param name="provider">The <see cref="IServiceProvider"/> to use.</param>
-        /// <returns>
-        /// The <see cref="ITflClient"/> to use.
-        /// </returns>
-        private static ITflClient AddTfl(HttpClient client, IServiceProvider provider)
-        {
-            var options = provider.GetRequiredService<TflOptions>();
-
-            client.BaseAddress = options.BaseUri;
-
-            string productName = "MartinCostello.LondonTravel";
-            string productVersion = typeof(StartupBase).GetTypeInfo().Assembly.GetName().Version.ToString(3);
-            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue(productName, productVersion));
-
-            return RestService.For<ITflClient>(client);
         }
     }
 }
