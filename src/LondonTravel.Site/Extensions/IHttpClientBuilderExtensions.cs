@@ -11,7 +11,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
     using System.Reflection;
     using Microsoft.Extensions.DependencyInjection;
     using Polly;
-    using Polly.Extensions.Http;
+    using Polly.Registry;
 
     /// <summary>
     /// A class containing extension methods for the <see cref="IHttpClientBuilder"/> interface. This class cannot be inherited.
@@ -35,7 +35,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
             return builder
                 .ConfigurePrimaryHttpMessageHandler(CreatePrimaryHttpHandler)
                 .ConfigureHttpClient(ApplyDefaultConfiguration)
-                .AddPolicyHandler(CreatePolicyForRequest);
+                .AddPolicyHandlerFromRegistry(GetRequestPolicy);
         }
 
         /// <summary>
@@ -51,28 +51,17 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         /// <summary>
         /// Creates a policy to use for an HTTP request.
         /// </summary>
-        /// <param name="request">The HTTP request to configure the policy for.</param>
+        /// <param name="registry">The policy registry to use.</param>
+        /// <param name="request">The HTTP request to get the policy for.</param>
         /// <returns>
-        /// The policy to use.
+        /// The policy to use for <paramref name="request"/>.
         /// </returns>
-        private static IAsyncPolicy<HttpResponseMessage> CreatePolicyForRequest(HttpRequestMessage request)
+        private static IAsyncPolicy<HttpResponseMessage> GetRequestPolicy(
+            IReadOnlyPolicyRegistry<string> registry,
+            HttpRequestMessage request)
         {
-            var sleepDurations = new[]
-            {
-                TimeSpan.FromSeconds(1),
-                TimeSpan.FromSeconds(5),
-                TimeSpan.FromSeconds(10),
-            };
-
-            var readPolicy = HttpPolicyExtensions.HandleTransientHttpError()
-                .WaitAndRetryAsync(sleepDurations)
-                .WithPolicyKey("ReadPolicy");
-
-            var writePolicy = Policy.NoOpAsync()
-                .AsAsyncPolicy<HttpResponseMessage>()
-                .WithPolicyKey("WritePolicy");
-
-            return request.Method == HttpMethod.Get ? readPolicy : writePolicy;
+            string policyName = request.Method == HttpMethod.Get ? "ReadPolicy" : "WritePolicy";
+            return registry.Get<IAsyncPolicy<HttpResponseMessage>>(policyName);
         }
 
         /// <summary>

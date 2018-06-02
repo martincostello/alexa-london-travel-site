@@ -204,6 +204,7 @@ namespace MartinCostello.LondonTravel.Site
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<ITflService, TflService>();
 
+            services.AddPolly();
             services.AddHttpClients();
 
             services
