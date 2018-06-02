@@ -24,7 +24,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         /// Initializes a new instance of the <see cref="ApiTests"/> class.
         /// </summary>
         /// <param name="fixture">The fixture to use.</param>
-        public ApiTests(HttpServerFixture fixture)
+        public ApiTests(TestServerFixture fixture)
             : base(fixture)
         {
         }

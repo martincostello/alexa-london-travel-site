@@ -6,23 +6,23 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using Xunit;
 
     /// <summary>
-    /// The base class for integration tests.
+    /// The base class for browser tests.
     /// </summary>
-    [Collection(TestServerCollection.Name)]
-    public abstract class IntegrationTest
+    [Collection(HttpServerCollection.Name)]
+    public abstract class BrowserTest
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="IntegrationTest"/> class.
+        /// Initializes a new instance of the <see cref="BrowserTest"/> class.
         /// </summary>
         /// <param name="fixture">The fixture to use.</param>
-        protected IntegrationTest(TestServerFixture fixture)
+        protected BrowserTest(HttpServerFixture fixture)
         {
             Fixture = fixture;
         }
 
         /// <summary>
-        /// Gets the <see cref="TestServerFixture"/> to use.
+        /// Gets the <see cref="HttpServerFixture"/> to use.
         /// </summary>
-        protected TestServerFixture Fixture { get; }
+        protected HttpServerFixture Fixture { get; }
     }
 }
