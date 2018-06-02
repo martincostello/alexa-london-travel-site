@@ -4,6 +4,7 @@
 namespace MartinCostello.LondonTravel.Site.Extensions
 {
     using System;
+    using System.Diagnostics;
     using System.Net;
     using System.Net.Http;
     using System.Net.Http.Headers;
@@ -44,7 +45,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         private static void ApplyDefaultConfiguration(HttpClient client)
         {
             client.DefaultRequestHeaders.UserAgent.Add(_userAgent.Value);
-            client.Timeout = TimeSpan.FromSeconds(20);
+            client.Timeout = Debugger.IsAttached ? TimeSpan.FromMinutes(1) : TimeSpan.FromSeconds(20);
         }
 
         /// <summary>
