@@ -4,10 +4,10 @@
 namespace MartinCostello.LondonTravel.Site.Integration
 {
     using System;
-    using System.Linq;
+    using System.Net;
     using System.Net.Http;
+    using System.Net.Sockets;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Hosting.Server.Features;
     using Microsoft.AspNetCore.TestHost;
 
     /// <summary>
@@ -24,15 +24,16 @@ namespace MartinCostello.LondonTravel.Site.Integration
         public HttpServerFixture()
             : base()
         {
+            ClientOptions.BaseAddress = FindServerAddress();
+
             var builder = CreateWebHostBuilder()
-                .UseSolutionRelativeContentRoot("src/LondonTravel.Site");
+                .UseSolutionRelativeContentRoot("src/LondonTravel.Site")
+                .UseUrls(ClientOptions.BaseAddress.ToString());
 
             ConfigureWebHost(builder);
 
             _webHost = builder.Build();
             _webHost.Start();
-
-            ClientOptions.BaseAddress = new Uri(_webHost.ServerFeatures.Get<IServerAddressesFeature>().Addresses.LastOrDefault());
         }
 
         /// <summary>
@@ -77,6 +78,33 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 }
 
                 _disposed = true;
+            }
+        }
+
+        private static Uri FindServerAddress()
+        {
+            int port = GetFreePortNumber();
+
+            return new UriBuilder()
+            {
+                Scheme = "https",
+                Host = "localhost",
+                Port = port,
+            }.Uri;
+        }
+
+        private static int GetFreePortNumber()
+        {
+            var listener = new TcpListener(IPAddress.Loopback, 0);
+            listener.Start();
+
+            try
+            {
+                return ((IPEndPoint)listener.LocalEndpoint).Port;
+            }
+            finally
+            {
+                listener.Stop();
             }
         }
     }
