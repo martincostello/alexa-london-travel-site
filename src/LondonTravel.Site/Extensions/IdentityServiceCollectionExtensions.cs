@@ -18,10 +18,6 @@ namespace MartinCostello.LondonTravel.Site.Extensions
     /// </summary>
     public static class IdentityServiceCollectionExtensions
     {
-        private const string CorrelationCookieName = "london-travel-correlation";
-
-        private const string StateCookieName = "london-travel-state";
-
         /// <summary>
         /// Configures identity services.
         /// </summary>
@@ -67,7 +63,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
                             p.ConsumerKey = twitterOptions.ClientId;
                             p.ConsumerSecret = twitterOptions.ClientSecret;
                             p.RetrieveUserDetails = true;
-                            p.StateCookie.Name = StateCookieName;
+                            p.StateCookie.Name = ApplicationCookie.State.Name;
 
                             p.Events.OnRemoteFailure =
                                 (context) => OAuthEventsHandler.HandleRemoteFailure(
@@ -122,7 +118,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
             var factory = serviceProvider.GetRequiredService<IHttpClientFactory>();
 
             options.Backchannel = factory.CreateClient(name);
-            options.CorrelationCookie.Name = CorrelationCookieName;
+            options.CorrelationCookie.Name = ApplicationCookie.Correlation.Name;
         }
 
         /// <summary>

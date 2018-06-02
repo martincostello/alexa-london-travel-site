@@ -146,7 +146,7 @@ namespace MartinCostello.LondonTravel.Site
             services.AddAntiforgery(
                 (p) =>
                 {
-                    p.Cookie.Name = "_anti-forgery";
+                    p.Cookie.Name = ApplicationCookie.Antiforgery.Name;
                     p.Cookie.SecurePolicy = CookiePolicy();
                     p.FormFieldName = "_anti-forgery";
                     p.HeaderName = "x-anti-forgery";
@@ -215,8 +215,8 @@ namespace MartinCostello.LondonTravel.Site
                 .AddDefaultTokenProviders();
 
             services
-                .ConfigureApplicationCookie((options) => ConfigureAuthorizationCookie(options, "london-travel-auth-app"))
-                .ConfigureExternalCookie((options) => ConfigureAuthorizationCookie(options, "london-travel-auth-external"));
+                .ConfigureApplicationCookie((options) => ConfigureAuthorizationCookie(options, ApplicationCookie.Application.Name))
+                .ConfigureExternalCookie((options) => ConfigureAuthorizationCookie(options, ApplicationCookie.External.Name));
 
             services.AddIdentity();
 
