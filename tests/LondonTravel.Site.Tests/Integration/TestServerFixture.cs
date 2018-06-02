@@ -39,7 +39,8 @@ namespace MartinCostello.LondonTravel.Site.Integration
             string fullPath = Path.Combine(directory, "testsettings.json");
 
             // Apply new configuration for tests
-            builder.AddJsonFile(fullPath)
+            builder.AddJsonFile("appsettings.json")
+                   .AddJsonFile(fullPath)
                    .AddEnvironmentVariables();
         }
     }

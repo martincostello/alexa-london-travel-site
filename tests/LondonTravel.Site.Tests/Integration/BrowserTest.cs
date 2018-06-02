@@ -3,6 +3,8 @@
 
 namespace MartinCostello.LondonTravel.Site.Integration
 {
+    using OpenQA.Selenium;
+    using OpenQA.Selenium.Chrome;
     using Xunit;
 
     /// <summary>
@@ -24,5 +26,28 @@ namespace MartinCostello.LondonTravel.Site.Integration
         /// Gets the <see cref="HttpServerFixture"/> to use.
         /// </summary>
         protected HttpServerFixture Fixture { get; }
+
+        /// <summary>
+        /// Creates a new instance of <see cref="IWebDriver"/>.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IWebDriver"/> to use for tests.
+        /// </returns>
+        protected IWebDriver CreateWebDriver()
+        {
+            string chromeDriverDirectory = System.IO.Path.GetDirectoryName(GetType().Assembly.Location);
+
+            var options = new ChromeOptions()
+            {
+                AcceptInsecureCertificates = true,
+            };
+
+            if (!System.Diagnostics.Debugger.IsAttached)
+            {
+                options.AddArgument("--headless");
+            }
+
+            return new ChromeDriver(chromeDriverDirectory, options);
+        }
     }
 }
