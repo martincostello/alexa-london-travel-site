@@ -28,6 +28,16 @@ namespace MartinCostello.LondonTravel.Site.Extensions
                 .AddHttpClient(Microsoft.Extensions.Options.Options.DefaultName)
                 .ApplyDefaultConfiguration();
 
+            var options = services.BuildServiceProvider().GetRequiredService<SiteOptions>();
+
+            foreach (string providerName in options.Authentication.ExternalProviders.Keys)
+            {
+                services
+                    .AddHttpClient(providerName)
+                    .ApplyDefaultConfiguration()
+                    .ApplyRemoteAuthenticationConfiguration();
+            }
+
             services
                 .AddHttpClient<ITflClient>()
                 .AddTypedClient(AddTfl)

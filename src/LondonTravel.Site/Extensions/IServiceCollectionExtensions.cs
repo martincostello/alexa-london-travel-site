@@ -3,12 +3,14 @@
 
 namespace MartinCostello.LondonTravel.Site.Extensions
 {
+    using System;
     using System.Linq;
+    using System.Net.Http;
     using Identity.Amazon;
     using MartinCostello.LondonTravel.Site.Identity;
     using Microsoft.AspNetCore.ApplicationInsights.HostingStartup;
+    using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authentication.OAuth;
-    using Microsoft.AspNetCore.Authentication.Twitter;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Options;
@@ -18,6 +20,10 @@ namespace MartinCostello.LondonTravel.Site.Extensions
     /// </summary>
     public static class IServiceCollectionExtensions
     {
+        private const string CorrelationCookieName = "london-travel-correlation";
+
+        private const string StateCookieName = "london-travel-state";
+
         /// <summary>
         /// Removes the registered Application Insights JavaScript tag helper.
         /// </summary>
@@ -57,27 +63,27 @@ namespace MartinCostello.LondonTravel.Site.Extensions
                 var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
                 var builder = services.AddAuthentication();
 
-                if (TryGetProvider("Amazon", options, out ExternalSignInOptions amazonOptions))
+                if (TryGetProvider("Amazon", options, out var amazonOptions))
                 {
-                    builder.AddAmazon((p) => SetupOAuth(p, amazonOptions, loggerFactory));
+                    builder.AddAmazon((p) => SetupOAuth("Amazon", p, amazonOptions, loggerFactory, provider));
                 }
 
-                if (TryGetProvider("Facebook", options, out ExternalSignInOptions facebookOptions))
+                if (TryGetProvider("Facebook", options, out var facebookOptions))
                 {
-                    builder.AddFacebook((p) => SetupOAuth(p, facebookOptions, loggerFactory));
+                    builder.AddFacebook((p) => SetupOAuth("Facebook", p, facebookOptions, loggerFactory, provider));
                 }
 
-                if (TryGetProvider("Google", options, out ExternalSignInOptions googleOptions))
+                if (TryGetProvider("Google", options, out var googleOptions))
                 {
-                    builder.AddGoogle((p) => SetupOAuth(p, googleOptions, loggerFactory));
+                    builder.AddGoogle((p) => SetupOAuth("Google", p, googleOptions, loggerFactory, provider));
                 }
 
-                if (TryGetProvider("Microsoft", options, out ExternalSignInOptions microsoftOptions))
+                if (TryGetProvider("Microsoft", options, out var microsoftOptions))
                 {
-                    builder.AddMicrosoftAccount((p) => SetupOAuth(p, microsoftOptions, loggerFactory));
+                    builder.AddMicrosoftAccount((p) => SetupOAuth("Microsoft", p, microsoftOptions, loggerFactory, provider));
                 }
 
-                if (TryGetProvider("Twitter", options, out ExternalSignInOptions twitterOptions))
+                if (TryGetProvider("Twitter", options, out var twitterOptions))
                 {
                     builder.AddTwitter(
                         (p) =>
@@ -85,17 +91,17 @@ namespace MartinCostello.LondonTravel.Site.Extensions
                             p.ConsumerKey = twitterOptions.ClientId;
                             p.ConsumerSecret = twitterOptions.ClientSecret;
                             p.RetrieveUserDetails = true;
+                            p.StateCookie.Name = StateCookieName;
 
-                            if (p.Events is TwitterEvents twitterEvents)
-                            {
-                                twitterEvents.OnRemoteFailure =
-                                    (context) => OAuthEventsHandler.HandleRemoteFailure(
-                                        context,
-                                        p.SignInScheme,
-                                        p.StateDataFormat,
-                                        loggerFactory.CreateLogger("Twitter"),
-                                        (token) => token?.Properties?.Items);
-                            }
+                            p.Events.OnRemoteFailure =
+                                (context) => OAuthEventsHandler.HandleRemoteFailure(
+                                    context,
+                                    p.SignInScheme,
+                                    p.StateDataFormat,
+                                    loggerFactory.CreateLogger("Twitter"),
+                                    (token) => token?.Properties?.Items);
+
+                            SetupRemoteAuth("Twitter", p, provider);
                         });
                 }
             }
@@ -107,15 +113,40 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         /// Sets up an instance of <typeparamref name="T"/> for an OAuth provider.
         /// </summary>
         /// <typeparam name="T">The type of the OAuth options to set up.</typeparam>
+        /// <param name="name">The name of the OAuth provider to set up.</param>
         /// <param name="auth">The OAuth options to set up.</param>
         /// <param name="options">The <see cref="ExternalSignInOptions"/> to use to set up the instance.</param>
         /// <param name="loggerFactory">The <see cref="ILoggerFactory"/> to use.</param>
-        private static void SetupOAuth<T>(T auth, ExternalSignInOptions options, ILoggerFactory loggerFactory)
+        /// <param name="serviceProvider">The <see cref="IServiceProvider"/> to use.</param>
+        private static void SetupOAuth<T>(
+            string name,
+            T auth,
+            ExternalSignInOptions options,
+            ILoggerFactory loggerFactory,
+            IServiceProvider serviceProvider)
             where T : OAuthOptions
         {
             auth.ClientId = options.ClientId;
             auth.ClientSecret = options.ClientSecret;
             auth.Events = new OAuthEventsHandler(auth, loggerFactory);
+
+            SetupRemoteAuth(name, auth, serviceProvider);
+        }
+
+        /// <summary>
+        /// Sets up an instance of <typeparamref name="T"/> for a remote authentication provider.
+        /// </summary>
+        /// <typeparam name="T">The type of the remote authentication options to set up.</typeparam>
+        /// <param name="name">The name of the remote authentication provider to set up.</param>
+        /// <param name="options">The remote authentication options to set up.</param>
+        /// <param name="serviceProvider">The <see cref="IServiceProvider"/> to use.</param>
+        private static void SetupRemoteAuth<T>(string name, T options, IServiceProvider serviceProvider)
+            where T : RemoteAuthenticationOptions
+        {
+            var factory = serviceProvider.GetRequiredService<IHttpClientFactory>();
+
+            options.Backchannel = factory.CreateClient(name);
+            options.CorrelationCookie.Name = CorrelationCookieName;
         }
 
         /// <summary>

@@ -39,6 +39,18 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         }
 
         /// <summary>
+        /// Applies the configuration for remote authentication to the <see cref="IHttpClientBuilder"/>.
+        /// </summary>
+        /// <param name="builder">The <see cref="IHttpClientBuilder"/> to apply the configuration to.</param>
+        /// <returns>
+        /// The <see cref="IHttpClientBuilder"/> passed as the value of <paramref name="builder"/>.
+        /// </returns>
+        public static IHttpClientBuilder ApplyRemoteAuthenticationConfiguration(this IHttpClientBuilder builder)
+        {
+            return builder.ConfigureHttpClient(ApplyRemoteAuthenticationConfiguration);
+        }
+
+        /// <summary>
         /// Applies the default configuration to <see cref="HttpClient"/> instances.
         /// </summary>
         /// <param name="client">The <see cref="HttpClient"/> to configure.</param>
@@ -46,6 +58,21 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         {
             client.DefaultRequestHeaders.UserAgent.Add(_userAgent.Value);
             client.Timeout = Debugger.IsAttached ? TimeSpan.FromMinutes(1) : TimeSpan.FromSeconds(20);
+        }
+
+        /// <summary>
+        /// Applies the configuration for remote authentication to <see cref="HttpClient"/> instances.
+        /// </summary>
+        /// <param name="client">The <see cref="HttpClient"/> to configure.</param>
+        private static void ApplyRemoteAuthenticationConfiguration(HttpClient client)
+        {
+            // Apply configuration settings to HttpClient that would be applied if
+            // the authentication libraries created their own HttpClient instances.
+            // See https://github.com/aspnet/Security/blob/b3e4bf382c9676e2d912636b7ee0255cad244e11/src/Microsoft.AspNetCore.Authentication.OAuth/OAuthPostConfigureOptions.cs#L34
+            // See https://github.com/aspnet/Security/blob/b3e4bf382c9676e2d912636b7ee0255cad244e11/src/Microsoft.AspNetCore.Authentication.Twitter/TwitterPostConfigureOptions.cs#L44-L47
+            client.DefaultRequestHeaders.Accept.ParseAdd("*/*");
+            client.DefaultRequestHeaders.ExpectContinue = false;
+            client.MaxResponseContentBufferSize = 1024 * 1024 * 10; // 10 MB
         }
 
         /// <summary>
