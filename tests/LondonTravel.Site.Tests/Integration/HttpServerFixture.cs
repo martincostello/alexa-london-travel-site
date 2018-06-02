@@ -4,10 +4,10 @@
 namespace MartinCostello.LondonTravel.Site.Integration
 {
     using System;
-    using System.Net;
+    using System.Linq;
     using System.Net.Http;
-    using System.Net.Sockets;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Hosting.Server.Features;
     using Microsoft.AspNetCore.TestHost;
 
     /// <summary>
@@ -24,33 +24,21 @@ namespace MartinCostello.LondonTravel.Site.Integration
         public HttpServerFixture()
             : base()
         {
-            var builder = CreateWebHostBuilder();
+            var builder = CreateWebHostBuilder()
+                .UseSolutionRelativeContentRoot("src/LondonTravel.Site");
 
             ConfigureWebHost(builder);
 
-            int port = GetFreePortNumber();
-
-            ServerAddress = new UriBuilder()
-            {
-                Scheme = "https",
-                Host = "localhost",
-                Port = port,
-            }.Uri;
-
-            builder
-                .UseSolutionRelativeContentRoot("src/LondonTravel.Site")
-                .UseUrls(ServerAddress.ToString());
-
-            ClientOptions.BaseAddress = ServerAddress;
-
             _webHost = builder.Build();
             _webHost.Start();
+
+            ClientOptions.BaseAddress = new Uri(_webHost.ServerFeatures.Get<IServerAddressesFeature>().Addresses.LastOrDefault());
         }
 
         /// <summary>
         /// Gets the server address of the application.
         /// </summary>
-        public Uri ServerAddress { get; }
+        public Uri ServerAddress => ClientOptions.BaseAddress;
 
         /// <summary>
         /// Creates an <see cref="HttpClient"/> to communicate with the application.
@@ -89,21 +77,6 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 }
 
                 _disposed = true;
-            }
-        }
-
-        private static int GetFreePortNumber()
-        {
-            var listener = new TcpListener(IPAddress.Loopback, 0);
-            listener.Start();
-
-            try
-            {
-                return ((IPEndPoint)listener.LocalEndpoint).Port;
-            }
-            finally
-            {
-                listener.Stop();
             }
         }
     }
