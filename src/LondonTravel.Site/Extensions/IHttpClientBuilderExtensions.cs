@@ -9,6 +9,8 @@ namespace MartinCostello.LondonTravel.Site.Extensions
     using System.Net.Http.Headers;
     using System.Reflection;
     using Microsoft.Extensions.DependencyInjection;
+    using Polly;
+    using Polly.Extensions.Http;
 
     /// <summary>
     /// A class containing extension methods for the <see cref="IHttpClientBuilder"/> interface. This class cannot be inherited.
@@ -31,7 +33,8 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         {
             return builder
                 .ConfigurePrimaryHttpMessageHandler(CreatePrimaryHttpHandler)
-                .ConfigureHttpClient(ApplyDefaultConfiguration);
+                .ConfigureHttpClient(ApplyDefaultConfiguration)
+                .AddPolicyHandler(CreatePolicyForRequest);
         }
 
         /// <summary>
@@ -42,6 +45,33 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         {
             client.DefaultRequestHeaders.UserAgent.Add(_userAgent.Value);
             client.Timeout = TimeSpan.FromSeconds(20);
+        }
+
+        /// <summary>
+        /// Creates a policy to use for an HTTP request.
+        /// </summary>
+        /// <param name="request">The HTTP request to configure the policy for.</param>
+        /// <returns>
+        /// The policy to use.
+        /// </returns>
+        private static IAsyncPolicy<HttpResponseMessage> CreatePolicyForRequest(HttpRequestMessage request)
+        {
+            var sleepDurations = new[]
+            {
+                TimeSpan.FromSeconds(1),
+                TimeSpan.FromSeconds(5),
+                TimeSpan.FromSeconds(10),
+            };
+
+            var readPolicy = HttpPolicyExtensions.HandleTransientHttpError()
+                .WaitAndRetryAsync(sleepDurations)
+                .WithPolicyKey("ReadPolicy");
+
+            var writePolicy = Policy.NoOpAsync()
+                .AsAsyncPolicy<HttpResponseMessage>()
+                .WithPolicyKey("WritePolicy");
+
+            return request.Method == HttpMethod.Get ? readPolicy : writePolicy;
         }
 
         /// <summary>
