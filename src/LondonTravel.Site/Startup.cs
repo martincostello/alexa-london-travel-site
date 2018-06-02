@@ -5,8 +5,6 @@ namespace MartinCostello.LondonTravel.Site
 {
     using System;
     using System.Globalization;
-    using Autofac;
-    using Autofac.Extensions.DependencyInjection;
     using Extensions;
     using Identity;
     using MartinCostello.LondonTravel.Site.Services;
@@ -223,14 +221,7 @@ namespace MartinCostello.LondonTravel.Site
 
             services.RemoveApplicationInsightsTagHelper();
 
-            var builder = new ContainerBuilder();
-
-            builder.Populate(services);
-
-            var container = builder.Build();
-            ServiceProvider = container.Resolve<IServiceProvider>();
-
-            return ServiceProvider;
+            return ServiceProvider = services.BuildServiceProvider();
         }
 
         /// <summary>
