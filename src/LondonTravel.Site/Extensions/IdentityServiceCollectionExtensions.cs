@@ -8,7 +8,10 @@ namespace MartinCostello.LondonTravel.Site.Extensions
     using Identity.Amazon;
     using MartinCostello.LondonTravel.Site.Identity;
     using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Authentication.OAuth;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Options;
@@ -19,13 +22,38 @@ namespace MartinCostello.LondonTravel.Site.Extensions
     public static class IdentityServiceCollectionExtensions
     {
         /// <summary>
+        /// Configures authentication for the application.
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection"/> to configure.</param>
+        /// <returns>
+        /// The <see cref="IServiceCollection"/> specified by <paramref name="services"/>.
+        /// </returns>
+        public static IServiceCollection AddApplicationAuthentication(this IServiceCollection services)
+        {
+            services
+                .AddIdentity<LondonTravelUser, LondonTravelRole>((options) => options.User.RequireUniqueEmail = true)
+                .AddClaimsPrincipalFactory<UserClaimsPrincipalFactory>()
+                .AddRoleStore<RoleStore>()
+                .AddUserStore<UserStore>()
+                .AddDefaultTokenProviders();
+
+            services
+                .ConfigureApplicationCookie((options) => ConfigureAuthorizationCookie(options, ApplicationCookie.Application.Name))
+                .ConfigureExternalCookie((options) => ConfigureAuthorizationCookie(options, ApplicationCookie.External.Name));
+
+            services.AddIdentity();
+
+            return services;
+        }
+
+        /// <summary>
         /// Configures identity services.
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection"/> to configure.</param>
         /// <returns>
         /// The <see cref="IServiceCollection"/> specified by <paramref name="services"/>.
         /// </returns>
-        public static IServiceCollection AddIdentity(this IServiceCollection services)
+        private static IServiceCollection AddIdentity(this IServiceCollection services)
         {
             var provider = services.BuildServiceProvider();
             var options = provider.GetRequiredService<SiteOptions>();
@@ -79,6 +107,23 @@ namespace MartinCostello.LondonTravel.Site.Extensions
             }
 
             return services;
+        }
+
+        /// <summary>
+        /// Configures an authentication cookie.
+        /// </summary>
+        /// <param name="options">The cookie authentication options.</param>
+        /// <param name="cookieName">The name to use for the cookie.</param>
+        private static void ConfigureAuthorizationCookie(CookieAuthenticationOptions options, string cookieName)
+        {
+            options.AccessDeniedPath = "/account/access-denied/";
+            options.Cookie.Name = cookieName;
+            options.Cookie.HttpOnly = true;
+            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            options.ExpireTimeSpan = TimeSpan.FromDays(150);
+            options.LoginPath = "/account/sign-in/";
+            options.LogoutPath = "/account/sign-out/";
+            options.SlidingExpiration = true;
         }
 
         /// <summary>

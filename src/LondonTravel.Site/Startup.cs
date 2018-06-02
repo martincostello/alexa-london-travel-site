@@ -6,11 +6,9 @@ namespace MartinCostello.LondonTravel.Site
     using System;
     using System.Globalization;
     using Extensions;
-    using Identity;
     using MartinCostello.LondonTravel.Site.Services;
     using Microsoft.ApplicationInsights.AspNetCore.Extensions;
     using Microsoft.ApplicationInsights.Extensibility;
-    using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.CookiePolicy;
     using Microsoft.AspNetCore.Cors.Infrastructure;
@@ -18,7 +16,6 @@ namespace MartinCostello.LondonTravel.Site
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.HttpOverrides;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Localization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Razor;
@@ -40,11 +37,6 @@ namespace MartinCostello.LondonTravel.Site
     /// </summary>
     public class Startup
     {
-        /// <summary>
-        /// The name of the default CORS policy.
-        /// </summary>
-        internal const string DefaultCorsPolicyName = "DefaultCorsPolicy";
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Startup"/> class.
         /// </summary>
@@ -147,7 +139,7 @@ namespace MartinCostello.LondonTravel.Site
                 (p) =>
                 {
                     p.Cookie.Name = ApplicationCookie.Antiforgery.Name;
-                    p.Cookie.SecurePolicy = CookiePolicy();
+                    p.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                     p.FormFieldName = "_anti-forgery";
                     p.HeaderName = "x-anti-forgery";
                 });
@@ -207,18 +199,7 @@ namespace MartinCostello.LondonTravel.Site
             services.AddPolly();
             services.AddHttpClients();
 
-            services
-                .AddIdentity<LondonTravelUser, LondonTravelRole>((options) => options.User.RequireUniqueEmail = true)
-                .AddClaimsPrincipalFactory<UserClaimsPrincipalFactory>()
-                .AddRoleStore<RoleStore>()
-                .AddUserStore<UserStore>()
-                .AddDefaultTokenProviders();
-
-            services
-                .ConfigureApplicationCookie((options) => ConfigureAuthorizationCookie(options, ApplicationCookie.Application.Name))
-                .ConfigureExternalCookie((options) => ConfigureAuthorizationCookie(options, ApplicationCookie.External.Name));
-
-            services.AddIdentity();
+            services.AddApplicationAuthentication();
 
             services.RemoveApplicationInsightsTagHelper();
 
@@ -280,23 +261,6 @@ namespace MartinCostello.LondonTravel.Site
         }
 
         /// <summary>
-        /// Configures an authentication cookie.
-        /// </summary>
-        /// <param name="options">The cookie authentication options.</param>
-        /// <param name="cookieName">The name to use for the cookie.</param>
-        private void ConfigureAuthorizationCookie(CookieAuthenticationOptions options, string cookieName)
-        {
-            options.AccessDeniedPath = "/account/access-denied/";
-            options.Cookie.Name = cookieName;
-            options.Cookie.HttpOnly = true;
-            options.Cookie.SecurePolicy = CookiePolicy();
-            options.ExpireTimeSpan = TimeSpan.FromDays(150);
-            options.LoginPath = "/account/sign-in/";
-            options.LogoutPath = "/account/sign-out/";
-            options.SlidingExpiration = true;
-        }
-
-        /// <summary>
         /// Configures CORS.
         /// </summary>
         /// <param name="corsOptions">The <see cref="CorsOptions"/> to configure.</param>
@@ -305,7 +269,7 @@ namespace MartinCostello.LondonTravel.Site
             var siteOptions = ServiceProvider.GetService<SiteOptions>();
 
             corsOptions.AddPolicy(
-                DefaultCorsPolicyName,
+                "DefaultCorsPolicy",
                 (builder) =>
                 {
                     builder
@@ -373,13 +337,8 @@ namespace MartinCostello.LondonTravel.Site
             return new CookiePolicyOptions()
             {
                 HttpOnly = HttpOnlyPolicy.Always,
-                Secure = CookiePolicy(),
+                Secure = CookieSecurePolicy.Always,
             };
-        }
-
-        private CookieSecurePolicy CookiePolicy()
-        {
-            return HostingEnvironment.IsDevelopment() ? CookieSecurePolicy.SameAsRequest : CookieSecurePolicy.Always;
         }
     }
 }
