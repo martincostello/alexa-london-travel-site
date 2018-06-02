@@ -33,7 +33,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
 
             if (context.HostingEnvironment.IsDevelopment())
             {
-                loggerConfig = loggerConfig.WriteTo.LiterateConsole();
+                loggerConfig = loggerConfig.WriteTo.Console();
             }
 
             string papertrailHostname = context.Configuration.PapertrailHostname();
