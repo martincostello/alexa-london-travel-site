@@ -9,6 +9,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using System.Net.Sockets;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.TestHost;
+    using Microsoft.Extensions.DependencyInjection;
 
     /// <summary>
     /// A test fixture representing an HTTP server hosting the application. This class cannot be inherited.
@@ -24,7 +25,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         public HttpServerFixture()
             : base()
         {
-            ClientOptions.BaseAddress = FindServerAddress();
+            ClientOptions.BaseAddress = FindFreeServerAddress();
 
             var builder = CreateWebHostBuilder()
                 .UseSolutionRelativeContentRoot("src/LondonTravel.Site")
@@ -66,6 +67,16 @@ namespace MartinCostello.LondonTravel.Site.Integration
         }
 
         /// <inheritdoc />
+        protected override void ConfigureWebHost(IWebHostBuilder builder)
+        {
+            base.ConfigureWebHost(builder);
+
+            builder.ConfigureServices(
+                (services) => services.AddSingleton<IStartupFilter, RemoteAuthorizationEventsFilter>(
+                    (_) => new RemoteAuthorizationEventsFilter(ServerAddress)));
+        }
+
+        /// <inheritdoc />
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
@@ -81,7 +92,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             }
         }
 
-        private static Uri FindServerAddress()
+        private static Uri FindFreeServerAddress()
         {
             int port = GetFreePortNumber();
 
