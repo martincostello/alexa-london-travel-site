@@ -4,10 +4,13 @@
 namespace MartinCostello.LondonTravel.Site.Integration
 {
     using System;
+    using System.IO;
+    using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
     using JustEat.HttpClientInterception;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Chrome;
+    using Pages;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -69,6 +72,14 @@ namespace MartinCostello.LondonTravel.Site.Integration
         }
 
         /// <summary>
+        /// Creates a new instance of <see cref="ApplicationNavigator"/>.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ApplicationNavigator"/> to use for tests.
+        /// </returns>
+        protected ApplicationNavigator CreateNavigator() => new ApplicationNavigator(Fixture.ServerAddress, CreateWebDriver());
+
+        /// <summary>
         /// Creates a new instance of <see cref="IWebDriver"/>.
         /// </summary>
         /// <returns>
@@ -109,6 +120,27 @@ namespace MartinCostello.LondonTravel.Site.Integration
         }
 
         /// <summary>
+        /// Runs the specified test with a new instance of <see cref="ApplicationNavigator"/>.
+        /// </summary>
+        /// <param name="test">The delegate to the test that will use the navigator.</param>
+        /// <param name="testName">The name of the test method.</param>
+        protected void WithNavigator(Action<ApplicationNavigator> test, [CallerMemberName] string testName = null)
+        {
+            using (ApplicationNavigator navigator = CreateNavigator())
+            {
+                try
+                {
+                    test(navigator);
+                }
+                catch (Exception)
+                {
+                    TakeScreenshot(navigator.Driver, testName);
+                    throw;
+                }
+            }
+        }
+
+        /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         /// <param name="disposing">
@@ -126,6 +158,28 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 }
 
                 _disposed = true;
+            }
+        }
+
+        private void TakeScreenshot(IWebDriver driver, string testName)
+        {
+            try
+            {
+                if (driver is ITakesScreenshot camera)
+                {
+                    Screenshot screenshot = camera.GetScreenshot();
+
+                    string directory = Path.GetDirectoryName(typeof(BrowserTest).Assembly.Location);
+                    string fileName = $"{testName}_{DateTimeOffset.UtcNow:YYYY-MM-dd-HH-mm-ss}.png";
+
+                    fileName = Path.Combine(directory, fileName);
+
+                    screenshot.SaveAsFile(fileName);
+                }
+            }
+            catch (Exception ex)
+            {
+                Output.WriteLine($"Failed to take screenshot: {ex.ToString()}");
             }
         }
     }

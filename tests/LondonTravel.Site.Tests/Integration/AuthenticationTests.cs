@@ -5,7 +5,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
 {
     using System;
     using Builders;
-    using OpenQA.Selenium;
+    using Pages;
     using Shouldly;
     using Xunit.Abstractions;
 
@@ -79,24 +79,24 @@ namespace MartinCostello.LondonTravel.Site.Integration
             SignInWithExternalProvider("twitter", "@JohnSmith");
         }
 
+        private void SignInWithExternalProvider(string name, string expectedUserName = "John")
+        {
+            // Act
+            WithNavigator(
+                (navigator) =>
+                {
+                    HomePage page = navigator.GoToRoot()
+                        .SignIn()
+                        .SignInWithProvider(name);
+
+                    // Assert
+                    page.UserName().ShouldBe(expectedUserName);
+                });
+        }
+
         private void ConfigureExternalProvider(Action<AuthenticationInterceptionBuilder> configure)
         {
             configure(new AuthenticationInterceptionBuilder(Fixture.Interceptor));
-        }
-
-        private void SignInWithExternalProvider(string providerName, string expectedName = "John")
-        {
-            // Act
-            using (var driver = CreateWebDriver())
-            {
-                driver.Navigate().GoToUrl(Fixture.ServerAddress);
-
-                driver.FindElement(By.CssSelector("[data-id='sign-in']")).Click();
-                driver.FindElement(By.CssSelector($"[data-id='sign-in-{providerName}']")).Click();
-
-                // Assert
-                driver.FindElement(By.CssSelector("[data-id='user-name']")).Text.ShouldBe(expectedName);
-            }
         }
     }
 }
