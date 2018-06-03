@@ -1,11 +1,6 @@
 sudo: required
 dist: trusty
 
-addons:
-  apt:
-    packages:
-      - google-chrome-stable
-
 env:
   global:
     - DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true
@@ -23,8 +18,11 @@ cache:
 
 addons:
   apt:
+    sources:
+    - google-chrome
     packages:
     - gettext
+    - google-chrome-stable
     - libcurl4-openssl-dev
     - libicu-dev
     - libssl-dev
