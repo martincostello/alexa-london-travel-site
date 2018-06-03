@@ -22,6 +22,7 @@ namespace MartinCostello.LondonTravel.Site
     using Microsoft.AspNetCore.StaticFiles;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.DependencyInjection.Extensions;
     using Microsoft.Extensions.Options;
     using Microsoft.Net.Http.Headers;
     using Microsoft.WindowsAzure.Storage;
@@ -179,13 +180,14 @@ namespace MartinCostello.LondonTravel.Site
                 .AddResponseCompression();
 
             services.AddSingleton<IClock>((_) => SystemClock.Instance);
-            services.AddSingleton<IDocumentCollectionInitializer, DocumentCollectionInitializer>();
-            services.AddSingleton<IDocumentClient, DocumentClientWrapper>();
             services.AddSingleton<ISiteTelemetry, SiteTelemetry>();
             services.AddSingleton<ITelemetryInitializer, SiteTelemetryInitializer>();
             services.AddSingleton<ITelemetryModule, SiteTelemetryModule>();
             services.AddSingleton<ITflServiceFactory, TflServiceFactory>();
             services.AddSingleton((_) => ConfigureJsonFormatter(new JsonSerializerSettings()));
+
+            services.TryAddSingleton<IDocumentClient, DocumentClientWrapper>();
+            services.TryAddSingleton<IDocumentCollectionInitializer, DocumentCollectionInitializer>();
 
             services.AddScoped((p) => p.GetRequiredService<IHttpContextAccessor>().HttpContext);
             services.AddScoped((p) => p.GetRequiredService<IOptionsSnapshot<SiteOptions>>().Value);

@@ -6,6 +6,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using System;
     using System.IO;
     using JustEat.HttpClientInterception;
+    using MartinCostello.LondonTravel.Site.Services.Data;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc.Testing;
     using Microsoft.Extensions.Configuration;
@@ -38,6 +39,14 @@ namespace MartinCostello.LondonTravel.Site.Integration
             builder.ConfigureServices(
                 (services) => services.AddSingleton<IHttpMessageHandlerBuilderFilter, HttpRequestInterceptionFilter>(
                     (_) => new HttpRequestInterceptionFilter(Interceptor)));
+
+            builder.ConfigureServices(
+                (services) =>
+                {
+                    services.AddSingleton<InMemoryDocumentStore>();
+                    services.AddSingleton<IDocumentClient>((p) => p.GetRequiredService<InMemoryDocumentStore>());
+                    services.AddSingleton<IDocumentCollectionInitializer>((p) => p.GetRequiredService<InMemoryDocumentStore>());
+                });
 
             builder.ConfigureAppConfiguration(ConfigureTests);
         }
