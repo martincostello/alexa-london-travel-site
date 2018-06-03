@@ -7,6 +7,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using System.Net;
     using System.Net.Http;
     using System.Net.Sockets;
+    using System.Security.Cryptography.X509Certificates;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.TestHost;
     using Microsoft.Extensions.DependencyInjection;
@@ -29,7 +30,10 @@ namespace MartinCostello.LondonTravel.Site.Integration
 
             var builder = CreateWebHostBuilder()
                 .UseSolutionRelativeContentRoot("src/LondonTravel.Site")
-                .UseUrls(ClientOptions.BaseAddress.ToString());
+                .UseUrls(ClientOptions.BaseAddress.ToString())
+                .UseKestrel(
+                    (p) => p.ConfigureHttpsDefaults(
+                        (r) => r.ServerCertificate = new X509Certificate2("localhost-dev.pfx", "Pa55w0rd!")));
 
             ConfigureWebHost(builder);
 
