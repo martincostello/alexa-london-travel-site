@@ -21,10 +21,11 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         /// Configures authentication for the application.
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection"/> to configure.</param>
+        /// <param name="applicationServices">A delegate to a method that retrieves the application services.</param>
         /// <returns>
         /// The <see cref="IServiceCollection"/> specified by <paramref name="services"/>.
         /// </returns>
-        public static IServiceCollection AddApplicationAuthentication(this IServiceCollection services)
+        public static IServiceCollection AddApplicationAuthentication(this IServiceCollection services, Func<IServiceProvider> applicationServices)
         {
             services
                 .AddIdentity<LondonTravelUser, LondonTravelRole>((options) => options.User.RequireUniqueEmail = true)
@@ -32,6 +33,8 @@ namespace MartinCostello.LondonTravel.Site.Extensions
                 .AddRoleStore<RoleStore>()
                 .AddUserStore<UserStore>()
                 .AddDefaultTokenProviders();
+
+            services.AddSingleton<ExternalAuthEvents>();
 
             services
                 .ConfigureApplicationCookie((options) => ConfigureAuthorizationCookie(options, ApplicationCookie.Application.Name))
@@ -44,7 +47,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
             {
                 var builder = services
                     .AddAuthentication()
-                    .AsApplicationBuilder(provider);
+                    .AsApplicationBuilder(siteOptions, applicationServices);
 
                 builder
                     .TryAddAmazon()
@@ -78,13 +81,17 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         /// Returns an <see cref="ApplicationAuthorizationBuilder"/> used to configure authentication for the application.
         /// </summary>
         /// <param name="builder">The <see cref="AuthenticationBuilder"/> to create the builder with.</param>
-        /// <param name="serviceProvider">The <see cref="IServiceProvider"/> to use.</param>
+        /// <param name="options">The <see cref="SiteOptions"/> to use.</param>
+        /// <param name="applicationServices">A delegate to a method that retrieves the application services.</param>
         /// <returns>
         /// The <see cref="ApplicationAuthorizationBuilder"/> to use to configure authentication for the application.
         /// </returns>
-        private static ApplicationAuthorizationBuilder AsApplicationBuilder(this AuthenticationBuilder builder, IServiceProvider serviceProvider)
+        private static ApplicationAuthorizationBuilder AsApplicationBuilder(
+            this AuthenticationBuilder builder,
+            SiteOptions options,
+            Func<IServiceProvider> applicationServices)
         {
-            return new ApplicationAuthorizationBuilder(builder, serviceProvider);
+            return new ApplicationAuthorizationBuilder(builder, options, applicationServices);
         }
     }
 }

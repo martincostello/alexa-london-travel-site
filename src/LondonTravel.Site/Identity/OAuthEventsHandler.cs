@@ -35,8 +35,9 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// Initializes a new instance of the <see cref="OAuthEventsHandler"/> class.
         /// </summary>
         /// <param name="options">The <see cref="OAuthOptions"/> to use.</param>
+        /// <param name="events">The <see cref="ExternalAuthEvents"/> to use.</param>
         /// <param name="loggerFactory">The <see cref="ILoggerFactory"/> to use.</param>
-        public OAuthEventsHandler(OAuthOptions options, ILoggerFactory loggerFactory)
+        public OAuthEventsHandler(OAuthOptions options, ExternalAuthEvents events, ILoggerFactory loggerFactory)
         {
             _options = options;
             _wrapped = options.Events;
@@ -48,7 +49,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
 
             // Assign delegated handlers
             OnCreatingTicket = _wrapped.CreatingTicket;
-            OnRedirectToAuthorizationEndpoint = _wrapped.RedirectToAuthorizationEndpoint;
+            OnRedirectToAuthorizationEndpoint = events?.OnRedirectToOAuthAuthorizationEndpoint ?? _wrapped.RedirectToAuthorizationEndpoint;
         }
 
         /// <summary>

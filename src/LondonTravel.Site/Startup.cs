@@ -199,7 +199,7 @@ namespace MartinCostello.LondonTravel.Site
             services.AddPolly();
             services.AddHttpClients();
 
-            services.AddApplicationAuthentication();
+            services.AddApplicationAuthentication(() => ServiceProvider);
 
             services.RemoveApplicationInsightsTagHelper();
 

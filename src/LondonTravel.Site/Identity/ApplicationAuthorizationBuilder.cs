@@ -18,22 +18,39 @@ namespace MartinCostello.LondonTravel.Site.Identity
     public sealed class ApplicationAuthorizationBuilder
     {
         private readonly AuthenticationBuilder _builder;
-        private readonly IHttpClientFactory _httpClientFactory;
-        private readonly ILoggerFactory _loggerFactory;
         private readonly SiteOptions _options;
+        private readonly Func<IServiceProvider> _serviceProviderFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationAuthorizationBuilder"/> class.
         /// </summary>
         /// <param name="builder">The <see cref="AuthenticationBuilder"/> to use.</param>
-        /// <param name="serviceProvider">The <see cref="IServiceProvider"/> to use.</param>
-        public ApplicationAuthorizationBuilder(AuthenticationBuilder builder, IServiceProvider serviceProvider)
+        /// <param name="options">The <see cref="SiteOptions"/> to use.</param>
+        /// <param name="serviceProviderFactory">A delegate to a method that returns the <see cref="IServiceProvider"/> to use.</param>
+        public ApplicationAuthorizationBuilder(
+            AuthenticationBuilder builder,
+            SiteOptions options,
+            Func<IServiceProvider> serviceProviderFactory)
         {
             _builder = builder;
-            _httpClientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
-            _loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
-            _options = serviceProvider.GetRequiredService<SiteOptions>();
+            _options = options;
+            _serviceProviderFactory = serviceProviderFactory;
         }
+
+        /// <summary>
+        /// Gets the <see cref="AuthEvents"/> to use.
+        /// </summary>
+        private ExternalAuthEvents AuthEvents => _serviceProviderFactory().GetRequiredService<ExternalAuthEvents>();
+
+        /// <summary>
+        /// Gets the <see cref="IHttpClientFactory"/> to use.
+        /// </summary>
+        private IHttpClientFactory HttpClientFactory => _serviceProviderFactory().GetRequiredService<IHttpClientFactory>();
+
+        /// <summary>
+        /// Gets the <see cref="ILoggerFactory"/> to use.
+        /// </summary>
+        private ILoggerFactory LoggerFactory => _serviceProviderFactory().GetRequiredService<ILoggerFactory>();
 
         /// <summary>
         /// Tries to configure Amazon authentication.
@@ -132,10 +149,18 @@ namespace MartinCostello.LondonTravel.Site.Identity
                                 context,
                                 options.SignInScheme,
                                 options.StateDataFormat,
-                                _loggerFactory.CreateLogger(name),
+                                LoggerFactory.CreateLogger(name),
                                 (token) => token?.Properties?.Items);
 
                         ConfigureRemoteAuth(name, options);
+
+                        // Enable hook for integration tests, if configured
+                        ExternalAuthEvents events = AuthEvents;
+
+                        if (events?.OnRedirectToTwitterAuthorizationEndpoint != null)
+                        {
+                            options.Events.OnRedirectToAuthorizationEndpoint = events.OnRedirectToTwitterAuthorizationEndpoint;
+                        }
                     });
             }
 
@@ -154,7 +179,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
         {
             auth.ClientId = options.ClientId;
             auth.ClientSecret = options.ClientSecret;
-            auth.Events = new OAuthEventsHandler(auth, _loggerFactory);
+            auth.Events = new OAuthEventsHandler(auth, AuthEvents, LoggerFactory);
 
             ConfigureRemoteAuth(name, auth);
         }
@@ -168,7 +193,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
         private void ConfigureRemoteAuth<T>(string name, T options)
             where T : RemoteAuthenticationOptions
         {
-            options.Backchannel = _httpClientFactory.CreateClient(name);
+            options.Backchannel = HttpClientFactory.CreateClient(name);
             options.CorrelationCookie.Name = ApplicationCookie.Correlation.Name;
         }
 
