@@ -110,7 +110,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             options.SetLoggingPreference(LogType.Server, LogLevel.All);
 #endif
 
-            var driver = new ChromeDriver(chromeDriverDirectory, options);
+            var driver = new ChromeDriver(chromeDriverDirectory, options, TimeSpan.FromSeconds(10));
 
             try
             {
