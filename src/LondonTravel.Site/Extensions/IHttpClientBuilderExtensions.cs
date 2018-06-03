@@ -9,6 +9,9 @@ namespace MartinCostello.LondonTravel.Site.Extensions
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Reflection;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.DependencyInjection;
     using Polly;
     using Polly.Registry;
@@ -32,9 +35,12 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         /// </returns>
         public static IHttpClientBuilder ApplyDefaultConfiguration(this IHttpClientBuilder builder)
         {
+            builder.Services.AddTransient<CorrelationIdHandler>();
+
             return builder
                 .ConfigurePrimaryHttpMessageHandler(CreatePrimaryHttpHandler)
                 .ConfigureHttpClient(ApplyDefaultConfiguration)
+                .AddHttpMessageHandler<CorrelationIdHandler>()
                 .AddPolicyHandlerFromRegistry(GetRequestPolicy);
         }
 
@@ -133,6 +139,27 @@ namespace MartinCostello.LondonTravel.Site.Extensions
             }
 
             return new ProductInfoHeaderValue("MartinCostello.LondonTravel", productVersion);
+        }
+
+        private sealed class CorrelationIdHandler : DelegatingHandler
+        {
+            private readonly IHttpContextAccessor _accessor;
+
+            public CorrelationIdHandler(IHttpContextAccessor accessor)
+                : base()
+            {
+                _accessor = accessor;
+            }
+
+            protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+            {
+                if (_accessor.HttpContext != null)
+                {
+                    request.Headers.TryAddWithoutValidation("x-correlation-id", _accessor.HttpContext.TraceIdentifier);
+                }
+
+                return base.SendAsync(request, cancellationToken);
+            }
         }
     }
 }
