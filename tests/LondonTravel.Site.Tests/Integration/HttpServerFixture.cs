@@ -3,43 +3,124 @@
 
 namespace MartinCostello.LondonTravel.Site.Integration
 {
-    using System.IO;
+    using System;
+    using System.Net;
+    using System.Net.Http;
+    using System.Net.Sockets;
+    using System.Security.Cryptography.X509Certificates;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Mvc.Testing;
-    using Microsoft.Extensions.Configuration;
+    using Microsoft.AspNetCore.TestHost;
+    using Microsoft.Extensions.DependencyInjection;
 
     /// <summary>
-    /// A test fixture representing an HTTP server hosting the website.
+    /// A test fixture representing an HTTP server hosting the application. This class cannot be inherited.
     /// </summary>
-    public class HttpServerFixture : WebApplicationFactory<Startup>
+    public sealed class HttpServerFixture : TestServerFixture
     {
+        private readonly IWebHost _webHost;
+        private bool _disposed;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="HttpServerFixture"/> class.
         /// </summary>
         public HttpServerFixture()
             : base()
         {
-            ClientOptions.AllowAutoRedirect = false;
-            ClientOptions.BaseAddress = new System.Uri("https://localhost");
+            ClientOptions.BaseAddress = FindFreeServerAddress();
+
+            var builder = CreateWebHostBuilder()
+                .UseSolutionRelativeContentRoot("src/LondonTravel.Site")
+                .UseUrls(ClientOptions.BaseAddress.ToString())
+                .UseKestrel(
+                    (p) => p.ConfigureHttpsDefaults(
+                        (r) => r.ServerCertificate = new X509Certificate2("localhost-dev.pfx", "Pa55w0rd!")));
+
+            ConfigureWebHost(builder);
+
+            _webHost = builder.Build();
+            _webHost.Start();
+        }
+
+        /// <summary>
+        /// Gets the server address of the application.
+        /// </summary>
+        public Uri ServerAddress => ClientOptions.BaseAddress;
+
+        /// <summary>
+        /// Creates an <see cref="HttpClient"/> to communicate with the application.
+        /// </summary>
+        /// <returns>
+        /// An <see cref="HttpClient"/> that can be to used to make application requests.
+        /// </returns>
+        public HttpClient CreateHttpClient()
+        {
+            var handler = new HttpClientHandler()
+            {
+                AllowAutoRedirect = ClientOptions.AllowAutoRedirect,
+                MaxAutomaticRedirections = ClientOptions.MaxAutomaticRedirections,
+                UseCookies = ClientOptions.HandleCookies,
+            };
+
+            var client = new HttpClient(handler);
+
+            ConfigureClient(client);
+
+            client.BaseAddress = ClientOptions.BaseAddress;
+
+            return client;
         }
 
         /// <inheritdoc />
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            builder.ConfigureAppConfiguration(ConfigureTests);
+            base.ConfigureWebHost(builder);
+
+            builder.ConfigureServices(
+                (services) => services.AddSingleton<IStartupFilter, RemoteAuthorizationEventsFilter>(
+                    (_) => new RemoteAuthorizationEventsFilter(ServerAddress)));
         }
 
-        private static void ConfigureTests(IConfigurationBuilder builder)
+        /// <inheritdoc />
+        protected override void Dispose(bool disposing)
         {
-            // Remove the application's normal configuration
-            builder.Sources.Clear();
+            base.Dispose(disposing);
 
-            string directory = Path.GetDirectoryName(typeof(HttpServerFixture).Assembly.Location);
-            string fullPath = Path.Combine(directory, "testsettings.json");
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _webHost?.Dispose();
+                }
 
-            // Apply new configuration for tests
-            builder.AddJsonFile(fullPath)
-                   .AddEnvironmentVariables();
+                _disposed = true;
+            }
+        }
+
+        private static Uri FindFreeServerAddress()
+        {
+            int port = GetFreePortNumber();
+
+            return new UriBuilder()
+            {
+                Scheme = "https",
+                Host = "localhost",
+                Port = port,
+            }.Uri;
+        }
+
+        private static int GetFreePortNumber()
+        {
+            var listener = new TcpListener(IPAddress.Loopback, 0);
+            listener.Start();
+
+            try
+            {
+                return ((IPEndPoint)listener.LocalEndpoint).Port;
+            }
+            finally
+            {
+                listener.Stop();
+            }
         }
     }
 }

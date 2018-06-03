@@ -38,12 +38,11 @@ namespace MartinCostello.LondonTravel.Site
         {
             return WebHost.CreateDefaultBuilder(args)
                 .UseKestrel((p) => p.AddServerHeader = false)
-                .UseAutofac()
-                .UseAzureAppServices()
                 .UseApplicationInsights()
+                .UseAzureAppServices()
+                .UseStartup<Startup>()
                 .ConfigureAppConfiguration((context, builder) => builder.ConfigureApplication(context))
                 .ConfigureLogging((context, builder) => builder.ConfigureLogging(context))
-                .UseStartup<Startup>()
                 .CaptureStartupErrors(true);
         }
     }

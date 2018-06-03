@@ -15,36 +15,35 @@ function HideTopbarPlugin(): any {
 }
 
 window.onload = () => {
+    if ("SwaggerUIBundle" in window) {
+        const url: string = $("link[rel='swagger']").attr("href");
+        const ui: any = SwaggerUIBundle({
+            url: url,
+            dom_id: "#swagger-ui",
+            deepLinking: true,
+            presets: [
+                SwaggerUIBundle.presets.apis,
+                SwaggerUIStandalonePreset
+            ],
+            plugins: [
+                SwaggerUIBundle.plugins.DownloadUrl,
+                HideTopbarPlugin
+            ],
+            layout: "StandaloneLayout",
+            booleanValues: ["false", "true"],
+            defaultModelRendering: "schema",
+            displayRequestDuration: true,
+            jsonEditor: true,
+            showRequestHeaders: true,
+            supportedSubmitMethods: ["get"],
+            validatorUrl: null,
+            responseInterceptor: (response: any): any => {
+                // Delete overly-verbose headers from the UI
+                delete response.headers["content-security-policy"];
+                delete response.headers["content-security-policy-report-only"];
+            }
+        });
 
-    let url: string = $("link[rel='swagger']").attr("href");
-
-    const ui: any = SwaggerUIBundle({
-        url: url,
-        dom_id: "#swagger-ui",
-        deepLinking: true,
-        presets: [
-            SwaggerUIBundle.presets.apis,
-            SwaggerUIStandalonePreset
-        ],
-        plugins: [
-            SwaggerUIBundle.plugins.DownloadUrl,
-            HideTopbarPlugin
-        ],
-        layout: "StandaloneLayout",
-        booleanValues: ["false", "true"],
-        defaultModelRendering: "schema",
-        displayRequestDuration: true,
-        jsonEditor: true,
-        showRequestHeaders: true,
-        supportedSubmitMethods: ["get"],
-        validatorUrl: null,
-        responseInterceptor: (response: any): any => {
-            // Delete overly-verbose headers from the UI
-            delete response.headers["content-security-policy"];
-            delete response.headers["content-security-policy-report-only"];
-            delete response.headers["public-key-pins-report-only"];
-        }
-    });
-
-    (window as any).ui = ui;
+        (window as any).ui = ui;
+    }
 };

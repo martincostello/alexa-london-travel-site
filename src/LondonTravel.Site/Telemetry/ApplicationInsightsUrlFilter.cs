@@ -37,7 +37,7 @@ namespace MartinCostello.LondonTravel.Site.Telemetry
 
                 if (_configuration != null)
                 {
-                    string endpoint = _configuration.TelemetryChannel.EndpointAddress;
+                    string endpoint = _configuration.TelemetryChannel?.EndpointAddress;
 
                     if (!string.IsNullOrEmpty(endpoint))
                     {

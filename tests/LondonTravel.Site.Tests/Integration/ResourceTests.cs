@@ -20,7 +20,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         /// Initializes a new instance of the <see cref="ResourceTests"/> class.
         /// </summary>
         /// <param name="fixture">The fixture to use.</param>
-        public ResourceTests(HttpServerFixture fixture)
+        public ResourceTests(TestServerFixture fixture)
             : base(fixture)
         {
         }

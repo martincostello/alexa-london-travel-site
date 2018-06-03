@@ -1,4 +1,4 @@
-﻿@inject Microsoft.AspNetCore.Identity.SignInManager<LondonTravelUser> SignInManager
+@inject Microsoft.AspNetCore.Identity.SignInManager<LondonTravelUser> SignInManager
 @{
     string displayName = User.GetDisplayName();
     string avatarUrl = User.GetAvatarUrl(Url.CdnContent("avatar.png", Options));
@@ -9,7 +9,7 @@
         <ul class="nav navbar-nav navbar-right">
             <li>
                 <a asp-route="@SiteRoutes.Manage" title="@SR.ManageLinkAltText" data-ga-label="Manage Account Navbar">
-                    @displayName
+                    <span data-id="user-name">@displayName</span>
                     <lazyimg alt="@displayName" title="@displayName" src="@avatarUrl" aria-hidden="true" />
                     <noscript>
                         <img alt="@displayName" title="@displayName" src="@avatarUrl" aria-hidden="true" />

@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Integration
@@ -8,21 +8,21 @@ namespace MartinCostello.LondonTravel.Site.Integration
     /// <summary>
     /// The base class for integration tests.
     /// </summary>
-    [Collection(HttpServerCollection.Name)]
+    [Collection(TestServerCollection.Name)]
     public abstract class IntegrationTest
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="IntegrationTest"/> class.
         /// </summary>
         /// <param name="fixture">The fixture to use.</param>
-        protected IntegrationTest(HttpServerFixture fixture)
+        protected IntegrationTest(TestServerFixture fixture)
         {
             Fixture = fixture;
         }
 
         /// <summary>
-        /// Gets the <see cref="HttpServerFixture"/> to use.
+        /// Gets the <see cref="TestServerFixture"/> to use.
         /// </summary>
-        protected HttpServerFixture Fixture { get; }
+        protected TestServerFixture Fixture { get; }
     }
 }
