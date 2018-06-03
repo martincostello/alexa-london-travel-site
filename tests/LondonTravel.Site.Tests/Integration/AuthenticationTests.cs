@@ -7,6 +7,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using Builders;
     using Pages;
     using Shouldly;
+    using Xunit;
     using Xunit.Abstractions;
 
     /// <summary>
@@ -24,7 +25,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         {
         }
 
-        [NotCIFact]
+        [Fact]
         public void Can_Sign_In_With_Amazon()
         {
             // Arrange
@@ -34,7 +35,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             SignInWithExternalProvider("amazon");
         }
 
-        [NotCIFact]
+        [Fact]
         public void Can_Sign_In_With_Facebook()
         {
             // Arrange
@@ -44,7 +45,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             SignInWithExternalProvider("facebook");
         }
 
-        [NotCIFact]
+        [Fact]
         public void Can_Sign_In_With_Google()
         {
             // Arrange
@@ -54,7 +55,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             SignInWithExternalProvider("google");
         }
 
-        [NotCIFact]
+        [Fact]
         public void Can_Sign_In_With_Microsoft()
         {
             // Arrange
@@ -64,7 +65,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             SignInWithExternalProvider("microsoft");
         }
 
-        [NotCIFact]
+        [Fact]
         public void Can_Sign_In_With_Twitter()
         {
             // Arrange
