@@ -30,6 +30,7 @@ after_build:
 artifacts:
   - path: artifacts\publish
   - path: artifacts\code-coverage.xml
+  - path: artifacts\*.png
 
 nuget:
   disable_publish_on_pr: true
