@@ -1,107 +1,48 @@
 {
   "Logging": {
-    "IncludeScopes": false,
     "LogLevel": {
-      "Default": "Warning",
-      "Microsoft": "Error",
-      "System": "Error"
+      "Default": "Warning"
     }
   },
   "Serilog": {
     "MinimumLevel": {
-      "Default": "Warning",
-      "Override": {
-        "System": "Error",
-        "Microsoft": "Error"
-      }
+      "Default": "Warning"
     }
   },
   "Site": {
     "Analytics": {
-      "Google": "UA-42907618-7"
+      "Google": "",
+      "Pingdom": ""
     },
     "Authentication": {
-      "IsEnabled": true,
       "ExternalProviders": {
         "Amazon": {
           "ClientId": "amazon-id",
-          "ClientSecret": "amazon-secret",
-          "IsEnabled": true
+          "ClientSecret": "amazon-secret"
         },
         "Facebook": {
           "ClientId": "facebook-id",
-          "ClientSecret": "facebook-secret",
-          "IsEnabled": true
+          "ClientSecret": "facebook-secret"
         },
         "Google": {
           "ClientId": "google-id",
-          "ClientSecret": "google-secret",
-          "IsEnabled": true
+          "ClientSecret": "google-secret"
         },
         "Microsoft": {
           "ClientId": "microsoft-id",
-          "ClientSecret": "microsoft-secret",
-          "IsEnabled": true
+          "ClientSecret": "microsoft-secret"
         },
         "Twitter": {
           "ClientId": "twitter-id",
-          "ClientSecret": "twitter-secret",
-          "IsEnabled": true
+          "ClientSecret": "twitter-secret"
         }
       },
       "UserStore": {
-        "ServiceUri": "http://localhost/",
+        "ServiceUri": "https://cosmos.local/",
         "AccessKey": "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==",
         "DatabaseName": "LondonTravelTests",
         "CollectionName": "Users_Tests"
       }
-    },
-    "CertificateTransparency": {
-      "Enforce": false,
-      "MaxAge": "00.00:30:00"
-    },
-    "ContentSecurityPolicyOrigins": {},
-    "ExternalLinks": {
-      "Api": "/",
-      "Cdn": "https://cdn.martincostello.com/",
-      "Skill": "https://www.amazon.co.uk/dp/B01NB0T86R",
-      "Status": "http://status.martincostello.com/",
-      "Reports": {
-        "ContentSecurityPolicy": null,
-        "ContentSecurityPolicyReportOnly": null,
-        "ExpectCTEnforce": null,
-        "ExpectCTReportOnly": null,
-        "ExpectStaple": null,
-        "PublicKeyPins": null,
-        "PublicKeyPinsReportOnly": null
-      }
-    },
-    "Metadata": {
-      "Author": {
-        "Avatar": "https://secure.gravatar.com/avatar/52c4a06bebd01c96ab7def5bed77ad6d",
-        "Bitcoin": "12uKG1MwnApd6uiFQ3VXLxFMNC3Z74Z2NG",
-        "Email": "londontravel@martincostello.com",
-        "Name": "Martin Costello",
-        "SocialMedia": {
-          "Facebook": "10100867762061905",
-          "Twitter": "@martin_costello"
-        },
-        "Website": "https://londontravel.martincostello.com/"
-      },
-      "Description": "London Travel Alexa Skill",
-      "Domain": "londontravel.martincostello.com",
-      "Keywords": "alexa,london travel",
-      "Name": "London Travel",
-      "Repository": "https://github.com/martincostello/alexa-london-travel-site",
-      "Robots": "INDEX",
-      "Type": "website"
-    },
-    "PublicKeyPins": {
-      "MaxAge": "60.00:00:00",
-      "IncludeSubdomains": false,
-      "Sha256Hashes": [
-        "wvMoN/75fGqUXeGDMNIe704oXvDghZhTNYhtQ7td+aY="
-      ]
     }
   }
 }

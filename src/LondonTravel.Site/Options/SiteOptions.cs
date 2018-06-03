@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Options
@@ -49,11 +49,6 @@ namespace MartinCostello.LondonTravel.Site.Options
         /// Gets or sets the metadata options for the site.
         /// </summary>
         public MetadataOptions Metadata { get; set; }
-
-        /// <summary>
-        /// Gets or sets the options for the public key pins to use.
-        /// </summary>
-        public PublicKeyPinsOptions PublicKeyPins { get; set; }
 
         /// <summary>
         /// Gets or sets the options for the TfL API integration.
