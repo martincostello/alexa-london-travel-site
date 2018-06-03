@@ -23,9 +23,24 @@
     "Authentication": {
       "IsEnabled": true,
       "ExternalProviders": {
+        "Amazon": {
+          "ClientId": "amazon-id",
+          "ClientSecret": "amazon-secret",
+          "IsEnabled": true
+        },
+        "Facebook": {
+          "ClientId": "facebook-id",
+          "ClientSecret": "facebook-secret",
+          "IsEnabled": true
+        },
         "Google": {
           "ClientId": "google-id",
           "ClientSecret": "google-secret",
+          "IsEnabled": true
+        },
+        "Microsoft": {
+          "ClientId": "microsoft-id",
+          "ClientSecret": "microsoft-secret",
           "IsEnabled": true
         },
         "Twitter": {
