@@ -102,10 +102,13 @@ namespace MartinCostello.LondonTravel.Site.Integration
             }
 
             options.SetLoggingPreference(LogType.Browser, LogLevel.All);
+
+#if DEBUG
             options.SetLoggingPreference(LogType.Client, LogLevel.All);
             options.SetLoggingPreference(LogType.Driver, LogLevel.All);
             options.SetLoggingPreference(LogType.Profiler, LogLevel.All);
             options.SetLoggingPreference(LogType.Server, LogLevel.All);
+#endif
 
             var driver = new ChromeDriver(chromeDriverDirectory, options);
 
