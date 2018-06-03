@@ -4,7 +4,9 @@
 namespace MartinCostello.LondonTravel.Site.Integration
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
     using JustEat.HttpClientInterception;
@@ -143,6 +145,10 @@ namespace MartinCostello.LondonTravel.Site.Integration
                     TakeScreenshot(navigator.Driver, testName);
                     throw;
                 }
+                finally
+                {
+                    OutputLogs(navigator.Driver);
+                }
             }
         }
 
@@ -164,6 +170,36 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 }
 
                 _disposed = true;
+            }
+        }
+
+        private void OutputLogs(IWebDriver driver)
+        {
+            try
+            {
+                var logs = driver.Manage().Logs;
+
+                var allEntries = new List<Tuple<string, LogEntry>>();
+
+                foreach (string logKind in logs.AvailableLogTypes)
+                {
+                    var logEntries = logs.GetLog(logKind)
+                        .Select((p) => Tuple.Create(logKind, p))
+                        .ToList();
+
+                    allEntries.AddRange(logEntries);
+                }
+
+                foreach (var logEntry in allEntries.OrderBy((p) => p.Item2.Timestamp))
+                {
+                    var logKind = logEntry.Item1;
+                    var entry = logEntry.Item2;
+                    Output.WriteLine($"[{entry.Timestamp:u}] {logKind} - {entry.Level}: {entry.Message}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Output.WriteLine($"Failed to output driver logs: {ex.ToString()}");
             }
         }
 
