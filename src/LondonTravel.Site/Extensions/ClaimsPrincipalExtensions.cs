@@ -94,7 +94,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
                 return name.Trim();
             }
 
-            name = value.FindFirst(ClaimTypes.Name)?.Value;
+            name = value.FindFirst((c) => c.Type == ClaimTypes.Name && c.Value != value.GetUserId() && c.Value != value.GetEmail())?.Value;
 
             if (!string.IsNullOrWhiteSpace(name))
             {
@@ -104,6 +104,26 @@ namespace MartinCostello.LondonTravel.Site.Extensions
             }
 
             return name ?? string.Empty;
+        }
+
+        /// <summary>
+        /// Gets the email address for the specified claims principal.
+        /// </summary>
+        /// <param name="value">The user to get the email address for.</param>
+        /// <returns>
+        /// The Id of the specified user.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="value"/> is <see langword="null"/>.
+        /// </exception>
+        public static string GetEmail(this ClaimsPrincipal value)
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
+            return value.FindFirst(ClaimTypes.Email)?.Value;
         }
 
         /// <summary>
