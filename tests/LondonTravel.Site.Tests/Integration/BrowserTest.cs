@@ -99,6 +99,12 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 options.AddArgument("--headless");
             }
 
+            options.SetLoggingPreference(LogType.Browser, LogLevel.All);
+            options.SetLoggingPreference(LogType.Client, LogLevel.All);
+            options.SetLoggingPreference(LogType.Driver, LogLevel.All);
+            options.SetLoggingPreference(LogType.Profiler, LogLevel.All);
+            options.SetLoggingPreference(LogType.Server, LogLevel.All);
+
             var driver = new ChromeDriver(chromeDriverDirectory, options);
 
             try
