@@ -89,7 +89,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         /// </returns>
         protected IWebDriver CreateWebDriver()
         {
-            string chromeDriverDirectory = System.IO.Path.GetDirectoryName(GetType().Assembly.Location);
+            string chromeDriverDirectory = Path.GetDirectoryName(GetType().Assembly.Location);
 
             var options = new ChromeOptions()
             {
