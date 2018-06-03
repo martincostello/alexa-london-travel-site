@@ -36,8 +36,8 @@ namespace MartinCostello.LondonTravel.Site.Integration
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             builder.ConfigureServices(
-                (services) => services.AddSingleton<IHttpMessageHandlerBuilderFilter, InterceptionFilter>(
-                    (_) => new InterceptionFilter(Interceptor)));
+                (services) => services.AddSingleton<IHttpMessageHandlerBuilderFilter, HttpRequestInterceptionFilter>(
+                    (_) => new HttpRequestInterceptionFilter(Interceptor)));
 
             builder.ConfigureAppConfiguration(ConfigureTests);
         }
@@ -54,25 +54,6 @@ namespace MartinCostello.LondonTravel.Site.Integration
             builder.AddJsonFile("appsettings.json")
                    .AddJsonFile(fullPath)
                    .AddEnvironmentVariables();
-        }
-
-        private sealed class InterceptionFilter : IHttpMessageHandlerBuilderFilter
-        {
-            private readonly HttpClientInterceptorOptions _options;
-
-            internal InterceptionFilter(HttpClientInterceptorOptions options)
-            {
-                _options = options;
-            }
-
-            public Action<HttpMessageHandlerBuilder> Configure(Action<HttpMessageHandlerBuilder> next)
-            {
-                return (builder) =>
-                {
-                    next(builder);
-                    builder.AdditionalHandlers.Add(_options.CreateHttpMessageHandler());
-                };
-            }
         }
     }
 }
