@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Services.Data
@@ -17,7 +17,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// <param name="collectionName">The name of the collection to ensure exists.</param>
         /// <returns>
         /// A <see cref="Task"/> representing the asynchronous operation to ensure the collection
-        /// exists which returns <see langword=""/> if the collection was created by the method
+        /// exists which returns <see langword="true"/> if the collection was created by the method
         /// invocation; otherwise <see langword="false"/> if it already existed.
         /// </returns>
         Task<bool> EnsureCollectionExistsAsync(string collectionName);
