@@ -6,7 +6,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using Identity.Amazon;
+    using AspNet.Security.OAuth.Amazon;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Http.Internal;
@@ -35,7 +35,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 QueryString = new QueryString(query)
             };
 
-            var scheme = new AuthenticationScheme("amazon-auth", "Amazon", typeof(AmazonHandler));
+            var scheme = new AuthenticationScheme("amazon-auth", "Amazon", typeof(AmazonAuthenticationHandler));
             var options = new RemoteAuthenticationOptions();
             var failure = new InvalidOperationException();
 
