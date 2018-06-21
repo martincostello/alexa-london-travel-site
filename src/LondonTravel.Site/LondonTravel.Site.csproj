@@ -22,6 +22,7 @@
     <EmbeddedResource Update="SiteResources.resx" Generator="" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="AspNet.Security.OAuth.Amazon" Version="2.0.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.DependencyCollector" Version="2.6.4" />
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.ApplicationInsights.HostingStartup" Version="2.1.0" />
