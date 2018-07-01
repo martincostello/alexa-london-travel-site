@@ -52,12 +52,10 @@ namespace MartinCostello.LondonTravel.Site.Integration
             }
         }
 
-        [SkippableFact]
+        [Fact]
         public async Task Cannot_Get_Preferences_With_Invalid_Token()
         {
             // Arrange
-            Skip.IfNot(CosmosDB.IsConfigured());
-
             string accessToken = Guid.NewGuid().ToString();
 
             using (var client = Fixture.CreateClient())
