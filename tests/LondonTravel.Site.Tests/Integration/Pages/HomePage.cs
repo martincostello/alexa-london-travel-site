@@ -19,5 +19,11 @@ namespace MartinCostello.LondonTravel.Site.Integration.Pages
             Navigator.Driver.FindElement(By.CssSelector("[data-id='sign-in']")).Click();
             return new SignInPage(Navigator);
         }
+
+        public HomePage SignOut()
+        {
+            Navigator.Driver.FindElement(By.CssSelector("[data-id='sign-out']")).Click();
+            return new HomePage(Navigator);
+        }
     }
 }

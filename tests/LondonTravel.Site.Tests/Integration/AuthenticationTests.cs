@@ -32,7 +32,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             ConfigureExternalProvider((p) => p.ForAmazon());
 
             // Act and Assert
-            SignInWithExternalProvider("amazon");
+            SignInWithExternalProviderAndSignOut("amazon");
         }
 
         [Fact]
@@ -42,7 +42,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             ConfigureExternalProvider((p) => p.ForFacebook());
 
             // Act and Assert
-            SignInWithExternalProvider("facebook");
+            SignInWithExternalProviderAndSignOut("facebook");
         }
 
         [Fact]
@@ -52,7 +52,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             ConfigureExternalProvider((p) => p.ForGoogle());
 
             // Act and Assert
-            SignInWithExternalProvider("google");
+            SignInWithExternalProviderAndSignOut("google");
         }
 
         [Fact]
@@ -62,7 +62,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             ConfigureExternalProvider((p) => p.ForMicrosoft());
 
             // Act and Assert
-            SignInWithExternalProvider("microsoft");
+            SignInWithExternalProviderAndSignOut("microsoft");
         }
 
         [Fact]
@@ -77,21 +77,28 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 });
 
             // Act and Assert
-            SignInWithExternalProvider("twitter", "@JohnSmith");
+            SignInWithExternalProviderAndSignOut("twitter", "@JohnSmith");
         }
 
-        private void SignInWithExternalProvider(string name, string expectedUserName = "John")
+        private void SignInWithExternalProviderAndSignOut(string name, string expectedUserName = "John")
         {
-            // Act
             WithNavigator(
                 (navigator) =>
                 {
+                    // Act
                     HomePage page = navigator.GoToRoot()
                         .SignIn()
                         .SignInWithProvider(name);
 
                     // Assert
+                    page.IsAuthenticated().ShouldBeTrue();
                     page.UserName().ShouldBe(expectedUserName);
+
+                    // Act
+                    page = page.SignOut();
+
+                    // Assert
+                    page.IsAuthenticated().ShouldBeFalse();
                 });
         }
 

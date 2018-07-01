@@ -17,6 +17,8 @@ namespace MartinCostello.LondonTravel.Site.Integration.Pages
 
         protected abstract string RelativeUri { get; }
 
+        public bool IsAuthenticated() => bool.Parse(Navigator.Driver.FindElement(By.CssSelector("[data-id='content']")).GetAttribute("data-authenticated"));
+
         public string UserName() => Navigator.Driver.FindElement(By.CssSelector("[data-id='user-name']")).Text;
 
         internal void NavigateToSelf()
