@@ -22,5 +22,11 @@ namespace MartinCostello.LondonTravel.Site.Integration.Pages
 
         public bool IsLinkedToAlexa() =>
             bool.Parse(Navigator.Driver.FindElement(By.CssSelector("[data-id='alexa-link']")).GetAttribute("data-is-linked"));
+
+        public RemoveAlexaLinkModal UnlinkAlexa()
+        {
+            Navigator.Driver.FindElement(By.CssSelector("[data-id='remove-alexa-link']")).Click();
+            return new RemoveAlexaLinkModal(Navigator);
+        }
     }
 }

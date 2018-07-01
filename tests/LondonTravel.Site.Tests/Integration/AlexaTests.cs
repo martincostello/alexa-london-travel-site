@@ -57,23 +57,34 @@ namespace MartinCostello.LondonTravel.Site.Integration
                     page.IsLinkedToAlexa().ShouldBeTrue();
 
                     // Arrange
-                    using (var client = Fixture.CreateHttpClient())
-                    {
-                        client.DefaultRequestHeaders.Authorization = ParseAuthorization(navigator.Driver);
+                    AuthenticationHeaderValue authorization = ParseAuthorization(navigator.Driver);
 
-                        // Act
-                        using (var response = await client.GetAsync("/api/preferences"))
-                        {
-                            // Assert
-                            response.StatusCode.ShouldBe(HttpStatusCode.OK);
+                    // Act
+                    JObject result = await GetPreferencesAsync(authorization, HttpStatusCode.OK);
 
-                            JObject result = await response.ReadAsObjectAsync();
+                    // Assert
+                    result.Value<string>("userId").ShouldNotBeNullOrWhiteSpace();
+                    result.Value<JArray>("favoriteLines").Values<string>().ShouldNotBeNull();
+                    result.Value<JArray>("favoriteLines").Values<string>().ShouldBeEmpty();
 
-                            result.Value<string>("userId").ShouldNotBeNullOrWhiteSpace();
-                            result.Value<JArray>("favoriteLines").Values<string>().ShouldNotBeNull();
-                            result.Value<JArray>("favoriteLines").Values<string>().ShouldBeEmpty();
-                        }
-                    }
+                    // Act
+                    page.UnlinkAlexa()
+                        .Close();
+
+                    // Assert
+                    page.IsAuthenticated().ShouldBeTrue();
+                    page.IsLinkedToAlexa().ShouldBeTrue();
+
+                    // Act
+                    page.UnlinkAlexa()
+                        .Confirm();
+
+                    // Assert
+                    page.IsAuthenticated().ShouldBeTrue();
+                    page.IsLinkedToAlexa().ShouldBeFalse();
+
+                    // Act and Assert
+                    await GetPreferencesAsync(authorization, HttpStatusCode.Unauthorized);
                 });
         }
 
@@ -124,6 +135,24 @@ namespace MartinCostello.LondonTravel.Site.Integration
             string parameter = values["access_token"];
 
             return new AuthenticationHeaderValue(scheme, parameter);
+        }
+
+        private async Task<JObject> GetPreferencesAsync(AuthenticationHeaderValue authorization, HttpStatusCode expected)
+        {
+            // Arrange
+            using (var client = Fixture.CreateHttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = authorization;
+
+                // Act
+                using (var response = await client.GetAsync("/api/preferences"))
+                {
+                    // Assert
+                    response.StatusCode.ShouldBe(expected);
+
+                    return await response.ReadAsObjectAsync();
+                }
+            }
         }
     }
 }
