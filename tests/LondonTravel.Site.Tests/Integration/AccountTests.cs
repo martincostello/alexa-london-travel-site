@@ -28,12 +28,10 @@ namespace MartinCostello.LondonTravel.Site.Integration
         {
         }
 
-        [SkippableFact]
+        [Fact]
         public async Task Can_Perform_Operations_On_Users_And_Get_Preferences_From_Api()
         {
             // Arrange
-            Skip.IfNot(CosmosDB.IsConfigured());
-
             var emailAddress = $"some.user.{Guid.NewGuid()}@some.domain.com";
 
             var user = new LondonTravelUser()
@@ -166,6 +164,11 @@ namespace MartinCostello.LondonTravel.Site.Integration
         /// </returns>
         protected IUserStore<LondonTravelUser> GetUserStore()
         {
+            // HACK Force server start-up
+            using (Fixture.CreateDefaultClient())
+            {
+            }
+
             return Fixture.Server.Host.Services.GetService(typeof(IUserStore<LondonTravelUser>)) as IUserStore<LondonTravelUser>;
         }
     }
