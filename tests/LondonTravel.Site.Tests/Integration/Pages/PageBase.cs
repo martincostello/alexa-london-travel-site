@@ -31,11 +31,8 @@ namespace MartinCostello.LondonTravel.Site.Integration.Pages
 
         internal void NavigateToSelf()
         {
-            Uri baseUri = Navigator.BaseUri;
             Uri relativeUri = new Uri(RelativeUri, UriKind.Relative);
-            Uri url = new Uri(baseUri, relativeUri);
-
-            Navigator.Driver.Navigate().GoToUrl(url);
+            Navigator.NavigateTo(relativeUri);
         }
     }
 }

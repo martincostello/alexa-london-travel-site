@@ -33,6 +33,12 @@ namespace MartinCostello.LondonTravel.Site.Integration.Pages
             GC.SuppressFinalize(this);
         }
 
+        public void NavigateTo(Uri relativeUri)
+        {
+            Uri url = new Uri(BaseUri, relativeUri);
+            Driver.Navigate().GoToUrl(url);
+        }
+
         protected virtual void Dispose(bool disposing)
         {
             if (!_disposed)
