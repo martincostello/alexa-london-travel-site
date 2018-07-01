@@ -1,9 +1,27 @@
+.response-col_status {
+    width: unset;
+}
+
+.swagger-ui .btn.authorize { /* csslint allow: adjoining-classes */
+    border-color: #258359;
+    color: #258359;
+}
+
 .swagger-ui .btn:hover {
     color: #3b4151;
+}
+
+.swagger-ui .opblock.opblock-get .opblock-summary-method { /* csslint allow: adjoining-classes */
+    background: #0170DF;
 }
 
 .swagger-ui-svg {
     height: 0;
     position: absolute;
     width: 0;
+}
+
+.swagger-ui .info a,
+.url {
+    color: #0F7661;
 }
