@@ -211,7 +211,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 }
 
                 return subset
-                    .Select((p) => p.Value)
+                    .Select((p) => p.Value.Value)
                     .OfType<T>()
                     .AsQueryable();
             }
