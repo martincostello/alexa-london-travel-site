@@ -19,5 +19,8 @@ namespace MartinCostello.LondonTravel.Site.Integration.Pages
             Navigator.Driver.FindElement(By.CssSelector("[data-id='delete-account']")).Click();
             return new DeleteModal(Navigator);
         }
+
+        public bool IsLinkedToAlexa() =>
+            bool.Parse(Navigator.Driver.FindElement(By.CssSelector("[data-id='alexa-link']")).GetAttribute("data-is-linked"));
     }
 }

@@ -12,6 +12,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using JustEat.HttpClientInterception;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Chrome;
+    using OpenQA.Selenium.Remote;
     using Pages;
     using Xunit;
     using Xunit.Abstractions;
@@ -101,6 +102,12 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 options.AddArgument("--headless");
             }
 
+            // Enable logging of redirects (see https://stackoverflow.com/a/42212131/1064169)
+            options.PerformanceLoggingPreferences = new ChromePerformanceLoggingPreferences();
+            options.PerformanceLoggingPreferences.AddTracingCategory("devtools.network");
+            options.AddAdditionalCapability(CapabilityType.EnableProfiling, true, true);
+            options.SetLoggingPreference("performance", LogLevel.All);
+
             options.SetLoggingPreference(LogType.Browser, LogLevel.All);
 
 #if DEBUG
@@ -142,6 +149,34 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 try
                 {
                     test(navigator);
+                }
+                catch (Exception)
+                {
+                    TakeScreenshot(navigator.Driver, testName);
+                    throw;
+                }
+                finally
+                {
+                    OutputLogs(navigator.Driver);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Runs the specified test with a new instance of <see cref="ApplicationNavigator"/> as an asynchronous operation.
+        /// </summary>
+        /// <param name="test">The delegate to the test that will use the navigator.</param>
+        /// <param name="testName">The name of the test method.</param>
+        /// <returns>
+        /// A <see cref="Task"/> representing the asynchronous operation to run the test.
+        /// </returns>
+        protected async Task WithNavigatorAsync(Func<ApplicationNavigator, Task> test, [CallerMemberName] string testName = null)
+        {
+            using (ApplicationNavigator navigator = CreateNavigator())
+            {
+                try
+                {
+                    await test(navigator);
                 }
                 catch (Exception)
                 {
