@@ -14,16 +14,16 @@ namespace MartinCostello.LondonTravel.Site.Integration.Pages
 
         protected override string RelativeUri => "/";
 
+        public ManagePage Manage()
+        {
+            Navigator.Driver.FindElement(UserNameSelector).Click();
+            return new ManagePage(Navigator);
+        }
+
         public SignInPage SignIn()
         {
             Navigator.Driver.FindElement(By.CssSelector("[data-id='sign-in']")).Click();
             return new SignInPage(Navigator);
-        }
-
-        public HomePage SignOut()
-        {
-            Navigator.Driver.FindElement(By.CssSelector("[data-id='sign-out']")).Click();
-            return new HomePage(Navigator);
         }
     }
 }

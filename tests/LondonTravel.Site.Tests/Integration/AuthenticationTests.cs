@@ -80,6 +80,36 @@ namespace MartinCostello.LondonTravel.Site.Integration
             SignInWithExternalProviderAndSignOut("twitter", "@JohnSmith");
         }
 
+        [Fact]
+        public void Can_Delete_Account()
+        {
+            // Arrange
+            ConfigureExternalProvider((p) => p.ForAmazon());
+
+            WithNavigator(
+                (navigator) =>
+                {
+                    ManagePage page = navigator.GoToRoot()
+                        .SignIn()
+                        .SignInWithAmazon()
+                        .Manage();
+
+                    // Act
+                    page.DeleteAccount()
+                        .Close();
+
+                    // Assert
+                    page.IsAuthenticated().ShouldBeTrue();
+
+                    // Act
+                    page.DeleteAccount()
+                        .Confirm();
+
+                    // Assert
+                    page.IsAuthenticated().ShouldBeFalse();
+                });
+        }
+
         private void SignInWithExternalProviderAndSignOut(string name, string expectedUserName = "John")
         {
             WithNavigator(

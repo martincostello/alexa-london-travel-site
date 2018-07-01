@@ -14,6 +14,8 @@ namespace MartinCostello.LondonTravel.Site.Integration.Pages
 
         protected override string RelativeUri => "/account/sign-in/";
 
+        public HomePage SignInWithAmazon() => SignInWithProvider("amazon");
+
         public HomePage SignInWithProvider(string name)
         {
             Navigator.Driver.FindElement(By.CssSelector($"[data-id='sign-in-{name}']")).Click();
