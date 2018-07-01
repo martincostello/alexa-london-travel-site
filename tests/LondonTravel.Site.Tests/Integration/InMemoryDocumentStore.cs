@@ -172,6 +172,11 @@ namespace MartinCostello.LondonTravel.Site.Integration
 
                 subset[id] = new DocumentEntry(id, document, etag);
 
+                if (document is Identity.LondonTravelUser user)
+                {
+                    user.ETag = etag;
+                }
+
                 return id;
             }
 
@@ -225,6 +230,11 @@ namespace MartinCostello.LondonTravel.Site.Integration
 
                 document.ETag = Guid.NewGuid().ToString();
                 document.Value = value;
+
+                if (value is Identity.LondonTravelUser user)
+                {
+                    user.ETag = document.ETag;
+                }
 
                 return value;
             }
