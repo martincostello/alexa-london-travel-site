@@ -24,7 +24,7 @@ namespace MartinCostello.LondonTravel.Site.Integration.Builders
             new LineInfo() { Id = "hammersmith-city", Name = "Hammersmith & City" },
             new LineInfo() { Id = "jubilee", Name = "Jubilee" },
             new LineInfo() { Id = "london-overground", Name = "London Overground" },
-            new LineInfo() { Id = "northern", Name = "Metropolitan" },
+            new LineInfo() { Id = "northern", Name = "Northern" },
             new LineInfo() { Id = "piccadilly", Name = "Piccadilly" },
             new LineInfo() { Id = "tfl-rail", Name = "TfL Rail" },
             new LineInfo() { Id = "victoria", Name = "Victoria" },

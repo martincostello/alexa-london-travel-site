@@ -67,6 +67,27 @@ namespace MartinCostello.LondonTravel.Site.Integration
                     result.Value<JArray>("favoriteLines").Values<string>().ShouldNotBeNull();
                     result.Value<JArray>("favoriteLines").Values<string>().ShouldBeEmpty();
 
+                    // Arrange
+                    HomePage homepage = navigator.GoToRoot();
+
+                    homepage
+                        .Lines()
+                        .First((p) => p.Name() == "District")
+                        .Toggle();
+
+                    homepage.UpdatePreferences();
+
+                    // Act
+                    result = await GetPreferencesAsync(authorization, HttpStatusCode.OK);
+
+                    // Assert
+                    result.Value<string>("userId").ShouldNotBeNullOrWhiteSpace();
+                    result.Value<JArray>("favoriteLines").Values<string>().ShouldNotBeNull();
+                    result.Value<JArray>("favoriteLines").Values<string>().ShouldBe(new[] { "district" });
+
+                    // Arrange
+                    page = homepage.Manage();
+
                     // Act
                     page.UnlinkAlexa()
                         .Close();
