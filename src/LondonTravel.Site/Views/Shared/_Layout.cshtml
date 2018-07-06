@@ -38,7 +38,7 @@
 </head>
 <body>
     @await Html.PartialAsync("_Navbar")
-    <main class="container body-content">
+    <main class="container body-content" data-authenticated="@User.Identity.IsAuthenticated.ToString().ToLowerInvariant()" data-id="content">
         @RenderBody()
         @await Html.PartialAsync("_Footer", Options)
     </main>

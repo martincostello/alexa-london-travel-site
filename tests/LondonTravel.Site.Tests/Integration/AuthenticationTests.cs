@@ -4,6 +4,8 @@
 namespace MartinCostello.LondonTravel.Site.Integration
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using Builders;
     using Pages;
     using Shouldly;
@@ -32,7 +34,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             ConfigureExternalProvider((p) => p.ForAmazon());
 
             // Act and Assert
-            SignInWithExternalProvider("amazon");
+            SignInWithExternalProviderAndSignOut("amazon");
         }
 
         [Fact]
@@ -42,7 +44,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             ConfigureExternalProvider((p) => p.ForFacebook());
 
             // Act and Assert
-            SignInWithExternalProvider("facebook");
+            SignInWithExternalProviderAndSignOut("facebook");
         }
 
         [Fact]
@@ -52,7 +54,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             ConfigureExternalProvider((p) => p.ForGoogle());
 
             // Act and Assert
-            SignInWithExternalProvider("google");
+            SignInWithExternalProviderAndSignOut("google");
         }
 
         [Fact]
@@ -62,7 +64,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             ConfigureExternalProvider((p) => p.ForMicrosoft());
 
             // Act and Assert
-            SignInWithExternalProvider("microsoft");
+            SignInWithExternalProviderAndSignOut("microsoft");
         }
 
         [Fact]
@@ -77,21 +79,99 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 });
 
             // Act and Assert
-            SignInWithExternalProvider("twitter", "@JohnSmith");
+            SignInWithExternalProviderAndSignOut("twitter", "@JohnSmith");
         }
 
-        private void SignInWithExternalProvider(string name, string expectedUserName = "John")
+        [Fact]
+        public void Can_Delete_Account()
         {
-            // Act
+            // Arrange
+            ConfigureExternalProvider((p) => p.ForAmazon());
+
             WithNavigator(
                 (navigator) =>
                 {
+                    ManagePage page = navigator.GoToRoot()
+                        .SignIn()
+                        .SignInWithAmazon()
+                        .Manage();
+
+                    // Act
+                    page.DeleteAccount()
+                        .Close();
+
+                    // Assert
+                    page.IsAuthenticated().ShouldBeTrue();
+
+                    // Act
+                    page.DeleteAccount()
+                        .Confirm();
+
+                    // Assert
+                    page.IsAuthenticated().ShouldBeFalse();
+                });
+        }
+
+        [Fact]
+        public void Can_Link_Accounts()
+        {
+            // Arrange
+            ConfigureExternalProvider((p) => p.ForAmazon().ForGoogle());
+
+            WithNavigator(
+                (navigator) =>
+                {
+                    ManagePage page = navigator.GoToRoot()
+                        .SignIn()
+                        .SignInWithAmazon()
+                        .Manage();
+
+                    // Assert
+                    IReadOnlyCollection<LinkedAccount> accounts = page.LinkedAccounts();
+
+                    accounts.Count.ShouldBe(1);
+                    accounts.First().Name().ShouldBe("Amazon");
+
+                    // Act
+                    page = page.SignInWithGoogle();
+
+                    // Assert
+                    accounts = page.LinkedAccounts();
+
+                    accounts.Count.ShouldBe(2);
+                    accounts.First().Name().ShouldBe("Amazon");
+                    accounts.Last().Name().ShouldBe("Google");
+
+                    // Act
+                    page = accounts.First().Remove();
+
+                    // Assert
+                    accounts = page.LinkedAccounts();
+
+                    accounts.Count.ShouldBe(1);
+                    accounts.First().Name().ShouldBe("Google");
+                });
+        }
+
+        private void SignInWithExternalProviderAndSignOut(string name, string expectedUserName = "John")
+        {
+            WithNavigator(
+                (navigator) =>
+                {
+                    // Act
                     HomePage page = navigator.GoToRoot()
                         .SignIn()
                         .SignInWithProvider(name);
 
                     // Assert
+                    page.IsAuthenticated().ShouldBeTrue();
                     page.UserName().ShouldBe(expectedUserName);
+
+                    // Act
+                    page = page.SignOut();
+
+                    // Assert
+                    page.IsAuthenticated().ShouldBeFalse();
                 });
         }
 

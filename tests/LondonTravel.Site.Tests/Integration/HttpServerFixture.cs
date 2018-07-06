@@ -61,6 +61,12 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 UseCookies = ClientOptions.HandleCookies,
             };
 
+            if (ClientOptions.BaseAddress.IsLoopback &&
+                string.Equals(ClientOptions.BaseAddress.Scheme, "https", StringComparison.OrdinalIgnoreCase))
+            {
+                handler.ServerCertificateCustomValidationCallback = (request, cert, chain, errors) => true;
+            }
+
             var client = new HttpClient(handler);
 
             ConfigureClient(client);

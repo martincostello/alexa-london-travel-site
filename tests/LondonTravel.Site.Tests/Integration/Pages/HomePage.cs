@@ -3,6 +3,8 @@
 
 namespace MartinCostello.LondonTravel.Site.Integration.Pages
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using OpenQA.Selenium;
 
     public sealed class HomePage : PageBase
@@ -13,6 +15,26 @@ namespace MartinCostello.LondonTravel.Site.Integration.Pages
         }
 
         protected override string RelativeUri => "/";
+
+        public IReadOnlyCollection<LinePreference> Lines()
+        {
+            return Navigator.Driver
+                .FindElements(By.CssSelector("[data-line-preference]"))
+                .Select((p) => new LinePreference(Navigator.Driver, p))
+                .ToList();
+        }
+
+        public ManagePage Manage()
+        {
+            Navigator.Driver.FindElement(UserNameSelector).Click();
+            return new ManagePage(Navigator);
+        }
+
+        public HomePage UpdatePreferences()
+        {
+            Navigator.Driver.FindElement(By.CssSelector("[data-id='save-preferences']")).Click();
+            return new HomePage(Navigator);
+        }
 
         public SignInPage SignIn()
         {

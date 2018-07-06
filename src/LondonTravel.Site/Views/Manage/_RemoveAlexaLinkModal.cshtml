@@ -1,14 +1,14 @@
-﻿@model ManageViewModel
+@model ManageViewModel
 <noscript>
     <form asp-route="@SiteRoutes.RemoveAlexaLink" method="post" class="form-horizontal">
         <input type="hidden" name="@(nameof(ManageViewModel.ETag))" value="@Model.ETag" />
         <input type="submit" class="btn btn-default btn-sm" value="@SR.ManageUnlinkAlexaButtonText" title="@SR.ManageUnlinkAlexaButtonAltText" />
     </form>
 </noscript>
-<button class="btn btn-default btn-sm hide js-hidden-control" title="@SR.ManageUnlinkAlexaButtonAltText" data-ga-label="Unlink Alexa Skill" data-toggle="modal" data-target="#unlink-alexa-modal">
+<button class="btn btn-default btn-sm hide js-hidden-control" title="@SR.ManageUnlinkAlexaButtonAltText" data-id="remove-alexa-link" data-ga-label="Unlink Alexa Skill" data-toggle="modal" data-target="#unlink-alexa-modal">
     @SR.ManageUnlinkAlexaButtonText
 </button>
-<div id="unlink-alexa-modal" class="modal js-modal" tabindex="-1" role="dialog" aria-describedby="unlink-alexa-modal-description" aria-labelledby="unlink-alexa-modal-title">
+<div id="unlink-alexa-modal" class="modal js-modal" data-id="modal-remove-alexa"  tabindex="-1" role="dialog" aria-describedby="unlink-alexa-modal-description" aria-labelledby="unlink-alexa-modal-title">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -39,7 +39,7 @@
                 <form asp-route="@SiteRoutes.RemoveAlexaLink" method="post" class="form-horizontal js-modal-form">
                     <input type="hidden" name="@(nameof(ManageViewModel.ETag))" value="@Model.ETag" />
                     <button type="button" class="btn btn-default js-unlink-control" title="@SR.CancelButtonAltText" data-dismiss="modal" data-ga-label="Unlink Alexa Skill Cancel">@SR.CancelButtonText</button>
-                    <input type="submit" class="btn btn-danger disabled js-unlink-control js-modal-confirm" value="@SR.ManageUnlinkAlexaModalConfirmButtonText" title="@SR.ManageUnlinkAlexaModalConfirmButtonAltText" data-ga-label="Unlink Alexa Skill Confirm" disabled />
+                    <input type="submit" class="btn btn-danger disabled js-unlink-control js-modal-confirm" data-id="remove-alexa-confirm" value="@SR.ManageUnlinkAlexaModalConfirmButtonText" title="@SR.ManageUnlinkAlexaModalConfirmButtonAltText" data-ga-label="Unlink Alexa Skill Confirm" disabled />
                 </form>
             </div>
         </div>

@@ -52,12 +52,10 @@ namespace MartinCostello.LondonTravel.Site.Integration
             }
         }
 
-        [SkippableFact]
+        [Fact]
         public async Task Cannot_Get_Preferences_With_Invalid_Token()
         {
             // Arrange
-            Skip.IfNot(CosmosDB.IsConfigured());
-
             string accessToken = Guid.NewGuid().ToString();
 
             using (var client = Fixture.CreateClient())
@@ -77,33 +75,6 @@ namespace MartinCostello.LondonTravel.Site.Integration
                     result.Value<int>("statusCode").ShouldBe(401);
                     result.Value<JArray>("details").Values<string>().ShouldNotBeNull();
                     result.Value<JArray>("details").Values<string>().ShouldBeEmpty();
-                }
-            }
-        }
-
-        [SkippableFact]
-        public async Task Can_Get_Preferences_With_Valid_Token()
-        {
-            // Arrange
-            Skip.IfNot(CosmosDB.IsConfigured());
-
-            string token = Environment.GetEnvironmentVariable("ALEXA_ACCESS_TOKEN");
-
-            using (var client = Fixture.CreateClient())
-            {
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(Scheme, token);
-
-                // Act
-                using (var response = await client.GetAsync(RequestUri))
-                {
-                    // Assert
-                    response.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-                    JObject result = await response.ReadAsObjectAsync();
-
-                    result.Value<string>("userId").ShouldNotBeNullOrWhiteSpace();
-                    result.Value<JArray>("favoriteLines").Values<string>().ShouldNotBeNull();
-                    result.Value<JArray>("favoriteLines").Values<string>().ShouldNotBeEmpty();
                 }
             }
         }
