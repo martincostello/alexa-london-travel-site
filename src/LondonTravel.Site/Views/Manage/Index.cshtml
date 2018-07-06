@@ -30,10 +30,10 @@
             <tbody>
                 @foreach (var provider in Model?.CurrentLogins)
                 {
-                    <tr>
+                    <tr data-linked-account data-provider="@provider.LoginProvider">
                         <td class="lead">
                             @await Html.PartialAsync("_SocialIcon", provider.LoginProvider)
-                            @provider.LoginProvider
+                            <span>@provider.ProviderDisplayName</span>
                         </td>
                         <td>
                             @if (Model.ShowRemoveButton)
@@ -42,7 +42,15 @@
                                     <div>
                                         <input asp-for="@provider.LoginProvider" name="LoginProvider" type="hidden" />
                                         <input asp-for="@provider.ProviderKey" name="ProviderKey" type="hidden" />
-                                        <input type="submit" class="btn btn-default" value="@SR.RemoveAccountButtonText" title="@SR.RemoveAccountButtonAltText(provider.LoginProvider)" data-ga-label="Remove Account Link - @provider.LoginProvider" data-toggle="modal" data-target=".remove-link-modal" />
+                                        <input type="submit"
+                                               class="btn btn-default"
+                                               value="@SR.RemoveAccountButtonText"
+                                               title="@SR.RemoveAccountButtonAltText(provider.ProviderDisplayName)"
+                                               data-id="remove-@provider.LoginProvider.ToLowerInvariant()-link"
+                                               data-ga-label="Remove Account Link - @provider.ProviderDisplayName"
+                                               data-toggle="modal"
+                                               data-target=".remove-link-modal"
+                                               />
                                     </div>
                                 </form>
                             }

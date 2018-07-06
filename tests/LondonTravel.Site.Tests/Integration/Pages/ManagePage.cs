@@ -3,6 +3,8 @@
 
 namespace MartinCostello.LondonTravel.Site.Integration.Pages
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using OpenQA.Selenium;
 
     public sealed class ManagePage : PageBase
@@ -22,6 +24,22 @@ namespace MartinCostello.LondonTravel.Site.Integration.Pages
 
         public bool IsLinkedToAlexa() =>
             bool.Parse(Navigator.Driver.FindElement(By.CssSelector("[data-id='alexa-link']")).GetAttribute("data-is-linked"));
+
+        public IReadOnlyCollection<LinkedAccount> LinkedAccounts()
+        {
+            return Navigator.Driver
+                .FindElements(By.CssSelector("[data-linked-account]"))
+                .Select((p) => new LinkedAccount(Navigator, p))
+                .ToList();
+        }
+
+        public ManagePage SignInWithGoogle() => SignInWithProvider("google");
+
+        public ManagePage SignInWithProvider(string name)
+        {
+            Navigator.Driver.FindElement(By.CssSelector($"[data-id='sign-in-{name}']")).Click();
+            return new ManagePage(Navigator);
+        }
 
         public RemoveAlexaLinkModal UnlinkAlexa()
         {

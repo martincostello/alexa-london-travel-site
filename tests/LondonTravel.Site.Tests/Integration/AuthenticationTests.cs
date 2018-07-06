@@ -4,6 +4,8 @@
 namespace MartinCostello.LondonTravel.Site.Integration
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using Builders;
     using Pages;
     using Shouldly;
@@ -107,6 +109,47 @@ namespace MartinCostello.LondonTravel.Site.Integration
 
                     // Assert
                     page.IsAuthenticated().ShouldBeFalse();
+                });
+        }
+
+        [Fact]
+        public void Can_Link_Accounts()
+        {
+            // Arrange
+            ConfigureExternalProvider((p) => p.ForAmazon().ForGoogle());
+
+            WithNavigator(
+                (navigator) =>
+                {
+                    ManagePage page = navigator.GoToRoot()
+                        .SignIn()
+                        .SignInWithAmazon()
+                        .Manage();
+
+                    // Assert
+                    IReadOnlyCollection<LinkedAccount> accounts = page.LinkedAccounts();
+
+                    accounts.Count.ShouldBe(1);
+                    accounts.First().Name().ShouldBe("Amazon");
+
+                    // Act
+                    page = page.SignInWithGoogle();
+
+                    // Assert
+                    accounts = page.LinkedAccounts();
+
+                    accounts.Count.ShouldBe(2);
+                    accounts.First().Name().ShouldBe("Amazon");
+                    accounts.Last().Name().ShouldBe("Google");
+
+                    // Act
+                    page = accounts.First().Remove();
+
+                    // Assert
+                    accounts = page.LinkedAccounts();
+
+                    accounts.Count.ShouldBe(1);
+                    accounts.First().Name().ShouldBe("Google");
                 });
         }
 
