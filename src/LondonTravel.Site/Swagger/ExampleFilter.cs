@@ -34,7 +34,7 @@ namespace MartinCostello.LondonTravel.Site.Swagger
         {
             if (operation != null && context?.ApiDescription != null && context.SchemaRegistry != null)
             {
-                var responseAttributes = context.ControllerActionDescriptor.GetControllerAndActionAttributes(true)
+                var responseAttributes = context.MethodInfo.GetCustomAttributes(typeof(SwaggerResponseExampleAttribute), true)
                     .OfType<SwaggerResponseExampleAttribute>()
                     .ToList();
 
