@@ -78,6 +78,14 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 .ThenBy((p) => p.Name)
                 .ToList();
 
+            foreach (var login in userLogins)
+            {
+                if (string.IsNullOrWhiteSpace(login.ProviderDisplayName))
+                {
+                    login.ProviderDisplayName = login.LoginProvider;
+                }
+            }
+
             var model = new ManageViewModel()
             {
                 CurrentLogins = userLogins,
