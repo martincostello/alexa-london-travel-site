@@ -34,8 +34,8 @@ namespace MartinCostello.LondonTravel.Site.Swagger
         {
             if (operation != null && context?.ApiDescription != null && context.SchemaRegistry != null)
             {
-                var responseAttributes = context.MethodInfo.GetCustomAttributes(typeof(SwaggerResponseExampleAttribute), true)
-                    .OfType<SwaggerResponseExampleAttribute>()
+                var responseAttributes = context.MethodInfo
+                    .GetCustomAttributes<SwaggerResponseExampleAttribute>(true)
                     .ToList();
 
                 foreach (var attribute in responseAttributes)
