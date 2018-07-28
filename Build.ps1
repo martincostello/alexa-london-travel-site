@@ -9,10 +9,9 @@ param(
 $ErrorActionPreference = "Stop"
 
 $solutionPath = Split-Path $MyInvocation.MyCommand.Definition
-$solutionFile = Join-Path $solutionPath "LondonTravel.Site.sln"
 $sdkFile      = Join-Path $solutionPath "global.json"
 
-$dotnetVersion = (Get-Content $sdkFile | ConvertFrom-Json).sdk.version
+$dotnetVersion = (Get-Content $sdkFile | Out-String | ConvertFrom-Json).sdk.version
 
 if ($OutputPath -eq "") {
     $OutputPath = Join-Path "$(Convert-Path "$PSScriptRoot")" "artifacts"
