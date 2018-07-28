@@ -88,6 +88,7 @@ namespace MartinCostello.LondonTravel.Site.Middleware
                     context.Response.Headers.Remove("Server");
                     context.Response.Headers.Remove("X-Powered-By");
 
+                    context.Response.Headers.Add("Feature-Policy", string.Empty);
                     context.Response.Headers.Add("Referrer-Policy", "no-referrer-when-downgrade");
                     context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
                     context.Response.Headers.Add("X-Download-Options", "noopen");
