@@ -21,8 +21,8 @@ namespace martinCostello.londonTravel {
 
             if ("ga" in window && ga) {
 
-                let command: string = "send";
-                let fields: any = {
+                const command: string = "send";
+                const fields: any = {
                     hitType: "event",
                     eventCategory: category,
                     eventAction: action,
@@ -42,13 +42,13 @@ namespace martinCostello.londonTravel {
 (() => {
     $("a, button, input, .ga-track-click").on("click", (e: JQuery.Event): void => {
 
-        let element: JQuery = $(e.target);
-        let label: string = element.attr("data-ga-label") || element.attr("id");
+        const element = $(e.target);
+        const label: string = element.attr("data-ga-label") || element.attr("id");
 
         if (label) {
 
-            let category: string = element.attr("data-ga-category") || "General";
-            let action: string = element.attr("data-ga-action") || "clicked";
+            const category: string = element.attr("data-ga-category") || "General";
+            const action: string = element.attr("data-ga-action") || "clicked";
 
             martinCostello.londonTravel.Tracking.track(
                 category,

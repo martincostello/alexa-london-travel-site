@@ -1,8 +1,8 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 (() => {
-    let rumId: string = $("meta[name='pingdom-rum']").attr("content");
+    const rumId: string = $("meta[name='pingdom-rum']").attr("content");
 
     if (rumId !== "") {
 
@@ -12,8 +12,8 @@
         ];
 
         (() => {
-            let s = document.getElementsByTagName("script")[0];
-            let p: any = document.createElement("script");
+            const s = document.getElementsByTagName("script")[0];
+            const p: any = document.createElement("script");
             p.async = "async";
             p.src = "https://rum-static.pingdom.net/prum.min.js";
             s.parentNode.insertBefore(p, s);

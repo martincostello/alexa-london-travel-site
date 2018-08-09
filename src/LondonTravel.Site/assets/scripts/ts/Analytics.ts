@@ -2,13 +2,13 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 (() => {
-    let trackingId: string = $("meta[name='google-analytics']").attr("content");
+    const trackingId: string = $("meta[name='google-analytics']").attr("content");
 
     if (trackingId !== "") {
 
-        let gaNewElement: any = {};
-        let gaElements: any = {};
-        let currentDate: any = new Date();
+        const gaNewElement: any = {};
+        const gaElements: any = {};
+        const currentDate: any = new Date();
 
         ((i: any, s, o, g, r, a, m) => {
             i["GoogleAnalyticsObject"] = r; i[r] = i[r] || function () {

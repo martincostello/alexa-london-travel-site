@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace martinCostello.londonTravel {
@@ -24,7 +24,7 @@ namespace martinCostello.londonTravel {
          */
         public initialize(): void {
 
-            let userId = $("meta[name='x-site-user-id']").attr("content");
+            const userId = $("meta[name='x-site-user-id']").attr("content");
 
             if (userId) {
                 this.client.setAuthenticatedUserContext(userId);
@@ -37,7 +37,7 @@ namespace martinCostello.londonTravel {
     let client = ((window as any).appInsights as Microsoft.ApplicationInsights.IAppInsights);
 
     if (client !== undefined) {
-        let telemetry = new martinCostello.londonTravel.Telemetry(client);
+        const telemetry = new martinCostello.londonTravel.Telemetry(client);
         telemetry.initialize();
     }
 })();

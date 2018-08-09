@@ -1,4 +1,4 @@
-﻿{
+{
   "rules": {
     "class-name": true,
     "comment-format": [ true, "check-space" ],
@@ -10,7 +10,7 @@
     "no-var-keyword": true,
     "one-line": [ true, "check-open-brace", "check-whitespace" ],
     "quotemark": [ true, "double" ],
-    "semicolon": [ "always" ],
+    "semicolon": [ true ],
     "triple-equals": [ true, "allow-null-check" ],
     "typedef-whitespace": [
       true,
