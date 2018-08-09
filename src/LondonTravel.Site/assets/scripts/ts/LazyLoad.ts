@@ -3,7 +3,7 @@
 
 $(window).on("load", () => {
 
-    let loadImages = (e?: JQuery.Event) => {
+    const loadImages = (e?: JQuery.Event) => {
         setTimeout(() => {
             ($("img.lazy") as any).lazyload();
         }, 500);

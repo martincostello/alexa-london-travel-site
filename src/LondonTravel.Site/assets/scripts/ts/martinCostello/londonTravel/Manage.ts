@@ -34,7 +34,7 @@ namespace martinCostello.londonTravel {
          * @param {JQueryEventObject} e - The event object.
          */
         private onFormSubmit = (e: JQuery.Event): void => {
-            let form: JQuery = $(e.target);
+            const form = $(e.target);
             form.find(".js-delete-control").addClass("disabled");
             form.find(".js-delete-content").addClass("hide");
             form.find(".js-delete-loader").removeClass("hide");
@@ -45,7 +45,7 @@ namespace martinCostello.londonTravel {
          * @param {JQueryEventObject} e - The event object.
          */
         private onModalShown = (e: JQuery.Event): void => {
-            let modal: JQuery = $(e.target);
+            const modal = $(e.target);
             setTimeout(() => {
                 modal.find(".js-modal-confirm")
                     .prop("disabled", false)
@@ -55,6 +55,6 @@ namespace martinCostello.londonTravel {
     }
 }
 ((): any => {
-    let manage: martinCostello.londonTravel.Manage = new martinCostello.londonTravel.Manage();
+    const manage: martinCostello.londonTravel.Manage = new martinCostello.londonTravel.Manage();
     manage.initialize();
 })();

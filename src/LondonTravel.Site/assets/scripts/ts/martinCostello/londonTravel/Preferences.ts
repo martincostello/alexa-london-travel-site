@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace martinCostello.londonTravel {
@@ -77,17 +77,17 @@ namespace martinCostello.londonTravel {
          */
         private checkCurrentState = (): void => {
 
-            let currentState: string = this.getCurrentState();
-            let isDirty: boolean = this.initialState !== currentState;
+            const currentState: string = this.getCurrentState();
+            const isDirty: boolean = this.initialState !== currentState;
 
             this.setButtonState(this.resetButton, isDirty);
             this.setButtonState(this.saveButton, isDirty);
             this.setButtonState(this.clearButton, currentState !== "");
 
             if (this.otherCount.length > 0) {
-                let total: number = this.getAllCheckboxes().length;
-                let favorites: number = this.getSelectedCheckboxes().length;
-                let others: number = total - favorites;
+                const total: number = this.getAllCheckboxes().length;
+                const favorites: number = this.getSelectedCheckboxes().length;
+                const others: number = total - favorites;
 
                 this.favoritesCount.text(`(${favorites.toString(10)})`);
                 this.otherCount.text(`(${others.toString(10)})`);
@@ -119,11 +119,11 @@ namespace martinCostello.londonTravel {
          */
         private getCurrentState = (): string => {
 
-            let ids: string[] = [];
+            const ids: string[] = [];
 
             this.getSelectedCheckboxes()
                 .each((index: number, elem: Element) => {
-                    let element: JQuery = $(elem);
+                    const element = $(elem);
                     ids.push(element.attr("data-line-id"));
                 });
 
@@ -146,8 +146,8 @@ namespace martinCostello.londonTravel {
          */
         private onLineClicked = (e: JQuery.Event): void => {
 
-            let element: JQuery = $(e.target);
-            let checkbox: JQuery = element.find("input[type='checkbox']");
+            const element = $(e.target);
+            const checkbox = element.find("input[type='checkbox']");
             checkbox.prop("checked", !checkbox.prop("checked"));
 
             this.checkCurrentState();
@@ -158,12 +158,12 @@ namespace martinCostello.londonTravel {
          */
         private resetFavoriteLines = (): void => {
 
-            let ids: string[] = this.initialState.split(",");
+            const ids: string[] = this.initialState.split(",");
 
             this.getAllCheckboxes()
                 .each((index: number, elem: Element) => {
-                    let element: JQuery = $(elem);
-                    let id: string = element.attr("data-line-id");
+                    const element = $(elem);
+                    const id: string = element.attr("data-line-id");
                     element.prop("checked", ids.indexOf(id) > -1);
                 });
 
@@ -186,5 +186,5 @@ namespace martinCostello.londonTravel {
     }
 }
 (() => {
-    let preferences: martinCostello.londonTravel.Preferences = new martinCostello.londonTravel.Preferences();
+    const preferences: martinCostello.londonTravel.Preferences = new martinCostello.londonTravel.Preferences();
 })();
