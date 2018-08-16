@@ -4,6 +4,8 @@
 namespace MartinCostello.LondonTravel.Site.Extensions
 {
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Azure.KeyVault;
+    using Microsoft.Azure.Services.AppAuthentication;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
 
@@ -32,20 +34,33 @@ namespace MartinCostello.LondonTravel.Site.Extensions
             string clientId = config["AzureKeyVault:ClientId"];
             string clientSecret = config["AzureKeyVault:ClientSecret"];
 
+            // Can Managed Service Identity be used instead of direct Key Vault integration?
+            bool canUseMsi =
+                !string.IsNullOrEmpty(config["MSI_ENDPOINT"]) &&
+                !string.IsNullOrEmpty(config["MSI_SECRET"]);
+
             bool canUseKeyVault =
                 !string.IsNullOrEmpty(vault) &&
-                !string.IsNullOrEmpty(clientId) &&
-                !string.IsNullOrEmpty(clientSecret);
+                (canUseMsi || (!string.IsNullOrEmpty(clientId) && !string.IsNullOrEmpty(clientSecret)));
 
             if (canUseKeyVault)
             {
                 var manager = new AzureEnvironmentSecretManager(config.AzureEnvironment());
 
-                builder.AddAzureKeyVault(
-                    vault,
-                    clientId,
-                    clientSecret,
-                    manager);
+                if (canUseMsi)
+                {
+                    var provider = new AzureServiceTokenProvider();
+                    var client = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(provider.KeyVaultTokenCallback));
+                    builder.AddAzureKeyVault(vault, client, manager);
+                }
+                else
+                {
+                    builder.AddAzureKeyVault(
+                        vault,
+                        clientId,
+                        clientSecret,
+                        manager);
+                }
             }
 
             return builder;
