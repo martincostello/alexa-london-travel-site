@@ -1,6 +1,10 @@
 sudo: required
 dist: trusty
 
+os:
+  - linux
+  - osx
+
 env:
   global:
     - DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true
@@ -29,7 +33,7 @@ addons:
     - libunwind8
 
 install:
-  - npm install -g npm@6.1.0
+  - npm install -g npm
   - npm install -g gulp@3.9.1
 
 script:
