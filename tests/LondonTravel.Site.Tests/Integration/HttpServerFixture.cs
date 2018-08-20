@@ -8,9 +8,11 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using System.Net.Http;
     using System.Net.Sockets;
     using System.Security.Cryptography.X509Certificates;
+    using MartinCostello.Logging.XUnit;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.TestHost;
     using Microsoft.Extensions.DependencyInjection;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// A test fixture representing an HTTP server hosting the application. This class cannot be inherited.
@@ -75,6 +77,14 @@ namespace MartinCostello.LondonTravel.Site.Integration
 
             return client;
         }
+
+        /// <inheritdoc />
+        public override void ClearOutputHelper()
+            => _webHost.Services.GetRequiredService<ITestOutputHelperAccessor>().OutputHelper = null;
+
+        /// <inheritdoc />
+        public override void SetOutputHelper(ITestOutputHelper value)
+            => _webHost.Services.GetRequiredService<ITestOutputHelperAccessor>().OutputHelper = value;
 
         /// <inheritdoc />
         protected override void ConfigureWebHost(IWebHostBuilder builder)

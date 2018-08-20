@@ -10,6 +10,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using System.Xml;
     using Shouldly;
     using Xunit;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// A class containing tests for the site map.
@@ -20,8 +21,9 @@ namespace MartinCostello.LondonTravel.Site.Integration
         /// Initializes a new instance of the <see cref="SiteMapTests"/> class.
         /// </summary>
         /// <param name="fixture">The fixture to use.</param>
-        public SiteMapTests(TestServerFixture fixture)
-            : base(fixture)
+        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+        public SiteMapTests(TestServerFixture fixture, ITestOutputHelper outputHelper)
+            : base(fixture, outputHelper)
         {
         }
 

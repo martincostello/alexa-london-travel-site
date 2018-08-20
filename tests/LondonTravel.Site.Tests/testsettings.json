@@ -1,12 +1,16 @@
 {
   "Logging": {
     "LogLevel": {
-      "Default": "Warning"
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "System": "Warning"
     }
   },
   "Serilog": {
     "MinimumLevel": {
-      "Default": "Warning"
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "System": "Warning"
     }
   },
   "Site": {

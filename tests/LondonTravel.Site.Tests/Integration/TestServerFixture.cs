@@ -6,12 +6,15 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using System;
     using System.IO;
     using JustEat.HttpClientInterception;
+    using MartinCostello.Logging.XUnit;
     using MartinCostello.LondonTravel.Site.Services.Data;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc.Testing;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Http;
+    using Microsoft.Extensions.Logging;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// A class representing a factory for creating instances of the application.
@@ -26,12 +29,30 @@ namespace MartinCostello.LondonTravel.Site.Integration
         {
             ClientOptions.AllowAutoRedirect = false;
             ClientOptions.BaseAddress = new Uri("https://localhost");
+
+            // HACK Force HTTP server startup
+            using (CreateDefaultClient())
+            {
+            }
         }
 
         /// <summary>
         /// Gets the <see cref="HttpClientInterceptorOptions"/> in use.
         /// </summary>
         public HttpClientInterceptorOptions Interceptor { get; } = new HttpClientInterceptorOptions() { ThrowOnMissingRegistration = true };
+
+        /// <summary>
+        /// Clears the current <see cref="ITestOutputHelper"/>.
+        /// </summary>
+        public virtual void ClearOutputHelper()
+            => Server.Host.Services.GetRequiredService<ITestOutputHelperAccessor>().OutputHelper = null;
+
+        /// <summary>
+        /// Sets the <see cref="ITestOutputHelper"/> to use.
+        /// </summary>
+        /// <param name="value">The <see cref="ITestOutputHelper"/> to use.</param>
+        public virtual void SetOutputHelper(ITestOutputHelper value)
+            => Server.Host.Services.GetRequiredService<ITestOutputHelperAccessor>().OutputHelper = value;
 
         /// <inheritdoc />
         protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -48,7 +69,8 @@ namespace MartinCostello.LondonTravel.Site.Integration
                     services.AddSingleton<IDocumentCollectionInitializer>((p) => p.GetRequiredService<InMemoryDocumentStore>());
                 });
 
-            builder.ConfigureAppConfiguration(ConfigureTests);
+            builder.ConfigureAppConfiguration(ConfigureTests)
+                   .ConfigureLogging((loggingBuilder) => loggingBuilder.ClearProviders().AddXUnit());
         }
 
         private static void ConfigureTests(IConfigurationBuilder builder)
