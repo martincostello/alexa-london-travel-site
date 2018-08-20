@@ -13,6 +13,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using Microsoft.AspNetCore.Identity;
     using Newtonsoft.Json.Linq;
     using Xunit;
+    using Xunit.Abstractions;
 
     /// <summary>
     /// A class containing tests for user accounts.
@@ -23,8 +24,9 @@ namespace MartinCostello.LondonTravel.Site.Integration
         /// Initializes a new instance of the <see cref="AccountTests"/> class.
         /// </summary>
         /// <param name="fixture">The fixture to use.</param>
-        public AccountTests(TestServerFixture fixture)
-            : base(fixture)
+        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+        public AccountTests(TestServerFixture fixture, ITestOutputHelper outputHelper)
+            : base(fixture, outputHelper)
         {
         }
 

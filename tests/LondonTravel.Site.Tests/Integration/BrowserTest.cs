@@ -10,12 +10,14 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
     using JustEat.HttpClientInterception;
+    using Microsoft.Extensions.Logging;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Chrome;
     using OpenQA.Selenium.Remote;
     using Pages;
     using Xunit;
     using Xunit.Abstractions;
+    using LogLevel = OpenQA.Selenium.LogLevel;
 
     /// <summary>
     /// The base class for browser tests.
@@ -34,11 +36,14 @@ namespace MartinCostello.LondonTravel.Site.Integration
         protected BrowserTest(HttpServerFixture fixture, ITestOutputHelper outputHelper)
         {
             Fixture = fixture;
+            Fixture.SetOutputHelper(outputHelper);
             Output = outputHelper;
+
+            var logger = outputHelper.ToLogger<HttpClientInterceptorOptions>();
 
             Fixture.Interceptor.OnSend = (request) =>
             {
-                Output.WriteLine($"[{DateTimeOffset.UtcNow:u}] {request.ToString()}");
+                logger.LogInformation("HTTP request intercepted. {Request}", request);
                 return Task.CompletedTask;
             };
 
@@ -203,6 +208,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             {
                 if (disposing)
                 {
+                    Fixture?.ClearOutputHelper();
                     _scope?.Dispose();
                     _scope = null;
                 }
