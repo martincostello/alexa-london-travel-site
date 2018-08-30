@@ -3,6 +3,7 @@
 
 namespace MartinCostello.LondonTravel.Site.Extensions
 {
+    using System;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Azure.KeyVault;
     using Microsoft.Azure.Services.AppAuthentication;
@@ -36,6 +37,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
 
             // Can Managed Service Identity be used instead of direct Key Vault integration?
             bool canUseMsi =
+                !string.Equals(config["WEBSITE_DISABLE_MSI"], bool.TrueString, StringComparison.OrdinalIgnoreCase) &&
                 !string.IsNullOrEmpty(config["MSI_ENDPOINT"]) &&
                 !string.IsNullOrEmpty(config["MSI_SECRET"]);
 
