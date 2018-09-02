@@ -32,10 +32,10 @@ namespace MartinCostello.LondonTravel.Site.Integration
             // Arrange
             new AuthenticationInterceptionBuilder(Fixture.Interceptor).ForAmazon();
 
-            WithNavigator(
-                (navigator) =>
+            AtPage<HomePage>(
+                (page) =>
                 {
-                    HomePage page = navigator.GoToRoot()
+                    page = page
                         .SignIn()
                         .SignInWithAmazon();
 

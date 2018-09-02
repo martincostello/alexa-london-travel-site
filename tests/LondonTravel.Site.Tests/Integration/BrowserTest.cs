@@ -82,18 +82,21 @@ namespace MartinCostello.LondonTravel.Site.Integration
         /// <summary>
         /// Creates a new instance of <see cref="ApplicationNavigator"/>.
         /// </summary>
+        /// <param name="collectPerformanceLogs">Whether to collect browser performance logs.</param>
         /// <returns>
         /// The <see cref="ApplicationNavigator"/> to use for tests.
         /// </returns>
-        protected ApplicationNavigator CreateNavigator() => new ApplicationNavigator(Fixture.ServerAddress, CreateWebDriver());
+        protected ApplicationNavigator CreateNavigator(bool collectPerformanceLogs = false)
+            => new ApplicationNavigator(Fixture.ServerAddress, CreateWebDriver(collectPerformanceLogs));
 
         /// <summary>
         /// Creates a new instance of <see cref="IWebDriver"/>.
         /// </summary>
+        /// <param name="collectPerformanceLogs">Whether to collect browser performance logs.</param>
         /// <returns>
         /// The <see cref="IWebDriver"/> to use for tests.
         /// </returns>
-        protected IWebDriver CreateWebDriver()
+        protected IWebDriver CreateWebDriver(bool collectPerformanceLogs = false)
         {
             string chromeDriverDirectory = Path.GetDirectoryName(GetType().Assembly.Location);
 
@@ -107,11 +110,14 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 options.AddArgument("--headless");
             }
 
-            // Enable logging of redirects (see https://stackoverflow.com/a/42212131/1064169)
-            options.PerformanceLoggingPreferences = new ChromePerformanceLoggingPreferences();
-            options.PerformanceLoggingPreferences.AddTracingCategory("devtools.network");
-            options.AddAdditionalCapability(CapabilityType.EnableProfiling, true, true);
-            options.SetLoggingPreference("performance", LogLevel.All);
+            if (collectPerformanceLogs)
+            {
+                // Enable logging of redirects (see https://stackoverflow.com/a/42212131/1064169)
+                options.PerformanceLoggingPreferences = new ChromePerformanceLoggingPreferences();
+                options.PerformanceLoggingPreferences.AddTracingCategory("devtools.network");
+                options.AddAdditionalCapability(CapabilityType.EnableProfiling, true, true);
+                options.SetLoggingPreference("performance", LogLevel.All);
+            }
 
             options.SetLoggingPreference(LogType.Browser, LogLevel.All);
 
@@ -157,12 +163,9 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 }
                 catch (Exception)
                 {
+                    OutputLogs(navigator.Driver);
                     TakeScreenshot(navigator.Driver, testName);
                     throw;
-                }
-                finally
-                {
-                    OutputLogs(navigator.Driver);
                 }
             }
         }
@@ -171,13 +174,17 @@ namespace MartinCostello.LondonTravel.Site.Integration
         /// Runs the specified test with a new instance of <see cref="ApplicationNavigator"/> as an asynchronous operation.
         /// </summary>
         /// <param name="test">The delegate to the test that will use the navigator.</param>
+        /// <param name="collectPerformanceLogs">Whether to collect browser performance logs.</param>
         /// <param name="testName">The name of the test method.</param>
         /// <returns>
         /// A <see cref="Task"/> representing the asynchronous operation to run the test.
         /// </returns>
-        protected async Task WithNavigatorAsync(Func<ApplicationNavigator, Task> test, [CallerMemberName] string testName = null)
+        protected async Task WithNavigatorAsync(
+            Func<ApplicationNavigator, Task> test,
+            bool collectPerformanceLogs = false,
+            [CallerMemberName] string testName = null)
         {
-            using (ApplicationNavigator navigator = CreateNavigator())
+            using (ApplicationNavigator navigator = CreateNavigator(collectPerformanceLogs))
             {
                 try
                 {
@@ -193,6 +200,36 @@ namespace MartinCostello.LondonTravel.Site.Integration
                     OutputLogs(navigator.Driver);
                 }
             }
+        }
+
+        /// <summary>
+        /// Runs the specified test with a new instance of <see cref="ApplicationNavigator"/> for the specified page type.
+        /// </summary>
+        /// <typeparam name="T">The type of the page to navigate to for the test.</typeparam>
+        /// <param name="test">The delegate to the test that will use the navigator.</param>
+        /// <param name="testName">The name of the test method.</param>
+        protected void AtPage<T>(Action<ApplicationNavigator, T> test, [CallerMemberName] string testName = null)
+            where T : PageBase
+        {
+            WithNavigator(
+                (navigator) =>
+                {
+                    T page = ((T)Activator.CreateInstance(typeof(T), navigator)).Navigate();
+                    test(navigator, page);
+                },
+                testName: testName);
+        }
+
+        /// <summary>
+        /// Runs the specified test with a new instance of <see cref="ApplicationNavigator"/> for the specified page type.
+        /// </summary>
+        /// <typeparam name="T">The type of the page to navigate to for the test.</typeparam>
+        /// <param name="test">The delegate to the test that will use the navigator.</param>
+        /// <param name="testName">The name of the test method.</param>
+        protected void AtPage<T>(Action<T> test, [CallerMemberName] string testName = null)
+            where T : PageBase
+        {
+            AtPage<T>((_, page) => test(page), testName: testName);
         }
 
         /// <summary>

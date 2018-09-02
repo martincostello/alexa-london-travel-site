@@ -88,10 +88,10 @@ namespace MartinCostello.LondonTravel.Site.Integration
             // Arrange
             ConfigureExternalProvider((p) => p.ForAmazon());
 
-            WithNavigator(
-                (navigator) =>
+            AtPage<HomePage>(
+                (homepage) =>
                 {
-                    ManagePage page = navigator.GoToRoot()
+                    ManagePage page = homepage
                         .SignIn()
                         .SignInWithAmazon()
                         .Manage();
@@ -118,10 +118,10 @@ namespace MartinCostello.LondonTravel.Site.Integration
             // Arrange
             ConfigureExternalProvider((p) => p.ForAmazon().ForGoogle());
 
-            WithNavigator(
-                (navigator) =>
+            AtPage<HomePage>(
+                (homepage) =>
                 {
-                    ManagePage page = navigator.GoToRoot()
+                    ManagePage page = homepage
                         .SignIn()
                         .SignInWithAmazon()
                         .Manage();
@@ -155,11 +155,10 @@ namespace MartinCostello.LondonTravel.Site.Integration
 
         private void SignInWithExternalProviderAndSignOut(string name, string expectedUserName = "John")
         {
-            WithNavigator(
-                (navigator) =>
+            AtPage<HomePage>(
+                (page) =>
                 {
-                    // Act
-                    HomePage page = navigator.GoToRoot()
+                    page = page
                         .SignIn()
                         .SignInWithProvider(name);
 

@@ -106,7 +106,8 @@ namespace MartinCostello.LondonTravel.Site.Integration
 
                     // Act and Assert
                     await GetPreferencesAsync(authorization, HttpStatusCode.Unauthorized);
-                });
+                },
+                collectPerformanceLogs: true);
         }
 
         private static Uri BuildAuthorizationUri(ApplicationNavigator navigator)
