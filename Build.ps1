@@ -6,8 +6,6 @@ param(
     [Parameter(Mandatory = $false)][switch] $DisableCodeCoverage
 )
 
-$ErrorActionPreference = "Stop"
-
 $solutionPath = Split-Path $MyInvocation.MyCommand.Definition
 $sdkFile      = Join-Path $solutionPath "global.json"
 

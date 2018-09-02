@@ -19,8 +19,6 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     using Microsoft.Extensions.Logging;
     using Models;
     using Moq;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
     using Services.Data;
     using Shouldly;
     using Telemetry;
@@ -38,26 +36,26 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         public static async Task Preferences_Returns_Unauthorized_Json_If_No_Authorization_Header_Specified(string authorizationHeader)
         {
             // Arrange
-            using (var target = CreateTarget())
-            {
-                // Act
-                IActionResult actual = await target.GetPreferences(authorizationHeader, default);
+            ApiController target = CreateTarget();
 
-                // Assert
-                actual.ShouldNotBeNull();
+            // Act
+            var actual = await target.GetPreferences(authorizationHeader, default);
 
-                var objectResult = actual.ShouldBeOfType<ObjectResult>();
+            // Assert
+            actual.ShouldNotBeNull();
 
-                objectResult.StatusCode.ShouldBe(401);
-                objectResult.Value.ShouldNotBeNull();
+            actual.Result.ShouldNotBeNull();
+            var objectResult = actual.Result.ShouldBeOfType<ObjectResult>();
 
-                var data = objectResult.Value.ShouldBeOfType<ErrorResponse>();
+            objectResult.StatusCode.ShouldBe(401);
+            objectResult.Value.ShouldNotBeNull();
 
-                data.Message.ShouldBe("No access token specified.");
-                data.StatusCode.ShouldBe(401);
-                data.Details.ShouldNotBeNull();
-                data.Details.ShouldBeEmpty();
-            }
+            var data = objectResult.Value.ShouldBeOfType<ErrorResponse>();
+
+            data.Message.ShouldBe("No access token specified.");
+            data.StatusCode.ShouldBe(401);
+            data.Details.ShouldNotBeNull();
+            data.Details.ShouldBeEmpty();
         }
 
         [Theory]
@@ -65,27 +63,27 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         public static async Task Preferences_Returns_Unauthorized_Json_If_Authorization_Header_Is_Invalid(string authorizationHeader)
         {
             // Arrange
-            using (var target = CreateTarget())
-            {
-                // Act
-                IActionResult actual = await target.GetPreferences(authorizationHeader, default);
+            ApiController target = CreateTarget();
 
-                // Assert
-                actual.ShouldNotBeNull();
+            // Act
+            var actual = await target.GetPreferences(authorizationHeader, default);
 
-                var objectResult = actual.ShouldBeOfType<ObjectResult>();
+            // Assert
+            actual.ShouldNotBeNull();
 
-                objectResult.StatusCode.ShouldBe(401);
-                objectResult.Value.ShouldNotBeNull();
+            actual.Result.ShouldNotBeNull();
+            var objectResult = actual.Result.ShouldBeOfType<ObjectResult>();
 
-                var data = objectResult.Value.ShouldBeOfType<ErrorResponse>();
+            objectResult.StatusCode.ShouldBe(401);
+            objectResult.Value.ShouldNotBeNull();
 
-                data.Message.ShouldBe("Unauthorized.");
-                data.StatusCode.ShouldBe(401);
-                data.Details.ShouldNotBeNull();
-                data.Details.ShouldHaveSingleItem();
-                data.Details.ShouldContain("The provided authorization value is not valid.");
-            }
+            var data = objectResult.Value.ShouldBeOfType<ErrorResponse>();
+
+            data.Message.ShouldBe("Unauthorized.");
+            data.StatusCode.ShouldBe(401);
+            data.Details.ShouldNotBeNull();
+            data.Details.ShouldHaveSingleItem();
+            data.Details.ShouldContain("The provided authorization value is not valid.");
         }
 
         [Theory]
@@ -94,26 +92,26 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         public static async Task Preferences_Returns_Unauthorized_Json_If_Authorization_Header_Has_No_Value(string authorizationHeader)
         {
             // Arrange
-            using (var target = CreateTarget())
-            {
-                // Act
-                IActionResult actual = await target.GetPreferences(authorizationHeader, default);
+            ApiController target = CreateTarget();
 
-                // Assert
-                actual.ShouldNotBeNull();
+            // Act
+            var actual = await target.GetPreferences(authorizationHeader, default);
 
-                var objectResult = actual.ShouldBeOfType<ObjectResult>();
+            // Assert
+            actual.ShouldNotBeNull();
 
-                objectResult.StatusCode.ShouldBe(401);
-                objectResult.Value.ShouldNotBeNull();
+            actual.Result.ShouldNotBeNull();
+            var objectResult = actual.Result.ShouldBeOfType<ObjectResult>();
 
-                var data = objectResult.Value.ShouldBeOfType<ErrorResponse>();
+            objectResult.StatusCode.ShouldBe(401);
+            objectResult.Value.ShouldNotBeNull();
 
-                data.Message.ShouldBe("Unauthorized.");
-                data.StatusCode.ShouldBe(401);
-                data.Details.ShouldNotBeNull();
-                data.Details.ShouldBeEmpty();
-            }
+            var data = objectResult.Value.ShouldBeOfType<ErrorResponse>();
+
+            data.Message.ShouldBe("Unauthorized.");
+            data.StatusCode.ShouldBe(401);
+            data.Details.ShouldNotBeNull();
+            data.Details.ShouldBeEmpty();
         }
 
         [Theory]
@@ -122,27 +120,27 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         public static async Task Preferences_Returns_Unauthorized_Json_If_Authorization_Header_Is_Incorrect_Scheme(string authorizationHeader)
         {
             // Arrange
-            using (var target = CreateTarget())
-            {
-                // Act
-                IActionResult actual = await target.GetPreferences(authorizationHeader, default);
+            ApiController target = CreateTarget();
 
-                // Assert
-                actual.ShouldNotBeNull();
+            // Act
+            var actual = await target.GetPreferences(authorizationHeader, default);
 
-                var objectResult = actual.ShouldBeOfType<ObjectResult>();
+            // Assert
+            actual.ShouldNotBeNull();
 
-                objectResult.StatusCode.ShouldBe(401);
-                objectResult.Value.ShouldNotBeNull();
+            actual.Result.ShouldNotBeNull();
+            var objectResult = actual.Result.ShouldBeOfType<ObjectResult>();
 
-                var data = objectResult.Value.ShouldBeOfType<ErrorResponse>();
+            objectResult.StatusCode.ShouldBe(401);
+            objectResult.Value.ShouldNotBeNull();
 
-                data.Message.ShouldBe("Unauthorized.");
-                data.StatusCode.ShouldBe(401);
-                data.Details.ShouldNotBeNull();
-                data.Details.ShouldHaveSingleItem();
-                data.Details.ShouldContain("Only the bearer authorization scheme is supported.");
-            }
+            var data = objectResult.Value.ShouldBeOfType<ErrorResponse>();
+
+            data.Message.ShouldBe("Unauthorized.");
+            data.StatusCode.ShouldBe(401);
+            data.Details.ShouldNotBeNull();
+            data.Details.ShouldHaveSingleItem();
+            data.Details.ShouldContain("Only the bearer authorization scheme is supported.");
         }
 
         [Fact]
@@ -162,26 +160,26 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             var client = CreateClient(users);
 
-            using (var target = CreateTarget(client))
-            {
-                // Act
-                IActionResult actual = await target.GetPreferences(authorizationHeader, default);
+            ApiController target = CreateTarget(client);
 
-                // Assert
-                actual.ShouldNotBeNull();
+            // Act
+            var actual = await target.GetPreferences(authorizationHeader, default);
 
-                var objectResult = actual.ShouldBeOfType<ObjectResult>();
+            // Assert
+            actual.ShouldNotBeNull();
 
-                objectResult.StatusCode.ShouldBe(401);
-                objectResult.Value.ShouldNotBeNull();
+            actual.Result.ShouldNotBeNull();
+            var objectResult = actual.Result.ShouldBeOfType<ObjectResult>();
 
-                var data = objectResult.Value.ShouldBeOfType<ErrorResponse>();
+            objectResult.StatusCode.ShouldBe(401);
+            objectResult.Value.ShouldNotBeNull();
 
-                data.Message.ShouldBe("Unauthorized.");
-                data.StatusCode.ShouldBe(401);
-                data.Details.ShouldNotBeNull();
-                data.Details.ShouldBeEmpty();
-            }
+            var data = objectResult.Value.ShouldBeOfType<ErrorResponse>();
+
+            data.Message.ShouldBe("Unauthorized.");
+            data.StatusCode.ShouldBe(401);
+            data.Details.ShouldNotBeNull();
+            data.Details.ShouldBeEmpty();
         }
 
         [Fact]
@@ -201,26 +199,26 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             var client = CreateClient(users);
 
-            using (var target = CreateTarget(client))
-            {
-                // Act
-                IActionResult actual = await target.GetPreferences(authorizationHeader, default);
+            ApiController target = CreateTarget(client);
 
-                // Assert
-                actual.ShouldNotBeNull();
+            // Act
+            var actual = await target.GetPreferences(authorizationHeader, default);
 
-                var objectResult = actual.ShouldBeOfType<ObjectResult>();
+            // Assert
+            actual.ShouldNotBeNull();
 
-                objectResult.StatusCode.ShouldBe(401);
-                objectResult.Value.ShouldNotBeNull();
+            actual.Result.ShouldNotBeNull();
+            var objectResult = actual.Result.ShouldBeOfType<ObjectResult>();
 
-                var data = objectResult.Value.ShouldBeOfType<ErrorResponse>();
+            objectResult.StatusCode.ShouldBe(401);
+            objectResult.Value.ShouldNotBeNull();
 
-                data.Message.ShouldBe("Unauthorized.");
-                data.StatusCode.ShouldBe(401);
-                data.Details.ShouldNotBeNull();
-                data.Details.ShouldBeEmpty();
-            }
+            var data = objectResult.Value.ShouldBeOfType<ErrorResponse>();
+
+            data.Message.ShouldBe("Unauthorized.");
+            data.StatusCode.ShouldBe(401);
+            data.Details.ShouldNotBeNull();
+            data.Details.ShouldBeEmpty();
         }
 
         [Fact]
@@ -242,24 +240,16 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             var client = CreateClient(users);
 
-            using (var target = CreateTarget(client))
-            {
-                // Act
-                IActionResult actual = await target.GetPreferences(authorizationHeader, default);
+            ApiController target = CreateTarget(client);
 
-                // Assert
-                actual.ShouldNotBeNull();
+            // Act
+            var actual = await target.GetPreferences(authorizationHeader, default);
 
-                var objectResult = actual.ShouldBeOfType<OkObjectResult>();
-
-                objectResult.StatusCode.ShouldBe(200);
-                objectResult.Value.ShouldNotBeNull();
-
-                var data = objectResult.Value.ShouldBeOfType<PreferencesResponse>();
-
-                data.FavoriteLines.ShouldBe(new[] { "district" });
-                data.UserId.ShouldBe("6");
-            }
+            // Assert
+            actual.ShouldNotBeNull();
+            actual.Value.ShouldNotBeNull();
+            actual.Value.FavoriteLines.ShouldBe(new[] { "district" });
+            actual.Value.UserId.ShouldBe("6");
         }
 
         [Fact]
@@ -271,24 +261,15 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             mock.Setup((p) => p.GetUserCountAsync(false))
                 .ReturnsAsync(42);
 
-            using (var target = CreateTarget(mock.Object))
-            {
-                // Act
-                IActionResult actual = await target.GetDocumentCount();
+            ApiController target = CreateTarget(mock.Object);
 
-                // Assert
-                actual.ShouldNotBeNull();
+            // Act
+            var actual = await target.GetDocumentCount();
 
-                var objectResult = actual.ShouldBeOfType<OkObjectResult>();
-
-                objectResult.StatusCode.ShouldBe(200);
-                objectResult.Value.ShouldNotBeNull();
-
-                string json = JsonConvert.SerializeObject(objectResult.Value);
-                JObject data = JObject.Parse(json);
-
-                data["count"].ShouldBe(42);
-            }
+            // Assert
+            actual.ShouldNotBeNull();
+            actual.Value.ShouldNotBeNull();
+            actual.Value.Count.ShouldBe(42);
         }
 
         /// <summary>

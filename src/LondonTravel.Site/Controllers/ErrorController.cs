@@ -161,6 +161,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         [Route("jmx-console/HtmlAdaptor")]
         [Route("license.php")]
         [Route("magmi/web/magmi.php")]
+        [Route("manager/index.php")]
         [Route("modules/{*catchall}")]
         [Route("readme.html")]
         [Route("site/{*catchall}")]

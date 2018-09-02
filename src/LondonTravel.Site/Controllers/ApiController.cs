@@ -20,8 +20,9 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     /// <summary>
     /// A class representing the controller for the <c>/api</c> resource.
     /// </summary>
+    [ApiController]
     [Route("api")]
-    public class ApiController : Controller
+    public class ApiController : ControllerBase
     {
         /// <summary>
         /// The <see cref="IAccountService"/> to use. This field is read-only.
@@ -52,15 +53,6 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         }
 
         /// <summary>
-        /// Gets the result for the <c>/api/</c> action.
-        /// </summary>
-        /// <returns>
-        /// The result for the <c>/api/</c> action.
-        /// </returns>
-        [HttpGet]
-        public IActionResult Index() => View();
-
-        /// <summary>
         /// Gets the result for the <c>/api/_count</c> action.
         /// </summary>
         /// <returns>
@@ -70,14 +62,13 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         [Authorize(Roles = "ADMINISTRATOR")]
         [HttpGet]
         [Produces("application/json")]
+        [ProducesResponseType(typeof(DocumentCount), StatusCodes.Status200OK)]
         [Route("_count")]
-        public async Task<IActionResult> GetDocumentCount()
+        public async Task<ActionResult<DocumentCount>> GetDocumentCount()
         {
             long count = await _service.GetUserCountAsync(useCache: false);
 
-            var value = new { count };
-
-            return Ok(value);
+            return new DocumentCount { Count = count };
         }
 
         /// <summary>
@@ -97,7 +88,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
         [Route("preferences")]
         [SwaggerResponseExample(typeof(PreferencesResponse), typeof(PreferencesResponseExampleProvider))]
-        public async Task<IActionResult> GetPreferences(
+        public async Task<ActionResult<PreferencesResponse>> GetPreferences(
             [FromHeader(Name = "Authorization")] string authorizationHeader,
             CancellationToken cancellationToken = default)
         {
@@ -142,15 +133,15 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 HttpContext.Connection.RemoteIpAddress,
                 Request.Headers["User-Agent"]);
 
-            var data = new PreferencesResponse()
+            var result = new PreferencesResponse()
             {
                 FavoriteLines = user.FavoriteLines,
                 UserId = user.Id,
             };
 
-            _telemetry.TrackApiPreferencesSuccess(data.UserId);
+            _telemetry.TrackApiPreferencesSuccess(result.UserId);
 
-            return Ok(data);
+            return result;
         }
 
         /// <summary>
