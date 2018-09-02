@@ -59,6 +59,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// The result for the <c>/</c> action.
         /// </returns>
         [HttpGet]
+        [HttpHead]
         [Route("", Name = SiteRoutes.Home)]
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
