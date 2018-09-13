@@ -10,7 +10,15 @@ module.exports = function (config) {
         autoWatch: false,
         concurrency: Infinity,
 
-        browsers: ["ChromeHeadless"],
+        browsers: ["ChromeHeadlessNoSandbox"],
+
+        customLaunchers: {
+            ChromeHeadlessNoSandbox: {
+                base: "ChromeHeadless",
+                flags: ["--no-sandbox"]
+            }
+        },
+
         frameworks: ["jasmine", "karma-typescript"],
 
         files: [
