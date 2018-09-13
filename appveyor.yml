@@ -16,7 +16,7 @@ cache:
 
 install:
   - ps: npm install -g npm
-  - ps: npm install -g gulp@3.9.1
+  - ps: npm install -g gulp@3.9.1 --loglevel=error
 
 build_script:
   - ps: .\Build.ps1
