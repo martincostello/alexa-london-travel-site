@@ -55,7 +55,7 @@
     <PackageReference Include="WindowsAzure.Storage" Version="9.3.1" />
   </ItemGroup>
   <Target Name="BundleAssets" BeforeTargets="PrepareForPublish">
-    <Exec Command="npm install --loglevel=error" Condition=" '$(InstallWebPackages)' == 'true' " />
+    <Exec Command="npm ci" Condition=" '$(InstallWebPackages)' == 'true' " />
     <Exec Command="gulp build" />
   </Target>
   <Target Name="PrepublishScript" DependsOnTargets="BundleAssets" BeforeTargets="Publish">
