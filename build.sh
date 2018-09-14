@@ -47,5 +47,9 @@ fi
 dotnet publish ./src/LondonTravel.Site/LondonTravel.Site.csproj --output $artifacts/publish --configuration $configuration || exit 1
 
 if [ $skipTests == 0 ]; then
-    dotnet test ./tests/LondonTravel.Site.Tests/LondonTravel.Site.Tests.csproj --output $artifacts --configuration $configuration || exit 1
+    if [ "$TF_BUILD" != "" ]; then
+        dotnet test ./tests/LondonTravel.Site.Tests/LondonTravel.Site.Tests.csproj --output $artifacts --configuration $configuration --logger trx || exit 1
+    else
+        dotnet test ./tests/LondonTravel.Site.Tests/LondonTravel.Site.Tests.csproj --output $artifacts --configuration $configuration || exit 1
+    fi
 fi
