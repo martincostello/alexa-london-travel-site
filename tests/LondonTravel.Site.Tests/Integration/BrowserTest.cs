@@ -115,7 +115,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) &&
                 !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("TF_BUILD")))
             {
-                options.AddArgument("--disable-dev-shm-usage");
+                options.AddArgument("--no-sandbox");
             }
 
             if (collectPerformanceLogs)
