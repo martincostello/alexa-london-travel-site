@@ -108,6 +108,14 @@ phases:
             ArtifactName: BuildDrop-$(AgentOSName)
           ${{ if ne(parameters.artifacts.name, '') }}:
             ArtifactName: ${{ parameters.artifacts.name }}
+      - task: PublishBuildArtifacts@1
+        displayName: Publish screenshots
+        condition: eq(variables['System.PullRequest.IsFork'], false)
+        inputs:
+          PathToPublish: '$(Build.StagingDirectory)/**/screenshots'
+          ArtifactType: Container
+          ${{ if eq(parameters.artifacts.name, '') }}:
+            ArtifactName: Screenshots-$(AgentOSName)
       - ${{ if eq(parameters.agentOS, 'Windows') }}:
         - task: PublishBuildArtifacts@1
           displayName: Publish deployment package

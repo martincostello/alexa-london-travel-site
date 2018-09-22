@@ -303,7 +303,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
                     string directory = Path.GetDirectoryName(typeof(BrowserTest).Assembly.Location);
                     string fileName = $"{testName}_{DateTimeOffset.UtcNow:YYYY-MM-dd-HH-mm-ss}.png";
 
-                    fileName = Path.Combine(directory, fileName);
+                    fileName = Path.Combine(directory, "screenshots", fileName);
 
                     screenshot.SaveAsFile(fileName);
                 }
