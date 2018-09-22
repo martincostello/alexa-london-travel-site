@@ -314,12 +314,12 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// </returns>
         private static IAccountService CreateClient(IEnumerable<LondonTravelUser> users)
         {
-            Mock<IDocumentClient> mock = new Mock<IDocumentClient>();
+            Mock<IDocumentService> mock = new Mock<IDocumentService>();
 
             mock.Setup((p) => p.GetAsync(It.IsAny<Expression<Func<LondonTravelUser, bool>>>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync((Expression<Func<LondonTravelUser, bool>> a, CancellationToken b) => users.Where(a.Compile()));
 
-            IDocumentClient client = mock.Object;
+            IDocumentService client = mock.Object;
             IMemoryCache cache = Mock.Of<IMemoryCache>();
             ILogger<AccountService> logger = new LoggerFactory().CreateLogger<AccountService>();
 

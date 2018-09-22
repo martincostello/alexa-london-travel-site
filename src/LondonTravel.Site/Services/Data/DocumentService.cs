@@ -19,19 +19,19 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
     using Options;
 
     /// <summary>
-    /// A class representing an implementation of <see cref="IDocumentClient"/>. This class cannot be inherited.
+    /// A class representing an implementation of <see cref="IDocumentService"/>. This class cannot be inherited.
     /// </summary>
-    public sealed class DocumentClientWrapper : IDocumentClient
+    public sealed class DocumentService : IDocumentService
     {
+        /// <summary>
+        /// The <see cref="IDocumentClient"/> to use. This field is read-only.
+        /// </summary>
+        private readonly IDocumentClient _client;
+
         /// <summary>
         /// The <see cref="IDocumentCollectionInitializer"/> to use. This field is read-only.
         /// </summary>
         private readonly IDocumentCollectionInitializer _initializer;
-
-        /// <summary>
-        /// The <see cref="DocumentClient"/> being wrapped. This field is read-only.
-        /// </summary>
-        private readonly DocumentClient _client;
 
         /// <summary>
         /// The <see cref="TelemetryClient"/> to use. This field is read-only.
@@ -46,29 +46,31 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// <summary>
         /// The logger to use. This field is read-only.
         /// </summary>
-        private readonly ILogger<DocumentClientWrapper> _logger;
+        private readonly ILogger _logger;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DocumentClientWrapper"/> class.
+        /// Initializes a new instance of the <see cref="DocumentService"/> class.
         /// </summary>
+        /// <param name="client">The <see cref="IDocumentClient"/> to use.</param>
         /// <param name="initializer">The <see cref="IDocumentCollectionInitializer"/> to use.</param>
         /// <param name="telemetry">The <see cref="TelemetryClient"/> to use.</param>
         /// <param name="options">The <see cref="UserStoreOptions"/> to use.</param>
-        /// <param name="logger">The <see cref="ILogger{DocumentClientWrapper}"/> to use.</param>
+        /// <param name="logger">The <see cref="ILogger{DocumentService}"/> to use.</param>
         /// <exception cref="ArgumentNullException">
-        /// <paramref name="options"/> is <see langword="null"/>.
+        /// <paramref name="client"/> or <paramref name="options"/> is <see langword="null"/>.
         /// </exception>
         /// <exception cref="ArgumentException">
         /// <paramref name="options"/> is invalid.
         /// </exception>
-        public DocumentClientWrapper(
+        public DocumentService(
+            IDocumentClient client,
             IDocumentCollectionInitializer initializer,
             TelemetryClient telemetry,
             UserStoreOptions options,
-            ILogger<DocumentClientWrapper> logger)
+            ILogger<DocumentService> logger)
         {
+            _client = client ?? throw new ArgumentNullException(nameof(client));
             _initializer = initializer ?? throw new ArgumentNullException(nameof(initializer));
-            _client = DocumentHelpers.CreateClient(options);
 
             _telemetry = telemetry;
             _options = options;
@@ -310,10 +312,8 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// <returns>
         /// A <see cref="Task"/> representing the asynchronous operation to ensure the collection exists.
         /// </returns>
-        private async Task EnsureCollectionExistsAsync()
-        {
-            await _initializer.EnsureCollectionExistsAsync(_options.CollectionName);
-        }
+        private Task EnsureCollectionExistsAsync()
+            => _initializer.EnsureCollectionExistsAsync(_client, _options.CollectionName);
 
         /// <summary>
         /// Builds a URI for the collection.
@@ -321,7 +321,8 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// <returns>
         /// The URI to use for the collection.
         /// </returns>
-        private Uri BuildCollectionUri() => UriFactory.CreateDocumentCollectionUri(_options.DatabaseName, _options.CollectionName);
+        private Uri BuildCollectionUri()
+            => UriFactory.CreateDocumentCollectionUri(_options.DatabaseName, _options.CollectionName);
 
         /// <summary>
         /// Builds a URI for the specified document Id.
@@ -330,6 +331,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// <returns>
         /// The URI to use for the specified document.
         /// </returns>
-        private Uri BuildDocumentUri(string id) => UriFactory.CreateDocumentUri(_options.DatabaseName, _options.CollectionName, id);
+        private Uri BuildDocumentUri(string id)
+            => UriFactory.CreateDocumentUri(_options.DatabaseName, _options.CollectionName, id);
     }
 }

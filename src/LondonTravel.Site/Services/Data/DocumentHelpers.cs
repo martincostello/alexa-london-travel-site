@@ -4,6 +4,7 @@
 namespace MartinCostello.LondonTravel.Site.Services.Data
 {
     using System;
+    using Microsoft.Azure.Documents;
     using Microsoft.Azure.Documents.Client;
     using Options;
 
@@ -23,11 +24,11 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         internal static readonly Uri DocumentsUriFragment = new Uri("docs", UriKind.Relative);
 
         /// <summary>
-        /// Creates a new instance of the <see cref="DocumentClient"/> class.
+        /// Creates a new instance of an <see cref="IDocumentClient"/> implementation.
         /// </summary>
         /// <param name="options">The <see cref="UserStoreOptions"/> to use.</param>
         /// <returns>
-        /// The created instance of <see cref="DocumentClient"/>.
+        /// The created instance of <see cref="IDocumentClient"/>.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="options"/> is <see langword="null"/>.
@@ -35,7 +36,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// <exception cref="ArgumentException">
         /// <paramref name="options"/> is invalid.
         /// </exception>
-        internal static DocumentClient CreateClient(UserStoreOptions options)
+        internal static IDocumentClient CreateClient(UserStoreOptions options)
         {
             if (options == null)
             {

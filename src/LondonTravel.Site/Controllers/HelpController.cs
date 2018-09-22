@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Controllers
@@ -23,7 +23,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// <summary>
         /// The <see cref="ILogger"/> to use. This field is read-only.
         /// </summary>
-        private readonly ILogger<HelpController> _logger;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HelpController"/> class.

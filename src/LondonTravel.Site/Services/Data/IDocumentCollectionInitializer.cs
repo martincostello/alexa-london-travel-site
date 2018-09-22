@@ -3,23 +3,24 @@
 
 namespace MartinCostello.LondonTravel.Site.Services.Data
 {
-    using System;
     using System.Threading.Tasks;
+    using Microsoft.Azure.Documents;
 
     /// <summary>
     /// Defines a document collection initializer.
     /// </summary>
-    public interface IDocumentCollectionInitializer : IDisposable
+    public interface IDocumentCollectionInitializer
     {
         /// <summary>
         /// Ensures that the specified collection exists as an asynchronous operation.
         /// </summary>
+        /// <param name="client">The document client to use.</param>
         /// <param name="collectionName">The name of the collection to ensure exists.</param>
         /// <returns>
         /// A <see cref="Task"/> representing the asynchronous operation to ensure the collection
         /// exists which returns <see langword="true"/> if the collection was created by the method
         /// invocation; otherwise <see langword="false"/> if it already existed.
         /// </returns>
-        Task<bool> EnsureCollectionExistsAsync(string collectionName);
+        Task<bool> EnsureCollectionExistsAsync(IDocumentClient client, string collectionName);
     }
 }

@@ -65,7 +65,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 (services) =>
                 {
                     services.AddSingleton<InMemoryDocumentStore>();
-                    services.AddSingleton<IDocumentClient>((p) => p.GetRequiredService<InMemoryDocumentStore>());
+                    services.AddSingleton<IDocumentService>((p) => p.GetRequiredService<InMemoryDocumentStore>());
                     services.AddSingleton<IDocumentCollectionInitializer>((p) => p.GetRequiredService<InMemoryDocumentStore>());
                 });
 

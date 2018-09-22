@@ -29,7 +29,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <summary>
         /// The <see cref="ILogger"/> to use. This field is read-only.
         /// </summary>
-        private readonly ILogger<OAuthEventsHandler> _logger;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OAuthEventsHandler"/> class.

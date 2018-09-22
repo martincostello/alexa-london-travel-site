@@ -11,11 +11,12 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using System.Threading.Tasks;
     using MartinCostello.LondonTravel.Site.Options;
     using MartinCostello.LondonTravel.Site.Services.Data;
+    using Microsoft.Azure.Documents;
 
     /// <summary>
     /// A class representing an in-memory document store. This class cannot be inherited.
     /// </summary>
-    internal sealed class InMemoryDocumentStore : IDocumentClient, IDocumentCollectionInitializer
+    internal sealed class InMemoryDocumentStore : IDocumentService, IDocumentCollectionInitializer
     {
         private readonly IDictionary<string, DocumentCollection> _collections;
 
@@ -46,18 +47,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         }
 
         /// <inheritdoc />
-        public void Dispose()
-        {
-            foreach (var collection in _collections)
-            {
-                collection.Value.Clear();
-            }
-
-            _collections.Clear();
-        }
-
-        /// <inheritdoc />
-        public Task<bool> EnsureCollectionExistsAsync(string collectionName)
+        public Task<bool> EnsureCollectionExistsAsync(IDocumentClient client, string collectionName)
         {
             bool exists = _collections.TryGetValue(collectionName, out DocumentCollection collection);
 
