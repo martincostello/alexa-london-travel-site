@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Services.Data
@@ -67,7 +67,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
                 throw new ArgumentException("No DocumentDB collection name is configured.", nameof(options));
             }
 
-            ConnectionPolicy connectionPolicy = null;
+            var connectionPolicy = ConnectionPolicy.Default;
 
             if (options.PreferredLocations?.Count > 0)
             {
@@ -77,6 +77,11 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
                 {
                     connectionPolicy.PreferredLocations.Add(location);
                 }
+            }
+
+            if (!string.IsNullOrEmpty(options.CurrentLocation))
+            {
+                connectionPolicy.SetCurrentLocation(options.CurrentLocation);
             }
 
             return new DocumentClient(options.ServiceUri, options.AccessKey, connectionPolicy);
