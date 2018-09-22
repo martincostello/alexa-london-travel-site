@@ -30,8 +30,15 @@ namespace MartinCostello.LondonTravel.Site.Integration
         {
             ClientOptions.BaseAddress = FindFreeServerAddress();
 
+            string applicationBasePath = AppContext.BaseDirectory;
+
+            if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("TF_BUILD")))
+            {
+                applicationBasePath = Environment.GetEnvironmentVariable("BUILD_SOURCESDIRECTORY");
+            }
+
             var builder = CreateWebHostBuilder()
-                .UseSolutionRelativeContentRoot("src/LondonTravel.Site")
+                .UseSolutionRelativeContentRoot("src/LondonTravel.Site", applicationBasePath: applicationBasePath)
                 .UseUrls(ClientOptions.BaseAddress.ToString())
                 .UseKestrel(
                     (p) => p.ConfigureHttpsDefaults(
