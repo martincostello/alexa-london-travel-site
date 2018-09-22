@@ -8,6 +8,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using System.IO;
     using System.Linq;
     using System.Runtime.CompilerServices;
+    using System.Runtime.InteropServices;
     using System.Threading.Tasks;
     using JustEat.HttpClientInterception;
     using Microsoft.Extensions.Logging;
@@ -108,6 +109,13 @@ namespace MartinCostello.LondonTravel.Site.Integration
             if (!System.Diagnostics.Debugger.IsAttached)
             {
                 options.AddArgument("--headless");
+            }
+
+            // HACK Workaround for "(unknown error: DevToolsActivePort file doesn't exist)"
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) &&
+                !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("TF_BUILD")))
+            {
+                options.AddArgument("--disable-dev-shm-usage");
             }
 
             if (collectPerformanceLogs)
