@@ -51,6 +51,7 @@ phases:
             .\Build.ps1 -OutputPath $(Build.StagingDirectory) $(BuildArgs)
           name: BuildAndTest
           displayName: Build and test
+          workingDirectory: $(Build.SourcesDirectory)
           env:
             DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
             NUGET_XMLDOC_MODE: skip
@@ -59,6 +60,7 @@ phases:
             ./build.sh --output $(Build.StagingDirectory) $(BuildArgs)
           name: BuildAndTest
           displayName: Build and test
+          workingDirectory: $(Build.SourcesDirectory)
           env:
             DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
             NUGET_XMLDOC_MODE: skip
