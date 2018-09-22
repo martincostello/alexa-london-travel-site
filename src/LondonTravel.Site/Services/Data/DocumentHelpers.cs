@@ -84,6 +84,8 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
                 connectionPolicy.SetCurrentLocation(options.CurrentLocation);
             }
 
+            connectionPolicy.UserAgentSuffix = "london-travel";
+
             return new DocumentClient(options.ServiceUri, options.AccessKey, connectionPolicy);
         }
     }
