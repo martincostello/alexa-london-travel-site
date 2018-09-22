@@ -28,20 +28,20 @@ namespace MartinCostello.LondonTravel.Site.Identity
         private const string RoleClaimIssuer = "https://londontravel.martincostello.com/";
 
         /// <summary>
-        /// The <see cref="IDocumentClient"/> to use. This field is read-only.
+        /// The <see cref="IDocumentService"/> to use. This field is read-only.
         /// </summary>
-        private readonly IDocumentClient _client;
+        private readonly IDocumentService _service;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserStore"/> class.
         /// </summary>
-        /// <param name="client">The <see cref="IDocumentClient"/> to use.</param>
+        /// <param name="service">The <see cref="IDocumentService"/> to use.</param>
         /// <exception cref="ArgumentNullException">
-        /// <paramref name="client"/> is <see langword="null"/>.
+        /// <paramref name="service"/> is <see langword="null"/>.
         /// </exception>
-        public UserStore(IDocumentClient client)
+        public UserStore(IDocumentService service)
         {
-            _client = client ?? throw new ArgumentNullException(nameof(client));
+            _service = service ?? throw new ArgumentNullException(nameof(service));
         }
 
         /// <inheritdoc />
@@ -75,7 +75,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 throw new ArgumentNullException(nameof(user));
             }
 
-            user.Id = await _client.CreateAsync(user);
+            user.Id = await _service.CreateAsync(user);
 
             return IdentityResult.Success;
         }
@@ -93,7 +93,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 throw new ArgumentException("No user Id specified.", nameof(user));
             }
 
-            bool deleted = await _client.DeleteAsync(user.Id);
+            bool deleted = await _service.DeleteAsync(user.Id);
 
             return deleted ?
                 IdentityResult.Success :
@@ -114,7 +114,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 throw new ArgumentNullException(nameof(normalizedEmail));
             }
 
-            var results = await _client.GetAsync<LondonTravelUser>((p) => p.EmailNormalized == normalizedEmail, cancellationToken);
+            var results = await _service.GetAsync<LondonTravelUser>((p) => p.EmailNormalized == normalizedEmail, cancellationToken);
             return results.FirstOrDefault();
         }
 
@@ -126,7 +126,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 throw new ArgumentNullException(nameof(userId));
             }
 
-            return await _client.GetAsync<LondonTravelUser>(userId);
+            return await _service.GetAsync<LondonTravelUser>(userId);
         }
 
         /// <inheritdoc />
@@ -142,7 +142,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 throw new ArgumentNullException(nameof(providerKey));
             }
 
-            var results = await _client.GetAsync<LondonTravelUser>(
+            var results = await _service.GetAsync<LondonTravelUser>(
                 (p) => p.Logins.Contains(new LondonTravelLoginInfo() { LoginProvider = loginProvider, ProviderKey = providerKey, ProviderDisplayName = null }) ||
                        p.Logins.Contains(new LondonTravelLoginInfo() { LoginProvider = loginProvider, ProviderKey = providerKey, ProviderDisplayName = loginProvider }),
                 cancellationToken);
@@ -158,7 +158,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 throw new ArgumentNullException(nameof(normalizedUserName));
             }
 
-            var results = await _client.GetAsync<LondonTravelUser>((p) => p.UserNameNormalized == normalizedUserName, cancellationToken);
+            var results = await _service.GetAsync<LondonTravelUser>((p) => p.UserNameNormalized == normalizedUserName, cancellationToken);
             return results.FirstOrDefault();
         }
 
@@ -382,7 +382,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 user.CreatedAt = DateTimeOffset.FromUnixTimeSeconds(user.Timestamp).UtcDateTime;
             }
 
-            LondonTravelUser updated = await _client.ReplaceAsync(user.Id, user, user.ETag);
+            LondonTravelUser updated = await _service.ReplaceAsync(user.Id, user, user.ETag);
 
             if (updated != null)
             {

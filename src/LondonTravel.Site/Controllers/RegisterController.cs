@@ -14,7 +14,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     public class RegisterController : Controller
     {
         private readonly IAccountService _service;
-        private readonly ILogger<RegisterController> _logger;
+        private readonly ILogger _logger;
 
         public RegisterController(IAccountService service, ILogger<RegisterController> logger)
         {

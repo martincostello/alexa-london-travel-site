@@ -15,9 +15,9 @@ namespace MartinCostello.LondonTravel.Site.Services
     public class AccountService : IAccountService
     {
         /// <summary>
-        /// The <see cref="IDocumentClient"/> to use. This field is read-only.
+        /// The <see cref="IDocumentService"/> to use. This field is read-only.
         /// </summary>
-        private readonly IDocumentClient _client;
+        private readonly IDocumentService _service;
 
         /// <summary>
         /// The <see cref="IMemoryCache"/> to use. This field is read-only.
@@ -27,17 +27,17 @@ namespace MartinCostello.LondonTravel.Site.Services
         /// <summary>
         /// The <see cref="ILogger"/> to use. This field is read-only.
         /// </summary>
-        private readonly ILogger<AccountService> _logger;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AccountService"/> class.
         /// </summary>
-        /// <param name="client">The <see cref="IDocumentClient"/> to use.</param>
+        /// <param name="service">The <see cref="IDocumentService"/> to use.</param>
         /// <param name="cache">The <see cref="IMemoryCache"/> to use.</param>
         /// <param name="logger">The <see cref="ILogger"/> to use.</param>
-        public AccountService(IDocumentClient client, IMemoryCache cache, ILogger<AccountService> logger)
+        public AccountService(IDocumentService service, IMemoryCache cache, ILogger<AccountService> logger)
         {
-            _client = client;
+            _service = service;
             _cache = cache;
             _logger = logger;
         }
@@ -50,7 +50,7 @@ namespace MartinCostello.LondonTravel.Site.Services
             {
                 try
                 {
-                    user = (await _client.GetAsync<LondonTravelUser>((p) => p.AlexaToken == accessToken, cancellationToken)).FirstOrDefault();
+                    user = (await _service.GetAsync<LondonTravelUser>((p) => p.AlexaToken == accessToken, cancellationToken)).FirstOrDefault();
                 }
                 catch (Exception ex)
                 {
@@ -63,9 +63,7 @@ namespace MartinCostello.LondonTravel.Site.Services
         }
 
         public Task<long> GetUserCountAsync(bool useCache)
-        {
-            return useCache ? GetUserCountFromCacheAsync() : GetUserCountFromDocumentStoreAsync();
-        }
+            => useCache ? GetUserCountFromCacheAsync() : GetUserCountFromDocumentStoreAsync();
 
         private async Task<long> GetUserCountFromCacheAsync()
         {
@@ -82,8 +80,6 @@ namespace MartinCostello.LondonTravel.Site.Services
         }
 
         private Task<long> GetUserCountFromDocumentStoreAsync()
-        {
-            return _client.GetDocumentCountAsync();
-        }
+            => _service.GetDocumentCountAsync();
     }
 }

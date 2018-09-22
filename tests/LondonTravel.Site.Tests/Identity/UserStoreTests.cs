@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Identity
@@ -123,7 +123,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
             // Arrange
             var user = new LondonTravelUser();
 
-            var mock = new Mock<IDocumentClient>();
+            var mock = new Mock<IDocumentService>();
 
             mock.Setup((p) => p.CreateAsync(user))
                 .ReturnsAsync("MyUserId");
@@ -149,7 +149,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 Id = "MyUserId"
             };
 
-            var mock = new Mock<IDocumentClient>();
+            var mock = new Mock<IDocumentService>();
 
             mock.Setup((p) => p.DeleteAsync(user.Id))
                 .ReturnsAsync(true);
@@ -172,7 +172,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 Id = "MyUserId"
             };
 
-            var mock = new Mock<IDocumentClient>();
+            var mock = new Mock<IDocumentService>();
 
             mock.Setup((p) => p.DeleteAsync(user.Id))
                 .ReturnsAsync(false);
@@ -483,9 +483,9 @@ namespace MartinCostello.LondonTravel.Site.Identity
             (await target.IsInRoleAsync(user, "admin", cancellationToken)).ShouldBeFalse();
         }
 
-        private static UserStore CreateStore(IDocumentClient client = null)
+        private static UserStore CreateStore(IDocumentService service = null)
         {
-            return new UserStore(client ?? Mock.Of<IDocumentClient>());
+            return new UserStore(service ?? Mock.Of<IDocumentService>());
         }
     }
 }

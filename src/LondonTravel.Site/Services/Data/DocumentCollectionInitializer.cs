@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Services.Data
@@ -7,7 +7,6 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
     using System.Collections.Concurrent;
     using System.Net;
     using System.Threading.Tasks;
-    using Microsoft.ApplicationInsights;
     using Microsoft.Azure.Documents;
     using Microsoft.Azure.Documents.Client;
     using Microsoft.Extensions.Logging;
@@ -20,19 +19,9 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
     public sealed class DocumentCollectionInitializer : IDocumentCollectionInitializer
     {
         /// <summary>
-        /// The <see cref="DocumentClient"/> being wrapped. This field is read-only.
-        /// </summary>
-        private readonly DocumentClient _client;
-
-        /// <summary>
-        /// The <see cref="TelemetryClient"/> to use. This field is read-only.
-        /// </summary>
-        private readonly TelemetryClient _telemetry;
-
-        /// <summary>
         /// The logger to use. This field is read-only.
         /// </summary>
-        private readonly ILogger<DocumentCollectionInitializer> _logger;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// The name of the Azure DocumentDB database. This field is read-only.
@@ -45,14 +34,8 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         private readonly ConcurrentDictionary<string, bool> _existingCollections;
 
         /// <summary>
-        /// Whether the instance has been disposed.
-        /// </summary>
-        private bool _disposed;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="DocumentCollectionInitializer"/> class.
         /// </summary>
-        /// <param name="telemetry">The <see cref="TelemetryClient"/> to use.</param>
         /// <param name="options">The <see cref="UserStoreOptions"/> to use.</param>
         /// <param name="logger">The <see cref="ILogger{DocumentCollectionInitializer}"/> to use.</param>
         /// <exception cref="ArgumentNullException">
@@ -62,31 +45,22 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// <paramref name="options"/> is invalid.
         /// </exception>
         public DocumentCollectionInitializer(
-            TelemetryClient telemetry,
             UserStoreOptions options,
             ILogger<DocumentCollectionInitializer> logger)
         {
-            _client = DocumentHelpers.CreateClient(options);
             _existingCollections = new ConcurrentDictionary<string, bool>();
-
-            _telemetry = telemetry;
             _logger = logger;
             _databaseName = options.DatabaseName;
         }
 
         /// <inheritdoc />
-        public void Dispose()
+        public async Task<bool> EnsureCollectionExistsAsync(IDocumentClient client, string collectionName)
         {
-            if (!_disposed)
+            if (client == null)
             {
-                _client?.Dispose();
-                _disposed = true;
+                throw new ArgumentNullException(nameof(client));
             }
-        }
 
-        /// <inheritdoc />
-        public async Task<bool> EnsureCollectionExistsAsync(string collectionName)
-        {
             if (collectionName == null)
             {
                 throw new ArgumentNullException(nameof(collectionName));
@@ -97,12 +71,12 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
                 return true;
             }
 
-            await EnsureDatabaseExistsAsync();
+            await EnsureDatabaseExistsAsync(client);
 
             Uri uri = BuildDatabaseUri();
             Uri createUri = new Uri($"{uri}/{DocumentHelpers.CollectionsUriFragment}", UriKind.Relative);
 
-            var response = await _client.CreateDocumentCollectionIfNotExistsAsync(
+            var response = await client.CreateDocumentCollectionIfNotExistsAsync(
                 uri,
                 new DocumentCollection() { Id = collectionName },
                 new RequestOptions() { OfferThroughput = 400 });
@@ -122,14 +96,13 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// <summary>
         /// Ensures that the database exists as an asynchronous operation.
         /// </summary>
+        /// <param name="client">The document client to use to ensure the database exists.</param>
         /// <returns>
         /// A <see cref="Task"/> representing the asynchronous operation to ensure the database exists.
         /// </returns>
-        private async Task EnsureDatabaseExistsAsync()
+        private async Task EnsureDatabaseExistsAsync(IDocumentClient client)
         {
-            await _client.OpenAsync();
-
-            var response = await _client.CreateDatabaseIfNotExistsAsync(new Database() { Id = _databaseName });
+            var response = await client.CreateDatabaseIfNotExistsAsync(new Database() { Id = _databaseName });
 
             bool created = response.StatusCode == HttpStatusCode.Created;
 

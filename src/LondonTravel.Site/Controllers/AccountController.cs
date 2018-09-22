@@ -37,7 +37,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         private readonly ISiteTelemetry _telemetry;
         private readonly IClock _clock;
         private readonly bool _isEnabled;
-        private readonly ILogger<AccountController> _logger;
+        private readonly ILogger _logger;
 
         public AccountController(
             UserManager<LondonTravelUser> userManager,

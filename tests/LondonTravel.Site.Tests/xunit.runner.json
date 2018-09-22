@@ -1,4 +1,5 @@
 {
   "methodDisplay": "method",
-  "methodDisplayOptions": "replaceUnderscoreWithSpace"
+  "methodDisplayOptions": "replaceUnderscoreWithSpace",
+  "parallelizeTestCollections": false
 }

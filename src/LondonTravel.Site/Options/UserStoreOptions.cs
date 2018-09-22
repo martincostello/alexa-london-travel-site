@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Options
@@ -30,6 +30,11 @@ namespace MartinCostello.LondonTravel.Site.Options
         /// Gets or sets the name of the Azure DocumentDB collection to use.
         /// </summary>
         public string CollectionName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the current Azure DocumentDB location, if any.
+        /// </summary>
+        public string CurrentLocation { get; set; }
 
         /// <summary>
         /// Gets or sets the preferred Azure DocumentDB locations to use, if any.
