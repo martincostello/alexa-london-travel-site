@@ -39,6 +39,24 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".vscode", ".vscode", "{DB85
 		.vscode\tasks.json = .vscode\tasks.json
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".azure-pipelines", ".azure-pipelines", "{6E4177B7-FAE2-448E-8764-B2261F9EEA63}"
+	ProjectSection(SolutionItems) = preProject
+		.azure-pipelines\build-template.yml = .azure-pipelines\build-template.yml
+		.azure-pipelines\build.yml = .azure-pipelines\build.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{4F53FEF1-66BC-45ED-B563-A619E9A193B7}"
+	ProjectSection(SolutionItems) = preProject
+		.github\stale.yml = .github\stale.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{4AD9EC06-329C-47FB-8549-1A1EDE980130}"
+	ProjectSection(SolutionItems) = preProject
+		docs\alexa-linking.graphviz = docs\alexa-linking.graphviz
+		docs\site.graphviz = docs\site.graphviz
+		docs\skill.graphviz = docs\skill.graphviz
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +79,9 @@ Global
 		{F1A4074F-A8DE-4A9A-97EF-91830AEC59B3} = {0EED3EF2-37DE-4E6E-B766-3E641D163515}
 		{0106CA34-73B0-4F30-8BDF-AF8D7AB22A4A} = {668E07A5-C40F-4694-9D3C-EBC1180656CF}
 		{DB85B1E3-701B-456F-AEE1-3B2F1DA23BC2} = {DD7EA67A-4FE1-4D4F-825E-51FF842107AB}
+		{6E4177B7-FAE2-448E-8764-B2261F9EEA63} = {DD7EA67A-4FE1-4D4F-825E-51FF842107AB}
+		{4F53FEF1-66BC-45ED-B563-A619E9A193B7} = {DD7EA67A-4FE1-4D4F-825E-51FF842107AB}
+		{4AD9EC06-329C-47FB-8549-1A1EDE980130} = {DD7EA67A-4FE1-4D4F-825E-51FF842107AB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {612E5D09-113B-4494-BEE6-0376224726FE}
