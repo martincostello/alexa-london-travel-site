@@ -113,9 +113,8 @@ namespace MartinCostello.LondonTravel.Site.Integration
 
             // HACK Workaround for "(unknown error: DevToolsActivePort file doesn't exist)"
             if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("TF_BUILD")) &&
-                (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.Windows)))
+                RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                options.AddArgument("--disable-gpu");
                 options.AddArgument("--no-sandbox");
             }
 

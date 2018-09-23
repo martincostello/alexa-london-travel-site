@@ -8,7 +8,6 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using System.Linq;
     using System.Net;
     using System.Net.Http.Headers;
-    using System.Runtime.InteropServices;
     using System.Threading.Tasks;
     using MartinCostello.LondonTravel.Site.Integration.Builders;
     using MartinCostello.LondonTravel.Site.Integration.Pages;
