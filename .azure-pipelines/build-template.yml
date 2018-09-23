@@ -46,11 +46,18 @@ phases:
             npm install -g gulp@3.9.1
           name: InstallGulp
           displayName: Install gulp
+      - ${{ if eq(parameters.agentOS, 'macOS') }}:
+        - script: |
+            brew install brew-cask
+            brew cask install google-chrome
+          name: InstallChrome
+          displayName: Install Google Chrome
       - ${{ if eq(parameters.agentOS, 'Windows') }}:
         - powershell: |
             .\Build.ps1 -OutputPath $(Build.StagingDirectory) $(BuildArgs)
           name: BuildAndTest
           displayName: Build and test
+          timeoutInMinutes: 20
           env:
             DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
             NUGET_XMLDOC_MODE: skip
@@ -59,6 +66,7 @@ phases:
             ./build.sh --output $(Build.StagingDirectory) $(BuildArgs)
           name: BuildAndTest
           displayName: Build and test
+          timeoutInMinutes: 20
           env:
             DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
             NUGET_XMLDOC_MODE: skip

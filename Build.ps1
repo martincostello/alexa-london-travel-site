@@ -95,6 +95,7 @@ function DotNetTest {
                 -hideskipped:All `
                 -mergebyhash `
                 -oldstyle `
+                -returntargetcode `
                 -register:user `
                 -skipautoprops `
                 `"-filter:+[LondonTravel.Site]* +[LondonTravel.Site.Views]* -[LondonTravel.Site.Tests]*`"
@@ -108,6 +109,7 @@ function DotNetTest {
                 -hideskipped:All `
                 -mergebyhash `
                 -oldstyle `
+                -returntargetcode `
                 -register:user `
                 -skipautoprops `
                 `"-filter:+[LondonTravel.Site]* +[LondonTravel.Site.Views]* -[LondonTravel.Site.Tests]*`"

@@ -8,6 +8,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using System.IO;
     using System.Linq;
     using System.Runtime.CompilerServices;
+    using System.Runtime.InteropServices;
     using System.Threading.Tasks;
     using JustEat.HttpClientInterception;
     using Microsoft.Extensions.Logging;
@@ -110,6 +111,13 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 options.AddArgument("--headless");
             }
 
+            // HACK Workaround for "(unknown error: DevToolsActivePort file doesn't exist)"
+            if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("TF_BUILD")) &&
+                RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                options.AddArgument("--no-sandbox");
+            }
+
             if (collectPerformanceLogs)
             {
                 // Enable logging of redirects (see https://stackoverflow.com/a/42212131/1064169)
@@ -128,11 +136,11 @@ namespace MartinCostello.LondonTravel.Site.Integration
             options.SetLoggingPreference(LogType.Server, LogLevel.All);
 #endif
 
-            var driver = new ChromeDriver(chromeDriverDirectory, options, TimeSpan.FromSeconds(10));
+            var timeout = TimeSpan.FromSeconds(10);
+            var driver = new ChromeDriver(chromeDriverDirectory, options, timeout);
 
             try
             {
-                var timeout = TimeSpan.FromSeconds(10);
                 var timeouts = driver.Manage().Timeouts();
 
                 timeouts.AsynchronousJavaScript = timeout;
@@ -295,7 +303,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
                     string directory = Path.GetDirectoryName(typeof(BrowserTest).Assembly.Location);
                     string fileName = $"{testName}_{DateTimeOffset.UtcNow:YYYY-MM-dd-HH-mm-ss}.png";
 
-                    fileName = Path.Combine(directory, fileName);
+                    fileName = Path.Combine(directory, "screenshots", fileName);
 
                     screenshot.SaveAsFile(fileName);
                 }

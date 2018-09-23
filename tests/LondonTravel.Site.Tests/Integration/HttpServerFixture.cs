@@ -9,6 +9,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using System.Net.Sockets;
     using System.Security.Cryptography.X509Certificates;
     using MartinCostello.Logging.XUnit;
+    using Microsoft.ApplicationInsights.DependencyCollector;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.TestHost;
     using Microsoft.Extensions.DependencyInjection;
@@ -30,8 +31,15 @@ namespace MartinCostello.LondonTravel.Site.Integration
         {
             ClientOptions.BaseAddress = FindFreeServerAddress();
 
+            string applicationBasePath = AppContext.BaseDirectory;
+
+            if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("TF_BUILD")))
+            {
+                applicationBasePath = Environment.GetEnvironmentVariable("BUILD_SOURCESDIRECTORY");
+            }
+
             var builder = CreateWebHostBuilder()
-                .UseSolutionRelativeContentRoot("src/LondonTravel.Site")
+                .UseSolutionRelativeContentRoot("src/LondonTravel.Site", applicationBasePath: applicationBasePath)
                 .UseUrls(ClientOptions.BaseAddress.ToString())
                 .UseKestrel(
                     (p) => p.ConfigureHttpsDefaults(
@@ -90,10 +98,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             base.ConfigureWebHost(builder);
-
-            builder.ConfigureServices(
-                (services) => services.AddSingleton<IStartupFilter, RemoteAuthorizationEventsFilter>(
-                    (_) => new RemoteAuthorizationEventsFilter(ServerAddress)));
+            builder.ConfigureServices(ConfigureServicesForTests);
         }
 
         /// <inheritdoc />
@@ -137,6 +142,23 @@ namespace MartinCostello.LondonTravel.Site.Integration
             {
                 listener.Stop();
             }
+        }
+
+        private void ConfigureServicesForTests(IServiceCollection services)
+        {
+            // Intercept remote authentication to redirect locally for browser UI tests
+            services.AddSingleton<IStartupFilter, RemoteAuthorizationEventsFilter>(
+                (_) => new RemoteAuthorizationEventsFilter(ServerAddress));
+
+            // Disable dependency tracking to work around https://github.com/Microsoft/ApplicationInsights-dotnet-server/pull/1006
+            services.ConfigureTelemetryModule<DependencyTrackingTelemetryModule>(
+                (module, _) =>
+                {
+                    module.DisableDiagnosticSourceInstrumentation = true;
+                    module.DisableRuntimeInstrumentation = true;
+                    module.SetComponentCorrelationHttpHeaders = false;
+                    module.IncludeDiagnosticSourceActivities.Clear();
+                });
         }
     }
 }

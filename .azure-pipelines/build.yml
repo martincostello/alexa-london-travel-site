@@ -17,8 +17,8 @@ phases:
     agentOS: macOS
     artifacts:
       archiveName: website.zip
-- template: build-template.yml
-  parameters:
-    agentOS: Windows
-    artifacts:
-      archiveName: website.zip
+#- template: build-template.yml
+#  parameters:
+#    agentOS: Windows
+#    artifacts:
+#      archiveName: website.zip
