@@ -115,6 +115,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("TF_BUILD")) &&
                 (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.Windows)))
             {
+                options.AddArgument("--disable-gpu");
                 options.AddArgument("--no-sandbox");
             }
 
