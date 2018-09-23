@@ -38,13 +38,6 @@ namespace MartinCostello.LondonTravel.Site.Integration
         [Fact]
         public async Task Can_Authorize_Alexa_And_Get_Preferences_From_Api()
         {
-            // HACK Temporarily skip this test to see if it's just this one that breaks in Azure Pipelines
-            if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("TF_BUILD")) &&
-                RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                return;
-            }
-
             // Arrange
             new AuthenticationInterceptionBuilder(Fixture.Interceptor).ForAmazon();
 
