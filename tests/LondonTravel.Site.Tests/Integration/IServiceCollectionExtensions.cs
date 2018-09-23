@@ -6,7 +6,6 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using Microsoft.ApplicationInsights.DependencyCollector;
     using Microsoft.ApplicationInsights.Extensibility;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.DependencyInjection.Extensions;
 
     internal static class IServiceCollectionExtensions
     {
@@ -22,9 +21,6 @@ namespace MartinCostello.LondonTravel.Site.Integration
                     module.SetComponentCorrelationHttpHeaders = false;
                     module.IncludeDiagnosticSourceActivities.Clear();
                 });
-
-            services.RemoveAll<ITelemetryInitializer>();
-            services.RemoveAll<ITelemetryModule>();
         }
     }
 }
