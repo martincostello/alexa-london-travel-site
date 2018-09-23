@@ -69,6 +69,10 @@ namespace MartinCostello.LondonTravel.Site.Integration
                     services.AddSingleton<IDocumentCollectionInitializer>((p) => p.GetRequiredService<InMemoryDocumentStore>());
                 });
 
+            // Disable dependency tracking to work around https://github.com/Microsoft/ApplicationInsights-dotnet-server/pull/1006
+            builder.ConfigureServices(
+                (services) => services.DisableApplicationInsights());
+
             builder.ConfigureAppConfiguration(ConfigureTests)
                    .ConfigureLogging((loggingBuilder) => loggingBuilder.ClearProviders().AddXUnit());
         }

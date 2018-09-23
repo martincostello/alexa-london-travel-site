@@ -55,8 +55,11 @@ namespace MartinCostello.LondonTravel.Site.Telemetry
                 {
                     if (!_initialized)
                     {
-                        _enricher = new HttpRequestActivityEnricher(configuration);
-                        _enricher.Subscribe();
+                        if (!configuration.DisableTelemetry)
+                        {
+                            _enricher = new HttpRequestActivityEnricher(configuration);
+                            _enricher.Subscribe();
+                        }
 
                         _initialized = true;
                     }

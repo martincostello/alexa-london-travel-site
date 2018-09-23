@@ -38,7 +38,6 @@ namespace MartinCostello.LondonTravel.Site
         {
             return WebHost.CreateDefaultBuilder(args)
                 .UseKestrel((p) => p.AddServerHeader = false)
-                .UseApplicationInsights()
                 .UseAzureAppServices()
                 .UseStartup<Startup>()
                 .ConfigureAppConfiguration((context, builder) => builder.ConfigureApplication(context))

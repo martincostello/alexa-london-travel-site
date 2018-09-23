@@ -301,9 +301,15 @@ namespace MartinCostello.LondonTravel.Site.Integration
                     Screenshot screenshot = camera.GetScreenshot();
 
                     string directory = Path.GetDirectoryName(typeof(BrowserTest).Assembly.Location);
-                    string fileName = $"{testName}_{DateTimeOffset.UtcNow:YYYY-MM-dd-HH-mm-ss}.png";
+                    directory = Path.Combine(directory, "screenshots");
 
-                    fileName = Path.Combine(directory, "screenshots", fileName);
+                    string fileName = $"{testName}_{DateTimeOffset.UtcNow:yyyy-MM-dd-HH-mm-ss}.png";
+                    fileName = Path.Combine(directory, fileName);
+
+                    if (!Directory.Exists(directory))
+                    {
+                        Directory.CreateDirectory(directory);
+                    }
 
                     screenshot.SaveAsFile(fileName);
                 }
