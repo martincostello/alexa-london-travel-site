@@ -58,7 +58,6 @@ phases:
           name: BuildAndTest
           displayName: Build and test
           timeoutInMinutes: 20
-          workingDirectory: $(Build.SourcesDirectory)
           env:
             DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
             NUGET_XMLDOC_MODE: skip
@@ -68,7 +67,6 @@ phases:
           name: BuildAndTest
           displayName: Build and test
           timeoutInMinutes: 20
-          workingDirectory: $(Build.SourcesDirectory)
           env:
             DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
             NUGET_XMLDOC_MODE: skip
@@ -112,7 +110,7 @@ phases:
         displayName: Publish screenshots
         condition: eq(variables['System.PullRequest.IsFork'], false)
         inputs:
-          PathToPublish: '$(Build.StagingDirectory)/**/screenshots/*.png'
+          PathToPublish: '$(Build.StagingDirectory)/**/*.png'
           ArtifactType: Container
           ${{ if eq(parameters.artifacts.name, '') }}:
             ArtifactName: Screenshots-$(AgentOSName)
