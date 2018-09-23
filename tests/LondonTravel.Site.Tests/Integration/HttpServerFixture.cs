@@ -152,7 +152,13 @@ namespace MartinCostello.LondonTravel.Site.Integration
 
             // Disable dependency tracking to work around https://github.com/Microsoft/ApplicationInsights-dotnet-server/pull/1006
             services.ConfigureTelemetryModule<DependencyTrackingTelemetryModule>(
-                (module, _) => module.DisableDiagnosticSourceInstrumentation = true);
+                (module, _) =>
+                {
+                    module.DisableDiagnosticSourceInstrumentation = true;
+                    module.DisableRuntimeInstrumentation = true;
+                    module.SetComponentCorrelationHttpHeaders = false;
+                    module.IncludeDiagnosticSourceActivities.Clear();
+                });
         }
     }
 }
