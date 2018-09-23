@@ -8,7 +8,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
     /// <summary>
     /// A class representing the collection fixture for a test server. This class cannot be inherited.
     /// </summary>
-    [CollectionDefinition(Name)]
+    [CollectionDefinition(Name, DisableParallelization = true)]
     public sealed class TestServerCollection : ICollectionFixture<TestServerFixture>
     {
         /// <summary>
