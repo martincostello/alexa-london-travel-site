@@ -136,11 +136,11 @@ namespace MartinCostello.LondonTravel.Site.Integration
             options.SetLoggingPreference(LogType.Server, LogLevel.All);
 #endif
 
-            var driver = new ChromeDriver(chromeDriverDirectory, options, TimeSpan.FromSeconds(10));
+            var timeout = TimeSpan.FromSeconds(10);
+            var driver = new ChromeDriver(chromeDriverDirectory, options, timeout);
 
             try
             {
-                var timeout = TimeSpan.FromSeconds(10);
                 var timeouts = driver.Manage().Timeouts();
 
                 timeouts.AsynchronousJavaScript = timeout;
