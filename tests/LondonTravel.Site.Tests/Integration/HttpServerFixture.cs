@@ -10,6 +10,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using System.Security.Cryptography.X509Certificates;
     using MartinCostello.Logging.XUnit;
     using Microsoft.ApplicationInsights.DependencyCollector;
+    using Microsoft.ApplicationInsights.Extensibility;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.TestHost;
     using Microsoft.Extensions.DependencyInjection;
@@ -159,6 +160,8 @@ namespace MartinCostello.LondonTravel.Site.Integration
                     module.SetComponentCorrelationHttpHeaders = false;
                     module.IncludeDiagnosticSourceActivities.Clear();
                 });
+
+            services.Configure<TelemetryConfiguration>((p) => p.DisableTelemetry = true);
         }
     }
 }
