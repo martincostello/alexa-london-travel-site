@@ -3,6 +3,8 @@
 
 namespace MartinCostello.LondonTravel.Site.Integration
 {
+    using Microsoft.ApplicationInsights.AspNetCore;
+    using Microsoft.ApplicationInsights.AspNetCore.Extensions;
     using Microsoft.ApplicationInsights.DependencyCollector;
     using Microsoft.ApplicationInsights.Extensibility;
     using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +15,11 @@ namespace MartinCostello.LondonTravel.Site.Integration
         {
             // Disable dependency tracking to work around https://github.com/Microsoft/ApplicationInsights-dotnet-server/pull/1006
             services.Configure<TelemetryConfiguration>((p) => p.DisableTelemetry = true);
+
+            // HACK Very hackily neutralise these telemetry modules. They always subscribe,
+            // diagnostic listeners even if Application Insights is turned off, and that's
+            // where the bug is. This prematurely initializes them and then disposes of them
+            // so that they remove their diagnostic listeners that are wired up that causes the problems.
             services.ConfigureTelemetryModule<DependencyTrackingTelemetryModule>(
                 (module, _) =>
                 {
@@ -20,6 +27,17 @@ namespace MartinCostello.LondonTravel.Site.Integration
                     module.DisableRuntimeInstrumentation = true;
                     module.SetComponentCorrelationHttpHeaders = false;
                     module.IncludeDiagnosticSourceActivities.Clear();
+
+                    module.Initialize(TelemetryConfiguration.Active);
+                    module.Dispose();
+                });
+
+            services.ConfigureTelemetryModule<RequestTrackingTelemetryModule>(
+                (module, _) =>
+                {
+                    module.CollectionOptions = new RequestCollectionOptions();
+                    module.Initialize(TelemetryConfiguration.Active);
+                    module.Dispose();
                 });
         }
     }
