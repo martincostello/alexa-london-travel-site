@@ -9,8 +9,6 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using System.Net.Sockets;
     using System.Security.Cryptography.X509Certificates;
     using MartinCostello.Logging.XUnit;
-    using Microsoft.ApplicationInsights.DependencyCollector;
-    using Microsoft.ApplicationInsights.Extensibility;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.TestHost;
     using Microsoft.Extensions.DependencyInjection;
@@ -152,16 +150,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 (_) => new RemoteAuthorizationEventsFilter(ServerAddress));
 
             // Disable dependency tracking to work around https://github.com/Microsoft/ApplicationInsights-dotnet-server/pull/1006
-            services.ConfigureTelemetryModule<DependencyTrackingTelemetryModule>(
-                (module, _) =>
-                {
-                    module.DisableDiagnosticSourceInstrumentation = true;
-                    module.DisableRuntimeInstrumentation = true;
-                    module.SetComponentCorrelationHttpHeaders = false;
-                    module.IncludeDiagnosticSourceActivities.Clear();
-                });
-
-            services.Configure<TelemetryConfiguration>((p) => p.DisableTelemetry = true);
+            services.DisableApplicationInsights();
         }
     }
 }
