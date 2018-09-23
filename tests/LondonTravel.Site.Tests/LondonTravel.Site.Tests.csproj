@@ -1,5 +1,6 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <Description>Tests for https://londontravel.martincostello.com/</Description>
     <NoWarn>$(NoWarn);CA1707;CA2234</NoWarn>
     <PreserveCompilationContext>true</PreserveCompilationContext>
