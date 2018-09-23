@@ -112,8 +112,8 @@ namespace MartinCostello.LondonTravel.Site.Integration
             }
 
             // HACK Workaround for "(unknown error: DevToolsActivePort file doesn't exist)"
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) &&
-                !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("TF_BUILD")))
+            if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("TF_BUILD")) &&
+                (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.Windows)))
             {
                 options.AddArgument("--no-sandbox");
             }
