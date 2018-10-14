@@ -39,9 +39,9 @@ namespace MartinCostello.LondonTravel.Site.Telemetry
         /// <inheritdoc />
         public void Initialize(ITelemetry telemetry)
         {
-            telemetry.Context.Properties["AzureDatacenter"] = _config.AzureDatacenter();
-            telemetry.Context.Properties["AzureEnvironment"] = _config.AzureEnvironment();
-            telemetry.Context.Properties["GitCommit"] = GitMetadata.Commit;
+            telemetry.Context.GlobalProperties["AzureDatacenter"] = _config.AzureDatacenter();
+            telemetry.Context.GlobalProperties["AzureEnvironment"] = _config.AzureEnvironment();
+            telemetry.Context.GlobalProperties["GitCommit"] = GitMetadata.Commit;
 
             if (_contextAccessor.HttpContext != null && string.IsNullOrEmpty(telemetry.Context.User.AuthenticatedUserId))
             {
