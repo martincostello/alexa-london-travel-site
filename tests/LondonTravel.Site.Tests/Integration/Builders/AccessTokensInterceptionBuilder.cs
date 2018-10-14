@@ -6,7 +6,6 @@ namespace MartinCostello.LondonTravel.Site.Integration.Builders
     using System;
     using System.Collections.Generic;
     using System.Globalization;
-    using System.Linq;
     using JustEat.HttpClientInterception;
 
     /// <summary>
@@ -222,9 +221,7 @@ namespace MartinCostello.LondonTravel.Site.Integration.Builders
 
             return new HttpRequestInterceptionBuilder()
                 .Requests().ForPost().ForUrl(url)
-                .Responds()
-                .WithContent(string.Join("&", form.Select((p) => $"{p.Key}={p.Value}")))
-                .WithMediaType("application/x-www-form-urlencoded");
+                .Responds().WithFormContent(form);
         }
     }
 }
