@@ -72,7 +72,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 var model = view.Model.ShouldBeOfType<RegisterViewModel>();
 
                 model.ShouldNotBeNull();
-                model.RegisteredUsers.ShouldBe(5000);
+                model.RegisteredUsers.ShouldBe(6000);
             }
         }
 
