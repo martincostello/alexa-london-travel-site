@@ -3,6 +3,8 @@
 
 namespace MartinCostello.LondonTravel.Site.Models
 {
+    using System;
+    using System.Linq;
     using Options;
 
     /// <summary>
@@ -91,6 +93,11 @@ namespace MartinCostello.LondonTravel.Site.Models
         public string TwitterHandle { get; set; }
 
         /// <summary>
+        /// Gets or sets the reviews metadata.
+        /// </summary>
+        public ReviewMetadataModel Reviews { get; set; }
+
+        /// <summary>
         /// Creates a new instance of <see cref="MetaModel"/>.
         /// </summary>
         /// <param name="options">The options to use.</param>
@@ -142,9 +149,25 @@ namespace MartinCostello.LondonTravel.Site.Models
                 model.SiteType = options.Type ?? "website";
                 model.Title = $"{title} - {model.SiteName}";
                 model.TwitterCard = "summary";
+
+                model.Reviews = BuildReviews();
             }
 
             return model;
+        }
+
+        private static ReviewMetadataModel BuildReviews()
+        {
+            int[] scores = new[] { 2, 3, 3, 3, 4, 4, 5, 5, 5 };
+            double average = Math.Round(scores.Average(), digits: 1);
+
+            return new ReviewMetadataModel()
+            {
+                WorstRating = 1,
+                BestRating = 5,
+                ReviewCount = 7,
+                AverageRating = average,
+            };
         }
     }
 }

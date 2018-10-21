@@ -1,4 +1,4 @@
-﻿@using Microsoft.AspNetCore.Hosting
+@using Microsoft.AspNetCore.Hosting
 @model MetaModel
 @inject IConfiguration Config
 @inject IHostingEnvironment Hosting
@@ -87,10 +87,10 @@
         "aggregateRating": {
             "@@context": "http://schema.org",
             "@@type": "AggregateRating",
-            "bestRating": 5,
-            "worstRating": 1,
-            "ratingValue": 4,
-            "reviewCount": 6
+            "bestRating": @Model.Reviews.BestRating,
+            "worstRating": @Model.Reviews.WorstRating,
+            "ratingValue": @Model.Reviews.AverageRating,
+            "reviewCount": @Model.Reviews.ReviewCount
         },
         "applicationCategory": "Travel & Transportation",
         "applicationSubCategory": "Public Transportation",
