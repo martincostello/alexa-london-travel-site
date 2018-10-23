@@ -117,6 +117,9 @@ namespace MartinCostello.LondonTravel.Site.Middleware
                         context.Response.Headers.Add("Expect-CT", _expectCTValue);
                     }
 
+                    context.Response.Headers.Add("Report-To", @"{""group"":""default"",""max_age"":31536000,""endpoints"":[{""url"":""https://martincostello.report-uri.com/a/d/g""}],""include_subdomains"":false}");
+                    context.Response.Headers.Add("NEL", @"{""report_to"":""default"",""max_age"":31536000,""include_subdomains"":false}");
+
                     context.Response.Headers.Add("X-Datacenter", _config.AzureDatacenter());
 
 #if DEBUG

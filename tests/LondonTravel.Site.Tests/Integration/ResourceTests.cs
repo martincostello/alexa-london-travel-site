@@ -7,6 +7,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using System.Net;
     using System.Net.Http;
     using System.Threading.Tasks;
+    using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using Shouldly;
     using Xunit;
@@ -153,7 +154,9 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 "content-security-policy",
                 "content-security-policy-report-only",
                 "feature-policy",
+                "NEL",
                 "Referrer-Policy",
+                "Report-To",
                 "X-Content-Type-Options",
                 "X-CSP-Nonce",
                 "X-Datacenter",
@@ -175,6 +178,25 @@ namespace MartinCostello.LondonTravel.Site.Integration
                     {
                         response.Headers.Contains(expected).ShouldBeTrue($"The '{expected}' response header was not found.");
                     }
+                }
+            }
+        }
+
+        [Theory]
+        [InlineData("NEL")]
+        [InlineData("Report-To")]
+        public async Task Response_Headers_Is_Valid_Json(string name)
+        {
+            // Act
+            using (var client = Fixture.CreateClient())
+            {
+                using (var response = await client.GetAsync("/"))
+                {
+                    // Assert
+                    response.Headers.Contains(name).ShouldBeTrue($"The '{name}' response header was not found.");
+
+                    string json = string.Join(string.Empty, response.Headers.GetValues(name));
+                    JObject.Parse(json).HasValues.ShouldBeTrue();
                 }
             }
         }
