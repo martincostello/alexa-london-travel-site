@@ -60,8 +60,8 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             }
             catch (Exception)
             {
-                // Over 6,000 users as of 21/10/2018
-                return 6000;
+                // Over 7,000 users as of 28/10/2018
+                return 7_000;
             }
         }
     }
