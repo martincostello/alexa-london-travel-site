@@ -33,14 +33,20 @@ phases:
       - ${{ parameters.beforeBuild }}
       - ${{ if eq(parameters.agentOS, 'Linux') }}:
         - script: |
-            apt-get update
-            apt-get install -y --no-install-recommends gettext libcurl4-openssl-dev libicu-dev libssl-dev libunwind8
+            sudo apt-get update
+            sudo apt-get install -y --no-install-recommends gettext libcurl4-openssl-dev libicu-dev libssl-dev libunwind8
           name: InstallDotNetCoreDeps
           displayName: Install .NET Core pre-requisites
-      - script: |
-          npm install -g npm
-        name: UpdateNpm
-        displayName: Update to latest npm
+      - ${{ if eq(parameters.agentOS, 'Linux') }}:
+        - script: |
+            sudo npm install -g npm
+          name: UpdateNpm
+          displayName: Update to latest npm
+      - ${{ if ne(parameters.agentOS, 'Linux') }}:
+        - script: |
+            npm install -g npm
+          name: UpdateNpm
+          displayName: Update to latest npm
       - ${{ if eq(parameters.agentOS, 'macOS') }}:
         - script: |
             npm install -g gulp@3.9.1
