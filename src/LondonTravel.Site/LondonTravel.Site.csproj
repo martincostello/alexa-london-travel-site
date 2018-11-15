@@ -10,6 +10,7 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <TypeScriptToolsVersion>latest</TypeScriptToolsVersion>
     <UserSecretsId>londontravel.martincostello.com</UserSecretsId>
+    <XlfLanguages>en-GB;en-US;qps-Ploc</XlfLanguages>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebugSymbols>True</DebugSymbols>
@@ -53,6 +54,7 @@
     <PackageReference Include="Serilog.Sinks.UDP" Version="5.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
     <PackageReference Include="WindowsAzure.Storage" Version="9.3.2" />
+    <PackageReference Include="XliffTasks" Version="0.2.0-beta-63125-01" PrivateAssets="All" />
   </ItemGroup>
   <Target Name="BundleAssets" BeforeTargets="PrepareForPublish">
     <Exec Command="npm ci" Condition=" '$(InstallWebPackages)' == 'true' " />
