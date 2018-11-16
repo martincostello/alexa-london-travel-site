@@ -114,7 +114,7 @@
       </trans-unit>
       <trans-unit id="AvailableLinesTitle">
         <source>Available Lines &lt;span class="{0}"&gt;({1})&lt;/span&gt;</source>
-        <target state="translated">[Åṽåîļåƀļéẋẋẋ Ļîñéšẋẋ &lt;spanxx class="{0}"&gt;({1})&lt;/span&gt;ẋẋẋẋẋẋẋẋ]</target>
+        <target state="translated">[Åṽåîļåƀļéẋẋẋ Ļîñéšẋẋ &lt;span class="{0}"&gt;(ẋ{1})ẋ&lt;/span&gt;]</target>
         <note />
       </trans-unit>
       <trans-unit id="BrandName">
@@ -154,7 +154,7 @@
       </trans-unit>
       <trans-unit id="CopyrightText">
         <source>&amp;copy; {0} {1}</source>
-        <target state="translated">[⅋çöþý⁏ẋẋ {0}ẋ {1}ẋ]</target>
+        <target state="translated">[⅋çöþý⁏ẋẋ {0} {1}]</target>
         <note />
       </trans-unit>
       <trans-unit id="DeleteAccountButtonAltText">
@@ -184,7 +184,7 @@
       </trans-unit>
       <trans-unit id="DeleteAccountParagraph1Html">
         <source>Clicking the &lt;strong&gt;Delete&lt;/strong&gt; button will &lt;strong&gt;&lt;em&gt;permanently&lt;/em&gt;&lt;/strong&gt; delete your London Travel account and any data associated with it.</source>
-        <target state="translated">[Çļîçķîñĝẋẋẋ ţĥéẋ &lt;strong&gt;Ðéļéţé&lt;/strong&gt;ẋẋẋẋẋẋẋẋ ƀûţţöñẋẋ ŵîļļẋẋ &lt;strong&gt;&lt;em&gt;þéŕɱåñéñţļý&lt;/em&gt;&lt;/strong&gt;ẋẋẋẋẋẋẋẋẋẋẋẋẋ ðéļéţéẋẋ ýöûŕẋẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ åççöûñţẋẋẋ åñðẋ åñýẋ ðåţåẋẋ åššöçîåţéðẋẋẋẋ ŵîţĥẋẋ îţ·ẋ]</target>
+        <target state="translated">[Çļîçķîñĝẋẋẋ ţĥéẋ &lt;strong&gt;Ðéļéţéẋẋ&lt;/strong&gt; ƀûţţöñẋẋ ŵîļļẋẋ &lt;strong&gt;&lt;em&gt;þéŕɱåñéñţļýẋẋẋẋ&lt;/em&gt;&lt;/strong&gt; ðéļéţéẋẋ ýöûŕẋẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ åççöûñţẋẋẋ åñðẋ åñýẋ ðåţåẋẋ åššöçîåţéðẋẋẋẋ ŵîţĥẋẋ îţ·ẋ]</target>
         <note />
       </trans-unit>
       <trans-unit id="DeleteAccountParagraph2">
@@ -194,7 +194,7 @@
       </trans-unit>
       <trans-unit id="DeleteAccountParagraph3Html">
         <source>Are you sure you want to delete your account? This action &lt;strong&gt;cannot&lt;/strong&gt; be undone.</source>
-        <target state="translated">[Åŕéẋ ýöûẋ šûŕéẋẋ ýöûẋ ŵåñţẋẋ ţöẋ ðéļéţéẋẋ ýöûŕẋẋ åççöûñţ¿ẋẋẋ Ţĥîšẋẋ åçţîöñẋẋ &lt;strong&gt;çåññöţ&lt;/strong&gt;ẋẋẋẋẋẋẋẋ ƀéẋ ûñðöñé·ẋẋẋ]</target>
+        <target state="translated">[Åŕéẋ ýöûẋ šûŕéẋẋ ýöûẋ ŵåñţẋẋ ţöẋ ðéļéţéẋẋ ýöûŕẋẋ åççöûñţ¿ẋẋẋ Ţĥîšẋẋ åçţîöñẋẋ &lt;strong&gt;çåññöţẋẋ&lt;/strong&gt; ƀéẋ ûñðöñé·ẋẋẋ]</target>
         <note />
       </trans-unit>
       <trans-unit id="DeleteAccountWarning">
@@ -239,7 +239,7 @@
       </trans-unit>
       <trans-unit id="ErrorSubtitle">
         <source>Error (HTTP {0})</source>
-        <target state="translated">[Éŕŕöŕẋẋ (ĤŢŢÞẋẋ {0})ẋẋ]</target>
+        <target state="translated">[Éŕŕöŕẋẋ (ĤŢŢÞẋẋ {0})ẋ]</target>
         <note />
       </trans-unit>
       <trans-unit id="ErrorSubtitle400">
@@ -299,7 +299,7 @@
       </trans-unit>
       <trans-unit id="FavoriteLinesTitle">
         <source>Favourite Lines &lt;span class="{0}"&gt;({1})&lt;/span&gt;</source>
-        <target state="translated">[Ƒåṽöûŕîţéẋẋẋ Ļîñéšẋẋ &lt;spanxx class="{0}"&gt;({1})&lt;/span&gt;ẋẋẋẋẋẋẋẋ]</target>
+        <target state="translated">[Ƒåṽöûŕîţéẋẋẋ Ļîñéšẋẋ &lt;span class="{0}"&gt;(ẋ{1})ẋ&lt;/span&gt;]</target>
         <note />
       </trans-unit>
       <trans-unit id="HelpLinkAltText">
@@ -354,7 +354,7 @@
       </trans-unit>
       <trans-unit id="LinePreferencesNoneContent">
         <source>Once you have chosen at least one favourite line, you will be able to ask the {0} skill about your commute if you have linked your account.</source>
-        <target state="translated">[Öñçéẋẋ ýöûẋ ĥåṽéẋẋ çĥöšéñẋẋ åţẋ ļéåšţẋẋ öñéẋ ƒåṽöûŕîţéẋẋẋ ļîñé،ẋẋ ýöûẋ ŵîļļẋẋ ƀéẋ åƀļéẋẋ ţöẋ åšķẋ ţĥéẋ {0}ẋ šķîļļẋẋ åƀöûţẋẋ ýöûŕẋẋ çöɱɱûţéẋẋẋ îƒẋ ýöûẋ ĥåṽéẋẋ ļîñķéðẋẋ ýöûŕẋẋ åççöûñţ·ẋẋẋ]</target>
+        <target state="translated">[Öñçéẋẋ ýöûẋ ĥåṽéẋẋ çĥöšéñẋẋ åţẋ ļéåšţẋẋ öñéẋ ƒåṽöûŕîţéẋẋẋ ļîñé،ẋẋ ýöûẋ ŵîļļẋẋ ƀéẋ åƀļéẋẋ ţöẋ åšķẋ ţĥéẋ {0} šķîļļẋẋ åƀöûţẋẋ ýöûŕẋẋ çöɱɱûţéẋẋẋ îƒẋ ýöûẋ ĥåṽéẋẋ ļîñķéðẋẋ ýöûŕẋẋ åççöûñţ·ẋẋẋ]</target>
         <note />
       </trans-unit>
       <trans-unit id="LinePreferencesNoneLead">
@@ -364,7 +364,7 @@
       </trans-unit>
       <trans-unit id="LinePreferencesPlural">
         <source>The {0} selected lines will be used by the London Travel skill to tell you about your commute.</source>
-        <target state="translated">[Ţĥéẋ {0}ẋ šéļéçţéðẋẋẋ ļîñéšẋẋ ŵîļļẋẋ ƀéẋ ûšéðẋẋ ƀýẋ ţĥéẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ šķîļļẋẋ ţöẋ ţéļļẋẋ ýöûẋ åƀöûţẋẋ ýöûŕẋẋ çöɱɱûţé·ẋẋẋ]</target>
+        <target state="translated">[Ţĥéẋ {0} šéļéçţéðẋẋẋ ļîñéšẋẋ ŵîļļẋẋ ƀéẋ ûšéðẋẋ ƀýẋ ţĥéẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ šķîļļẋẋ ţöẋ ţéļļẋẋ ýöûẋ åƀöûţẋẋ ýöûŕẋẋ çöɱɱûţé·ẋẋẋ]</target>
         <note />
       </trans-unit>
       <trans-unit id="LinePreferencesSingular">
@@ -474,7 +474,7 @@
       </trans-unit>
       <trans-unit id="OtherLinesTitle">
         <source>Other Lines &lt;span class="{0}"&gt;({1})&lt;/span&gt;</source>
-        <target state="translated">[Öţĥéŕẋẋ Ļîñéšẋẋ &lt;spanxx class="{0}"&gt;({1})&lt;/span&gt;ẋẋẋẋẋẋẋẋ]</target>
+        <target state="translated">[Öţĥéŕẋẋ Ļîñéšẋẋ &lt;span class="{0}"&gt;(ẋ{1})ẋ&lt;/span&gt;]</target>
         <note />
       </trans-unit>
       <trans-unit id="PermissionDeniedContent">
@@ -549,7 +549,7 @@
       </trans-unit>
       <trans-unit id="RegisterParagraph4">
         <source>More than {0:N0} users have registered an account.</source>
-        <target state="translated">[Ṁöŕéẋẋ ţĥåñẋẋ {0:N0}ẋẋ ûšéŕšẋẋ ĥåṽéẋẋ ŕéĝîšţéŕéðẋẋẋẋ åñẋ åççöûñţ·ẋẋẋ]</target>
+        <target state="translated">[Ṁöŕéẋẋ ţĥåñẋẋ {0:N0} ûšéŕšẋẋ ĥåṽéẋẋ ŕéĝîšţéŕéðẋẋẋẋ åñẋ åççöûñţ·ẋẋẋ]</target>
         <note />
       </trans-unit>
       <trans-unit id="RegisterSignInSubtitle">
@@ -569,7 +569,7 @@
       </trans-unit>
       <trans-unit id="RemoveAccountButtonAltText">
         <source>Remove link to {0} from your account</source>
-        <target state="translated">[Ŕéɱöṽéẋẋ ļîñķẋẋ ţöẋ {0}ẋ ƒŕöɱẋẋ ýöûŕẋẋ åççöûñţẋẋẋ]</target>
+        <target state="translated">[Ŕéɱöṽéẋẋ ļîñķẋẋ ţöẋ {0} ƒŕöɱẋẋ ýöûŕẋẋ åççöûñţẋẋẋ]</target>
         <note />
       </trans-unit>
       <trans-unit id="RemoveAccountButtonText">
@@ -609,12 +609,12 @@
       </trans-unit>
       <trans-unit id="SignInButtonAltText">
         <source>Sign in using your {0} account</source>
-        <target state="translated">[Šîĝñẋẋ îñẋ ûšîñĝẋẋ ýöûŕẋẋ {0}ẋ åççöûñţẋẋẋ]</target>
+        <target state="translated">[Šîĝñẋẋ îñẋ ûšîñĝẋẋ ýöûŕẋẋ {0} åççöûñţẋẋẋ]</target>
         <note />
       </trans-unit>
       <trans-unit id="SignInButtonText">
         <source>Sign in with {0}</source>
-        <target state="translated">[Šîĝñẋẋ îñẋ ŵîţĥẋẋ {0}ẋ]</target>
+        <target state="translated">[Šîĝñẋẋ îñẋ ŵîţĥẋẋ {0}]</target>
         <note />
       </trans-unit>
       <trans-unit id="SignInErrorSubtitle">
