@@ -1,0 +1,777 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="en-US" original="../SiteResources.resx">
+    <body>
+      <trans-unit id="AccessDeniedSubtitle">
+        <source>You do not have access to this resource.</source>
+        <target state="translated">You do not have access to this resource.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AccessDeniedTitle">
+        <source>Access denied</source>
+        <target state="translated">Access denied</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AccountCreatedTitle">
+        <source>Your London Travel account has been created.</source>
+        <target state="translated">Your London Travel account has been created.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AccountDeletedContent">
+        <source>Sorry to see you go.</source>
+        <target state="translated">Sorry to see you go.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AccountDeletedTitle">
+        <source>Your London Travel account has been deleted.</source>
+        <target state="translated">Your London Travel account has been deleted.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AccountLinkDeniedContent">
+        <source>You did not grant permission for London Travel to access your other account.</source>
+        <target state="translated">You did not grant permission for London Travel to access your other account.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AccountLinkDeniedTitle">
+        <source>Account link permission denied</source>
+        <target state="translated">Account link permission denied</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AccountLinkFailedContent">
+        <source>Something went wrong when attempting to link your other account.</source>
+        <target state="translated">Something went wrong when attempting to link your other account.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AccountLinkFailedTitle">
+        <source>Account link failed</source>
+        <target state="translated">Account link failed</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AccountLockedSubtitle">
+        <source>This account has been locked out. Please try again later.</source>
+        <target state="translated">This account has been locked out. Please try again later.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AccountLockedTitle">
+        <source>Account locked</source>
+        <target state="translated">Account locked</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AlexaSignInFormTitle">
+        <source>Choose a service to sign-in with:</source>
+        <target state="translated">Choose a service to sign-in with:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AlexaSignInMetaDescription">
+        <source>Link your London Travel account with Alexa.</source>
+        <target state="translated">Link your London Travel account with Alexa.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AlexaSignInParagraph1">
+        <source>Sign in to link an existing London Travel account to the Alexa skill.</source>
+        <target state="translated">Sign in to link an existing London Travel account to the Alexa skill.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AlexaSignInParagraph2">
+        <source>If you do not already have one set up, an account will be created once you have signed in.</source>
+        <target state="translated">If you do not already have one set up, an account will be created once you have signed in.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AlexaSignInParagraph3">
+        <source>Once you've linked your account to the skill you'll be able to ask Alexa for information about your commute.</source>
+        <target state="translated">Once you've linked your account to the skill you'll be able to ask Alexa for information about your commute.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AlexaSignInTitle">
+        <source>Sign In or Register</source>
+        <target state="translated">Sign In or Register</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AlreadyRegisteredContent1">
+        <source>You have already created a London Travel account by signing in with a different service to the one you just tried to sign in with.</source>
+        <target state="translated">You have already created a London Travel account by signing in with a different service to the one you just tried to sign in with.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AlreadyRegisteredContent2">
+        <source>Sign in with one of the service(s) you've already used to sign-in, then you'll be able to link other service(s) to your account.</source>
+        <target state="translated">Sign in with one of the service(s) you've already used to sign-in, then you'll be able to link other service(s) to your account.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AlreadyRegisteredTitle">
+        <source>Already registered</source>
+        <target state="translated">Already registered</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AvailableLinesTitle">
+        <source>Available Lines &lt;span class="{0}"&gt;({1})&lt;/span&gt;</source>
+        <target state="translated">Available Lines &lt;span class="{0}"&gt;({1})&lt;/span&gt;</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BrandName">
+        <source>London Travel</source>
+        <target state="translated">London Travel</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CancelButtonAltText">
+        <source>Cancel</source>
+        <target state="translated">Cancel</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CancelButtonText">
+        <source>Cancel</source>
+        <target state="translated">Cancel</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClearPreferencesButtonAltText">
+        <source>Deselect all lines</source>
+        <target state="translated">Deselect all lines</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClearPreferencesButtonText">
+        <source>Deselect all</source>
+        <target state="translated">Deselect all</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CloseButtonText">
+        <source>Close</source>
+        <target state="translated">Close</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommuteSkillInvocation">
+        <source>"Alexa, ask London Travel what my commute's like today?"</source>
+        <target state="translated">"Alexa, ask London Travel what my commute's like today?"</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CopyrightText">
+        <source>&amp;copy; {0} {1}</source>
+        <target state="translated">&amp;copy; {0} {1}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DeleteAccountButtonAltText">
+        <source>Permanently delete your London Travel account</source>
+        <target state="translated">Permanently delete your London Travel account</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DeleteAccountButtonText">
+        <source>Delete your account</source>
+        <target state="translated">Delete your account</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DeleteAccountConfirmationButtonAltText">
+        <source>Permanently delete your account</source>
+        <target state="translated">Permanently delete your account</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DeleteAccountConfirmationButtonText">
+        <source>Delete</source>
+        <target state="translated">Delete</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DeleteAccountModalTitle">
+        <source>Delete your account</source>
+        <target state="translated">Delete your account</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DeleteAccountParagraph1Html">
+        <source>Clicking the &lt;strong&gt;Delete&lt;/strong&gt; button will &lt;strong&gt;&lt;em&gt;permanently&lt;/em&gt;&lt;/strong&gt; delete your London Travel account and any data associated with it.</source>
+        <target state="translated">Clicking the &lt;strong&gt;Delete&lt;/strong&gt; button will &lt;strong&gt;&lt;em&gt;permanently&lt;/em&gt;&lt;/strong&gt; delete your London Travel account and any data associated with it.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DeleteAccountParagraph2">
+        <source>If you have linked the London Travel Alexa skill to this account you will no longer be able to ask Alexa about your commute using the skill unless you create a new account and re-link the skill using an Alexa-enabled device.</source>
+        <target state="translated">If you have linked the London Travel Alexa skill to this account you will no longer be able to ask Alexa about your commute using the skill unless you create a new account and re-link the skill using an Alexa-enabled device.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DeleteAccountParagraph3Html">
+        <source>Are you sure you want to delete your account? This action &lt;strong&gt;cannot&lt;/strong&gt; be undone.</source>
+        <target state="translated">Are you sure you want to delete your account? This action &lt;strong&gt;cannot&lt;/strong&gt; be undone.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DeleteAccountWarning">
+        <source>Warning!</source>
+        <target state="translated">Warning!</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DeleteInProgressText">
+        <source>Your account is being deleted...</source>
+        <target state="translated">Your account is being deleted...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorMessage">
+        <source>Sorry, something went wrong.</source>
+        <target state="translated">Sorry, something went wrong.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorSubtitle">
+        <source>Error (HTTP {0})</source>
+        <target state="translated">Error (HTTP {0})</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorTitle">
+        <source>Error</source>
+        <target state="translated">Error</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FavoriteLinesTitle">
+        <source>Favourite Lines &lt;span class="{0}"&gt;({1})&lt;/span&gt;</source>
+        <target state="translated">Favorite Lines &lt;span class="{0}"&gt;({1})&lt;/span&gt;</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="HelpLinkAltText">
+        <source>View help and support information for the London Travel Alexa skill and this website</source>
+        <target state="translated">View help and support information for the London Travel Alexa skill and this website</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="HelpLinkText">
+        <source>Help &amp; Support</source>
+        <target state="translated">Help &amp; Support</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="HelpMetaDescription">
+        <source>Help and support for the London Travel Alexa skill.</source>
+        <target state="translated">Help and support for the London Travel Alexa skill.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="HelpTitle">
+        <source>Help and Support</source>
+        <target state="translated">Help and Support</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="HomepageLead">
+        <source>An Amazon Alexa skill for checking the status of travel in London.</source>
+        <target state="translated">An Amazon Alexa skill for checking the status of travel in London.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="HomepageLinkAltText">
+        <source>View the homepage</source>
+        <target state="translated">View the homepage</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="HomepageLinkText">
+        <source>Home</source>
+        <target state="translated">Home</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="HomepageTitle">
+        <source>Home</source>
+        <target state="translated">Home</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InstallLinkAltText">
+        <source>Install London Travel for Amazon Alexa from amazon.co.uk</source>
+        <target state="translated">Install London Travel for Amazon Alexa from amazon.co.uk</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InstallLinkText">
+        <source>Install</source>
+        <target state="translated">Install</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="LinePreferencesNoneContent">
+        <source>Once you have chosen at least one favourite line, you will be able to ask the {0} skill about your commute if you have linked your account.</source>
+        <target state="translated">Once you have chosen at least one favorite line, you will be able to ask the {0} skill about your commute if you have linked your account.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="LinePreferencesNoneLead">
+        <source>It looks like you haven't chosen any favourite lines yet. Select some below to get started.</source>
+        <target state="translated">It looks like you haven't chosen any favorite lines yet. Select some below to get started.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="LinePreferencesPlural">
+        <source>The {0} selected lines will be used by the London Travel skill to tell you about your commute.</source>
+        <target state="translated">The {0} selected lines will be used by the London Travel skill to tell you about your commute.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="LinePreferencesSingular">
+        <source>The selected line will be used by the London Travel skill to tell you about your commute.</source>
+        <target state="translated">The selected line will be used by the London Travel skill to tell you about your commute.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManageLinkAltText">
+        <source>Manage your account</source>
+        <target state="translated">Manage your account</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManageLinkedAccountsContent">
+        <source>Listed below are the accounts you have linked to your London Travel account for signing in with.</source>
+        <target state="translated">Listed below are the accounts you have linked to your London Travel account for signing in with.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManageLinkedAccountsSubtitle">
+        <source>Linked Accounts</source>
+        <target state="translated">Linked Accounts</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManageLinkOtherAccountsSubtitle">
+        <source>Link another account</source>
+        <target state="translated">Link another account</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManageLinkText">
+        <source>Manage account</source>
+        <target state="translated">Manage account</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManageMetaDescription">
+        <source>Manage your account details for the London Travel skill.</source>
+        <target state="translated">Manage your account details for the London Travel skill.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManagePreferencesTitle">
+        <source>Line Preferences</source>
+        <target state="translated">Line Preferences</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManageTitle">
+        <source>Manage your account</source>
+        <target state="translated">Manage your account</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="NavbarCollapseAltText">
+        <source>Toggle navigation</source>
+        <target state="translated">Toggle navigation</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="NavbarMenuText">
+        <source>Menu</source>
+        <target state="translated">Menu</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="OtherLinesTitle">
+        <source>Other Lines &lt;span class="{0}"&gt;({1})&lt;/span&gt;</source>
+        <target state="translated">Other Lines &lt;span class="{0}"&gt;({1})&lt;/span&gt;</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PermissionDeniedContent">
+        <source>You did not grant permission for London Travel to access your email address when you signed in. An email address is required to register.</source>
+        <target state="translated">You did not grant permission for London Travel to access your email address when you signed in. An email address is required to register.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PermissionDeniedTitle">
+        <source>Permission denied</source>
+        <target state="translated">Permission denied</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PrivacyPolicyLinkAltText">
+        <source>View the London Travel Alexa skill's Privacy Policy</source>
+        <target state="translated">View the London Travel Alexa skill's Privacy Policy</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PrivacyPolicyLinkText">
+        <source>Privacy Policy</source>
+        <target state="translated">Privacy Policy</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PrivacyPolicyMetaDescription">
+        <source>Privacy policy for user data with the London Travel Alexa skill.</source>
+        <target state="translated">Privacy policy for user data with the London Travel Alexa skill.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PrivacyPolicyMetaTitle">
+        <source>Privacy Policy</source>
+        <target state="translated">Privacy Policy</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PrivacyPolicyTitle">
+        <source>London Travel Privacy Policy</source>
+        <target state="translated">London Travel Privacy Policy</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RegisterLead">
+        <source>Registering for an account for the London Travel skill allows you to save your tube line and station preferences so that you can ask about your commute.</source>
+        <target state="translated">Registering for an account for the London Travel skill allows you to save your tube line and station preferences so that you can ask about your commute.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RegisterLinkAltText">
+        <source>Register for a London Travel account</source>
+        <target state="translated">Register for a London Travel account</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RegisterLinkText">
+        <source>Register</source>
+        <target state="translated">Register</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RegisterMetaDescription">
+        <source>Register for a London Travel account to link your Alexa skill to and save your preferences.</source>
+        <target state="translated">Register for a London Travel account to link your Alexa skill to and save your preferences.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RegisterParagraph1">
+        <source>If you do not already have a London Travel account, you can create one by signing in with one of the services below.</source>
+        <target state="translated">If you do not already have a London Travel account, you can create one by signing in with one of the services below.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RegisterParagraph2">
+        <source>The London Travel account created will use with email address associated with the service you sign in with.</source>
+        <target state="translated">The London Travel account created will use with email address associated with the service you sign in with.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RegisterParagraph3">
+        <source>Accounts and their data are managed by this service in line with the Privacy Policy and Terms of Service.</source>
+        <target state="translated">Accounts and their data are managed by this service in line with the Privacy Policy and Terms of Service.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RegisterSignInSubtitle">
+        <source>Choose a service to register using:</source>
+        <target state="translated">Choose a service to register using:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RegisterSubtitle">
+        <source>Register for an account</source>
+        <target state="translated">Register for an account</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RegisterTitle">
+        <source>Register</source>
+        <target state="translated">Register</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RemoveAccountButtonAltText">
+        <source>Remove link to {0} from your account</source>
+        <target state="translated">Remove link to {0} from your account</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RemoveAccountButtonText">
+        <source>Remove</source>
+        <target state="translated">Remove</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RemoveAccountLinkModalDescription">
+        <source>Please wait while your account link is removed.</source>
+        <target state="translated">Please wait while your account link is removed.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RemoveAccountLinkModalTitle">
+        <source>Removing account link...</source>
+        <target state="translated">Removing account link...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ResetPreferencesButtonAltText">
+        <source>Reset all line selections to their original values</source>
+        <target state="translated">Reset all line selections to their original values</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ResetPreferencesButtonText">
+        <source>Reset</source>
+        <target state="translated">Reset</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SavePreferencesButtonAltText">
+        <source>Save the changes to your line preferences</source>
+        <target state="translated">Save the changes to your line preferences</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SavePreferencesButtonText">
+        <source>Save preferences</source>
+        <target state="translated">Save preferences</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SignInButtonAltText">
+        <source>Sign in using your {0} account</source>
+        <target state="translated">Sign in using your {0} account</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SignInButtonText">
+        <source>Sign in with {0}</source>
+        <target state="translated">Sign in with {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SignInErrorSubtitle">
+        <source>Sorry, you couldn't be signed in. Please try again later.</source>
+        <target state="translated">Sorry, you couldn't be signed in. Please try again later.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SignInErrorTitle">
+        <source>Sign-in error</source>
+        <target state="translated">Sign-in error</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SigningInModalDescription">
+        <source>Please wait while you are redirected to sign-in.</source>
+        <target state="translated">Please wait while you are redirected to sign-in.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SigningInModalTitle">
+        <source>Signing in...</source>
+        <target state="translated">Signing in...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SignInLinkAltText">
+        <source>Sign in to your London Travel account</source>
+        <target state="translated">Sign in to your London Travel account</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SignInLinkText">
+        <source>Sign In</source>
+        <target state="translated">Sign In</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SignInMetaDescription">
+        <source>Sign in to your London Travel account.</source>
+        <target state="translated">Sign in to your London Travel account.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SignInRegisterSubtitle">
+        <source>...or register a new account</source>
+        <target state="translated">...or register a new account</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SignInRegisterText">
+        <source>If you do not already have a London Travel account, register for one by clicking the button below.</source>
+        <target state="translated">If you do not already have a London Travel account, register for one by clicking the button below.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SignInSubtitle">
+        <source>Choose a service to sign in with:</source>
+        <target state="translated">Choose a service to sign in with:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SignInTitle">
+        <source>Sign in</source>
+        <target state="translated">Sign in</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SignOutLinkText">
+        <source>Sign out</source>
+        <target state="translated">Sign out</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SkillNotLinkedDescription">
+        <source>Link your account with the London Travel skill using the Alexa app to access your preferences from the skill to ask about your commute.</source>
+        <target state="translated">Link your account with the London Travel skill using the Alexa app to access your preferences from the skill to ask about your commute.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SkillNotLinkedTitle">
+        <source>You have not linked your account with the Alexa app</source>
+        <target state="translated">You have not linked your account with the Alexa app</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StatusLinkAltText">
+        <source>View site uptime information</source>
+        <target state="translated">View site uptime information</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StatusLinkText">
+        <source>Site Status &amp; Uptime</source>
+        <target state="translated">Site Status &amp; Uptime</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TermsOfServiceLinkAltText">
+        <source>View the London Travel Alexa skill's Terms of Service</source>
+        <target state="translated">View the London Travel Alexa skill's Terms of Service</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TermsOfServiceLinkText">
+        <source>Terms of Service</source>
+        <target state="translated">Terms of Service</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TermsOfServiceMetaDescription">
+        <source>The Terms of Service for the London Travel Alexa skill and website.</source>
+        <target state="translated">The Terms of Service for the London Travel Alexa skill and website.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TermsOfServiceMetaTitle">
+        <source>Terms of Service</source>
+        <target state="translated">Terms of Service</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TermsOfServiceTitle">
+        <source>London Travel Terms of Service</source>
+        <target state="translated">London Travel Terms of Service</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UpdateFailureModalDescription">
+        <source>Your preferences were not been saved as they have since been saved elsewhere and might have been overwritten. Please try again.</source>
+        <target state="translated">Your preferences were not been saved as they have since been saved elsewhere and might have been overwritten. Please try again.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UpdateFailureModalTitle">
+        <source>Your preferences were not saved</source>
+        <target state="translated">Your preferences were not saved</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UpdateProgressModalDescription">
+        <source>Saving your preferences.</source>
+        <target state="translated">Saving your preferences.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UpdateProgressModalTitle">
+        <source>Saving preferences...</source>
+        <target state="translated">Saving preferences...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UpdateSuccessModalTitle">
+        <source>Your preferences have been saved</source>
+        <target state="translated">Your preferences have been saved</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManageLinkedToAlexa">
+        <source>Your account is linked to the Alexa skill</source>
+        <target state="translated">Your account is linked to the Alexa skill</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManageNotLinkedToAlexa">
+        <source>Your account is not linked to the Alexa skill</source>
+        <target state="translated">Your account is not linked to the Alexa skill</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManageUnlinkAlexaButtonAltText">
+        <source>Unlink your account from the Alexa skill</source>
+        <target state="translated">Unlink your account from the Alexa skill</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManageUnlinkAlexaButtonText">
+        <source>Unlink</source>
+        <target state="translated">Unlink</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManageUnlinkAlexaModalConfirmButtonAltText">
+        <source>Unlink your account from the London Travel Alexa skill</source>
+        <target state="translated">Unlink your account from the London Travel Alexa skill</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManageUnlinkAlexaModalConfirmButtonText">
+        <source>Unlink</source>
+        <target state="translated">Unlink</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManageUnlinkAlexaModalContent1">
+        <source>Unlinking your account from the London Travel Alexa skill will prevent you from asking about your commute.</source>
+        <target state="translated">Unlinking your account from the London Travel Alexa skill will prevent you from asking about your commute.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManageUnlinkAlexaModalContent2">
+        <source>You can re-link your account at any time by using the Alexa app.</source>
+        <target state="translated">You can re-link your account at any time by using the Alexa app.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManageUnlinkAlexaModalLoading">
+        <source>Unlinking the Alexa skill</source>
+        <target state="translated">Unlinking the Alexa skill</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManageUnlinkAlexaModalTitle">
+        <source>Unlink Alexa skill</source>
+        <target state="translated">Unlink Alexa skill</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorMessage400">
+        <source>The request was invalid.</source>
+        <target state="translated">The request was invalid.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorMessage403">
+        <source>You are not permitted to access this resource.</source>
+        <target state="translated">You are not permitted to access this resource.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorMessage404">
+        <source>The page you requested could not be found.</source>
+        <target state="translated">The page you requested could not be found.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorMessage405">
+        <source>The specified HTTP method was not allowed.</source>
+        <target state="translated">The specified HTTP method was not allowed.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorMessage408">
+        <source>Your request took too long to process.</source>
+        <target state="translated">Your request took too long to process.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorSubtitle400">
+        <source>Bad request (HTTP 400)</source>
+        <target state="translated">Bad request (HTTP 400)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorSubtitle403">
+        <source>Forbidden (HTTP 403)</source>
+        <target state="translated">Forbidden (HTTP 403)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorSubtitle404">
+        <source>Page not found (HTTP 404)</source>
+        <target state="translated">Page not found (HTTP 404)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorSubtitle405">
+        <source>HTTP method not allowed (HTTP 405)</source>
+        <target state="translated">HTTP method not allowed (HTTP 405)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorSubtitle408">
+        <source>Request timeout (HTTP 408)</source>
+        <target state="translated">Request timeout (HTTP 408)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorTitle400">
+        <source>Bad request</source>
+        <target state="translated">Bad request</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorTitle403">
+        <source>Forbidden</source>
+        <target state="translated">Forbidden</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorTitle404">
+        <source>Not found</source>
+        <target state="translated">Not found</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorTitle405">
+        <source>Method not allowed</source>
+        <target state="translated">Method not allowed</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorTitle408">
+        <source>Request timeout</source>
+        <target state="translated">Request timeout</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TechnologyLinkAltText">
+        <source>Information about the technologies behind the London Travel Alexa skill</source>
+        <target state="translated">Information about the technologies behind the London Travel Alexa skill</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TechnologyLinkText">
+        <source>Technology</source>
+        <target state="translated">Technology</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TechnologyMetaDescription">
+        <source>Information about the technologies behind the London Travel Alexa skill.</source>
+        <target state="translated">Information about the technologies behind the London Travel Alexa skill.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TechnologyMetaTitle">
+        <source>London Travel Technologies</source>
+        <target state="translated">London Travel Technologies</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TechnologyTitle">
+        <source>London Travel Technologies</source>
+        <target state="translated">London Travel Technologies</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ApiDocumentationMetaDescription">
+        <source>Documentation for the London Travel REST API.</source>
+        <target state="translated">Documentation for the London Travel REST API.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ApiDocumentationMetaTitle">
+        <source>API Documentation</source>
+        <target state="translated">API Documentation</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RegisterParagraph4">
+        <source>More than {0:N0} users have registered an account.</source>
+        <target state="translated">More than {0:N0} users have registered an account.</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

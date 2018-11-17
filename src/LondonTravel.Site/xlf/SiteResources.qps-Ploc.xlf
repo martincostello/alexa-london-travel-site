@@ -1,0 +1,777 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="qps-Ploc" original="../SiteResources.resx">
+    <body>
+      <trans-unit id="AccessDeniedSubtitle">
+        <source>You do not have access to this resource.</source>
+        <target state="translated">[Ýöûẋ ðöẋ ñöţẋ ĥåṽéẋẋ åççéššẋẋ ţöẋ ţĥîšẋẋ ŕéšöûŕçé·ẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AccessDeniedTitle">
+        <source>Access denied</source>
+        <target state="translated">[Åççéššẋẋ ðéñîéðẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AccountCreatedTitle">
+        <source>Your London Travel account has been created.</source>
+        <target state="translated">[Ýöûŕẋẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ åççöûñţẋẋẋ ĥåšẋ ƀééñẋẋ çŕéåţéð·ẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AccountDeletedContent">
+        <source>Sorry to see you go.</source>
+        <target state="translated">[Šöŕŕýẋẋ ţöẋ šééẋ ýöûẋ ĝö·ẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AccountDeletedTitle">
+        <source>Your London Travel account has been deleted.</source>
+        <target state="translated">[Ýöûŕẋẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ åççöûñţẋẋẋ ĥåšẋ ƀééñẋẋ ðéļéţéð·ẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AccountLinkDeniedContent">
+        <source>You did not grant permission for London Travel to access your other account.</source>
+        <target state="translated">[Ýöûẋ ðîðẋ ñöţẋ ĝŕåñţẋẋ þéŕɱîššîöñẋẋẋẋ ƒöŕẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ ţöẋ åççéššẋẋ ýöûŕẋẋ öţĥéŕẋẋ åççöûñţ·ẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AccountLinkDeniedTitle">
+        <source>Account link permission denied</source>
+        <target state="translated">[Åççöûñţẋẋẋ ļîñķẋẋ þéŕɱîššîöñẋẋẋẋ ðéñîéðẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AccountLinkFailedContent">
+        <source>Something went wrong when attempting to link your other account.</source>
+        <target state="translated">[Šöɱéţĥîñĝẋẋẋ ŵéñţẋẋ ŵŕöñĝẋẋ ŵĥéñẋẋ åţţéɱþţîñĝẋẋẋẋ ţöẋ ļîñķẋẋ ýöûŕẋẋ öţĥéŕẋẋ åççöûñţ·ẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AccountLinkFailedTitle">
+        <source>Account link failed</source>
+        <target state="translated">[Åççöûñţẋẋẋ ļîñķẋẋ ƒåîļéðẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AccountLockedSubtitle">
+        <source>This account has been locked out. Please try again later.</source>
+        <target state="translated">[Ţĥîšẋẋ åççöûñţẋẋẋ ĥåšẋ ƀééñẋẋ ļöçķéðẋẋ öûţ·ẋẋ Þļéåšéẋẋ ţŕýẋ åĝåîñẋẋ ļåţéŕ·ẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AccountLockedTitle">
+        <source>Account locked</source>
+        <target state="translated">[Åççöûñţẋẋẋ ļöçķéðẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AlexaSignInFormTitle">
+        <source>Choose a service to sign-in with:</source>
+        <target state="translated">[Çĥööšéẋẋ åẋ šéŕṽîçéẋẋẋ ţöẋ šîĝñ‐îñẋẋẋ ŵîţĥ∶ẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AlexaSignInMetaDescription">
+        <source>Link your London Travel account with Alexa.</source>
+        <target state="translated">[Ļîñķẋẋ ýöûŕẋẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ åççöûñţẋẋẋ ŵîţĥẋẋ Åļéẋå·ẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AlexaSignInParagraph1">
+        <source>Sign in to link an existing London Travel account to the Alexa skill.</source>
+        <target state="translated">[Šîĝñẋẋ îñẋ ţöẋ ļîñķẋẋ åñẋ éẋîšţîñĝẋẋẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ åççöûñţẋẋẋ ţöẋ ţĥéẋ Åļéẋåẋẋ šķîļļ·ẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AlexaSignInParagraph2">
+        <source>If you do not already have one set up, an account will be created once you have signed in.</source>
+        <target state="translated">[Îƒẋ ýöûẋ ðöẋ ñöţẋ åļŕéåðýẋẋẋ ĥåṽéẋẋ öñéẋ šéţẋ ûþ،ẋ åñẋ åççöûñţẋẋẋ ŵîļļẋẋ ƀéẋ çŕéåţéðẋẋẋ öñçéẋẋ ýöûẋ ĥåṽéẋẋ šîĝñéðẋẋ îñ·ẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AlexaSignInParagraph3">
+        <source>Once you've linked your account to the skill you'll be able to ask Alexa for information about your commute.</source>
+        <target state="translated">[Öñçéẋẋ ýöû´ṽéẋẋ ļîñķéðẋẋ ýöûŕẋẋ åççöûñţẋẋẋ ţöẋ ţĥéẋ šķîļļẋẋ ýöû´ļļẋẋ ƀéẋ åƀļéẋẋ ţöẋ åšķẋ Åļéẋåẋẋ ƒöŕẋ îñƒöŕɱåţîöñẋẋẋẋ åƀöûţẋẋ ýöûŕẋẋ çöɱɱûţé·ẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AlexaSignInTitle">
+        <source>Sign In or Register</source>
+        <target state="translated">[Šîĝñẋẋ Îñẋ öŕẋ Ŕéĝîšţéŕẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AlreadyRegisteredContent1">
+        <source>You have already created a London Travel account by signing in with a different service to the one you just tried to sign in with.</source>
+        <target state="translated">[Ýöûẋ ĥåṽéẋẋ åļŕéåðýẋẋẋ çŕéåţéðẋẋẋ åẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ åççöûñţẋẋẋ ƀýẋ šîĝñîñĝẋẋẋ îñẋ ŵîţĥẋẋ åẋ ðîƒƒéŕéñţẋẋẋ šéŕṽîçéẋẋẋ ţöẋ ţĥéẋ öñéẋ ýöûẋ ĵûšţẋẋ ţŕîéðẋẋ ţöẋ šîĝñẋẋ îñẋ ŵîţĥ·ẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AlreadyRegisteredContent2">
+        <source>Sign in with one of the service(s) you've already used to sign-in, then you'll be able to link other service(s) to your account.</source>
+        <target state="translated">[Šîĝñẋẋ îñẋ ŵîţĥẋẋ öñéẋ öƒẋ ţĥéẋ šéŕṽîçé(š)ẋẋẋẋ ýöû´ṽéẋẋ åļŕéåðýẋẋẋ ûšéðẋẋ ţöẋ šîĝñ‐îñ،ẋẋẋ ţĥéñẋẋ ýöû´ļļẋẋ ƀéẋ åƀļéẋẋ ţöẋ ļîñķẋẋ öţĥéŕẋẋ šéŕṽîçé(š)ẋẋẋẋ ţöẋ ýöûŕẋẋ åççöûñţ·ẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AlreadyRegisteredTitle">
+        <source>Already registered</source>
+        <target state="translated">[Åļŕéåðýẋẋẋ ŕéĝîšţéŕéðẋẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ApiDocumentationMetaDescription">
+        <source>Documentation for the London Travel REST API.</source>
+        <target state="translated">[Ðöçûɱéñţåţîöñẋẋẋẋẋ ƒöŕẋ ţĥéẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ ŔÉŠŢẋẋ ÅÞÎ·ẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ApiDocumentationMetaTitle">
+        <source>API Documentation</source>
+        <target state="translated">[ÅÞÎẋ Ðöçûɱéñţåţîöñẋẋẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AvailableLinesTitle">
+        <source>Available Lines &lt;span class="{0}"&gt;({1})&lt;/span&gt;</source>
+        <target state="translated">[Åṽåîļåƀļéẋẋẋ Ļîñéšẋẋ &lt;span class="{0}"&gt;(ẋ{1})ẋ&lt;/span&gt;]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BrandName">
+        <source>London Travel</source>
+        <target state="translated">[Ļöñðöñẋẋ Ţŕåṽéļẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CancelButtonAltText">
+        <source>Cancel</source>
+        <target state="translated">[Çåñçéļẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CancelButtonText">
+        <source>Cancel</source>
+        <target state="translated">[Çåñçéļẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClearPreferencesButtonAltText">
+        <source>Deselect all lines</source>
+        <target state="translated">[Ðéšéļéçţẋẋẋ åļļẋ ļîñéšẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClearPreferencesButtonText">
+        <source>Deselect all</source>
+        <target state="translated">[Ðéšéļéçţẋẋẋ åļļẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CloseButtonText">
+        <source>Close</source>
+        <target state="translated">[Çļöšéẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommuteSkillInvocation">
+        <source>"Alexa, ask London Travel what my commute's like today?"</source>
+        <target state="translated">[″Åļéẋå،ẋẋẋ åšķẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ ŵĥåţẋẋ ɱýẋ çöɱɱûţé´šẋẋẋ ļîķéẋẋ ţöðåý¿″ẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CopyrightText">
+        <source>&amp;copy; {0} {1}</source>
+        <target state="translated">[⅋çöþý⁏ẋẋ {0} {1}]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DeleteAccountButtonAltText">
+        <source>Permanently delete your London Travel account</source>
+        <target state="translated">[Þéŕɱåñéñţļýẋẋẋẋ ðéļéţéẋẋ ýöûŕẋẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ åççöûñţẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DeleteAccountButtonText">
+        <source>Delete your account</source>
+        <target state="translated">[Ðéļéţéẋẋ ýöûŕẋẋ åççöûñţẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DeleteAccountConfirmationButtonAltText">
+        <source>Permanently delete your account</source>
+        <target state="translated">[Þéŕɱåñéñţļýẋẋẋẋ ðéļéţéẋẋ ýöûŕẋẋ åççöûñţẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DeleteAccountConfirmationButtonText">
+        <source>Delete</source>
+        <target state="translated">[Ðéļéţéẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DeleteAccountModalTitle">
+        <source>Delete your account</source>
+        <target state="translated">[Ðéļéţéẋẋ ýöûŕẋẋ åççöûñţẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DeleteAccountParagraph1Html">
+        <source>Clicking the &lt;strong&gt;Delete&lt;/strong&gt; button will &lt;strong&gt;&lt;em&gt;permanently&lt;/em&gt;&lt;/strong&gt; delete your London Travel account and any data associated with it.</source>
+        <target state="translated">[Çļîçķîñĝẋẋẋ ţĥéẋ &lt;strong&gt;Ðéļéţéẋẋ&lt;/strong&gt; ƀûţţöñẋẋ ŵîļļẋẋ &lt;strong&gt;&lt;em&gt;þéŕɱåñéñţļýẋẋẋẋ&lt;/em&gt;&lt;/strong&gt; ðéļéţéẋẋ ýöûŕẋẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ åççöûñţẋẋẋ åñðẋ åñýẋ ðåţåẋẋ åššöçîåţéðẋẋẋẋ ŵîţĥẋẋ îţ·ẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DeleteAccountParagraph2">
+        <source>If you have linked the London Travel Alexa skill to this account you will no longer be able to ask Alexa about your commute using the skill unless you create a new account and re-link the skill using an Alexa-enabled device.</source>
+        <target state="translated">[Îƒẋ ýöûẋ ĥåṽéẋẋ ļîñķéðẋẋ ţĥéẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ Åļéẋåẋẋ šķîļļẋẋ ţöẋ ţĥîšẋẋ åççöûñţẋẋẋ ýöûẋ ŵîļļẋẋ ñöẋ ļöñĝéŕẋẋ ƀéẋ åƀļéẋẋ ţöẋ åšķẋ Åļéẋåẋẋ åƀöûţẋẋ ýöûŕẋẋ çöɱɱûţéẋẋẋ ûšîñĝẋẋ ţĥéẋ šķîļļẋẋ ûñļéššẋẋ ýöûẋ çŕéåţéẋẋ åẋ ñéŵẋ åççöûñţẋẋẋ åñðẋ ŕé‐ļîñķẋẋẋ ţĥéẋ šķîļļẋẋ ûšîñĝẋẋ åñẋ Åļéẋå‐éñåƀļéðẋẋẋẋẋ ðéṽîçé·ẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DeleteAccountParagraph3Html">
+        <source>Are you sure you want to delete your account? This action &lt;strong&gt;cannot&lt;/strong&gt; be undone.</source>
+        <target state="translated">[Åŕéẋ ýöûẋ šûŕéẋẋ ýöûẋ ŵåñţẋẋ ţöẋ ðéļéţéẋẋ ýöûŕẋẋ åççöûñţ¿ẋẋẋ Ţĥîšẋẋ åçţîöñẋẋ &lt;strong&gt;çåññöţẋẋ&lt;/strong&gt; ƀéẋ ûñðöñé·ẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DeleteAccountWarning">
+        <source>Warning!</source>
+        <target state="translated">[Ŵåŕñîñĝ¡ẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DeleteInProgressText">
+        <source>Your account is being deleted...</source>
+        <target state="translated">[Ýöûŕẋẋ åççöûñţẋẋẋ îšẋ ƀéîñĝẋẋ ðéļéţéð···ẋẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorMessage">
+        <source>Sorry, something went wrong.</source>
+        <target state="translated">[Šöŕŕý،ẋẋ šöɱéţĥîñĝẋẋẋ ŵéñţẋẋ ŵŕöñĝ·ẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorMessage400">
+        <source>The request was invalid.</source>
+        <target state="translated">[Ţĥéẋ ŕéǫûéšţẋẋẋ ŵåšẋ îñṽåļîð·ẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorMessage403">
+        <source>You are not permitted to access this resource.</source>
+        <target state="translated">[Ýöûẋ åŕéẋ ñöţẋ þéŕɱîţţéðẋẋẋ ţöẋ åççéššẋẋ ţĥîšẋẋ ŕéšöûŕçé·ẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorMessage404">
+        <source>The page you requested could not be found.</source>
+        <target state="translated">[Ţĥéẋ þåĝéẋẋ ýöûẋ ŕéǫûéšţéðẋẋẋ çöûļðẋẋ ñöţẋ ƀéẋ ƒöûñð·ẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorMessage405">
+        <source>The specified HTTP method was not allowed.</source>
+        <target state="translated">[Ţĥéẋ šþéçîƒîéðẋẋẋ ĤŢŢÞẋẋ ɱéţĥöðẋẋ ŵåšẋ ñöţẋ åļļöŵéð·ẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorMessage408">
+        <source>Your request took too long to process.</source>
+        <target state="translated">[Ýöûŕẋẋ ŕéǫûéšţẋẋẋ ţööķẋẋ ţööẋ ļöñĝẋẋ ţöẋ þŕöçéšš·ẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorSubtitle">
+        <source>Error (HTTP {0})</source>
+        <target state="translated">[Éŕŕöŕẋẋ (ĤŢŢÞẋẋ {0})ẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorSubtitle400">
+        <source>Bad request (HTTP 400)</source>
+        <target state="translated">[Ɓåðẋ ŕéǫûéšţẋẋẋ (ĤŢŢÞẋẋ ④⓪⓪)ẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorSubtitle403">
+        <source>Forbidden (HTTP 403)</source>
+        <target state="translated">[Ƒöŕƀîððéñẋẋẋ (ĤŢŢÞẋẋ ④⓪③)ẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorSubtitle404">
+        <source>Page not found (HTTP 404)</source>
+        <target state="translated">[Þåĝéẋẋ ñöţẋ ƒöûñðẋẋ (ĤŢŢÞẋẋ ④⓪④)ẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorSubtitle405">
+        <source>HTTP method not allowed (HTTP 405)</source>
+        <target state="translated">[ĤŢŢÞẋẋ ɱéţĥöðẋẋ ñöţẋ åļļöŵéðẋẋẋ (ĤŢŢÞẋẋ ④⓪⑤)ẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorSubtitle408">
+        <source>Request timeout (HTTP 408)</source>
+        <target state="translated">[Ŕéǫûéšţẋẋẋ ţîɱéöûţẋẋẋ (ĤŢŢÞẋẋ ④⓪⑧)ẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorTitle">
+        <source>Error</source>
+        <target state="translated">[Éŕŕöŕẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorTitle400">
+        <source>Bad request</source>
+        <target state="translated">[Ɓåðẋ ŕéǫûéšţẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorTitle403">
+        <source>Forbidden</source>
+        <target state="translated">[Ƒöŕƀîððéñẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorTitle404">
+        <source>Not found</source>
+        <target state="translated">[Ñöţẋ ƒöûñðẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorTitle405">
+        <source>Method not allowed</source>
+        <target state="translated">[Ṁéţĥöðẋẋ ñöţẋ åļļöŵéðẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ErrorTitle408">
+        <source>Request timeout</source>
+        <target state="translated">[Ŕéǫûéšţẋẋẋ ţîɱéöûţẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FavoriteLinesTitle">
+        <source>Favourite Lines &lt;span class="{0}"&gt;({1})&lt;/span&gt;</source>
+        <target state="translated">[Ƒåṽöûŕîţéẋẋẋ Ļîñéšẋẋ &lt;span class="{0}"&gt;(ẋ{1})ẋ&lt;/span&gt;]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="HelpLinkAltText">
+        <source>View help and support information for the London Travel Alexa skill and this website</source>
+        <target state="translated">[Ṽîéŵẋẋ ĥéļþẋẋ åñðẋ šûþþöŕţẋẋẋ îñƒöŕɱåţîöñẋẋẋẋ ƒöŕẋ ţĥéẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ Åļéẋåẋẋ šķîļļẋẋ åñðẋ ţĥîšẋẋ ŵéƀšîţéẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="HelpLinkText">
+        <source>Help &amp; Support</source>
+        <target state="translated">[Ĥéļþẋẋ ⅋ẋ Šûþþöŕţẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="HelpMetaDescription">
+        <source>Help and support for the London Travel Alexa skill.</source>
+        <target state="translated">[Ĥéļþẋẋ åñðẋ šûþþöŕţẋẋẋ ƒöŕẋ ţĥéẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ Åļéẋåẋẋ šķîļļ·ẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="HelpTitle">
+        <source>Help and Support</source>
+        <target state="translated">[Ĥéļþẋẋ åñðẋ Šûþþöŕţẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="HomepageLead">
+        <source>An Amazon Alexa skill for checking the status of travel in London.</source>
+        <target state="translated">[Åñẋ Åɱåžöñẋẋ Åļéẋåẋẋ šķîļļẋẋ ƒöŕẋ çĥéçķîñĝẋẋẋ ţĥéẋ šţåţûšẋẋ öƒẋ ţŕåṽéļẋẋ îñẋ Ļöñðöñ·ẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="HomepageLinkAltText">
+        <source>View the homepage</source>
+        <target state="translated">[Ṽîéŵẋẋ ţĥéẋ ĥöɱéþåĝéẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="HomepageLinkText">
+        <source>Home</source>
+        <target state="translated">[Ĥöɱéẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="HomepageTitle">
+        <source>Home</source>
+        <target state="translated">[Ĥöɱéẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InstallLinkAltText">
+        <source>Install London Travel for Amazon Alexa from amazon.co.uk</source>
+        <target state="translated">[Îñšţåļļẋẋẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ ƒöŕẋ Åɱåžöñẋẋ Åļéẋåẋẋ ƒŕöɱẋẋ åɱåžöñ·çö·ûķẋẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InstallLinkText">
+        <source>Install</source>
+        <target state="translated">[Îñšţåļļẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="LinePreferencesNoneContent">
+        <source>Once you have chosen at least one favourite line, you will be able to ask the {0} skill about your commute if you have linked your account.</source>
+        <target state="translated">[Öñçéẋẋ ýöûẋ ĥåṽéẋẋ çĥöšéñẋẋ åţẋ ļéåšţẋẋ öñéẋ ƒåṽöûŕîţéẋẋẋ ļîñé،ẋẋ ýöûẋ ŵîļļẋẋ ƀéẋ åƀļéẋẋ ţöẋ åšķẋ ţĥéẋ {0} šķîļļẋẋ åƀöûţẋẋ ýöûŕẋẋ çöɱɱûţéẋẋẋ îƒẋ ýöûẋ ĥåṽéẋẋ ļîñķéðẋẋ ýöûŕẋẋ åççöûñţ·ẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="LinePreferencesNoneLead">
+        <source>It looks like you haven't chosen any favourite lines yet. Select some below to get started.</source>
+        <target state="translated">[Îţẋ ļööķšẋẋ ļîķéẋẋ ýöûẋ ĥåṽéñ´ţẋẋẋ çĥöšéñẋẋ åñýẋ ƒåṽöûŕîţéẋẋẋ ļîñéšẋẋ ýéţ·ẋẋ Šéļéçţẋẋ šöɱéẋẋ ƀéļöŵẋẋ ţöẋ ĝéţẋ šţåŕţéð·ẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="LinePreferencesPlural">
+        <source>The {0} selected lines will be used by the London Travel skill to tell you about your commute.</source>
+        <target state="translated">[Ţĥéẋ {0} šéļéçţéðẋẋẋ ļîñéšẋẋ ŵîļļẋẋ ƀéẋ ûšéðẋẋ ƀýẋ ţĥéẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ šķîļļẋẋ ţöẋ ţéļļẋẋ ýöûẋ åƀöûţẋẋ ýöûŕẋẋ çöɱɱûţé·ẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="LinePreferencesSingular">
+        <source>The selected line will be used by the London Travel skill to tell you about your commute.</source>
+        <target state="translated">[Ţĥéẋ šéļéçţéðẋẋẋ ļîñéẋẋ ŵîļļẋẋ ƀéẋ ûšéðẋẋ ƀýẋ ţĥéẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ šķîļļẋẋ ţöẋ ţéļļẋẋ ýöûẋ åƀöûţẋẋ ýöûŕẋẋ çöɱɱûţé·ẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManageLinkAltText">
+        <source>Manage your account</source>
+        <target state="translated">[Ṁåñåĝéẋẋ ýöûŕẋẋ åççöûñţẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManageLinkOtherAccountsSubtitle">
+        <source>Link another account</source>
+        <target state="translated">[Ļîñķẋẋ åñöţĥéŕẋẋẋ åççöûñţẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManageLinkText">
+        <source>Manage account</source>
+        <target state="translated">[Ṁåñåĝéẋẋ åççöûñţẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManageLinkedAccountsContent">
+        <source>Listed below are the accounts you have linked to your London Travel account for signing in with.</source>
+        <target state="translated">[Ļîšţéðẋẋ ƀéļöŵẋẋ åŕéẋ ţĥéẋ åççöûñţšẋẋẋ ýöûẋ ĥåṽéẋẋ ļîñķéðẋẋ ţöẋ ýöûŕẋẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ åççöûñţẋẋẋ ƒöŕẋ šîĝñîñĝẋẋẋ îñẋ ŵîţĥ·ẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManageLinkedAccountsSubtitle">
+        <source>Linked Accounts</source>
+        <target state="translated">[Ļîñķéðẋẋ Åççöûñţšẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManageLinkedToAlexa">
+        <source>Your account is linked to the Alexa skill</source>
+        <target state="translated">[Ýöûŕẋẋ åççöûñţẋẋẋ îšẋ ļîñķéðẋẋ ţöẋ ţĥéẋ Åļéẋåẋẋ šķîļļẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManageMetaDescription">
+        <source>Manage your account details for the London Travel skill.</source>
+        <target state="translated">[Ṁåñåĝéẋẋ ýöûŕẋẋ åççöûñţẋẋẋ ðéţåîļšẋẋẋ ƒöŕẋ ţĥéẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ šķîļļ·ẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManageNotLinkedToAlexa">
+        <source>Your account is not linked to the Alexa skill</source>
+        <target state="translated">[Ýöûŕẋẋ åççöûñţẋẋẋ îšẋ ñöţẋ ļîñķéðẋẋ ţöẋ ţĥéẋ Åļéẋåẋẋ šķîļļẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManagePreferencesTitle">
+        <source>Line Preferences</source>
+        <target state="translated">[Ļîñéẋẋ Þŕéƒéŕéñçéšẋẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManageTitle">
+        <source>Manage your account</source>
+        <target state="translated">[Ṁåñåĝéẋẋ ýöûŕẋẋ åççöûñţẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManageUnlinkAlexaButtonAltText">
+        <source>Unlink your account from the Alexa skill</source>
+        <target state="translated">[Ûñļîñķẋẋ ýöûŕẋẋ åççöûñţẋẋẋ ƒŕöɱẋẋ ţĥéẋ Åļéẋåẋẋ šķîļļẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManageUnlinkAlexaButtonText">
+        <source>Unlink</source>
+        <target state="translated">[Ûñļîñķẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManageUnlinkAlexaModalConfirmButtonAltText">
+        <source>Unlink your account from the London Travel Alexa skill</source>
+        <target state="translated">[Ûñļîñķẋẋ ýöûŕẋẋ åççöûñţẋẋẋ ƒŕöɱẋẋ ţĥéẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ Åļéẋåẋẋ šķîļļẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManageUnlinkAlexaModalConfirmButtonText">
+        <source>Unlink</source>
+        <target state="translated">[Ûñļîñķẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManageUnlinkAlexaModalContent1">
+        <source>Unlinking your account from the London Travel Alexa skill will prevent you from asking about your commute.</source>
+        <target state="translated">[Ûñļîñķîñĝẋẋẋ ýöûŕẋẋ åççöûñţẋẋẋ ƒŕöɱẋẋ ţĥéẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ Åļéẋåẋẋ šķîļļẋẋ ŵîļļẋẋ þŕéṽéñţẋẋẋ ýöûẋ ƒŕöɱẋẋ åšķîñĝẋẋ åƀöûţẋẋ ýöûŕẋẋ çöɱɱûţé·ẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManageUnlinkAlexaModalContent2">
+        <source>You can re-link your account at any time by using the Alexa app.</source>
+        <target state="translated">[Ýöûẋ çåñẋ ŕé‐ļîñķẋẋẋ ýöûŕẋẋ åççöûñţẋẋẋ åţẋ åñýẋ ţîɱéẋẋ ƀýẋ ûšîñĝẋẋ ţĥéẋ Åļéẋåẋẋ åþþ·ẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManageUnlinkAlexaModalLoading">
+        <source>Unlinking the Alexa skill</source>
+        <target state="translated">[Ûñļîñķîñĝẋẋẋ ţĥéẋ Åļéẋåẋẋ šķîļļẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ManageUnlinkAlexaModalTitle">
+        <source>Unlink Alexa skill</source>
+        <target state="translated">[Ûñļîñķẋẋ Åļéẋåẋẋ šķîļļẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="NavbarCollapseAltText">
+        <source>Toggle navigation</source>
+        <target state="translated">[Ţöĝĝļéẋẋ ñåṽîĝåţîöñẋẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="NavbarMenuText">
+        <source>Menu</source>
+        <target state="translated">[Ṁéñûẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="OtherLinesTitle">
+        <source>Other Lines &lt;span class="{0}"&gt;({1})&lt;/span&gt;</source>
+        <target state="translated">[Öţĥéŕẋẋ Ļîñéšẋẋ &lt;span class="{0}"&gt;(ẋ{1})ẋ&lt;/span&gt;]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PermissionDeniedContent">
+        <source>You did not grant permission for London Travel to access your email address when you signed in. An email address is required to register.</source>
+        <target state="translated">[Ýöûẋ ðîðẋ ñöţẋ ĝŕåñţẋẋ þéŕɱîššîöñẋẋẋẋ ƒöŕẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ ţöẋ åççéššẋẋ ýöûŕẋẋ éɱåîļẋẋ åððŕéššẋẋẋ ŵĥéñẋẋ ýöûẋ šîĝñéðẋẋ îñ·ẋ Åñẋ éɱåîļẋẋ åððŕéššẋẋẋ îšẋ ŕéǫûîŕéðẋẋẋ ţöẋ ŕéĝîšţéŕ·ẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PermissionDeniedTitle">
+        <source>Permission denied</source>
+        <target state="translated">[Þéŕɱîššîöñẋẋẋẋ ðéñîéðẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PrivacyPolicyLinkAltText">
+        <source>View the London Travel Alexa skill's Privacy Policy</source>
+        <target state="translated">[Ṽîéŵẋẋ ţĥéẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ Åļéẋåẋẋ šķîļļ´šẋẋẋ Þŕîṽåçýẋẋẋ Þöļîçýẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PrivacyPolicyLinkText">
+        <source>Privacy Policy</source>
+        <target state="translated">[Þŕîṽåçýẋẋẋ Þöļîçýẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PrivacyPolicyMetaDescription">
+        <source>Privacy policy for user data with the London Travel Alexa skill.</source>
+        <target state="translated">[Þŕîṽåçýẋẋẋ þöļîçýẋẋ ƒöŕẋ ûšéŕẋẋ ðåţåẋẋ ŵîţĥẋẋ ţĥéẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ Åļéẋåẋẋ šķîļļ·ẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PrivacyPolicyMetaTitle">
+        <source>Privacy Policy</source>
+        <target state="translated">[Þŕîṽåçýẋẋẋ Þöļîçýẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PrivacyPolicyTitle">
+        <source>London Travel Privacy Policy</source>
+        <target state="translated">[Ļöñðöñẋẋ Ţŕåṽéļẋẋ Þŕîṽåçýẋẋẋ Þöļîçýẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RegisterLead">
+        <source>Registering for an account for the London Travel skill allows you to save your tube line and station preferences so that you can ask about your commute.</source>
+        <target state="translated">[Ŕéĝîšţéŕîñĝẋẋẋẋ ƒöŕẋ åñẋ åççöûñţẋẋẋ ƒöŕẋ ţĥéẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ šķîļļẋẋ åļļöŵšẋẋ ýöûẋ ţöẋ šåṽéẋẋ ýöûŕẋẋ ţûƀéẋẋ ļîñéẋẋ åñðẋ šţåţîöñẋẋẋ þŕéƒéŕéñçéšẋẋẋẋ šöẋ ţĥåţẋẋ ýöûẋ çåñẋ åšķẋ åƀöûţẋẋ ýöûŕẋẋ çöɱɱûţé·ẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RegisterLinkAltText">
+        <source>Register for a London Travel account</source>
+        <target state="translated">[Ŕéĝîšţéŕẋẋẋ ƒöŕẋ åẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ åççöûñţẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RegisterLinkText">
+        <source>Register</source>
+        <target state="translated">[Ŕéĝîšţéŕẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RegisterMetaDescription">
+        <source>Register for a London Travel account to link your Alexa skill to and save your preferences.</source>
+        <target state="translated">[Ŕéĝîšţéŕẋẋẋ ƒöŕẋ åẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ åççöûñţẋẋẋ ţöẋ ļîñķẋẋ ýöûŕẋẋ Åļéẋåẋẋ šķîļļẋẋ ţöẋ åñðẋ šåṽéẋẋ ýöûŕẋẋ þŕéƒéŕéñçéš·ẋẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RegisterParagraph1">
+        <source>If you do not already have a London Travel account, you can create one by signing in with one of the services below.</source>
+        <target state="translated">[Îƒẋ ýöûẋ ðöẋ ñöţẋ åļŕéåðýẋẋẋ ĥåṽéẋẋ åẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ åççöûñţ،ẋẋẋ ýöûẋ çåñẋ çŕéåţéẋẋ öñéẋ ƀýẋ šîĝñîñĝẋẋẋ îñẋ ŵîţĥẋẋ öñéẋ öƒẋ ţĥéẋ šéŕṽîçéšẋẋẋ ƀéļöŵ·ẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RegisterParagraph2">
+        <source>The London Travel account created will use with email address associated with the service you sign in with.</source>
+        <target state="translated">[Ţĥéẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ åççöûñţẋẋẋ çŕéåţéðẋẋẋ ŵîļļẋẋ ûšéẋ ŵîţĥẋẋ éɱåîļẋẋ åððŕéššẋẋẋ åššöçîåţéðẋẋẋẋ ŵîţĥẋẋ ţĥéẋ šéŕṽîçéẋẋẋ ýöûẋ šîĝñẋẋ îñẋ ŵîţĥ·ẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RegisterParagraph3">
+        <source>Accounts and their data are managed by this service in line with the Privacy Policy and Terms of Service.</source>
+        <target state="translated">[Åççöûñţšẋẋẋ åñðẋ ţĥéîŕẋẋ ðåţåẋẋ åŕéẋ ɱåñåĝéðẋẋẋ ƀýẋ ţĥîšẋẋ šéŕṽîçéẋẋẋ îñẋ ļîñéẋẋ ŵîţĥẋẋ ţĥéẋ Þŕîṽåçýẋẋẋ Þöļîçýẋẋ åñðẋ Ţéŕɱšẋẋ öƒẋ Šéŕṽîçé·ẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RegisterParagraph4">
+        <source>More than {0:N0} users have registered an account.</source>
+        <target state="translated">[Ṁöŕéẋẋ ţĥåñẋẋ {0:N0} ûšéŕšẋẋ ĥåṽéẋẋ ŕéĝîšţéŕéðẋẋẋẋ åñẋ åççöûñţ·ẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RegisterSignInSubtitle">
+        <source>Choose a service to register using:</source>
+        <target state="translated">[Çĥööšéẋẋ åẋ šéŕṽîçéẋẋẋ ţöẋ ŕéĝîšţéŕẋẋẋ ûšîñĝ∶ẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RegisterSubtitle">
+        <source>Register for an account</source>
+        <target state="translated">[Ŕéĝîšţéŕẋẋẋ ƒöŕẋ åñẋ åççöûñţẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RegisterTitle">
+        <source>Register</source>
+        <target state="translated">[Ŕéĝîšţéŕẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RemoveAccountButtonAltText">
+        <source>Remove link to {0} from your account</source>
+        <target state="translated">[Ŕéɱöṽéẋẋ ļîñķẋẋ ţöẋ {0} ƒŕöɱẋẋ ýöûŕẋẋ åççöûñţẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RemoveAccountButtonText">
+        <source>Remove</source>
+        <target state="translated">[Ŕéɱöṽéẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RemoveAccountLinkModalDescription">
+        <source>Please wait while your account link is removed.</source>
+        <target state="translated">[Þļéåšéẋẋ ŵåîţẋẋ ŵĥîļéẋẋ ýöûŕẋẋ åççöûñţẋẋẋ ļîñķẋẋ îšẋ ŕéɱöṽéð·ẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RemoveAccountLinkModalTitle">
+        <source>Removing account link...</source>
+        <target state="translated">[Ŕéɱöṽîñĝẋẋẋ åççöûñţẋẋẋ ļîñķ···ẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ResetPreferencesButtonAltText">
+        <source>Reset all line selections to their original values</source>
+        <target state="translated">[Ŕéšéţẋẋ åļļẋ ļîñéẋẋ šéļéçţîöñšẋẋẋẋ ţöẋ ţĥéîŕẋẋ öŕîĝîñåļẋẋẋ ṽåļûéšẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ResetPreferencesButtonText">
+        <source>Reset</source>
+        <target state="translated">[Ŕéšéţẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SavePreferencesButtonAltText">
+        <source>Save the changes to your line preferences</source>
+        <target state="translated">[Šåṽéẋẋ ţĥéẋ çĥåñĝéšẋẋẋ ţöẋ ýöûŕẋẋ ļîñéẋẋ þŕéƒéŕéñçéšẋẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SavePreferencesButtonText">
+        <source>Save preferences</source>
+        <target state="translated">[Šåṽéẋẋ þŕéƒéŕéñçéšẋẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SignInButtonAltText">
+        <source>Sign in using your {0} account</source>
+        <target state="translated">[Šîĝñẋẋ îñẋ ûšîñĝẋẋ ýöûŕẋẋ {0} åççöûñţẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SignInButtonText">
+        <source>Sign in with {0}</source>
+        <target state="translated">[Šîĝñẋẋ îñẋ ŵîţĥẋẋ {0}]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SignInErrorSubtitle">
+        <source>Sorry, you couldn't be signed in. Please try again later.</source>
+        <target state="translated">[Šöŕŕý،ẋẋ ýöûẋ çöûļðñ´ţẋẋẋ ƀéẋ šîĝñéðẋẋ îñ·ẋ Þļéåšéẋẋ ţŕýẋ åĝåîñẋẋ ļåţéŕ·ẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SignInErrorTitle">
+        <source>Sign-in error</source>
+        <target state="translated">[Šîĝñ‐îñẋẋẋ éŕŕöŕẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SignInLinkAltText">
+        <source>Sign in to your London Travel account</source>
+        <target state="translated">[Šîĝñẋẋ îñẋ ţöẋ ýöûŕẋẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ åççöûñţẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SignInLinkText">
+        <source>Sign In</source>
+        <target state="translated">[Šîĝñẋẋ Îñẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SignInMetaDescription">
+        <source>Sign in to your London Travel account.</source>
+        <target state="translated">[Šîĝñẋẋ îñẋ ţöẋ ýöûŕẋẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ åççöûñţ·ẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SignInRegisterSubtitle">
+        <source>...or register a new account</source>
+        <target state="translated">[···öŕẋẋ ŕéĝîšţéŕẋẋẋ åẋ ñéŵẋ åççöûñţẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SignInRegisterText">
+        <source>If you do not already have a London Travel account, register for one by clicking the button below.</source>
+        <target state="translated">[Îƒẋ ýöûẋ ðöẋ ñöţẋ åļŕéåðýẋẋẋ ĥåṽéẋẋ åẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ åççöûñţ،ẋẋẋ ŕéĝîšţéŕẋẋẋ ƒöŕẋ öñéẋ ƀýẋ çļîçķîñĝẋẋẋ ţĥéẋ ƀûţţöñẋẋ ƀéļöŵ·ẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SignInSubtitle">
+        <source>Choose a service to sign in with:</source>
+        <target state="translated">[Çĥööšéẋẋ åẋ šéŕṽîçéẋẋẋ ţöẋ šîĝñẋẋ îñẋ ŵîţĥ∶ẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SignInTitle">
+        <source>Sign in</source>
+        <target state="translated">[Šîĝñẋẋ îñẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SignOutLinkText">
+        <source>Sign out</source>
+        <target state="translated">[Šîĝñẋẋ öûţẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SigningInModalDescription">
+        <source>Please wait while you are redirected to sign-in.</source>
+        <target state="translated">[Þļéåšéẋẋ ŵåîţẋẋ ŵĥîļéẋẋ ýöûẋ åŕéẋ ŕéðîŕéçţéðẋẋẋẋ ţöẋ šîĝñ‐îñ·ẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SigningInModalTitle">
+        <source>Signing in...</source>
+        <target state="translated">[Šîĝñîñĝẋẋẋ îñ···ẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SkillNotLinkedDescription">
+        <source>Link your account with the London Travel skill using the Alexa app to access your preferences from the skill to ask about your commute.</source>
+        <target state="translated">[Ļîñķẋẋ ýöûŕẋẋ åççöûñţẋẋẋ ŵîţĥẋẋ ţĥéẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ šķîļļẋẋ ûšîñĝẋẋ ţĥéẋ Åļéẋåẋẋ åþþẋ ţöẋ åççéššẋẋ ýöûŕẋẋ þŕéƒéŕéñçéšẋẋẋẋ ƒŕöɱẋẋ ţĥéẋ šķîļļẋẋ ţöẋ åšķẋ åƀöûţẋẋ ýöûŕẋẋ çöɱɱûţé·ẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SkillNotLinkedTitle">
+        <source>You have not linked your account with the Alexa app</source>
+        <target state="translated">[Ýöûẋ ĥåṽéẋẋ ñöţẋ ļîñķéðẋẋ ýöûŕẋẋ åççöûñţẋẋẋ ŵîţĥẋẋ ţĥéẋ Åļéẋåẋẋ åþþẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StatusLinkAltText">
+        <source>View site uptime information</source>
+        <target state="translated">[Ṽîéŵẋẋ šîţéẋẋ ûþţîɱéẋẋ îñƒöŕɱåţîöñẋẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StatusLinkText">
+        <source>Site Status &amp; Uptime</source>
+        <target state="translated">[Šîţéẋẋ Šţåţûšẋẋ ⅋ẋ Ûþţîɱéẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TechnologyLinkAltText">
+        <source>Information about the technologies behind the London Travel Alexa skill</source>
+        <target state="translated">[Îñƒöŕɱåţîöñẋẋẋẋ åƀöûţẋẋ ţĥéẋ ţéçĥñöļöĝîéšẋẋẋẋ ƀéĥîñðẋẋ ţĥéẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ Åļéẋåẋẋ šķîļļẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TechnologyLinkText">
+        <source>Technology</source>
+        <target state="translated">[Ţéçĥñöļöĝýẋẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TechnologyMetaDescription">
+        <source>Information about the technologies behind the London Travel Alexa skill.</source>
+        <target state="translated">[Îñƒöŕɱåţîöñẋẋẋẋ åƀöûţẋẋ ţĥéẋ ţéçĥñöļöĝîéšẋẋẋẋ ƀéĥîñðẋẋ ţĥéẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ Åļéẋåẋẋ šķîļļ·ẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TechnologyMetaTitle">
+        <source>London Travel Technologies</source>
+        <target state="translated">[Ļöñðöñẋẋ Ţŕåṽéļẋẋ Ţéçĥñöļöĝîéšẋẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TechnologyTitle">
+        <source>London Travel Technologies</source>
+        <target state="translated">[Ļöñðöñẋẋ Ţŕåṽéļẋẋ Ţéçĥñöļöĝîéšẋẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TermsOfServiceLinkAltText">
+        <source>View the London Travel Alexa skill's Terms of Service</source>
+        <target state="translated">[Ṽîéŵẋẋ ţĥéẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ Åļéẋåẋẋ šķîļļ´šẋẋẋ Ţéŕɱšẋẋ öƒẋ Šéŕṽîçéẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TermsOfServiceLinkText">
+        <source>Terms of Service</source>
+        <target state="translated">[Ţéŕɱšẋẋ öƒẋ Šéŕṽîçéẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TermsOfServiceMetaDescription">
+        <source>The Terms of Service for the London Travel Alexa skill and website.</source>
+        <target state="translated">[Ţĥéẋ Ţéŕɱšẋẋ öƒẋ Šéŕṽîçéẋẋẋ ƒöŕẋ ţĥéẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ Åļéẋåẋẋ šķîļļẋẋ åñðẋ ŵéƀšîţé·ẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TermsOfServiceMetaTitle">
+        <source>Terms of Service</source>
+        <target state="translated">[Ţéŕɱšẋẋ öƒẋ Šéŕṽîçéẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TermsOfServiceTitle">
+        <source>London Travel Terms of Service</source>
+        <target state="translated">[Ļöñðöñẋẋ Ţŕåṽéļẋẋ Ţéŕɱšẋẋ öƒẋ Šéŕṽîçéẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UpdateFailureModalDescription">
+        <source>Your preferences were not been saved as they have since been saved elsewhere and might have been overwritten. Please try again.</source>
+        <target state="translated">[Ýöûŕẋẋ þŕéƒéŕéñçéšẋẋẋẋ ŵéŕéẋẋ ñöţẋ ƀééñẋẋ šåṽéðẋẋ åšẋ ţĥéýẋẋ ĥåṽéẋẋ šîñçéẋẋ ƀééñẋẋ šåṽéðẋẋ éļšéŵĥéŕéẋẋẋ åñðẋ ɱîĝĥţẋẋ ĥåṽéẋẋ ƀééñẋẋ öṽéŕŵŕîţţéñ·ẋẋẋẋ Þļéåšéẋẋ ţŕýẋ åĝåîñ·ẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UpdateFailureModalTitle">
+        <source>Your preferences were not saved</source>
+        <target state="translated">[Ýöûŕẋẋ þŕéƒéŕéñçéšẋẋẋẋ ŵéŕéẋẋ ñöţẋ šåṽéðẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UpdateProgressModalDescription">
+        <source>Saving your preferences.</source>
+        <target state="translated">[Šåṽîñĝẋẋ ýöûŕẋẋ þŕéƒéŕéñçéš·ẋẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UpdateProgressModalTitle">
+        <source>Saving preferences...</source>
+        <target state="translated">[Šåṽîñĝẋẋ þŕéƒéŕéñçéš···ẋẋẋẋẋ]</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UpdateSuccessModalTitle">
+        <source>Your preferences have been saved</source>
+        <target state="translated">[Ýöûŕẋẋ þŕéƒéŕéñçéšẋẋẋẋ ĥåṽéẋẋ ƀééñẋẋ šåṽéðẋẋ]</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
