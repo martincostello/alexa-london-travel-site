@@ -8,8 +8,10 @@ namespace MartinCostello.LondonTravel.Site.TagHelpers
     using System.Text.Encodings.Web;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Mvc.Razor.Infrastructure;
     using Microsoft.AspNetCore.Mvc.Routing;
     using Microsoft.AspNetCore.Mvc.TagHelpers;
+    using Microsoft.AspNetCore.Mvc.ViewFeatures;
     using Microsoft.AspNetCore.Razor.TagHelpers;
     using Microsoft.Extensions.Caching.Memory;
     using Microsoft.Extensions.FileProviders;
@@ -30,8 +32,8 @@ namespace MartinCostello.LondonTravel.Site.TagHelpers
         /// </summary>
         private static readonly char[] Tilde = new[] { '~' };
 
-        public SriScriptTagHelper(IHostingEnvironment hostingEnvironment, IMemoryCache cache, HtmlEncoder htmlEncoder, JavaScriptEncoder javaScriptEncoder, IUrlHelperFactory urlHelperFactory)
-            : base(hostingEnvironment, cache, htmlEncoder, javaScriptEncoder, urlHelperFactory)
+        public SriScriptTagHelper(IHostingEnvironment hostingEnvironment, TagHelperMemoryCacheProvider cacheProvider, IFileVersionProvider fileVersionProvider, HtmlEncoder htmlEncoder, JavaScriptEncoder javaScriptEncoder, IUrlHelperFactory urlHelperFactory)
+            : base(hostingEnvironment, cacheProvider, fileVersionProvider, htmlEncoder, javaScriptEncoder, urlHelperFactory)
         {
         }
 
@@ -92,7 +94,12 @@ namespace MartinCostello.LondonTravel.Site.TagHelpers
                     }
                 }
 
-                Cache.Set(cacheKey, hash);
+                var options = new MemoryCacheEntryOptions()
+                {
+                    Size = hash.Length,
+                };
+
+                Cache.Set(cacheKey, hash, options);
             }
 
             output.Attributes.Add("integrity", $"sha384-{hash}");

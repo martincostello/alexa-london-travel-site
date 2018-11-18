@@ -178,7 +178,7 @@ namespace MartinCostello.LondonTravel.Site.Integration.Builders
                 email = _email,
             };
 
-            return Build("https://graph.facebook.com/v2.12/me", user, ignoreQuery: true);
+            return Build($"https://graph.facebook.com/v{AccessTokensInterceptionBuilder.FacebookApiVersion}/me", user, ignoreQuery: true);
         }
 
         /// <summary>

@@ -5,6 +5,7 @@
     <CommitBranch Condition=" '$(CommitBranch)' == '' ">$(BUILD_SOURCEBRANCHNAME)</CommitBranch>
     <CommitBranch Condition=" '$(CommitBranch)' == '' ">$(TRAVIS_PULL_REQUEST_BRANCH)</CommitBranch>
     <CommitBranch Condition=" '$(CommitBranch)' == '' ">$(TRAVIS_BRANCH)</CommitBranch>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
   </PropertyGroup>
   <Target Name="AddGitMetadaAssemblyAttributes"
           BeforeTargets="CoreGenerateAssemblyInfo"

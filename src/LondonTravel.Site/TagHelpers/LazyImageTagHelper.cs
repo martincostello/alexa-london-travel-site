@@ -5,10 +5,11 @@ namespace MartinCostello.LondonTravel.Site.TagHelpers
 {
     using System.Text.Encodings.Web;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Mvc.Razor.Infrastructure;
     using Microsoft.AspNetCore.Mvc.Routing;
     using Microsoft.AspNetCore.Mvc.TagHelpers;
+    using Microsoft.AspNetCore.Mvc.ViewFeatures;
     using Microsoft.AspNetCore.Razor.TagHelpers;
-    using Microsoft.Extensions.Caching.Memory;
 
     /// <summary>
     /// A <see cref="ITagHelper"/> implementation targeting &lt;lazyimg&gt;
@@ -32,19 +33,8 @@ namespace MartinCostello.LondonTravel.Site.TagHelpers
         /// </summary>
         private const string SourceAttributeName = "src";
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LazyImageTagHelper"/> class.
-        /// </summary>
-        /// <param name="hostingEnvironment">The <see cref="IHostingEnvironment"/>.</param>
-        /// <param name="cache">The <see cref="IMemoryCache"/>.</param>
-        /// <param name="htmlEncoder">The <see cref="HtmlEncoder"/> to use.</param>
-        /// <param name="urlHelperFactory">The <see cref="IUrlHelperFactory"/>.</param>
-        public LazyImageTagHelper(
-            IHostingEnvironment hostingEnvironment,
-            IMemoryCache cache,
-            HtmlEncoder htmlEncoder,
-            IUrlHelperFactory urlHelperFactory)
-            : base(hostingEnvironment, cache, htmlEncoder, urlHelperFactory)
+        public LazyImageTagHelper(IHostingEnvironment hostingEnvironment, TagHelperMemoryCacheProvider cacheProvider, IFileVersionProvider fileVersionProvider, HtmlEncoder htmlEncoder, IUrlHelperFactory urlHelperFactory)
+            : base(hostingEnvironment, cacheProvider, fileVersionProvider, htmlEncoder, urlHelperFactory)
         {
         }
 
