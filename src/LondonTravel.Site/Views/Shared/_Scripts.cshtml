@@ -7,8 +7,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/locale/en-gb.js" integrity="sha256-aTgx0CTTED3qZtyezqOlG3e04BkBaEzWDwNT1O4TGVo=" crossorigin="anonymous" defer></script>
     }
 <environment names="Development">
-    <script src="~/assets/js/site.js" asp-append-version="true" defer></script>
+    <script src="~/assets/js/site.js" asp-append-version="true" asp-add-sri="true" defer></script>
 </environment>
 <environment names="Staging,Production">
-    <script src="~/assets/js/site.min.js" asp-append-version="true" defer></script>
+    <script src="~/assets/js/site.min.js" asp-append-version="true" asp-add-sri="true" defer></script>
 </environment>
