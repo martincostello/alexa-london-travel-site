@@ -42,7 +42,7 @@
     <VersionPrefix>2.1.0</VersionPrefix>
     <VersionSuffix></VersionSuffix>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(CI)' != '' or '$(TF_BUILD)' != '' ">
+  <PropertyGroup Condition=" '$(CI)' != '' or '$(TF_BUILD)' != '' or !Exists('$(MSBuildThisFileDirectory)\src\LondonTravel.Site\node_modules') ">
     <InstallWebPackages>true</InstallWebPackages>
   </PropertyGroup>
 </Project>
