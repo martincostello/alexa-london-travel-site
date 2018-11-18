@@ -264,6 +264,7 @@ namespace MartinCostello.LondonTravel.Site.Middleware
                 { "block-all-mixed-content", Array.Empty<string>() },
                 { "base-uri", new[] { Csp.Self } },
                 { "manifest-src", new[] { Csp.Self } },
+                { "worker-src", new[] { Csp.Self } },
             };
 
             if (allowInlineStyles)
