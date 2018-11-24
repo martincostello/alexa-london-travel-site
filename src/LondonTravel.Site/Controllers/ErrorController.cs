@@ -76,7 +76,8 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// The result for the <c>/error</c> action.
         /// </returns>
         [HttpGet]
-        public IActionResult Index(int? id)
+        [IgnoreAntiforgeryToken]
+        public IActionResult Index([FromQuery] int? id)
         {
             int httpCode = id ?? StatusCodes.Status500InternalServerError;
 
@@ -148,6 +149,8 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         [HttpGet]
         [HttpHead]
         [HttpPost]
+        [Route(".env")]
+        [Route(".git/{*catchall}")]
         [Route("admin.php")]
         [Route("admin-console")]
         [Route("admin/login.php")]

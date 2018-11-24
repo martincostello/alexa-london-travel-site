@@ -229,6 +229,9 @@ namespace MartinCostello.LondonTravel.Site.Integration
         }
 
         [Theory]
+        [InlineData("/.env")]
+        [InlineData("/.git")]
+        [InlineData("/.git/head")]
         [InlineData("/admin.php")]
         [InlineData("/wp-admin/blah")]
         [InlineData("/xmlrpc.php")]
