@@ -76,7 +76,8 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// The result for the <c>/error</c> action.
         /// </returns>
         [HttpGet]
-        public IActionResult Index(int? id)
+        [IgnoreAntiforgeryToken]
+        public IActionResult Index([FromQuery] int? id)
         {
             int httpCode = id ?? StatusCodes.Status500InternalServerError;
 
