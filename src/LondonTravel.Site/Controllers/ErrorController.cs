@@ -149,6 +149,8 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         [HttpGet]
         [HttpHead]
         [HttpPost]
+        [Route(".env")]
+        [Route(".git/{*catchall}")]
         [Route("admin.php")]
         [Route("admin-console")]
         [Route("admin/login.php")]
