@@ -1,10 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
-    <!--
     <AspNetCoreHostingModel>inprocess</AspNetCoreHostingModel>
-    -->
-    <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
-    <AspNetCoreModuleName>AspNetCoreModule</AspNetCoreModuleName>
     <DebugType>full</DebugType>
     <Description>https://londontravel.martincostello.com/</Description>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
