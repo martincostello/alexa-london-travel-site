@@ -16,7 +16,7 @@
   </ItemGroup>
   <PropertyGroup>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-    <Authors>Martin Costello</Authors>
+    <Authors>martin_costello</Authors>
     <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)LondonTravel.Site.ruleset</CodeAnalysisRuleSet>
     <Company>https://github.com/martincostello/alexa-london-travel-site</Company>
     <Copyright>Martin Costello (c) $([System.DateTime]::UtcNow.ToString(yyyy))</Copyright>
@@ -26,7 +26,7 @@
     <GenerateGitMetadata Condition=" ('$(CI)' != '' or '$(TF_BUILD)' != '') and '$(GenerateGitMetadata)' == '' ">true</GenerateGitMetadata>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <LangVersion>latest</LangVersion>
-    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath</MSBuildAllProjects>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
     <NeutralLanguage>en-US</NeutralLanguage>
     <NoWarn>$(NoWarn);CA1016;CA1054;CA1055;CA1056;CA1812;CA1819;CS1591;CA2007</NoWarn>
     <PackageIconUrl>https://martincostello.com/favicon.ico</PackageIconUrl>
@@ -39,7 +39,7 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>$(PackageProjectUrl).git</RepositoryUrl>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-    <VersionPrefix>2.1.0</VersionPrefix>
+    <VersionPrefix>2.2.0</VersionPrefix>
     <VersionSuffix></VersionSuffix>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(CI)' != '' or '$(TF_BUILD)' != '' or !Exists('$(MSBuildThisFileDirectory)\src\LondonTravel.Site\node_modules') ">

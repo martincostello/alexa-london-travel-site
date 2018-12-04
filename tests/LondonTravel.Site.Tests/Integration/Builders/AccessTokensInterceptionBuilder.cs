@@ -14,6 +14,8 @@ namespace MartinCostello.LondonTravel.Site.Integration.Builders
     /// </summary>
     public class AccessTokensInterceptionBuilder
     {
+        internal const string FacebookApiVersion = "3.1";
+
         private static readonly Random _random = new Random();
 
         private string _accessToken = Guid.NewGuid().ToString();
@@ -131,7 +133,7 @@ namespace MartinCostello.LondonTravel.Site.Integration.Builders
         /// <returns>
         /// The <see cref="HttpRequestInterceptionBuilder"/> configured from the current instance.
         /// </returns>
-        public HttpRequestInterceptionBuilder ForFacebook() => ForOAuth("https://graph.facebook.com/v2.12/oauth/access_token");
+        public HttpRequestInterceptionBuilder ForFacebook() => ForOAuth($"https://graph.facebook.com/v{FacebookApiVersion}/oauth/access_token");
 
         /// <summary>
         /// Returns a new <see cref="HttpRequestInterceptionBuilder"/> that is configured

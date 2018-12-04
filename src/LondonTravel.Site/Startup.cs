@@ -139,7 +139,7 @@ namespace MartinCostello.LondonTravel.Site
             services
                 .AddLocalization()
                 .AddMvc(ConfigureMvc)
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
                 .AddDataAnnotationsLocalization()
                 .AddJsonOptions((p) => ConfigureJsonFormatter(p));

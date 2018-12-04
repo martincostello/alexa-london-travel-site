@@ -3,20 +3,20 @@
     "anonymousAuthentication": true,
     "windowsAuthentication": false,
     "iisExpress": {
-      "applicationUrl": "http://localhost:53486/",
-      "sslPort": 44310
+      "applicationUrl": "http://localhost:63492/",
+      "sslPort": 44303
     }
   },
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "https://localhost:44310/",
+      "launchUrl": "https://localhost:44303/",
       "environmentVariables": {
         "Azure:Datacenter": "Local",
         "Azure:Environment": "Local",
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "ASPNETCORE_HTTPS_PORT": "44310"
+        "ASPNETCORE_HTTPS_PORT": "44303"
       }
     },
     "Kestrel": {

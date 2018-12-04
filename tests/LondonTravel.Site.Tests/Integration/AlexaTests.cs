@@ -131,7 +131,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
 
             // Trawl the performance logs to find the redirection that loaded the current
             // page as that will have contained the parameters with the token in its hash.
-            string url = driver.Manage().Logs.GetLog("performance")
+            var logs = driver.Manage().Logs.GetLog("performance")
                 .Select((p) => JObject.Parse(p.Message))
                 .Select((p) => p.Value<JObject>("message"))
                 .Where((p) => p.Value<string>("method") == "Network.requestWillBeSent")
@@ -140,8 +140,25 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 .Where((p) => p["redirectResponse"] != null)
                 .Where((p) => p["request"] != null)
                 .Where((p) => p["request"].Value<string>("url") == driverUrl)
-                .Select((p) => p["redirectResponse"]["headers"].Value<string>("Location"))
+                .Select((p) => p["redirectResponse"]["headers"])
+                .ToList();
+
+            // Handle casing differences in HTTP response header casing in the logs
+            string url = logs
+                .Select((p) => p.Value<string>("Location"))
                 .LastOrDefault();
+
+            if (url == null)
+            {
+                url = logs
+                    .Select((p) => p.Value<string>("location"))
+                    .LastOrDefault();
+            }
+
+            if (url == null)
+            {
+                throw new InvalidOperationException("Failed to parse browser performance log for authorization URL.");
+            }
 
             return ParseAuthorization(url);
         }

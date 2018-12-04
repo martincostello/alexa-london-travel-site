@@ -6,17 +6,17 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
-      "program": "${workspaceRoot}/src/LondonTravel.Site/bin/Debug/netcoreapp2.1/LondonTravel.Site.dll",
+      "program": "${workspaceRoot}/src/LondonTravel.Site/bin/Debug/netcoreapp2.2/LondonTravel.Site.dll",
       "args": [],
       "cwd": "${workspaceRoot}/src/LondonTravel.Site",
       "stopAtEntry": false,
       "internalConsoleOptions": "openOnSessionStart",
       "launchBrowser": {
         "enabled": true,
-        "args": "https://localhost:5001/",
+        "args": "${auto-detect-url}",
         "windows": {
           "command": "cmd.exe",
-          "args": "/C start https://localhost:5001/"
+          "args": "/C start ${auto-detect-url}"
         },
         "osx": {
           "command": "open"
@@ -34,10 +34,18 @@
       }
     },
     {
-      "name": ".NET Core Attach",
+      "name": "Run tests",
       "type": "coreclr",
-      "request": "attach",
-      "processId": "${command:pickProcess}"
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "dotnet",
+      "args": [
+        "test"
+      ],
+      "cwd": "${workspaceRoot}/tests/LondonTravel.Site.Tests",
+      "console": "internalConsole",
+      "stopAtEntry": false,
+      "internalConsoleOptions": "openOnSessionStart"
     }
   ]
 }
