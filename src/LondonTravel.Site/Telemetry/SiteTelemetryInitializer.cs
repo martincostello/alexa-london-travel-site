@@ -3,6 +3,8 @@
 
 namespace MartinCostello.LondonTravel.Site.Telemetry
 {
+    using System.Net.Http;
+    using System.Net.Http.Headers;
     using Extensions;
     using Microsoft.ApplicationInsights.Channel;
     using Microsoft.ApplicationInsights.DataContracts;
@@ -60,6 +62,31 @@ namespace MartinCostello.LondonTravel.Site.Telemetry
                     foreach (var item in activity.Tags)
                     {
                         dependency.Properties[item.Key] = item.Value;
+                    }
+                }
+
+                HttpResponseHeaders headers = null;
+
+                // See https://github.com/Microsoft/ApplicationInsights-dotnet-server/issues/587#issuecomment-443927313
+                if (dependency.TryGetOperationDetail("HttpResponse", out object detail) && detail is HttpResponseMessage response)
+                {
+                    headers = response.Headers;
+                }
+                else if (dependency.TryGetOperationDetail("HttpResponseHeaders", out detail) && detail is HttpResponseHeaders responseHeaders)
+                {
+                    headers = responseHeaders;
+                }
+
+                if (headers != null)
+                {
+                    if (headers.TryGetValues("x-ms-activity-id", out var values))
+                    {
+                        activity.AddTag("Activity Id", string.Join(", ", values));
+                    }
+
+                    if (headers.TryGetValues("x-ms-request-charge", out values))
+                    {
+                        activity.AddTag("Request Charge", string.Join(", ", values));
                     }
                 }
             }
