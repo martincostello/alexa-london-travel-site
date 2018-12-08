@@ -4,8 +4,10 @@
 namespace MartinCostello.LondonTravel.Site.Services.Data
 {
     using System;
+    using System.Net.Http;
     using Microsoft.Azure.Documents;
     using Microsoft.Azure.Documents.Client;
+    using Microsoft.Extensions.DependencyInjection;
     using Options;
 
     /// <summary>
@@ -26,21 +28,51 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// <summary>
         /// Creates a new instance of an <see cref="IDocumentClient"/> implementation.
         /// </summary>
-        /// <param name="options">The <see cref="UserStoreOptions"/> to use.</param>
+        /// <param name="serviceProvider">The <see cref="IServiceProvider"/> to use.</param>
         /// <returns>
         /// The created instance of <see cref="IDocumentClient"/>.
         /// </returns>
         /// <exception cref="ArgumentNullException">
-        /// <paramref name="options"/> is <see langword="null"/>.
+        /// <paramref name="serviceProvider"/> is <see langword="null"/>.
+        /// </exception>
+        internal static IDocumentClient CreateClient(IServiceProvider serviceProvider)
+        {
+            if (serviceProvider == null)
+            {
+                throw new ArgumentNullException(nameof(serviceProvider));
+            }
+
+            var options = serviceProvider.GetRequiredService<UserStoreOptions>();
+            var factory = serviceProvider.GetRequiredService<IHttpMessageHandlerFactory>();
+            var handler = factory.CreateHandler("Azure-CosmosDB");
+
+            return CreateClient(options, handler);
+        }
+
+        /// <summary>
+        /// Creates a new instance of an <see cref="IDocumentClient"/> implementation.
+        /// </summary>
+        /// <param name="options">The <see cref="UserStoreOptions"/> to use.</param>
+        /// <param name="handler">The <see cref="HttpMessageHandler"/> to use.</param>
+        /// <returns>
+        /// The created instance of <see cref="IDocumentClient"/>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="options"/> or <paramref name="handler"/> is <see langword="null"/>.
         /// </exception>
         /// <exception cref="ArgumentException">
         /// <paramref name="options"/> is invalid.
         /// </exception>
-        internal static IDocumentClient CreateClient(UserStoreOptions options)
+        internal static IDocumentClient CreateClient(UserStoreOptions options, HttpMessageHandler handler)
         {
             if (options == null)
             {
                 throw new ArgumentNullException(nameof(options));
+            }
+
+            if (handler == null)
+            {
+                throw new ArgumentNullException(nameof(handler));
             }
 
             if (options.ServiceUri == null)
@@ -88,7 +120,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             connectionPolicy.RequestTimeout = TimeSpan.FromSeconds(30);
             connectionPolicy.UserAgentSuffix = "london-travel";
 
-            return new DocumentClient(options.ServiceUri, options.AccessKey, connectionPolicy);
+            return new DocumentClient(options.ServiceUri, options.AccessKey, handler, connectionPolicy);
         }
     }
 }

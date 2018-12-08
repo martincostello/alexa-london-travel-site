@@ -170,7 +170,7 @@ namespace MartinCostello.LondonTravel.Site
             services.AddSingleton<ITelemetryInitializer, SiteTelemetryInitializer>();
             services.AddSingleton<ITflServiceFactory, TflServiceFactory>();
             services.AddSingleton((_) => ConfigureJsonFormatter(new JsonSerializerSettings()));
-            services.AddSingleton((p) => DocumentHelpers.CreateClient(p.GetRequiredService<UserStoreOptions>()));
+            services.AddSingleton(DocumentHelpers.CreateClient);
 
             services.TryAddSingleton<IDocumentService, DocumentService>();
             services.TryAddSingleton<IDocumentCollectionInitializer, DocumentCollectionInitializer>();
