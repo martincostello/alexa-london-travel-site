@@ -4,6 +4,7 @@
 namespace MartinCostello.LondonTravel.Site
 {
     using System;
+    using System.IO;
     using Extensions;
     using MartinCostello.LondonTravel.Site.Services;
     using Microsoft.ApplicationInsights.AspNetCore.Extensions;
@@ -227,7 +228,43 @@ namespace MartinCostello.LondonTravel.Site
             return settings;
         }
 
-        private static StaticFileOptions CreateStaticFileOptions()
+        /// <summary>
+        /// Sets the cache headers for static files.
+        /// </summary>
+        /// <param name="context">The static file response context to set the headers for.</param>
+        private void SetCacheHeaders(StaticFileResponseContext context)
+        {
+            var maxAge = TimeSpan.FromDays(7);
+
+            if (context.File.Exists && HostingEnvironment.IsProduction())
+            {
+                string extension = Path.GetExtension(context.File.PhysicalPath);
+
+                // These files are served with a content hash in the URL so can be cached for longer
+                bool isScriptOrStyle =
+                    string.Equals(extension, ".css", StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(extension, ".js", StringComparison.OrdinalIgnoreCase);
+
+                if (isScriptOrStyle)
+                {
+                    maxAge = TimeSpan.FromDays(365);
+                }
+            }
+
+            var headers = context.Context.Response.GetTypedHeaders();
+            headers.CacheControl = new CacheControlHeaderValue()
+            {
+                MaxAge = maxAge,
+            };
+        }
+
+        /// <summary>
+        /// Configures the options for serving static content.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="StaticFileOptions"/> to use.
+        /// </returns>
+        private StaticFileOptions CreateStaticFileOptions()
         {
             var provider = new FileExtensionContentTypeProvider();
             provider.Mappings[".webmanifest"] = "application/manifest+json";
@@ -236,15 +273,8 @@ namespace MartinCostello.LondonTravel.Site
             {
                 ContentTypeProvider = provider,
                 DefaultContentType = "application/json",
+                OnPrepareResponse = SetCacheHeaders,
                 ServeUnknownFileTypes = true,
-                OnPrepareResponse = (context) =>
-                {
-                    var headers = context.Context.Response.GetTypedHeaders();
-                    headers.CacheControl = new CacheControlHeaderValue()
-                    {
-                        MaxAge = TimeSpan.FromDays(7)
-                    };
-                }
             };
         }
 
