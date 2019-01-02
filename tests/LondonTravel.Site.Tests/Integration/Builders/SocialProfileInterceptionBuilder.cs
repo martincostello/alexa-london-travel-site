@@ -17,7 +17,6 @@ namespace MartinCostello.LondonTravel.Site.Integration.Builders
         private string _facebookProfile = "john.smith";
         private string _firstName = "John";
         private string _fullName = "John Smith";
-        private string _googlePlusProfile = "JohnSmith";
         private string _id = Guid.NewGuid().ToString();
         private string _middleName = "Jay";
         private string _surname = "Smith";
@@ -84,19 +83,6 @@ namespace MartinCostello.LondonTravel.Site.Integration.Builders
         public SocialProfileInterceptionBuilder WithFullName(string value)
         {
             _fullName = value ?? string.Empty;
-            return this;
-        }
-
-        /// <summary>
-        /// Sets the Google+ profile to use.
-        /// </summary>
-        /// <param name="value">The value to set.</param>
-        /// <returns>
-        /// The current <see cref="SocialProfileInterceptionBuilder"/>.
-        /// </returns>
-        public SocialProfileInterceptionBuilder WithGooglePlusProfile(string value)
-        {
-            _googlePlusProfile = value ?? string.Empty;
             return this;
         }
 
@@ -192,21 +178,14 @@ namespace MartinCostello.LondonTravel.Site.Integration.Builders
         {
             var user = new
             {
-                id = _id,
-                displayName = _displayName,
-                name = new
-                {
-                    givenName = _firstName,
-                    familyName = _surname,
-                },
-                url = $"https://plus.google.local/+{_googlePlusProfile}",
-                emails = new[]
-                {
-                    new { value = _email },
-                },
+                sub = _id,
+                name = _displayName,
+                given_name = _firstName,
+                family_name = _surname,
+                email = _email,
             };
 
-            return Build("https://www.googleapis.com/plus/v1/people/me", user);
+            return Build("https://openidconnect.googleapis.com/v1/userinfo", user);
         }
 
         /// <summary>
