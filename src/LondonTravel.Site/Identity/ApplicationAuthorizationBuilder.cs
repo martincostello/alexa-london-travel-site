@@ -5,6 +5,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
 {
     using System;
     using System.Net.Http;
+    using System.Security.Claims;
     using MartinCostello.LondonTravel.Site.Options;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authentication.OAuth;
@@ -99,7 +100,22 @@ namespace MartinCostello.LondonTravel.Site.Identity
 
             if (TryGetProvider(name, out ExternalSignInOptions signInOptions))
             {
-                _builder.AddGoogle((auth) => ConfigureOAuth(name, auth, signInOptions));
+                _builder.AddGoogle(
+                    (auth) =>
+                    {
+                        ConfigureOAuth(name, auth, signInOptions);
+
+                        // See https://github.com/aspnet/AspNetCore/issues/6069#issuecomment-449461197
+                        auth.UserInformationEndpoint = "https://openidconnect.googleapis.com/v1/userinfo";
+                        auth.ClaimActions.Clear();
+                        auth.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");
+                        auth.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
+                        auth.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
+                        auth.ClaimActions.MapJsonKey(ClaimTypes.Surname, "family_name");
+                        auth.ClaimActions.MapJsonKey("urn:google:profile", "profile");
+                        auth.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
+                        auth.ClaimActions.MapJsonKey("urn:google:image", "picture");
+                    });
             }
 
             return this;
