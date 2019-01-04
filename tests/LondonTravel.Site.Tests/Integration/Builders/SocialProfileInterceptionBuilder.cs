@@ -178,14 +178,14 @@ namespace MartinCostello.LondonTravel.Site.Integration.Builders
         {
             var user = new
             {
-                sub = _id,
+                id = _id,
                 name = _displayName,
                 given_name = _firstName,
                 family_name = _surname,
                 email = _email,
             };
 
-            return Build("https://openidconnect.googleapis.com/v1/userinfo", user);
+            return Build("https://www.googleapis.com/oauth2/v2/userinfo", user);
         }
 
         /// <summary>

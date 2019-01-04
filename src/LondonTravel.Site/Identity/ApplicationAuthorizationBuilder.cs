@@ -106,15 +106,15 @@ namespace MartinCostello.LondonTravel.Site.Identity
                         ConfigureOAuth(name, auth, signInOptions);
 
                         // See https://github.com/aspnet/AspNetCore/issues/6069#issuecomment-449461197
-                        auth.UserInformationEndpoint = "https://openidconnect.googleapis.com/v1/userinfo";
+                        // and https://github.com/aspnet/AspNetCore/pull/6338
+                        auth.UserInformationEndpoint = "https://www.googleapis.com/oauth2/v2/userinfo";
                         auth.ClaimActions.Clear();
-                        auth.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "sub");
+                        auth.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
                         auth.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
                         auth.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
                         auth.ClaimActions.MapJsonKey(ClaimTypes.Surname, "family_name");
-                        auth.ClaimActions.MapJsonKey("urn:google:profile", "profile");
+                        auth.ClaimActions.MapJsonKey("urn:google:profile", "link");
                         auth.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
-                        auth.ClaimActions.MapJsonKey("urn:google:image", "picture");
                     });
             }
 
