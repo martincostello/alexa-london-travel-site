@@ -33,6 +33,7 @@
     "karma-typescript": "3.0.13",
     "lodash": ">=4.17.11",
     "merge-stream": "1.0.1",
+    "natives": "^1.1.6",
     "path": "0.12.7",
     "puppeteer": "1.8.0",
     "superagent": "3.8.3",
