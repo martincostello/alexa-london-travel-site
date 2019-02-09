@@ -60,7 +60,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             IUserStore<LondonTravelUser> GetUserStore(IServiceProvider serviceProvider)
                 => serviceProvider.GetRequiredService<IUserStore<LondonTravelUser>>();
 
-            using (var scope = Fixture.Server.Host.Services.CreateScope())
+            using (var scope = Fixture.Services.CreateScope())
             {
                 using (IUserStore<LondonTravelUser> store = GetUserStore(scope.ServiceProvider))
                 {
@@ -142,7 +142,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             }
 
             // Arrange
-            using (var scope = Fixture.Server.Host.Services.CreateScope())
+            using (var scope = Fixture.Services.CreateScope())
             {
                 using (IUserStore<LondonTravelUser> store = GetUserStore(scope.ServiceProvider))
                 {
