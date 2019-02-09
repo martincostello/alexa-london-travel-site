@@ -5,6 +5,8 @@ namespace MartinCostello.LondonTravel.Site.Integration
 {
     using System;
     using System.IO;
+    using System.Linq;
+    using System.Reflection;
     using JustEat.HttpClientInterception;
     using MartinCostello.Logging.XUnit;
     using MartinCostello.LondonTravel.Site.Services.Data;
@@ -30,10 +32,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             ClientOptions.AllowAutoRedirect = false;
             ClientOptions.BaseAddress = new Uri("https://localhost");
 
-            // HACK Force HTTP server startup
-            using (CreateDefaultClient())
-            {
-            }
+            EnsureStarted();
         }
 
         /// <summary>
@@ -42,17 +41,30 @@ namespace MartinCostello.LondonTravel.Site.Integration
         public HttpClientInterceptorOptions Interceptor { get; } = new HttpClientInterceptorOptions() { ThrowOnMissingRegistration = true };
 
         /// <summary>
+        /// Gets the <see cref="IServiceProvider"/> in use.
+        /// </summary>
+        public virtual IServiceProvider Services => Server?.Host?.Services;
+
+        /// <summary>
         /// Clears the current <see cref="ITestOutputHelper"/>.
         /// </summary>
         public virtual void ClearOutputHelper()
-            => Server.Host.Services.GetRequiredService<ITestOutputHelperAccessor>().OutputHelper = null;
+        {
+            if (Services != null)
+            {
+                Services.GetRequiredService<ITestOutputHelperAccessor>().OutputHelper = null;
+            }
+        }
 
         /// <summary>
         /// Sets the <see cref="ITestOutputHelper"/> to use.
         /// </summary>
         /// <param name="value">The <see cref="ITestOutputHelper"/> to use.</param>
         public virtual void SetOutputHelper(ITestOutputHelper value)
-            => Server.Host.Services.GetRequiredService<ITestOutputHelperAccessor>().OutputHelper = value;
+        {
+            EnsureStarted();
+            Services.GetRequiredService<ITestOutputHelperAccessor>().OutputHelper = value;
+        }
 
         /// <inheritdoc />
         protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -74,10 +86,28 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 (services) => services.DisableApplicationInsights());
 
             builder.ConfigureAppConfiguration(ConfigureTests)
-                   .ConfigureLogging((loggingBuilder) => loggingBuilder.ClearProviders().AddXUnit());
+                   .ConfigureLogging((loggingBuilder) => loggingBuilder.ClearProviders().AddXUnit())
+                   .UseContentRoot(GetApplicationContentRootPath());
         }
 
-        private static void ConfigureTests(IConfigurationBuilder builder)
+        /// <summary>
+        /// Gets the content root path to use for the application.
+        /// </summary>
+        /// <returns>
+        /// The content root path to use for the application.
+        /// </returns>
+        protected string GetApplicationContentRootPath()
+        {
+            var attribute = GetTestAssemblies()
+                .SelectMany((p) => p.GetCustomAttributes<WebApplicationFactoryContentRootAttribute>())
+                .Where((p) => string.Equals(p.Key, "LondonTravel.Site", StringComparison.OrdinalIgnoreCase))
+                .OrderBy((p) => p.Priority)
+                .First();
+
+            return attribute.ContentRootPath;
+        }
+
+        private void ConfigureTests(IConfigurationBuilder builder)
         {
             // Remove the application's normal configuration
             builder.Sources.Clear();
@@ -89,6 +119,14 @@ namespace MartinCostello.LondonTravel.Site.Integration
             builder.AddJsonFile("appsettings.json")
                    .AddJsonFile(fullPath)
                    .AddEnvironmentVariables();
+        }
+
+        private void EnsureStarted()
+        {
+            // HACK Force HTTP server startup
+            using (CreateDefaultClient())
+            {
+            }
         }
     }
 }

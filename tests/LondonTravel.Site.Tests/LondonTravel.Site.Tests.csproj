@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Description>Tests for https://londontravel.martincostello.com/</Description>
     <NoWarn>$(NoWarn);CA1707;CA2234</NoWarn>
@@ -13,6 +13,12 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\LondonTravel.Site\LondonTravel.Site.csproj" />
+    <WebApplicationFactoryContentRootAttribute
+      Include="LondonTravel.Site"
+      AssemblyName="LondonTravel.Site"
+      ContentRootPath="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)../../src/LondonTravel.Site'))"
+      ContentRootTest="LondonTravel.Site.csproj"
+      Priority="-1" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="JustEat.HttpClientInterception" Version="1.2.2" />
