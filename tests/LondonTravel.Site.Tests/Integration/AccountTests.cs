@@ -11,6 +11,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using System.Threading.Tasks;
     using MartinCostello.LondonTravel.Site.Identity;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.Extensions.DependencyInjection;
     using Newtonsoft.Json.Linq;
     using Xunit;
     using Xunit.Abstractions;
@@ -51,59 +52,70 @@ namespace MartinCostello.LondonTravel.Site.Integration
             string[] favoriteLines = new[] { "district", "northern" };
             string userId;
 
-            using (IUserStore<LondonTravelUser> store = GetUserStore())
+            // HACK Force server start-up
+            using (Fixture.CreateDefaultClient())
             {
-                // Act
-                IdentityResult createResult = await store.CreateAsync(user, default);
+            }
 
-                // Assert
-                Assert.NotNull(createResult);
-                Assert.True(createResult.Succeeded);
-                Assert.NotEmpty(user.Id);
+            IUserStore<LondonTravelUser> GetUserStore(IServiceProvider serviceProvider)
+                => serviceProvider.GetRequiredService<IUserStore<LondonTravelUser>>();
 
-                // Arrange
-                userId = user.Id;
+            using (var scope = Fixture.Server.Host.Services.CreateScope())
+            {
+                using (IUserStore<LondonTravelUser> store = GetUserStore(scope.ServiceProvider))
+                {
+                    // Act
+                    IdentityResult createResult = await store.CreateAsync(user, default);
 
-                // Act
-                LondonTravelUser actual = await store.FindByIdAsync(userId, default);
+                    // Assert
+                    Assert.NotNull(createResult);
+                    Assert.True(createResult.Succeeded);
+                    Assert.NotEmpty(user.Id);
 
-                // Assert
-                Assert.NotNull(actual);
-                Assert.Equal(userId, actual.Id);
-                Assert.Null(actual.AlexaToken);
-                Assert.Equal(user.CreatedAt, actual.CreatedAt);
-                Assert.Equal(user.Email, actual.Email);
-                Assert.False(actual.EmailConfirmed);
-                Assert.NotEmpty(actual.ETag);
-                Assert.Equal(Array.Empty<string>(), actual.FavoriteLines);
-                Assert.Equal(user.GivenName, actual.GivenName);
-                Assert.Equal(Array.Empty<LondonTravelLoginInfo>(), actual.Logins);
-                Assert.Equal(user.Surname, actual.Surname);
-                Assert.Equal(user.UserName, actual.UserName);
+                    // Arrange
+                    userId = user.Id;
 
-                // Arrange
-                string etag = actual.ETag;
+                    // Act
+                    LondonTravelUser actual = await store.FindByIdAsync(userId, default);
 
-                actual.AlexaToken = accessToken;
-                actual.FavoriteLines = favoriteLines;
+                    // Assert
+                    Assert.NotNull(actual);
+                    Assert.Equal(userId, actual.Id);
+                    Assert.Null(actual.AlexaToken);
+                    Assert.Equal(user.CreatedAt, actual.CreatedAt);
+                    Assert.Equal(user.Email, actual.Email);
+                    Assert.False(actual.EmailConfirmed);
+                    Assert.NotEmpty(actual.ETag);
+                    Assert.Equal(Array.Empty<string>(), actual.FavoriteLines);
+                    Assert.Equal(user.GivenName, actual.GivenName);
+                    Assert.Equal(Array.Empty<LondonTravelLoginInfo>(), actual.Logins);
+                    Assert.Equal(user.Surname, actual.Surname);
+                    Assert.Equal(user.UserName, actual.UserName);
 
-                // Act
-                IdentityResult updateResult = await store.UpdateAsync(actual, default);
+                    // Arrange
+                    string etag = actual.ETag;
 
-                // Assert
-                Assert.NotNull(updateResult);
-                Assert.True(updateResult.Succeeded);
+                    actual.AlexaToken = accessToken;
+                    actual.FavoriteLines = favoriteLines;
 
-                // Act
-                actual = await store.FindByNameAsync(emailAddress, default);
+                    // Act
+                    IdentityResult updateResult = await store.UpdateAsync(actual, default);
 
-                // Assert
-                Assert.NotNull(actual);
-                Assert.Equal(userId, actual.Id);
-                Assert.Equal(emailAddress, actual.Email);
-                Assert.NotEqual(etag, actual.ETag);
-                Assert.Equal(accessToken, actual.AlexaToken);
-                Assert.Equal(favoriteLines, actual.FavoriteLines);
+                    // Assert
+                    Assert.NotNull(updateResult);
+                    Assert.True(updateResult.Succeeded);
+
+                    // Act
+                    actual = await store.FindByNameAsync(emailAddress, default);
+
+                    // Assert
+                    Assert.NotNull(actual);
+                    Assert.Equal(userId, actual.Id);
+                    Assert.Equal(emailAddress, actual.Email);
+                    Assert.NotEqual(etag, actual.ETag);
+                    Assert.Equal(accessToken, actual.AlexaToken);
+                    Assert.Equal(favoriteLines, actual.FavoriteLines);
+                }
             }
 
             // Arrange
@@ -130,14 +142,17 @@ namespace MartinCostello.LondonTravel.Site.Integration
             }
 
             // Arrange
-            using (IUserStore<LondonTravelUser> store = GetUserStore())
+            using (var scope = Fixture.Server.Host.Services.CreateScope())
             {
-                // Act
-                IdentityResult updateResult = await store.DeleteAsync(new LondonTravelUser() { Id = userId }, default);
+                using (IUserStore<LondonTravelUser> store = GetUserStore(scope.ServiceProvider))
+                {
+                    // Act
+                    IdentityResult updateResult = await store.DeleteAsync(new LondonTravelUser() { Id = userId }, default);
 
-                // Assert
-                Assert.NotNull(updateResult);
-                Assert.True(updateResult.Succeeded);
+                    // Assert
+                    Assert.NotNull(updateResult);
+                    Assert.True(updateResult.Succeeded);
+                }
             }
 
             // Arrange
@@ -156,22 +171,6 @@ namespace MartinCostello.LondonTravel.Site.Integration
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Returns a user store for the application.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="IUserStore{LondonTravelUser}"/> to use for the application.
-        /// </returns>
-        protected IUserStore<LondonTravelUser> GetUserStore()
-        {
-            // HACK Force server start-up
-            using (Fixture.CreateDefaultClient())
-            {
-            }
-
-            return Fixture.Server.Host.Services.GetService(typeof(IUserStore<LondonTravelUser>)) as IUserStore<LondonTravelUser>;
         }
     }
 }

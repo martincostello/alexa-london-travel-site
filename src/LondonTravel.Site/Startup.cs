@@ -51,25 +51,34 @@ namespace MartinCostello.LondonTravel.Site
         /// <summary>
         /// Gets the current configuration.
         /// </summary>
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         /// <summary>
         /// Gets the current hosting environment.
         /// </summary>
-        public IHostingEnvironment HostingEnvironment { get; }
+        private IHostingEnvironment HostingEnvironment { get; }
 
         /// <summary>
         /// Gets or sets the service provider.
         /// </summary>
-        public IServiceProvider ServiceProvider { get; set; }
+        private IServiceProvider ServiceProvider { get; set; }
 
         /// <summary>
         /// Configures the application.
         /// </summary>
         /// <param name="app">The <see cref="IApplicationBuilder"/> to use.</param>
+        /// <param name="applicationLifetime">The <see cref="IApplicationLifetime"/> to use.</param>
+        /// <param name="serviceProvider">The <see cref="IServiceProvider"/> to use.</param>
         /// <param name="options">The snapshot of <see cref="SiteOptions"/> to use.</param>
-        public void Configure(IApplicationBuilder app, IOptionsSnapshot<SiteOptions> options)
+        public void Configure(
+            IApplicationBuilder app,
+            IApplicationLifetime applicationLifetime,
+            IServiceProvider serviceProvider,
+            IOptionsSnapshot<SiteOptions> options)
         {
+            ServiceProvider = serviceProvider.CreateScope().ServiceProvider;
+
+            applicationLifetime.ApplicationStopped.Register(OnApplicationStopped);
             app.UseCustomHttpHeaders(HostingEnvironment, Configuration, options);
 
             app.UseRequestLocalization("en-GB", "en-US");
@@ -110,10 +119,7 @@ namespace MartinCostello.LondonTravel.Site
         /// Configures the services for the application.
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection"/> to use.</param>
-        /// <returns>
-        /// The <see cref="IServiceProvider"/> to use.
-        /// </returns>
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             services.AddApplicationInsightsTelemetry(Configuration);
 
@@ -143,7 +149,7 @@ namespace MartinCostello.LondonTravel.Site
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
                 .AddDataAnnotationsLocalization()
-                .AddJsonOptions((p) => ConfigureJsonFormatter(p));
+                .AddJsonOptions(ConfigureJsonFormatter);
 
             services.AddRouting(
                 (p) =>
@@ -170,18 +176,19 @@ namespace MartinCostello.LondonTravel.Site
             services.AddSingleton<ISiteTelemetry, SiteTelemetry>();
             services.AddSingleton<ITelemetryInitializer, SiteTelemetryInitializer>();
             services.AddSingleton<ITflServiceFactory, TflServiceFactory>();
-            services.AddSingleton((_) => ConfigureJsonFormatter(new JsonSerializerSettings()));
             services.AddSingleton(DocumentHelpers.CreateClient);
+
+            services.AddSingleton((_) => ConfigureJsonFormatter(new JsonSerializerSettings()));
+            services.AddSingleton((p) => p.GetRequiredService<IOptions<SiteOptions>>().Value);
+            services.AddSingleton((p) => p.GetRequiredService<SiteOptions>().Authentication.UserStore);
+            services.AddSingleton((p) => p.GetRequiredService<SiteOptions>().Tfl);
 
             services.TryAddSingleton<IDocumentService, DocumentService>();
             services.TryAddSingleton<IDocumentCollectionInitializer, DocumentCollectionInitializer>();
 
-            services.AddScoped((p) => p.GetRequiredService<IHttpContextAccessor>().HttpContext);
-            services.AddScoped((p) => p.GetRequiredService<IOptionsSnapshot<SiteOptions>>().Value);
-            services.AddScoped((p) => p.GetRequiredService<SiteOptions>().Authentication.UserStore);
-            services.AddScoped((p) => p.GetRequiredService<SiteOptions>().Tfl);
-
+            services.AddHttpContextAccessor();
             services.AddScoped<SiteResources>();
+
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<ITflService, TflService>();
 
@@ -191,21 +198,14 @@ namespace MartinCostello.LondonTravel.Site
             services.AddApplicationAuthentication(() => ServiceProvider);
 
             services.RemoveApplicationInsightsTagHelper();
-
-            return ServiceProvider = services.BuildServiceProvider();
         }
 
         /// <summary>
         /// Configures the JSON serializer for MVC.
         /// </summary>
         /// <param name="options">The <see cref="MvcJsonOptions"/> to configure.</param>
-        /// <returns>
-        /// The <see cref="JsonSerializerSettings"/> to use.
-        /// </returns>
-        private static JsonSerializerSettings ConfigureJsonFormatter(MvcJsonOptions options)
-        {
-            return ConfigureJsonFormatter(options.SerializerSettings);
-        }
+        private static void ConfigureJsonFormatter(MvcJsonOptions options)
+            => ConfigureJsonFormatter(options.SerializerSettings);
 
         /// <summary>
         /// Configures the JSON serializer.
@@ -357,6 +357,19 @@ namespace MartinCostello.LondonTravel.Site
                 HttpOnly = HttpOnlyPolicy.Always,
                 Secure = CookieSecurePolicy.Always,
             };
+        }
+
+        /// <summary>
+        /// Handles the application being stopped.
+        /// </summary>
+        private void OnApplicationStopped()
+        {
+            Serilog.Log.CloseAndFlush();
+
+            if (ServiceProvider is IDisposable disposable)
+            {
+                disposable.Dispose();
+            }
         }
     }
 }
