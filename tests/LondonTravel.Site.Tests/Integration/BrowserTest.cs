@@ -200,12 +200,9 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 }
                 catch (Exception)
                 {
+                    OutputLogs(navigator.Driver);
                     TakeScreenshot(navigator.Driver, testName);
                     throw;
-                }
-                finally
-                {
-                    OutputLogs(navigator.Driver);
                 }
             }
         }

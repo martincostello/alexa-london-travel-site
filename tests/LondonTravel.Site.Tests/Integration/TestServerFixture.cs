@@ -21,7 +21,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
     /// <summary>
     /// A class representing a factory for creating instances of the application.
     /// </summary>
-    public class TestServerFixture : WebApplicationFactory<Startup>
+    public class TestServerFixture : WebApplicationFactory<Startup>, ITestOutputHelperAccessor
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TestServerFixture"/> class.
@@ -31,14 +31,15 @@ namespace MartinCostello.LondonTravel.Site.Integration
         {
             ClientOptions.AllowAutoRedirect = false;
             ClientOptions.BaseAddress = new Uri("https://localhost");
-
-            EnsureStarted();
         }
 
         /// <summary>
         /// Gets the <see cref="HttpClientInterceptorOptions"/> in use.
         /// </summary>
         public HttpClientInterceptorOptions Interceptor { get; } = new HttpClientInterceptorOptions() { ThrowOnMissingRegistration = true };
+
+        /// <inheritdoc />
+        public ITestOutputHelper OutputHelper { get; set; }
 
         /// <summary>
         /// Gets the <see cref="IServiceProvider"/> in use.
@@ -50,10 +51,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         /// </summary>
         public virtual void ClearOutputHelper()
         {
-            if (Services != null)
-            {
-                Services.GetRequiredService<ITestOutputHelperAccessor>().OutputHelper = null;
-            }
+            OutputHelper = null;
         }
 
         /// <summary>
@@ -62,8 +60,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         /// <param name="value">The <see cref="ITestOutputHelper"/> to use.</param>
         public virtual void SetOutputHelper(ITestOutputHelper value)
         {
-            EnsureStarted();
-            Services.GetRequiredService<ITestOutputHelperAccessor>().OutputHelper = value;
+            OutputHelper = value;
         }
 
         /// <inheritdoc />
@@ -81,12 +78,8 @@ namespace MartinCostello.LondonTravel.Site.Integration
                     services.AddSingleton<IDocumentCollectionInitializer>((p) => p.GetRequiredService<InMemoryDocumentStore>());
                 });
 
-            // Disable dependency tracking to work around https://github.com/Microsoft/ApplicationInsights-dotnet-server/pull/1006
-            builder.ConfigureServices(
-                (services) => services.DisableApplicationInsights());
-
             builder.ConfigureAppConfiguration(ConfigureTests)
-                   .ConfigureLogging((loggingBuilder) => loggingBuilder.ClearProviders().AddXUnit())
+                   .ConfigureLogging((loggingBuilder) => loggingBuilder.AddXUnit(this))
                    .UseContentRoot(GetApplicationContentRootPath());
         }
 
@@ -109,24 +102,10 @@ namespace MartinCostello.LondonTravel.Site.Integration
 
         private void ConfigureTests(IConfigurationBuilder builder)
         {
-            // Remove the application's normal configuration
-            builder.Sources.Clear();
-
             string directory = Path.GetDirectoryName(typeof(TestServerFixture).Assembly.Location);
             string fullPath = Path.Combine(directory, "testsettings.json");
 
-            // Apply new configuration for tests
-            builder.AddJsonFile("appsettings.json")
-                   .AddJsonFile(fullPath)
-                   .AddEnvironmentVariables();
-        }
-
-        private void EnsureStarted()
-        {
-            // HACK Force HTTP server startup
-            using (CreateDefaultClient())
-            {
-            }
+            builder.AddJsonFile(fullPath);
         }
     }
 }

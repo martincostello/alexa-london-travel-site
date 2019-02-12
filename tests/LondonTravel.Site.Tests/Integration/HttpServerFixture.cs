@@ -8,15 +8,17 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using System.Net.Http;
     using System.Net.Sockets;
     using System.Security.Cryptography.X509Certificates;
+    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.DependencyInjection;
+    using Xunit;
 
     /// <summary>
     /// A test fixture representing an HTTP server hosting the application. This class cannot be inherited.
     /// </summary>
-    public sealed class HttpServerFixture : TestServerFixture
+    public sealed class HttpServerFixture : TestServerFixture, IAsyncLifetime
     {
-        private readonly IWebHost _webHost;
+        private IWebHost _host;
         private bool _disposed;
 
         /// <summary>
@@ -25,18 +27,6 @@ namespace MartinCostello.LondonTravel.Site.Integration
         public HttpServerFixture()
             : base()
         {
-            ClientOptions.BaseAddress = FindFreeServerAddress();
-
-            var builder = CreateWebHostBuilder()
-                .UseUrls(ClientOptions.BaseAddress.ToString())
-                .UseKestrel(
-                    (p) => p.ConfigureHttpsDefaults(
-                        (r) => r.ServerCertificate = new X509Certificate2("localhost-dev.pfx", "Pa55w0rd!")));
-
-            ConfigureWebHost(builder);
-
-            _webHost = builder.Build();
-            _webHost.Start();
         }
 
         /// <summary>
@@ -45,7 +35,19 @@ namespace MartinCostello.LondonTravel.Site.Integration
         public Uri ServerAddress => ClientOptions.BaseAddress;
 
         /// <inheritdoc />
-        public override IServiceProvider Services => _webHost?.Services;
+        public override IServiceProvider Services => _host?.Services;
+
+        /// <inheritdoc />
+        async Task IAsyncLifetime.InitializeAsync()
+            => await EnsureHttpServerAsync();
+
+        /// <inheritdoc />
+        async Task IAsyncLifetime.DisposeAsync()
+        {
+            await _host?.StopAsync(default);
+            _host?.Dispose();
+            _host = null;
+        }
 
         /// <summary>
         /// Creates an <see cref="HttpClient"/> to communicate with the application.
@@ -81,7 +83,17 @@ namespace MartinCostello.LondonTravel.Site.Integration
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             base.ConfigureWebHost(builder);
+
             builder.ConfigureServices(ConfigureServicesForTests);
+
+            builder.ConfigureKestrel(
+                (p) => p.ConfigureHttpsDefaults(
+                    (r) => r.ServerCertificate = new X509Certificate2("localhost-dev.pfx", "Pa55w0rd!")));
+
+            builder.UseUrls(ServerAddress.ToString());
+
+            // Allow the tests on the self-hosted server to link accounts via "Amazon"
+            builder.UseSetting("Site:Alexa:RedirectUrls:3", ServerAddress.ToString() + "manage/");
         }
 
         /// <inheritdoc />
@@ -93,7 +105,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             {
                 if (disposing)
                 {
-                    _webHost?.Dispose();
+                    _host?.Dispose();
                 }
 
                 _disposed = true;
@@ -132,9 +144,27 @@ namespace MartinCostello.LondonTravel.Site.Integration
             // Intercept remote authentication to redirect locally for browser UI tests
             services.AddSingleton<IStartupFilter, RemoteAuthorizationEventsFilter>(
                 (_) => new RemoteAuthorizationEventsFilter(ServerAddress));
+        }
 
-            // Disable dependency tracking to work around https://github.com/Microsoft/ApplicationInsights-dotnet-server/pull/1006
-            services.DisableApplicationInsights();
+        private async Task EnsureHttpServerAsync()
+        {
+            if (_host == null)
+            {
+                await CreateHttpServer();
+            }
+        }
+
+        private async Task CreateHttpServer()
+        {
+            // Configure the server address for the server to listen on for HTTP requests
+            ClientOptions.BaseAddress = FindFreeServerAddress();
+
+            var builder = CreateWebHostBuilder();
+
+            ConfigureWebHost(builder);
+
+            _host = builder.Build();
+            await _host.StartAsync();
         }
     }
 }
