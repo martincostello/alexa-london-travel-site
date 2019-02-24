@@ -29,7 +29,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
                 .Enrich.WithProperty("AzureEnvironment", context.Configuration.AzureEnvironment())
                 .Enrich.WithProperty("Version", GitMetadata.Commit)
                 .ReadFrom.Configuration(context.Configuration)
-                .WriteTo.ApplicationInsightsEvents(context.Configuration.ApplicationInsightsKey());
+                .WriteTo.ApplicationInsights(context.Configuration.ApplicationInsightsKey(), TelemetryConverter.Events);
 
             if (context.HostingEnvironment.IsDevelopment())
             {
