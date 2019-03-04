@@ -444,7 +444,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
             UserStore target = CreateStore();
 
             // Act
-            var actual = await target.GetRolesAsync(user,  CancellationToken.None);
+            var actual = await target.GetRolesAsync(user, CancellationToken.None);
 
             // Assert
             actual.ShouldNotBeNull();
