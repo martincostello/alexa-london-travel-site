@@ -687,16 +687,6 @@
         <target state="translated">[Ýöûẋ ĥåṽéẋẋ ñöţẋ ļîñķéðẋẋ ýöûŕẋẋ åççöûñţẋẋẋ ŵîţĥẋẋ ţĥéẋ Åļéẋåẋẋ åþþẋ]</target>
         <note />
       </trans-unit>
-      <trans-unit id="StatusLinkAltText">
-        <source>View site uptime information</source>
-        <target state="translated">[Ṽîéŵẋẋ šîţéẋẋ ûþţîɱéẋẋ îñƒöŕɱåţîöñẋẋẋẋ]</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusLinkText">
-        <source>Site Status &amp; Uptime</source>
-        <target state="translated">[Šîţéẋẋ Šţåţûšẋẋ ⅋ẋ Ûþţîɱéẋẋ]</target>
-        <note />
-      </trans-unit>
       <trans-unit id="TechnologyLinkAltText">
         <source>Information about the technologies behind the London Travel Alexa skill</source>
         <target state="translated">[Îñƒöŕɱåţîöñẋẋẋẋ åƀöûţẋẋ ţĥéẋ ţéçĥñöļöĝîéšẋẋẋẋ ƀéĥîñðẋẋ ţĥéẋ Ļöñðöñẋẋ Ţŕåṽéļẋẋ Åļéẋåẋẋ šķîļļẋẋ]</target>

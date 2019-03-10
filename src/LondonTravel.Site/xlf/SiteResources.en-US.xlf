@@ -547,16 +547,6 @@
         <target state="translated">You have not linked your account with the Alexa app</target>
         <note />
       </trans-unit>
-      <trans-unit id="StatusLinkAltText">
-        <source>View site uptime information</source>
-        <target state="translated">View site uptime information</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusLinkText">
-        <source>Site Status &amp; Uptime</source>
-        <target state="translated">Site Status &amp; Uptime</target>
-        <note />
-      </trans-unit>
       <trans-unit id="TermsOfServiceLinkAltText">
         <source>View the London Travel Alexa skill's Terms of Service</source>
         <target state="translated">View the London Travel Alexa skill's Terms of Service</target>
