@@ -196,8 +196,6 @@ namespace MartinCostello.LondonTravel.Site
             services.AddHttpClients();
 
             services.AddApplicationAuthentication(() => ServiceProvider);
-
-            services.RemoveApplicationInsightsTagHelper();
         }
 
         /// <summary>
