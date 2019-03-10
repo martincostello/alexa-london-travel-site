@@ -37,7 +37,7 @@ To build and test the website run one of the following commands:
 
 ## License
 
-This project is licensed under the [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt) license.
+This project is licensed under the [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt) license.
 
 ## Copyright and Trademarks
 

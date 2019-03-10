@@ -15,8 +15,7 @@
   },
   "Site": {
     "Analytics": {
-      "Google": "",
-      "Pingdom": ""
+      "Google": ""
     },
     "Authentication": {
       "ExternalProviders": {

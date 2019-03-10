@@ -52,7 +52,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
                         License = new License()
                         {
                             Name = "Apache 2.0",
-                            Url = "http://www.apache.org/licenses/LICENSE-2.0.html",
+                            Url = "https://www.apache.org/licenses/LICENSE-2.0.html",
                         },
                         TermsOfService = terms.Uri.ToString(),
                         Title = options.Metadata.Name,

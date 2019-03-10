@@ -231,10 +231,6 @@ namespace MartinCostello.LondonTravel.Site
 
         public string SignOutLinkText => _localizer[nameof(SignOutLinkText)];
 
-        public string StatusLinkText => _localizer[nameof(StatusLinkText)];
-
-        public string StatusLinkAltText => _localizer[nameof(StatusLinkAltText)];
-
         public string TermsOfServiceTitle => _localizer[nameof(TermsOfServiceTitle)];
 
         public string TermsOfServiceMetaDescription => _localizer[nameof(TermsOfServiceMetaDescription)];

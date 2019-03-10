@@ -18,10 +18,6 @@
         <a asp-route="@SiteRoutes.Technology" title="@SR.TechnologyLinkAltText" data-ga-label="Technology Footer">
             @SR.TechnologyLinkText
         </a>
-        |
-        <a href="@Model.ExternalLinks.Status.AbsoluteUri" rel="noopener noreferrer" target="_blank" title="@SR.StatusLinkAltText" data-ga-label="Site Uptime">
-            @SR.StatusLinkText
-        </a>
         <span id="build-date" data-format="YYYY-MM-DD HH:mm Z" data-timestamp="@GitMetadata.Timestamp.ToString("u", CultureInfo.InvariantCulture)"></span>
     </p>
     <div class="row hidden-md hidden-lg">

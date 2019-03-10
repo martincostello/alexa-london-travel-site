@@ -26,11 +26,6 @@ namespace MartinCostello.LondonTravel.Site.Options
         public Uri Skill { get; set; }
 
         /// <summary>
-        /// Gets or sets the URI of the status website.
-        /// </summary>
-        public Uri Status { get; set; }
-
-        /// <summary>
         /// Gets or sets the options for the URIs to use for reports.
         /// </summary>
         public ReportOptions Reports { get; set; }
