@@ -4,7 +4,7 @@
 namespace MartinCostello.LondonTravel.Site.Swagger
 {
     using System;
-    using Swashbuckle.AspNetCore.Swagger;
+    using Microsoft.OpenApi.Models;
     using Swashbuckle.AspNetCore.SwaggerGen;
 
     /// <summary>
@@ -19,11 +19,11 @@ namespace MartinCostello.LondonTravel.Site.Swagger
         private const string Prefix = "Gets or sets ";
 
         /// <inheritdoc />
-        public void Apply(Operation operation, OperationFilterContext context)
+        public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
-            if (context?.SchemaRegistry?.Definitions != null)
+            if (context?.SchemaRepository?.Schemas != null)
             {
-                foreach (var definition in context.SchemaRegistry.Definitions.Values)
+                foreach (var definition in context.SchemaRepository.Schemas.Values)
                 {
                     if (definition.Properties != null)
                     {

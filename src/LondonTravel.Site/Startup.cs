@@ -110,7 +110,7 @@ namespace MartinCostello.LondonTravel.Site
 
             app.UseMvcWithDefaultRoute();
 
-            app.UseSwagger();
+            app.UseSwagger((p) => p.SerializeAsV2 = true);
 
             app.UseCookiePolicy(CreateCookiePolicy());
         }

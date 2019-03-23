@@ -4,8 +4,7 @@
 namespace MartinCostello.LondonTravel.Site.Swagger
 {
     using System;
-    using System.Collections.Generic;
-    using Swashbuckle.AspNetCore.Swagger;
+    using Microsoft.OpenApi.Models;
     using Swashbuckle.AspNetCore.SwaggerGen;
 
     public class SecurityRequirementsOperationFilter : IOperationFilter
@@ -13,15 +12,15 @@ namespace MartinCostello.LondonTravel.Site.Swagger
         public const string SchemeName = "Access Token";
 
         /// <inheritdoc />
-        public void Apply(Operation operation, OperationFilterContext context)
+        public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
             // As we only expose one operation (and it is not decorated with [Authorize]),
             // just apply the Access Token requirement straight onto the operation.
-            operation.Security = new List<IDictionary<string, IEnumerable<string>>>()
+            operation.Security = new[]
             {
-                new Dictionary<string, IEnumerable<string>>()
+                new OpenApiSecurityRequirement()
                 {
-                    { SchemeName, Array.Empty<string>() }
+                    { new OpenApiSecurityScheme() { Name = SchemeName }, Array.Empty<string>() },
                 }
             };
         }
