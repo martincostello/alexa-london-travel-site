@@ -74,14 +74,21 @@ namespace MartinCostello.LondonTravel.Site.Extensions
                     p.SchemaFilter<ExampleFilter>();
                     p.OperationFilter<ExampleFilter>();
                     p.OperationFilter<RemoveStyleCopPrefixesFilter>();
-                    p.OperationFilter<SecurityRequirementsOperationFilter>();
+
+                    string schemeName = "Access Token";
 
                     var securityScheme = new OpenApiSecurityScheme()
                     {
                         In = ParameterLocation.Header,
                         Name = "Authorization",
                         Type = SecuritySchemeType.ApiKey,
-                        Description = "Access token authentication using a bearer token."
+                        Description = "Access token authentication using a bearer token.",
+                        Reference = new OpenApiReference()
+                        {
+                            Id = schemeName,
+                            Type = ReferenceType.SecurityScheme,
+                        },
+                        UnresolvedReference = false,
                     };
 
                     var securityRequirement = new OpenApiSecurityRequirement()
@@ -89,7 +96,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
                         { securityScheme, Array.Empty<string>() },
                     };
 
-                    p.AddSecurityDefinition(SecurityRequirementsOperationFilter.SchemeName, securityScheme);
+                    p.AddSecurityDefinition(schemeName, securityScheme);
                     p.AddSecurityRequirement(securityRequirement);
                 });
         }
