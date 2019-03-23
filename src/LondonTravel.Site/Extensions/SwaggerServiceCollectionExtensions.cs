@@ -9,8 +9,8 @@ namespace MartinCostello.LondonTravel.Site.Extensions
     using MartinCostello.LondonTravel.Site.Swagger;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.OpenApi.Models;
     using Options;
-    using Swashbuckle.AspNetCore.Swagger;
     using Swashbuckle.AspNetCore.SwaggerGen;
 
     /// <summary>
@@ -41,26 +41,28 @@ namespace MartinCostello.LondonTravel.Site.Extensions
                         Path = "terms-of-service/",
                     };
 
-                    var info = new Info()
+                    var info = new OpenApiInfo()
                     {
-                        Contact = new Contact()
+                        Contact = new OpenApiContact()
                         {
                             Name = options.Metadata.Author.Name,
-                            Url = options.Metadata.Repository,
+                            Url = new Uri(options.Metadata.Repository, UriKind.Absolute),
                         },
                         Description = options.Metadata.Description,
-                        License = new License()
+                        License = new OpenApiLicense()
                         {
                             Name = "Apache 2.0",
-                            Url = "https://www.apache.org/licenses/LICENSE-2.0.html",
+                            Url = new Uri("https://www.apache.org/licenses/LICENSE-2.0.html", UriKind.Absolute),
                         },
-                        TermsOfService = terms.Uri.ToString(),
+                        TermsOfService = terms.Uri,
                         Title = options.Metadata.Name,
                         Version = string.Empty,
                     };
 
                     p.DescribeAllEnumsAsStrings();
                     p.DescribeStringEnumsInCamelCase();
+
+                    p.EnableAnnotations();
 
                     p.IgnoreObsoleteActions();
                     p.IgnoreObsoleteProperties();
@@ -70,20 +72,32 @@ namespace MartinCostello.LondonTravel.Site.Extensions
                     p.SwaggerDoc("api", info);
 
                     p.SchemaFilter<ExampleFilter>();
-
                     p.OperationFilter<ExampleFilter>();
                     p.OperationFilter<RemoveStyleCopPrefixesFilter>();
-                    p.OperationFilter<SecurityRequirementsOperationFilter>();
 
-                    var securityScheme = new ApiKeyScheme()
+                    string schemeName = "Access Token";
+
+                    var securityScheme = new OpenApiSecurityScheme()
                     {
-                        In = "header",
+                        In = ParameterLocation.Header,
                         Name = "Authorization",
-                        Type = "apiKey",
-                        Description = "Access token authentication using a bearer token."
+                        Type = SecuritySchemeType.ApiKey,
+                        Description = "Access token authentication using a bearer token.",
+                        Reference = new OpenApiReference()
+                        {
+                            Id = schemeName,
+                            Type = ReferenceType.SecurityScheme,
+                        },
+                        UnresolvedReference = false,
                     };
 
-                    p.AddSecurityDefinition(SecurityRequirementsOperationFilter.SchemeName, securityScheme);
+                    var securityRequirement = new OpenApiSecurityRequirement()
+                    {
+                        { securityScheme, Array.Empty<string>() },
+                    };
+
+                    p.AddSecurityDefinition(schemeName, securityScheme);
+                    p.AddSecurityRequirement(securityRequirement);
                 });
         }
 

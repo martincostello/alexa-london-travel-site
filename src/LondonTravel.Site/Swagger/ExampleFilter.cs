@@ -4,10 +4,13 @@
 namespace MartinCostello.LondonTravel.Site.Swagger
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using Microsoft.OpenApi.Any;
+    using Microsoft.OpenApi.Models;
     using Newtonsoft.Json;
-    using Swashbuckle.AspNetCore.Swagger;
+    using Newtonsoft.Json.Linq;
     using Swashbuckle.AspNetCore.SwaggerGen;
 
     /// <summary>
@@ -30,9 +33,9 @@ namespace MartinCostello.LondonTravel.Site.Swagger
         }
 
         /// <inheritdoc />
-        public void Apply(Operation operation, OperationFilterContext context)
+        public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
-            if (operation != null && context?.ApiDescription != null && context.SchemaRegistry != null)
+            if (operation != null && context?.ApiDescription != null && context.SchemaRepository != null)
             {
                 var responseAttributes = context.MethodInfo
                     .GetCustomAttributes<SwaggerResponseExampleAttribute>(true)
@@ -40,32 +43,35 @@ namespace MartinCostello.LondonTravel.Site.Swagger
 
                 foreach (var attribute in responseAttributes)
                 {
-                    var schema = context.SchemaRegistry.GetOrRegister(attribute.ResponseType);
+                    if (!context.SchemaRepository.Schemas.TryGetValue(attribute.ResponseType.Name, out var schema))
+                    {
+                        continue;
+                    }
 
                     var response = operation.Responses
-                        .Where((p) => p.Value.Schema?.Type == schema.Type)
-                        .Where((p) => p.Value.Schema?.Ref == schema.Ref)
-                        .Select((p) => p.Value)
+                        .SelectMany((p) => p.Value.Content)
+                        .Where((p) => p.Value.Schema.Reference.Id == attribute.ResponseType.Name)
+                        .Select((p) => p)
                         .FirstOrDefault();
 
-                    if (response != null)
+                    if (!response.Equals(new KeyValuePair<string, OpenApiMediaType>()))
                     {
-                        response.Examples = CreateExample(attribute.ExampleType);
+                        response.Value.Example = CreateExample(attribute.ExampleType);
                     }
                 }
             }
         }
 
         /// <inheritdoc />
-        public void Apply(Schema model, SchemaFilterContext context)
+        public void Apply(OpenApiSchema schema, SchemaFilterContext context)
         {
             if (context.JsonContract != null)
             {
-                var attribute = context.SystemType.GetCustomAttribute<SwaggerTypeExampleAttribute>();
+                var attribute = context.Type.GetCustomAttribute<SwaggerTypeExampleAttribute>();
 
                 if (attribute != null)
                 {
-                    model.Example = CreateExample(attribute.ExampleType);
+                    schema.Example = CreateExample(attribute.ExampleType);
                 }
             }
         }
@@ -77,7 +83,7 @@ namespace MartinCostello.LondonTravel.Site.Swagger
         /// <returns>
         /// The example value.
         /// </returns>
-        private object CreateExample(Type exampleType)
+        private IOpenApiAny CreateExample(Type exampleType)
         {
             var provider = (IExampleProvider)Activator.CreateInstance(exampleType);
             return FormatAsJson(provider);
@@ -93,13 +99,92 @@ namespace MartinCostello.LondonTravel.Site.Swagger
         /// <exception cref="ArgumentNullException">
         /// <paramref name="provider"/> is <see langword="null"/>.
         /// </exception>
-        private object FormatAsJson(IExampleProvider provider)
+        private IOpenApiAny FormatAsJson(IExampleProvider provider)
         {
             var examples = provider.GetExample();
 
             // Apply any formatting rules configured for the API (e.g. camel casing)
             var json = JsonConvert.SerializeObject(examples, _settings);
-            return JsonConvert.DeserializeObject(json);
+            var @object = JObject.Parse(json);
+
+            var result = new OpenApiObject();
+
+            // Recursively build up the example from the properties of the JObject
+            foreach (var token in @object)
+            {
+                if (TryParse(token.Value, out var any))
+                {
+                    result[token.Key] = any;
+                }
+            }
+
+            return result;
+        }
+
+        private bool TryParse(JToken token, out IOpenApiAny any)
+        {
+            any = null;
+
+            switch (token.Type)
+            {
+                case JTokenType.Array:
+                    var array = new OpenApiArray();
+
+                    foreach (var value in token as JArray)
+                    {
+                        if (TryParse(value, out var child))
+                        {
+                            array.Add(child);
+                        }
+                    }
+
+                    any = array;
+                    return true;
+
+                case JTokenType.Boolean:
+                    any = new OpenApiBoolean(token.Value<bool>());
+                    return true;
+
+                case JTokenType.Date:
+                    any = new OpenApiDate(token.Value<DateTime>());
+                    return true;
+
+                case JTokenType.Float:
+                    any = new OpenApiDouble(token.Value<double>());
+                    return true;
+
+                case JTokenType.Guid:
+                    any = new OpenApiString(token.Value<Guid>().ToString());
+                    return true;
+
+                case JTokenType.Integer:
+                    any = new OpenApiInteger(token.Value<int>());
+                    return true;
+
+                case JTokenType.String:
+                case JTokenType.TimeSpan:
+                case JTokenType.Uri:
+                    any = new OpenApiString(token.Value<string>());
+                    return true;
+
+                case JTokenType.Object:
+                    var obj = new OpenApiObject();
+
+                    foreach (var child in token as JObject)
+                    {
+                        if (TryParse(child.Value, out var value))
+                        {
+                            obj[child.Key] = value;
+                        }
+                    }
+
+                    any = obj;
+                    return true;
+
+                case JTokenType.Null:
+                default:
+                    return false;
+            }
         }
     }
 }
