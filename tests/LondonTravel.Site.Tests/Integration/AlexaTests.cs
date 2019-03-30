@@ -9,9 +9,9 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using System.Net;
     using System.Net.Http.Headers;
     using System.Threading.Tasks;
-    using MartinCostello.LondonTravel.Site.Integration.Builders;
     using MartinCostello.LondonTravel.Site.Integration.Pages;
     using Microsoft.AspNetCore.WebUtilities;
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Primitives;
     using Newtonsoft.Json.Linq;
     using OpenQA.Selenium;
@@ -32,14 +32,13 @@ namespace MartinCostello.LondonTravel.Site.Integration
         public AlexaTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
             : base(fixture, outputHelper)
         {
+            Fixture.Services.GetRequiredService<InMemoryDocumentStore>().Clear();
         }
 
         [Fact]
         public async Task Can_Authorize_Alexa_And_Get_Preferences_From_Api()
         {
             // Arrange
-            new AuthenticationInterceptionBuilder(Fixture.Interceptor).ForAmazon();
-
             await WithNavigatorAsync(
                 async (navigator) =>
                 {

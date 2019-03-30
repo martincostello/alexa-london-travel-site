@@ -28,6 +28,19 @@ namespace MartinCostello.LondonTravel.Site.Integration
 
         private string CollectionName { get; }
 
+        /// <summary>
+        /// Clears the document store.
+        /// </summary>
+        public void Clear()
+        {
+            foreach (var collection in _collections.Values)
+            {
+                collection.Clear();
+            }
+
+            _collections.Clear();
+        }
+
         /// <inheritdoc />
         public Task<string> CreateAsync(object document)
         {
@@ -49,11 +62,11 @@ namespace MartinCostello.LondonTravel.Site.Integration
         /// <inheritdoc />
         public Task<bool> EnsureCollectionExistsAsync(IDocumentClient client, string collectionName)
         {
-            bool exists = _collections.TryGetValue(collectionName, out DocumentCollection collection);
+            bool exists = _collections.TryGetValue(collectionName, out var _);
 
             if (!exists)
             {
-                collection = _collections[collectionName] = new DocumentCollection();
+                _collections[collectionName] = new DocumentCollection();
             }
 
             return Task.FromResult(!exists);

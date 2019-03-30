@@ -36,7 +36,10 @@ namespace MartinCostello.LondonTravel.Site.Integration
         /// <summary>
         /// Gets the <see cref="HttpClientInterceptorOptions"/> in use.
         /// </summary>
-        public HttpClientInterceptorOptions Interceptor { get; } = new HttpClientInterceptorOptions().ThrowsOnMissingRegistration();
+        public HttpClientInterceptorOptions Interceptor { get; }
+            = new HttpClientInterceptorOptions()
+                 .ThrowsOnMissingRegistration()
+                 .RegisterBundle(Path.Combine("Integration", "oauth-http-bundle.json"));
 
         /// <inheritdoc />
         public ITestOutputHelper OutputHelper { get; set; }

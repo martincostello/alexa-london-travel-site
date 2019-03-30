@@ -5,7 +5,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
 {
     using System.Collections.Generic;
     using System.Linq;
-    using Builders;
+    using Microsoft.Extensions.DependencyInjection;
     using Pages;
     using Shouldly;
     using Xunit;
@@ -24,14 +24,13 @@ namespace MartinCostello.LondonTravel.Site.Integration
         public PreferencesTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
             : base(fixture, outputHelper)
         {
+            Fixture.Services.GetRequiredService<InMemoryDocumentStore>().Clear();
         }
 
         [Fact]
         public void Can_Manage_Preferences()
         {
             // Arrange
-            new AuthenticationInterceptionBuilder(Fixture.Interceptor).ForAmazon();
-
             AtPage<HomePage>(
                 (page) =>
                 {

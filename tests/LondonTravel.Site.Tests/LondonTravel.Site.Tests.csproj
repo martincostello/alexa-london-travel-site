@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Description>Tests for https://londontravel.martincostello.com/</Description>
     <NoWarn>$(NoWarn);CA1031;CA1707;CA2234</NoWarn>
@@ -8,7 +8,7 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="testsettings.json;xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="testsettings.json;xunit.runner.json;Integration\*-http-bundle.json" CopyToOutputDirectory="PreserveNewest" />
     <None Update="localhost-dev.pfx" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
   <ItemGroup>
