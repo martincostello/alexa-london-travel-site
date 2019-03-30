@@ -1,0 +1,131 @@
+{
+  "$schema": "https://raw.githubusercontent.com/justeat/httpclient-interception/master/src/HttpClientInterception/Bundles/http-request-bundle-schema.json",
+  "id": "oauth",
+  "version": 1,
+  "comment": "HTTP bundles for testing OAuth authentication.",
+  "items": [
+    {
+      "comment": "Token resource for Amazon login",
+      "uri": "https://api.amazon.com/auth/o2/token",
+      "method": "POST",
+      "contentFormat": "json",
+      "contentJson": {
+        "access_token": "96552ad0-65fc-448d-a505-aa8025892ea6",
+        "token_type": "access",
+        "refresh_token": "4dd8f396-34bb-49db-8425-6f5eec71e698",
+        "expires_in": "300"
+      }
+    },
+    {
+      "comment": "User information resource for Amazon login",
+      "uri": "https://api.amazon.com/user/profile?fields=email,name,user_id",
+      "contentFormat": "json",
+      "contentJson": {
+        "user_id": "e7efbeee-30df-45ad-9708-e4efd74248d2",
+        "name": "John Smith",
+        "email": "amazon@john-smith.local"
+      }
+    },
+    {
+      "comment": "Token resource for Facebook login",
+      "uri": "https://graph.facebook.com/v3.1/oauth/access_token",
+      "method": "POST",
+      "contentFormat": "json",
+      "contentJson": {
+        "access_token": "dce7a657-1796-4ed0-b299-4dd382964ca1",
+        "token_type": "access",
+        "refresh_token": "35be8321-e5e0-49d8-9334-d16652ecdc51",
+        "expires_in": "300"
+      }
+    },
+    {
+      "comment": "User information resource for Facebook login",
+      "uri": "https://graph.facebook.com/v3.1/me",
+      "ignoreQuery": true,
+      "contentFormat": "json",
+      "contentJson": {
+        "id": "bc8abd75-3d24-49b2-8568-147f99fd4e35",
+        "name": "John Smith",
+        "first_name": "John",
+        "middle_name": "Jay",
+        "last_name": "Smith",
+        "link": "https://facebook.local/john.smith",
+        "email": "facebook@john-smith.local"
+      }
+    },
+    {
+      "comment": "Token resource for Google login",
+      "uri": "https://www.googleapis.com/oauth2/v4/token",
+      "method": "POST",
+      "contentFormat": "json",
+      "contentJson": {
+        "access_token": "37d9fbbc-abcb-4f5d-96cb-259d9b56b45c",
+        "token_type": "access",
+        "refresh_token": "f656b874-842f-467c-b541-d7bcd204ad94",
+        "expires_in": "300"
+      }
+    },
+    {
+      "comment": "User information resource for Google login",
+      "uri": "https://www.googleapis.com/oauth2/v2/userinfo",
+      "contentFormat": "json",
+      "contentJson": {
+        "id": "c91599d6-ab86-452c-96d3-6e8eb45585f2",
+        "name": "John Smith",
+        "given_name": "John",
+        "family_name": "Smith",
+        "email": "google@john-smith.local"
+      }
+    },
+    {
+      "comment": "Token resource for Microsoft login",
+      "uri": "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+      "method": "POST",
+      "contentFormat": "json",
+      "contentJson": {
+        "access_token": "32118a2d-7290-4e87-996c-6b6efc2d46b5",
+        "token_type": "access",
+        "refresh_token": "4f156a06-6510-4e91-935a-0addcae49bdf",
+        "expires_in": "300"
+      }
+    },
+    {
+      "comment": "User information resource for Microsoft login",
+      "uri": "https://graph.microsoft.com/v1.0/me",
+      "contentFormat": "json",
+      "contentJson": {
+        "id": "909d2d9f-18bc-4285-ae02-e0720aa0608a",
+        "displayName": "John Smith",
+        "givenName": "John",
+        "surname": "Smith",
+        "mail": "microsoft@john-smith.local"
+      }
+    },
+    {
+      "comment": "Access token resource for Twitter login",
+      "uri": "https://api.twitter.com/oauth/access_token",
+      "method": "POST",
+      "contentHeaders": {
+        "content-type": [ "application/x-www-form-urlencoded" ]
+      },
+      "contentString": "oauth_token=twitter-oath-token&oauth_token_secret=twitter-oath-secret&user_id=123456&screen_name=@JohnSmith"
+    },
+    {
+      "comment": "Request token resource for Twitter login",
+      "uri": "https://api.twitter.com/oauth/request_token",
+      "method": "POST",
+      "contentHeaders": {
+        "content-type": [ "application/x-www-form-urlencoded" ]
+      },
+      "contentString": "oauth_token=twitter-oath-token&oauth_token_secret=twitter-oath-secret&oauth_callback_confirmed=true"
+    },
+    {
+      "comment": "User information resource for Twitter login",
+      "uri": "https://api.twitter.com/1.1/account/verify_credentials.json?include_email=true",
+      "contentFormat": "json",
+      "contentJson": {
+        "email": "twitter@john-smith.local"
+      }
+    }
+  ]
+}

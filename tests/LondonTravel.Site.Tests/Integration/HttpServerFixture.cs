@@ -4,11 +4,13 @@
 namespace MartinCostello.LondonTravel.Site.Integration
 {
     using System;
+    using System.IO;
     using System.Net;
     using System.Net.Http;
     using System.Net.Sockets;
     using System.Security.Cryptography.X509Certificates;
     using System.Threading.Tasks;
+    using JustEat.HttpClientInterception;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.DependencyInjection;
     using Xunit;
@@ -27,6 +29,8 @@ namespace MartinCostello.LondonTravel.Site.Integration
         public HttpServerFixture()
             : base()
         {
+            Interceptor.RegisterBundle(Path.Combine("Integration", "oauth-http-bundle.json"));
+            Interceptor.RegisterBundle(Path.Combine("Integration", "tfl-http-bundle.json"));
         }
 
         /// <summary>

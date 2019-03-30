@@ -3,10 +3,9 @@
 
 namespace MartinCostello.LondonTravel.Site.Integration
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Builders;
+    using Microsoft.Extensions.DependencyInjection;
     using Pages;
     using Shouldly;
     using Xunit;
@@ -25,69 +24,41 @@ namespace MartinCostello.LondonTravel.Site.Integration
         public AuthenticationTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
             : base(fixture, outputHelper)
         {
+            Fixture.Services.GetRequiredService<InMemoryDocumentStore>().Clear();
         }
 
-        [Fact]
-        public void Can_Sign_In_With_Amazon()
+        [Theory]
+        [InlineData("amazon", "John")]
+        [InlineData("facebook", "John")]
+        [InlineData("google", "John")]
+        [InlineData("microsoft", "John")]
+        [InlineData("twitter", "@JohnSmith")]
+        public void Can_Sign_In_And_Out_With_External_Provider(string provider, string expected)
         {
             // Arrange
-            ConfigureExternalProvider((p) => p.ForAmazon());
-
-            // Act and Assert
-            SignInWithExternalProviderAndSignOut("amazon");
-        }
-
-        [Fact]
-        public void Can_Sign_In_With_Facebook()
-        {
-            // Arrange
-            ConfigureExternalProvider((p) => p.ForFacebook());
-
-            // Act and Assert
-            SignInWithExternalProviderAndSignOut("facebook");
-        }
-
-        [Fact]
-        public void Can_Sign_In_With_Google()
-        {
-            // Arrange
-            ConfigureExternalProvider((p) => p.ForGoogle());
-
-            // Act and Assert
-            SignInWithExternalProviderAndSignOut("google");
-        }
-
-        [Fact]
-        public void Can_Sign_In_With_Microsoft()
-        {
-            // Arrange
-            ConfigureExternalProvider((p) => p.ForMicrosoft());
-
-            // Act and Assert
-            SignInWithExternalProviderAndSignOut("microsoft");
-        }
-
-        [Fact]
-        public void Can_Sign_In_With_Twitter()
-        {
-            // Arrange
-            ConfigureExternalProvider(
-                (p) =>
+            AtPage<HomePage>(
+                (page) =>
                 {
-                    p.Tokens().WithAccessToken("twitter-oath-token");
-                    p.ForTwitter();
-                });
+                    page = page
+                        .SignIn()
+                        .SignInWithProvider(provider);
 
-            // Act and Assert
-            SignInWithExternalProviderAndSignOut("twitter", "@JohnSmith");
+                    // Assert
+                    page.IsAuthenticated().ShouldBeTrue();
+                    page.UserName().ShouldBe(expected);
+
+                    // Act
+                    page = page.SignOut();
+
+                    // Assert
+                    page.IsAuthenticated().ShouldBeFalse();
+                });
         }
 
         [Fact]
         public void Can_Delete_Account()
         {
             // Arrange
-            ConfigureExternalProvider((p) => p.ForAmazon());
-
             AtPage<HomePage>(
                 (homepage) =>
                 {
@@ -116,8 +87,6 @@ namespace MartinCostello.LondonTravel.Site.Integration
         public void Can_Link_Accounts()
         {
             // Arrange
-            ConfigureExternalProvider((p) => p.ForAmazon().ForGoogle());
-
             AtPage<HomePage>(
                 (homepage) =>
                 {
@@ -151,32 +120,6 @@ namespace MartinCostello.LondonTravel.Site.Integration
                     accounts.Count.ShouldBe(1);
                     accounts.First().Name().ShouldBe("Google");
                 });
-        }
-
-        private void SignInWithExternalProviderAndSignOut(string name, string expectedUserName = "John")
-        {
-            AtPage<HomePage>(
-                (page) =>
-                {
-                    page = page
-                        .SignIn()
-                        .SignInWithProvider(name);
-
-                    // Assert
-                    page.IsAuthenticated().ShouldBeTrue();
-                    page.UserName().ShouldBe(expectedUserName);
-
-                    // Act
-                    page = page.SignOut();
-
-                    // Assert
-                    page.IsAuthenticated().ShouldBeFalse();
-                });
-        }
-
-        private void ConfigureExternalProvider(Action<AuthenticationInterceptionBuilder> configure)
-        {
-            configure(new AuthenticationInterceptionBuilder(Fixture.Interceptor));
         }
     }
 }

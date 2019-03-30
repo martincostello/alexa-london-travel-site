@@ -49,8 +49,6 @@ namespace MartinCostello.LondonTravel.Site.Integration
             };
 
             _scope = Fixture.Interceptor.BeginScope();
-
-            new Builders.TflInterceptionBuilder().ForLines().RegisterWith(Fixture.Interceptor);
         }
 
         /// <summary>

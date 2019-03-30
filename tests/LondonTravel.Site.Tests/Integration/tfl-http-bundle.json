@@ -1,0 +1,66 @@
+{
+  "$schema": "https://raw.githubusercontent.com/justeat/httpclient-interception/master/src/HttpClientInterception/Bundles/http-request-bundle-schema.json",
+  "id": "tfl",
+  "version": 1,
+  "comment": "HTTP bundles for testing the TfL API integration.",
+  "items": [
+    {
+      "uri": "https://api.tfl.gov.uk/Line/Mode/dlr%2Coverground%2Ctflrail%2Ctube?app_id=&app_key=",
+      "contentFormat": "json",
+      "contentJson": [
+        {
+          "id": "bakerloo",
+          "name": "Bakerloo"
+        },
+        {
+          "id": "central",
+          "name": "Central"
+        },
+        {
+          "id": "circle",
+          "name": "Circle"
+        },
+        {
+          "id": "district",
+          "name": "District"
+        },
+        {
+          "id": "dlr",
+          "name": "DLR"
+        },
+        {
+          "id": "hammersmith-city",
+          "name": "Hammersmith & City"
+        },
+        {
+          "id": "jubilee",
+          "name": "Jubilee"
+        },
+        {
+          "id": "london-overground",
+          "name": "London Overground"
+        },
+        {
+          "id": "northern",
+          "name": "Northern"
+        },
+        {
+          "id": "piccadilly",
+          "name": "Piccadilly"
+        },
+        {
+          "id": "tfl-rail",
+          "name": "TfL Rail"
+        },
+        {
+          "id": "victoria",
+          "name": "Victoria"
+        },
+        {
+          "id": "waterloo-city",
+          "name": "Waterloo & City"
+        }
+      ]
+    }
+  ]
+}
