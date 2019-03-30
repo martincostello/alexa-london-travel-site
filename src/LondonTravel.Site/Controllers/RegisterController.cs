@@ -9,17 +9,14 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     using MartinCostello.LondonTravel.Site.Services;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.Logging;
 
     public class RegisterController : Controller
     {
         private readonly IAccountService _service;
-        private readonly ILogger _logger;
 
-        public RegisterController(IAccountService service, ILogger<RegisterController> logger)
+        public RegisterController(IAccountService service)
         {
             _service = service;
-            _logger = logger;
         }
 
         /// <summary>
@@ -58,7 +55,9 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 // Deduct one for "over X,000 users".
                 return ((count - 1) / 1000) * 1000;
             }
+#pragma warning disable CA1031
             catch (Exception)
+#pragma warning restore CA1031
             {
                 // Over 7,000 users as of 28/10/2018
                 return 7_000;

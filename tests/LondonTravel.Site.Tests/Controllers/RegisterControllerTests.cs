@@ -11,7 +11,6 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Controllers;
     using Microsoft.AspNetCore.Routing;
-    using Microsoft.Extensions.Logging;
     using Moq;
     using Shouldly;
     using Xunit;
@@ -100,7 +99,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             var controllerContext = new ControllerContext(actionContext);
 
-            return new RegisterController(service, Mock.Of<ILogger<RegisterController>>())
+            return new RegisterController(service)
             {
                 ControllerContext = controllerContext,
             };
