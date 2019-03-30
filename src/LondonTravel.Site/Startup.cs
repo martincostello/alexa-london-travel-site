@@ -227,6 +227,21 @@ namespace MartinCostello.LondonTravel.Site
         }
 
         /// <summary>
+        /// Creates the <see cref="CookiePolicyOptions"/> to use.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="CookiePolicyOptions"/> to use for the application.
+        /// </returns>
+        private static CookiePolicyOptions CreateCookiePolicy()
+        {
+            return new CookiePolicyOptions()
+            {
+                HttpOnly = HttpOnlyPolicy.Always,
+                Secure = CookieSecurePolicy.Always,
+            };
+        }
+
+        /// <summary>
         /// Sets the cache headers for static files.
         /// </summary>
         /// <param name="context">The static file response context to set the headers for.</param>
@@ -340,21 +355,6 @@ namespace MartinCostello.LondonTravel.Site
             {
                 options.Filters.Add(new RequireHttpsAttribute());
             }
-        }
-
-        /// <summary>
-        /// Creates the <see cref="CookiePolicyOptions"/> to use.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="CookiePolicyOptions"/> to use for the application.
-        /// </returns>
-        private CookiePolicyOptions CreateCookiePolicy()
-        {
-            return new CookiePolicyOptions()
-            {
-                HttpOnly = HttpOnlyPolicy.Always,
-                Secure = CookieSecurePolicy.Always,
-            };
         }
 
         /// <summary>

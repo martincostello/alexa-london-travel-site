@@ -27,7 +27,9 @@ namespace MartinCostello.LondonTravel.Site
                 CreateWebHostBuilder(args).Build().Run();
                 return 0;
             }
+#pragma warning disable CA1031
             catch (Exception ex)
+#pragma warning restore CA1031
             {
                 Console.Error.WriteLine($"Unhandled exception: {ex}");
                 return -1;

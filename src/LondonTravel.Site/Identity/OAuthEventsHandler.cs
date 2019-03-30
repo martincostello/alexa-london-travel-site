@@ -207,7 +207,9 @@ namespace MartinCostello.LondonTravel.Site.Identity
                     _logger,
                     (p) => p?.Items);
             }
+#pragma warning disable CA1031
             catch (Exception ex)
+#pragma warning restore CA1031
             {
                 _logger.LogError(default, ex, "Failed to handle remote failure: {Message}.", ex.Message);
 
