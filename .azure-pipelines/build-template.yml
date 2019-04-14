@@ -23,7 +23,7 @@ phases:
       ${{ if and(eq(parameters.queueName, ''), eq(parameters.agentOS, 'macOS')) }}:
         name: Hosted macOS
       ${{ if and(eq(parameters.queueName, ''), eq(parameters.agentOS, 'Windows')) }}:
-        name: Hosted Windows 2019 with VS 2019
+        name: Hosted Windows 2019 with VS2019
     variables:
       AgentOSName: ${{ parameters.agentOS }}
       ArchiveName: ${{ parameters.artifacts.archiveName }}
