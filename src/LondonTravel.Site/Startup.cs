@@ -96,8 +96,6 @@ namespace MartinCostello.LondonTravel.Site
             app.UseHsts()
                .UseHttpsRedirection();
 
-            app.UseStaticFiles(CreateStaticFileOptions());
-
             app.UseForwardedHeaders(
                 new ForwardedHeadersOptions()
                 {
@@ -105,6 +103,8 @@ namespace MartinCostello.LondonTravel.Site
                 });
 
             app.UseHttpMethodOverride();
+
+            app.UseStaticFiles(CreateStaticFileOptions());
 
             app.UseIdentity(options.Value);
 
