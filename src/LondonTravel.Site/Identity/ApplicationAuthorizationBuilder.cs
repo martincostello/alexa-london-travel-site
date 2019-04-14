@@ -5,7 +5,6 @@ namespace MartinCostello.LondonTravel.Site.Identity
 {
     using System;
     using System.Net.Http;
-    using System.Security.Claims;
     using MartinCostello.LondonTravel.Site.Options;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authentication.OAuth;

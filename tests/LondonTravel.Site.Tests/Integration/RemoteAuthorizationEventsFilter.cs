@@ -5,8 +5,8 @@ namespace MartinCostello.LondonTravel.Site.Integration
 {
     using System;
     using System.Collections.Specialized;
-    using System.Net.Http;
     using System.Threading.Tasks;
+    using System.Web;
     using MartinCostello.LondonTravel.Site.Identity;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Builder;
@@ -43,7 +43,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         private static NameValueCollection ParseQueryString<T>(RedirectContext<T> context)
             where T : AuthenticationSchemeOptions
         {
-            return new UriBuilder(context.RedirectUri).Uri.ParseQueryString();
+            return HttpUtility.ParseQueryString(new UriBuilder(context.RedirectUri).Uri.Query);
         }
 
         private static Task Redirect<T>(RedirectContext<T> context, UriBuilder builder)

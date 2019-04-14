@@ -104,7 +104,9 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 AcceptInsecureCertificates = true,
             };
 
-            if (!System.Diagnostics.Debugger.IsAttached)
+            bool isDebuggerAttached = System.Diagnostics.Debugger.IsAttached;
+
+            if (!isDebuggerAttached)
             {
                 options.AddArgument("--headless");
             }
@@ -116,7 +118,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 options.AddArgument("--no-sandbox");
             }
 
-            if (collectPerformanceLogs)
+            if (collectPerformanceLogs || isDebuggerAttached)
             {
                 // Enable logging of redirects (see https://stackoverflow.com/a/42212131/1064169)
                 options.PerformanceLoggingPreferences = new ChromePerformanceLoggingPreferences();
@@ -129,7 +131,6 @@ namespace MartinCostello.LondonTravel.Site.Integration
 
 #if DEBUG
             options.SetLoggingPreference(LogType.Client, LogLevel.All);
-            options.SetLoggingPreference(LogType.Driver, LogLevel.All);
             options.SetLoggingPreference(LogType.Profiler, LogLevel.All);
             options.SetLoggingPreference(LogType.Server, LogLevel.All);
 #endif
