@@ -23,7 +23,7 @@
     "gulp-uglify": "3.0.1",
     "hoek": "4.2.1",
     "jasmine-core": "3.2.1",
-    "jquery": "3.3.1",
+    "jquery": "3.4.1",
     "jshint": "2.9.6",
     "karma": "3.0.0",
     "karma-appveyor-reporter": "0.4.1",
