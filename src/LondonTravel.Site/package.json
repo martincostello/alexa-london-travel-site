@@ -29,7 +29,7 @@
     "karma-appveyor-reporter": "0.4.1",
     "karma-chrome-launcher": "2.2.0",
     "karma-html-detailed-reporter": "1.1.21",
-    "karma-jasmine": "1.1.2",
+    "karma-jasmine": "2.0.1",
     "karma-typescript": "3.0.13",
     "lodash": ">=4.17.11",
     "merge-stream": "1.0.1",
