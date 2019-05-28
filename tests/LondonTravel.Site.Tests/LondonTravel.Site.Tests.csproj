@@ -21,7 +21,7 @@
       Priority="-1" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="JustEat.HttpClientInterception" Version="2.0.0" />
+    <PackageReference Include="JustEat.HttpClientInterception" Version="2.0.1" />
     <PackageReference Include="MartinCostello.Logging.XUnit" Version="0.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="2.2.0" />
