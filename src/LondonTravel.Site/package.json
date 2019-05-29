@@ -25,7 +25,7 @@
     "jasmine-core": "3.4.0",
     "jquery": "3.4.0",
     "jshint": "2.9.6",
-    "karma": "3.0.0",
+    "karma": "4.1.0",
     "karma-appveyor-reporter": "0.4.1",
     "karma-chrome-launcher": "2.2.0",
     "karma-html-detailed-reporter": "2.1.0",
