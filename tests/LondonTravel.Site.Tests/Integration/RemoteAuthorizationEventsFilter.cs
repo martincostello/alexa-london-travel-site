@@ -97,7 +97,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             var builder = new UriBuilder(_serverAddress)
             {
                 Path = "/signin-twitter",
-                Query = queryString.ToString()
+                Query = queryString.ToString(),
             };
 
             return Redirect(context, builder);

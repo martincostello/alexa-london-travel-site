@@ -32,7 +32,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
 
             var request = new DefaultHttpRequest(httpContext)
             {
-                QueryString = new QueryString(query)
+                QueryString = new QueryString(query),
             };
 
             var scheme = new AuthenticationScheme("amazon-auth", "Amazon", typeof(AmazonAuthenticationHandler));

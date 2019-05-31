@@ -146,7 +146,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
             // Arrange
             var user = new LondonTravelUser()
             {
-                Id = "MyUserId"
+                Id = "MyUserId",
             };
 
             var mock = new Mock<IDocumentService>();
@@ -169,7 +169,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
             // Arrange
             var user = new LondonTravelUser()
             {
-                Id = "MyUserId"
+                Id = "MyUserId",
             };
 
             var mock = new Mock<IDocumentService>();
@@ -438,7 +438,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
 
             var expected = new[]
             {
-                "admin"
+                "admin",
             };
 
             UserStore target = CreateStore();
@@ -464,7 +464,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
 
             var expected = new[]
             {
-                "admin"
+                "admin",
             };
 
             UserStore target = CreateStore();

@@ -17,7 +17,7 @@ namespace MartinCostello.LondonTravel.Site.Swagger
             return new PreferencesResponse()
             {
                 FavoriteLines = new[] { "northern", "victoria" },
-                UserId = "578a0443-2208-4fb3-8e33-92351e58b685"
+                UserId = "578a0443-2208-4fb3-8e33-92351e58b685",
             };
         }
     }
