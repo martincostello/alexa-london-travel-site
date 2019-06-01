@@ -52,7 +52,7 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc2" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="5.0.0-rc2" />
     <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
-    <PackageReference Include="XliffTasks" Version="0.2.0-beta-63730-01" PrivateAssets="All" />
+    <PackageReference Include="XliffTasks" Version="1.0.0-beta.19253.2" PrivateAssets="All" />
   </ItemGroup>
   <Target Name="BundleAssets" BeforeTargets="PrepareForPublish">
     <Exec Command="npm ci" Condition=" '$(InstallWebPackages)' == 'true' " />
