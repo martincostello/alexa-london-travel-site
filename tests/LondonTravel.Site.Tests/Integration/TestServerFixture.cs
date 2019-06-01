@@ -82,7 +82,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 });
 
             builder.ConfigureAppConfiguration(ConfigureTests)
-                   .ConfigureLogging((loggingBuilder) => loggingBuilder.AddXUnit(this))
+                   .ConfigureLogging((loggingBuilder) => loggingBuilder.ClearProviders().AddXUnit(this))
                    .UseContentRoot(GetApplicationContentRootPath());
         }
 
