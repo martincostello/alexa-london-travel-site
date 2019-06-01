@@ -17,7 +17,7 @@ cache:
 install:
   - ps: npm install -g npm
   - ps: npm install -g gulp@3.9.1 --loglevel=error
-  - ps: choco upgrade googlechrome --confirm --no-progress
+  - ps: choco upgrade googlechrome --confirm --ignore-checksums --no-progress
 
 build_script:
   - ps: .\Build.ps1
