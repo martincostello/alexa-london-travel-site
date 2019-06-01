@@ -36,7 +36,7 @@
     "natives": "^1.1.6",
     "path": "0.12.7",
     "puppeteer": "1.17.0",
-    "superagent": "3.8.3",
+    "superagent": "5.0.5",
     "tslint": "5.17.0",
     "typescript": "3.5.1"
   }
