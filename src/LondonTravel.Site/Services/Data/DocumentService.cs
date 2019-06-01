@@ -297,7 +297,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             var accessCondition = new AccessCondition()
             {
                 Condition = etag,
-                Type = AccessConditionType.IfMatch
+                Type = AccessConditionType.IfMatch,
             };
 
             return new RequestOptions()

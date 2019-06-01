@@ -154,9 +154,9 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// </returns>
         private static string BuildRedirectUrl(Uri redirectUri, string state, string accessToken)
         {
-            UriBuilder builder = new UriBuilder(redirectUri)
+            var builder = new UriBuilder(redirectUri)
             {
-                Fragment = $"state={(state == null ? string.Empty : Uri.EscapeDataString(state))}&access_token={Uri.EscapeDataString(accessToken)}&token_type=Bearer"
+                Fragment = $"state={(state == null ? string.Empty : Uri.EscapeDataString(state))}&access_token={Uri.EscapeDataString(accessToken)}&token_type=Bearer",
             };
 
             return builder.Uri.AbsoluteUri;
@@ -233,9 +233,9 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             }
             else
             {
-                UriBuilder builder = new UriBuilder(redirectUri)
+                var builder = new UriBuilder(redirectUri)
                 {
-                    Fragment = fragment
+                    Fragment = fragment,
                 };
 
                 url = builder.Uri.AbsoluteUri;
