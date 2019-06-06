@@ -4,7 +4,7 @@
   "version": "2.2.0",
   "devDependencies": {
     "@types/applicationinsights-js": "1.0.9",
-    "@types/google.analytics": "0.0.39",
+    "@types/google.analytics": "0.0.40",
     "@types/jasmine": "3.3.13",
     "@types/jquery": "3.3.9",
     "bootstrap": ">=4.3.1",
