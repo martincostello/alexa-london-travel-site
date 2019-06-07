@@ -59,9 +59,9 @@ namespace MartinCostello.LondonTravel.Site
         private IHostingEnvironment HostingEnvironment { get; }
 
         /// <summary>
-        /// Gets or sets the service provider.
+        /// Gets or sets the service scope to use for a service provider.
         /// </summary>
-        private IServiceProvider ServiceProvider { get; set; }
+        private IServiceScope ServiceScope { get; set; }
 
         /// <summary>
         /// Configures the application.
@@ -76,7 +76,7 @@ namespace MartinCostello.LondonTravel.Site
             IServiceProvider serviceProvider,
             IOptionsSnapshot<SiteOptions> options)
         {
-            ServiceProvider = serviceProvider.CreateScope().ServiceProvider;
+            ServiceScope = serviceProvider.CreateScope();
 
             applicationLifetime.ApplicationStopped.Register(OnApplicationStopped);
             app.UseCustomHttpHeaders(HostingEnvironment, Configuration, options);
@@ -195,7 +195,7 @@ namespace MartinCostello.LondonTravel.Site
             services.AddPolly();
             services.AddHttpClients();
 
-            services.AddApplicationAuthentication(() => ServiceProvider);
+            services.AddApplicationAuthentication(() => ServiceScope.ServiceProvider);
         }
 
         /// <summary>
@@ -297,7 +297,7 @@ namespace MartinCostello.LondonTravel.Site
         /// <param name="corsOptions">The <see cref="CorsOptions"/> to configure.</param>
         private void ConfigureCors(CorsOptions corsOptions)
         {
-            var siteOptions = ServiceProvider.GetService<SiteOptions>();
+            var siteOptions = ServiceScope.ServiceProvider.GetService<SiteOptions>();
 
             corsOptions.AddPolicy(
                 "DefaultCorsPolicy",
@@ -363,11 +363,7 @@ namespace MartinCostello.LondonTravel.Site
         private void OnApplicationStopped()
         {
             Serilog.Log.CloseAndFlush();
-
-            if (ServiceProvider is IDisposable disposable)
-            {
-                disposable.Dispose();
-            }
+            ServiceScope?.Dispose();
         }
     }
 }

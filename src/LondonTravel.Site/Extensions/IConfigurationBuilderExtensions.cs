@@ -51,9 +51,11 @@ namespace MartinCostello.LondonTravel.Site.Extensions
 
                 if (canUseMsi)
                 {
+#pragma warning disable CA2000
                     var provider = new AzureServiceTokenProvider();
                     var client = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(provider.KeyVaultTokenCallback));
                     builder.AddAzureKeyVault(vault, client, manager);
+#pragma warning restore CA2000
                 }
                 else
                 {

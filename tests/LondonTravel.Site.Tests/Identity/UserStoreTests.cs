@@ -462,11 +462,6 @@ namespace MartinCostello.LondonTravel.Site.Identity
             user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, "not-a-string", ClaimValueTypes.Email, "https://londontravel.martincostello.com/")));
             user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, "wrong-issuer", ClaimValueTypes.String, "google")));
 
-            var expected = new[]
-            {
-                "admin",
-            };
-
             UserStore target = CreateStore();
 
             // Act and Assert

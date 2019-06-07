@@ -82,7 +82,9 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
             {
                 using (var response = await operation())
                 {
+#pragma warning disable CA2000
                     await response.EnsureSuccessStatusCodeAsync();
+#pragma warning restore CA2000
 
                     result = response.Content;
 
