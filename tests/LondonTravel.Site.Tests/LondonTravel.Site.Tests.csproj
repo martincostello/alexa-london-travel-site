@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Description>Tests for https://londontravel.martincostello.com/</Description>
-    <NoWarn>$(NoWarn);CA1031;CA1707;CA2234</NoWarn>
+    <NoWarn>$(NoWarn);CA1031;CA1707;CA2000;CA2234</NoWarn>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <RootNamespace>MartinCostello.LondonTravel.Site</RootNamespace>
     <Summary>Tests for the London Travel website</Summary>
