@@ -30,7 +30,7 @@
     <PackageReference Include="Moq" Version="4.11.0" />
     <PackageReference Include="Selenium.Support" Version="3.141.0" />
     <PackageReference Include="Selenium.WebDriver" Version="3.141.0" />
-    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="74.0.3729.6" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="75.0.3770.8" />
     <PackageReference Include="Shouldly" Version="3.0.2" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
