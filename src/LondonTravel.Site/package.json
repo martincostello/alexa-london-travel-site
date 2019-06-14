@@ -39,6 +39,6 @@
     "puppeteer": "1.17.0",
     "superagent": "5.0.8",
     "tslint": "5.17.0",
-    "typescript": "3.5.1"
+    "typescript": "3.5.2"
   }
 }
