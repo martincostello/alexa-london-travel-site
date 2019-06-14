@@ -14,7 +14,6 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Primitives;
     using Newtonsoft.Json.Linq;
-    using OpenQA.Selenium;
     using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
@@ -36,11 +35,11 @@ namespace MartinCostello.LondonTravel.Site.Integration
         }
 
         [Fact]
-        public async Task Can_Authorize_Alexa_And_Get_Preferences_From_Api()
+        public void Can_Authorize_Alexa()
         {
             // Arrange
-            await WithNavigatorAsync(
-                async (navigator) =>
+            WithNavigator(
+                (navigator) =>
                 {
                     Uri relativeUri = BuildAuthorizationUri(navigator);
 
@@ -54,9 +53,37 @@ namespace MartinCostello.LondonTravel.Site.Integration
                     // Assert
                     page.IsAuthenticated().ShouldBeTrue();
                     page.IsLinkedToAlexa().ShouldBeTrue();
+                });
+        }
+
+        [Fact]
+        public async Task Can_Get_Preferences_From_Api()
+        {
+            // Arrange
+            await WithNavigatorAsync(
+                async (navigator) =>
+                {
+                    var page = new SignInPage(navigator)
+                        .Navigate()
+                        .SignInWithAmazon()
+                        .Manage();
+
+                    // Assert
+                    page.IsAuthenticated().ShouldBeTrue();
+                    page.IsLinkedToAlexa().ShouldBeFalse();
 
                     // Arrange
-                    AuthenticationHeaderValue authorization = ParseAuthorization(navigator.Driver);
+                    Uri relativeUri = BuildAuthorizationUri(navigator);
+
+                    // Act
+                    navigator.NavigateTo(relativeUri);
+
+                    // Assert
+                    page.IsAuthenticated().ShouldBeTrue();
+                    page.IsLinkedToAlexa().ShouldBeTrue();
+
+                    // Arrange
+                    AuthenticationHeaderValue authorization = ParseAuthorization(navigator.Driver.Url);
 
                     // Act
                     JObject result = await GetPreferencesAsync(authorization, HttpStatusCode.OK);
@@ -105,8 +132,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
 
                     // Act and Assert
                     await GetPreferencesAsync(authorization, HttpStatusCode.Unauthorized);
-                },
-                collectPerformanceLogs: true);
+                });
         }
 
         private static Uri BuildAuthorizationUri(ApplicationNavigator navigator)
@@ -124,48 +150,9 @@ namespace MartinCostello.LondonTravel.Site.Integration
             return new Uri(uriString, UriKind.Relative);
         }
 
-        private static AuthenticationHeaderValue ParseAuthorization(IWebDriver driver)
-        {
-            string driverUrl = driver.Url;
-
-            // Trawl the performance logs to find the redirection that loaded the current
-            // page as that will have contained the parameters with the token in its hash.
-            var logs = driver.Manage().Logs.GetLog("performance")
-                .Select((p) => JObject.Parse(p.Message))
-                .Select((p) => p.Value<JObject>("message"))
-                .Where((p) => p.Value<string>("method") == "Network.requestWillBeSent")
-                .Where((p) => p["params"] != null)
-                .Select((p) => p["params"])
-                .Where((p) => p["redirectResponse"] != null)
-                .Where((p) => p["request"] != null)
-                .Where((p) => p["request"].Value<string>("url") == driverUrl)
-                .Select((p) => p["redirectResponse"]["headers"])
-                .ToList();
-
-            // Handle casing differences in HTTP response header casing in the logs
-            string url = logs
-                .Select((p) => p.Value<string>("Location"))
-                .LastOrDefault();
-
-            if (url == null)
-            {
-                url = logs
-                    .Select((p) => p.Value<string>("location"))
-                    .LastOrDefault();
-            }
-
-            if (url == null)
-            {
-                throw new InvalidOperationException("Failed to parse browser performance log for authorization URL.");
-            }
-
-            return ParseAuthorization(url);
-        }
-
         private static AuthenticationHeaderValue ParseAuthorization(string url)
         {
-            int index = url.IndexOf('#', StringComparison.Ordinal);
-            string hash = url.Substring(index + 1);
+            var hash = new UriBuilder(url).Fragment;
 
             Dictionary<string, StringValues> values = QueryHelpers.ParseQuery(hash);
 
