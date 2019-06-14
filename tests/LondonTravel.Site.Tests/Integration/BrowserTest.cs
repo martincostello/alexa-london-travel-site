@@ -14,7 +14,6 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using Microsoft.Extensions.Logging;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Chrome;
-    using OpenQA.Selenium.Remote;
     using Pages;
     using Xunit;
     using Xunit.Abstractions;
@@ -81,21 +80,19 @@ namespace MartinCostello.LondonTravel.Site.Integration
         /// <summary>
         /// Creates a new instance of <see cref="ApplicationNavigator"/>.
         /// </summary>
-        /// <param name="collectPerformanceLogs">Whether to collect browser performance logs.</param>
         /// <returns>
         /// The <see cref="ApplicationNavigator"/> to use for tests.
         /// </returns>
-        protected ApplicationNavigator CreateNavigator(bool collectPerformanceLogs = false)
-            => new ApplicationNavigator(Fixture.ServerAddress, CreateWebDriver(collectPerformanceLogs));
+        protected ApplicationNavigator CreateNavigator()
+            => new ApplicationNavigator(Fixture.ServerAddress, CreateWebDriver());
 
         /// <summary>
         /// Creates a new instance of <see cref="IWebDriver"/>.
         /// </summary>
-        /// <param name="collectPerformanceLogs">Whether to collect browser performance logs.</param>
         /// <returns>
         /// The <see cref="IWebDriver"/> to use for tests.
         /// </returns>
-        protected IWebDriver CreateWebDriver(bool collectPerformanceLogs = false)
+        protected IWebDriver CreateWebDriver()
         {
             string chromeDriverDirectory = Path.GetDirectoryName(GetType().Assembly.Location);
 
@@ -116,15 +113,6 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
                 options.AddArgument("--no-sandbox");
-            }
-
-            if (collectPerformanceLogs || isDebuggerAttached)
-            {
-                // Enable logging of redirects (see https://stackoverflow.com/a/42212131/1064169)
-                options.PerformanceLoggingPreferences = new ChromePerformanceLoggingPreferences();
-                options.PerformanceLoggingPreferences.AddTracingCategory("devtools.network");
-                options.AddAdditionalCapability(CapabilityType.EnableProfiling, true, true);
-                options.SetLoggingPreference("performance", LogLevel.All);
             }
 
             options.SetLoggingPreference(LogType.Browser, LogLevel.All);
@@ -181,17 +169,15 @@ namespace MartinCostello.LondonTravel.Site.Integration
         /// Runs the specified test with a new instance of <see cref="ApplicationNavigator"/> as an asynchronous operation.
         /// </summary>
         /// <param name="test">The delegate to the test that will use the navigator.</param>
-        /// <param name="collectPerformanceLogs">Whether to collect browser performance logs.</param>
         /// <param name="testName">The name of the test method.</param>
         /// <returns>
         /// A <see cref="Task"/> representing the asynchronous operation to run the test.
         /// </returns>
         protected async Task WithNavigatorAsync(
             Func<ApplicationNavigator, Task> test,
-            bool collectPerformanceLogs = false,
             [CallerMemberName] string testName = null)
         {
-            using (ApplicationNavigator navigator = CreateNavigator(collectPerformanceLogs))
+            using (ApplicationNavigator navigator = CreateNavigator())
             {
                 try
                 {
