@@ -39,9 +39,11 @@ namespace MartinCostello.LondonTravel.Site.Extensions
             }
 
             services
-                .AddHttpClient<ITflClient>()
+                .AddHttpClient(nameof(ITflClient))
                 .AddTypedClient(AddTfl)
                 .ApplyDefaultConfiguration();
+
+            services.AddSingleton<IContentSerializer, JsonContentSerializer>();
 
             return services;
         }
@@ -56,11 +58,15 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         /// </returns>
         private static ITflClient AddTfl(HttpClient client, IServiceProvider provider)
         {
-            var options = provider.GetRequiredService<TflOptions>();
+            client.BaseAddress = provider.GetRequiredService<TflOptions>().BaseUri;
 
-            client.BaseAddress = options.BaseUri;
+            var settings = new RefitSettings()
+            {
+                ContentSerializer = provider.GetRequiredService<IContentSerializer>(),
+                HttpMessageHandlerFactory = () => provider.GetRequiredService<IHttpMessageHandlerFactory>().CreateHandler(),
+            };
 
-            return RestService.For<ITflClient>(client);
+            return RestService.For<ITflClient>(client, settings);
         }
     }
 }

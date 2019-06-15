@@ -126,7 +126,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 using (var client = Fixture.CreateClient())
                 {
                     // Act
-                    using (var response = await client.SendAsync(message, default))
+                    using (var response = await client.SendAsync(message))
                     {
                         // Assert
                         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -163,7 +163,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 using (var client = Fixture.CreateClient())
                 {
                     // Act
-                    using (var response = await client.SendAsync(message, default))
+                    using (var response = await client.SendAsync(message))
                     {
                         // Assert
                         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);

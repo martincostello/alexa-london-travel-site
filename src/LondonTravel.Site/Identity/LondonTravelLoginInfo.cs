@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Identity
@@ -14,19 +14,19 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <summary>
         /// Gets or sets the login provider.
         /// </summary>
-        [JsonProperty(PropertyName = "loginProvider")]
+        [JsonProperty("loginProvider")]
         public string LoginProvider { get; set; }
 
         /// <summary>
         /// Gets or sets the provider key.
         /// </summary>
-        [JsonProperty(PropertyName = "providerKey")]
+        [JsonProperty("providerKey")]
         public string ProviderKey { get; set; }
 
         /// <summary>
         /// Gets or sets the provider display name.
         /// </summary>
-        [JsonProperty(PropertyName = "providerDisplayName")]
+        [JsonProperty("providerDisplayName")]
         public string ProviderDisplayName { get; set; }
 
         /// <summary>
