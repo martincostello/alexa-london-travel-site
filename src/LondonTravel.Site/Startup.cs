@@ -168,9 +168,8 @@ namespace MartinCostello.LondonTravel.Site
 
             services.AddSwagger(HostingEnvironment);
 
-            services
-                .AddResponseCaching()
-                .AddResponseCompression();
+            services.AddResponseCaching()
+                    .AddResponseCompression();
 
             services.AddSingleton<IClock>((_) => SystemClock.Instance);
             services.AddSingleton<ISiteTelemetry, SiteTelemetry>();

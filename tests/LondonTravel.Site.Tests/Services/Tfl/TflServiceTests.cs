@@ -6,10 +6,12 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net.Http;
     using System.Threading.Tasks;
     using JustEat.HttpClientInterception;
     using MartinCostello.LondonTravel.Site.Options;
     using Microsoft.Extensions.Caching.Memory;
+    using Refit;
     using Xunit;
 
     public sealed class TflServiceTests : IDisposable
@@ -54,7 +56,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
             {
                 httpClient.BaseAddress = _options.BaseUri;
 
-                var client = Refit.RestService.For<ITflClient>(httpClient);
+                ITflClient client = CreateClient(httpClient);
                 var target = new TflService(client, _cache, _options);
 
                 // Act
@@ -93,7 +95,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
             {
                 httpClient.BaseAddress = _options.BaseUri;
 
-                var client = Refit.RestService.For<ITflClient>(httpClient);
+                ITflClient client = CreateClient(httpClient);
                 var target = new TflService(client, _cache, _options);
 
                 // Act
@@ -133,7 +135,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
             {
                 httpClient.BaseAddress = _options.BaseUri;
 
-                var client = Refit.RestService.For<ITflClient>(httpClient);
+                ITflClient client = CreateClient(httpClient);
                 var target = new TflService(client, _cache, _options);
 
                 // Act
@@ -174,7 +176,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
             {
                 httpClient.BaseAddress = _options.BaseUri;
 
-                var client = Refit.RestService.For<ITflClient>(httpClient);
+                ITflClient client = CreateClient(httpClient);
                 var target = new TflService(client, _cache, _options);
 
                 // Act
@@ -210,6 +212,13 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
             var options = Microsoft.Extensions.Options.Options.Create(cacheOptions);
 
             return new MemoryCache(options);
+        }
+
+        private static ITflClient CreateClient(HttpClient httpClient)
+        {
+            var settings = new RefitSettings() { ContentSerializer = new JsonContentSerializer() };
+
+            return RestService.For<ITflClient>(httpClient, settings);
         }
 
         private static TflOptions CreateOptions()

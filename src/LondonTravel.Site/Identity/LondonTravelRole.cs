@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Identity
@@ -15,31 +15,31 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <summary>
         /// Gets or sets the role Id.
         /// </summary>
-        [JsonProperty(PropertyName = "id")]
+        [JsonProperty("id")]
         public string Id { get; set; }
 
         /// <summary>
         /// Gets or sets the claim's type.
         /// </summary>
-        [JsonProperty(PropertyName = "claimType")]
+        [JsonProperty("claimType")]
         public string ClaimType { get; set; }
 
         /// <summary>
         /// Gets or sets the claim's value.
         /// </summary>
-        [JsonProperty(PropertyName = "value")]
+        [JsonProperty("value")]
         public string Value { get; set; }
 
         /// <summary>
         /// Gets or sets the claim's value's type.
         /// </summary>
-        [JsonProperty(PropertyName = "valueType")]
+        [JsonProperty("valueType")]
         public string ValueType { get; set; }
 
         /// <summary>
         /// Gets or sets the claim's issuer.
         /// </summary>
-        [JsonProperty(PropertyName = "issuer")]
+        [JsonProperty("issuer")]
         public string Issuer { get; set; }
 
         /// <summary>
