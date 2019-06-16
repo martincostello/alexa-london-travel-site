@@ -25,11 +25,11 @@ build_script:
 after_build:
     - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
     - pip install codecov
-    - codecov -f "artifacts\code-coverage.xml"
+    - codecov -f "artifacts\coverage.cobertura.xml"
 
 artifacts:
   - path: artifacts\publish
-  - path: artifacts\code-coverage.xml
+  - path: artifacts\coverage*.xml
   - path: artifacts\*.png
 
 nuget:
