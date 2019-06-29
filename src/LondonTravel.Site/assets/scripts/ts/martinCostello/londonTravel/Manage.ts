@@ -31,9 +31,9 @@ namespace martinCostello.londonTravel {
 
         /**
          * Handles the form being submitted.
-         * @param {JQueryEventObject} e - The event object.
+         * @param {JQuery.TriggeredEvent} e - The event object.
          */
-        private onFormSubmit = (e: JQuery.Event): void => {
+        private onFormSubmit = (e: JQuery.TriggeredEvent): void => {
             const form = $(e.target);
             form.find(".js-delete-control").addClass("disabled");
             form.find(".js-delete-content").addClass("hide");
@@ -42,9 +42,9 @@ namespace martinCostello.londonTravel {
 
         /**
          * Handles the modal being displayed.
-         * @param {JQueryEventObject} e - The event object.
+         * @param {JQuery.TriggeredEvent} e - The event object.
          */
-        private onModalShown = (e: JQuery.Event): void => {
+        private onModalShown = (e: JQuery.TriggeredEvent): void => {
             const modal = $(e.target);
             setTimeout(() => {
                 modal.find(".js-modal-confirm")
