@@ -40,7 +40,7 @@ namespace martinCostello.londonTravel {
 }
 
 (() => {
-    $("a, button, input, .ga-track-click").on("click", (e: JQuery.Event): void => {
+    $("a, button, input, .ga-track-click").on("click", (e: JQuery.TriggeredEvent): void => {
 
         const element = $(e.target);
         const label: string = element.attr("data-ga-label") || element.attr("id");
