@@ -31,7 +31,7 @@
     "karma-chrome-launcher": "2.2.0",
     "karma-html-detailed-reporter": "2.1.0",
     "karma-jasmine": "2.0.1",
-    "karma-typescript": "4.1.0",
+    "karma-typescript": "4.1.1",
     "lodash": ">=4.17.11",
     "merge-stream": "2.0.0",
     "natives": "^1.1.6",
