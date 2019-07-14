@@ -56,10 +56,9 @@
   </ItemGroup>
   <Target Name="BundleAssets" BeforeTargets="PrepareForPublish">
     <Exec Command="npm ci" Condition=" '$(InstallWebPackages)' == 'true' " />
-    <Exec Command="gulp build" />
   </Target>
   <Target Name="PrepublishScript" DependsOnTargets="BundleAssets" BeforeTargets="Publish">
-    <Exec Command="gulp publish" />
+    <Exec Command="npm run publish" />
   </Target>
   <Target Name="AddGeneratedContentItems" BeforeTargets="AssignTargetPaths" Condition="'$(CI)' != '' or '$(TF_BUILD)' != ''">
     <ItemGroup>

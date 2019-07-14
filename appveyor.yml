@@ -15,8 +15,7 @@ cache:
   - '%APPDATA%\npm-cache'
 
 install:
-  - ps: npm install -g npm
-  - ps: npm install -g gulp@3.9.1 --loglevel=error
+  - ps: npm install --global npm
   - ps: choco upgrade googlechrome --confirm --ignore-checksums --no-progress
 
 build_script:

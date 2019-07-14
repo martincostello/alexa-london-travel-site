@@ -40,5 +40,9 @@
     "superagent": "5.1.0",
     "tslint": "5.18.0",
     "typescript": "3.5.3"
+  },
+  "scripts": {
+    "build": "gulp build",
+    "publish": "gulp publish"
   }
 }
