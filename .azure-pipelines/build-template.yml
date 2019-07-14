@@ -39,19 +39,14 @@ phases:
           displayName: Install .NET Core pre-requisites
       - ${{ if eq(parameters.agentOS, 'Linux') }}:
         - script: |
-            sudo npm install -g npm
+            sudo npm install --global npm
           name: UpdateNpm
           displayName: Update to latest npm
       - ${{ if ne(parameters.agentOS, 'Linux') }}:
         - script: |
-            npm install -g npm
+            npm install --global npm
           name: UpdateNpm
           displayName: Update to latest npm
-      - ${{ if eq(parameters.agentOS, 'macOS') }}:
-        - script: |
-            npm install -g gulp@3.9.1
-          name: InstallGulp
-          displayName: Install gulp
       - ${{ if eq(parameters.agentOS, 'macOS') }}:
         - script: |
             brew install brew-cask
