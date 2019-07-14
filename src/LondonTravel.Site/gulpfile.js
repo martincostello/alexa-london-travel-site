@@ -10,11 +10,9 @@ var concat = require("gulp-concat");
 var csslint = require("gulp-csslint");
 var cssmin = require("gulp-cssmin");
 var del = require("del");
-var jasmine = require("gulp-jasmine");
 var jshint = require("gulp-jshint");
 var karmaServer = require("karma").Server;
 var merge = require("merge-stream");
-var path = require("path");
 var sourcemaps = require("gulp-sourcemaps");
 var ts = require("gulp-typescript");
 var tslint = require("gulp-tslint");
@@ -67,16 +65,16 @@ gulp.task("lint:js", function () {
 });
 
 gulp.task("lint:ts", function () {
-    gulp.src(paths.ts)
+    return gulp.src(paths.ts)
         .pipe(tslint({
             formatter: "msbuild"
         }))
         .pipe(tslint.report());
 });
 
-gulp.task("lint", ["lint:css", "lint:js", "lint:ts"]);
+gulp.task("lint", gulp.parallel("lint:css", "lint:js", "lint:ts"));
 
-gulp.task("min:css", ["lint:css"], function () {
+gulp.task("min:css", function () {
     var tasks = getBundles(regex.css).map(function (bundle) {
 
         var css = gulp.src(bundle.inputFiles, { base: "." })
@@ -94,11 +92,11 @@ gulp.task("min:css", ["lint:css"], function () {
     return merge(tasks);
 });
 
-gulp.task("min:js", ["lint:js", "lint:ts"], function () {
+gulp.task("min:js", function () {
     var tasks = getBundles(regex.js).map(function (bundle) {
 
         var tsProject = ts.createProject("tsconfig.json");
-        var tsResult = gulp.src(bundle.inputFiles, { base: "." })
+        var tsResult = gulp.src(bundle.inputFiles, { allowEmpty: true, base: "." })
             .pipe(sourcemaps.init())
             .pipe(tsProject());
 
@@ -115,7 +113,7 @@ gulp.task("min:js", ["lint:js", "lint:ts"], function () {
     return merge(tasks);
 });
 
-gulp.task("min", ["min:css", "min:js"]);
+gulp.task("min", gulp.parallel("min:css", "min:js"));
 
 gulp.task("test:js:karma", function (done) {
     new karmaServer({
@@ -132,8 +130,8 @@ gulp.task("test:js:chrome", function (done) {
     }, done).start();
 });
 
-gulp.task("test", ["test:js"]);
-gulp.task("test:js", ["test:js:karma"]);
+gulp.task("test:js", gulp.series("test:js:karma"));
+gulp.task("test", gulp.series("test:js"));
 
 gulp.task("watch", function () {
     getBundles(regex.js).forEach(function (bundle) {
@@ -144,7 +142,7 @@ gulp.task("watch", function () {
     });
 });
 
-gulp.task("build", ["lint", "min"]);
-gulp.task("publish", ["build", "test"]);
+gulp.task("build", gulp.series("lint", "min"));
+gulp.task("publish", gulp.series("build", "test"));
 
-gulp.task("default", ["build"]);
+gulp.task("default", gulp.series("build"));
