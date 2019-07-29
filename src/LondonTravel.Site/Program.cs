@@ -5,8 +5,8 @@ namespace MartinCostello.LondonTravel.Site
 {
     using System;
     using Extensions;
-    using Microsoft.AspNetCore;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Hosting;
 
     /// <summary>
     /// A class representing the entry-point to the application. This class cannot be inherited.
@@ -24,7 +24,7 @@ namespace MartinCostello.LondonTravel.Site
         {
             try
             {
-                CreateWebHostBuilder(args).Build().Run();
+                CreateHostBuilder(args).Build().Run();
                 return 0;
             }
 #pragma warning disable CA1031
@@ -36,14 +36,18 @@ namespace MartinCostello.LondonTravel.Site
             }
         }
 
-        private static IWebHostBuilder CreateWebHostBuilder(string[] args)
+        public static IHostBuilder CreateHostBuilder(string[] args)
         {
-            return WebHost.CreateDefaultBuilder(args)
-                .UseAzureAppServices()
-                .UseStartup<Startup>()
+            return Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((context, builder) => builder.ConfigureApplication(context))
                 .ConfigureLogging((context, builder) => builder.ConfigureLogging(context))
-                .CaptureStartupErrors(true);
+                .ConfigureWebHostDefaults(
+                    (webBuilder) =>
+                    {
+                        webBuilder.CaptureStartupErrors(true)
+                                  .UseAzureAppServices()
+                                  .UseStartup<Startup>();
+                    });
         }
     }
 }

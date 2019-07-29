@@ -4,8 +4,6 @@
 namespace MartinCostello.LondonTravel.Site.TagHelpers
 {
     using System.Text.Encodings.Web;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Mvc.Razor.Infrastructure;
     using Microsoft.AspNetCore.Mvc.Routing;
     using Microsoft.AspNetCore.Mvc.TagHelpers;
     using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -33,8 +31,8 @@ namespace MartinCostello.LondonTravel.Site.TagHelpers
         /// </summary>
         private const string SourceAttributeName = "src";
 
-        public LazyImageTagHelper(IHostingEnvironment hostingEnvironment, TagHelperMemoryCacheProvider cacheProvider, IFileVersionProvider fileVersionProvider, HtmlEncoder htmlEncoder, IUrlHelperFactory urlHelperFactory)
-            : base(hostingEnvironment, cacheProvider, fileVersionProvider, htmlEncoder, urlHelperFactory)
+        public LazyImageTagHelper(IFileVersionProvider fileVersionProvider, HtmlEncoder htmlEncoder, IUrlHelperFactory urlHelperFactory)
+            : base(fileVersionProvider, htmlEncoder, urlHelperFactory)
         {
         }
 

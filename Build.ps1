@@ -87,10 +87,10 @@ function DotNetTest {
         $reportOutput = Join-Path $OutputPath "coverage"
 
         if ($null -ne $env:TF_BUILD) {
-            & $dotnetPath test $Project --output $OutputPath --logger trx -- RunConfiguration.TestSessionTimeout=1800000
+            & $dotnetPath test $Project --output $OutputPath --logger trx -- RunConfiguration.TestSessionTimeout=1200000
         }
         else {
-            & $dotnetPath test $Project --output $OutputPath -- RunConfiguration.TestSessionTimeout=1800000
+            & $dotnetPath test $Project --output $OutputPath -- RunConfiguration.TestSessionTimeout=1200000
         }
 
         $dotNetTestExitCode = $LASTEXITCODE

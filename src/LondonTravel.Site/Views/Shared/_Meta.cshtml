@@ -1,7 +1,7 @@
 @using Microsoft.AspNetCore.Hosting
 @model MetaModel
 @inject IConfiguration Config
-@inject IHostingEnvironment Hosting
+@inject IWebHostEnvironment Hosting
 @{
     bool renderAnalytics = string.Equals(Config.AzureEnvironment(), "production", StringComparison.OrdinalIgnoreCase);
 }

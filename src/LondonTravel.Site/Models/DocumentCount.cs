@@ -3,7 +3,7 @@
 
 namespace MartinCostello.LondonTravel.Site.Models
 {
-    using Newtonsoft.Json;
+    using System.Text.Json.Serialization;
 
     /// <summary>
     /// A class representing the number of documents in the document store. This class cannot be inherited.
@@ -13,7 +13,7 @@ namespace MartinCostello.LondonTravel.Site.Models
         /// <summary>
         /// Gets or sets the number of documents in the store.
         /// </summary>
-        [JsonProperty("count")]
+        [JsonPropertyName("count")]
         public long Count { get; set; }
     }
 }

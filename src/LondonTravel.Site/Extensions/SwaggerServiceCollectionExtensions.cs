@@ -9,6 +9,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
     using MartinCostello.LondonTravel.Site.Swagger;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
     using Microsoft.OpenApi.Models;
     using Options;
     using Swashbuckle.AspNetCore.SwaggerGen;
@@ -26,7 +27,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         /// <returns>
         /// The value specified by <paramref name="value"/>.
         /// </returns>
-        public static IServiceCollection AddSwagger(this IServiceCollection value, IHostingEnvironment environment)
+        public static IServiceCollection AddSwagger(this IServiceCollection value, IWebHostEnvironment environment)
         {
             return value.AddSwaggerGen(
                 (p) =>
@@ -107,7 +108,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         /// <param name="options">The Swagger options.</param>
         /// <param name="environment">The current hosting environment.</param>
         /// <param name="fileName">The XML comments file name to try to add.</param>
-        private static void AddXmlCommentsIfExists(SwaggerGenOptions options, IHostingEnvironment environment, string fileName)
+        private static void AddXmlCommentsIfExists(SwaggerGenOptions options, IWebHostEnvironment environment, string fileName)
         {
             var modelType = typeof(Startup).GetTypeInfo();
             string applicationPath;

@@ -5,8 +5,8 @@ namespace MartinCostello.LondonTravel.Site.Models
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Text.Json.Serialization;
     using MartinCostello.LondonTravel.Site.Swagger;
-    using Newtonsoft.Json;
 
     /// <summary>
     /// Represents an error from an API resource.
@@ -17,28 +17,28 @@ namespace MartinCostello.LondonTravel.Site.Models
         /// <summary>
         /// Gets or sets the HTTP status code.
         /// </summary>
-        [JsonProperty("statusCode")]
+        [JsonPropertyName("statusCode")]
         [Required]
         public int StatusCode { get; set; }
 
         /// <summary>
         /// Gets or sets the error message.
         /// </summary>
-        [JsonProperty("message")]
+        [JsonPropertyName("message")]
         [Required]
         public string Message { get; set; }
 
         /// <summary>
         /// Gets or sets the request Id.
         /// </summary>
-        [JsonProperty("requestId")]
+        [JsonPropertyName("requestId")]
         [Required]
         public string RequestId { get; set; }
 
         /// <summary>
         /// Gets or sets the error details, if any.
         /// </summary>
-        [JsonProperty("details")]
+        [JsonPropertyName("details")]
         [Required]
         public ICollection<string> Details { get; set; }
     }

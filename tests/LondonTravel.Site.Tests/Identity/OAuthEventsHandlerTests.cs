@@ -9,7 +9,6 @@ namespace MartinCostello.LondonTravel.Site.Identity
     using AspNet.Security.OAuth.Amazon;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Http.Internal;
     using Microsoft.Extensions.Logging;
     using Moq;
     using Shouldly;
@@ -29,11 +28,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
         {
             // Arrange
             var httpContext = new DefaultHttpContext();
-
-            var request = new DefaultHttpRequest(httpContext)
-            {
-                QueryString = new QueryString(query),
-            };
+            httpContext.Request.QueryString = new QueryString(query);
 
             var scheme = new AuthenticationScheme("amazon-auth", "Amazon", typeof(AmazonAuthenticationHandler));
             var options = new RemoteAuthenticationOptions();

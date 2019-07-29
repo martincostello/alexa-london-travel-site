@@ -5,6 +5,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
 {
     using System;
     using System.Net.Http;
+    using MartinCostello.LondonTravel.Site.Services;
     using MartinCostello.LondonTravel.Site.Services.Tfl;
     using Microsoft.Extensions.DependencyInjection;
     using Options;
@@ -43,7 +44,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
                 .AddTypedClient(AddTfl)
                 .ApplyDefaultConfiguration();
 
-            services.AddSingleton<IContentSerializer, JsonContentSerializer>();
+            services.AddSingleton<IContentSerializer, SystemTextJsonContentSerializer>();
 
             return services;
         }

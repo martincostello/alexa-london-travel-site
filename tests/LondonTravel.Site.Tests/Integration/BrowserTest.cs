@@ -121,6 +121,11 @@ namespace MartinCostello.LondonTravel.Site.Integration
             options.SetLoggingPreference(LogType.Client, LogLevel.All);
             options.SetLoggingPreference(LogType.Profiler, LogLevel.All);
             options.SetLoggingPreference(LogType.Server, LogLevel.All);
+
+            if (isDebuggerAttached)
+            {
+                options.SetLoggingPreference(LogType.Driver, LogLevel.All);
+            }
 #endif
 
             var timeout = TimeSpan.FromSeconds(10);

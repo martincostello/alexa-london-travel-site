@@ -8,12 +8,12 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using System.Linq;
     using System.Net;
     using System.Net.Http.Headers;
+    using System.Text.Json;
     using System.Threading.Tasks;
     using MartinCostello.LondonTravel.Site.Integration.Pages;
     using Microsoft.AspNetCore.WebUtilities;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Primitives;
-    using Newtonsoft.Json.Linq;
     using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
@@ -86,12 +86,11 @@ namespace MartinCostello.LondonTravel.Site.Integration
                     AuthenticationHeaderValue authorization = ParseAuthorization(navigator.Driver.Url);
 
                     // Act
-                    JObject result = await GetPreferencesAsync(authorization, HttpStatusCode.OK);
+                    using var firstResult = await GetPreferencesAsync(authorization, HttpStatusCode.OK);
 
                     // Assert
-                    result.Value<string>("userId").ShouldNotBeNullOrWhiteSpace();
-                    result.Value<JArray>("favoriteLines").Values<string>().ShouldNotBeNull();
-                    result.Value<JArray>("favoriteLines").Values<string>().ShouldBeEmpty();
+                    firstResult.RootElement.GetString("userId").ShouldNotBeNullOrWhiteSpace();
+                    firstResult.RootElement.GetStringArray("favoriteLines").ShouldBe(Array.Empty<string>());
 
                     // Arrange
                     HomePage homepage = navigator.GoToRoot();
@@ -104,12 +103,11 @@ namespace MartinCostello.LondonTravel.Site.Integration
                     homepage.UpdatePreferences();
 
                     // Act
-                    result = await GetPreferencesAsync(authorization, HttpStatusCode.OK);
+                    using var secondResult = await GetPreferencesAsync(authorization, HttpStatusCode.OK);
 
                     // Assert
-                    result.Value<string>("userId").ShouldNotBeNullOrWhiteSpace();
-                    result.Value<JArray>("favoriteLines").Values<string>().ShouldNotBeNull();
-                    result.Value<JArray>("favoriteLines").Values<string>().ShouldBe(new[] { "district" });
+                    secondResult.RootElement.GetString("userId").ShouldNotBeNullOrWhiteSpace();
+                    secondResult.RootElement.GetStringArray("favoriteLines").ShouldBe(new[] { "district" });
 
                     // Arrange
                     page = homepage.Manage();
@@ -162,22 +160,19 @@ namespace MartinCostello.LondonTravel.Site.Integration
             return new AuthenticationHeaderValue(scheme, parameter);
         }
 
-        private async Task<JObject> GetPreferencesAsync(AuthenticationHeaderValue authorization, HttpStatusCode expected)
+        private async Task<JsonDocument> GetPreferencesAsync(AuthenticationHeaderValue authorization, HttpStatusCode expected)
         {
             // Arrange
-            using (var client = Fixture.CreateHttpClient())
-            {
-                client.DefaultRequestHeaders.Authorization = authorization;
+            using var client = Fixture.CreateHttpClient();
+            client.DefaultRequestHeaders.Authorization = authorization;
 
-                // Act
-                using (var response = await client.GetAsync("/api/preferences"))
-                {
-                    // Assert
-                    response.StatusCode.ShouldBe(expected);
+            // Act
+            using var response = await client.GetAsync("/api/preferences");
 
-                    return await response.ReadAsObjectAsync();
-                }
-            }
+            // Assert
+            response.StatusCode.ShouldBe(expected);
+
+            return await response.ReadAsJsonDocumentAsync();
         }
     }
 }

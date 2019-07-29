@@ -4,15 +4,14 @@
 namespace MartinCostello.LondonTravel.Site.Integration
 {
     using System;
-    using System.Collections.Generic;
     using System.Net;
     using System.Net.Http;
     using System.Net.Http.Headers;
+    using System.Text.Json;
     using System.Threading.Tasks;
     using MartinCostello.LondonTravel.Site.Identity;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.DependencyInjection;
-    using Newtonsoft.Json.Linq;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -57,7 +56,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             {
             }
 
-            IUserStore<LondonTravelUser> GetUserStore(IServiceProvider serviceProvider)
+            static IUserStore<LondonTravelUser> GetUserStore(IServiceProvider serviceProvider)
                 => serviceProvider.GetRequiredService<IUserStore<LondonTravelUser>>();
 
             using (var scope = Fixture.Services.CreateScope())
@@ -133,10 +132,10 @@ namespace MartinCostello.LondonTravel.Site.Integration
                         Assert.Equal("application/json", response.Content.Headers.ContentType.MediaType);
 
                         string json = await response.Content.ReadAsStringAsync();
-                        dynamic preferences = JObject.Parse(json);
+                        using var preferences = JsonDocument.Parse(json);
 
-                        Assert.Equal(userId, (string)preferences.userId);
-                        Assert.Equal(favoriteLines, preferences.favoriteLines.ToObject<string[]>() as IList<string>);
+                        Assert.Equal(userId, preferences.RootElement.GetString("userId"));
+                        Assert.Equal(favoriteLines, preferences.RootElement.GetStringArray("favoriteLines"));
                     }
                 }
             }

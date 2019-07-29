@@ -7,10 +7,11 @@ namespace MartinCostello.LondonTravel.Site.Swagger
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using System.Text.Json;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Options;
     using Microsoft.OpenApi.Any;
     using Microsoft.OpenApi.Models;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
     using Swashbuckle.AspNetCore.SwaggerGen;
 
     /// <summary>
@@ -19,17 +20,17 @@ namespace MartinCostello.LondonTravel.Site.Swagger
     internal sealed class ExampleFilter : IOperationFilter, ISchemaFilter
     {
         /// <summary>
-        /// The <see cref="JsonSerializerSettings"/> to use for formatting example responses. This field is read-only.
+        /// The <see cref="JsonSerializerOptions"/> to use for formatting example responses. This field is read-only.
         /// </summary>
-        private readonly JsonSerializerSettings _settings;
+        private readonly JsonSerializerOptions _settings;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExampleFilter"/> class.
         /// </summary>
-        /// <param name="settings">The <see cref="JsonSerializerSettings"/> to use.</param>
-        public ExampleFilter(JsonSerializerSettings settings)
+        /// <param name="settings">The <see cref="JsonOptions"/> to use.</param>
+        public ExampleFilter(IOptions<JsonOptions> settings)
         {
-            _settings = settings;
+            _settings = settings.Value.JsonSerializerOptions;
         }
 
         /// <inheritdoc />
@@ -104,33 +105,33 @@ namespace MartinCostello.LondonTravel.Site.Swagger
             var examples = provider.GetExample();
 
             // Apply any formatting rules configured for the API (e.g. camel casing)
-            var json = JsonConvert.SerializeObject(examples, _settings);
-            var @object = JObject.Parse(json);
+            var json = JsonSerializer.Serialize(examples, _settings);
+            using var document = JsonDocument.Parse(json);
 
             var result = new OpenApiObject();
 
             // Recursively build up the example from the properties of the JObject
-            foreach (var token in @object)
+            foreach (var token in document.RootElement.EnumerateObject())
             {
                 if (TryParse(token.Value, out var any))
                 {
-                    result[token.Key] = any;
+                    result[token.Name] = any;
                 }
             }
 
             return result;
         }
 
-        private bool TryParse(JToken token, out IOpenApiAny any)
+        private bool TryParse(JsonElement token, out IOpenApiAny any)
         {
             any = null;
 
-            switch (token.Type)
+            switch (token.ValueKind)
             {
-                case JTokenType.Array:
+                case JsonValueKind.Array:
                     var array = new OpenApiArray();
 
-                    foreach (var value in token as JArray)
+                    foreach (var value in token.EnumerateArray())
                     {
                         if (TryParse(value, out var child))
                         {
@@ -141,47 +142,38 @@ namespace MartinCostello.LondonTravel.Site.Swagger
                     any = array;
                     return true;
 
-                case JTokenType.Boolean:
-                    any = new OpenApiBoolean(token.Value<bool>());
+                case JsonValueKind.False:
+                    any = new OpenApiBoolean(false);
                     return true;
 
-                case JTokenType.Date:
-                    any = new OpenApiDate(token.Value<DateTime>());
+                case JsonValueKind.True:
+                    any = new OpenApiBoolean(true);
                     return true;
 
-                case JTokenType.Float:
-                    any = new OpenApiDouble(token.Value<double>());
+                case JsonValueKind.Number:
+                    any = new OpenApiDouble(token.GetDouble());
                     return true;
 
-                case JTokenType.Guid:
-                    any = new OpenApiString(token.Value<Guid>().ToString());
+                case JsonValueKind.String:
+                    any = new OpenApiString(token.GetString());
                     return true;
 
-                case JTokenType.Integer:
-                    any = new OpenApiInteger(token.Value<int>());
-                    return true;
-
-                case JTokenType.String:
-                case JTokenType.TimeSpan:
-                case JTokenType.Uri:
-                    any = new OpenApiString(token.Value<string>());
-                    return true;
-
-                case JTokenType.Object:
+                case JsonValueKind.Object:
                     var obj = new OpenApiObject();
 
-                    foreach (var child in token as JObject)
+                    foreach (var child in token.EnumerateObject())
                     {
                         if (TryParse(child.Value, out var value))
                         {
-                            obj[child.Key] = value;
+                            obj[child.Name] = value;
                         }
                     }
 
                     any = obj;
                     return true;
 
-                case JTokenType.Null:
+                case JsonValueKind.Null:
+                case JsonValueKind.Undefined:
                 default:
                     return false;
             }

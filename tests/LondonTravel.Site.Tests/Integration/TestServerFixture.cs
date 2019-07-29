@@ -14,6 +14,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using Microsoft.AspNetCore.Mvc.Testing;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Http;
     using Microsoft.Extensions.Logging;
     using Xunit.Abstractions;
@@ -43,11 +44,6 @@ namespace MartinCostello.LondonTravel.Site.Integration
 
         /// <inheritdoc />
         public ITestOutputHelper OutputHelper { get; set; }
-
-        /// <summary>
-        /// Gets the <see cref="IServiceProvider"/> in use.
-        /// </summary>
-        public virtual IServiceProvider Services => Server?.Host?.Services;
 
         /// <summary>
         /// Clears the current <see cref="ITestOutputHelper"/>.
