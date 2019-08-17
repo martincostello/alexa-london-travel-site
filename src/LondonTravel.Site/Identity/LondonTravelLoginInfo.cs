@@ -3,8 +3,8 @@
 
 namespace MartinCostello.LondonTravel.Site.Identity
 {
+    using System.Text.Json.Serialization;
     using Microsoft.AspNetCore.Identity;
-    using Newtonsoft.Json;
 
     /// <summary>
     /// A class representing external login information for a user.
@@ -14,19 +14,19 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <summary>
         /// Gets or sets the login provider.
         /// </summary>
-        [JsonProperty("loginProvider")]
+        [JsonPropertyName("loginProvider")]
         public string LoginProvider { get; set; }
 
         /// <summary>
         /// Gets or sets the provider key.
         /// </summary>
-        [JsonProperty("providerKey")]
+        [JsonPropertyName("providerKey")]
         public string ProviderKey { get; set; }
 
         /// <summary>
         /// Gets or sets the provider display name.
         /// </summary>
-        [JsonProperty("providerDisplayName")]
+        [JsonPropertyName("providerDisplayName")]
         public string ProviderDisplayName { get; set; }
 
         /// <summary>

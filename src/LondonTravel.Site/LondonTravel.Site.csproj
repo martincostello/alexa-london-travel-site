@@ -34,7 +34,6 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.AzureKeyVault" Version="3.0.0-preview8.19405.4" />
     <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="3.0.0-preview8.19405.4" />
     <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="3.0.0-preview8.19405.4" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="NodaTime" Version="2.4.7" />
     <PackageReference Include="Polly" Version="7.1.1" />
     <PackageReference Include="Refit" Version="4.7.51" />

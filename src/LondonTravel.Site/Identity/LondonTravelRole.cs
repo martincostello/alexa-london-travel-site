@@ -5,7 +5,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
 {
     using System;
     using System.Security.Claims;
-    using Newtonsoft.Json;
+    using System.Text.Json.Serialization;
 
     /// <summary>
     /// A class representing a user role.
@@ -15,31 +15,31 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <summary>
         /// Gets or sets the role Id.
         /// </summary>
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
         /// <summary>
         /// Gets or sets the claim's type.
         /// </summary>
-        [JsonProperty("claimType")]
+        [JsonPropertyName("claimType")]
         public string ClaimType { get; set; }
 
         /// <summary>
         /// Gets or sets the claim's value.
         /// </summary>
-        [JsonProperty("value")]
+        [JsonPropertyName("value")]
         public string Value { get; set; }
 
         /// <summary>
         /// Gets or sets the claim's value's type.
         /// </summary>
-        [JsonProperty("valueType")]
+        [JsonPropertyName("valueType")]
         public string ValueType { get; set; }
 
         /// <summary>
         /// Gets or sets the claim's issuer.
         /// </summary>
-        [JsonProperty("issuer")]
+        [JsonPropertyName("issuer")]
         public string Issuer { get; set; }
 
         /// <summary>
