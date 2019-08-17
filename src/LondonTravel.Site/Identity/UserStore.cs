@@ -114,7 +114,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 throw new ArgumentNullException(nameof(normalizedEmail));
             }
 
-            var results = await _service.GetAsync<LondonTravelUser>((p) => p.EmailNormalized == normalizedEmail, cancellationToken);
+            var results = await _service.GetAsync((p) => p.EmailNormalized == normalizedEmail, cancellationToken);
             return results.FirstOrDefault();
         }
 
@@ -126,7 +126,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 throw new ArgumentNullException(nameof(userId));
             }
 
-            return await _service.GetAsync<LondonTravelUser>(userId);
+            return await _service.GetAsync(userId);
         }
 
         /// <inheritdoc />
@@ -142,7 +142,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 throw new ArgumentNullException(nameof(providerKey));
             }
 
-            var results = await _service.GetAsync<LondonTravelUser>(
+            var results = await _service.GetAsync(
                 (p) => p.Logins.Contains(new LondonTravelLoginInfo() { LoginProvider = loginProvider, ProviderKey = providerKey, ProviderDisplayName = null }) ||
                        p.Logins.Contains(new LondonTravelLoginInfo() { LoginProvider = loginProvider, ProviderKey = providerKey, ProviderDisplayName = loginProvider }),
                 cancellationToken);
@@ -158,7 +158,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 throw new ArgumentNullException(nameof(normalizedUserName));
             }
 
-            var results = await _service.GetAsync<LondonTravelUser>((p) => p.UserNameNormalized == normalizedUserName, cancellationToken);
+            var results = await _service.GetAsync((p) => p.UserNameNormalized == normalizedUserName, cancellationToken);
             return results.FirstOrDefault();
         }
 
@@ -382,7 +382,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 user.CreatedAt = DateTimeOffset.FromUnixTimeSeconds(user.Timestamp).UtcDateTime;
             }
 
-            LondonTravelUser updated = await _service.ReplaceAsync(user.Id, user, user.ETag);
+            LondonTravelUser updated = await _service.ReplaceAsync(user, user.ETag);
 
             if (updated != null)
             {

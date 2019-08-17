@@ -50,7 +50,7 @@ namespace MartinCostello.LondonTravel.Site.Services
             {
                 try
                 {
-                    user = (await _service.GetAsync<LondonTravelUser>((p) => p.AlexaToken == accessToken, cancellationToken)).FirstOrDefault();
+                    user = (await _service.GetAsync((p) => p.AlexaToken == accessToken, cancellationToken)).FirstOrDefault();
                 }
                 catch (Exception ex)
                 {

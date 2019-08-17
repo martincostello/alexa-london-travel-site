@@ -4,11 +4,9 @@
 namespace MartinCostello.LondonTravel.Site.Services.Data
 {
     using System;
-    using System.Net.Http;
     using MartinCostello.LondonTravel.Site.Options;
-    using Microsoft.Azure.Documents;
+    using Microsoft.Azure.Cosmos;
     using Microsoft.Extensions.DependencyInjection;
-    using Moq;
     using Shouldly;
     using Xunit;
 
@@ -29,29 +27,15 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         {
             // Arrange
             UserStoreOptions options = null;
-            HttpMessageHandler handler = Mock.Of<HttpMessageHandler>();
 
             // Act and Assert
-            Assert.Throws<ArgumentNullException>("options", () => DocumentHelpers.CreateClient(options, handler));
-        }
-
-        [Fact]
-        public static void CreateClient_Throws_If_Handler_Is_Null()
-        {
-            // Arrange
-            UserStoreOptions options = new UserStoreOptions();
-            HttpMessageHandler handler = null;
-
-            // Act and Assert
-            Assert.Throws<ArgumentNullException>("handler", () => DocumentHelpers.CreateClient(options, handler));
+            Assert.Throws<ArgumentNullException>("options", () => DocumentHelpers.CreateClient(options));
         }
 
         [Fact]
         public static void CreateClient_Throws_If_Options_Has_No_Service_Endpoint()
         {
             // Arrange
-            var handler = Mock.Of<HttpMessageHandler>();
-
             var options = new UserStoreOptions()
             {
                 ServiceUri = null,
@@ -61,15 +45,13 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             };
 
             // Act and Assert
-            Assert.Throws<ArgumentException>("options", () => DocumentHelpers.CreateClient(options, handler));
+            Assert.Throws<ArgumentException>("options", () => DocumentHelpers.CreateClient(options));
         }
 
         [Fact]
         public static void CreateClient_Throws_If_Options_Has_Relative_Service_Endpoint()
         {
             // Arrange
-            var handler = Mock.Of<HttpMessageHandler>();
-
             var options = new UserStoreOptions()
             {
                 ServiceUri = new Uri("/", UriKind.Relative),
@@ -79,7 +61,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             };
 
             // Act and Assert
-            Assert.Throws<ArgumentException>("options", () => DocumentHelpers.CreateClient(options, handler));
+            Assert.Throws<ArgumentException>("options", () => DocumentHelpers.CreateClient(options));
         }
 
         [Theory]
@@ -88,8 +70,6 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         public static void CreateClient_Throws_If_Options_Has_No_Access_Key(string accessKey)
         {
             // Arrange
-            var handler = Mock.Of<HttpMessageHandler>();
-
             var options = new UserStoreOptions()
             {
                 ServiceUri = new Uri("https://cosmosdb.azure.local"),
@@ -99,7 +79,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             };
 
             // Act and Assert
-            Assert.Throws<ArgumentException>("options", () => DocumentHelpers.CreateClient(options, handler));
+            Assert.Throws<ArgumentException>("options", () => DocumentHelpers.CreateClient(options));
         }
 
         [Theory]
@@ -108,8 +88,6 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         public static void CreateClient_Throws_If_Options_Has_No_Database_Name(string databaseName)
         {
             // Arrange
-            var handler = Mock.Of<HttpMessageHandler>();
-
             var options = new UserStoreOptions()
             {
                 ServiceUri = new Uri("https://cosmosdb.azure.local"),
@@ -119,7 +97,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             };
 
             // Act and Assert
-            Assert.Throws<ArgumentException>("options", () => DocumentHelpers.CreateClient(options, handler));
+            Assert.Throws<ArgumentException>("options", () => DocumentHelpers.CreateClient(options));
         }
 
         [Theory]
@@ -128,8 +106,6 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         public static void CreateClient_Throws_If_Options_Has_No_Collection_Name(string collectionName)
         {
             // Arrange
-            var handler = Mock.Of<HttpMessageHandler>();
-
             var options = new UserStoreOptions()
             {
                 ServiceUri = new Uri("https://cosmosdb.azure.local"),
@@ -139,7 +115,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             };
 
             // Act and Assert
-            Assert.Throws<ArgumentException>("options", () => DocumentHelpers.CreateClient(options, handler));
+            Assert.Throws<ArgumentException>("options", () => DocumentHelpers.CreateClient(options));
         }
 
         [Fact]
@@ -153,20 +129,19 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
                 DatabaseName = "my-database",
                 CollectionName = "my-collection",
                 CurrentLocation = "UK South",
-                PreferredLocations = new[] { "UK South", "East US" },
             };
 
             var services = new ServiceCollection()
-                .AddSingleton(options)
-                .AddHttpClient();
+                .AddSingleton(options);
 
             var serviceProvider = services.BuildServiceProvider();
 
             // Act
-            IDocumentClient actual = DocumentHelpers.CreateClient(serviceProvider);
-
-            // Assert
-            actual.ShouldNotBeNull();
+            using (CosmosClient actual = DocumentHelpers.CreateClient(serviceProvider))
+            {
+                // Assert
+                actual.ShouldNotBeNull();
+            }
         }
 
         [Fact]
@@ -182,16 +157,16 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             };
 
             var services = new ServiceCollection()
-                .AddSingleton(options)
-                .AddHttpClient();
+                .AddSingleton(options);
 
             var serviceProvider = services.BuildServiceProvider();
 
             // Act
-            IDocumentClient actual = DocumentHelpers.CreateClient(serviceProvider);
-
-            // Assert
-            actual.ShouldNotBeNull();
+            using (CosmosClient actual = DocumentHelpers.CreateClient(serviceProvider))
+            {
+                // Assert
+                actual.ShouldNotBeNull();
+            }
         }
     }
 }

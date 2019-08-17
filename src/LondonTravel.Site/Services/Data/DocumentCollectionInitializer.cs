@@ -6,9 +6,9 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
     using System;
     using System.Collections.Concurrent;
     using System.Net;
+    using System.Threading;
     using System.Threading.Tasks;
-    using Microsoft.Azure.Documents;
-    using Microsoft.Azure.Documents.Client;
+    using Microsoft.Azure.Cosmos;
     using Microsoft.Extensions.Logging;
     using Options;
 
@@ -29,9 +29,9 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         private readonly string _databaseName;
 
         /// <summary>
-        /// The collections that have been checked to exist. This field is read-only.
+        /// The containers that have been checked to exist. This field is read-only.
         /// </summary>
-        private readonly ConcurrentDictionary<string, bool> _existingCollections;
+        private readonly ConcurrentDictionary<string, bool> _existingContainers;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DocumentCollectionInitializer"/> class.
@@ -48,13 +48,16 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             UserStoreOptions options,
             ILogger<DocumentCollectionInitializer> logger)
         {
-            _existingCollections = new ConcurrentDictionary<string, bool>();
+            _existingContainers = new ConcurrentDictionary<string, bool>();
             _logger = logger;
             _databaseName = options.DatabaseName;
         }
 
         /// <inheritdoc />
-        public async Task<bool> EnsureCollectionExistsAsync(IDocumentClient client, string collectionName)
+        public async Task<bool> EnsureCollectionExistsAsync(
+            CosmosClient client,
+            string collectionName,
+            CancellationToken cancellationToken = default)
         {
             if (client == null)
             {
@@ -66,43 +69,29 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
                 throw new ArgumentNullException(nameof(collectionName));
             }
 
-            if (_existingCollections.ContainsKey(collectionName))
+            if (_existingContainers.ContainsKey(collectionName))
             {
                 return true;
             }
 
-            await EnsureDatabaseExistsAsync(client);
+            Database database = await GetOrCreateDatabaseAsync(client, cancellationToken);
 
-            Uri uri = BuildDatabaseUri();
-            Uri createUri = new Uri($"{uri}/{DocumentHelpers.CollectionsUriFragment}", UriKind.Relative);
-
-            var response = await client.CreateDocumentCollectionIfNotExistsAsync(
-                uri,
-                new DocumentCollection() { Id = collectionName },
-                new RequestOptions() { OfferThroughput = 400 });
-
-            bool created = response.StatusCode == HttpStatusCode.Created;
-
-            if (created)
-            {
-                _logger.LogInformation("Created collection {CollectionName} in database {DatabaseName}.", collectionName, _databaseName);
-            }
-
-            _existingCollections.AddOrUpdate(collectionName, created, (p, r) => true);
-
-            return created;
+            return await CreateContainerAsync(collectionName, database, cancellationToken);
         }
 
         /// <summary>
-        /// Ensures that the database exists as an asynchronous operation.
+        /// Gets or creates the database as an asynchronous operation.
         /// </summary>
-        /// <param name="client">The document client to use to ensure the database exists.</param>
+        /// <param name="client">The Cosmos client to use to get the database.</param>
+        /// <param name="cancellationToken">The cancellation token to use.</param>
         /// <returns>
-        /// A <see cref="Task"/> representing the asynchronous operation to ensure the database exists.
+        /// A <see cref="Task{Database}"/> representing the asynchronous operation to get the database.
         /// </returns>
-        private async Task EnsureDatabaseExistsAsync(IDocumentClient client)
+        private async Task<Database> GetOrCreateDatabaseAsync(CosmosClient client, CancellationToken cancellationToken)
         {
-            var response = await client.CreateDatabaseIfNotExistsAsync(new Database() { Id = _databaseName });
+            var response = await client.CreateDatabaseIfNotExistsAsync(
+                _databaseName,
+                cancellationToken: cancellationToken);
 
             bool created = response.StatusCode == HttpStatusCode.Created;
 
@@ -110,14 +99,39 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             {
                 _logger.LogInformation("Created database {DatabaseName}.", _databaseName);
             }
+
+            return response.Database;
         }
 
         /// <summary>
-        /// Builds a URI for the database.
+        /// Creates the container as an asynchronous operation.
         /// </summary>
+        /// <param name="id">The container Id.</param>
+        /// <param name="database">The database to create the container in.</param>
+        /// <param name="cancellationToken">The cancellation token to use.</param>
         /// <returns>
-        /// The URI to use for the database.
+        /// A <see cref="Task{Database}"/> representing the asynchronous operation to create the container.
         /// </returns>
-        private Uri BuildDatabaseUri() => UriFactory.CreateDatabaseUri(_databaseName);
+        private async Task<bool> CreateContainerAsync(
+            string id,
+            Database database,
+            CancellationToken cancellationToken)
+        {
+            var containerProperties = new ContainerProperties(id, "/_partitionKey");
+
+            var response = await database.CreateContainerIfNotExistsAsync(
+                containerProperties,
+                throughput: 400,
+                cancellationToken: cancellationToken);
+
+            bool created = response.StatusCode == HttpStatusCode.Created;
+
+            if (created)
+            {
+                _logger.LogInformation("Created collection {CollectionName} in database {DatabaseName}.", id, _databaseName);
+            }
+
+            return created;
+        }
     }
 }
