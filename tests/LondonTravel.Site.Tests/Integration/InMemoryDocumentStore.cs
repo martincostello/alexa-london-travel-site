@@ -9,9 +9,10 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using System.Linq.Expressions;
     using System.Threading;
     using System.Threading.Tasks;
+    using MartinCostello.LondonTravel.Site.Identity;
     using MartinCostello.LondonTravel.Site.Options;
     using MartinCostello.LondonTravel.Site.Services.Data;
-    using Microsoft.Azure.Documents;
+    using Microsoft.Azure.Cosmos;
 
     /// <summary>
     /// A class representing an in-memory document store. This class cannot be inherited.
@@ -42,7 +43,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         }
 
         /// <inheritdoc />
-        public Task<string> CreateAsync(object document)
+        public Task<string> CreateAsync(LondonTravelUser document)
         {
             DocumentCollection collection = EnsureCollection();
             string id = collection.Create(document);
@@ -60,7 +61,10 @@ namespace MartinCostello.LondonTravel.Site.Integration
         }
 
         /// <inheritdoc />
-        public Task<bool> EnsureCollectionExistsAsync(IDocumentClient client, string collectionName)
+        public Task<bool> EnsureCollectionExistsAsync(
+            CosmosClient client,
+            string collectionName,
+            CancellationToken cancellationToken = default)
         {
             bool exists = _collections.TryGetValue(collectionName, out var _);
 
@@ -73,22 +77,20 @@ namespace MartinCostello.LondonTravel.Site.Integration
         }
 
         /// <inheritdoc />
-        public Task<T> GetAsync<T>(string id)
-            where T : class
+        public Task<LondonTravelUser> GetAsync(string id)
         {
             DocumentCollection collection = EnsureCollection();
-            T item = collection.Get<T>(id);
+            LondonTravelUser item = collection.Get<LondonTravelUser>(id);
 
             return Task.FromResult(item);
         }
 
         /// <inheritdoc />
-        public Task<IEnumerable<T>> GetAsync<T>(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken)
-            where T : class
+        public Task<IEnumerable<LondonTravelUser>> GetAsync(Expression<Func<LondonTravelUser, bool>> predicate, CancellationToken cancellationToken)
         {
             DocumentCollection collection = EnsureCollection();
 
-            var results = collection.Get<T>()
+            var results = collection.Get<LondonTravelUser>()
                 .Where(predicate)
                 .AsEnumerable();
 
@@ -105,11 +107,10 @@ namespace MartinCostello.LondonTravel.Site.Integration
         }
 
         /// <inheritdoc />
-        public Task<T> ReplaceAsync<T>(string id, T document, string etag)
-            where T : class
+        public Task<LondonTravelUser> ReplaceAsync(LondonTravelUser document, string etag)
         {
             DocumentCollection collection = EnsureCollection();
-            document = collection.Replace(id, document, etag);
+            document = collection.Replace(document.Id, document, etag);
 
             return Task.FromResult(document);
         }

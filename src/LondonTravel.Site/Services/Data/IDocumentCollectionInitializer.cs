@@ -3,8 +3,9 @@
 
 namespace MartinCostello.LondonTravel.Site.Services.Data
 {
+    using System.Threading;
     using System.Threading.Tasks;
-    using Microsoft.Azure.Documents;
+    using Microsoft.Azure.Cosmos;
 
     /// <summary>
     /// Defines a document collection initializer.
@@ -16,11 +17,15 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// </summary>
         /// <param name="client">The document client to use.</param>
         /// <param name="collectionName">The name of the collection to ensure exists.</param>
+        /// <param name="cancellationToken">The optional cancellation token to use.</param>
         /// <returns>
         /// A <see cref="Task"/> representing the asynchronous operation to ensure the collection
         /// exists which returns <see langword="true"/> if the collection was created by the method
         /// invocation; otherwise <see langword="false"/> if it already existed.
         /// </returns>
-        Task<bool> EnsureCollectionExistsAsync(IDocumentClient client, string collectionName);
+        Task<bool> EnsureCollectionExistsAsync(
+            CosmosClient client,
+            string collectionName,
+            CancellationToken cancellationToken = default);
     }
 }

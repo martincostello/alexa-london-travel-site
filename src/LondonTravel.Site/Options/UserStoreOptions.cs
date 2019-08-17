@@ -4,7 +4,6 @@
 namespace MartinCostello.LondonTravel.Site.Options
 {
     using System;
-    using System.Collections.Generic;
 
     /// <summary>
     /// A class representing the authentication user store options for the site. This class cannot be inherited.
@@ -12,33 +11,28 @@ namespace MartinCostello.LondonTravel.Site.Options
     public sealed class UserStoreOptions
     {
         /// <summary>
-        /// Gets or sets the Azure DocumentDB service URI to use.
+        /// Gets or sets the Azure Cosmos DB service URI to use.
         /// </summary>
         public Uri ServiceUri { get; set; }
 
         /// <summary>
-        /// Gets or sets the Azure DocumentDB access key to use.
+        /// Gets or sets the Azure Cosmos DB access key to use.
         /// </summary>
         public string AccessKey { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of the Azure DocumentDB database to use.
+        /// Gets or sets the name of the Azure Cosmos DB database to use.
         /// </summary>
         public string DatabaseName { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of the Azure DocumentDB collection to use.
+        /// Gets or sets the name of the Azure Cosmos DB collection to use.
         /// </summary>
         public string CollectionName { get; set; }
 
         /// <summary>
-        /// Gets or sets the current Azure DocumentDB location, if any.
+        /// Gets or sets the current Azure Cosmos DB location, if any.
         /// </summary>
         public string CurrentLocation { get; set; }
-
-        /// <summary>
-        /// Gets or sets the preferred Azure DocumentDB locations to use, if any.
-        /// </summary>
-        public ICollection<string> PreferredLocations { get; set; }
     }
 }
