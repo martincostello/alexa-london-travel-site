@@ -12,6 +12,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
     using System.Threading.Tasks;
     using MartinCostello.LondonTravel.Site.Identity;
     using Microsoft.Azure.Cosmos;
+    using Microsoft.Azure.Cosmos.Linq;
     using Microsoft.Extensions.Logging;
     using Options;
 
@@ -147,11 +148,16 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
                 _options.CollectionName,
                 _options.DatabaseName);
 
-            // TODO Make asynchronous
-            var documents = container
-                .GetItemLinqQueryable<LondonTravelUser>(allowSynchronousQueryExecution: true)
-                .Where(predicate)
-                .ToList();
+            var queryable = container.GetItemLinqQueryable<LondonTravelUser>();
+            var iterator = queryable.Where(predicate).ToFeedIterator();
+
+            var documents = new List<LondonTravelUser>();
+
+            while (iterator.HasMoreResults)
+            {
+                var items = await iterator.ReadNextAsync(cancellationToken);
+                documents.AddRange(items);
+            }
 
             _logger.LogTrace(
                 "Found {DocumentCount:N0} document(s) in collection {CollectionName} of database {DatabaseName} that matched query.",
