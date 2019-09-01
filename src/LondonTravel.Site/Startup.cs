@@ -199,7 +199,7 @@ namespace MartinCostello.LondonTravel.Site
         /// Configures the JSON serializer for MVC.
         /// </summary>
         /// <param name="options">The <see cref="JsonOptions"/> to configure.</param>
-        private static void ConfigureJsonFormatter(JsonOptions options)
+        internal static void ConfigureJsonFormatter(JsonOptions options)
         {
             // Omit nulls to reduce payload size
             options.JsonSerializerOptions.IgnoreNullValues = true;
