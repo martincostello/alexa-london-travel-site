@@ -14,13 +14,13 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
         /// Gets or sets the Id of the stop point.
         /// </summary>
         [JsonPropertyName("id")]
-        public string Id { get; set; }
+        public string? Id { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the stop point.
         /// </summary>
         [JsonPropertyName("commonName")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// Gets or sets the latitude of the stop point.

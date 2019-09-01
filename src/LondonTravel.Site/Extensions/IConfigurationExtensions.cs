@@ -19,7 +19,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         /// </returns>
         public static string ApplicationInsightsKey(this IConfiguration config)
         {
-            return config?["ApplicationInsights:InstrumentationKey"];
+            return config?["ApplicationInsights:InstrumentationKey"] ?? string.Empty;
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         /// </returns>
         public static string AzureStorageConnectionString(this IConfiguration config)
         {
-            return config?["ConnectionStrings:AzureStorage"];
+            return config?["ConnectionStrings:AzureStorage"] ?? string.Empty;
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         /// </returns>
         public static string PapertrailHostname(this IConfiguration config)
         {
-            return config?["Papertrail:Hostname"];
+            return config?["Papertrail:Hostname"] ?? string.Empty;
         }
 
         /// <summary>

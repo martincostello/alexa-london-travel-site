@@ -62,7 +62,7 @@ namespace MartinCostello.LondonTravel.Site
         /// <summary>
         /// Gets or sets the service scope to use for a service provider.
         /// </summary>
-        private IServiceScope ServiceScope { get; set; }
+        private IServiceScope? ServiceScope { get; set; }
 
         /// <summary>
         /// Configures the application.
@@ -178,7 +178,7 @@ namespace MartinCostello.LondonTravel.Site
             services.AddSingleton(DocumentHelpers.CreateClient);
 
             services.AddSingleton((p) => p.GetRequiredService<IOptions<SiteOptions>>().Value);
-            services.AddSingleton((p) => p.GetRequiredService<SiteOptions>().Authentication.UserStore);
+            services.AddSingleton((p) => p.GetRequiredService<SiteOptions>().Authentication!.UserStore);
             services.AddSingleton((p) => p.GetRequiredService<SiteOptions>().Tfl);
 
             services.TryAddSingleton<IDocumentService, DocumentService>();
@@ -193,7 +193,7 @@ namespace MartinCostello.LondonTravel.Site
             services.AddPolly();
             services.AddHttpClients();
 
-            services.AddApplicationAuthentication(() => ServiceScope.ServiceProvider);
+            services.AddApplicationAuthentication(() => ServiceScope!.ServiceProvider);
         }
 
         /// <summary>
@@ -237,7 +237,7 @@ namespace MartinCostello.LondonTravel.Site
 
             if (context.File.Exists && HostingEnvironment.IsProduction())
             {
-                string extension = Path.GetExtension(context.File.PhysicalPath);
+                string? extension = Path.GetExtension(context.File.PhysicalPath);
 
                 // These files are served with a content hash in the URL so can be cached for longer
                 bool isScriptOrStyle =
@@ -283,7 +283,7 @@ namespace MartinCostello.LondonTravel.Site
         /// <param name="corsOptions">The <see cref="CorsOptions"/> to configure.</param>
         private void ConfigureCors(CorsOptions corsOptions)
         {
-            var siteOptions = ServiceScope.ServiceProvider.GetService<SiteOptions>();
+            var siteOptions = ServiceScope!.ServiceProvider.GetService<SiteOptions>();
 
             corsOptions.AddPolicy(
                 "DefaultCorsPolicy",

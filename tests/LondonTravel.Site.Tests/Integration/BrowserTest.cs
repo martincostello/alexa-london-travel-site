@@ -26,7 +26,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
     public abstract class BrowserTest : IDisposable
     {
         private bool _disposed;
-        private IDisposable _scope;
+        private IDisposable? _scope;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BrowserTest"/> class.
@@ -94,7 +94,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         /// </returns>
         protected IWebDriver CreateWebDriver()
         {
-            string chromeDriverDirectory = Path.GetDirectoryName(GetType().Assembly.Location);
+            string? chromeDriverDirectory = Path.GetDirectoryName(GetType().Assembly.Location);
 
             var options = new ChromeOptions()
             {
@@ -153,7 +153,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         /// </summary>
         /// <param name="test">The delegate to the test that will use the navigator.</param>
         /// <param name="testName">The name of the test method.</param>
-        protected void WithNavigator(Action<ApplicationNavigator> test, [CallerMemberName] string testName = null)
+        protected void WithNavigator(Action<ApplicationNavigator> test, [CallerMemberName] string? testName = null)
         {
             using ApplicationNavigator navigator = CreateNavigator();
 
@@ -179,7 +179,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         /// </returns>
         protected async Task WithNavigatorAsync(
             Func<ApplicationNavigator, Task> test,
-            [CallerMemberName] string testName = null)
+            [CallerMemberName] string? testName = null)
         {
             using ApplicationNavigator navigator = CreateNavigator();
 
@@ -201,14 +201,16 @@ namespace MartinCostello.LondonTravel.Site.Integration
         /// <typeparam name="T">The type of the page to navigate to for the test.</typeparam>
         /// <param name="test">The delegate to the test that will use the navigator.</param>
         /// <param name="testName">The name of the test method.</param>
-        protected void AtPage<T>(Action<ApplicationNavigator, T> test, [CallerMemberName] string testName = null)
+        protected void AtPage<T>(Action<ApplicationNavigator, T> test, [CallerMemberName] string? testName = null)
             where T : PageBase
         {
             WithNavigator(
                 (navigator) =>
                 {
-                    T page = ((T)Activator.CreateInstance(typeof(T), navigator)).Navigate();
-                    test(navigator, page);
+                    T? page = Activator.CreateInstance(typeof(T), navigator) as T;
+                    page!.Navigate();
+
+                    test(navigator, page!);
                 },
                 testName: testName);
         }
@@ -219,7 +221,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         /// <typeparam name="T">The type of the page to navigate to for the test.</typeparam>
         /// <param name="test">The delegate to the test that will use the navigator.</param>
         /// <param name="testName">The name of the test method.</param>
-        protected void AtPage<T>(Action<T> test, [CallerMemberName] string testName = null)
+        protected void AtPage<T>(Action<T> test, [CallerMemberName] string? testName = null)
             where T : PageBase
         {
             AtPage<T>((_, page) => test(page), testName: testName);
@@ -277,7 +279,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             }
         }
 
-        private void TakeScreenshot(IWebDriver driver, string testName)
+        private void TakeScreenshot(IWebDriver driver, string? testName)
         {
             try
             {
@@ -285,8 +287,8 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 {
                     Screenshot screenshot = camera.GetScreenshot();
 
-                    string directory = Path.GetDirectoryName(typeof(BrowserTest).Assembly.Location);
-                    directory = Path.Combine(directory, "screenshots");
+                    string? directory = Path.GetDirectoryName(typeof(BrowserTest).Assembly.Location);
+                    directory = Path.Combine(directory ?? ".", "screenshots");
 
                     string fileName = $"{testName}_{DateTimeOffset.UtcNow:yyyy-MM-dd-HH-mm-ss}.png";
                     fileName = Path.Combine(directory, fileName);

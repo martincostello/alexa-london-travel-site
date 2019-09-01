@@ -91,7 +91,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
                 _options.DatabaseName,
                 result.Resource.Id);
 
-            return result.Resource.Id;
+            return result.Resource.Id!;
         }
 
         /// <inheritdoc />
@@ -117,7 +117,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         }
 
         /// <inheritdoc />
-        public async Task<LondonTravelUser> GetAsync(string id)
+        public async Task<LondonTravelUser?> GetAsync(string id)
         {
             if (id == null)
             {
@@ -186,7 +186,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         }
 
         /// <inheritdoc />
-        public async Task<LondonTravelUser> ReplaceAsync(LondonTravelUser document, string etag)
+        public async Task<LondonTravelUser?> ReplaceAsync(LondonTravelUser document, string? etag)
         {
             if (document == null)
             {
@@ -195,7 +195,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
             Container container = await GetContainerAsync();
 
-            string id = document.Id;
+            string? id = document.Id;
 
             _logger.LogTrace(
                 "Replacing document with Id {Id} in collection {CollectionName} of database {DatabaseName}.",
@@ -203,7 +203,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
                 _options.CollectionName,
                 _options.DatabaseName);
 
-            ItemRequestOptions requestOptions = GetOptionsForETag(etag);
+            ItemRequestOptions? requestOptions = GetOptionsForETag(etag);
 
             try
             {
@@ -237,7 +237,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// <returns>
         /// The created instance of <see cref="ItemRequestOptions"/>, if any.
         /// </returns>
-        private ItemRequestOptions GetOptionsForETag(string etag)
+        private ItemRequestOptions? GetOptionsForETag(string? etag)
         {
             if (etag == null)
             {
@@ -258,7 +258,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// </returns>
         private async Task<Container> GetContainerAsync()
         {
-            await _initializer.EnsureCollectionExistsAsync(_client, _options.CollectionName);
+            await _initializer.EnsureCollectionExistsAsync(_client, _options.CollectionName!);
 
             return _client.GetContainer(_options.DatabaseName, _options.CollectionName);
         }

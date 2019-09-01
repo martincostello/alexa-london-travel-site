@@ -279,7 +279,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// <returns>
         /// The created instance of <see cref="ApiController"/>.
         /// </returns>
-        private static ApiController CreateTarget(IAccountService service = null)
+        private static ApiController CreateTarget(IAccountService? service = null)
         {
             var httpRequest = new Mock<HttpRequest>();
 

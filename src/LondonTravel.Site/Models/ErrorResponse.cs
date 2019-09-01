@@ -26,20 +26,20 @@ namespace MartinCostello.LondonTravel.Site.Models
         /// </summary>
         [JsonPropertyName("message")]
         [Required]
-        public string Message { get; set; }
+        public string Message { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the request Id.
         /// </summary>
         [JsonPropertyName("requestId")]
         [Required]
-        public string RequestId { get; set; }
+        public string RequestId { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the error details, if any.
         /// </summary>
         [JsonPropertyName("details")]
         [Required]
-        public ICollection<string> Details { get; set; }
+        public ICollection<string> Details { get; set; } = new List<string>();
     }
 }

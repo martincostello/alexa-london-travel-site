@@ -30,7 +30,7 @@
                                 <i class="fa fa-external-link" aria-hidden="true"></i>
                             </a>
                         </li>
-                        @if (Options?.Authentication.IsEnabled == true)
+                        @if (Options?.Authentication?.IsEnabled == true)
                         {
                             <li role="separator" class="divider"></li>
                             @if (User.Identity.IsAuthenticated)

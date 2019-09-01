@@ -17,6 +17,7 @@ namespace MartinCostello.LondonTravel.Site.Models
         public LinePreferencesViewModel()
         {
             AllLines = new List<FavoriteLineItem>();
+            ETag = string.Empty;
         }
 
         /// <summary>

@@ -62,8 +62,8 @@ namespace MartinCostello.LondonTravel.Site.TagHelpers
                 return;
             }
 
-            string filePath = (context.AllAttributes["src"].Value as string)?.TrimStart(Tilde);
-            string type = context.AllAttributes["type"]?.Value?.ToString() as string;
+            string? filePath = (context.AllAttributes["src"].Value as string)?.TrimStart(Tilde);
+            string? type = context.AllAttributes["type"]?.Value?.ToString() as string;
 
             if (string.IsNullOrEmpty(filePath) ||
                 (!string.IsNullOrEmpty(type) && !string.Equals(type, "text/javascript", StringComparison.OrdinalIgnoreCase)))

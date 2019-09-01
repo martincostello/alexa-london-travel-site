@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Options
@@ -11,31 +11,31 @@ namespace MartinCostello.LondonTravel.Site.Options
         /// <summary>
         /// Gets or sets the URL of the author's avatar.
         /// </summary>
-        public string Avatar { get; set; }
+        public string? Avatar { get; set; }
 
         /// <summary>
         /// Gets or sets the Bitcoin address of the author.
         /// </summary>
-        public string Bitcoin { get; set; }
+        public string? Bitcoin { get; set; }
 
         /// <summary>
         /// Gets or sets the email address of the author.
         /// </summary>
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the author.
         /// </summary>
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// Gets or sets the social media options.
         /// </summary>
-        public AuthorSocialMediaOptions SocialMedia { get; set; }
+        public AuthorSocialMediaOptions? SocialMedia { get; set; }
 
         /// <summary>
         /// Gets or sets the URL of the author's website.
         /// </summary>
-        public string Website { get; set; }
+        public string? Website { get; set; }
     }
 }

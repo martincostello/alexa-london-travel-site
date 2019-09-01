@@ -74,7 +74,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 Assert.NotEmpty(user.Id);
 
                 // Arrange
-                userId = user.Id;
+                userId = user.Id!;
 
                 // Act
                 LondonTravelUser actual = await store.FindByIdAsync(userId, default);
@@ -94,7 +94,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 Assert.Equal(user.UserName, actual.UserName);
 
                 // Arrange
-                string etag = actual.ETag;
+                string etag = actual.ETag!;
 
                 actual.AlexaToken = accessToken;
                 actual.FavoriteLines = favoriteLines;

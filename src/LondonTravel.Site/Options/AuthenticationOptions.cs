@@ -18,11 +18,11 @@ namespace MartinCostello.LondonTravel.Site.Options
         /// <summary>
         /// Gets or sets the external sign-in providers for the site.
         /// </summary>
-        public IDictionary<string, ExternalSignInOptions> ExternalProviders { get; set; }
+        public IDictionary<string, ExternalSignInOptions>? ExternalProviders { get; set; }
 
         /// <summary>
         /// Gets or sets the user store options.
         /// </summary>
-        public UserStoreOptions UserStore { get; set; }
+        public UserStoreOptions? UserStore { get; set; }
     }
 }

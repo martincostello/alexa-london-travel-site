@@ -21,7 +21,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
     /// </summary>
     public sealed class HttpServerFixture : TestServerFixture, IAsyncLifetime
     {
-        private IHost _host;
+        private IHost? _host;
         private bool _disposed;
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         public Uri ServerAddress => ClientOptions.BaseAddress;
 
         /// <inheritdoc />
-        public override IServiceProvider Services => _host?.Services;
+        public override IServiceProvider? Services => _host?.Services;
 
         /// <inheritdoc />
         async Task IAsyncLifetime.InitializeAsync()
@@ -49,9 +49,12 @@ namespace MartinCostello.LondonTravel.Site.Integration
         /// <inheritdoc />
         async Task IAsyncLifetime.DisposeAsync()
         {
-            await _host?.StopAsync(default);
-            _host?.Dispose();
-            _host = null;
+            if (_host != null)
+            {
+                await _host.StopAsync();
+                _host.Dispose();
+                _host = null;
+            }
         }
 
         /// <summary>

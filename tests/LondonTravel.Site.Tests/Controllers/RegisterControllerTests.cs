@@ -80,7 +80,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// <returns>
         /// The created instance of <see cref="RegisterController"/>.
         /// </returns>
-        private static RegisterController CreateTarget(IAccountService service = null)
+        private static RegisterController CreateTarget(IAccountService? service = null)
         {
             var httpContext = new Mock<HttpContext>();
 
@@ -97,7 +97,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             var controllerContext = new ControllerContext(actionContext);
 
-            return new RegisterController(service)
+            return new RegisterController(service!)
             {
                 ControllerContext = controllerContext,
             };

@@ -93,10 +93,10 @@ namespace MartinCostello.LondonTravel.Site.TagHelpers
                 return;
             }
 
-            string filePath = (context.AllAttributes["href"].Value as string)?.TrimStart(Tilde);
+            string? filePath = (context.AllAttributes["href"].Value as string)?.TrimStart(Tilde);
             IFileInfo fileInfo = HostingEnvironment.WebRootFileProvider.GetFileInfo(filePath);
 
-            if (!fileInfo.Exists)
+            if (!fileInfo.Exists || filePath == null)
             {
                 // Not a local file
                 await base.ProcessAsync(context, output);

@@ -15,6 +15,6 @@ namespace MartinCostello.LondonTravel.Site.Telemetry
         /// </summary>
         /// <param name="eventName">The name of the event to track.</param>
         /// <param name="properties">The optional properties associated with the event.</param>
-        void TrackEvent(string eventName, IDictionary<string, string> properties = null);
+        void TrackEvent(string eventName, IDictionary<string, string>? properties = null);
     }
 }

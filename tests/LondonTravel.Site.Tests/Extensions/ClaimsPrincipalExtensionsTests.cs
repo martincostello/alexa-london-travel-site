@@ -18,8 +18,8 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         [Fact]
         public static void GetAvatarUrl_Throws_If_Required_Parameters_Are_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => ClaimsPrincipalExtensions.GetAvatarUrl(null, string.Empty)).ParamName.ShouldBe("value");
-            Assert.Throws<ArgumentNullException>(() => ClaimsPrincipalExtensions.GetAvatarUrl(new ClaimsPrincipal(), null)).ParamName.ShouldBe("fallbackImageUrl");
+            Assert.Throws<ArgumentNullException>(() => ClaimsPrincipalExtensions.GetAvatarUrl(null!, string.Empty)).ParamName.ShouldBe("value");
+            Assert.Throws<ArgumentNullException>(() => ClaimsPrincipalExtensions.GetAvatarUrl(new ClaimsPrincipal(), null!)).ParamName.ShouldBe("fallbackImageUrl");
         }
 
         [Fact]
@@ -68,7 +68,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         [Fact]
         public static void GetDisplayName_Throws_If_Value_Is_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => ClaimsPrincipalExtensions.GetDisplayName(null)).ParamName.ShouldBe("value");
+            Assert.Throws<ArgumentNullException>(() => ClaimsPrincipalExtensions.GetDisplayName(null!)).ParamName.ShouldBe("value");
         }
 
         [Fact]

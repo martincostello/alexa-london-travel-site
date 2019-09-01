@@ -48,11 +48,11 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
         public Task<ICollection<LineInfo>> GetLinesAsync(CancellationToken cancellationToken = default)
         {
             const string CacheKey = "TfL.AvailableLines";
-            string supportedModes = string.Join(",", _options.SupportedModes);
+            string supportedModes = string.Join(",", _options.SupportedModes ?? Array.Empty<string>());
 
             return GetWithCachingAsync(
                 CacheKey,
-                () => _client.GetLinesAsync(supportedModes, _options.AppId, _options.AppKey, cancellationToken));
+                () => _client.GetLinesAsync(supportedModes, _options.AppId!, _options.AppKey!, cancellationToken));
         }
 
         /// <inheritdoc />
@@ -62,7 +62,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
 
             return GetWithCachingAsync(
                 cacheKey,
-                () => _client.GetStopPointsAsync(lineId, _options.AppId, _options.AppKey, cancellationToken));
+                () => _client.GetStopPointsAsync(lineId, _options.AppId!, _options.AppKey!, cancellationToken));
         }
 
         /// <summary>

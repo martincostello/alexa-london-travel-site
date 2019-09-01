@@ -43,7 +43,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
                  .RegisterBundle(Path.Combine("Integration", "oauth-http-bundle.json"));
 
         /// <inheritdoc />
-        public ITestOutputHelper OutputHelper { get; set; }
+        public ITestOutputHelper? OutputHelper { get; set; }
 
         /// <summary>
         /// Clears the current <see cref="ITestOutputHelper"/>.
@@ -101,8 +101,8 @@ namespace MartinCostello.LondonTravel.Site.Integration
 
         private void ConfigureTests(IConfigurationBuilder builder)
         {
-            string directory = Path.GetDirectoryName(typeof(TestServerFixture).Assembly.Location);
-            string fullPath = Path.Combine(directory, "testsettings.json");
+            string? directory = Path.GetDirectoryName(typeof(TestServerFixture).Assembly.Location);
+            string fullPath = Path.Combine(directory ?? ".", "testsettings.json");
 
             builder.AddJsonFile(fullPath);
         }

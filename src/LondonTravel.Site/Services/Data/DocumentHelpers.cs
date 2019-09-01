@@ -54,7 +54,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// <exception cref="ArgumentException">
         /// <paramref name="options"/> is invalid.
         /// </exception>
-        internal static CosmosClient CreateClient(UserStoreOptions options, CosmosSerializer serializer = null)
+        internal static CosmosClient CreateClient(UserStoreOptions options, CosmosSerializer? serializer = null)
         {
             if (options == null)
             {

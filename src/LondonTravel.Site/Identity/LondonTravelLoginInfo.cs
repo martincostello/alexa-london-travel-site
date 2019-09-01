@@ -15,19 +15,19 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// Gets or sets the login provider.
         /// </summary>
         [JsonPropertyName("loginProvider")]
-        public string LoginProvider { get; set; }
+        public string? LoginProvider { get; set; }
 
         /// <summary>
         /// Gets or sets the provider key.
         /// </summary>
         [JsonPropertyName("providerKey")]
-        public string ProviderKey { get; set; }
+        public string? ProviderKey { get; set; }
 
         /// <summary>
         /// Gets or sets the provider display name.
         /// </summary>
         [JsonPropertyName("providerDisplayName")]
-        public string ProviderDisplayName { get; set; }
+        public string? ProviderDisplayName { get; set; }
 
         /// <summary>
         /// Created an instance of <see cref="LondonTravelLoginInfo"/> from the specified <see cref="UserLoginInfo"/>.

@@ -122,8 +122,8 @@ namespace MartinCostello.LondonTravel.Site.Extensions
             string productVersion = typeof(Startup)
                 .GetTypeInfo()
                 .Assembly
-                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
-                .InformationalVersion;
+                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
+                .InformationalVersion!;
 
             // Truncate the Git commit SHA to 7 characters, if present
             int indexOfPlus = productVersion.IndexOf('+', StringComparison.Ordinal);

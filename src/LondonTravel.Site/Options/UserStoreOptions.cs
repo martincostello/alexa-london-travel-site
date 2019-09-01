@@ -13,26 +13,26 @@ namespace MartinCostello.LondonTravel.Site.Options
         /// <summary>
         /// Gets or sets the Azure Cosmos DB service URI to use.
         /// </summary>
-        public Uri ServiceUri { get; set; }
+        public Uri? ServiceUri { get; set; }
 
         /// <summary>
         /// Gets or sets the Azure Cosmos DB access key to use.
         /// </summary>
-        public string AccessKey { get; set; }
+        public string? AccessKey { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the Azure Cosmos DB database to use.
         /// </summary>
-        public string DatabaseName { get; set; }
+        public string? DatabaseName { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the Azure Cosmos DB collection to use.
         /// </summary>
-        public string CollectionName { get; set; }
+        public string? CollectionName { get; set; }
 
         /// <summary>
         /// Gets or sets the current Azure Cosmos DB location, if any.
         /// </summary>
-        public string CurrentLocation { get; set; }
+        public string? CurrentLocation { get; set; }
     }
 }

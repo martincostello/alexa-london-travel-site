@@ -3,19 +3,20 @@
 
 namespace MartinCostello.LondonTravel.Site.Models
 {
+    using System;
     using System.Collections.Generic;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Identity;
 
     public class ManageViewModel
     {
-        public IList<UserLoginInfo> CurrentLogins { get; set; }
+        public IList<UserLoginInfo> CurrentLogins { get; set; } = Array.Empty<UserLoginInfo>();
 
-        public IList<AuthenticationScheme> OtherLogins { get; set; }
+        public IList<AuthenticationScheme> OtherLogins { get; set; } = Array.Empty<AuthenticationScheme>();
 
         public bool CanAddMoreLogins => OtherLogins?.Count > 0;
 
-        public string ETag { get; set; }
+        public string ETag { get; set; } = string.Empty;
 
         public bool IsLinkedToAlexa { get; set; }
 

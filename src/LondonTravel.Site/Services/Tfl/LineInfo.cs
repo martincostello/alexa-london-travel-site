@@ -14,12 +14,12 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
         /// Gets or sets the Id of the line.
         /// </summary>
         [JsonPropertyName("id")]
-        public string Id { get; set; }
+        public string? Id { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the line.
         /// </summary>
         [JsonPropertyName("name")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
     }
 }

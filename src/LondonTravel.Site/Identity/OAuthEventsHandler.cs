@@ -69,12 +69,12 @@ namespace MartinCostello.LondonTravel.Site.Identity
             string provider,
             ISecureDataFormat<T> secureDataFormat,
             ILogger logger,
-            Func<T, IDictionary<string, string>> propertiesProvider)
+            Func<T, IDictionary<string, string>?> propertiesProvider)
         {
-            string path = GetSiteErrorRedirect(context, secureDataFormat, propertiesProvider);
+            string? path = GetSiteErrorRedirect(context, secureDataFormat, propertiesProvider);
 
             if (string.IsNullOrEmpty(path) ||
-                !Uri.TryCreate(path, UriKind.Relative, out Uri notUsed))
+                !Uri.TryCreate(path, UriKind.Relative, out Uri? notUsed))
             {
                 path = "/";
             }
@@ -121,17 +121,17 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <returns>
         /// The site context associated with the current request, if any.
         /// </returns>
-        private static string GetSiteErrorRedirect<T>(
+        private static string? GetSiteErrorRedirect<T>(
             RemoteFailureContext context,
             ISecureDataFormat<T> secureDataFormat,
-            Func<T, IDictionary<string, string>> propertiesProvider)
+            Func<T, IDictionary<string, string>?> propertiesProvider)
         {
             var state = context.Request.Query["state"];
             var stateData = secureDataFormat.Unprotect(state);
             var properties = propertiesProvider?.Invoke(stateData);
 
             if (properties == null ||
-                !properties.TryGetValue(SiteContext.ErrorRedirectPropertyName, out string value))
+                !properties.TryGetValue(SiteContext.ErrorRedirectPropertyName, out string? value))
             {
                 value = null;
             }

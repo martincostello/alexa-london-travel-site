@@ -26,7 +26,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// <summary>
         /// The name of the Azure DocumentDB database. This field is read-only.
         /// </summary>
-        private readonly string _databaseName;
+        private readonly string? _databaseName;
 
         /// <summary>
         /// The containers that have been checked to exist. This field is read-only.

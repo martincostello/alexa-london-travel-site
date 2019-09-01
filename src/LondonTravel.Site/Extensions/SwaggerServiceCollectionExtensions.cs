@@ -38,7 +38,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
                     var terms = new UriBuilder()
                     {
                         Scheme = "https",
-                        Host = options.Metadata.Domain,
+                        Host = options.Metadata?.Domain!,
                         Path = "terms-of-service/",
                     };
 
@@ -46,17 +46,17 @@ namespace MartinCostello.LondonTravel.Site.Extensions
                     {
                         Contact = new OpenApiContact()
                         {
-                            Name = options.Metadata.Author.Name,
-                            Url = new Uri(options.Metadata.Repository, UriKind.Absolute),
+                            Name = options.Metadata?.Author?.Name,
+                            Url = new Uri(options.Metadata?.Repository!, UriKind.Absolute),
                         },
-                        Description = options.Metadata.Description,
+                        Description = options.Metadata?.Description,
                         License = new OpenApiLicense()
                         {
                             Name = "Apache 2.0",
                             Url = new Uri("https://www.apache.org/licenses/LICENSE-2.0.html", UriKind.Absolute),
                         },
                         TermsOfService = terms.Uri,
-                        Title = options.Metadata.Name,
+                        Title = options.Metadata?.Name,
                         Version = string.Empty,
                     };
 
@@ -111,7 +111,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         private static void AddXmlCommentsIfExists(SwaggerGenOptions options, IWebHostEnvironment environment, string fileName)
         {
             var modelType = typeof(Startup).GetTypeInfo();
-            string applicationPath;
+            string? applicationPath;
 
             if (environment.IsDevelopment())
             {
@@ -122,7 +122,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
                 applicationPath = environment.ContentRootPath;
             }
 
-            var path = Path.GetFullPath(Path.Combine(applicationPath, fileName));
+            var path = Path.GetFullPath(Path.Combine(applicationPath ?? ".", fileName));
 
             if (File.Exists(path))
             {

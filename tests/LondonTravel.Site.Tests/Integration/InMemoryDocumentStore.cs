@@ -24,7 +24,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         public InMemoryDocumentStore(UserStoreOptions options)
         {
             _collections = new Dictionary<string, DocumentCollection>();
-            CollectionName = options.CollectionName;
+            CollectionName = options.CollectionName!;
         }
 
         private string CollectionName { get; }
@@ -77,10 +77,10 @@ namespace MartinCostello.LondonTravel.Site.Integration
         }
 
         /// <inheritdoc />
-        public Task<LondonTravelUser> GetAsync(string id)
+        public Task<LondonTravelUser?> GetAsync(string id)
         {
             DocumentCollection collection = EnsureCollection();
-            LondonTravelUser item = collection.Get<LondonTravelUser>(id);
+            LondonTravelUser? item = collection.Get<LondonTravelUser?>(id);
 
             return Task.FromResult(item);
         }
@@ -107,12 +107,12 @@ namespace MartinCostello.LondonTravel.Site.Integration
         }
 
         /// <inheritdoc />
-        public Task<LondonTravelUser> ReplaceAsync(LondonTravelUser document, string etag)
+        public Task<LondonTravelUser?> ReplaceAsync(LondonTravelUser document, string? etag)
         {
             DocumentCollection collection = EnsureCollection();
-            document = collection.Replace(document.Id, document, etag);
+            LondonTravelUser? result = collection.Replace(document.Id!, document, etag);
 
-            return Task.FromResult(document);
+            return Task.FromResult(result);
         }
 
         private DocumentCollection EnsureCollection()
@@ -220,7 +220,8 @@ namespace MartinCostello.LondonTravel.Site.Integration
                     .AsQueryable();
             }
 
-            internal T Replace<T>(string id, T value, string etag)
+            internal T? Replace<T>(string id, T value, string? etag)
+                where T : class
             {
                 if (!_documents.TryGetValue(typeof(T), out var subset) || !subset.TryGetValue(id, out var document))
                 {

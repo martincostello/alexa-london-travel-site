@@ -18,6 +18,7 @@ namespace MartinCostello.LondonTravel.Site.Models
         public PreferencesResponse()
         {
             FavoriteLines = new List<string>();
+            UserId = string.Empty;
         }
 
         /// <summary>

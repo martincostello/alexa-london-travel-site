@@ -18,20 +18,20 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         public static void CreateClient_Throws_If_ServiceProvider_Is_Null()
         {
             // Arrange
-            IServiceProvider serviceProvider = null;
+            IServiceProvider? serviceProvider = null;
 
             // Act and Assert
-            Assert.Throws<ArgumentNullException>("serviceProvider", () => DocumentHelpers.CreateClient(serviceProvider));
+            Assert.Throws<ArgumentNullException>("serviceProvider", () => DocumentHelpers.CreateClient(serviceProvider!));
         }
 
         [Fact]
         public static void CreateClient_Throws_If_Options_Is_Null()
         {
             // Arrange
-            UserStoreOptions options = null;
+            UserStoreOptions? options = null;
 
             // Act and Assert
-            Assert.Throws<ArgumentNullException>("options", () => DocumentHelpers.CreateClient(options));
+            Assert.Throws<ArgumentNullException>("options", () => DocumentHelpers.CreateClient(options!));
         }
 
         [Fact]

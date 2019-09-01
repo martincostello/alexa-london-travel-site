@@ -15,87 +15,87 @@ namespace MartinCostello.LondonTravel.Site.Models
         /// <summary>
         /// Gets or sets the author.
         /// </summary>
-        public string Author { get; set; }
+        public string? Author { get; set; }
 
         /// <summary>
         /// Gets or sets the Bitcoin address of the author.
         /// </summary>
-        public string Bitcoin { get; set; }
+        public string? Bitcoin { get; set; }
 
         /// <summary>
         /// Gets or sets the canonical URI.
         /// </summary>
-        public string CanonicalUri { get; set; }
+        public string? CanonicalUri { get; set; }
 
         /// <summary>
         /// Gets or sets the description.
         /// </summary>
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         /// <summary>
         /// Gets or sets the Facebook add Id.
         /// </summary>
-        public string FacebookApp { get; set; }
+        public string? FacebookApp { get; set; }
 
         /// <summary>
         /// Gets or sets the Facebook profile Id.
         /// </summary>
-        public string FacebookProfile { get; set; }
+        public string? FacebookProfile { get; set; }
 
         /// <summary>
         /// Gets or sets the host name.
         /// </summary>
-        public string HostName { get; set; }
+        public string? HostName { get; set; }
 
         /// <summary>
         /// Gets or sets the image URI.
         /// </summary>
-        public string ImageUri { get; set; }
+        public string? ImageUri { get; set; }
 
         /// <summary>
         /// Gets or sets the image alternate text.
         /// </summary>
-        public string ImageAltText { get; set; }
+        public string? ImageAltText { get; set; }
 
         /// <summary>
         /// Gets or sets the page keywords.
         /// </summary>
-        public string Keywords { get; set; }
+        public string? Keywords { get; set; }
 
         /// <summary>
         /// Gets or sets the robots value.
         /// </summary>
-        public string Robots { get; set; }
+        public string? Robots { get; set; }
 
         /// <summary>
         /// Gets or sets the site name.
         /// </summary>
-        public string SiteName { get; set; }
+        public string? SiteName { get; set; }
 
         /// <summary>
         /// Gets or sets the site type.
         /// </summary>
-        public string SiteType { get; set; }
+        public string? SiteType { get; set; }
 
         /// <summary>
         /// Gets or sets the page title.
         /// </summary>
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
         /// <summary>
         /// Gets or sets the Twitter card type.
         /// </summary>
-        public string TwitterCard { get; set; }
+        public string? TwitterCard { get; set; }
 
         /// <summary>
         /// Gets or sets the Twitter handle.
         /// </summary>
-        public string TwitterHandle { get; set; }
+        public string? TwitterHandle { get; set; }
 
         /// <summary>
         /// Gets or sets the reviews metadata.
         /// </summary>
-        public ReviewMetadataModel Reviews { get; set; }
+        public ReviewMetadataModel? Reviews { get; set; }
 
         /// <summary>
         /// Creates a new instance of <see cref="MetaModel"/>.
@@ -112,15 +112,20 @@ namespace MartinCostello.LondonTravel.Site.Models
         /// The created instance of <see cref="MetaModel"/>.
         /// </returns>
         public static MetaModel Create(
-            MetadataOptions options,
-            string canonicalUri = null,
-            string hostName = null,
-            string description = null,
-            string imageUri = null,
-            string imageAltText = null,
-            string robots = null,
-            string title = null)
+            MetadataOptions? options,
+            string? canonicalUri = null,
+            string? hostName = null,
+            string? description = null,
+            string? imageUri = null,
+            string? imageAltText = null,
+            string? robots = null,
+            string? title = null)
         {
+            if (options == null)
+            {
+                options = new MetadataOptions();
+            }
+
             var model = new MetaModel();
 
             if (options != null)

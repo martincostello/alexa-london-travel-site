@@ -60,7 +60,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
 
             string iconClass = string.Empty;
 
-            if (_iconImageMap.TryGetValue(authenticationScheme, out string modifier))
+            if (_iconImageMap.TryGetValue(authenticationScheme, out string? modifier))
             {
                 iconClass = $"fa-{modifier}";
             }

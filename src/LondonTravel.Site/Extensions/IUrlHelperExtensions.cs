@@ -37,7 +37,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         /// <param name="options">The current site configuration.</param>
         /// <param name="appendVersion">Whether to append a version query string parameter to the URL.</param>
         /// <returns>The CDN absolute URI, if configured; otherwise the application absolute URI..</returns>
-        public static string CdnContent(this IUrlHelper value, string contentPath, SiteOptions options, bool appendVersion = true)
+        public static string CdnContent(this IUrlHelper value, string contentPath, SiteOptions? options, bool appendVersion = true)
         {
             var cdn = options?.ExternalLinks?.Cdn;
 

@@ -26,25 +26,25 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// Gets or sets the user Id.
         /// </summary>
         [JsonPropertyName("id")]
-        public string Id { get; set; }
+        public string? Id { get; set; }
 
         /// <summary>
         /// Gets or sets the ETag of the underlying document.
         /// </summary>
         [JsonPropertyName("_etag")]
-        public string ETag { get; set; }
+        public string? ETag { get; set; }
 
         /// <summary>
         /// Gets or sets the user's email address.
         /// </summary>
         [JsonPropertyName("email")]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         /// <summary>
         /// Gets or sets the normalized email address.
         /// </summary>
         [JsonPropertyName("emailNormalized")]
-        public string EmailNormalized { get; set; }
+        public string? EmailNormalized { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the user's email address has been confirmed.
@@ -56,25 +56,25 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// Gets or sets the user's given name.
         /// </summary>
         [JsonPropertyName("givenName")]
-        public string GivenName { get; set; }
+        public string? GivenName { get; set; }
 
         /// <summary>
         /// Gets or sets the user's surname.
         /// </summary>
         [JsonPropertyName("surname")]
-        public string Surname { get; set; }
+        public string? Surname { get; set; }
 
         /// <summary>
         /// Gets or sets the user name.
         /// </summary>
         [JsonPropertyName("userName")]
-        public string UserName { get; set; }
+        public string? UserName { get; set; }
 
         /// <summary>
         /// Gets or sets the normalized user name.
         /// </summary>
         [JsonPropertyName("userNameNormalized")]
-        public string UserNameNormalized { get; set; }
+        public string? UserNameNormalized { get; set; }
 
         /// <summary>
         /// Gets or sets the user's external logins.
@@ -98,13 +98,13 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// Gets or sets the user's Amazon Alexa access token.
         /// </summary>
         [JsonPropertyName("alexaToken")]
-        public string AlexaToken { get; set; }
+        public string? AlexaToken { get; set; }
 
         /// <summary>
         /// Gets or sets the user's security stamp.
         /// </summary>
         [JsonPropertyName("securityStamp")]
-        public string SecurityStamp { get; set; }
+        public string? SecurityStamp { get; set; }
 
         /// <summary>
         /// Gets or sets the date and time the user was created.

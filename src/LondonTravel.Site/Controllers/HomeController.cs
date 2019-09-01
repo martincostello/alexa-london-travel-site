@@ -102,7 +102,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 return;
             }
 
-            model.ETag = user.ETag;
+            model.ETag = user.ETag!;
             model.IsAuthenticated = true;
             model.IsLinkedToAlexa = !string.IsNullOrWhiteSpace(user.AlexaToken);
 
@@ -140,8 +140,8 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             {
                 var favorite = new FavoriteLineItem()
                 {
-                    DisplayName = line.Name,
-                    Id = line.Id,
+                    DisplayName = line.Name!,
+                    Id = line.Id!,
                 };
 
                 model.AllLines.Add(favorite);

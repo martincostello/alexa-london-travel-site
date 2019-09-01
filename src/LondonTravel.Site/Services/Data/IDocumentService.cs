@@ -44,7 +44,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// A <see cref="Task{TResult}"/> representing the asynchronous operation to get the
         /// document with the specified Id of the specified type or <see langword="null"/> if not found.
         /// </returns>
-        Task<LondonTravelUser> GetAsync(string id);
+        Task<LondonTravelUser?> GetAsync(string id);
 
         /// <summary>
         /// Gets any documents that match the specified predicate as an asynchronous operation.
@@ -78,6 +78,6 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// which returns the updated document if it was successfully replaced or
         /// <see langword="null"/> if the replacement failed due to a write conflict.
         /// </returns>
-        Task<LondonTravelUser> ReplaceAsync(LondonTravelUser document, string etag);
+        Task<LondonTravelUser?> ReplaceAsync(LondonTravelUser document, string? etag);
     }
 }

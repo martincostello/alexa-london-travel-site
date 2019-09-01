@@ -16,31 +16,31 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// Gets or sets the role Id.
         /// </summary>
         [JsonPropertyName("id")]
-        public string Id { get; set; }
+        public string? Id { get; set; }
 
         /// <summary>
         /// Gets or sets the claim's type.
         /// </summary>
         [JsonPropertyName("claimType")]
-        public string ClaimType { get; set; }
+        public string? ClaimType { get; set; }
 
         /// <summary>
         /// Gets or sets the claim's value.
         /// </summary>
         [JsonPropertyName("value")]
-        public string Value { get; set; }
+        public string? Value { get; set; }
 
         /// <summary>
         /// Gets or sets the claim's value's type.
         /// </summary>
         [JsonPropertyName("valueType")]
-        public string ValueType { get; set; }
+        public string? ValueType { get; set; }
 
         /// <summary>
         /// Gets or sets the claim's issuer.
         /// </summary>
         [JsonPropertyName("issuer")]
-        public string Issuer { get; set; }
+        public string? Issuer { get; set; }
 
         /// <summary>
         /// Creates an instance of <see cref="LondonTravelRole"/> from an instance of <see cref="Claim"/>.

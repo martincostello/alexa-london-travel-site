@@ -65,7 +65,7 @@ namespace MartinCostello.LondonTravel.Site
 
         public string CommuteSkillInvocation => _localizer[nameof(CommuteSkillInvocation)];
 
-        public LocalizedHtmlString CopyrightText => _htmlLocalizer[nameof(CopyrightText), _options.Metadata.Author.Name, DateTimeOffset.UtcNow.Year];
+        public LocalizedHtmlString CopyrightText => _htmlLocalizer[nameof(CopyrightText), _options.Metadata?.Author?.Name, DateTimeOffset.UtcNow.Year];
 
         public string DeleteAccountButtonText => _localizer[nameof(DeleteAccountButtonText)];
 

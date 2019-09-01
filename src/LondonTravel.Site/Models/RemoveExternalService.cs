@@ -5,8 +5,8 @@ namespace MartinCostello.LondonTravel.Site.Models
 {
     public class RemoveExternalService
     {
-        public string LoginProvider { get; set; }
+        public string LoginProvider { get; set; } = string.Empty;
 
-        public string ProviderKey { get; set; }
+        public string ProviderKey { get; set; } = string.Empty;
     }
 }

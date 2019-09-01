@@ -27,6 +27,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
             using UserStore target = CreateStore();
 
             // Act and Assert
+#nullable disable
             await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.AddLoginAsync(null, login, cancellationToken));
             await Assert.ThrowsAsync<ArgumentNullException>("login", () => target.AddLoginAsync(user, null, cancellationToken));
             await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.CreateAsync(null, cancellationToken));
@@ -59,6 +60,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
             await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.GetRolesAsync(null, cancellationToken));
             await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.IsInRoleAsync(null, "a", cancellationToken));
             await Assert.ThrowsAsync<ArgumentNullException>("roleName", () => target.IsInRoleAsync(user, null, cancellationToken));
+#nullable enable
         }
 
         [Fact]
@@ -472,13 +474,13 @@ namespace MartinCostello.LondonTravel.Site.Identity
             (await target.IsInRoleAsync(user, string.Empty, cancellationToken)).ShouldBeFalse();
 
             // Arrange
-            user.RoleClaims = null;
+            user.RoleClaims = null!;
 
             // Act and Assert
             (await target.IsInRoleAsync(user, "admin", cancellationToken)).ShouldBeFalse();
         }
 
-        private static UserStore CreateStore(IDocumentService service = null)
+        private static UserStore CreateStore(IDocumentService? service = null)
         {
             return new UserStore(service ?? Mock.Of<IDocumentService>());
         }

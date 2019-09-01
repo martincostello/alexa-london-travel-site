@@ -21,7 +21,7 @@ namespace MartinCostello.LondonTravel.Site.Services
         /// A <see cref="Task{TResult}"/> representing the asynchronous operation to get the user
         /// with the specified access token, if found, otherwise <see langword="null"/>.
         /// </returns>
-        Task<LondonTravelUser> GetUserByAccessTokenAsync(string accessToken, CancellationToken cancellationToken);
+        Task<LondonTravelUser?> GetUserByAccessTokenAsync(string accessToken, CancellationToken cancellationToken);
 
         /// <summary>
         /// Gets the number of registered users as an asynchronous operation.

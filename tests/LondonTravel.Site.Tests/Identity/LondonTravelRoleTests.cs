@@ -14,10 +14,10 @@ namespace MartinCostello.LondonTravel.Site.Identity
         public static void FromClaim_Throws_If_Claim_Is_Null()
         {
             // Arrange
-            Claim claim = null;
+            Claim? claim = null;
 
             // Act and Assert
-            Assert.Throws<ArgumentNullException>(() => LondonTravelRole.FromClaim(claim));
+            Assert.Throws<ArgumentNullException>(() => LondonTravelRole.FromClaim(claim!));
         }
 
         [Fact]

@@ -31,7 +31,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         /// </returns>
         public static string EnsureCspNonce(this HttpContext context)
         {
-            string nonce = context.GetCspNonce();
+            string? nonce = context.GetCspNonce();
 
             if (nonce == null)
             {
@@ -56,11 +56,11 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         /// <returns>
         /// The current CSP nonce value, if any.
         /// </returns>
-        public static string GetCspNonce(this HttpContext context)
+        public static string? GetCspNonce(this HttpContext context)
         {
-            string nonce = null;
+            string? nonce = null;
 
-            if (context.Items.TryGetValue(CspNonceKey, out object value))
+            if (context.Items.TryGetValue(CspNonceKey, out object? value))
             {
                 nonce = value as string;
             }
@@ -89,7 +89,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         {
             bool result = false;
 
-            if (context.Items.TryGetValue(InlineStylesKey, out object value) &&
+            if (context.Items.TryGetValue(InlineStylesKey, out object? value) &&
                 value is bool allowInlineStyles)
             {
                 result = allowInlineStyles;

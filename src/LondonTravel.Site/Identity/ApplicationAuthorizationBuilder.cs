@@ -61,9 +61,9 @@ namespace MartinCostello.LondonTravel.Site.Identity
         {
             string name = "Amazon";
 
-            if (TryGetProvider(name, out ExternalSignInOptions signInOptions))
+            if (TryGetProvider(name, out ExternalSignInOptions? signInOptions))
             {
-                _builder.AddAmazon((auth) => ConfigureOAuth(name, auth, signInOptions));
+                _builder.AddAmazon((auth) => ConfigureOAuth(name, auth, signInOptions!));
             }
 
             return this;
@@ -79,9 +79,9 @@ namespace MartinCostello.LondonTravel.Site.Identity
         {
             string name = "Facebook";
 
-            if (TryGetProvider(name, out ExternalSignInOptions signInOptions))
+            if (TryGetProvider(name, out ExternalSignInOptions? signInOptions))
             {
-                _builder.AddFacebook((auth) => ConfigureOAuth(name, auth, signInOptions));
+                _builder.AddFacebook((auth) => ConfigureOAuth(name, auth, signInOptions!));
             }
 
             return this;
@@ -97,9 +97,9 @@ namespace MartinCostello.LondonTravel.Site.Identity
         {
             string name = "Google";
 
-            if (TryGetProvider(name, out ExternalSignInOptions signInOptions))
+            if (TryGetProvider(name, out ExternalSignInOptions? signInOptions))
             {
-                _builder.AddGoogle((auth) => ConfigureOAuth(name, auth, signInOptions));
+                _builder.AddGoogle((auth) => ConfigureOAuth(name, auth, signInOptions!));
             }
 
             return this;
@@ -115,9 +115,9 @@ namespace MartinCostello.LondonTravel.Site.Identity
         {
             string name = "Microsoft";
 
-            if (TryGetProvider(name, out ExternalSignInOptions signInOptions))
+            if (TryGetProvider(name, out ExternalSignInOptions? signInOptions))
             {
-                _builder.AddMicrosoftAccount((auth) => ConfigureOAuth(name, auth, signInOptions));
+                _builder.AddMicrosoftAccount((auth) => ConfigureOAuth(name, auth, signInOptions!));
             }
 
             return this;
@@ -133,12 +133,12 @@ namespace MartinCostello.LondonTravel.Site.Identity
         {
             string name = "Twitter";
 
-            if (TryGetProvider(name, out ExternalSignInOptions signInOptions))
+            if (TryGetProvider(name, out ExternalSignInOptions? signInOptions))
             {
                 _builder.AddTwitter(
                     (options) =>
                     {
-                        options.ConsumerKey = signInOptions.ClientId;
+                        options.ConsumerKey = signInOptions!.ClientId;
                         options.ConsumerSecret = signInOptions.ClientSecret;
                         options.RetrieveUserDetails = true;
                         options.StateCookie.Name = ApplicationCookie.State.Name;
@@ -204,10 +204,10 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <returns>
         /// <see langword="true"/> if the specified provider is enabled; otherwise <see langword="false"/>.
         /// </returns>
-        private bool TryGetProvider(string name, out ExternalSignInOptions options)
+        private bool TryGetProvider(string name, out ExternalSignInOptions? options)
         {
             options = null;
-            ExternalSignInOptions signInOptions = null;
+            ExternalSignInOptions? signInOptions = null;
 
             bool isEnabled =
                 _options?.Authentication?.ExternalProviders?.TryGetValue(name, out signInOptions) == true &&

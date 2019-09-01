@@ -28,7 +28,7 @@
         </p>
         <table class="table">
             <tbody>
-                @foreach (var provider in Model?.CurrentLogins)
+                @foreach (var provider in Model?.CurrentLogins!)
                 {
                     <tr data-linked-account data-provider="@provider.LoginProvider">
                         <td class="lead">
@@ -72,7 +72,7 @@
             <form asp-route="@SiteRoutes.LinkAccount" method="post" class="form-horizontal">
                 <div>
                     <p>
-                        @foreach (var scheme in Model?.OtherLogins)
+                        @foreach (var scheme in Model?.OtherLogins!)
                         {
                             @await Html.PartialAsync("_SocialButton", scheme)
                         }

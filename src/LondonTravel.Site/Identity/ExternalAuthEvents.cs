@@ -17,11 +17,11 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <summary>
         /// Gets or sets an optional delegate to invoke when redirecting to an OAuth authorization endpoint.
         /// </summary>
-        public Func<RedirectContext<OAuthOptions>, Task> OnRedirectToOAuthAuthorizationEndpoint { get; set; }
+        public Func<RedirectContext<OAuthOptions>, Task>? OnRedirectToOAuthAuthorizationEndpoint { get; set; }
 
         /// <summary>
         /// Gets or sets an optional delegate to invoke when redirecting to the Twitter authorization endpoint.
         /// </summary>
-        public Func<RedirectContext<TwitterOptions>, Task> OnRedirectToTwitterAuthorizationEndpoint { get; set; }
+        public Func<RedirectContext<TwitterOptions>, Task>? OnRedirectToTwitterAuthorizationEndpoint { get; set; }
     }
 }

@@ -52,14 +52,16 @@ namespace MartinCostello.LondonTravel.Site.Integration
             locations.ShouldNotBeNull();
             locations.Count.ShouldBeGreaterThan(0);
 
-            foreach (XmlNode location in locations)
+            foreach (XmlNode? location in locations)
             {
-                string url = location.InnerText;
+                location.ShouldNotBeNull();
+
+                string url = location!.InnerText;
 
                 url.ShouldNotBeNullOrWhiteSpace();
-                Uri.TryCreate(url, UriKind.Absolute, out Uri uri).ShouldBeTrue();
+                Uri.TryCreate(url, UriKind.Absolute, out Uri? uri).ShouldBeTrue();
 
-                uri.Scheme.ShouldBe("https");
+                uri!.Scheme.ShouldBe("https");
                 uri.Port.ShouldBe(443);
                 uri.Host.ShouldBe("londontravel.martincostello.com");
                 uri.AbsolutePath.ShouldEndWith("/");
@@ -70,7 +72,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 response.StatusCode.ShouldBe(HttpStatusCode.OK, $"Failed to get {uri.PathAndQuery}. {await response.Content.ReadAsStringAsync()}");
                 response.Content.Headers.ContentType?.MediaType.ShouldBe(MediaTypeNames.Text.Html);
                 response.Content.Headers.ContentLength.ShouldNotBeNull();
-                response.Content.Headers.ContentLength.Value.ShouldBeGreaterThan(0);
+                response.Content.Headers.ContentLength!.Value.ShouldBeGreaterThan(0);
             }
         }
 

@@ -78,7 +78,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         [AllowAnonymous]
         [HttpGet]
         [Route("sign-in", Name = SiteRoutes.SignIn)]
-        public async Task<IActionResult> SignIn(string returnUrl = null)
+        public async Task<IActionResult> SignIn(string? returnUrl = null)
         {
             if (!_isEnabled)
             {
@@ -155,7 +155,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         [HttpPost]
         [Route("external-sign-in", Name = SiteRoutes.ExternalSignIn)]
         [ValidateAntiForgeryToken]
-        public IActionResult ExternalSignIn(string provider, string returnUrl = null)
+        public IActionResult ExternalSignIn(string? provider, string? returnUrl = null)
         {
             if (string.IsNullOrWhiteSpace(provider))
             {
@@ -187,7 +187,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         [AllowAnonymous]
         [Route("external-sign-in-callback", Name = SiteRoutes.ExternalSignInCallback)]
         [HttpGet]
-        public async Task<IActionResult> ExternalSignInCallback(string returnUrl = null, string remoteError = null)
+        public async Task<IActionResult> ExternalSignInCallback(string? returnUrl = null, string? remoteError = null)
         {
             if (!_isEnabled)
             {
@@ -225,7 +225,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             }
             else
             {
-                LondonTravelUser user = CreateSystemUser(info);
+                LondonTravelUser? user = CreateSystemUser(info);
 
                 if (string.IsNullOrEmpty(user?.Email))
                 {
@@ -243,7 +243,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
                     _logger.LogInformation("New user account {UserId} created through {LoginProvider}.", user.Id, info.LoginProvider);
 
-                    _telemetry.TrackAccountCreated(user.Id, user.Email, info.LoginProvider);
+                    _telemetry.TrackAccountCreated(user.Id!, user.Email, info.LoginProvider);
 
                     if (IsRedirectAlexaAuthorization(returnUrl))
                     {
@@ -282,7 +282,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             }
         }
 
-        private IActionResult RedirectToLocal(string returnUrl)
+        private IActionResult RedirectToLocal(string? returnUrl)
         {
             if (Url.IsLocalUrl(returnUrl))
             {
@@ -294,7 +294,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             }
         }
 
-        private LondonTravelUser CreateSystemUser(ExternalLoginInfo info)
+        private LondonTravelUser? CreateSystemUser(ExternalLoginInfo info)
         {
             var email = info.Principal.FindFirstValue(ClaimTypes.Email);
 
@@ -333,17 +333,17 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
         private bool IsReferrerRegistrationPage() => IsReferrerRoute(SiteRoutes.Register);
 
-        private bool IsRedirectAlexaAuthorization(string returnUrl) => IsUrlRoute(returnUrl, SiteRoutes.AuthorizeAlexa);
+        private bool IsRedirectAlexaAuthorization(string? returnUrl) => IsUrlRoute(returnUrl, SiteRoutes.AuthorizeAlexa);
 
         private bool IsReferrerRoute(string routeName)
         {
             return IsUrlRoute(HttpContext.Request.Headers["referer"], routeName);
         }
 
-        private bool IsUrlRoute(string url, string routeName)
+        private bool IsUrlRoute(string? url, string routeName)
         {
             if (string.IsNullOrWhiteSpace(url) ||
-                !Uri.TryCreate(url, UriKind.RelativeOrAbsolute, out Uri uri))
+                !Uri.TryCreate(url, UriKind.RelativeOrAbsolute, out Uri? uri))
             {
                 return false;
             }

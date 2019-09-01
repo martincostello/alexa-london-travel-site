@@ -31,12 +31,15 @@ namespace MartinCostello.LondonTravel.Site.Extensions
 
             var options = services.BuildServiceProvider().GetRequiredService<SiteOptions>();
 
-            foreach (string providerName in options.Authentication.ExternalProviders.Keys)
+            if (options.Authentication?.ExternalProviders != null)
             {
-                services
-                    .AddHttpClient(providerName)
-                    .ApplyDefaultConfiguration()
-                    .ApplyRemoteAuthenticationConfiguration();
+                foreach (string providerName in options.Authentication.ExternalProviders.Keys)
+                {
+                    services
+                        .AddHttpClient(providerName)
+                        .ApplyDefaultConfiguration()
+                        .ApplyRemoteAuthenticationConfiguration();
+                }
             }
 
             services
