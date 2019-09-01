@@ -7,11 +7,13 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using System.Net;
     using System.Net.Http;
     using System.Net.Http.Headers;
+    using System.Net.Mime;
     using System.Text.Json;
     using System.Threading.Tasks;
     using MartinCostello.LondonTravel.Site.Identity;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.DependencyInjection;
+    using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
 
@@ -129,7 +131,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
                     {
                         // Assert
                         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-                        Assert.Equal("application/json", response.Content.Headers.ContentType.MediaType);
+                        response.Content.Headers.ContentType.MediaType.ShouldBe(MediaTypeNames.Application.Json);
 
                         string json = await response.Content.ReadAsStringAsync();
                         using var preferences = JsonDocument.Parse(json);
@@ -166,7 +168,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
                     {
                         // Assert
                         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-                        Assert.Equal("application/json", response.Content.Headers.ContentType.MediaType);
+                        response.Content.Headers.ContentType.MediaType.ShouldBe(MediaTypeNames.Application.Json);
                     }
                 }
             }

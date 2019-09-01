@@ -5,6 +5,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 {
     using System;
     using System.Net.Http.Headers;
+    using System.Net.Mime;
     using System.Threading;
     using System.Threading.Tasks;
     using Identity;
@@ -61,7 +62,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         [ApiExplorerSettings(IgnoreApi = true)]
         [Authorize(Roles = "ADMINISTRATOR")]
         [HttpGet]
-        [Produces("application/json")]
+        [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(typeof(DocumentCount), StatusCodes.Status200OK)]
         [Route("_count")]
         public async Task<ActionResult<DocumentCount>> GetDocumentCount()
@@ -83,7 +84,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// <response code="401">A valid access token was not provided.</response>
         /// <response code="500">An internal error occurred.</response>
         [HttpGet]
-        [Produces("application/json", Type = typeof(PreferencesResponse))]
+        [Produces(MediaTypeNames.Application.Json, Type = typeof(PreferencesResponse))]
         [ProducesResponseType(typeof(PreferencesResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status401Unauthorized)]
         [Route("preferences")]

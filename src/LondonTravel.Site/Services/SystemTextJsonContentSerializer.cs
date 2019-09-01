@@ -7,6 +7,7 @@ namespace MartinCostello.LondonTravel.Site.Services
     using System.IO;
     using System.Net.Http;
     using System.Net.Http.Headers;
+    using System.Net.Mime;
     using System.Text;
     using System.Text.Json;
     using System.Threading.Tasks;
@@ -21,7 +22,7 @@ namespace MartinCostello.LondonTravel.Site.Services
     public sealed class SystemTextJsonContentSerializer : IContentSerializer
     {
         private static readonly MediaTypeHeaderValue _jsonMediaType =
-            new MediaTypeHeaderValue("application/json") { CharSet = Encoding.UTF8.WebName };
+            new MediaTypeHeaderValue(MediaTypeNames.Application.Json) { CharSet = Encoding.UTF8.WebName };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SystemTextJsonContentSerializer"/> class.

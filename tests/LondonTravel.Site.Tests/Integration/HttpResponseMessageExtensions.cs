@@ -4,6 +4,7 @@
 namespace MartinCostello.LondonTravel.Site.Integration
 {
     using System.Net.Http;
+    using System.Net.Mime;
     using System.Text.Json;
     using System.Threading.Tasks;
     using Shouldly;
@@ -12,7 +13,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
     {
         public static async Task<JsonDocument> ReadAsJsonDocumentAsync(this HttpResponseMessage response)
         {
-            response.Content.Headers.ContentType?.MediaType.ShouldBe("application/json");
+            response.Content.Headers.ContentType?.MediaType.ShouldBe(MediaTypeNames.Application.Json);
             response.Content.Headers.ContentLength.ShouldNotBeNull();
             response.Content.Headers.ContentLength.ShouldNotBe(0);
 

@@ -5,6 +5,7 @@ namespace MartinCostello.LondonTravel.Site
 {
     using System;
     using System.IO;
+    using System.Net.Mime;
     using Extensions;
     using MartinCostello.LondonTravel.Site.Services;
     using Microsoft.ApplicationInsights.AspNetCore.Extensions;
@@ -270,7 +271,7 @@ namespace MartinCostello.LondonTravel.Site
             return new StaticFileOptions()
             {
                 ContentTypeProvider = provider,
-                DefaultContentType = "application/json",
+                DefaultContentType = MediaTypeNames.Application.Json,
                 OnPrepareResponse = SetCacheHeaders,
                 ServeUnknownFileTypes = true,
             };
