@@ -237,24 +237,22 @@ namespace MartinCostello.LondonTravel.Site.Integration
             using (var message = new HttpRequestMessage(HttpMethod.Head, requestUri))
             {
                 // Act
-                using (var response = await client.SendAsync(message))
-                {
-                    // Assert
-                    response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
-                    response.Headers.Location?.Host.ShouldBe("www.youtube.com");
-                }
+                using var response = await client.SendAsync(message);
+
+                // Assert
+                response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
+                response.Headers.Location?.Host.ShouldBe("www.youtube.com");
             }
 
             // Arrange
             using (var content = new StringContent(string.Empty))
             {
                 // Act
-                using (var response = await client.PostAsync(requestUri, content))
-                {
-                    // Assert
-                    response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
-                    response.Headers.Location?.Host.ShouldBe("www.youtube.com");
-                }
+                using var response = await client.PostAsync(requestUri, content);
+
+                // Assert
+                response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
+                response.Headers.Location?.Host.ShouldBe("www.youtube.com");
             }
         }
     }

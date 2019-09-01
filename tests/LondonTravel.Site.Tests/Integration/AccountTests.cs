@@ -63,60 +63,59 @@ namespace MartinCostello.LondonTravel.Site.Integration
 
             using (var scope = Fixture.Services.CreateScope())
             {
-                using (IUserStore<LondonTravelUser> store = GetUserStore(scope.ServiceProvider))
-                {
-                    // Act
-                    IdentityResult createResult = await store.CreateAsync(user, default);
+                using IUserStore<LondonTravelUser> store = GetUserStore(scope.ServiceProvider);
 
-                    // Assert
-                    Assert.NotNull(createResult);
-                    Assert.True(createResult.Succeeded);
-                    Assert.NotEmpty(user.Id);
+                // Act
+                IdentityResult createResult = await store.CreateAsync(user, default);
 
-                    // Arrange
-                    userId = user.Id;
+                // Assert
+                Assert.NotNull(createResult);
+                Assert.True(createResult.Succeeded);
+                Assert.NotEmpty(user.Id);
 
-                    // Act
-                    LondonTravelUser actual = await store.FindByIdAsync(userId, default);
+                // Arrange
+                userId = user.Id;
 
-                    // Assert
-                    Assert.NotNull(actual);
-                    Assert.Equal(userId, actual.Id);
-                    Assert.Null(actual.AlexaToken);
-                    Assert.Equal(user.CreatedAt, actual.CreatedAt);
-                    Assert.Equal(user.Email, actual.Email);
-                    Assert.False(actual.EmailConfirmed);
-                    Assert.NotEmpty(actual.ETag);
-                    Assert.Equal(Array.Empty<string>(), actual.FavoriteLines);
-                    Assert.Equal(user.GivenName, actual.GivenName);
-                    Assert.Equal(Array.Empty<LondonTravelLoginInfo>(), actual.Logins);
-                    Assert.Equal(user.Surname, actual.Surname);
-                    Assert.Equal(user.UserName, actual.UserName);
+                // Act
+                LondonTravelUser actual = await store.FindByIdAsync(userId, default);
 
-                    // Arrange
-                    string etag = actual.ETag;
+                // Assert
+                Assert.NotNull(actual);
+                Assert.Equal(userId, actual.Id);
+                Assert.Null(actual.AlexaToken);
+                Assert.Equal(user.CreatedAt, actual.CreatedAt);
+                Assert.Equal(user.Email, actual.Email);
+                Assert.False(actual.EmailConfirmed);
+                Assert.NotEmpty(actual.ETag);
+                Assert.Equal(Array.Empty<string>(), actual.FavoriteLines);
+                Assert.Equal(user.GivenName, actual.GivenName);
+                Assert.Equal(Array.Empty<LondonTravelLoginInfo>(), actual.Logins);
+                Assert.Equal(user.Surname, actual.Surname);
+                Assert.Equal(user.UserName, actual.UserName);
 
-                    actual.AlexaToken = accessToken;
-                    actual.FavoriteLines = favoriteLines;
+                // Arrange
+                string etag = actual.ETag;
 
-                    // Act
-                    IdentityResult updateResult = await store.UpdateAsync(actual, default);
+                actual.AlexaToken = accessToken;
+                actual.FavoriteLines = favoriteLines;
 
-                    // Assert
-                    Assert.NotNull(updateResult);
-                    Assert.True(updateResult.Succeeded);
+                // Act
+                IdentityResult updateResult = await store.UpdateAsync(actual, default);
 
-                    // Act
-                    actual = await store.FindByNameAsync(emailAddress, default);
+                // Assert
+                Assert.NotNull(updateResult);
+                Assert.True(updateResult.Succeeded);
 
-                    // Assert
-                    Assert.NotNull(actual);
-                    Assert.Equal(userId, actual.Id);
-                    Assert.Equal(emailAddress, actual.Email);
-                    Assert.NotEqual(etag, actual.ETag);
-                    Assert.Equal(accessToken, actual.AlexaToken);
-                    Assert.Equal(favoriteLines, actual.FavoriteLines);
-                }
+                // Act
+                actual = await store.FindByNameAsync(emailAddress, default);
+
+                // Assert
+                Assert.NotNull(actual);
+                Assert.Equal(userId, actual.Id);
+                Assert.Equal(emailAddress, actual.Email);
+                Assert.NotEqual(etag, actual.ETag);
+                Assert.Equal(accessToken, actual.AlexaToken);
+                Assert.Equal(favoriteLines, actual.FavoriteLines);
             }
 
             // Arrange
@@ -124,36 +123,32 @@ namespace MartinCostello.LondonTravel.Site.Integration
             {
                 message.Headers.Authorization = new AuthenticationHeaderValue("bearer", accessToken);
 
-                using (var client = Fixture.CreateClient())
-                {
-                    // Act
-                    using (var response = await client.SendAsync(message))
-                    {
-                        // Assert
-                        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-                        response.Content.Headers.ContentType.MediaType.ShouldBe(MediaTypeNames.Application.Json);
+                // Act
+                using var client = Fixture.CreateClient();
+                using var response = await client.SendAsync(message);
 
-                        string json = await response.Content.ReadAsStringAsync();
-                        using var preferences = JsonDocument.Parse(json);
+                // Assert
+                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+                response.Content.Headers.ContentType.MediaType.ShouldBe(MediaTypeNames.Application.Json);
 
-                        Assert.Equal(userId, preferences.RootElement.GetString("userId"));
-                        Assert.Equal(favoriteLines, preferences.RootElement.GetStringArray("favoriteLines"));
-                    }
-                }
+                string json = await response.Content.ReadAsStringAsync();
+                using var preferences = JsonDocument.Parse(json);
+
+                Assert.Equal(userId, preferences.RootElement.GetString("userId"));
+                Assert.Equal(favoriteLines, preferences.RootElement.GetStringArray("favoriteLines"));
             }
 
             // Arrange
             using (var scope = Fixture.Services.CreateScope())
             {
-                using (IUserStore<LondonTravelUser> store = GetUserStore(scope.ServiceProvider))
-                {
-                    // Act
-                    IdentityResult updateResult = await store.DeleteAsync(new LondonTravelUser() { Id = userId }, default);
+                using IUserStore<LondonTravelUser> store = GetUserStore(scope.ServiceProvider);
 
-                    // Assert
-                    Assert.NotNull(updateResult);
-                    Assert.True(updateResult.Succeeded);
-                }
+                // Act
+                IdentityResult updateResult = await store.DeleteAsync(new LondonTravelUser() { Id = userId }, default);
+
+                // Assert
+                Assert.NotNull(updateResult);
+                Assert.True(updateResult.Succeeded);
             }
 
             // Arrange
@@ -161,16 +156,13 @@ namespace MartinCostello.LondonTravel.Site.Integration
             {
                 message.Headers.Authorization = new AuthenticationHeaderValue("bearer", accessToken);
 
-                using (var client = Fixture.CreateClient())
-                {
-                    // Act
-                    using (var response = await client.SendAsync(message))
-                    {
-                        // Assert
-                        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-                        response.Content.Headers.ContentType.MediaType.ShouldBe(MediaTypeNames.Application.Json);
-                    }
-                }
+                // Act
+                using var client = Fixture.CreateClient();
+                using var response = await client.SendAsync(message);
+
+                // Assert
+                Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+                response.Content.Headers.ContentType.MediaType.ShouldBe(MediaTypeNames.Application.Json);
             }
         }
     }

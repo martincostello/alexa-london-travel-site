@@ -155,18 +155,17 @@ namespace MartinCostello.LondonTravel.Site.Integration
         /// <param name="testName">The name of the test method.</param>
         protected void WithNavigator(Action<ApplicationNavigator> test, [CallerMemberName] string testName = null)
         {
-            using (ApplicationNavigator navigator = CreateNavigator())
+            using ApplicationNavigator navigator = CreateNavigator();
+
+            try
             {
-                try
-                {
-                    test(navigator);
-                }
-                catch (Exception)
-                {
-                    OutputLogs(navigator.Driver);
-                    TakeScreenshot(navigator.Driver, testName);
-                    throw;
-                }
+                test(navigator);
+            }
+            catch (Exception)
+            {
+                OutputLogs(navigator.Driver);
+                TakeScreenshot(navigator.Driver, testName);
+                throw;
             }
         }
 
@@ -182,18 +181,17 @@ namespace MartinCostello.LondonTravel.Site.Integration
             Func<ApplicationNavigator, Task> test,
             [CallerMemberName] string testName = null)
         {
-            using (ApplicationNavigator navigator = CreateNavigator())
+            using ApplicationNavigator navigator = CreateNavigator();
+
+            try
             {
-                try
-                {
-                    await test(navigator);
-                }
-                catch (Exception)
-                {
-                    OutputLogs(navigator.Driver);
-                    TakeScreenshot(navigator.Driver, testName);
-                    throw;
-                }
+                await test(navigator);
+            }
+            catch (Exception)
+            {
+                OutputLogs(navigator.Driver);
+                TakeScreenshot(navigator.Driver, testName);
+                throw;
             }
         }
 

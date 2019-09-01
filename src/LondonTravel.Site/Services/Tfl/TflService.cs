@@ -80,20 +80,19 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
         {
             if (!_cache.TryGetValue(cacheKey, out T result))
             {
-                using (var response = await operation())
-                {
+                using var response = await operation();
+
 #pragma warning disable CA2000
-                    await response.EnsureSuccessStatusCodeAsync();
+                await response.EnsureSuccessStatusCodeAsync();
 #pragma warning restore CA2000
 
-                    result = response.Content;
+                result = response.Content;
 
-                    if (!string.IsNullOrEmpty(cacheKey) &&
-                        response.Headers.CacheControl != null &&
-                        response.Headers.CacheControl.MaxAge.HasValue)
-                    {
-                        _cache.Set(cacheKey, result, absoluteExpirationRelativeToNow: response.Headers.CacheControl.MaxAge.Value);
-                    }
+                if (!string.IsNullOrEmpty(cacheKey) &&
+                    response.Headers.CacheControl != null &&
+                    response.Headers.CacheControl.MaxAge.HasValue)
+                {
+                    _cache.Set(cacheKey, result, absoluteExpirationRelativeToNow: response.Headers.CacheControl.MaxAge.Value);
                 }
             }
 

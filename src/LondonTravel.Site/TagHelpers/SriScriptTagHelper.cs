@@ -88,10 +88,8 @@ namespace MartinCostello.LondonTravel.Site.TagHelpers
             {
                 using (var algorithm = SHA384.Create())
                 {
-                    using (var stream = fileInfo.CreateReadStream())
-                    {
-                        hash = Convert.ToBase64String(algorithm.ComputeHash(stream));
-                    }
+                    using var stream = fileInfo.CreateReadStream();
+                    hash = Convert.ToBase64String(algorithm.ComputeHash(stream));
                 }
 
                 var options = new MemoryCacheEntryOptions()

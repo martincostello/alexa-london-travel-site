@@ -109,10 +109,8 @@ namespace MartinCostello.LondonTravel.Site.TagHelpers
             {
                 using (var stream = File.OpenRead(fileInfo.PhysicalPath))
                 {
-                    using (var reader = new StreamReader(stream))
-                    {
-                        css = await reader.ReadToEndAsync();
-                    }
+                    using var reader = new StreamReader(stream);
+                    css = await reader.ReadToEndAsync();
                 }
 
                 if (MinifyInlined == true)
