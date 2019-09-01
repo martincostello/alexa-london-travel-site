@@ -18,8 +18,6 @@ namespace MartinCostello.LondonTravel.Site.Integration.Pages
 
         private IWebElement NameElement { get; }
 
-        private IWebElement RemoveButton { get; }
-
         private IWebElement RootElement { get; }
 
         public string Id() => RootElement.GetAttribute("data-provider");

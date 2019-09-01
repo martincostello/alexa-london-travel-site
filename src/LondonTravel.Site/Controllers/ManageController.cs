@@ -15,7 +15,6 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using Models;
-    using Services.Data;
     using Services.Tfl;
     using Telemetry;
 
@@ -28,7 +27,6 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     {
         private readonly UserManager<LondonTravelUser> _userManager;
         private readonly SignInManager<LondonTravelUser> _signInManager;
-        private readonly IDocumentService _documentService;
         private readonly ITflServiceFactory _tflServiceFactory;
         private readonly ISiteTelemetry _telemetry;
         private readonly ILogger _logger;
@@ -36,14 +34,12 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         public ManageController(
           UserManager<LondonTravelUser> userManager,
           SignInManager<LondonTravelUser> signInManager,
-          IDocumentService documentService,
           ITflServiceFactory tflServiceFactory,
           ISiteTelemetry telemetry,
           ILogger<ManageController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _documentService = documentService;
             _tflServiceFactory = tflServiceFactory;
             _telemetry = telemetry;
             _logger = logger;
