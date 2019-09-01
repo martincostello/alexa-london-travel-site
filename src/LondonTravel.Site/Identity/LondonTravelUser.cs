@@ -116,6 +116,6 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// Gets or sets the Unix timestamp of the user document.
         /// </summary>
         [JsonPropertyName("_ts")]
-        internal long Timestamp { get; set; }
+        public long Timestamp { get; set; }
     }
 }
