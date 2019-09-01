@@ -24,8 +24,7 @@
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <GenerateGitMetadata Condition=" ('$(CI)' != '' or '$(TF_BUILD)' != '') and '$(GenerateGitMetadata)' == '' ">true</GenerateGitMetadata>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
-    <LangVersion>preview</LangVersion>
-    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <LangVersion>latest</LangVersion>
     <NeutralLanguage>en-US</NeutralLanguage>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
     <NoWarn Condition=" '$(GenerateDocumentationFile)' != 'true' ">$(NoWarn);SA0001</NoWarn>

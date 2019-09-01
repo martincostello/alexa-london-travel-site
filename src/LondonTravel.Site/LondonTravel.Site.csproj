@@ -22,18 +22,17 @@
   <ItemGroup>
     <PackageReference Include="AspNet.Security.OAuth.Amazon" Version="3.0.0-preview-0858" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.7.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="3.0.0-preview8.19405.7" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="3.0.0-preview8.19405.7" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="3.0.0-preview8.19405.7" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="3.0.0-preview8.19405.7" />
-    <PackageReference Include="Microsoft.AspNetCore.AzureAppServicesIntegration" Version="3.0.0-preview8.19405.7" />
-    <PackageReference Include="Microsoft.AspNetCore.DataProtection.AzureStorage" Version="3.0.0-preview8.19405.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="3.0.0-rc1.19427.14" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="3.0.0-rc1.19427.14" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="3.0.0-rc1.19427.14" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="3.0.0-rc1.19427.14" />
+    <PackageReference Include="Microsoft.AspNetCore.AzureAppServicesIntegration" Version="3.0.0-rc1.19427.14" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.AzureStorage" Version="3.0.0-rc1.19427.14" />
     <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.1.1" />
     <PackageReference Include="Microsoft.Azure.KeyVault.WebKey" Version="3.0.4" />
     <PackageReference Include="Microsoft.Azure.Storage.Blob" Version="10.0.3" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.AzureKeyVault" Version="3.0.0-preview8.19405.4" />
-    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="3.0.0-preview8.19405.4" />
-    <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="3.0.0-preview8.19405.4" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.AzureKeyVault" Version="3.0.0-rc1.19426.4" />
+    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="3.0.0-rc1.19426.4" />
     <PackageReference Include="NodaTime" Version="2.4.7" />
     <PackageReference Include="Polly" Version="7.1.1" />
     <PackageReference Include="Refit" Version="4.7.51" />
