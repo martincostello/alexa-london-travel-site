@@ -13,6 +13,7 @@ namespace MartinCostello.LondonTravel.Site.Middleware
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Options;
     using Options;
 
@@ -60,7 +61,7 @@ namespace MartinCostello.LondonTravel.Site.Middleware
         /// <param name="options">The current site configuration options.</param>
         public CustomHttpHeadersMiddleware(
             RequestDelegate next,
-            IHostingEnvironment environment,
+            IWebHostEnvironment environment,
             IConfiguration config,
             IOptionsSnapshot<SiteOptions> options)
         {
@@ -97,7 +98,7 @@ namespace MartinCostello.LondonTravel.Site.Middleware
                     // Middleware (e.g. Identity) may have already set X-Frame-Options
                     context.Response.Headers["X-Frame-Options"] = "DENY";
 
-                    string nonce = context.GetCspNonce();
+                    string? nonce = context.GetCspNonce();
 
                     if (nonce != null)
                     {
@@ -168,7 +169,7 @@ namespace MartinCostello.LondonTravel.Site.Middleware
             builder.AppendFormat(
                 CultureInfo.InvariantCulture,
                 "max-age={0};",
-                (int)options.CertificateTransparency?.MaxAge.TotalSeconds);
+                (int)(options.CertificateTransparency?.MaxAge.TotalSeconds ?? default));
 
             if (enforce)
             {
@@ -207,7 +208,7 @@ namespace MartinCostello.LondonTravel.Site.Middleware
         /// <returns>
         /// The origin to use for the URI, if any.
         /// </returns>
-        private static string GetOriginForContentSecurityPolicy(Uri baseUri)
+        private static string GetOriginForContentSecurityPolicy(Uri? baseUri)
         {
             if (baseUri == null)
             {
@@ -233,7 +234,7 @@ namespace MartinCostello.LondonTravel.Site.Middleware
         /// <returns>
         /// A <see cref="string"/> containing the Content Security Policy to use.
         /// </returns>
-        private string BuildContentSecurityPolicy(string nonce, bool allowInlineStyles, bool isReport)
+        private string BuildContentSecurityPolicy(string? nonce, bool allowInlineStyles, bool isReport)
         {
             var options = _options.Value;
             var cdn = GetCdnOriginForContentSecurityPolicy(options);
@@ -305,7 +306,7 @@ namespace MartinCostello.LondonTravel.Site.Middleware
                 IList<string> origins = pair.Value;
 
                 if (options.ContentSecurityPolicyOrigins != null &&
-                    options.ContentSecurityPolicyOrigins.TryGetValue(pair.Key, out IList<string> configOrigins))
+                    options.ContentSecurityPolicyOrigins.TryGetValue(pair.Key, out IList<string>? configOrigins))
                 {
                     origins = origins.Concat(configOrigins).ToList();
                 }

@@ -5,6 +5,7 @@ namespace MartinCostello.LondonTravel.Site
 {
     using System;
     using System.IO;
+    using System.Net.Mime;
     using Extensions;
     using MartinCostello.LondonTravel.Site.Services;
     using Microsoft.ApplicationInsights.AspNetCore.Extensions;
@@ -19,13 +20,13 @@ namespace MartinCostello.LondonTravel.Site
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Razor;
     using Microsoft.AspNetCore.StaticFiles;
+    using Microsoft.Azure.Storage;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.DependencyInjection.Extensions;
+    using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Options;
     using Microsoft.Net.Http.Headers;
-    using Microsoft.WindowsAzure.Storage;
-    using Newtonsoft.Json;
     using NodaTime;
     using Options;
     using Services.Data;
@@ -41,8 +42,8 @@ namespace MartinCostello.LondonTravel.Site
         /// Initializes a new instance of the <see cref="Startup"/> class.
         /// </summary>
         /// <param name="configuration">The <see cref="IConfiguration"/> to use.</param>
-        /// <param name="hostingEnvironment">The <see cref="IHostingEnvironment"/> to use.</param>
-        public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
+        /// <param name="hostingEnvironment">The <see cref="IWebHostEnvironment"/> to use.</param>
+        public Startup(IConfiguration configuration, IWebHostEnvironment hostingEnvironment)
         {
             Configuration = configuration;
             HostingEnvironment = hostingEnvironment;
@@ -56,23 +57,23 @@ namespace MartinCostello.LondonTravel.Site
         /// <summary>
         /// Gets the current hosting environment.
         /// </summary>
-        private IHostingEnvironment HostingEnvironment { get; }
+        private IWebHostEnvironment HostingEnvironment { get; }
 
         /// <summary>
         /// Gets or sets the service scope to use for a service provider.
         /// </summary>
-        private IServiceScope ServiceScope { get; set; }
+        private IServiceScope? ServiceScope { get; set; }
 
         /// <summary>
         /// Configures the application.
         /// </summary>
         /// <param name="app">The <see cref="IApplicationBuilder"/> to use.</param>
-        /// <param name="applicationLifetime">The <see cref="IApplicationLifetime"/> to use.</param>
+        /// <param name="applicationLifetime">The <see cref="IHostApplicationLifetime"/> to use.</param>
         /// <param name="serviceProvider">The <see cref="IServiceProvider"/> to use.</param>
         /// <param name="options">The snapshot of <see cref="SiteOptions"/> to use.</param>
         public void Configure(
             IApplicationBuilder app,
-            IApplicationLifetime applicationLifetime,
+            IHostApplicationLifetime applicationLifetime,
             IServiceProvider serviceProvider,
             IOptionsSnapshot<SiteOptions> options)
         {
@@ -106,9 +107,11 @@ namespace MartinCostello.LondonTravel.Site
 
             app.UseStaticFiles(CreateStaticFileOptions());
 
+            app.UseRouting();
+
             app.UseIdentity(options.Value);
 
-            app.UseMvcWithDefaultRoute();
+            app.UseEndpoints((endpoints) => endpoints.MapDefaultControllerRoute());
 
             app.UseSwagger();
 
@@ -138,15 +141,12 @@ namespace MartinCostello.LondonTravel.Site
                     p.HeaderName = "x-anti-forgery";
                 });
 
-            services
-                .AddMemoryCache()
-                .AddDistributedMemoryCache()
-                .AddCors(ConfigureCors);
+            services.AddCors(ConfigureCors);
 
             services
                 .AddLocalization()
-                .AddMvc(ConfigureMvc)
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                .AddControllersWithViews(ConfigureMvc)
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
                 .AddDataAnnotationsLocalization()
                 .AddJsonOptions(ConfigureJsonFormatter);
@@ -177,9 +177,8 @@ namespace MartinCostello.LondonTravel.Site
             services.AddSingleton<ITflServiceFactory, TflServiceFactory>();
             services.AddSingleton(DocumentHelpers.CreateClient);
 
-            services.AddSingleton((_) => ConfigureJsonFormatter(new JsonSerializerSettings()));
             services.AddSingleton((p) => p.GetRequiredService<IOptions<SiteOptions>>().Value);
-            services.AddSingleton((p) => p.GetRequiredService<SiteOptions>().Authentication.UserStore);
+            services.AddSingleton((p) => p.GetRequiredService<SiteOptions>().Authentication!.UserStore);
             services.AddSingleton((p) => p.GetRequiredService<SiteOptions>().Tfl);
 
             services.TryAddSingleton<IDocumentService, DocumentService>();
@@ -194,35 +193,23 @@ namespace MartinCostello.LondonTravel.Site
             services.AddPolly();
             services.AddHttpClients();
 
-            services.AddApplicationAuthentication(() => ServiceScope.ServiceProvider);
+            services.AddApplicationAuthentication(() => ServiceScope!.ServiceProvider);
         }
 
         /// <summary>
         /// Configures the JSON serializer for MVC.
         /// </summary>
-        /// <param name="options">The <see cref="MvcJsonOptions"/> to configure.</param>
-        private static void ConfigureJsonFormatter(MvcJsonOptions options)
-            => ConfigureJsonFormatter(options.SerializerSettings);
-
-        /// <summary>
-        /// Configures the JSON serializer.
-        /// </summary>
-        /// <param name="settings">The <see cref="JsonSerializerSettings"/> to configure.</param>
-        /// <returns>
-        /// The <see cref="JsonSerializerSettings"/> to use.
-        /// </returns>
-        private static JsonSerializerSettings ConfigureJsonFormatter(JsonSerializerSettings settings)
+        /// <param name="options">The <see cref="JsonOptions"/> to configure.</param>
+        internal static void ConfigureJsonFormatter(JsonOptions options)
         {
-            // Make JSON easier to read for debugging at the expense of larger payloads
-            settings.Formatting = Formatting.Indented;
-
             // Omit nulls to reduce payload size
-            settings.NullValueHandling = NullValueHandling.Ignore;
+            options.JsonSerializerOptions.IgnoreNullValues = true;
 
-            // Explicitly define behavior when serializing DateTime values
-            settings.DateFormatString = "yyyy'-'MM'-'dd'T'HH':'mm':'ssK";   // Only return DateTimes to a 1 second precision
+            // Make JSON easier to read for debugging at the expense of larger payloads
+            options.JsonSerializerOptions.WriteIndented = true;
 
-            return settings;
+            // Opt-out of case insensitivity on property names
+            options.JsonSerializerOptions.PropertyNameCaseInsensitive = false;
         }
 
         /// <summary>
@@ -250,7 +237,7 @@ namespace MartinCostello.LondonTravel.Site
 
             if (context.File.Exists && HostingEnvironment.IsProduction())
             {
-                string extension = Path.GetExtension(context.File.PhysicalPath);
+                string? extension = Path.GetExtension(context.File.PhysicalPath);
 
                 // These files are served with a content hash in the URL so can be cached for longer
                 bool isScriptOrStyle =
@@ -284,7 +271,7 @@ namespace MartinCostello.LondonTravel.Site
             return new StaticFileOptions()
             {
                 ContentTypeProvider = provider,
-                DefaultContentType = "application/json",
+                DefaultContentType = MediaTypeNames.Application.Json,
                 OnPrepareResponse = SetCacheHeaders,
                 ServeUnknownFileTypes = true,
             };
@@ -296,7 +283,7 @@ namespace MartinCostello.LondonTravel.Site
         /// <param name="corsOptions">The <see cref="CorsOptions"/> to configure.</param>
         private void ConfigureCors(CorsOptions corsOptions)
         {
-            var siteOptions = ServiceScope.ServiceProvider.GetService<SiteOptions>();
+            var siteOptions = ServiceScope!.ServiceProvider.GetService<SiteOptions>();
 
             corsOptions.AddPolicy(
                 "DefaultCorsPolicy",

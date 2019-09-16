@@ -4,8 +4,10 @@
 namespace MartinCostello.LondonTravel.Site.Services.Data
 {
     using System;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Azure.Cosmos;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Options;
     using Options;
 
     /// <summary>
@@ -32,13 +34,17 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
             var options = serviceProvider.GetRequiredService<UserStoreOptions>();
 
-            return CreateClient(options);
+            var jsonOptions = serviceProvider.GetRequiredService<IOptions<JsonOptions>>().Value;
+            var serializer = new SystemTextJsonCosmosSerializer(jsonOptions.JsonSerializerOptions);
+
+            return CreateClient(options, serializer);
         }
 
         /// <summary>
         /// Creates a new instance of an <see cref="IDocumentClient"/> implementation.
         /// </summary>
         /// <param name="options">The <see cref="UserStoreOptions"/> to use.</param>
+        /// <param name="serializer">The optional <see cref="CosmosSerializer"/> to use.</param>
         /// <returns>
         /// The created instance of <see cref="IDocumentClient"/>.
         /// </returns>
@@ -48,7 +54,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// <exception cref="ArgumentException">
         /// <paramref name="options"/> is invalid.
         /// </exception>
-        internal static CosmosClient CreateClient(UserStoreOptions options)
+        internal static CosmosClient CreateClient(UserStoreOptions options, CosmosSerializer? serializer = null)
         {
             if (options == null)
             {
@@ -84,6 +90,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             {
                 ApplicationName = "london-travel",
                 RequestTimeout = TimeSpan.FromSeconds(15),
+                Serializer = serializer,
             };
 
             if (!string.IsNullOrEmpty(options.CurrentLocation))

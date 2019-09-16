@@ -34,20 +34,19 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             mock.Setup((p) => p.GetUserCountAsync(true))
                 .ReturnsAsync(userCount);
 
-            using (RegisterController target = CreateTarget(service: mock.Object))
-            {
-                // Act
-                var actual = await target.Index();
+            using RegisterController target = CreateTarget(service: mock.Object);
 
-                // Assert
-                actual.ShouldNotBeNull();
+            // Act
+            var actual = await target.Index();
 
-                var view = actual.ShouldBeOfType<ViewResult>();
-                var model = view.Model.ShouldBeOfType<RegisterViewModel>();
+            // Assert
+            actual.ShouldNotBeNull();
 
-                model.ShouldNotBeNull();
-                model.RegisteredUsers.ShouldBe(expected);
-            }
+            var view = actual.ShouldBeOfType<ViewResult>();
+            var model = view.Model.ShouldBeOfType<RegisterViewModel>();
+
+            model.ShouldNotBeNull();
+            model.RegisteredUsers.ShouldBe(expected);
         }
 
         [Fact]
@@ -59,20 +58,19 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             mock.Setup((p) => p.GetUserCountAsync(true))
                 .ThrowsAsync(new InvalidOperationException());
 
-            using (RegisterController target = CreateTarget(service: mock.Object))
-            {
-                // Act
-                var actual = await target.Index();
+            using RegisterController target = CreateTarget(service: mock.Object);
 
-                // Assert
-                actual.ShouldNotBeNull();
+            // Act
+            var actual = await target.Index();
 
-                var view = actual.ShouldBeOfType<ViewResult>();
-                var model = view.Model.ShouldBeOfType<RegisterViewModel>();
+            // Assert
+            actual.ShouldNotBeNull();
 
-                model.ShouldNotBeNull();
-                model.RegisteredUsers.ShouldBe(7000);
-            }
+            var view = actual.ShouldBeOfType<ViewResult>();
+            var model = view.Model.ShouldBeOfType<RegisterViewModel>();
+
+            model.ShouldNotBeNull();
+            model.RegisteredUsers.ShouldBe(7000);
         }
 
         /// <summary>
@@ -82,7 +80,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// <returns>
         /// The created instance of <see cref="RegisterController"/>.
         /// </returns>
-        private static RegisterController CreateTarget(IAccountService service = null)
+        private static RegisterController CreateTarget(IAccountService? service = null)
         {
             var httpContext = new Mock<HttpContext>();
 
@@ -99,7 +97,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             var controllerContext = new ControllerContext(actionContext);
 
-            return new RegisterController(service)
+            return new RegisterController(service!)
             {
                 ControllerContext = controllerContext,
             };

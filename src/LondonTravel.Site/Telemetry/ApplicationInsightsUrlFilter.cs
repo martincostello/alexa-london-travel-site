@@ -21,7 +21,7 @@ namespace MartinCostello.LondonTravel.Site.Telemetry
         private readonly TelemetryConfiguration _configuration;
         private readonly Uri _telemetryServiceEndpointUri = new Uri(TelemetryServiceEndpoint);
 
-        private KeyValuePair<string, string> _cachedEndpointLeftPart;
+        private KeyValuePair<string?, string> _cachedEndpointLeftPart;
 
         internal ApplicationInsightsUrlFilter(TelemetryConfiguration configuration)
         {
@@ -33,11 +33,11 @@ namespace MartinCostello.LondonTravel.Site.Telemetry
         {
             get
             {
-                string currentEndpointAddressValue = null;
+                string? currentEndpointAddressValue = null;
 
                 if (_configuration != null)
                 {
-                    string endpoint = _configuration.TelemetryChannel?.EndpointAddress;
+                    string? endpoint = _configuration.TelemetryChannel?.EndpointAddress;
 
                     if (!string.IsNullOrEmpty(endpoint))
                     {
@@ -62,7 +62,7 @@ namespace MartinCostello.LondonTravel.Site.Telemetry
             }
 
             bool result = false;
-            string url = uri?.ToString();
+            string? url = uri?.ToString();
 
             if (!string.IsNullOrEmpty(url))
             {
@@ -83,12 +83,12 @@ namespace MartinCostello.LondonTravel.Site.Telemetry
             return result;
         }
 
-        private KeyValuePair<string, string> GetEndpointLeftPart(string currentEndpointAddressValue = null)
+        private KeyValuePair<string?, string> GetEndpointLeftPart(string? currentEndpointAddressValue = null)
         {
             Uri uri = currentEndpointAddressValue != null ? new Uri(currentEndpointAddressValue) : _telemetryServiceEndpointUri;
             string endpointLeftPart = uri.Scheme + "://" + uri.Authority;
 
-            return new KeyValuePair<string, string>(currentEndpointAddressValue, endpointLeftPart);
+            return new KeyValuePair<string?, string>(currentEndpointAddressValue, endpointLeftPart);
         }
     }
 }

@@ -72,7 +72,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
 
             var builder = new UriBuilder(location)
             {
-                Query = queryString.ToString(),
+                Query = queryString.ToString() ?? string.Empty,
             };
 
             return Redirect(context, builder);
@@ -97,7 +97,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             var builder = new UriBuilder(_serverAddress)
             {
                 Path = "/signin-twitter",
-                Query = queryString.ToString(),
+                Query = queryString.ToString() ?? string.Empty,
             };
 
             return Redirect(context, builder);

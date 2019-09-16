@@ -7,7 +7,6 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     using Identity;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.Logging;
     using Models;
 
     /// <summary>
@@ -21,19 +20,12 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         private readonly UserManager<LondonTravelUser> _userManager;
 
         /// <summary>
-        /// The <see cref="ILogger"/> to use. This field is read-only.
-        /// </summary>
-        private readonly ILogger _logger;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="HelpController"/> class.
         /// </summary>
         /// <param name="userManager">The <see cref="UserManager{TUser}"/> to use.</param>
-        /// <param name="logger">The <see cref="ILogger"/> to use.</param>
-        public HelpController(UserManager<LondonTravelUser> userManager, ILogger<HelpController> logger)
+        public HelpController(UserManager<LondonTravelUser> userManager)
         {
             _userManager = userManager;
-            _logger = logger;
         }
 
         /// <summary>

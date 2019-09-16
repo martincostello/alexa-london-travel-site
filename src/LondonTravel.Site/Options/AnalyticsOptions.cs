@@ -11,6 +11,6 @@ namespace MartinCostello.LondonTravel.Site.Options
         /// <summary>
         /// Gets or sets the Google property Id.
         /// </summary>
-        public string Google { get; set; }
+        public string? Google { get; set; }
     }
 }

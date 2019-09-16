@@ -4,11 +4,12 @@
 namespace MartinCostello.LondonTravel.Site.Integration
 {
     using System;
+    using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Mime;
+    using System.Text.Json;
     using System.Threading.Tasks;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
     using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
@@ -29,63 +30,61 @@ namespace MartinCostello.LondonTravel.Site.Integration
         }
 
         [Theory]
-        [InlineData("/", "text/html")]
-        [InlineData("/account/register/", "text/html")]
-        [InlineData("/account/sign-in/", "text/html")]
-        [InlineData("/api/", "text/html")]
-        [InlineData("/apple-app-site-association", "application/json")]
+        [InlineData("/", MediaTypeNames.Text.Html)]
+        [InlineData("/account/register/", MediaTypeNames.Text.Html)]
+        [InlineData("/account/sign-in/", MediaTypeNames.Text.Html)]
+        [InlineData("/api/", MediaTypeNames.Text.Html)]
+        [InlineData("/apple-app-site-association", MediaTypeNames.Application.Json)]
         [InlineData("/assets/css/site.css", "text/css")]
-        [InlineData("/assets/css/site.css.map", "text/plain")]
+        [InlineData("/assets/css/site.css.map", MediaTypeNames.Text.Plain)]
         [InlineData("/assets/css/site.min.css", "text/css")]
-        [InlineData("/assets/css/site.min.css.map", "text/plain")]
+        [InlineData("/assets/css/site.min.css.map", MediaTypeNames.Text.Plain)]
         [InlineData("/assets/js/site.js", "application/javascript")]
-        [InlineData("/assets/js/site.js.map", "text/plain")]
+        [InlineData("/assets/js/site.js.map", MediaTypeNames.Text.Plain)]
         [InlineData("/assets/js/site.min.js", "application/javascript")]
-        [InlineData("/assets/js/site.min.js.map", "text/plain")]
+        [InlineData("/assets/js/site.min.js.map", MediaTypeNames.Text.Plain)]
         [InlineData("/assets/js/site.manage.js", "application/javascript")]
-        [InlineData("/assets/js/site.manage.js.map", "text/plain")]
+        [InlineData("/assets/js/site.manage.js.map", MediaTypeNames.Text.Plain)]
         [InlineData("/assets/js/site.manage.min.js", "application/javascript")]
-        [InlineData("/assets/js/site.manage.min.js.map", "text/plain")]
+        [InlineData("/assets/js/site.manage.min.js.map", MediaTypeNames.Text.Plain)]
         [InlineData("/assets/js/site.preferences.js", "application/javascript")]
-        [InlineData("/assets/js/site.preferences.js.map", "text/plain")]
+        [InlineData("/assets/js/site.preferences.js.map", MediaTypeNames.Text.Plain)]
         [InlineData("/assets/js/site.preferences.min.js", "application/javascript")]
-        [InlineData("/assets/js/site.preferences.min.js.map", "text/plain")]
-        [InlineData("/.well-known/apple-app-site-association", "application/json")]
-        [InlineData("/.well-known/assetlinks.json", "application/json")]
-        [InlineData("/.well-known/security.txt", "text/plain")]
-        [InlineData("/BingSiteAuth.xml", "text/xml")]
-        [InlineData("/browserconfig.xml", "text/xml")]
-        [InlineData("/error.html", "text/html")]
+        [InlineData("/assets/js/site.preferences.min.js.map", MediaTypeNames.Text.Plain)]
+        [InlineData("/.well-known/apple-app-site-association", MediaTypeNames.Application.Json)]
+        [InlineData("/.well-known/assetlinks.json", MediaTypeNames.Application.Json)]
+        [InlineData("/.well-known/security.txt", MediaTypeNames.Text.Plain)]
+        [InlineData("/BingSiteAuth.xml", MediaTypeNames.Text.Xml)]
+        [InlineData("/browserconfig.xml", MediaTypeNames.Text.Xml)]
+        [InlineData("/error.html", MediaTypeNames.Text.Html)]
         [InlineData("/favicon.ico", "image/x-icon")]
-        [InlineData("/googled1107923138d0b79.html", "text/html")]
-        [InlineData("/help/", "text/html")]
-        [InlineData("/humans.txt", "text/plain")]
-        [InlineData("/keybase.txt", "text/plain")]
+        [InlineData("/googled1107923138d0b79.html", MediaTypeNames.Text.Html)]
+        [InlineData("/help/", MediaTypeNames.Text.Html)]
+        [InlineData("/humans.txt", MediaTypeNames.Text.Plain)]
+        [InlineData("/keybase.txt", MediaTypeNames.Text.Plain)]
         [InlineData("/manifest.webmanifest", "application/manifest+json")]
-        [InlineData("/pgp-key.txt", "text/plain")]
-        [InlineData("/privacy-policy/", "text/html")]
-        [InlineData("/robots.txt", "text/plain")]
-        [InlineData("/security.txt", "text/plain")]
+        [InlineData("/pgp-key.txt", MediaTypeNames.Text.Plain)]
+        [InlineData("/privacy-policy/", MediaTypeNames.Text.Html)]
+        [InlineData("/robots.txt", MediaTypeNames.Text.Plain)]
+        [InlineData("/security.txt", MediaTypeNames.Text.Plain)]
         [InlineData("/service-worker.js", "application/javascript")]
-        [InlineData("/sitemap.xml", "text/xml")]
-        [InlineData("/swagger/api/swagger.json", "application/json")]
-        [InlineData("/technology/", "text/html")]
-        [InlineData("/terms-of-service/", "text/html")]
+        [InlineData("/sitemap.xml", MediaTypeNames.Text.Xml)]
+        [InlineData("/swagger/api/swagger.json", MediaTypeNames.Application.Json)]
+        [InlineData("/technology/", MediaTypeNames.Text.Html)]
+        [InlineData("/terms-of-service/", MediaTypeNames.Text.Html)]
         public async Task Can_Load_Resource(string requestUri, string contentType)
         {
             // Arrange
-            using (var client = Fixture.CreateClient())
-            {
-                // Act
-                using (var response = await client.GetAsync(requestUri))
-                {
-                    // Assert
-                    response.StatusCode.ShouldBe(HttpStatusCode.OK, $"Failed to get {requestUri}. {await response.Content.ReadAsStringAsync()}");
-                    response.Content.Headers.ContentType?.MediaType.ShouldBe(contentType);
-                    response.Content.Headers.ContentLength.ShouldNotBeNull();
-                    response.Content.Headers.ContentLength.ShouldNotBe(0);
-                }
-            }
+            using var client = Fixture.CreateClient();
+
+            // Act
+            using var response = await client.GetAsync(requestUri);
+
+            // Assert
+            response.StatusCode.ShouldBe(HttpStatusCode.OK, $"Failed to get {requestUri}. {await response.Content.ReadAsStringAsync()}");
+            response.Content.Headers.ContentType?.MediaType.ShouldBe(contentType);
+            response.Content.Headers.ContentLength.ShouldNotBeNull();
+            response.Content.Headers.ContentLength.ShouldNotBe(0);
         }
 
         [Theory]
@@ -95,16 +94,14 @@ namespace MartinCostello.LondonTravel.Site.Integration
         public async Task Resource_Is_Redirect(string requestUri, string location)
         {
             // Arrange
-            using (var client = Fixture.CreateClient())
-            {
-                // Act
-                using (var response = await client.GetAsync(requestUri))
-                {
-                    // Assert
-                    response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
-                    response.Headers.Location?.OriginalString.ShouldBe(location);
-                }
-            }
+            using var client = Fixture.CreateClient();
+
+            // Act
+            using var response = await client.GetAsync(requestUri);
+
+            // Assert
+            response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
+            response.Headers.Location?.OriginalString.ShouldBe(location);
         }
 
         [Theory]
@@ -114,35 +111,30 @@ namespace MartinCostello.LondonTravel.Site.Integration
         public async Task Cannot_Load_Resource_Unauthenticated(string requestUri)
         {
             // Arrange
-            using (var client = Fixture.CreateClient())
-            {
-                // Act
-                using (var response = await client.GetAsync(requestUri))
-                {
-                    // Assert
-                    response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
-                    response.Headers.Location?.PathAndQuery.ShouldBe($"/account/sign-in/?ReturnUrl={Uri.EscapeDataString(requestUri)}");
-                }
-            }
+            using var client = Fixture.CreateClient();
+
+            // Act
+            using var response = await client.GetAsync(requestUri);
+
+            // Assert
+            response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
+            response.Headers.Location?.PathAndQuery.ShouldBe($"/account/sign-in/?ReturnUrl={Uri.EscapeDataString(requestUri)}");
         }
 
         [Fact]
         public async Task Manifest_Is_Valid_Json()
         {
             // Arrange
-            using (var client = Fixture.CreateClient())
-            {
-                using (var response = await client.GetAsync("/manifest.webmanifest"))
-                {
-                    // Assert
-                    response.EnsureSuccessStatusCode();
+            using var client = Fixture.CreateClient();
+            using var response = await client.GetAsync("/manifest.webmanifest");
 
-                    string json = await response.Content.ReadAsStringAsync();
-                    JObject manifest = JObject.Parse(json);
+            // Assert
+            response.EnsureSuccessStatusCode();
 
-                    ((string)manifest["name"]).ShouldBe("London Travel");
-                }
-            }
+            string json = await response.Content.ReadAsStringAsync();
+            var manifest = JsonDocument.Parse(json);
+
+            manifest.RootElement.GetString("name").ShouldBe("London Travel");
         }
 
         [Fact]
@@ -169,16 +161,13 @@ namespace MartinCostello.LondonTravel.Site.Integration
             };
 
             // Act
-            using (var client = Fixture.CreateClient())
+            using var client = Fixture.CreateClient();
+            var response = await client.GetAsync("/");
+
+            // Assert
+            foreach (string expected in expectedHeaders)
             {
-                using (var response = await client.GetAsync("/"))
-                {
-                    // Assert
-                    foreach (string expected in expectedHeaders)
-                    {
-                        response.Headers.Contains(expected).ShouldBeTrue($"The '{expected}' response header was not found.");
-                    }
-                }
+                response.Headers.Contains(expected).ShouldBeTrue($"The '{expected}' response header was not found.");
             }
         }
 
@@ -188,17 +177,15 @@ namespace MartinCostello.LondonTravel.Site.Integration
         public async Task Response_Headers_Is_Valid_Json(string name)
         {
             // Act
-            using (var client = Fixture.CreateClient())
-            {
-                using (var response = await client.GetAsync("/"))
-                {
-                    // Assert
-                    response.Headers.Contains(name).ShouldBeTrue($"The '{name}' response header was not found.");
+            using var client = Fixture.CreateClient();
+            using var response = await client.GetAsync("/");
 
-                    string json = string.Join(string.Empty, response.Headers.GetValues(name));
-                    JObject.Parse(json).HasValues.ShouldBeTrue();
-                }
-            }
+            // Assert
+            response.Headers.Contains(name).ShouldBeTrue($"The '{name}' response header was not found.");
+
+            string json = string.Join(string.Empty, response.Headers.GetValues(name));
+            using var document = JsonDocument.Parse(json);
+            document.RootElement.EnumerateObject().Count().ShouldBeGreaterThanOrEqualTo(1);
         }
 
         [Theory]
@@ -216,16 +203,14 @@ namespace MartinCostello.LondonTravel.Site.Integration
         public async Task Error_Page_Returns_Correct_Status_Code(string requestUri, HttpStatusCode expected)
         {
             // Arrange
-            using (var client = Fixture.CreateClient())
-            {
-                // Act
-                using (var response = await client.GetAsync(requestUri))
-                {
-                    // Assert
-                    response.StatusCode.ShouldBe(expected);
-                    response.Content.Headers.ContentType?.MediaType.ShouldBe("text/html");
-                }
-            }
+            using var client = Fixture.CreateClient();
+
+            // Act
+            using var response = await client.GetAsync(requestUri);
+
+            // Assert
+            response.StatusCode.ShouldBe(expected);
+            response.Content.Headers.ContentType?.MediaType.ShouldBe("text/html");
         }
 
         [Theory]
@@ -238,39 +223,36 @@ namespace MartinCostello.LondonTravel.Site.Integration
         public async Task Crawler_Spam_Is_Redirected_To_YouTube(string requestUri)
         {
             // Arrange
-            using (var client = Fixture.CreateClient())
+            using var client = Fixture.CreateClient();
+
+            // Act
+            using (var response = await client.GetAsync(requestUri))
+            {
+                // Assert
+                response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
+                response.Headers.Location?.Host.ShouldBe("www.youtube.com");
+            }
+
+            // Arrange
+            using (var message = new HttpRequestMessage(HttpMethod.Head, requestUri))
             {
                 // Act
-                using (var response = await client.GetAsync(requestUri))
-                {
-                    // Assert
-                    response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
-                    response.Headers.Location?.Host.ShouldBe("www.youtube.com");
-                }
+                using var response = await client.SendAsync(message);
 
-                // Arrange
-                using (var message = new HttpRequestMessage(HttpMethod.Head, requestUri))
-                {
-                    // Act
-                    using (var response = await client.SendAsync(message))
-                    {
-                        // Assert
-                        response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
-                        response.Headers.Location?.Host.ShouldBe("www.youtube.com");
-                    }
-                }
+                // Assert
+                response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
+                response.Headers.Location?.Host.ShouldBe("www.youtube.com");
+            }
 
-                // Arrange
-                using (var content = new StringContent(string.Empty))
-                {
-                    // Act
-                    using (var response = await client.PostAsync(requestUri, content))
-                    {
-                        // Assert
-                        response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
-                        response.Headers.Location?.Host.ShouldBe("www.youtube.com");
-                    }
-                }
+            // Arrange
+            using (var content = new StringContent(string.Empty))
+            {
+                // Act
+                using var response = await client.PostAsync(requestUri, content);
+
+                // Assert
+                response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
+                response.Headers.Location?.Host.ShouldBe("www.youtube.com");
             }
         }
     }

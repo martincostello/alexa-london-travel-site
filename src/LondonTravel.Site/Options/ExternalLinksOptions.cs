@@ -13,21 +13,21 @@ namespace MartinCostello.LondonTravel.Site.Options
         /// <summary>
         /// Gets or sets the URI of the API.
         /// </summary>
-        public Uri Api { get; set; }
+        public Uri? Api { get; set; }
 
         /// <summary>
         /// Gets or sets the URI of the CDN.
         /// </summary>
-        public Uri Cdn { get; set; }
+        public Uri? Cdn { get; set; }
 
         /// <summary>
         /// Gets or sets the URI of the skill.
         /// </summary>
-        public Uri Skill { get; set; }
+        public Uri? Skill { get; set; }
 
         /// <summary>
         /// Gets or sets the options for the URIs to use for reports.
         /// </summary>
-        public ReportOptions Reports { get; set; }
+        public ReportOptions? Reports { get; set; }
     }
 }

@@ -24,9 +24,10 @@ namespace MartinCostello.LondonTravel.Site.Identity
             var login = new UserLoginInfo("loginProvider", "providerKey", "displayName");
             var cancellationToken = CancellationToken.None;
 
-            UserStore target = CreateStore();
+            using UserStore target = CreateStore();
 
             // Act and Assert
+#nullable disable
             await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.AddLoginAsync(null, login, cancellationToken));
             await Assert.ThrowsAsync<ArgumentNullException>("login", () => target.AddLoginAsync(user, null, cancellationToken));
             await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.CreateAsync(null, cancellationToken));
@@ -59,6 +60,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
             await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.GetRolesAsync(null, cancellationToken));
             await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.IsInRoleAsync(null, "a", cancellationToken));
             await Assert.ThrowsAsync<ArgumentNullException>("roleName", () => target.IsInRoleAsync(user, null, cancellationToken));
+#nullable enable
         }
 
         [Fact]
@@ -69,7 +71,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
             var roleName = "RoleName";
             var cancellationToken = CancellationToken.None;
 
-            UserStore target = CreateStore();
+            using UserStore target = CreateStore();
 
             // Act and Assert
             await Assert.ThrowsAsync<NotImplementedException>(() => target.AddToRoleAsync(user, roleName, cancellationToken));
@@ -86,7 +88,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
 
             var login = new UserLoginInfo("acme", "providerKey", "displayName");
 
-            UserStore target = CreateStore();
+            using UserStore target = CreateStore();
 
             // Act and Assert
             await Assert.ThrowsAsync<InvalidOperationException>(() => target.AddLoginAsync(user, login, CancellationToken.None));
@@ -99,7 +101,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
             var user = new LondonTravelUser();
             var login = new UserLoginInfo("acme", "providerKey", "displayName");
 
-            UserStore target = CreateStore();
+            using UserStore target = CreateStore();
 
             // Act
             await target.AddLoginAsync(user, login, CancellationToken.None);
@@ -128,7 +130,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
             mock.Setup((p) => p.CreateAsync(user))
                 .ReturnsAsync("MyUserId");
 
-            UserStore target = CreateStore(mock.Object);
+            using UserStore target = CreateStore(mock.Object);
 
             // Act
             var actual = await target.CreateAsync(user, CancellationToken.None);
@@ -154,7 +156,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
             mock.Setup((p) => p.DeleteAsync(user.Id))
                 .ReturnsAsync(true);
 
-            UserStore target = CreateStore(mock.Object);
+            using UserStore target = CreateStore(mock.Object);
 
             // Act
             var actual = await target.DeleteAsync(user, CancellationToken.None);
@@ -177,7 +179,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
             mock.Setup((p) => p.DeleteAsync(user.Id))
                 .ReturnsAsync(false);
 
-            UserStore target = CreateStore(mock.Object);
+            using UserStore target = CreateStore(mock.Object);
 
             // Act
             var actual = await target.DeleteAsync(user, CancellationToken.None);
@@ -197,7 +199,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 Id = string.Empty,
             };
 
-            UserStore target = CreateStore();
+            using UserStore target = CreateStore();
 
             // Act and Assert
             await Assert.ThrowsAsync<ArgumentException>("user", () => target.DeleteAsync(user, CancellationToken.None));
@@ -212,7 +214,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 Email = "user@domain.com",
             };
 
-            UserStore target = CreateStore();
+            using UserStore target = CreateStore();
 
             // Act
             var actual = await target.GetEmailAsync(user, CancellationToken.None);
@@ -230,7 +232,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 EmailConfirmed = true,
             };
 
-            UserStore target = CreateStore();
+            using UserStore target = CreateStore();
 
             // Act
             var actual = await target.GetEmailConfirmedAsync(user, CancellationToken.None);
@@ -248,7 +250,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 EmailNormalized = "user@domain.com",
             };
 
-            UserStore target = CreateStore();
+            using UserStore target = CreateStore();
 
             // Act
             var actual = await target.GetNormalizedEmailAsync(user, CancellationToken.None);
@@ -266,7 +268,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 UserNameNormalized = "user.name",
             };
 
-            UserStore target = CreateStore();
+            using UserStore target = CreateStore();
 
             // Act
             var actual = await target.GetNormalizedUserNameAsync(user, CancellationToken.None);
@@ -284,7 +286,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 SecurityStamp = "MySecurityStamp",
             };
 
-            UserStore target = CreateStore();
+            using UserStore target = CreateStore();
 
             // Act
             var actual = await target.GetSecurityStampAsync(user, CancellationToken.None);
@@ -302,7 +304,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 Id = "123",
             };
 
-            UserStore target = CreateStore();
+            using UserStore target = CreateStore();
 
             // Act
             var actual = await target.GetUserIdAsync(user, CancellationToken.None);
@@ -320,7 +322,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 UserName = "user.name",
             };
 
-            UserStore target = CreateStore();
+            using UserStore target = CreateStore();
 
             // Act
             var actual = await target.GetUserNameAsync(user, CancellationToken.None);
@@ -336,7 +338,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
             var expected = "user@domain.com";
             var user = new LondonTravelUser();
 
-            UserStore target = CreateStore();
+            using UserStore target = CreateStore();
 
             // Act
             await target.SetEmailAsync(user, expected, CancellationToken.None);
@@ -352,7 +354,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
             var expected = true;
             var user = new LondonTravelUser();
 
-            UserStore target = CreateStore();
+            using UserStore target = CreateStore();
 
             // Act
             await target.SetEmailConfirmedAsync(user, expected, CancellationToken.None);
@@ -368,7 +370,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
             var expected = "user@domain.com";
             var user = new LondonTravelUser();
 
-            UserStore target = CreateStore();
+            using UserStore target = CreateStore();
 
             // Act
             await target.SetNormalizedEmailAsync(user, expected, CancellationToken.None);
@@ -384,7 +386,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
             var expected = "user.name";
             var user = new LondonTravelUser();
 
-            UserStore target = CreateStore();
+            using UserStore target = CreateStore();
 
             // Act
             await target.SetNormalizedUserNameAsync(user, expected, CancellationToken.None);
@@ -400,7 +402,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
             var expected = "MySecurityStamp";
             var user = new LondonTravelUser();
 
-            UserStore target = CreateStore();
+            using UserStore target = CreateStore();
 
             // Act
             await target.SetSecurityStampAsync(user, expected, CancellationToken.None);
@@ -416,7 +418,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
             var expected = "user.name";
             var user = new LondonTravelUser();
 
-            UserStore target = CreateStore();
+            using UserStore target = CreateStore();
 
             // Act
             await target.SetUserNameAsync(user, expected, CancellationToken.None);
@@ -441,7 +443,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 "admin",
             };
 
-            UserStore target = CreateStore();
+            using UserStore target = CreateStore();
 
             // Act
             var actual = await target.GetRolesAsync(user, CancellationToken.None);
@@ -462,7 +464,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
             user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, "not-a-string", ClaimValueTypes.Email, "https://londontravel.martincostello.com/")));
             user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, "wrong-issuer", ClaimValueTypes.String, "google")));
 
-            UserStore target = CreateStore();
+            using UserStore target = CreateStore();
 
             // Act and Assert
             (await target.IsInRoleAsync(user, "admin", cancellationToken)).ShouldBeTrue();
@@ -472,13 +474,13 @@ namespace MartinCostello.LondonTravel.Site.Identity
             (await target.IsInRoleAsync(user, string.Empty, cancellationToken)).ShouldBeFalse();
 
             // Arrange
-            user.RoleClaims = null;
+            user.RoleClaims = null!;
 
             // Act and Assert
             (await target.IsInRoleAsync(user, "admin", cancellationToken)).ShouldBeFalse();
         }
 
-        private static UserStore CreateStore(IDocumentService service = null)
+        private static UserStore CreateStore(IDocumentService? service = null)
         {
             return new UserStore(service ?? Mock.Of<IDocumentService>());
         }

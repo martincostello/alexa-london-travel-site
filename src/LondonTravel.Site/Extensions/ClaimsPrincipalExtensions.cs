@@ -43,7 +43,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
                 throw new ArgumentNullException(nameof(fallbackImageUrl));
             }
 
-            string email = value.FindFirst(ClaimTypes.Email)?.Value;
+            string? email = value.FindFirst(ClaimTypes.Email)?.Value;
 
             if (string.IsNullOrWhiteSpace(email))
             {
@@ -87,7 +87,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
                 throw new ArgumentNullException(nameof(value));
             }
 
-            string name = value.FindFirst(ClaimTypes.GivenName)?.Value;
+            string? name = value.FindFirst(ClaimTypes.GivenName)?.Value;
 
             if (!string.IsNullOrWhiteSpace(name))
             {
@@ -116,7 +116,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         /// <exception cref="ArgumentNullException">
         /// <paramref name="value"/> is <see langword="null"/>.
         /// </exception>
-        public static string GetEmail(this ClaimsPrincipal value)
+        public static string? GetEmail(this ClaimsPrincipal value)
         {
             if (value == null)
             {
@@ -136,7 +136,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         /// <exception cref="ArgumentNullException">
         /// <paramref name="value"/> is <see langword="null"/>.
         /// </exception>
-        public static string GetUserId(this ClaimsPrincipal value)
+        public static string? GetUserId(this ClaimsPrincipal value)
         {
             if (value == null)
             {

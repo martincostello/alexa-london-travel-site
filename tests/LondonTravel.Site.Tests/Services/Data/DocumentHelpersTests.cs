@@ -5,10 +5,12 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 {
     using System;
     using MartinCostello.LondonTravel.Site.Options;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Azure.Cosmos;
     using Microsoft.Extensions.DependencyInjection;
     using Shouldly;
     using Xunit;
+    using Options = Microsoft.Extensions.Options.Options;
 
     public static class DocumentHelpersTests
     {
@@ -16,20 +18,20 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         public static void CreateClient_Throws_If_ServiceProvider_Is_Null()
         {
             // Arrange
-            IServiceProvider serviceProvider = null;
+            IServiceProvider? serviceProvider = null;
 
             // Act and Assert
-            Assert.Throws<ArgumentNullException>("serviceProvider", () => DocumentHelpers.CreateClient(serviceProvider));
+            Assert.Throws<ArgumentNullException>("serviceProvider", () => DocumentHelpers.CreateClient(serviceProvider!));
         }
 
         [Fact]
         public static void CreateClient_Throws_If_Options_Is_Null()
         {
             // Arrange
-            UserStoreOptions options = null;
+            UserStoreOptions? options = null;
 
             // Act and Assert
-            Assert.Throws<ArgumentNullException>("options", () => DocumentHelpers.CreateClient(options));
+            Assert.Throws<ArgumentNullException>("options", () => DocumentHelpers.CreateClient(options!));
         }
 
         [Fact]
@@ -132,16 +134,16 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             };
 
             var services = new ServiceCollection()
+                .AddSingleton(Options.Create(new JsonOptions()))
                 .AddSingleton(options);
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
 
             // Act
-            using (CosmosClient actual = DocumentHelpers.CreateClient(serviceProvider))
-            {
-                // Assert
-                actual.ShouldNotBeNull();
-            }
+            using CosmosClient actual = DocumentHelpers.CreateClient(serviceProvider);
+
+            // Assert
+            actual.ShouldNotBeNull();
         }
 
         [Fact]
@@ -157,16 +159,16 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             };
 
             var services = new ServiceCollection()
+                .AddSingleton(Options.Create(new JsonOptions()))
                 .AddSingleton(options);
 
-            var serviceProvider = services.BuildServiceProvider();
+            using var serviceProvider = services.BuildServiceProvider();
 
             // Act
-            using (CosmosClient actual = DocumentHelpers.CreateClient(serviceProvider))
-            {
-                // Assert
-                actual.ShouldNotBeNull();
-            }
+            using CosmosClient actual = DocumentHelpers.CreateClient(serviceProvider);
+
+            // Assert
+            actual.ShouldNotBeNull();
         }
     }
 }

@@ -32,7 +32,7 @@ namespace MartinCostello.LondonTravel.Site.TagHelpers
         /// </summary>
         private static readonly char[] Tilde = new[] { '~' };
 
-        public SriScriptTagHelper(IHostingEnvironment hostingEnvironment, TagHelperMemoryCacheProvider cacheProvider, IFileVersionProvider fileVersionProvider, HtmlEncoder htmlEncoder, JavaScriptEncoder javaScriptEncoder, IUrlHelperFactory urlHelperFactory)
+        public SriScriptTagHelper(IWebHostEnvironment hostingEnvironment, TagHelperMemoryCacheProvider cacheProvider, IFileVersionProvider fileVersionProvider, HtmlEncoder htmlEncoder, JavaScriptEncoder javaScriptEncoder, IUrlHelperFactory urlHelperFactory)
             : base(hostingEnvironment, cacheProvider, fileVersionProvider, htmlEncoder, javaScriptEncoder, urlHelperFactory)
         {
         }
@@ -62,8 +62,8 @@ namespace MartinCostello.LondonTravel.Site.TagHelpers
                 return;
             }
 
-            string filePath = (context.AllAttributes["src"].Value as string)?.TrimStart(Tilde);
-            string type = context.AllAttributes["type"]?.Value?.ToString() as string;
+            string? filePath = (context.AllAttributes["src"].Value as string)?.TrimStart(Tilde);
+            string? type = context.AllAttributes["type"]?.Value?.ToString() as string;
 
             if (string.IsNullOrEmpty(filePath) ||
                 (!string.IsNullOrEmpty(type) && !string.Equals(type, "text/javascript", StringComparison.OrdinalIgnoreCase)))
@@ -88,10 +88,8 @@ namespace MartinCostello.LondonTravel.Site.TagHelpers
             {
                 using (var algorithm = SHA384.Create())
                 {
-                    using (var stream = fileInfo.CreateReadStream())
-                    {
-                        hash = Convert.ToBase64String(algorithm.ComputeHash(stream));
-                    }
+                    using var stream = fileInfo.CreateReadStream();
+                    hash = Convert.ToBase64String(algorithm.ComputeHash(stream));
                 }
 
                 var options = new MemoryCacheEntryOptions()

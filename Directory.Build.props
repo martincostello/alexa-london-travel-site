@@ -8,7 +8,6 @@
     <PackageReference Include="coverlet.msbuild" Version="2.6.3" PrivateAssets="All" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="$(AnalyzersVersion)" PrivateAssets="All" />
     <PackageReference Include="Microsoft.CodeQuality.Analyzers" Version="$(AnalyzersVersion)" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.NetCore.Analyzers" Version="$(AnalyzersVersion)" PrivateAssets="All" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19367-01" PrivateAssets="All" />
     <PackageReference Include="ReportGenerator" Version="4.2.19" PrivateAssets="All" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" PrivateAssets="All" />
@@ -25,11 +24,10 @@
     <GenerateGitMetadata Condition=" ('$(CI)' != '' or '$(TF_BUILD)' != '') and '$(GenerateGitMetadata)' == '' ">true</GenerateGitMetadata>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <LangVersion>latest</LangVersion>
-    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
     <NeutralLanguage>en-US</NeutralLanguage>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
     <NoWarn Condition=" '$(GenerateDocumentationFile)' != 'true' ">$(NoWarn);SA0001</NoWarn>
-    <PackageIconUrl>https://martincostello.com/favicon.ico</PackageIconUrl>
+    <Nullable>enable</Nullable>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/martincostello/alexa-london-travel-site</PackageProjectUrl>
     <PackageReleaseNotes>$(PackageProjectUrl)/releases</PackageReleaseNotes>
@@ -39,7 +37,7 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>$(PackageProjectUrl).git</RepositoryUrl>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-    <VersionPrefix>2.2.0</VersionPrefix>
+    <VersionPrefix>3.0.0</VersionPrefix>
     <VersionSuffix></VersionSuffix>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(CI)' != '' or '$(TF_BUILD)' != '' or !Exists('$(MSBuildThisFileDirectory)\src\LondonTravel.Site\node_modules') ">
@@ -49,7 +47,7 @@
     <CollectCoverage>true</CollectCoverage>
     <CoverletOutput Condition=" '$(OutputPath)' != '' ">$(OutputPath)/</CoverletOutput>
     <CoverletOutputFormat>cobertura,json</CoverletOutputFormat>
-    <Exclude>[Refit.*]*,[xunit.*]*</Exclude>
+    <Exclude>[AspNet.Security.OAuth*]*,[Refit*]*,[xunit.*]*</Exclude>
     <ExcludeByAttribute>System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute</ExcludeByAttribute>
     <Threshold>65</Threshold>
   </PropertyGroup>

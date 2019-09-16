@@ -15,7 +15,6 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using Models;
-    using Services.Data;
     using Services.Tfl;
     using Telemetry;
 
@@ -28,7 +27,6 @@ namespace MartinCostello.LondonTravel.Site.Controllers
     {
         private readonly UserManager<LondonTravelUser> _userManager;
         private readonly SignInManager<LondonTravelUser> _signInManager;
-        private readonly IDocumentService _documentService;
         private readonly ITflServiceFactory _tflServiceFactory;
         private readonly ISiteTelemetry _telemetry;
         private readonly ILogger _logger;
@@ -36,14 +34,12 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         public ManageController(
           UserManager<LondonTravelUser> userManager,
           SignInManager<LondonTravelUser> signInManager,
-          IDocumentService documentService,
           ITflServiceFactory tflServiceFactory,
           ISiteTelemetry telemetry,
           ILogger<ManageController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _documentService = documentService;
             _tflServiceFactory = tflServiceFactory;
             _telemetry = telemetry;
             _logger = logger;
@@ -89,7 +85,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             var model = new ManageViewModel()
             {
                 CurrentLogins = userLogins,
-                ETag = user.ETag,
+                ETag = user.ETag!,
                 IsLinkedToAlexa = !string.IsNullOrWhiteSpace(user.AlexaToken),
                 OtherLogins = otherLogins,
             };
@@ -219,7 +215,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
                     await _signInManager.SignInAsync(user, isPersistent: true);
 
-                    _telemetry.TrackRemoveExternalAccountLink(user.Id, account.LoginProvider);
+                    _telemetry.TrackRemoveExternalAccountLink(user.Id!, account.LoginProvider);
 
                     message = SiteMessage.RemoveAccountLinkSuccess;
                 }
@@ -260,7 +256,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
                 if (result.Succeeded)
                 {
-                    _telemetry.TrackRemoveAlexaLink(user.Id);
+                    _telemetry.TrackRemoveAlexaLink(user.Id!);
 
                     _logger.LogInformation("Removed Alexa link from user Id {UserId}.", user.Id);
 
@@ -298,7 +294,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                     await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
                     await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
 
-                    _telemetry.TrackAccountDeleted(user.Id, user.Email);
+                    _telemetry.TrackAccountDeleted(user.Id!, user.Email!);
 
                     return RedirectToRoute(SiteRoutes.Home, new { Message = SiteMessage.AccountDeleted });
                 }
@@ -368,7 +364,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
                 if (result.Succeeded)
                 {
-                    _telemetry.TrackLinePreferencesUpdated(user.Id, existingLines, newLines);
+                    _telemetry.TrackLinePreferencesUpdated(user.Id!, existingLines, newLines);
 
                     _logger.LogInformation("Updated line preferences for user Id {UserId}.", user.Id);
                 }
@@ -398,7 +394,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 ITflService service = _tflServiceFactory.CreateService();
                 ICollection<LineInfo> lines = await service.GetLinesAsync(cancellationToken);
 
-                IList<string> validLines = lines.Select((p) => p.Id).ToList();
+                IList<string?> validLines = lines.Select((p) => p.Id).ToList();
 
                 return model.FavoriteLines.All((p) => validLines.Contains(p));
             }
@@ -432,7 +428,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
                 if (!hasClaim)
                 {
-                    user.RoleClaims.Add(LondonTravelRole.FromClaim(claim));
+                    user!.RoleClaims.Add(LondonTravelRole.FromClaim(claim));
                     commitUpdate = true;
                 }
             }
@@ -443,7 +439,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
                 if (result.Succeeded)
                 {
-                    _telemetry.TrackClaimsUpdated(user.Id);
+                    _telemetry.TrackClaimsUpdated(user.Id!);
                 }
 
                 return result;

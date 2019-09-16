@@ -4,6 +4,7 @@
 namespace MartinCostello.LondonTravel.Site.Controllers
 {
     using System;
+    using System.Buffers;
     using System.Linq;
     using System.Security.Cryptography;
     using System.Threading.Tasks;
@@ -34,7 +35,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// <summary>
         /// The <see cref="AlexaOptions"/> to use. This field is read-only.
         /// </summary>
-        private readonly AlexaOptions _options;
+        private readonly AlexaOptions? _options;
 
         /// <summary>
         /// The <see cref="ILogger"/> to use. This field is read-only.
@@ -68,14 +69,21 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// </returns>
         public static string GenerateAccessToken()
         {
-            byte[] entropy = new byte[64];
+            const int TokenLength = 64;
 
-            using (var random = RandomNumberGenerator.Create())
+            byte[] entropy = ArrayPool<byte>.Shared.Rent(TokenLength);
+
+            try
             {
+                using var random = RandomNumberGenerator.Create();
                 random.GetBytes(entropy);
-            }
 
-            return Convert.ToBase64String(entropy);
+                return Convert.ToBase64String(entropy, 0, TokenLength);
+            }
+            finally
+            {
+                ArrayPool<byte>.Shared.Return(entropy, clearArray: true);
+            }
         }
 
         /// <summary>
@@ -92,17 +100,17 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         [HttpGet]
         [Route("authorize", Name = SiteRoutes.AuthorizeAlexa)]
         public async Task<IActionResult> AuthorizeSkill(
-            [FromQuery(Name = "state")] string state,
-            [FromQuery(Name = "client_id")] string clientId,
-            [FromQuery(Name = "response_type")] string responseType,
-            [FromQuery(Name = "redirect_uri")] Uri redirectUri)
+            [FromQuery(Name = "state")] string? state,
+            [FromQuery(Name = "client_id")] string? clientId,
+            [FromQuery(Name = "response_type")] string? responseType,
+            [FromQuery(Name = "redirect_uri")] Uri? redirectUri)
         {
             if (_options?.IsLinkingEnabled != true)
             {
                 return NotFound();
             }
 
-            if (!VerifyRequest(clientId, responseType, out string error))
+            if (!VerifyRequest(clientId, responseType, out string? error))
             {
                 return RedirectForError(redirectUri, state, error);
             }
@@ -129,9 +137,9 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                     return RedirectForError(redirectUri, state);
                 }
 
-                _telemetry.TrackAlexaLink(user.Id);
+                _telemetry.TrackAlexaLink(user.Id!);
 
-                string tokenRedirectUrl = BuildRedirectUrl(redirectUri, state, accessToken);
+                string tokenRedirectUrl = BuildRedirectUrl(redirectUri!, state, accessToken);
                 return Redirect(tokenRedirectUrl);
             }
 #pragma warning disable CA1031
@@ -152,7 +160,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// <returns>
         /// The URI to redirect the user to receive the generated access token.
         /// </returns>
-        private static string BuildRedirectUrl(Uri redirectUri, string state, string accessToken)
+        private static string BuildRedirectUrl(Uri redirectUri, string? state, string accessToken)
         {
             var builder = new UriBuilder(redirectUri)
             {
@@ -221,7 +229,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// <returns>
         /// The URI to redirect the user to.
         /// </returns>
-        private IActionResult RedirectForError(Uri redirectUri, string state, string errorCode = null)
+        private IActionResult RedirectForError(Uri? redirectUri, string? state, string? errorCode = null)
         {
             string fragment = $"state={(state == null ? string.Empty : Uri.EscapeDataString(state))}&error={errorCode ?? "server_error"}";
 
@@ -253,7 +261,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// <returns>
         /// <see langword="true"/> if the specified parameter values are valid; otherwise <see langword="false"/>.
         /// </returns>
-        private bool VerifyRequest(string clientId, string responseType, out string error)
+        private bool VerifyRequest(string? clientId, string? responseType, out string? error)
         {
             error = null;
 
@@ -263,7 +271,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 return false;
             }
 
-            if (!string.Equals(clientId, _options.ClientId, StringComparison.Ordinal))
+            if (!string.Equals(clientId, _options?.ClientId, StringComparison.Ordinal))
             {
                 _logger.LogWarning("Invalid client Id {ClientId} specified.", clientId);
 
@@ -291,7 +299,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// <returns>
         /// <see langword="true"/> if the specified client Id is valid; otherwise <see langword="false"/>.
         /// </returns>
-        private bool VerifyRedirectUri(Uri redirectUri)
+        private bool VerifyRedirectUri(Uri? redirectUri)
         {
             if (redirectUri == null)
             {

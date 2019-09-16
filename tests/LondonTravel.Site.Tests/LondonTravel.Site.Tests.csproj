@@ -5,7 +5,7 @@
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <RootNamespace>MartinCostello.LondonTravel.Site</RootNamespace>
     <Summary>Tests for the London Travel website</Summary>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="testsettings.json;xunit.runner.json;Integration\*-http-bundle.json" CopyToOutputDirectory="PreserveNewest" />
@@ -21,11 +21,10 @@
       Priority="-1" />
   </ItemGroup>
   <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="JustEat.HttpClientInterception" Version="2.0.2" />
     <PackageReference Include="MartinCostello.Logging.XUnit" Version="0.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="3.0.0-rc1.19457.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
     <PackageReference Include="Moq" Version="4.13.0" />
     <PackageReference Include="Selenium.Support" Version="3.141.0" />

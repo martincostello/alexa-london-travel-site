@@ -10,6 +10,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
     using System.Threading.Tasks;
     using JustEat.HttpClientInterception;
     using MartinCostello.LondonTravel.Site.Options;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Caching.Memory;
     using Refit;
     using Xunit;
@@ -49,20 +50,15 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
 
             _interceptor.Register(builder);
 
-            ICollection<LineInfo> actual1;
-            ICollection<LineInfo> actual2;
+            using var httpClient = _interceptor.CreateHttpClient();
+            httpClient.BaseAddress = _options.BaseUri;
 
-            using (var httpClient = _interceptor.CreateHttpClient())
-            {
-                httpClient.BaseAddress = _options.BaseUri;
+            var client = Refit.RestService.For<ITflClient>(httpClient);
+            var target = new TflService(client, _cache, _options);
 
-                ITflClient client = CreateClient(httpClient);
-                var target = new TflService(client, _cache, _options);
-
-                // Act
-                actual1 = await target.GetLinesAsync();
-                actual2 = await target.GetLinesAsync();
-            }
+            // Act
+            ICollection<LineInfo> actual1 = await target.GetLinesAsync();
+            ICollection<LineInfo> actual2 = await target.GetLinesAsync();
 
             // Assert
             Assert.NotNull(actual1);
@@ -88,20 +84,15 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
 
             _interceptor.Register(builder);
 
-            ICollection<LineInfo> actual1;
-            ICollection<LineInfo> actual2;
+            using var httpClient = _interceptor.CreateHttpClient();
+            httpClient.BaseAddress = _options.BaseUri;
 
-            using (var httpClient = _interceptor.CreateHttpClient())
-            {
-                httpClient.BaseAddress = _options.BaseUri;
+            ITflClient client = CreateClient(httpClient);
+            var target = new TflService(client, _cache, _options);
 
-                ITflClient client = CreateClient(httpClient);
-                var target = new TflService(client, _cache, _options);
-
-                // Act
-                actual1 = await target.GetLinesAsync();
-                actual2 = await target.GetLinesAsync();
-            }
+            // Act
+            ICollection<LineInfo> actual1 = await target.GetLinesAsync();
+            ICollection<LineInfo> actual2 = await target.GetLinesAsync();
 
             // Assert
             Assert.NotNull(actual1);
@@ -128,20 +119,15 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
 
             _interceptor.Register(builder);
 
-            ICollection<StopPoint> actual1;
-            ICollection<StopPoint> actual2;
+            using var httpClient = _interceptor.CreateHttpClient();
+            httpClient.BaseAddress = _options.BaseUri;
 
-            using (var httpClient = _interceptor.CreateHttpClient())
-            {
-                httpClient.BaseAddress = _options.BaseUri;
+            ITflClient client = CreateClient(httpClient);
+            var target = new TflService(client, _cache, _options);
 
-                ITflClient client = CreateClient(httpClient);
-                var target = new TflService(client, _cache, _options);
-
-                // Act
-                actual1 = await target.GetStopPointsByLineAsync("victoria");
-                actual2 = await target.GetStopPointsByLineAsync("victoria");
-            }
+            // Act
+            ICollection<StopPoint> actual1 = await target.GetStopPointsByLineAsync("victoria");
+            ICollection<StopPoint> actual2 = await target.GetStopPointsByLineAsync("victoria");
 
             // Assert
             Assert.NotNull(actual1);
@@ -169,20 +155,15 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
 
             _interceptor.Register(builder);
 
-            ICollection<StopPoint> actual1;
-            ICollection<StopPoint> actual2;
+            using var httpClient = _interceptor.CreateHttpClient();
+            httpClient.BaseAddress = _options.BaseUri;
 
-            using (var httpClient = _interceptor.CreateHttpClient())
-            {
-                httpClient.BaseAddress = _options.BaseUri;
+            ITflClient client = CreateClient(httpClient);
+            var target = new TflService(client, _cache, _options);
 
-                ITflClient client = CreateClient(httpClient);
-                var target = new TflService(client, _cache, _options);
-
-                // Act
-                actual1 = await target.GetStopPointsByLineAsync("victoria");
-                actual2 = await target.GetStopPointsByLineAsync("victoria");
-            }
+            // Act
+            ICollection<StopPoint> actual1 = await target.GetStopPointsByLineAsync("victoria");
+            ICollection<StopPoint> actual2 = await target.GetStopPointsByLineAsync("victoria");
 
             // Assert
             Assert.NotNull(actual1);
@@ -216,7 +197,8 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
 
         private static ITflClient CreateClient(HttpClient httpClient)
         {
-            var settings = new RefitSettings() { ContentSerializer = new JsonContentSerializer() };
+            var options = Microsoft.Extensions.Options.Options.Create(new JsonOptions());
+            var settings = new RefitSettings() { ContentSerializer = new SystemTextJsonContentSerializer(options) };
 
             return RestService.For<ITflClient>(httpClient, settings);
         }

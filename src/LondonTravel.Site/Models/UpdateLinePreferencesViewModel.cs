@@ -13,11 +13,11 @@ namespace MartinCostello.LondonTravel.Site.Models
         /// <summary>
         /// Gets or sets the ETag value associated with the user's preferences.
         /// </summary>
-        public string ETag { get; set; }
+        public string ETag { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the names of the user's favorite line(s).
         /// </summary>
-        public IList<string> FavoriteLines { get; set; }
+        public IList<string> FavoriteLines { get; set; } = new List<string>();
     }
 }

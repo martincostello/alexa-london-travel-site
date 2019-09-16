@@ -27,7 +27,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         /// </returns>
         public static IApplicationBuilder UseCustomHttpHeaders(
             this IApplicationBuilder value,
-            IHostingEnvironment environment,
+            IWebHostEnvironment environment,
             IConfiguration config,
             IOptionsSnapshot<SiteOptions> options)
         {
@@ -44,6 +44,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
             if (options?.Authentication?.IsEnabled == true)
             {
                 app.UseAuthentication();
+                app.UseAuthorization();
             }
         }
     }

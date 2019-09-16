@@ -14,6 +14,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using Microsoft.AspNetCore.Mvc.Testing;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Http;
     using Microsoft.Extensions.Logging;
     using Xunit.Abstractions;
@@ -42,12 +43,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
                  .RegisterBundle(Path.Combine("Integration", "oauth-http-bundle.json"));
 
         /// <inheritdoc />
-        public ITestOutputHelper OutputHelper { get; set; }
-
-        /// <summary>
-        /// Gets the <see cref="IServiceProvider"/> in use.
-        /// </summary>
-        public virtual IServiceProvider Services => Server?.Host?.Services;
+        public ITestOutputHelper? OutputHelper { get; set; }
 
         /// <summary>
         /// Clears the current <see cref="ITestOutputHelper"/>.
@@ -105,8 +101,8 @@ namespace MartinCostello.LondonTravel.Site.Integration
 
         private void ConfigureTests(IConfigurationBuilder builder)
         {
-            string directory = Path.GetDirectoryName(typeof(TestServerFixture).Assembly.Location);
-            string fullPath = Path.Combine(directory, "testsettings.json");
+            string? directory = Path.GetDirectoryName(typeof(TestServerFixture).Assembly.Location);
+            string fullPath = Path.Combine(directory ?? ".", "testsettings.json");
 
             builder.AddJsonFile(fullPath);
         }

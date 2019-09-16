@@ -42,9 +42,9 @@ namespace MartinCostello.LondonTravel.Site.Services
             _logger = logger;
         }
 
-        public async Task<LondonTravelUser> GetUserByAccessTokenAsync(string accessToken, CancellationToken cancellationToken)
+        public async Task<LondonTravelUser?> GetUserByAccessTokenAsync(string accessToken, CancellationToken cancellationToken)
         {
-            LondonTravelUser user = null;
+            LondonTravelUser? user = null;
 
             if (!string.IsNullOrEmpty(accessToken))
             {

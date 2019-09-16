@@ -6,6 +6,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using System;
     using System.Globalization;
     using System.Net;
+    using System.Net.Mime;
     using System.Threading.Tasks;
     using System.Xml;
     using Shouldly;
@@ -36,44 +37,42 @@ namespace MartinCostello.LondonTravel.Site.Integration
             using (var client = Fixture.CreateClient())
             {
                 // Act
-                using (var response = await client.GetAsync("sitemap.xml"))
-                {
-                    response.StatusCode.ShouldBe(HttpStatusCode.OK);
-                    response.Content.Headers.ContentType?.MediaType.ShouldBe("text/xml");
+                using var response = await client.GetAsync("sitemap.xml");
 
-                    string xml = await response.Content.ReadAsStringAsync();
+                response.StatusCode.ShouldBe(HttpStatusCode.OK);
+                response.Content.Headers.ContentType?.MediaType.ShouldBe(MediaTypeNames.Text.Xml);
 
-                    xml.ShouldNotBeNullOrWhiteSpace();
-                    locations = GetSitemapLocations(xml);
-                }
+                string xml = await response.Content.ReadAsStringAsync();
+
+                xml.ShouldNotBeNullOrWhiteSpace();
+                locations = GetSitemapLocations(xml);
             }
 
             // Assert
             locations.ShouldNotBeNull();
             locations.Count.ShouldBeGreaterThan(0);
 
-            foreach (XmlNode location in locations)
+            foreach (XmlNode? location in locations)
             {
-                string url = location.InnerText;
+                location.ShouldNotBeNull();
+
+                string url = location!.InnerText;
 
                 url.ShouldNotBeNullOrWhiteSpace();
-                Uri.TryCreate(url, UriKind.Absolute, out Uri uri).ShouldBeTrue();
+                Uri.TryCreate(url, UriKind.Absolute, out Uri? uri).ShouldBeTrue();
 
-                uri.Scheme.ShouldBe("https");
+                uri!.Scheme.ShouldBe("https");
                 uri.Port.ShouldBe(443);
                 uri.Host.ShouldBe("londontravel.martincostello.com");
                 uri.AbsolutePath.ShouldEndWith("/");
 
-                using (var client = Fixture.CreateClient())
-                {
-                    using (var response = await client.GetAsync(uri.PathAndQuery))
-                    {
-                        response.StatusCode.ShouldBe(HttpStatusCode.OK, $"Failed to get {uri.PathAndQuery}. {await response.Content.ReadAsStringAsync()}");
-                        response.Content.Headers.ContentType?.MediaType.ShouldBe("text/html");
-                        response.Content.Headers.ContentLength.ShouldNotBeNull();
-                        response.Content.Headers.ContentLength.Value.ShouldBeGreaterThan(0);
-                    }
-                }
+                using var client = Fixture.CreateClient();
+                using var response = await client.GetAsync(uri.PathAndQuery);
+
+                response.StatusCode.ShouldBe(HttpStatusCode.OK, $"Failed to get {uri.PathAndQuery}. {await response.Content.ReadAsStringAsync()}");
+                response.Content.Headers.ContentType?.MediaType.ShouldBe(MediaTypeNames.Text.Html);
+                response.Content.Headers.ContentLength.ShouldNotBeNull();
+                response.Content.Headers.ContentLength!.Value.ShouldBeGreaterThan(0);
             }
         }
 

@@ -17,11 +17,11 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         /// </summary>
         private static readonly IDictionary<string, string> _iconImageMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
-            { "Amazon", "amazon" },
-            { "Facebook", "facebook" },
-            { "Google", "google" },
-            { "Microsoft", "windows" },
-            { "Twitter", "twitter" },
+            ["Amazon"] = "amazon",
+            ["Facebook"] = "facebook",
+            ["Google"] = "google",
+            ["Microsoft"] = "windows",
+            ["Twitter"] = "twitter",
         };
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
 
             string iconClass = string.Empty;
 
-            if (_iconImageMap.TryGetValue(authenticationScheme, out string modifier))
+            if (_iconImageMap.TryGetValue(authenticationScheme, out string? modifier))
             {
                 iconClass = $"fa-{modifier}";
             }

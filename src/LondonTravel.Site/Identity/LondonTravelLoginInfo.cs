@@ -3,8 +3,8 @@
 
 namespace MartinCostello.LondonTravel.Site.Identity
 {
+    using System.Text.Json.Serialization;
     using Microsoft.AspNetCore.Identity;
-    using Newtonsoft.Json;
 
     /// <summary>
     /// A class representing external login information for a user.
@@ -14,20 +14,20 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <summary>
         /// Gets or sets the login provider.
         /// </summary>
-        [JsonProperty("loginProvider")]
-        public string LoginProvider { get; set; }
+        [JsonPropertyName("loginProvider")]
+        public string? LoginProvider { get; set; }
 
         /// <summary>
         /// Gets or sets the provider key.
         /// </summary>
-        [JsonProperty("providerKey")]
-        public string ProviderKey { get; set; }
+        [JsonPropertyName("providerKey")]
+        public string? ProviderKey { get; set; }
 
         /// <summary>
         /// Gets or sets the provider display name.
         /// </summary>
-        [JsonProperty("providerDisplayName")]
-        public string ProviderDisplayName { get; set; }
+        [JsonPropertyName("providerDisplayName")]
+        public string? ProviderDisplayName { get; set; }
 
         /// <summary>
         /// Created an instance of <see cref="LondonTravelLoginInfo"/> from the specified <see cref="UserLoginInfo"/>.

@@ -87,10 +87,10 @@ function DotNetTest {
         $reportOutput = Join-Path $OutputPath "coverage"
 
         if ($null -ne $env:TF_BUILD) {
-            & $dotnetPath test $Project --output $OutputPath --logger trx -- RunConfiguration.TestSessionTimeout=1800000
+            & $dotnetPath test $Project --output $OutputPath --logger trx -- RunConfiguration.TestSessionTimeout=1200000
         }
         else {
-            & $dotnetPath test $Project --output $OutputPath -- RunConfiguration.TestSessionTimeout=1800000
+            & $dotnetPath test $Project --output $OutputPath -- RunConfiguration.TestSessionTimeout=1200000
         }
 
         $dotNetTestExitCode = $LASTEXITCODE
@@ -112,10 +112,10 @@ function DotNetPublish {
     param([string]$Project)
     $publishPath = (Join-Path $OutputPath "publish")
     if ($VersionSuffix) {
-        & $dotnet publish $Project --output $publishPath --configuration $Configuration --version-suffix "$VersionSuffix"
+        & $dotnet publish $Project --output $publishPath --configuration $Configuration --version-suffix "$VersionSuffix" --runtime win-x64 --self-contained
     }
     else {
-        & $dotnet publish $Project --output $publishPath --configuration $Configuration
+        & $dotnet publish $Project --output $publishPath --configuration $Configuration --runtime win-x64 --self-contained
     }
     if ($LASTEXITCODE -ne 0) {
         throw "dotnet publish failed with exit code $LASTEXITCODE"

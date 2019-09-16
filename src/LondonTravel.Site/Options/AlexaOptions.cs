@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Options
@@ -13,7 +13,7 @@ namespace MartinCostello.LondonTravel.Site.Options
         /// <summary>
         /// Gets or sets the client Id for the Alexa skill.
         /// </summary>
-        public string ClientId { get; set; }
+        public string? ClientId { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether Alexa account linking is enabled.
@@ -23,6 +23,6 @@ namespace MartinCostello.LondonTravel.Site.Options
         /// <summary>
         /// Gets or sets the allowed redirection URLs for account linking.
         /// </summary>
-        public ICollection<string> RedirectUrls { get; set; }
+        public ICollection<string>? RedirectUrls { get; set; }
     }
 }

@@ -65,7 +65,7 @@ namespace MartinCostello.LondonTravel.Site.Telemetry
                     }
                 }
 
-                HttpResponseHeaders headers = null;
+                HttpResponseHeaders? headers = null;
 
                 // See https://github.com/Microsoft/ApplicationInsights-dotnet-server/issues/587#issuecomment-443927313
                 if (dependency.TryGetOperationDetail("HttpResponse", out object detail) && detail is HttpResponseMessage response)
@@ -77,7 +77,7 @@ namespace MartinCostello.LondonTravel.Site.Telemetry
                     headers = responseHeaders;
                 }
 
-                if (headers != null)
+                if (headers != null && activity != null)
                 {
                     if (headers.TryGetValues("x-ms-activity-id", out var values))
                     {

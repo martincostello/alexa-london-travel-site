@@ -4,11 +4,11 @@
 namespace MartinCostello.LondonTravel.Site.Extensions
 {
     using System;
-    using Microsoft.AspNetCore.Hosting;
     using Microsoft.Azure.KeyVault;
     using Microsoft.Azure.Services.AppAuthentication;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
 
     /// <summary>
     /// A class containing extension methods for the <see cref="IConfigurationBuilder"/> interface. This class cannot be inherited.
@@ -19,11 +19,11 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         /// Configures the application.
         /// </summary>
         /// <param name="builder">The <see cref="IConfigurationBuilder"/> to configure.</param>
-        /// <param name="context">The <see cref="WebHostBuilderContext"/> to use.</param>
+        /// <param name="context">The <see cref="HostBuilderContext"/> to use.</param>
         /// <returns>
         /// The <see cref="IConfigurationBuilder"/> passed as the value of <paramref name="builder"/>.
         /// </returns>
-        public static IConfigurationBuilder ConfigureApplication(this IConfigurationBuilder builder, WebHostBuilderContext context)
+        public static IConfigurationBuilder ConfigureApplication(this IConfigurationBuilder builder, HostBuilderContext context)
         {
             builder.AddApplicationInsightsSettings(developerMode: context.HostingEnvironment.IsDevelopment());
 

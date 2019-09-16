@@ -53,17 +53,16 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
 
             SiteOptions options = CreateValidSiteOptions();
-            options.Alexa.IsLinkingEnabled = false;
+            options.Alexa!.IsLinkingEnabled = false;
 
-            using (var target = CreateTarget(options: options))
-            {
-                // Act
-                IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, redirectUri);
+            using var target = CreateTarget(options: options);
 
-                // Assert
-                actual.ShouldNotBeNull();
-                actual.ShouldBeOfType<NotFoundResult>();
-            }
+            // Act
+            IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, redirectUri);
+
+            // Assert
+            actual.ShouldNotBeNull();
+            actual.ShouldBeOfType<NotFoundResult>();
         }
 
         [Theory]
@@ -76,14 +75,13 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             string responseType = "token";
             Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
 
-            using (var target = CreateTarget())
-            {
-                // Act
-                IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, redirectUri);
+            using var target = CreateTarget();
 
-                // Assert
-                AssertRedirect(actual, "https://alexa.amazon.com/alexa-london-travel?foo=bar#state=Some%20State&error=invalid_request");
-            }
+            // Act
+            IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, redirectUri);
+
+            // Assert
+            AssertRedirect(actual, "https://alexa.amazon.com/alexa-london-travel?foo=bar#state=Some%20State&error=invalid_request");
         }
 
         [Theory]
@@ -96,14 +94,13 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             string responseType = "token";
             Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
 
-            using (var target = CreateTarget())
-            {
-                // Act
-                IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, redirectUri);
+            using var target = CreateTarget();
 
-                // Assert
-                AssertRedirect(actual, "https://alexa.amazon.com/alexa-london-travel?foo=bar#state=Some%20State&error=unauthorized_client");
-            }
+            // Act
+            IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, redirectUri);
+
+            // Assert
+            AssertRedirect(actual, "https://alexa.amazon.com/alexa-london-travel?foo=bar#state=Some%20State&error=unauthorized_client");
         }
 
         [Theory]
@@ -116,14 +113,13 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             string clientId = "my-client-id";
             Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
 
-            using (var target = CreateTarget())
-            {
-                // Act
-                IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, redirectUri);
+            using var target = CreateTarget();
 
-                // Assert
-                AssertRedirect(actual, "https://alexa.amazon.com/alexa-london-travel?foo=bar#state=Some%20State&error=invalid_request");
-            }
+            // Act
+            IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, redirectUri);
+
+            // Assert
+            AssertRedirect(actual, "https://alexa.amazon.com/alexa-london-travel?foo=bar#state=Some%20State&error=invalid_request");
         }
 
         [Theory]
@@ -136,14 +132,13 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             string clientId = "my-client-id";
             Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
 
-            using (var target = CreateTarget())
-            {
-                // Act
-                IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, redirectUri);
+            using var target = CreateTarget();
 
-                // Assert
-                AssertRedirect(actual, "https://alexa.amazon.com/alexa-london-travel?foo=bar#state=Some%20State&error=unsupported_response_type");
-            }
+            // Act
+            IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, redirectUri);
+
+            // Assert
+            AssertRedirect(actual, "https://alexa.amazon.com/alexa-london-travel?foo=bar#state=Some%20State&error=unsupported_response_type");
         }
 
         [Theory]
@@ -159,17 +154,16 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             string state = "Some State";
             string clientId = "my-client-id";
             string responseType = "token";
-            Uri redirectUri = redirectUrl == null ? null : new Uri(redirectUrl, UriKind.RelativeOrAbsolute);
+            Uri? redirectUri = redirectUrl == null ? null : new Uri(redirectUrl, UriKind.RelativeOrAbsolute);
 
-            using (var target = CreateTarget())
-            {
-                // Act
-                IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, redirectUri);
+            using var target = CreateTarget();
 
-                // Assert
-                actual.ShouldNotBeNull();
-                actual.ShouldBeOfType<BadRequestResult>();
-            }
+            // Act
+            IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, redirectUri);
+
+            // Assert
+            actual.ShouldNotBeNull();
+            actual.ShouldBeOfType<BadRequestResult>();
         }
 
         [Fact]
@@ -181,14 +175,13 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             string responseType = "token";
             Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
 
-            using (var target = CreateTarget())
-            {
-                // Act
-                IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, redirectUri);
+            using var target = CreateTarget();
 
-                // Assert
-                AssertRedirect(actual, "https://alexa.amazon.com/alexa-london-travel?foo=bar#state=Some%20State&error=server_error");
-            }
+            // Act
+            IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, redirectUri);
+
+            // Assert
+            AssertRedirect(actual, "https://alexa.amazon.com/alexa-london-travel?foo=bar#state=Some%20State&error=server_error");
         }
 
         [Fact]
@@ -205,14 +198,13 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             var userManager = CreateUserManager(user, result);
 
-            using (var target = CreateTarget(userManager))
-            {
-                // Act
-                IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, redirectUri);
+            using var target = CreateTarget(userManager);
 
-                // Assert
-                AssertRedirect(actual, "https://alexa.amazon.com/alexa-london-travel?foo=bar#state=Some%20State&error=server_error");
-            }
+            // Act
+            IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, redirectUri);
+
+            // Assert
+            AssertRedirect(actual, "https://alexa.amazon.com/alexa-london-travel?foo=bar#state=Some%20State&error=server_error");
         }
 
         [Theory]
@@ -235,33 +227,32 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             var userManager = CreateUserManager(user, result);
 
-            using (var target = CreateTarget(userManager))
+            using var target = CreateTarget(userManager);
+
+            // Act
+            IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, redirectUri);
+
+            // Assert
+            actual.ShouldNotBeNull();
+
+            var viewResult = actual.ShouldBeOfType<RedirectResult>();
+            viewResult.Permanent.ShouldBeFalse();
+
+            viewResult.Url.ShouldNotBeNullOrWhiteSpace();
+            viewResult.Url.ShouldStartWith("https://alexa.amazon.com/alexa-london-travel?foo=bar#state=Some%20State&access_token=");
+            viewResult.Url.ShouldEndWith("&token_type=Bearer");
+
+            if (alexaToken != null)
             {
-                // Act
-                IActionResult actual = await target.AuthorizeSkill(state, clientId, responseType, redirectUri);
-
-                // Assert
-                actual.ShouldNotBeNull();
-
-                var viewResult = actual.ShouldBeOfType<RedirectResult>();
-                viewResult.Permanent.ShouldBeFalse();
-
-                viewResult.Url.ShouldNotBeNullOrWhiteSpace();
-                viewResult.Url.ShouldStartWith("https://alexa.amazon.com/alexa-london-travel?foo=bar#state=Some%20State&access_token=");
-                viewResult.Url.ShouldEndWith("&token_type=Bearer");
-
-                if (alexaToken != null)
-                {
-                    viewResult.Url.ShouldNotContain(alexaToken);
-                    viewResult.Url.ShouldNotContain(Uri.EscapeUriString(alexaToken));
-                }
-
-                user.AlexaToken.ShouldNotBe(alexaToken);
-                user.AlexaToken.Length.ShouldBeGreaterThanOrEqualTo(64);
+                viewResult.Url.ShouldNotContain(alexaToken);
+                viewResult.Url.ShouldNotContain(Uri.EscapeUriString(alexaToken));
             }
+
+            user.AlexaToken.ShouldNotBe(alexaToken);
+            user.AlexaToken.Length.ShouldBeGreaterThanOrEqualTo(64);
         }
 
-        private static RedirectResult AssertRedirect(IActionResult actual, string url = null)
+        private static RedirectResult AssertRedirect(IActionResult actual, string? url = null)
         {
             actual.ShouldNotBeNull();
 
@@ -286,8 +277,8 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// The created instance of <see cref="AlexaController"/>.
         /// </returns>
         private static AlexaController CreateTarget(
-            UserManager<LondonTravelUser> userManager = null,
-            SiteOptions options = null)
+            UserManager<LondonTravelUser>? userManager = null,
+            SiteOptions? options = null)
         {
             var httpContext = new Mock<HttpContext>();
 
@@ -318,7 +309,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// <returns>
         /// The created instance of <see cref="UserManager{TUser}"/>.
         /// </returns>
-        private static UserManager<LondonTravelUser> CreateUserManager(LondonTravelUser user = null, IdentityResult result = null)
+        private static UserManager<LondonTravelUser> CreateUserManager(LondonTravelUser? user = null, IdentityResult? result = null)
         {
             var mock = new Mock<UserManager<LondonTravelUser>>(
                 Mock.Of<IUserStore<LondonTravelUser>>(),

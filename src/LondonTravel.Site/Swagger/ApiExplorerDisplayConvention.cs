@@ -4,6 +4,7 @@
 namespace MartinCostello.LondonTravel.Site.Swagger
 {
     using System.Linq;
+    using System.Net.Mime;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
@@ -16,7 +17,7 @@ namespace MartinCostello.LondonTravel.Site.Swagger
         public void Apply(ActionModel action)
         {
             action.ApiExplorer.IsVisible =
-                action.Attributes.OfType<ProducesAttribute>().Any((p) => p.ContentTypes.Contains("application/json")) &&
+                action.Attributes.OfType<ProducesAttribute>().Any((p) => p.ContentTypes.Contains(MediaTypeNames.Application.Json)) &&
                 !action.Attributes.OfType<ApiExplorerSettingsAttribute>().Any((p) => p.IgnoreApi);
         }
     }

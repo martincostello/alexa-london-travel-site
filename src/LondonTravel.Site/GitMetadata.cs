@@ -42,8 +42,7 @@ namespace MartinCostello.LondonTravel.Site
                 .GetCustomAttributes<AssemblyMetadataAttribute>()
                 .Where((p) => string.Equals(p.Key, name, StringComparison.Ordinal))
                 .Select((p) => p.Value)
-                .DefaultIfEmpty(defaultValue)
-                .FirstOrDefault();
+                .FirstOrDefault() ?? defaultValue;
         }
     }
 }

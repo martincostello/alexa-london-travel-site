@@ -13,6 +13,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using JustEat.HttpClientInterception;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
     using Xunit;
 
     /// <summary>
@@ -20,7 +21,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
     /// </summary>
     public sealed class HttpServerFixture : TestServerFixture, IAsyncLifetime
     {
-        private IWebHost _host;
+        private IHost? _host;
         private bool _disposed;
 
         /// <summary>
@@ -39,7 +40,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         public Uri ServerAddress => ClientOptions.BaseAddress;
 
         /// <inheritdoc />
-        public override IServiceProvider Services => _host?.Services;
+        public override IServiceProvider? Services => _host?.Services;
 
         /// <inheritdoc />
         async Task IAsyncLifetime.InitializeAsync()
@@ -48,9 +49,12 @@ namespace MartinCostello.LondonTravel.Site.Integration
         /// <inheritdoc />
         async Task IAsyncLifetime.DisposeAsync()
         {
-            await _host?.StopAsync(default);
-            _host?.Dispose();
-            _host = null;
+            if (_host != null)
+            {
+                await _host.StopAsync();
+                _host.Dispose();
+                _host = null;
+            }
         }
 
         /// <summary>
@@ -163,12 +167,13 @@ namespace MartinCostello.LondonTravel.Site.Integration
             // Configure the server address for the server to listen on for HTTP requests
             ClientOptions.BaseAddress = FindFreeServerAddress();
 
-            var builder = CreateWebHostBuilder();
-
-            ConfigureWebHost(builder);
+            var builder = CreateHostBuilder().ConfigureWebHost(ConfigureWebHost);
 
             _host = builder.Build();
-            await _host.StartAsync();
+
+            // Force creation of the Kestrel server and start it
+            var hostedService = _host.Services.GetService<IHostedService>();
+            await hostedService.StartAsync(default);
         }
     }
 }

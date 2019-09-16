@@ -11,12 +11,12 @@ namespace MartinCostello.LondonTravel.Site.Models
         /// <summary>
         /// Gets or sets the Id of the line.
         /// </summary>
-        public string Id { get; set; }
+        public string Id { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the display name of the line.
         /// </summary>
-        public string DisplayName { get; set; }
+        public string DisplayName { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets a value indicating whether the line is a favorite.

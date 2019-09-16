@@ -126,7 +126,8 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 throw new ArgumentNullException(nameof(userId));
             }
 
-            return await _service.GetAsync(userId);
+            var user = await _service.GetAsync(userId);
+            return user!;
         }
 
         /// <inheritdoc />
@@ -170,7 +171,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 throw new ArgumentNullException(nameof(user));
             }
 
-            return Task.FromResult(user.Email);
+            return Task.FromResult(user.Email!);
         }
 
         /// <inheritdoc />
@@ -207,7 +208,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 throw new ArgumentNullException(nameof(user));
             }
 
-            return Task.FromResult(user.EmailNormalized);
+            return Task.FromResult(user.EmailNormalized!);
         }
 
         /// <inheritdoc />
@@ -218,7 +219,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 throw new ArgumentNullException(nameof(user));
             }
 
-            return Task.FromResult(user.UserNameNormalized);
+            return Task.FromResult(user.UserNameNormalized!);
         }
 
         /// <inheritdoc />
@@ -229,7 +230,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 throw new ArgumentNullException(nameof(user));
             }
 
-            return Task.FromResult(user.SecurityStamp);
+            return Task.FromResult(user.SecurityStamp!);
         }
 
         /// <inheritdoc />
@@ -240,7 +241,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 throw new ArgumentNullException(nameof(user));
             }
 
-            return Task.FromResult(user.Id);
+            return Task.FromResult(user.Id!);
         }
 
         /// <inheritdoc />
@@ -251,7 +252,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 throw new ArgumentNullException(nameof(user));
             }
 
-            return Task.FromResult(user.UserName);
+            return Task.FromResult(user.UserName!);
         }
 
         /// <inheritdoc />
@@ -382,7 +383,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                 user.CreatedAt = DateTimeOffset.FromUnixTimeSeconds(user.Timestamp).UtcDateTime;
             }
 
-            LondonTravelUser updated = await _service.ReplaceAsync(user, user.ETag);
+            LondonTravelUser? updated = await _service.ReplaceAsync(user, user.ETag);
 
             if (updated != null)
             {
@@ -418,7 +419,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                     .Where((p) => string.Equals(p.ClaimType, ClaimTypes.Role, StringComparison.Ordinal))
                     .Where((p) => string.Equals(p.ValueType, ClaimValueTypes.String, StringComparison.Ordinal))
                     .Where((p) => !string.IsNullOrEmpty(p.Value))
-                    .Select((p) => p.Value)
+                    .Select((p) => p.Value!)
                     .ToArray();
             }
 

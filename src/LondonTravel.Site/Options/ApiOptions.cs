@@ -11,6 +11,6 @@ namespace MartinCostello.LondonTravel.Site.Options
         /// <summary>
         /// Gets or sets the CORS options for the API.
         /// </summary>
-        public ApiCorsOptions Cors { get; set; }
+        public ApiCorsOptions? Cors { get; set; }
     }
 }

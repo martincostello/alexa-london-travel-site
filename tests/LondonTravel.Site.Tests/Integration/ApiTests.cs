@@ -7,7 +7,6 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using System.Net;
     using System.Net.Http.Headers;
     using System.Threading.Tasks;
-    using Newtonsoft.Json.Linq;
     using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
@@ -35,23 +34,21 @@ namespace MartinCostello.LondonTravel.Site.Integration
         public async Task Cannot_Get_Preferences_Unauthenticated()
         {
             // Arrange
-            using (var client = Fixture.CreateClient())
-            {
-                // Act
-                using (var response = await client.GetAsync(RequestUri))
-                {
-                    // Assert
-                    response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+            using var client = Fixture.CreateClient();
 
-                    JObject result = await response.ReadAsObjectAsync();
+            // Act
+            using var response = await client.GetAsync(RequestUri);
 
-                    result.Value<string>("requestId").ShouldNotBeNullOrWhiteSpace();
-                    result.Value<string>("message").ShouldBe("No access token specified.");
-                    result.Value<int>("statusCode").ShouldBe(401);
-                    result.Value<JArray>("details").Values<string>().ShouldNotBeNull();
-                    result.Value<JArray>("details").Values<string>().ShouldBeEmpty();
-                }
-            }
+            // Assert
+            response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+
+            using var result = await response.ReadAsJsonDocumentAsync();
+
+            result.RootElement.GetString("requestId").ShouldNotBeNullOrWhiteSpace();
+            result.RootElement.GetString("message").ShouldBe("No access token specified.");
+            result.RootElement.GetInt32("statusCode").ShouldBe(401);
+            result.RootElement.GetStringArray("details").ShouldNotBeNull();
+            result.RootElement.GetStringArray("details").ShouldBeEmpty();
         }
 
         [Fact]
@@ -60,25 +57,22 @@ namespace MartinCostello.LondonTravel.Site.Integration
             // Arrange
             string accessToken = Guid.NewGuid().ToString();
 
-            using (var client = Fixture.CreateClient())
-            {
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(Scheme, accessToken);
+            using var client = Fixture.CreateClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(Scheme, accessToken);
 
-                // Act
-                using (var response = await client.GetAsync(RequestUri))
-                {
-                    // Assert
-                    response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+            // Act
+            using var response = await client.GetAsync(RequestUri);
 
-                    JObject result = await response.ReadAsObjectAsync();
+            // Assert
+            response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
 
-                    result.Value<string>("requestId").ShouldNotBeNullOrWhiteSpace();
-                    result.Value<string>("message").ShouldBe("Unauthorized.");
-                    result.Value<int>("statusCode").ShouldBe(401);
-                    result.Value<JArray>("details").Values<string>().ShouldNotBeNull();
-                    result.Value<JArray>("details").Values<string>().ShouldBeEmpty();
-                }
-            }
+            using var result = await response.ReadAsJsonDocumentAsync();
+
+            result.RootElement.GetString("requestId").ShouldNotBeNullOrWhiteSpace();
+            result.RootElement.GetString("message").ShouldBe("Unauthorized.");
+            result.RootElement.GetInt32("statusCode").ShouldBe(401);
+            result.RootElement.GetStringArray("details").ShouldNotBeNull();
+            result.RootElement.GetStringArray("details").ShouldBeEmpty();
         }
     }
 }

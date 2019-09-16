@@ -30,9 +30,9 @@ namespace MartinCostello.LondonTravel.Site.Identity
         {
             var principal = await base.CreateAsync(user);
 
-            if (principal.Identity is ClaimsIdentity identity)
+            if (principal.Identity is ClaimsIdentity identity && user?.RoleClaims != null)
             {
-                foreach (LondonTravelRole role in user?.RoleClaims)
+                foreach (LondonTravelRole role in user.RoleClaims)
                 {
                     identity.AddClaim(role.ToClaim());
                 }

@@ -52,7 +52,7 @@ namespace MartinCostello.LondonTravel.Site.TagHelpers
         /// </summary>
         private static readonly char[] Tilde = new[] { '~' };
 
-        public InlineStyleTagHelper(IHostingEnvironment hostingEnvironment, TagHelperMemoryCacheProvider cacheProvider, IFileVersionProvider fileVersionProvider, HtmlEncoder htmlEncoder, JavaScriptEncoder javaScriptEncoder, IUrlHelperFactory urlHelperFactory)
+        public InlineStyleTagHelper(IWebHostEnvironment hostingEnvironment, TagHelperMemoryCacheProvider cacheProvider, IFileVersionProvider fileVersionProvider, HtmlEncoder htmlEncoder, JavaScriptEncoder javaScriptEncoder, IUrlHelperFactory urlHelperFactory)
             : base(hostingEnvironment, cacheProvider, fileVersionProvider, htmlEncoder, javaScriptEncoder, urlHelperFactory)
         {
         }
@@ -93,10 +93,10 @@ namespace MartinCostello.LondonTravel.Site.TagHelpers
                 return;
             }
 
-            string filePath = (context.AllAttributes["href"].Value as string)?.TrimStart(Tilde);
+            string? filePath = (context.AllAttributes["href"].Value as string)?.TrimStart(Tilde);
             IFileInfo fileInfo = HostingEnvironment.WebRootFileProvider.GetFileInfo(filePath);
 
-            if (!fileInfo.Exists)
+            if (!fileInfo.Exists || filePath == null)
             {
                 // Not a local file
                 await base.ProcessAsync(context, output);
@@ -109,10 +109,8 @@ namespace MartinCostello.LondonTravel.Site.TagHelpers
             {
                 using (var stream = File.OpenRead(fileInfo.PhysicalPath))
                 {
-                    using (var reader = new StreamReader(stream))
-                    {
-                        css = await reader.ReadToEndAsync();
-                    }
+                    using var reader = new StreamReader(stream);
+                    css = await reader.ReadToEndAsync();
                 }
 
                 if (MinifyInlined == true)

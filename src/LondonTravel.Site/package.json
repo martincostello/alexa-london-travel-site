@@ -1,7 +1,7 @@
 {
   "name": "londontravelmartincostellocom",
   "private": true,
-  "version": "2.2.0",
+  "version": "3.0.0",
   "devDependencies": {
     "@types/applicationinsights-js": "1.0.9",
     "@types/google.analytics": "0.0.40",

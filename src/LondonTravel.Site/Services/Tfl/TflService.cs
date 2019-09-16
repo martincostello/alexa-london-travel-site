@@ -48,11 +48,11 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
         public Task<ICollection<LineInfo>> GetLinesAsync(CancellationToken cancellationToken = default)
         {
             const string CacheKey = "TfL.AvailableLines";
-            string supportedModes = string.Join(",", _options.SupportedModes);
+            string supportedModes = string.Join(",", _options.SupportedModes ?? Array.Empty<string>());
 
             return GetWithCachingAsync(
                 CacheKey,
-                () => _client.GetLinesAsync(supportedModes, _options.AppId, _options.AppKey, cancellationToken));
+                () => _client.GetLinesAsync(supportedModes, _options.AppId!, _options.AppKey!, cancellationToken));
         }
 
         /// <inheritdoc />
@@ -62,7 +62,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
 
             return GetWithCachingAsync(
                 cacheKey,
-                () => _client.GetStopPointsAsync(lineId, _options.AppId, _options.AppKey, cancellationToken));
+                () => _client.GetStopPointsAsync(lineId, _options.AppId!, _options.AppKey!, cancellationToken));
         }
 
         /// <summary>
@@ -80,20 +80,19 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
         {
             if (!_cache.TryGetValue(cacheKey, out T result))
             {
-                using (var response = await operation())
-                {
+                using var response = await operation();
+
 #pragma warning disable CA2000
-                    await response.EnsureSuccessStatusCodeAsync();
+                await response.EnsureSuccessStatusCodeAsync();
 #pragma warning restore CA2000
 
-                    result = response.Content;
+                result = response.Content;
 
-                    if (!string.IsNullOrEmpty(cacheKey) &&
-                        response.Headers.CacheControl != null &&
-                        response.Headers.CacheControl.MaxAge.HasValue)
-                    {
-                        _cache.Set(cacheKey, result, absoluteExpirationRelativeToNow: response.Headers.CacheControl.MaxAge.Value);
-                    }
+                if (!string.IsNullOrEmpty(cacheKey) &&
+                    response.Headers.CacheControl != null &&
+                    response.Headers.CacheControl.MaxAge.HasValue)
+                {
+                    _cache.Set(cacheKey, result, absoluteExpirationRelativeToNow: response.Headers.CacheControl.MaxAge.Value);
                 }
             }
 

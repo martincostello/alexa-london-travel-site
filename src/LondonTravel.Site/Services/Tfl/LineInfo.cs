@@ -1,9 +1,9 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Services.Tfl
 {
-    using Newtonsoft.Json;
+    using System.Text.Json.Serialization;
 
     /// <summary>
     /// A class representing information about a line. This class cannot be inherited.
@@ -13,13 +13,13 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
         /// <summary>
         /// Gets or sets the Id of the line.
         /// </summary>
-        [JsonProperty("id")]
-        public string Id { get; set; }
+        [JsonPropertyName("id")]
+        public string? Id { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the line.
         /// </summary>
-        [JsonProperty("name")]
-        public string Name { get; set; }
+        [JsonPropertyName("name")]
+        public string? Name { get; set; }
     }
 }
