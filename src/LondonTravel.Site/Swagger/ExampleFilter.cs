@@ -66,9 +66,9 @@ namespace MartinCostello.LondonTravel.Site.Swagger
         /// <inheritdoc />
         public void Apply(OpenApiSchema schema, SchemaFilterContext context)
         {
-            if (context.JsonContract != null)
+            if (context.ApiModel != null)
             {
-                var attribute = context.Type.GetCustomAttribute<SwaggerTypeExampleAttribute>();
+                var attribute = context.ApiModel.Type.GetCustomAttribute<SwaggerTypeExampleAttribute>();
 
                 if (attribute != null)
                 {
