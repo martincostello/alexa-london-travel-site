@@ -156,7 +156,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             while (iterator.HasMoreResults)
             {
                 var items = await iterator.ReadNextAsync(cancellationToken);
-                documents.AddRange(items);
+                documents.AddRange(items.Resource);
             }
 
             _logger.LogTrace(
