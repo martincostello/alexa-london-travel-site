@@ -4,10 +4,8 @@
 namespace MartinCostello.LondonTravel.Site.Services.Data
 {
     using System;
-    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Azure.Cosmos;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Options;
     using Options;
 
     /// <summary>
@@ -34,10 +32,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
             var options = serviceProvider.GetRequiredService<UserStoreOptions>();
 
-            var jsonOptions = serviceProvider.GetRequiredService<IOptions<JsonOptions>>().Value;
-            var serializer = new SystemTextJsonCosmosSerializer(jsonOptions.JsonSerializerOptions);
-
-            return CreateClient(options, serializer);
+            return CreateClient(options);
         }
 
         /// <summary>
