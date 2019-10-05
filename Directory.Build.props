@@ -28,12 +28,6 @@
     <NoWarn>$(NoWarn);CS1591</NoWarn>
     <NoWarn Condition=" '$(GenerateDocumentationFile)' != 'true' ">$(NoWarn);SA0001</NoWarn>
     <Nullable>enable</Nullable>
-    <!--
-      Workaround issue with Open API document generation on macOS:
-      https://github.com/aspnet/AspNetCore/issues/14232
-      https://github.com/domaindrivendev/Swashbuckle.AspNetCore/issues/1266#issuecomment-533896204
-    -->
-    <OpenApiGenerateDocuments>false</OpenApiGenerateDocuments>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/martincostello/alexa-london-travel-site</PackageProjectUrl>
     <PackageReleaseNotes>$(PackageProjectUrl)/releases</PackageReleaseNotes>
