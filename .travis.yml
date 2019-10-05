@@ -1,10 +1,11 @@
 sudo: required
 dist: xenial
-language: csharp
-mono: none
+language: node_js
+node_js: 8
 
 os:
   - linux
+  - osx
 
 env:
   global:
@@ -23,18 +24,16 @@ cache:
 
 addons:
   apt:
-    sources:
-    - google-chrome
     packages:
     - gettext
-    - google-chrome-stable
     - libcurl4-openssl-dev
     - libicu-dev
     - libssl-dev
     - libunwind8
+  chrome: stable
 
 install:
   - npm install --global npm
 
 script:
-  - ./build.sh --restore-packages
+  - ./build.sh
