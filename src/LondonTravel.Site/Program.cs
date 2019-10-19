@@ -45,7 +45,6 @@ namespace MartinCostello.LondonTravel.Site
                     (webBuilder) =>
                     {
                         webBuilder.CaptureStartupErrors(true)
-                                  .UseAzureAppServices()
                                   .UseStartup<Startup>();
                     });
         }
