@@ -44,7 +44,7 @@
     <PackageReference Include="Serilog.Sinks.UDP" Version="6.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc4" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="5.0.0-rc4" />
-    <PackageReference Include="XliffTasks" Version="1.0.0-beta.19380.4" PrivateAssets="All" />
+    <PackageReference Include="XliffTasks" Version="1.0.0-beta.19505.1" PrivateAssets="All" />
   </ItemGroup>
   <Target Name="BundleAssets" BeforeTargets="PrepareForPublish">
     <Exec Command="npm ci" Condition=" '$(InstallWebPackages)' == 'true' " />
