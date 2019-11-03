@@ -5,7 +5,7 @@
   "devDependencies": {
     "@types/applicationinsights-js": "1.0.9",
     "@types/google.analytics": "0.0.40",
-    "@types/jasmine": "3.4.0",
+    "@types/jasmine": "3.4.5",
     "@types/jquery": "3.3.31",
     "bootstrap": ">=4.3.1",
     "clean-css": ">=4.1.11",
