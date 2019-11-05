@@ -28,7 +28,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.DataProtection.AzureStorage" Version="3.0.0" />
-    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.3.3" />
+    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.4.0" />
     <PackageReference Include="Microsoft.Azure.KeyVault.WebKey" Version="3.0.4" />
     <PackageReference Include="Microsoft.Azure.Storage.Blob" Version="11.1.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.AzureKeyVault" Version="3.0.0" />
