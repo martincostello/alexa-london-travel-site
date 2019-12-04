@@ -8,7 +8,7 @@
     <PackageReference Include="coverlet.msbuild" Version="2.7.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="$(AnalyzersVersion)" PrivateAssets="All" />
     <PackageReference Include="Microsoft.CodeQuality.Analyzers" Version="$(AnalyzersVersion)" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19519-01" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
     <PackageReference Include="ReportGenerator" Version="4.3.6" PrivateAssets="All" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" PrivateAssets="All" />
   </ItemGroup>
@@ -43,12 +43,12 @@
   <PropertyGroup Condition=" '$(CI)' != '' or '$(TF_BUILD)' != '' or !Exists('$(MSBuildThisFileDirectory)\src\LondonTravel.Site\node_modules') ">
     <InstallWebPackages>true</InstallWebPackages>
   </PropertyGroup>
-  <PropertyGroup>
+  <PropertyGroup Condition=" '$(BuildingInsideVisualStudio)' == '' ">
     <CollectCoverage>true</CollectCoverage>
     <CoverletOutput Condition=" '$(OutputPath)' != '' ">$(OutputPath)/</CoverletOutput>
     <CoverletOutputFormat>cobertura,json</CoverletOutputFormat>
     <Exclude>[AspNet.Security.OAuth*]*,[Refit*]*,[xunit.*]*</Exclude>
     <ExcludeByAttribute>System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute</ExcludeByAttribute>
-    <Threshold>65</Threshold>
+    <Threshold>70</Threshold>
   </PropertyGroup>
 </Project>
