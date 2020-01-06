@@ -5,7 +5,7 @@
   <ItemGroup>
     <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" Link="stylecop.json" />
     <Compile Include="$(MSBuildThisFileDirectory)CommonAssemblyInfo.cs" />
-    <PackageReference Include="coverlet.msbuild" Version="2.7.0" PrivateAssets="All" />
+    <PackageReference Include="coverlet.msbuild" Version="2.8.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="$(AnalyzersVersion)" PrivateAssets="All" />
     <PackageReference Include="Microsoft.CodeQuality.Analyzers" Version="$(AnalyzersVersion)" PrivateAssets="All" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
@@ -49,6 +49,6 @@
     <CoverletOutputFormat>cobertura,json</CoverletOutputFormat>
     <Exclude>[AspNet.Security.OAuth*]*,[Refit*]*,[xunit.*]*</Exclude>
     <ExcludeByAttribute>System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute</ExcludeByAttribute>
-    <Threshold>70</Threshold>
+    <Threshold>65</Threshold>
   </PropertyGroup>
 </Project>
