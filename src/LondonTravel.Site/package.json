@@ -38,7 +38,7 @@
     "path": "0.12.7",
     "puppeteer": "2.1.1",
     "superagent": "5.2.2",
-    "tslint": "6.1.0",
+    "tslint": "6.1.1",
     "typescript": "3.8.3"
   },
   "scripts": {
