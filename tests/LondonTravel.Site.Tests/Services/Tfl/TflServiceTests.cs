@@ -10,7 +10,6 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
     using System.Threading.Tasks;
     using JustEat.HttpClientInterception;
     using MartinCostello.LondonTravel.Site.Options;
-    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Caching.Memory;
     using Refit;
     using Xunit;
@@ -197,8 +196,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
 
         private static ITflClient CreateClient(HttpClient httpClient)
         {
-            var options = Microsoft.Extensions.Options.Options.Create(new JsonOptions());
-            var settings = new RefitSettings() { ContentSerializer = new SystemTextJsonContentSerializer(options) };
+            var settings = new RefitSettings() { ContentSerializer = new SystemTextJsonContentSerializer() };
 
             return RestService.For<ITflClient>(httpClient, settings);
         }
