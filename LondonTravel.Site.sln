@@ -17,7 +17,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
 		global.json = global.json
-		Install-Emulator.ps1 = Install-Emulator.ps1
 		LICENSE = LICENSE
 		LondonTravel.Site.ruleset = LondonTravel.Site.ruleset
 		NuGet.config = NuGet.config
