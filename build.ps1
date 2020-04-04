@@ -1,3 +1,4 @@
+#! /usr/bin/pwsh
 param(
     [Parameter(Mandatory = $false)][string] $Configuration = "Release",
     [Parameter(Mandatory = $false)][string] $VersionSuffix = "",
