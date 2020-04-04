@@ -55,7 +55,7 @@ phases:
           displayName: Install Google Chrome
       - ${{ if eq(parameters.agentOS, 'Windows') }}:
         - powershell: |
-            .\Build.ps1 -OutputPath $(Build.StagingDirectory) $(BuildArgs)
+            .\build.ps1 -OutputPath $(Build.StagingDirectory) $(BuildArgs)
           name: BuildAndTest
           displayName: Build and test
           timeoutInMinutes: 20
