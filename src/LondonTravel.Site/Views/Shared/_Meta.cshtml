@@ -59,7 +59,7 @@
     <meta name="x-request-locale" content="@CultureInfo.CurrentUICulture.Name" />
     <meta name="x-site-branch" content="@GitMetadata.Branch" />
     <meta name="x-site-revision" content="@GitMetadata.Commit" />
-    @if (User.Identity.IsAuthenticated)
+    @if (User?.Identity?.IsAuthenticated == true)
     {
     <meta name="x-site-user-id" content="@User.GetUserId()" />
     }

@@ -40,7 +40,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         {
             var model = new HelpViewModel()
             {
-                IsSignedIn = User.Identity.IsAuthenticated,
+                IsSignedIn = User?.Identity?.IsAuthenticated == true,
             };
 
             if (model.IsSignedIn)

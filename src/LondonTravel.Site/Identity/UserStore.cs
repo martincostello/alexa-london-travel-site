@@ -115,7 +115,8 @@ namespace MartinCostello.LondonTravel.Site.Identity
             }
 
             var results = await _service.GetAsync((p) => p.EmailNormalized == normalizedEmail, cancellationToken);
-            return results.FirstOrDefault();
+            var result = results.FirstOrDefault();
+            return result!;
         }
 
         /// <inheritdoc />
@@ -148,7 +149,8 @@ namespace MartinCostello.LondonTravel.Site.Identity
                        p.Logins.Contains(new LondonTravelLoginInfo() { LoginProvider = loginProvider, ProviderKey = providerKey, ProviderDisplayName = loginProvider }),
                 cancellationToken);
 
-            return results.FirstOrDefault();
+            var result = results.FirstOrDefault();
+            return result!;
         }
 
         /// <inheritdoc />
@@ -160,7 +162,8 @@ namespace MartinCostello.LondonTravel.Site.Identity
             }
 
             var results = await _service.GetAsync((p) => p.UserNameNormalized == normalizedUserName, cancellationToken);
-            return results.FirstOrDefault();
+            var result = results.FirstOrDefault();
+            return result!;
         }
 
         /// <inheritdoc />

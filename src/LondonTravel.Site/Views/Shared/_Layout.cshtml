@@ -37,7 +37,7 @@
 </head>
 <body>
     @await Html.PartialAsync("_Navbar")
-    <main class="container body-content" data-authenticated="@User.Identity.IsAuthenticated.ToString().ToLowerInvariant()" data-id="content">
+    <main class="container body-content" data-authenticated="@((User?.Identity?.IsAuthenticated == true).ToString().ToLowerInvariant())" data-id="content">
         @RenderBody()
         @await Html.PartialAsync("_Footer", Options)
     </main>
@@ -47,7 +47,7 @@
     @await RenderSectionAsync("scripts", required: false)
 </body>
 <!--
-    
+
     Environment: @Config.AzureEnvironment()
     Datacenter:  @Config.AzureDatacenter()
     Instance:    @Environment.MachineName

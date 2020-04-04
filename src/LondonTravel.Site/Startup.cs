@@ -320,11 +320,11 @@ namespace MartinCostello.LondonTravel.Site
                 .SetApplicationName($"londontravel-{environment}");
 
             string connectionString = Configuration.AzureStorageConnectionString();
-            string relativePath = $"/data-protection/london-travel/{environment}/keys.xml";
 
             if (!string.IsNullOrWhiteSpace(connectionString) &&
                 CloudStorageAccount.TryParse(connectionString, out CloudStorageAccount account))
             {
+                string relativePath = $"/data-protection/london-travel/{environment}/keys.xml";
                 dataProtection.PersistKeysToAzureBlobStorage(account, relativePath);
             }
         }

@@ -31,7 +31,8 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
                 byte[] utf8Json = memory.ToArray();
 
-                return JsonSerializer.Deserialize<T>(utf8Json, _options);
+                var result = JsonSerializer.Deserialize<T>(utf8Json, _options);
+                return result!;
             }
         }
 

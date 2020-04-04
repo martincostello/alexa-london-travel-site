@@ -4,9 +4,8 @@
 namespace MartinCostello.LondonTravel.Site.Extensions
 {
     using System;
-    using Microsoft.Azure.KeyVault;
-    using Microsoft.Azure.Services.AppAuthentication;
     using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Configuration.AzureKeyVault;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
 
@@ -47,24 +46,20 @@ namespace MartinCostello.LondonTravel.Site.Extensions
 
             if (canUseKeyVault)
             {
-                var manager = new AzureEnvironmentSecretManager(config.AzureEnvironment());
+                AzureKeyVaultConfigurationOptions options;
 
                 if (canUseMsi)
                 {
-#pragma warning disable CA2000
-                    var provider = new AzureServiceTokenProvider();
-                    var client = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(provider.KeyVaultTokenCallback));
-                    builder.AddAzureKeyVault(vault, client, manager);
-#pragma warning restore CA2000
+                    options = new AzureKeyVaultConfigurationOptions(vault);
                 }
                 else
                 {
-                    builder.AddAzureKeyVault(
-                        vault,
-                        clientId,
-                        clientSecret,
-                        manager);
+                    options = new AzureKeyVaultConfigurationOptions(vault, clientId, clientSecret);
                 }
+
+                options.Manager = new AzureEnvironmentSecretManager(config.AzureEnvironment());
+
+                builder.AddAzureKeyVault(options);
             }
 
             return builder;
