@@ -80,7 +80,7 @@ function DotNetTest {
 
         $packagesRoot = $env:USERPROFILE
 
-        if ($null -eq $packagesPath) {
+        if ($null -eq $packagesRoot) {
             $packagesRoot = "~"
         }
 
