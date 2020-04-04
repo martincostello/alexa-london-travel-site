@@ -31,8 +31,8 @@ To build and test the website run one of the following commands:
 
 **Windows**
 
-```batchfile
-.\Build.ps1
+```powershell
+.\build.ps1
 ```
 
 ## License

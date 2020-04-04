@@ -85,7 +85,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 return NotFound();
             }
 
-            if (User.Identity.IsAuthenticated)
+            if (User?.Identity?.IsAuthenticated == true)
             {
                 return RedirectToRoute(SiteRoutes.Home);
             }

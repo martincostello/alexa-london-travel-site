@@ -11,10 +11,10 @@ namespace MartinCostello.LondonTravel.Site
         internal static int GetInt32(this JsonElement element, string propertyName)
             => element.GetProperty(propertyName).GetInt32();
 
-        internal static string GetString(this JsonElement element, string propertyName)
+        internal static string? GetString(this JsonElement element, string propertyName)
             => element.GetProperty(propertyName).GetString();
 
-        internal static string[] GetStringArray(this JsonElement element, string propertyName)
+        internal static string?[] GetStringArray(this JsonElement element, string propertyName)
             => element.GetProperty(propertyName).EnumerateArray().Select((p) => p.GetString()).ToArray();
     }
 }

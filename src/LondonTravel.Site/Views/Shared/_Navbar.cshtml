@@ -33,7 +33,7 @@
                         @if (Options?.Authentication?.IsEnabled == true)
                         {
                             <li role="separator" class="divider"></li>
-                            @if (User.Identity.IsAuthenticated)
+                            @if (User?.Identity?.IsAuthenticated == true)
                             {
                                 <li>
                                     <a asp-route="@SiteRoutes.Manage" title="@SR.ManageLinkAltText" data-ga-label="Manage Account Navbar">

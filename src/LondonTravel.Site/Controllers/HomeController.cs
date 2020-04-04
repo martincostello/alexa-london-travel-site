@@ -65,7 +65,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         {
             var model = new LinePreferencesViewModel();
 
-            if (User.Identity.IsAuthenticated)
+            if (User?.Identity?.IsAuthenticated == true)
             {
                 await MapPreferencesAsync(model, cancellationToken);
             }
@@ -111,7 +111,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             MapFavoriteLines(model, lines, user.FavoriteLines);
 
-            string updateResult = HttpContext.Request.Query["UpdateSuccess"].FirstOrDefault();
+            string? updateResult = HttpContext.Request.Query["UpdateSuccess"].FirstOrDefault();
 
             if (!string.IsNullOrEmpty(updateResult))
             {

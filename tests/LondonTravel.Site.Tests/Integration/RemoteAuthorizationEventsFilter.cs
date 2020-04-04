@@ -60,8 +60,8 @@ namespace MartinCostello.LondonTravel.Site.Integration
         {
             NameValueCollection queryString = ParseQueryString(context);
 
-            string location = queryString["redirect_uri"];
-            string state = queryString["state"];
+            string? location = queryString["redirect_uri"];
+            string? state = queryString["state"];
 
             queryString.Clear();
 
@@ -70,7 +70,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             queryString.Add("code", code);
             queryString.Add("state", state);
 
-            var builder = new UriBuilder(location)
+            var builder = new UriBuilder(location!)
             {
                 Query = queryString.ToString() ?? string.Empty,
             };
@@ -83,7 +83,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         {
             NameValueCollection queryString = ParseQueryString(context);
 
-            string state = queryString["state"];
+            string? state = queryString["state"];
 
             queryString.Clear();
 

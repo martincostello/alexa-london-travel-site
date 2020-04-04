@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2009
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DD7EA67A-4FE1-4D4F-825E-51FF842107AB}"
 	ProjectSection(SolutionItems) = preProject
@@ -11,13 +11,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.sonarrc = .sonarrc
 		.travis.yml = .travis.yml
 		appveyor.yml = appveyor.yml
-		Build.ps1 = Build.ps1
+		build.ps1 = build.ps1
 		build.sh = build.sh
 		CommonAssemblyInfo.cs = CommonAssemblyInfo.cs
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
 		global.json = global.json
-		Install-Emulator.ps1 = Install-Emulator.ps1
 		LICENSE = LICENSE
 		LondonTravel.Site.ruleset = LondonTravel.Site.ruleset
 		NuGet.config = NuGet.config

@@ -30,7 +30,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         [Route("account/register", Name = SiteRoutes.Register)]
         public async Task<IActionResult> Index()
         {
-            if (User.Identity.IsAuthenticated)
+            if (User?.Identity?.IsAuthenticated == true)
             {
                 return RedirectToRoute(SiteRoutes.Home);
             }

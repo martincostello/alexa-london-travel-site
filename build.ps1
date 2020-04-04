@@ -1,3 +1,4 @@
+#! /usr/bin/pwsh
 param(
     [Parameter(Mandatory = $false)][string] $Configuration = "Release",
     [Parameter(Mandatory = $false)][string] $VersionSuffix = "",
@@ -19,7 +20,7 @@ if ($OutputPath -eq "") {
 
 $installDotNetSdk = $false;
 
-if (($null -eq (Get-Command "dotnet.exe" -ErrorAction SilentlyContinue)) -and ($null -eq (Get-Command "dotnet" -ErrorAction SilentlyContinue))) {
+if (($null -eq (Get-Command "dotnet" -ErrorAction SilentlyContinue)) -and ($null -eq (Get-Command "dotnet.exe" -ErrorAction SilentlyContinue))) {
     Write-Host "The .NET Core SDK is not installed."
     $installDotNetSdk = $true
 }
@@ -51,10 +52,10 @@ if ($installDotNetSdk -eq $true) {
     }
 
     $env:PATH = "$env:DOTNET_INSTALL_DIR;$env:PATH"
-    $dotnet = Join-Path "$env:DOTNET_INSTALL_DIR" "dotnet.exe"
+    $dotnet = Join-Path "$env:DOTNET_INSTALL_DIR" "dotnet"
 }
 else {
-    $dotnet = "dotnet.exe"
+    $dotnet = "dotnet"
 }
 
 function DotNetTest {
@@ -74,14 +75,20 @@ function DotNetTest {
             $dotnetPath = $dotnet
         }
         else {
-            $dotnetPath = (Get-Command "dotnet.exe").Source
+            $dotnetPath = (Get-Command "dotnet").Source
         }
 
-        $nugetPath = Join-Path $env:USERPROFILE ".nuget\packages"
+        $packagesRoot = $env:USERPROFILE
+
+        if ($null -eq $packagesRoot) {
+            $packagesRoot = "~"
+        }
+
+        $nugetPath = Join-Path $packagesRoot ".nuget\packages"
         $propsFile = Join-Path $solutionPath "Directory.Build.props"
 
         $reportGeneratorVersion = (Select-Xml -Path $propsFile -XPath "//PackageReference[@Include='ReportGenerator']/@Version").Node.'#text'
-        $reportGeneratorPath = Join-Path $nugetPath "ReportGenerator\$reportGeneratorVersion\tools\netcoreapp2.0\ReportGenerator.dll"
+        $reportGeneratorPath = Join-Path $nugetPath "ReportGenerator\$reportGeneratorVersion\tools\netcoreapp3.0\ReportGenerator.dll"
 
         $coverageOutput = Join-Path $OutputPath "coverage.cobertura.xml"
         $reportOutput = Join-Path $OutputPath "coverage"

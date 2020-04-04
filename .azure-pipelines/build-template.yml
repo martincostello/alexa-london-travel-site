@@ -31,46 +31,19 @@ phases:
       ${{ insert }}: ${{ parameters.variables }}
     steps:
       - ${{ parameters.beforeBuild }}
-      - ${{ if eq(parameters.agentOS, 'Linux') }}:
-        - script: |
-            sudo apt-get update
-            sudo apt-get install -y --no-install-recommends gettext libcurl4-openssl-dev libicu-dev libssl-dev libunwind8
-          name: InstallDotNetCoreDeps
-          displayName: Install .NET Core pre-requisites
-      - ${{ if eq(parameters.agentOS, 'Linux') }}:
-        - script: |
-            sudo npm install --global npm
-          name: UpdateNpm
-          displayName: Update to latest npm
-      - ${{ if ne(parameters.agentOS, 'Linux') }}:
-        - script: |
-            npm install --global npm
-          name: UpdateNpm
-          displayName: Update to latest npm
-      - ${{ if eq(parameters.agentOS, 'macOS') }}:
-        - script: |
-            brew install brew-cask
-            brew cask install google-chrome
-          name: InstallChrome
-          displayName: Install Google Chrome
-      - ${{ if eq(parameters.agentOS, 'Windows') }}:
-        - powershell: |
-            .\Build.ps1 -OutputPath $(Build.StagingDirectory) $(BuildArgs)
-          name: BuildAndTest
-          displayName: Build and test
-          timeoutInMinutes: 20
-          env:
-            DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-            NUGET_XMLDOC_MODE: skip
-      - ${{ if ne(parameters.agentOS, 'Windows') }}:
-        - script: |
-            ./build.sh --output $(Build.StagingDirectory) $(BuildArgs)
-          name: BuildAndTest
-          displayName: Build and test
-          timeoutInMinutes: 20
-          env:
-            DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-            NUGET_XMLDOC_MODE: skip
+      - task: UseDotNet@2
+        displayName: 'Setup .NET Core SDK'
+        inputs:
+          useGlobalJson: true
+      - pwsh: |
+          ./build.ps1 -OutputPath $(Build.StagingDirectory) $(BuildArgs)
+        name: BuildAndTest
+        displayName: Build and test
+        timeoutInMinutes: 20
+        env:
+          DOTNET_CLI_TELEMETRY_OPTOUT: true
+          DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+          NUGET_XMLDOC_MODE: skip
       - ${{ if eq(parameters.agentOS, 'Windows') }}:
         - task: ArchiveFiles@2
           name: Package
