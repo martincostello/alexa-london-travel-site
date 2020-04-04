@@ -39,7 +39,7 @@ phases:
           ./build.ps1 -OutputPath $(Build.StagingDirectory) $(BuildArgs)
         name: BuildAndTest
         displayName: Build and test
-	    timeoutInMinutes: 20
+        timeoutInMinutes: 20
         env:
           DOTNET_CLI_TELEMETRY_OPTOUT: true
           DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
