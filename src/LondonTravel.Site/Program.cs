@@ -45,6 +45,7 @@ namespace MartinCostello.LondonTravel.Site
                     (webBuilder) =>
                     {
                         webBuilder.CaptureStartupErrors(true)
+                                  .ConfigureKestrel((p) => p.AddServerHeader = false)
                                   .UseStartup<Startup>();
                     });
         }
