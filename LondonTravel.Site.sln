@@ -9,10 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
 		.sonarrc = .sonarrc
-		.travis.yml = .travis.yml
-		appveyor.yml = appveyor.yml
 		build.ps1 = build.ps1
-		build.sh = build.sh
 		CommonAssemblyInfo.cs = CommonAssemblyInfo.cs
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
@@ -56,6 +53,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{4AD9EC06-3
 		docs\skill.graphviz = docs\skill.graphviz
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{22736F26-BC95-4792-915C-B6E61FEB523A}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build.yml = .github\workflows\build.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,7 @@ Global
 		{6E4177B7-FAE2-448E-8764-B2261F9EEA63} = {DD7EA67A-4FE1-4D4F-825E-51FF842107AB}
 		{4F53FEF1-66BC-45ED-B563-A619E9A193B7} = {DD7EA67A-4FE1-4D4F-825E-51FF842107AB}
 		{4AD9EC06-329C-47FB-8549-1A1EDE980130} = {DD7EA67A-4FE1-4D4F-825E-51FF842107AB}
+		{22736F26-BC95-4792-915C-B6E61FEB523A} = {4F53FEF1-66BC-45ED-B563-A619E9A193B7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {612E5D09-113B-4494-BEE6-0376224726FE}
