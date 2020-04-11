@@ -71,33 +71,20 @@ function DotNetTest {
     }
     else {
 
-        if ($installDotNetSdk -eq $true) {
-            $dotnetPath = $dotnet
-        }
-        else {
-            $dotnetPath = (Get-Command "dotnet").Source
-        }
-
-        $packagesRoot = $env:USERPROFILE
-
-        if ($null -eq $packagesRoot) {
-            $packagesRoot = "~"
-        }
-
-        $nugetPath = Join-Path $packagesRoot ".nuget\packages"
+        $nugetPath = Join-Path ($env:USERPROFILE ?? "~") ".nuget\packages"
         $propsFile = Join-Path $solutionPath "Directory.Build.props"
 
         $reportGeneratorVersion = (Select-Xml -Path $propsFile -XPath "//PackageReference[@Include='ReportGenerator']/@Version").Node.'#text'
-        $reportGeneratorPath = Join-Path $nugetPath "ReportGenerator\$reportGeneratorVersion\tools\netcoreapp3.0\ReportGenerator.dll"
+        $reportGeneratorPath = Join-Path $nugetPath "reportgenerator\$reportGeneratorVersion\tools\netcoreapp3.0\ReportGenerator.dll"
 
         $coverageOutput = Join-Path $OutputPath "coverage.cobertura.xml"
         $reportOutput = Join-Path $OutputPath "coverage"
 
         if ($null -ne $env:TF_BUILD) {
-            & $dotnetPath test $Project --output $OutputPath --logger trx -- RunConfiguration.TestSessionTimeout=1200000
+            & $dotnet test $Project --output $OutputPath --logger trx -- RunConfiguration.TestSessionTimeout=1200000
         }
         else {
-            & $dotnetPath test $Project --output $OutputPath -- RunConfiguration.TestSessionTimeout=1200000
+            & $dotnet test $Project --output $OutputPath -- RunConfiguration.TestSessionTimeout=1200000
         }
 
         $dotNetTestExitCode = $LASTEXITCODE
