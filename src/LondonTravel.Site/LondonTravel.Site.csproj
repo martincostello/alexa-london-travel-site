@@ -52,7 +52,7 @@
   <Target Name="PrepublishScript" DependsOnTargets="BundleAssets" BeforeTargets="Publish">
     <Exec Command="npm run publish" />
   </Target>
-  <Target Name="AddGeneratedContentItems" BeforeTargets="AssignTargetPaths" Condition="'$(CI)' != '' or '$(TF_BUILD)' != ''">
+  <Target Name="AddGeneratedContentItems" BeforeTargets="AssignTargetPaths" Condition="'$(CI)' != '' or '$(GITHUB_ACTIONS)' != '' or '$(TF_BUILD)' != ''">
     <ItemGroup>
       <Content Include="wwwroot/**" CopyToPublishDirectory="PreserveNewest" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder);@(Content)" />
       <Content Include="wwwroot/.well-known/**" CopyToPublishDirectory="PreserveNewest" Exclude="$(DefaultItemExcludes)" />
