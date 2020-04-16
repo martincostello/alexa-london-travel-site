@@ -6,7 +6,7 @@
     "@types/applicationinsights-js": "1.0.9",
     "@types/google.analytics": "0.0.40",
     "@types/jasmine": "3.4.0",
-    "@types/jquery": "3.3.34",
+    "@types/jquery": "3.3.35",
     "bootstrap": ">=4.4.1",
     "clean-css": ">=4.2.3",
     "cryptiles": "4.1.3",
