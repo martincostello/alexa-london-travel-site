@@ -35,8 +35,8 @@ namespace MartinCostello.LondonTravel.Site.Integration
 
                 var events = builder.ApplicationServices.GetRequiredService<ExternalAuthEvents>();
 
-                events.OnRedirectToOAuthAuthorizationEndpoint = (context) => RedirectToSelfForOAuth(context);
-                events.OnRedirectToTwitterAuthorizationEndpoint = (context) => RedirectToSelfForTwitter(context);
+                events.OnRedirectToOAuthAuthorizationEndpoint = RedirectToSelfForOAuth
+                events.OnRedirectToTwitterAuthorizationEndpoint = RedirectToSelfForTwitter;
             };
         }
 
@@ -55,7 +55,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             return Task.CompletedTask;
         }
 
-        private Task RedirectToSelfForOAuth<T>(RedirectContext<T> context)
+        private static Task RedirectToSelfForOAuth<T>(RedirectContext<T> context)
             where T : AuthenticationSchemeOptions
         {
             NameValueCollection queryString = ParseQueryString(context);
