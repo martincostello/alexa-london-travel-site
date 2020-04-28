@@ -8,13 +8,13 @@ namespace martinCostello.londonTravel {
      */
     export class Preferences {
 
-        private readonly clearButton: JQuery;
-        private readonly container: JQuery;
-        private readonly favoritesCount: JQuery;
+        private readonly clearButton: JQuery<Element>;
+        private readonly container: JQuery<Element>;
+        private readonly favoritesCount: JQuery<Element>;
         private readonly initialState: string;
-        private readonly otherCount: JQuery;
-        private readonly resetButton: JQuery;
-        private readonly saveButton: JQuery;
+        private readonly otherCount: JQuery<Element>;
+        private readonly resetButton: JQuery<Element>;
+        private readonly saveButton: JQuery<Element>;
 
         /**
          * Initializes a new instance of the martinCostello.londonTravel.Preferences class.
@@ -107,9 +107,9 @@ namespace martinCostello.londonTravel {
 
         /**
          * Gets all of the checkboxes in the preferences control.
-         * @returns {JQuery} - The jQuery element containing all the checkboxes.
+         * @returns {JQuery<Element>} - The jQuery element containing all the checkboxes.
          */
-        private getAllCheckboxes = (): JQuery => {
+        private getAllCheckboxes = (): JQuery<Element> => {
             return this.container.find("input[type='checkbox']");
         }
 
@@ -134,9 +134,9 @@ namespace martinCostello.londonTravel {
 
         /**
          * Gets the selected checkboxes in the preferences control.
-         * @returns {JQuery} - The jQuery element containing the selected checkboxes.
+         * @returns {JQuery<Element>} - The jQuery element containing the selected checkboxes.
          */
-        private getSelectedCheckboxes = (): JQuery => {
+        private getSelectedCheckboxes = (): JQuery<Element> => {
             return this.container.find("input[type='checkbox']:checked");
         }
 
@@ -172,10 +172,10 @@ namespace martinCostello.londonTravel {
 
         /**
          * Sets the state of the specified button to be enabled or not.
-         * @param {JQuery} button - The button to enable or disable.
+         * @param {JQuery<Element>} button - The button to enable or disable.
          * @param {boolean} enabled - Whether the button is enabled, or not.
          */
-        private setButtonState = (button: JQuery, enabled: boolean): void => {
+        private setButtonState = (button: JQuery<Element>, enabled: boolean): void => {
             if (enabled === true) {
                 button.prop("disabled", false).removeClass("disabled");
             }
