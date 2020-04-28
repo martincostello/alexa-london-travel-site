@@ -237,7 +237,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// <returns>
         /// The created instance of <see cref="ItemRequestOptions"/>, if any.
         /// </returns>
-        private ItemRequestOptions? GetOptionsForETag(string? etag)
+        private static ItemRequestOptions? GetOptionsForETag(string? etag)
         {
             if (etag == null)
             {
