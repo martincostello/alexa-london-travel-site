@@ -477,7 +477,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <returns>
         /// The created instance of <see cref="IdentityResult"/>.
         /// </returns>
-        private IdentityResult ResultForError(string code, string description)
+        private static IdentityResult ResultForError(string code, string description)
         {
             var error = new IdentityError()
             {
