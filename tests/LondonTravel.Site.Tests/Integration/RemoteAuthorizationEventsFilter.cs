@@ -35,7 +35,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
 
                 var events = builder.ApplicationServices.GetRequiredService<ExternalAuthEvents>();
 
-                events.OnRedirectToOAuthAuthorizationEndpoint = RedirectToSelfForOAuth
+                events.OnRedirectToOAuthAuthorizationEndpoint = RedirectToSelfForOAuth;
                 events.OnRedirectToTwitterAuthorizationEndpoint = RedirectToSelfForTwitter;
             };
         }
