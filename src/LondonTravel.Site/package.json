@@ -39,7 +39,7 @@
     "puppeteer": "3.0.4",
     "superagent": "5.2.2",
     "tslint": "6.1.2",
-    "typescript": "3.8.3"
+    "typescript": "3.9.2"
   },
   "scripts": {
     "build": "gulp build",
