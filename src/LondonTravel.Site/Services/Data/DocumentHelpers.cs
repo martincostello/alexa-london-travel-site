@@ -5,6 +5,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 {
     using System;
     using Microsoft.Azure.Cosmos;
+    using Microsoft.Azure.Cosmos.Fluent;
     using Microsoft.Extensions.DependencyInjection;
     using Options;
 
@@ -81,19 +82,17 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
                 throw new ArgumentException("No DocumentDB collection name is configured.", nameof(options));
             }
 
-            var cosmosOptions = new CosmosClientOptions()
-            {
-                ApplicationName = "london-travel",
-                RequestTimeout = TimeSpan.FromSeconds(15),
-                Serializer = serializer,
-            };
+            var builder = new CosmosClientBuilder(options.ServiceUri.AbsoluteUri, options.AccessKey)
+                .WithApplicationName("london-travel")
+                .WithCustomSerializer(serializer)
+                .WithRequestTimeout(TimeSpan.FromSeconds(15));
 
             if (!string.IsNullOrEmpty(options.CurrentLocation))
             {
-                cosmosOptions.ApplicationRegion = options.CurrentLocation;
+                builder = builder.WithApplicationRegion(options.CurrentLocation);
             }
 
-            return new CosmosClient(options.ServiceUri.AbsoluteUri, options.AccessKey, cosmosOptions);
+            return builder.Build();
         }
     }
 }
