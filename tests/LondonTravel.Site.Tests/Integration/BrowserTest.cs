@@ -128,7 +128,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             }
 #endif
 
-            var timeout = TimeSpan.FromSeconds(10);
+            var timeout = TimeSpan.FromSeconds(15);
             var driver = new ChromeDriver(chromeDriverDirectory, options, timeout);
 
             try

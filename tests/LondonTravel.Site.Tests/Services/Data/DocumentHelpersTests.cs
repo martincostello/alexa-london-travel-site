@@ -4,10 +4,12 @@
 namespace MartinCostello.LondonTravel.Site.Services.Data
 {
     using System;
+    using System.Net.Http;
     using MartinCostello.LondonTravel.Site.Options;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Azure.Cosmos;
     using Microsoft.Extensions.DependencyInjection;
+    using Moq;
     using Shouldly;
     using Xunit;
     using Options = Microsoft.Extensions.Options.Options;
@@ -25,13 +27,25 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         }
 
         [Fact]
+        public static void CreateClient_Throws_If_HttpClientFactory_Is_Null()
+        {
+            // Arrange
+            var options = new UserStoreOptions();
+            IHttpClientFactory? httpClientFactory = null;
+
+            // Act and Assert
+            Assert.Throws<ArgumentNullException>("httpClientFactory", () => DocumentHelpers.CreateClient(options, httpClientFactory!));
+        }
+
+        [Fact]
         public static void CreateClient_Throws_If_Options_Is_Null()
         {
             // Arrange
             UserStoreOptions? options = null;
+            var httpClientFactory = Mock.Of<IHttpClientFactory>();
 
             // Act and Assert
-            Assert.Throws<ArgumentNullException>("options", () => DocumentHelpers.CreateClient(options!));
+            Assert.Throws<ArgumentNullException>("options", () => DocumentHelpers.CreateClient(options!, httpClientFactory));
         }
 
         [Fact]
@@ -46,8 +60,10 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
                 CollectionName = "my-collection",
             };
 
+            var httpClientFactory = Mock.Of<IHttpClientFactory>();
+
             // Act and Assert
-            Assert.Throws<ArgumentException>("options", () => DocumentHelpers.CreateClient(options));
+            Assert.Throws<ArgumentException>("options", () => DocumentHelpers.CreateClient(options, httpClientFactory));
         }
 
         [Fact]
@@ -62,8 +78,10 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
                 CollectionName = "my-collection",
             };
 
+            var httpClientFactory = Mock.Of<IHttpClientFactory>();
+
             // Act and Assert
-            Assert.Throws<ArgumentException>("options", () => DocumentHelpers.CreateClient(options));
+            Assert.Throws<ArgumentException>("options", () => DocumentHelpers.CreateClient(options, httpClientFactory));
         }
 
         [Theory]
@@ -80,8 +98,10 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
                 CollectionName = "my-collection",
             };
 
+            var httpClientFactory = Mock.Of<IHttpClientFactory>();
+
             // Act and Assert
-            Assert.Throws<ArgumentException>("options", () => DocumentHelpers.CreateClient(options));
+            Assert.Throws<ArgumentException>("options", () => DocumentHelpers.CreateClient(options, httpClientFactory));
         }
 
         [Theory]
@@ -98,8 +118,10 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
                 CollectionName = "my-collection",
             };
 
+            var httpClientFactory = Mock.Of<IHttpClientFactory>();
+
             // Act and Assert
-            Assert.Throws<ArgumentException>("options", () => DocumentHelpers.CreateClient(options));
+            Assert.Throws<ArgumentException>("options", () => DocumentHelpers.CreateClient(options, httpClientFactory));
         }
 
         [Theory]
@@ -116,8 +138,10 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
                 CollectionName = collectionName,
             };
 
+            var httpClientFactory = Mock.Of<IHttpClientFactory>();
+
             // Act and Assert
-            Assert.Throws<ArgumentException>("options", () => DocumentHelpers.CreateClient(options));
+            Assert.Throws<ArgumentException>("options", () => DocumentHelpers.CreateClient(options, httpClientFactory));
         }
 
         [Fact]
@@ -134,6 +158,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             };
 
             var services = new ServiceCollection()
+                .AddHttpClient()
                 .AddSingleton(Options.Create(new JsonOptions()))
                 .AddSingleton(options);
 
@@ -159,6 +184,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             };
 
             var services = new ServiceCollection()
+                .AddHttpClient()
                 .AddSingleton(Options.Create(new JsonOptions()))
                 .AddSingleton(options);
 

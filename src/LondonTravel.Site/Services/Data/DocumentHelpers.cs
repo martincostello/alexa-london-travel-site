@@ -4,7 +4,9 @@
 namespace MartinCostello.LondonTravel.Site.Services.Data
 {
     using System;
+    using System.Net.Http;
     using Microsoft.Azure.Cosmos;
+    using Microsoft.Azure.Cosmos.Fluent;
     using Microsoft.Extensions.DependencyInjection;
     using Options;
 
@@ -31,29 +33,39 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             }
 
             var options = serviceProvider.GetRequiredService<UserStoreOptions>();
+            var httpClientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
 
-            return CreateClient(options);
+            return CreateClient(options, httpClientFactory);
         }
 
         /// <summary>
         /// Creates a new instance of an <see cref="IDocumentClient"/> implementation.
         /// </summary>
         /// <param name="options">The <see cref="UserStoreOptions"/> to use.</param>
+        /// <param name="httpClientFactory">The <see cref="IHttpClientFactory"/> to use.</param>
         /// <param name="serializer">The optional <see cref="CosmosSerializer"/> to use.</param>
         /// <returns>
         /// The created instance of <see cref="IDocumentClient"/>.
         /// </returns>
         /// <exception cref="ArgumentNullException">
-        /// <paramref name="options"/> is <see langword="null"/>.
+        /// <paramref name="options"/> or <paramref name="httpClientFactory"/> is <see langword="null"/>.
         /// </exception>
         /// <exception cref="ArgumentException">
         /// <paramref name="options"/> is invalid.
         /// </exception>
-        internal static CosmosClient CreateClient(UserStoreOptions options, CosmosSerializer? serializer = null)
+        internal static CosmosClient CreateClient(
+            UserStoreOptions options,
+            IHttpClientFactory httpClientFactory,
+            CosmosSerializer? serializer = null)
         {
             if (options == null)
             {
                 throw new ArgumentNullException(nameof(options));
+            }
+
+            if (httpClientFactory == null)
+            {
+                throw new ArgumentNullException(nameof(httpClientFactory));
             }
 
             if (options.ServiceUri == null)
@@ -81,19 +93,18 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
                 throw new ArgumentException("No DocumentDB collection name is configured.", nameof(options));
             }
 
-            var cosmosOptions = new CosmosClientOptions()
-            {
-                ApplicationName = "london-travel",
-                RequestTimeout = TimeSpan.FromSeconds(15),
-                Serializer = serializer,
-            };
+            var builder = new CosmosClientBuilder(options.ServiceUri.AbsoluteUri, options.AccessKey)
+                .WithApplicationName("london-travel")
+                .WithCustomSerializer(serializer)
+                .WithHttpClientFactory(httpClientFactory.CreateClient)
+                .WithRequestTimeout(TimeSpan.FromSeconds(15));
 
             if (!string.IsNullOrEmpty(options.CurrentLocation))
             {
-                cosmosOptions.ApplicationRegion = options.CurrentLocation;
+                builder = builder.WithApplicationRegion(options.CurrentLocation);
             }
 
-            return new CosmosClient(options.ServiceUri.AbsoluteUri, options.AccessKey, cosmosOptions);
+            return builder.Build();
         }
     }
 }
