@@ -142,14 +142,29 @@ function Get-Latest-Runtime-Version([string] $FileName, [string] $SdkVersion, [b
         Say-Verbose "JSON: $JsonContent"
 
         try {
-            $JsonContent | ForEach-Object {
+            foreach ($_ in $JsonContent) {
                 if ($_.sdk.version -eq $SdkVersion) {
                     $Version = $_.sdk."runtime-version"
+                    break;
                 }
             }
         }
         catch {
-            throw "Unable to parse the releases node in '$FileName'"
+            throw "Unable to parse the releases sdk node in '$FileName'"
+        }
+
+        if ($null -eq $Version) {
+            try {
+                foreach ($_ in $JsonContent) {
+                    if ($_.sdks.version -eq $SdkVersion) {
+                        $Version = $_.sdks."runtime-version" | Select -First 1
+                        break;
+                    }
+                }
+            }
+            catch {
+                throw "Unable to parse the releases sdks node in '$FileName'"
+            }
         }
     }
     else {
@@ -216,6 +231,8 @@ if ($null -eq $CurrentRuntimeVersion) {
     Say "Unable to determine runtime version for .NET SDK version $CurrentSDKVersion."
     return
 }
+
+Say-Verbose "Current .NET runtime version is $CurrentRuntimeVersion"
 
 Say "Latest .NET SDK version for channel '$Channel' is $LatestSDKVersion (runtime version $LatestRuntimeVersion)"
 
