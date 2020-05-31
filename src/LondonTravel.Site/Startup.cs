@@ -60,24 +60,22 @@ namespace MartinCostello.LondonTravel.Site
         private IWebHostEnvironment HostingEnvironment { get; }
 
         /// <summary>
-        /// Gets or sets the service scope to use for a service provider.
+        /// Gets or sets the service provider.
         /// </summary>
-        private IServiceScope? ServiceScope { get; set; }
+        private IServiceProvider? ServiceProvider { get; set; }
 
         /// <summary>
         /// Configures the application.
         /// </summary>
         /// <param name="app">The <see cref="IApplicationBuilder"/> to use.</param>
         /// <param name="applicationLifetime">The <see cref="IHostApplicationLifetime"/> to use.</param>
-        /// <param name="serviceProvider">The <see cref="IServiceProvider"/> to use.</param>
         /// <param name="options">The snapshot of <see cref="SiteOptions"/> to use.</param>
         public void Configure(
             IApplicationBuilder app,
             IHostApplicationLifetime applicationLifetime,
-            IServiceProvider serviceProvider,
             IOptionsSnapshot<SiteOptions> options)
         {
-            ServiceScope = serviceProvider.CreateScope();
+            ServiceProvider = app.ApplicationServices;
 
             applicationLifetime.ApplicationStopped.Register(OnApplicationStopped);
             app.UseCustomHttpHeaders(HostingEnvironment, Configuration, options);
@@ -193,7 +191,7 @@ namespace MartinCostello.LondonTravel.Site
             services.AddPolly();
             services.AddHttpClients();
 
-            services.AddApplicationAuthentication(() => ServiceScope!.ServiceProvider);
+            services.AddApplicationAuthentication(() => ServiceProvider!);
         }
 
         /// <summary>
@@ -283,7 +281,7 @@ namespace MartinCostello.LondonTravel.Site
         /// <param name="corsOptions">The <see cref="CorsOptions"/> to configure.</param>
         private void ConfigureCors(CorsOptions corsOptions)
         {
-            var siteOptions = ServiceScope!.ServiceProvider.GetService<SiteOptions>();
+            var siteOptions = ServiceProvider!.GetService<SiteOptions>();
 
             corsOptions.AddPolicy(
                 "DefaultCorsPolicy",
@@ -349,7 +347,6 @@ namespace MartinCostello.LondonTravel.Site
         private void OnApplicationStopped()
         {
             Serilog.Log.CloseAndFlush();
-            ServiceScope?.Dispose();
         }
     }
 }
