@@ -5,6 +5,8 @@ updates:
   schedule:
     interval: daily
     timezone: Europe/London
+  reviewers:
+    - "martincostello"
   open-pull-requests-limit: 99
   ignore:
   - dependency-name: XliffTasks
@@ -15,6 +17,8 @@ updates:
   schedule:
     interval: daily
     timezone: Europe/London
+  reviewers:
+    - "martincostello"
   open-pull-requests-limit: 99
   ignore:
   - dependency-name: "@types/jasmine"
