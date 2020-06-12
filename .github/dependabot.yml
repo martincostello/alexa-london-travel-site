@@ -1,0 +1,22 @@
+version: 2
+updates:
+- package-ecosystem: nuget
+  directory: "/"
+  schedule:
+    interval: daily
+    timezone: Europe/London
+  open-pull-requests-limit: 99
+  ignore:
+  - dependency-name: XliffTasks
+    versions:
+    - "> 1.0.0-beta.19562.1"
+- package-ecosystem: npm
+  directory: "/src/LondonTravel.Site"
+  schedule:
+    interval: daily
+    timezone: Europe/London
+  open-pull-requests-limit: 99
+  ignore:
+  - dependency-name: "@types/jasmine"
+    versions:
+    - "> 3.4.0"
