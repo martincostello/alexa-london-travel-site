@@ -74,12 +74,12 @@ describe("Debugging", () => {
     describe("Given meta tags containing the site version", () => {
 
         beforeAll(() => {
-            $("head").append("<meta name='x-site-branch'] content='master' />");
+            $("head").append("<meta name='x-site-branch'] content='main' />");
             $("head").append("<meta name='x-site-revision'] content='012345ab' />");
         });
 
         it("then the branch is correct", () => {
-            expect(martinCostello.londonTravel.Debug.branch()).toBe("master");
+            expect(martinCostello.londonTravel.Debug.branch()).toBe("main");
         });
 
         it("then the revision is correct", () => {
