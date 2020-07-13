@@ -315,11 +315,11 @@ namespace MartinCostello.LondonTravel.Site.Middleware
 
                 if (origins.Count > 0)
                 {
-                    builder.Append(" ");
+                    builder.Append(' ');
                     builder.Append(string.Join(" ", origins));
                 }
 
-                builder.Append(";");
+                builder.Append(';');
             }
 
             if (!isReport && _isProduction)

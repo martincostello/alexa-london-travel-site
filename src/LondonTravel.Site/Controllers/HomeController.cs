@@ -147,7 +147,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 model.AllLines.Add(favorite);
             }
 
-            model.AllLines
+            model.AllLines = model.AllLines
                 .OrderBy((p) => p.DisplayName, StringComparer.Ordinal)
                 .ToList();
 
