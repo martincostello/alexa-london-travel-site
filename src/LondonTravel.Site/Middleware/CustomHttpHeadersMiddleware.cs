@@ -251,21 +251,21 @@ namespace MartinCostello.LondonTravel.Site.Middleware
 
             var policies = new Dictionary<string, IList<string>>()
             {
-                { "default-src", new[] { Csp.Self, Csp.Data } },
-                { "script-src", scriptDirectives },
-                { "style-src", styleDirectives },
-                { "img-src", new[] { Csp.Self, Csp.Data, cdn } },
-                { "font-src", new[] { Csp.Self } },
-                { "connect-src", new[] { Csp.Self } },
-                { "media-src", new[] { Csp.None } },
-                { "object-src", new[] { Csp.None } },
-                { "child-src", new[] { Csp.Self } },
-                { "frame-ancestors", new[] { Csp.None } },
-                { "form-action", new[] { Csp.Self } },
-                { "block-all-mixed-content", Array.Empty<string>() },
-                { "base-uri", new[] { Csp.Self } },
-                { "manifest-src", new[] { Csp.Self } },
-                { "worker-src", new[] { Csp.Self } },
+                ["default-src"] = new[] { Csp.Self, Csp.Data },
+                ["script-src"] = scriptDirectives,
+                ["style-src"] = styleDirectives,
+                ["img-src"] = new[] { Csp.Self, Csp.Data, cdn },
+                ["font-src"] = new[] { Csp.Self },
+                ["connect-src"] = new[] { Csp.Self },
+                ["media-src"] = new[] { Csp.None },
+                ["object-src"] = new[] { Csp.None },
+                ["child-src"] = new[] { Csp.Self },
+                ["frame-ancestors"] = new[] { Csp.None },
+                ["form-action"] = new[] { Csp.Self },
+                ["block-all-mixed-content"] = Array.Empty<string>(),
+                ["base-uri"] = new[] { Csp.Self },
+                ["manifest-src"] = new[] { Csp.Self },
+                ["worker-src"] = new[] { Csp.Self },
             };
 
             if (allowInlineStyles)
