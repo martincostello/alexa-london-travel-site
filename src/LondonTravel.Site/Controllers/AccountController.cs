@@ -90,13 +90,21 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 return RedirectToRoute(SiteRoutes.Home);
             }
 
+            Uri? returnUri = null;
+
+            if (returnUrl != null &&
+                !Uri.TryCreate(returnUrl, UriKind.Relative, out returnUri))
+            {
+                return RedirectToRoute(SiteRoutes.Home);
+            }
+
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
             ViewData["ReturnUrl"] = returnUrl;
 
             string viewName = nameof(SignIn);
 
-            if (IsRedirectAlexaAuthorization(returnUrl))
+            if (IsRedirectAlexaAuthorization(returnUri?.ToString()))
             {
                 viewName += "Alexa";
                 ViewData["AuthenticationSchemesToHide"] = AuthenticationSchemesDisabledForAlexa;
@@ -196,7 +204,10 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             if (remoteError != null)
             {
-                ModelState.AddModelError(string.Empty, $"Error from external provider: {remoteError}");
+                _logger.LogWarning(
+                    "Error from external provider. {RemoteError}",
+                    remoteError);
+
                 return View(nameof(SignIn));
             }
 
@@ -227,10 +238,15 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             {
                 LondonTravelUser? user = CreateSystemUser(info);
 
+                if (!Uri.TryCreate(returnUrl, UriKind.Relative, out Uri? returnUri))
+                {
+                    returnUri = null;
+                }
+
                 if (string.IsNullOrEmpty(user?.Email))
                 {
                     ViewData["Message"] = nameof(SiteMessage.PermissionDenied);
-                    ViewData["ReturnUrl"] = returnUrl;
+                    ViewData["ReturnUrl"] = returnUri?.ToString();
 
                     return View("SignIn");
                 }
@@ -245,7 +261,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
                     _telemetry.TrackAccountCreated(user.Id!, user.Email, info.LoginProvider);
 
-                    if (IsRedirectAlexaAuthorization(returnUrl))
+                    if (returnUri != null && IsRedirectAlexaAuthorization(returnUri.ToString()))
                     {
                         return Redirect(returnUrl);
                     }
