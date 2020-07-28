@@ -275,7 +275,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             }
             catch (Exception ex)
             {
-                Output.WriteLine($"Failed to output driver logs: {ex.ToString()}");
+                Output.WriteLine($"Failed to output driver logs: {ex}");
             }
         }
 
@@ -303,7 +303,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             }
             catch (Exception ex)
             {
-                Output.WriteLine($"Failed to take screenshot: {ex.ToString()}");
+                Output.WriteLine($"Failed to take screenshot: {ex}");
             }
         }
     }
