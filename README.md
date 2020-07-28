@@ -1,6 +1,6 @@
 # Alexa London Travel Site
 
-[![London Travel](https://cdn.martincostello.com/london-travel-108x108.png "London Travel")](https://www.amazon.co.uk/dp/B01NB0T86R)
+[![London Travel](https://martincostello.azureedge.net/london-travel-108x108.png "London Travel")](https://www.amazon.co.uk/dp/B01NB0T86R)
 
 [![Build status](https://github.com/martincostello/alexa-london-travel-site/workflows/build/badge.svg?branch=main&event=push)](https://github.com/martincostello/alexa-london-travel-site/actions?query=workflow%3ABuild+branch%3Amain+event%3Apush)
 
