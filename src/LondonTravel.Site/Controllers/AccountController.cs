@@ -263,7 +263,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
                     if (returnUri != null && IsRedirectAlexaAuthorization(returnUri.ToString()))
                     {
-                        return Redirect(returnUrl);
+                        return Redirect(returnUri.ToString());
                     }
                     else
                     {
