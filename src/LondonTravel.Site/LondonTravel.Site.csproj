@@ -6,6 +6,7 @@
     <OutputType>Exe</OutputType>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <RootNamespace>MartinCostello.LondonTravel.Site</RootNamespace>
+    <SatelliteResourceLanguages>en,en-GB,en-US,qps-Ploc</SatelliteResourceLanguages>
     <Summary>Website for the London Travel Amazon Alexa skill.</Summary>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <TypeScriptToolsVersion>latest</TypeScriptToolsVersion>
