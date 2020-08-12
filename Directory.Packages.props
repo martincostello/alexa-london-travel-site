@@ -21,7 +21,7 @@
     <PackageVersion Include="Microsoft.Azure.Storage.Blob" Version="11.2.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="$(AnalyzersVersion)" />
     <PackageVersion Include="Microsoft.CodeQuality.Analyzers" Version="$(AnalyzersVersion)" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.AzureKeyVault" Version="3.1.6" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.AzureKeyVault" Version="3.1.7" />
     <PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="3.1.7" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="16.7.0" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.0.0" />
