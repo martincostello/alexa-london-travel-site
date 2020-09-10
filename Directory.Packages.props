@@ -33,7 +33,7 @@
     <PackageVersion Include="ReportGenerator" Version="4.6.7" />
     <PackageVersion Include="Selenium.Support" Version="3.141.0" />
     <PackageVersion Include="Selenium.WebDriver" Version="3.141.0" />
-    <PackageVersion Include="Serilog" Version="2.9.0" />
+    <PackageVersion Include="Serilog" Version="2.10.0" />
     <PackageVersion Include="Serilog.Extensions.Logging" Version="3.0.1" />
     <PackageVersion Include="Serilog.Settings.Configuration" Version="3.1.0" />
     <PackageVersion Include="Serilog.Sinks.ApplicationInsights" Version="3.1.0" />
