@@ -28,7 +28,7 @@
     },
     {
       "comment": "Token resource for Facebook login",
-      "uri": "https://graph.facebook.com/v4.0/oauth/access_token",
+      "uri": "https://graph.facebook.com/v8.0/oauth/access_token",
       "method": "POST",
       "contentFormat": "json",
       "contentJson": {
@@ -40,7 +40,7 @@
     },
     {
       "comment": "User information resource for Facebook login",
-      "uri": "https://graph.facebook.com/v4.0/me",
+      "uri": "https://graph.facebook.com/v8.0/me",
       "ignoreQuery": true,
       "contentFormat": "json",
       "contentJson": {
@@ -55,7 +55,7 @@
     },
     {
       "comment": "Token resource for Google login",
-      "uri": "https://www.googleapis.com/oauth2/v4/token",
+      "uri": "https://oauth2.googleapis.com/token",
       "method": "POST",
       "contentFormat": "json",
       "contentJson": {
