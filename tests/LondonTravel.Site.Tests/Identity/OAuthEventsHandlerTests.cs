@@ -46,6 +46,6 @@ namespace MartinCostello.LondonTravel.Site.Identity
             httpContext.Response.GetTypedHeaders().Location.OriginalString.ShouldBe(expected);
         }
 
-        private static IDictionary<string, string> PropertiesProvider<T>(T value) => new Dictionary<string, string>();
+        private static IDictionary<string, string?> PropertiesProvider<T>(T value) => new Dictionary<string, string?>();
     }
 }

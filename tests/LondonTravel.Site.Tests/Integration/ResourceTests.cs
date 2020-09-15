@@ -81,7 +81,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             using var response = await client.GetAsync(requestUri);
 
             // Assert
-            response.StatusCode.ShouldBe(HttpStatusCode.OK, $"Failed to get {requestUri}. {await response.Content.ReadAsStringAsync()}");
+            response.StatusCode.ShouldBe(HttpStatusCode.OK, $"Failed to get {requestUri}. {await response.Content!.ReadAsStringAsync()}");
             response.Content.Headers.ContentType?.MediaType.ShouldBe(contentType);
             response.Content.Headers.ContentLength.ShouldNotBeNull();
             response.Content.Headers.ContentLength.ShouldNotBe(0);
@@ -131,7 +131,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             // Assert
             response.EnsureSuccessStatusCode();
 
-            string json = await response.Content.ReadAsStringAsync();
+            string json = await response.Content!.ReadAsStringAsync();
             var manifest = JsonDocument.Parse(json);
 
             manifest.RootElement.GetString("name").ShouldBe("London Travel");
@@ -210,7 +210,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
 
             // Assert
             response.StatusCode.ShouldBe(expected);
-            response.Content.Headers.ContentType?.MediaType.ShouldBe("text/html");
+            response.Content!.Headers.ContentType?.MediaType.ShouldBe("text/html");
         }
 
         [Theory]

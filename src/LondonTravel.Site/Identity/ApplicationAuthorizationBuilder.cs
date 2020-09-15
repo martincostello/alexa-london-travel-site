@@ -146,7 +146,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                         options.Events.OnRemoteFailure =
                             (context) => OAuthEventsHandler.HandleRemoteFailure(
                                 context,
-                                options.SignInScheme,
+                                options.SignInScheme!,
                                 options.StateDataFormat,
                                 LoggerFactory.CreateLogger(name),
                                 (token) => token?.Properties?.Items);

@@ -175,8 +175,8 @@ namespace MartinCostello.LondonTravel.Site
             services.AddSingleton(DocumentHelpers.CreateClient);
 
             services.AddSingleton((p) => p.GetRequiredService<IOptions<SiteOptions>>().Value);
-            services.AddSingleton((p) => p.GetRequiredService<SiteOptions>().Authentication!.UserStore);
-            services.AddSingleton((p) => p.GetRequiredService<SiteOptions>().Tfl);
+            services.AddSingleton((p) => p.GetRequiredService<SiteOptions>().Authentication!.UserStore!);
+            services.AddSingleton((p) => p.GetRequiredService<SiteOptions>().Tfl!);
 
             services.TryAddSingleton<IDocumentService, DocumentService>();
             services.TryAddSingleton<IDocumentCollectionInitializer, DocumentCollectionInitializer>();

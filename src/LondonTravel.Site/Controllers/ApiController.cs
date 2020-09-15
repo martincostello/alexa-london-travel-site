@@ -178,7 +178,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         {
             errorDetail = null;
 
-            if (!AuthenticationHeaderValue.TryParse(authorizationHeader, out AuthenticationHeaderValue authorization))
+            if (!AuthenticationHeaderValue.TryParse(authorizationHeader, out AuthenticationHeaderValue? authorization))
             {
                 errorDetail = "The provided authorization value is not valid.";
                 return null;

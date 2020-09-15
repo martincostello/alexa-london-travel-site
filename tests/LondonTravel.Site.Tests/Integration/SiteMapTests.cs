@@ -31,7 +31,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         [Fact]
         public async Task Site_Map_Locations_Are_Valid()
         {
-            XmlNodeList locations;
+            XmlNodeList? locations;
 
             // Arrange
             using (var client = Fixture.CreateClient())
@@ -40,7 +40,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 using var response = await client.GetAsync("sitemap.xml");
 
                 response.StatusCode.ShouldBe(HttpStatusCode.OK);
-                response.Content.Headers.ContentType?.MediaType.ShouldBe(MediaTypeNames.Text.Xml);
+                response.Content!.Headers.ContentType?.MediaType.ShouldBe(MediaTypeNames.Text.Xml);
 
                 string xml = await response.Content.ReadAsStringAsync();
 
@@ -50,7 +50,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
 
             // Assert
             locations.ShouldNotBeNull();
-            locations.Count.ShouldBeGreaterThan(0);
+            locations!.Count.ShouldBeGreaterThan(0);
 
             foreach (XmlNode? location in locations)
             {
@@ -69,14 +69,14 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 using var client = Fixture.CreateClient();
                 using var response = await client.GetAsync(uri.PathAndQuery);
 
-                response.StatusCode.ShouldBe(HttpStatusCode.OK, $"Failed to get {uri.PathAndQuery}. {await response.Content.ReadAsStringAsync()}");
+                response.StatusCode.ShouldBe(HttpStatusCode.OK, $"Failed to get {uri.PathAndQuery}. {await response.Content!.ReadAsStringAsync()}");
                 response.Content.Headers.ContentType?.MediaType.ShouldBe(MediaTypeNames.Text.Html);
                 response.Content.Headers.ContentLength.ShouldNotBeNull();
                 response.Content.Headers.ContentLength!.Value.ShouldBeGreaterThan(0);
             }
         }
 
-        private static XmlNodeList GetSitemapLocations(string xml)
+        private static XmlNodeList? GetSitemapLocations(string xml)
         {
             string prefix = "ns";
             string uri = "http://www.sitemaps.org/schemas/sitemap/0.9";

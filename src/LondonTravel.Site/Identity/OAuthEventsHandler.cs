@@ -69,7 +69,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
             string provider,
             ISecureDataFormat<T> secureDataFormat,
             ILogger logger,
-            Func<T, IDictionary<string, string>?> propertiesProvider)
+            Func<T, IDictionary<string, string?>?> propertiesProvider)
         {
             string? path = GetSiteErrorRedirect(context, secureDataFormat, propertiesProvider);
 
@@ -92,7 +92,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
 
                 var eventId = default(EventId);
                 string errors = string.Join(";", context.Request.Query.Select((p) => $"'{p.Key}' = '{p.Value}'"));
-                string logMessage = $"Failed to sign-in using '{provider}': '{context.Failure.Message}'. Errors: {errors}.";
+                string logMessage = $"Failed to sign-in using '{provider}': '{context.Failure?.Message}'. Errors: {errors}.";
 
                 if (IsCorrelationFailure(context))
                 {
@@ -124,11 +124,11 @@ namespace MartinCostello.LondonTravel.Site.Identity
         private static string? GetSiteErrorRedirect<T>(
             RemoteFailureContext context,
             ISecureDataFormat<T> secureDataFormat,
-            Func<T, IDictionary<string, string>?> propertiesProvider)
+            Func<T, IDictionary<string, string?>?> propertiesProvider)
         {
             var state = context.Request.Query["state"];
             var stateData = secureDataFormat.Unprotect(state);
-            var properties = propertiesProvider?.Invoke(stateData);
+            var properties = propertiesProvider?.Invoke(stateData!);
 
             if (properties == null ||
                 !properties.TryGetValue(SiteContext.ErrorRedirectPropertyName, out string? value))
@@ -151,7 +151,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
             // See https://github.com/aspnet/Security/blob/ad425163b29b1e09a41e84423b0dcbac797c9164/src/Microsoft.AspNetCore.Authentication.OAuth/OAuthHandler.cs#L66
             // and https://github.com/aspnet/Security/blob/2d1c56ce5ccfc15c78dd49cee772f6be473f3ee2/src/Microsoft.AspNetCore.Authentication/RemoteAuthenticationHandler.cs#L203
             // This effectively means that the user did not pass their cookies along correctly to correlate the request.
-            return string.Equals(context.Failure.Message, "Correlation failed.", StringComparison.Ordinal);
+            return string.Equals(context.Failure?.Message, "Correlation failed.", StringComparison.Ordinal);
         }
 
         /// <summary>
@@ -202,7 +202,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
             {
                 await HandleRemoteFailure(
                     context,
-                    _options.SignInScheme,
+                    _options.SignInScheme!,
                     _options.StateDataFormat,
                     _logger,
                     (p) => p?.Items);
