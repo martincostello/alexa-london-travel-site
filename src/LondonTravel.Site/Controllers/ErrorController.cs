@@ -88,9 +88,9 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 httpCode = StatusCodes.Status500InternalServerError;
             }
 
-            string title = _resources.ErrorTitle;
-            string subtitle = _resources.ErrorSubtitle(httpCode);
-            string message = _resources.ErrorMessage;
+            string? title = _resources.ErrorTitle;
+            string? subtitle = _resources.ErrorSubtitle(httpCode);
+            string? message = _resources.ErrorMessage;
             bool isUserError = false;
 
             switch (httpCode)

@@ -128,8 +128,11 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 using var response = await client.SendAsync(message);
 
                 // Assert
-                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-                response.Content.Headers.ContentType.MediaType.ShouldBe(MediaTypeNames.Application.Json);
+                response.StatusCode.ShouldBe(HttpStatusCode.OK);
+                response.Content.ShouldNotBeNull();
+                response.Content!.Headers.ShouldNotBeNull();
+                response.Content!.Headers!.ContentType.ShouldNotBeNull();
+                response.Content.Headers.ContentType!.MediaType.ShouldBe(MediaTypeNames.Application.Json);
 
                 string json = await response.Content.ReadAsStringAsync();
                 using var preferences = JsonDocument.Parse(json);
@@ -161,8 +164,11 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 using var response = await client.SendAsync(message);
 
                 // Assert
-                Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-                response.Content.Headers.ContentType.MediaType.ShouldBe(MediaTypeNames.Application.Json);
+                response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+                response.Content.ShouldNotBeNull();
+                response.Content!.Headers.ShouldNotBeNull();
+                response.Content!.Headers!.ContentType.ShouldNotBeNull();
+                response.Content.Headers.ContentType!.MediaType.ShouldBe(MediaTypeNames.Application.Json);
             }
         }
     }

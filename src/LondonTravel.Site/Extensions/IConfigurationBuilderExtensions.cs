@@ -4,8 +4,9 @@
 namespace MartinCostello.LondonTravel.Site.Extensions
 {
     using System;
+    using Azure.Core;
+    using Azure.Identity;
     using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.Configuration.AzureKeyVault;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
 
@@ -33,6 +34,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
             string vault = config["AzureKeyVault:Uri"];
             string clientId = config["AzureKeyVault:ClientId"];
             string clientSecret = config["AzureKeyVault:ClientSecret"];
+            string tenantId = config["AzureKeyVault:TenantId"];
 
             // Can Managed Service Identity be used instead of direct Key Vault integration?
             bool canUseMsi =
@@ -42,24 +44,23 @@ namespace MartinCostello.LondonTravel.Site.Extensions
 
             bool canUseKeyVault =
                 !string.IsNullOrEmpty(vault) &&
-                (canUseMsi || (!string.IsNullOrEmpty(clientId) && !string.IsNullOrEmpty(clientSecret)));
+                (canUseMsi || (!string.IsNullOrEmpty(clientId) && !string.IsNullOrEmpty(clientSecret) && !string.IsNullOrEmpty(tenantId)));
 
             if (canUseKeyVault)
             {
-                AzureKeyVaultConfigurationOptions options;
+                var manager = new AzureEnvironmentSecretManager(config.AzureEnvironment());
+                TokenCredential credential;
 
                 if (canUseMsi)
                 {
-                    options = new AzureKeyVaultConfigurationOptions(vault);
+                    credential = new ManagedIdentityCredential();
                 }
                 else
                 {
-                    options = new AzureKeyVaultConfigurationOptions(vault, clientId, clientSecret);
+                    credential = new ClientSecretCredential(tenantId, clientId, clientSecret);
                 }
 
-                options.Manager = new AzureEnvironmentSecretManager(config.AzureEnvironment());
-
-                builder.AddAzureKeyVault(options);
+                builder.AddAzureKeyVault(new Uri(vault), credential, manager);
             }
 
             return builder;

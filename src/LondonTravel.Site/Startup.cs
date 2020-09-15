@@ -20,7 +20,6 @@ namespace MartinCostello.LondonTravel.Site
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Razor;
     using Microsoft.AspNetCore.StaticFiles;
-    using Microsoft.Azure.Storage;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -176,8 +175,8 @@ namespace MartinCostello.LondonTravel.Site
             services.AddSingleton(DocumentHelpers.CreateClient);
 
             services.AddSingleton((p) => p.GetRequiredService<IOptions<SiteOptions>>().Value);
-            services.AddSingleton((p) => p.GetRequiredService<SiteOptions>().Authentication!.UserStore);
-            services.AddSingleton((p) => p.GetRequiredService<SiteOptions>().Tfl);
+            services.AddSingleton((p) => p.GetRequiredService<SiteOptions>().Authentication!.UserStore!);
+            services.AddSingleton((p) => p.GetRequiredService<SiteOptions>().Tfl!);
 
             services.TryAddSingleton<IDocumentService, DocumentService>();
             services.TryAddSingleton<IDocumentCollectionInitializer, DocumentCollectionInitializer>();
@@ -319,11 +318,13 @@ namespace MartinCostello.LondonTravel.Site
 
             string connectionString = Configuration.AzureStorageConnectionString();
 
-            if (!string.IsNullOrWhiteSpace(connectionString) &&
-                CloudStorageAccount.TryParse(connectionString, out CloudStorageAccount account))
+            if (!string.IsNullOrWhiteSpace(connectionString))
             {
-                string relativePath = $"/data-protection/london-travel/{environment}/keys.xml";
-                dataProtection.PersistKeysToAzureBlobStorage(account, relativePath);
+                string relativePath = $"/london-travel/{environment}/keys.xml";
+                dataProtection.PersistKeysToAzureBlobStorage(
+                    connectionString,
+                    "data-protection",
+                    relativePath);
             }
         }
 

@@ -24,7 +24,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         public AuthenticationTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
             : base(fixture, outputHelper)
         {
-            Fixture.Services.GetRequiredService<InMemoryDocumentStore>().Clear();
+            Fixture.Services!.GetRequiredService<InMemoryDocumentStore>().Clear();
         }
 
         [Theory]

@@ -31,7 +31,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         public AlexaTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
             : base(fixture, outputHelper)
         {
-            Fixture.Services.GetRequiredService<InMemoryDocumentStore>().Clear();
+            Fixture.Services!.GetRequiredService<InMemoryDocumentStore>().Clear();
         }
 
         [Fact]
@@ -135,7 +135,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
 
         private static Uri BuildAuthorizationUri(ApplicationNavigator navigator)
         {
-            var queryString = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            var queryString = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase)
             {
                 { "client_id", "alexa-london-travel" },
                 { "redirect_uri", new Uri(navigator.BaseUri, new Uri("/manage/", UriKind.Relative)).ToString() },
