@@ -4,14 +4,14 @@
 namespace MartinCostello.LondonTravel.Site
 {
     using System;
-    using Microsoft.Azure.KeyVault.Models;
-    using Microsoft.Extensions.Configuration.AzureKeyVault;
+    using Azure.Extensions.AspNetCore.Configuration.Secrets;
+    using Azure.Security.KeyVault.Secrets;
 
     /// <summary>
-    /// A class representing an implementation of <see cref="IKeyVaultSecretManager"/>
+    /// A class representing an implementation of <see cref="KeyVaultSecretManager"/>
     /// that selects keys based on the Azure environment name. This class cannot be inherited.
     /// </summary>
-    internal sealed class AzureEnvironmentSecretManager : IKeyVaultSecretManager
+    internal sealed class AzureEnvironmentSecretManager : KeyVaultSecretManager
     {
         /// <summary>
         /// The secret prefix to use for the environment.
@@ -28,17 +28,17 @@ namespace MartinCostello.LondonTravel.Site
         }
 
         /// <inheritdoc />
-        public string GetKey(SecretBundle secret)
+        public override string GetKey(KeyVaultSecret secret)
         {
-            return secret.SecretIdentifier.Name.Substring(_prefix.Length)
+            return secret.Name.Substring(_prefix.Length)
                 .Replace("--", "_", StringComparison.Ordinal)
                 .Replace("-", ":", StringComparison.Ordinal);
         }
 
         /// <inheritdoc />
-        public bool Load(SecretItem secret)
+        public override bool Load(SecretProperties secret)
         {
-            return secret.Identifier.Name.StartsWith(_prefix, StringComparison.Ordinal);
+            return secret.Name.StartsWith(_prefix, StringComparison.Ordinal);
         }
     }
 }
