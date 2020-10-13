@@ -131,7 +131,7 @@
     </ReadLinesFromFile>
     <Message Text="The latest version of the Google Chrome driver is $(_ChromeDriverLatestVersion)." Importance="normal" />
     <PropertyGroup>
-      <ChromeDriverVersion>$(_ChromeDriverLatestVersion)*</ChromeDriverVersion>
+      <ChromeDriverVersion>$(_ChromeDriverLatestVersion)00</ChromeDriverVersion>
     </PropertyGroup>
     <!--
       Add the appropriate package reference for the driver for the installed version of Chrome.
