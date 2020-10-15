@@ -23,7 +23,7 @@
     <PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="5.0.0-rc.2.20478.4" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.0.0" />
-    <PackageVersion Include="Moq" Version="4.14.6" />
+    <PackageVersion Include="Moq" Version="4.14.7" />
     <PackageVersion Include="NodaTime" Version="$(NodaTimeVersion)" />
     <PackageVersion Include="NodaTime.Testing" Version="$(NodaTimeVersion)" />
     <PackageVersion Include="Polly" Version="7.2.1" />
