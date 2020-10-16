@@ -3,10 +3,10 @@
     <NodaTimeVersion>3.0.1</NodaTimeVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="AspNet.Security.OAuth.Amazon" Version="5.0.0-rc.2.20513.86" />
+    <PackageVersion Include="AspNet.Security.OAuth.Amazon" Version="5.0.0-rc.2.20516.57" />
+    <PackageVersion Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.0.1" />
     <PackageVersion Include="Azure.Extensions.AspNetCore.DataProtection.Blobs" Version="1.0.1" />
     <PackageVersion Include="Azure.Extensions.AspNetCore.DataProtection.Keys" Version="1.0.2" />
-    <PackageVersion Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.0.1" />
     <PackageVersion Include="Azure.Identity" Version="1.2.3" />
     <PackageVersion Include="coverlet.msbuild" Version="2.9.0" />
     <PackageVersion Include="JustEat.HttpClientInterception" Version="3.0.0" />
