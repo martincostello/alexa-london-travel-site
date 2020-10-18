@@ -37,6 +37,7 @@ jobs:
       run: ./build.ps1
       env:
         DOTNET_CLI_TELEMETRY_OPTOUT: true
+        DOTNET_NOLOGO: true
         DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
         NUGET_XMLDOC_MODE: skip
 
@@ -45,3 +46,20 @@ jobs:
       with:
         file: ./artifacts/coverage.cobertura.xml
         flags: ${{ matrix.codecov_os }}
+
+    - name: 'Deploy to londontravel-dev.martincostello.com'
+      uses: azure/webapps-deploy@v2.1.2
+      if: ${{ github.ref == 'refs/heads/main' && runner.os == 'Windows' }}
+      with:
+        app-name: londontravelmartincostello-uksouth
+        slot-name: dev
+        package: './artifacts/publish'
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_DEV  }}
+
+    - name: 'Deploy to londontravel.martincostello.com'
+      uses: azure/webapps-deploy@v2.1.2
+      if: ${{ github.ref == 'refs/heads/deploy' && runner.os == 'Windows' }}
+      with:
+        app-name: londontravelmartincostello-uksouth
+        package: './artifacts/publish'
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_PROD  }}
