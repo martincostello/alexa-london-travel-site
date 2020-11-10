@@ -16,7 +16,7 @@
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="5.0.0-rc.2.20475.17" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="5.0.0-rc.2.20475.17" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.Twitter" Version="5.0.0-rc.2.20475.17" />
-    <PackageVersion Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" Version="5.0.0-rc.2.20475.17" />
+    <PackageVersion Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" Version="5.0.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="5.0.0-rc.2.20475.17" />
     <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.14.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.1" />
