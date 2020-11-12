@@ -39,7 +39,6 @@ module.exports = function (config) {
         },
 
         plugins: [
-            "karma-appveyor-reporter",
             "karma-chrome-launcher",
             "karma-html-detailed-reporter",
             "karma-jasmine",
@@ -48,7 +47,6 @@ module.exports = function (config) {
 
         reporters: [
             "progress",
-            "appveyor",
             "karma-typescript"
         ]
     });
