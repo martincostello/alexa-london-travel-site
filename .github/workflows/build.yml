@@ -2,7 +2,7 @@ name: build
 
 on:
   push:
-    branches: [ main, deploy ]
+    branches: [ main ]
   pull_request:
     branches: [ main ]
   workflow_dispatch:
@@ -54,12 +54,4 @@ jobs:
         app-name: londontravelmartincostello-uksouth
         slot-name: dev
         package: './artifacts/publish'
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_DEV  }}
-
-    - name: 'Deploy to londontravel.martincostello.com'
-      uses: azure/webapps-deploy@v2
-      if: ${{ github.ref == 'refs/heads/deploy' && runner.os == 'Windows' }}
-      with:
-        app-name: londontravelmartincostello-uksouth
-        package: './artifacts/publish'
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_PROD  }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_DEV }}
