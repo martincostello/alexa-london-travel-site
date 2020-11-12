@@ -24,6 +24,11 @@ namespace MartinCostello.LondonTravel.Site
         public static string Commit { get; } = GetMetadataValue("CommitHash", "HEAD");
 
         /// <summary>
+        /// Gets the Id for the GitHub Actions run the assembly was compiled and deployed from.
+        /// </summary>
+        public static string DeployId { get; } = GetMetadataValue("DeployId", "Unknown");
+
+        /// <summary>
         /// Gets the timestamp the assembly was compiled at.
         /// </summary>
         public static DateTime Timestamp { get; } = DateTime.Parse(GetMetadataValue("BuildTimestamp", DateTime.UtcNow.ToString("o", CultureInfo.InvariantCulture)), CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
