@@ -50,8 +50,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{4AD9EC06-3
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{22736F26-BC95-4792-915C-B6E61FEB523A}"
 	ProjectSection(SolutionItems) = preProject
+		.github\workflows\automerge.yml = .github\workflows\automerge.yml
 		.github\workflows\build.yml = .github\workflows\build.yml
+		.github\workflows\codeql-analysis.yml = .github\workflows\codeql-analysis.yml
 		.github\workflows\deploy.yml = .github\workflows\deploy.yml
+		.github\workflows\linter.yml = .github\workflows\linter.yml
 		.github\workflows\update-dotnet-sdk.yml = .github\workflows\update-dotnet-sdk.yml
 	EndProjectSection
 EndProject
@@ -77,7 +80,6 @@ Global
 		{F1A4074F-A8DE-4A9A-97EF-91830AEC59B3} = {0EED3EF2-37DE-4E6E-B766-3E641D163515}
 		{0106CA34-73B0-4F30-8BDF-AF8D7AB22A4A} = {668E07A5-C40F-4694-9D3C-EBC1180656CF}
 		{DB85B1E3-701B-456F-AEE1-3B2F1DA23BC2} = {DD7EA67A-4FE1-4D4F-825E-51FF842107AB}
-		{6E4177B7-FAE2-448E-8764-B2261F9EEA63} = {DD7EA67A-4FE1-4D4F-825E-51FF842107AB}
 		{4F53FEF1-66BC-45ED-B563-A619E9A193B7} = {DD7EA67A-4FE1-4D4F-825E-51FF842107AB}
 		{4AD9EC06-329C-47FB-8549-1A1EDE980130} = {DD7EA67A-4FE1-4D4F-825E-51FF842107AB}
 		{22736F26-BC95-4792-915C-B6E61FEB523A} = {4F53FEF1-66BC-45ED-B563-A619E9A193B7}
