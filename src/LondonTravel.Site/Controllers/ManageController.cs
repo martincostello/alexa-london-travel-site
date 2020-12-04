@@ -200,7 +200,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             var user = await GetCurrentUserAsync();
             var message = SiteMessage.Error;
 
-            if (user != null && account != null)
+            if (user != null)
             {
                 _logger.LogTrace("Removing login for provider {ProviderName} from user Id {UserId}.", account.LoginProvider, user.Id);
 
