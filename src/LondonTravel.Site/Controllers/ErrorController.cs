@@ -5,6 +5,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 {
     using System;
     using System.Net;
+    using System.Security.Cryptography;
     using MartinCostello.LondonTravel.Site.Telemetry;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
@@ -149,6 +150,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         [HttpGet]
         [HttpHead]
         [HttpPost]
+        [IgnoreAntiforgeryToken]
         [Route(".env")]
         [Route(".git/{*catchall}")]
         [Route("admin.php")]
@@ -180,10 +182,12 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         [Route("wp-links-opml.php")]
         [Route("wp-login.php")]
         [Route("xmlrpc.php")]
+#pragma warning disable CA5391
         public ActionResult No()
+#pragma warning restore CA5391
         {
             _telemetry.TrackSuspiciousCrawler();
-            return Redirect(Videos[new Random().Next(0, Videos.Length)]);
+            return Redirect(Videos[RandomNumberGenerator.GetInt32(0, Videos.Length)]);
         }
     }
 }

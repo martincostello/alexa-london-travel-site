@@ -128,35 +128,32 @@ namespace MartinCostello.LondonTravel.Site.Models
 
             var model = new MetaModel();
 
-            if (options != null)
+            if (options.Author != null)
             {
-                if (options.Author != null)
+                model.Author = options.Author.Name;
+                model.Bitcoin = options.Author.Bitcoin;
+
+                if (options.Author.SocialMedia != null)
                 {
-                    model.Author = options.Author.Name;
-                    model.Bitcoin = options.Author.Bitcoin;
-
-                    if (options.Author.SocialMedia != null)
-                    {
-                        model.FacebookProfile = options.Author.SocialMedia.Facebook;
-                        model.TwitterHandle = options.Author.SocialMedia.Twitter;
-                    }
+                    model.FacebookProfile = options.Author.SocialMedia.Facebook;
+                    model.TwitterHandle = options.Author.SocialMedia.Twitter;
                 }
-
-                model.CanonicalUri = canonicalUri ?? string.Empty;
-                model.Description = description ?? options.Description;
-                model.FacebookApp = options.SocialMedia?.Facebook;
-                model.HostName = hostName ?? options.Domain;
-                model.ImageUri = imageUri ?? options.Image ?? string.Empty;
-                model.ImageAltText = imageAltText ?? options.Name;
-                model.Keywords = options.Keywords ?? "alexa,london travel";
-                model.Robots = robots ?? options.Robots;
-                model.SiteName = options.Name ?? "London Travel is an Amazon Alexa skill for checking the status for travel in London.";
-                model.SiteType = options.Type ?? "website";
-                model.Title = $"{title} - {model.SiteName}";
-                model.TwitterCard = "summary";
-
-                model.Reviews = BuildReviews();
             }
+
+            model.CanonicalUri = canonicalUri ?? string.Empty;
+            model.Description = description ?? options.Description;
+            model.FacebookApp = options.SocialMedia?.Facebook;
+            model.HostName = hostName ?? options.Domain;
+            model.ImageUri = imageUri ?? options.Image ?? string.Empty;
+            model.ImageAltText = imageAltText ?? options.Name;
+            model.Keywords = options.Keywords ?? "alexa,london travel";
+            model.Robots = robots ?? options.Robots;
+            model.SiteName = options.Name ?? "London Travel is an Amazon Alexa skill for checking the status for travel in London.";
+            model.SiteType = options.Type ?? "website";
+            model.Title = $"{title} - {model.SiteName}";
+            model.TwitterCard = "summary";
+
+            model.Reviews = BuildReviews();
 
             return model;
         }
