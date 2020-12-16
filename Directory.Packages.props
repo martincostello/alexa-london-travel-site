@@ -27,7 +27,7 @@
     <PackageVersion Include="NodaTime.Testing" Version="$(NodaTimeVersion)" />
     <PackageVersion Include="Polly" Version="7.2.1" />
     <PackageVersion Include="Refit" Version="5.2.4" />
-    <PackageVersion Include="ReportGenerator" Version="4.8.1" />
+    <PackageVersion Include="ReportGenerator" Version="4.8.2" />
     <PackageVersion Include="Selenium.Support" Version="3.141.0" />
     <PackageVersion Include="Selenium.WebDriver" Version="3.141.0" />
     <PackageVersion Include="Serilog" Version="2.10.0" />
