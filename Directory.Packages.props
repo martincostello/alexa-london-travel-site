@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <NodaTimeVersion>3.0.4</NodaTimeVersion>
+    <NodaTimeVersion>3.0.5</NodaTimeVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="AspNet.Security.OAuth.Amazon" Version="5.0.0" />
