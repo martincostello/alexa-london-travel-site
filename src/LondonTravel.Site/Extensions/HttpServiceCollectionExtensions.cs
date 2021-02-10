@@ -48,7 +48,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
                 .AddTypedClient(AddTfl)
                 .ApplyDefaultConfiguration();
 
-            services.AddSingleton<IContentSerializer>(
+            services.AddSingleton<IHttpContentSerializer>(
                 (p) =>
                 {
                     var options = p.GetRequiredService<IOptions<JsonOptions>>().Value;
@@ -72,7 +72,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
 
             var settings = new RefitSettings()
             {
-                ContentSerializer = provider.GetRequiredService<IContentSerializer>(),
+                ContentSerializer = provider.GetRequiredService<IHttpContentSerializer>(),
                 HttpMessageHandlerFactory = () => provider.GetRequiredService<IHttpMessageHandlerFactory>().CreateHandler(),
             };
 

@@ -96,7 +96,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
                 }
             }
 
-            return result;
+            return result!;
         }
     }
 }
