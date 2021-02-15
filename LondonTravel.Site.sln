@@ -50,7 +50,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{4AD9EC06-3
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{22736F26-BC95-4792-915C-B6E61FEB523A}"
 	ProjectSection(SolutionItems) = preProject
-		.github\workflows\automerge.yml = .github\workflows\automerge.yml
 		.github\workflows\build.yml = .github\workflows\build.yml
 		.github\workflows\codeql-analysis.yml = .github\workflows\codeql-analysis.yml
 		.github\workflows\deploy.yml = .github\workflows\deploy.yml
