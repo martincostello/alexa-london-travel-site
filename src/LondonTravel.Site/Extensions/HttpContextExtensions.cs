@@ -35,11 +35,11 @@ namespace MartinCostello.LondonTravel.Site.Extensions
 
             if (nonce == null)
             {
-                byte[] data = new byte[32];
+                byte[] data = Array.Empty<byte>();
 
                 try
                 {
-                    RandomNumberGenerator.Fill(data);
+                    data = RandomNumberGenerator.GetBytes(32);
 
                     nonce = Convert.ToBase64String(data).Replace("+", "/", StringComparison.Ordinal); // '+' causes encoding issues with TagHelpers
                 }

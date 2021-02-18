@@ -68,11 +68,11 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// </returns>
         public static string GenerateAccessToken()
         {
-            byte[] entropy = new byte[64];
+            byte[] entropy = Array.Empty<byte>();
 
             try
             {
-                RandomNumberGenerator.Fill(entropy);
+                entropy = RandomNumberGenerator.GetBytes(64);
 
                 return Convert.ToBase64String(entropy);
             }
