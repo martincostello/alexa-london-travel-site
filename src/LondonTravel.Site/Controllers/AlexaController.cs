@@ -4,7 +4,6 @@
 namespace MartinCostello.LondonTravel.Site.Controllers
 {
     using System;
-    using System.Buffers;
     using System.Linq;
     using System.Security.Cryptography;
     using System.Threading.Tasks;
@@ -69,20 +68,17 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// </returns>
         public static string GenerateAccessToken()
         {
-            const int TokenLength = 64;
-
-            byte[] entropy = ArrayPool<byte>.Shared.Rent(TokenLength);
+            byte[] entropy = new byte[64];
 
             try
             {
-                using var random = RandomNumberGenerator.Create();
-                random.GetBytes(entropy);
+                RandomNumberGenerator.Fill(entropy);
 
-                return Convert.ToBase64String(entropy, 0, TokenLength);
+                return Convert.ToBase64String(entropy);
             }
             finally
             {
-                ArrayPool<byte>.Shared.Return(entropy, clearArray: true);
+                CryptographicOperations.ZeroMemory(entropy);
             }
         }
 
