@@ -31,7 +31,7 @@
     "karma-html-detailed-reporter": "2.1.0",
     "karma-jasmine": "4.0.1",
     "karma-typescript": "5.4.0",
-    "lodash": ">=4.17.20",
+    "lodash": ">=4.17.21",
     "merge-stream": "2.0.0",
     "natives": "^1.1.6",
     "path": "0.12.7",
