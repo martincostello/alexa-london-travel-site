@@ -78,7 +78,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl
         /// </returns>
         private async Task<T> GetWithCachingAsync<T>(string cacheKey, Func<Task<ApiResponse<T>>> operation)
         {
-            if (!_cache.TryGetValue(cacheKey, out T result))
+            if (!_cache.TryGetValue(cacheKey, out T? result))
             {
                 using var response = await operation();
 
