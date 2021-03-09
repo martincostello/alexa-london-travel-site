@@ -13,11 +13,11 @@
     <PackageVersion Include="MartinCostello.Logging.XUnit" Version="0.1.0" />
     <PackageVersion Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.17.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.Facebook" Version="5.0.4" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="5.0.3" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="5.0.3" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Twitter" Version="5.0.3" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="5.0.4" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="5.0.4" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Twitter" Version="5.0.4" />
     <PackageVersion Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" Version="5.0.4" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="5.0.3" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="5.0.4" />
     <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.17.0" />
     <PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="5.0.1" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
