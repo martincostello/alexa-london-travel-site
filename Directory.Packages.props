@@ -3,7 +3,7 @@
     <NodaTimeVersion>3.0.5</NodaTimeVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="AspNet.Security.OAuth.Amazon" Version="5.0.1" />
+    <PackageVersion Include="AspNet.Security.OAuth.Amazon" Version="5.0.2" />
     <PackageVersion Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.0.2" />
     <PackageVersion Include="Azure.Extensions.AspNetCore.DataProtection.Blobs" Version="1.2.0" />
     <PackageVersion Include="Azure.Extensions.AspNetCore.DataProtection.Keys" Version="1.0.2" />
