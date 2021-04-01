@@ -3,9 +3,23 @@ name: build
 on:
   push:
     branches: [ main ]
+    paths-ignore:
+    - '**/*.md'
+    - '**/*.gitignore'
+    - '**/*.gitattributes'
   pull_request:
     branches: [ main ]
   workflow_dispatch:
+
+env:
+  AZURE_WEBAPP_NAME: londontravelmartincostello-uksouth
+  AZURE_WEBAPP_PACKAGE_PATH: ./artifacts/publish
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_GENERATE_ASPNET_CERTIFICATE: false
+  DOTNET_MULTILEVEL_LOOKUP: 0
+  DOTNET_NOLOGO: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  NUGET_XMLDOC_MODE: skip
 
 jobs:
   build:
@@ -29,17 +43,12 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Setup .NET Core SDK
+    - name: Setup .NET SDK
       uses: actions/setup-dotnet@v1
 
-    - name: Build, Test and Publish
+    - name: Build, test and publish
       shell: pwsh
       run: ./build.ps1
-      env:
-        DOTNET_CLI_TELEMETRY_OPTOUT: true
-        DOTNET_NOLOGO: true
-        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-        NUGET_XMLDOC_MODE: skip
 
     - uses: codecov/codecov-action@v1
       name: Upload coverage to Codecov
@@ -47,11 +56,53 @@ jobs:
         file: ./artifacts/coverage.cobertura.xml
         flags: ${{ matrix.codecov_os }}
 
-    - name: 'Deploy to londontravel-dev.martincostello.com'
-      uses: azure/webapps-deploy@v2
-      if: ${{ github.ref == 'refs/heads/main' && runner.os == 'Windows' }}
+    - name: Publish artifacts
+      uses: actions/upload-artifact@v2
+      if: ${{ runner.os == 'Windows' }}
       with:
-        app-name: londontravelmartincostello-uksouth
+        name: webapp
+        path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
+  deploy-dev:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    name: dev
+    needs: build
+    runs-on: windows-latest
+    environment:
+      name: dev
+      url: https://londontravel-dev.martincostello.com
+
+    steps:
+
+    - name: Download artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: webapp
+
+    - name: Deploy to Azure App Service
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
         slot-name: dev
-        package: './artifacts/publish'
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_DEV }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+
+  deploy-prod:
+    name: production
+    needs: deploy-dev
+    runs-on: windows-latest
+    environment:
+      name: production
+      url: https://londontravel.martincostello.com
+
+    steps:
+
+    - name: Download artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: webapp
+
+    - name: Deploy to Azure App Service
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
