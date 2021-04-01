@@ -4,8 +4,6 @@
 
 [![Build status](https://github.com/martincostello/alexa-london-travel-site/workflows/build/badge.svg?branch=main&event=push)](https://github.com/martincostello/alexa-london-travel-site/actions?query=workflow%3Abuild+branch%3Amain+event%3Apush)
 
-[![Deploy status](https://github.com/martincostello/alexa-london-travel-site/workflows/deploy/badge.svg?branch=deploy&event=push)](https://github.com/martincostello/alexa-london-travel-site/actions?query=workflow%3Adeploy+branch%3Adeploy+event%3Apush)
-
 ## Overview
 
 This repository contains the companion site for London Travel, an [Amazon Alexa skill](https://www.amazon.co.uk/dp/B01NB0T86R) for checking the status for travel in London.

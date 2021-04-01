@@ -6,10 +6,6 @@ param(
     [Parameter(Mandatory = $false)][switch] $SkipTests
 )
 
-# These make CI builds faster
-$env:DOTNET_SKIP_FIRST_TIME_EXPERIENCE = "true"
-$env:NUGET_XMLDOC_MODE = "skip"
-
 $ErrorActionPreference = "Stop"
 $ProgressPreference = "SilentlyContinue"
 
