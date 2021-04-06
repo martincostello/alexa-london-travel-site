@@ -12,7 +12,7 @@
     <PackageVersion Include="JustEat.HttpClientInterception" Version="3.1.0" />
     <PackageVersion Include="MartinCostello.Logging.XUnit" Version="0.1.1" />
     <PackageVersion Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.17.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Facebook" Version="5.0.4" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Facebook" Version="5.0.5" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="5.0.5" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="5.0.5" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.Twitter" Version="5.0.4" />
