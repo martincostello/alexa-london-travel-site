@@ -4,14 +4,15 @@
 namespace MartinCostello.LondonTravel.Site.Integration
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
-    using System.Net;
     using System.Net.Http;
-    using System.Net.Sockets;
     using System.Security.Cryptography.X509Certificates;
     using System.Threading.Tasks;
     using JustEat.HttpClientInterception;
+    using MartinCostello.LondonTravel.Site.Extensions;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Xunit;
@@ -68,6 +69,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             var handler = new HttpClientHandler()
             {
                 AllowAutoRedirect = ClientOptions.AllowAutoRedirect,
+                CheckCertificateRevocationList = true,
                 MaxAutomaticRedirections = ClientOptions.MaxAutomaticRedirections,
                 UseCookies = ClientOptions.HandleCookies,
             };
@@ -78,9 +80,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 handler.ServerCertificateCustomValidationCallback = (request, cert, chain, errors) => true;
             }
 
-#pragma warning disable CA5400
-            var client = new HttpClient(handler);
-#pragma warning restore CA5400
+            var client = new HttpClient(handler, disposeHandler: true);
 
             ConfigureClient(client);
 
@@ -94,16 +94,19 @@ namespace MartinCostello.LondonTravel.Site.Integration
         {
             base.ConfigureWebHost(builder);
 
-            builder.ConfigureServices(ConfigureServicesForTests);
+            // Intercept remote authentication to redirect locally for browser UI tests
+            builder.ConfigureServices((p) => p.AddSingleton<IStartupFilter, RemoteAuthorizationEventsFilter>());
 
             builder.ConfigureKestrel(
                 (p) => p.ConfigureHttpsDefaults(
                     (r) => r.ServerCertificate = new X509Certificate2("localhost-dev.pfx", "Pa55w0rd!")));
 
-            builder.UseUrls(ServerAddress.ToString());
+            // Configure the server address for the server to
+            // listen on for HTTPS requests on a dynamic port.
+            builder.UseUrls("https://127.0.0.1:0");
 
             // Allow the tests on the self-hosted server to link accounts via "Amazon"
-            builder.UseSetting("Site:Alexa:RedirectUrls:3", ServerAddress.ToString() + "manage/");
+            builder.ConfigureAppConfiguration((p) => p.Add(new HttpServerFixtureConfigurationSource(this)));
         }
 
         /// <inheritdoc />
@@ -122,40 +125,6 @@ namespace MartinCostello.LondonTravel.Site.Integration
             }
         }
 
-        private static Uri FindFreeServerAddress()
-        {
-            int port = GetFreePortNumber();
-
-            return new UriBuilder()
-            {
-                Scheme = "https",
-                Host = "localhost",
-                Port = port,
-            }.Uri;
-        }
-
-        private static int GetFreePortNumber()
-        {
-            var listener = new TcpListener(IPAddress.Loopback, 0);
-            listener.Start();
-
-            try
-            {
-                return ((IPEndPoint)listener.LocalEndpoint).Port;
-            }
-            finally
-            {
-                listener.Stop();
-            }
-        }
-
-        private void ConfigureServicesForTests(IServiceCollection services)
-        {
-            // Intercept remote authentication to redirect locally for browser UI tests
-            services.AddSingleton<IStartupFilter, RemoteAuthorizationEventsFilter>(
-                (_) => new RemoteAuthorizationEventsFilter(ServerAddress));
-        }
-
         private async Task EnsureHttpServerAsync()
         {
             if (_host == null)
@@ -166,9 +135,6 @@ namespace MartinCostello.LondonTravel.Site.Integration
 
         private async Task CreateHttpServer()
         {
-            // Configure the server address for the server to listen on for HTTP requests
-            ClientOptions.BaseAddress = FindFreeServerAddress();
-
             var builder = CreateHostBuilder().ConfigureWebHost(ConfigureWebHost);
 
             _host = builder.Build();
@@ -176,6 +142,49 @@ namespace MartinCostello.LondonTravel.Site.Integration
             // Force creation of the Kestrel server and start it
             var hostedService = _host.Services.GetRequiredService<IHostedService>();
             await hostedService.StartAsync(default);
+
+            ClientOptions.BaseAddress = _host.GetAddress();
+
+            // Force the configuration to reload now the server address is assigned
+            var config = _host.Services.GetRequiredService<IConfiguration>();
+
+            if (config is IConfigurationRoot root)
+            {
+                root.Reload();
+            }
+        }
+
+        private sealed class HttpServerFixtureConfigurationSource : IConfigurationSource
+        {
+            internal HttpServerFixtureConfigurationSource(HttpServerFixture fixture)
+            {
+                Fixture = fixture;
+            }
+
+            private HttpServerFixture Fixture { get; }
+
+            public IConfigurationProvider Build(IConfigurationBuilder builder)
+            {
+                return new HttpServerFixtureConfigurationProvider(Fixture);
+            }
+        }
+
+        private sealed class HttpServerFixtureConfigurationProvider : ConfigurationProvider
+        {
+            internal HttpServerFixtureConfigurationProvider(HttpServerFixture fixture)
+            {
+                Fixture = fixture;
+            }
+
+            private HttpServerFixture Fixture { get; }
+
+            public override void Load()
+            {
+                Data = new Dictionary<string, string>()
+                {
+                    ["Site:Alexa:RedirectUrls:3"] = Fixture.ServerAddress.ToString() + "manage/",
+                };
+            }
         }
     }
 }

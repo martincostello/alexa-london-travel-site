@@ -137,10 +137,10 @@ namespace MartinCostello.LondonTravel.Site.Integration
         {
             var queryString = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase)
             {
-                { "client_id", "alexa-london-travel" },
-                { "redirect_uri", new Uri(navigator.BaseUri, new Uri("/manage/", UriKind.Relative)).ToString() },
-                { "response_type", "token" },
-                { "state", "my_state" },
+                ["client_id"] = "alexa-london-travel",
+                ["redirect_uri"] = new Uri(navigator.BaseUri, new Uri("/manage/", UriKind.Relative)).ToString(),
+                ["response_type"] = "token",
+                ["state"] = "my_state",
             };
 
             string uriString = QueryHelpers.AddQueryString("/alexa/authorize/", queryString);

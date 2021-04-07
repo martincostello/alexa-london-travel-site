@@ -7,11 +7,13 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using System.Collections.Specialized;
     using System.Threading.Tasks;
     using System.Web;
+    using MartinCostello.LondonTravel.Site.Extensions;
     using MartinCostello.LondonTravel.Site.Identity;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
 
     /// <summary>
     /// A class representing a <see cref="IStartupFilter"/> that allows the tests to redirect external
@@ -19,12 +21,12 @@ namespace MartinCostello.LondonTravel.Site.Integration
     /// </summary>
     internal sealed class RemoteAuthorizationEventsFilter : IStartupFilter
     {
-        private readonly Uri _serverAddress;
-
-        public RemoteAuthorizationEventsFilter(Uri serverAddress)
+        public RemoteAuthorizationEventsFilter(IHost host)
         {
-            _serverAddress = serverAddress;
+            Host = host;
         }
+
+        private IHost Host { get; }
 
         /// <inheritdoc />
         public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> next)
@@ -94,7 +96,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             queryString.Add("oauth_token", oauthToken);
             queryString.Add("oauth_verifier", verifier);
 
-            var builder = new UriBuilder(_serverAddress)
+            var builder = new UriBuilder(Host.GetAddress())
             {
                 Path = "/signin-twitter",
                 Query = queryString.ToString() ?? string.Empty,
