@@ -24,35 +24,34 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         /// </returns>
         public static IServiceCollection AddPolly(this IServiceCollection services)
         {
-            var sleepDurations = new[]
+            return services.AddPolicyRegistry((_, registry) =>
             {
-                TimeSpan.FromSeconds(1),
-                TimeSpan.FromSeconds(5),
-                TimeSpan.FromSeconds(10),
-            };
+                var sleepDurations = new[]
+                {
+                    TimeSpan.FromSeconds(1),
+                    TimeSpan.FromSeconds(5),
+                    TimeSpan.FromSeconds(10),
+                };
 
-            var readPolicy = HttpPolicyExtensions.HandleTransientHttpError()
-                .WaitAndRetryAsync(sleepDurations)
-                .WithPolicyKey("ReadPolicy");
+                var readPolicy = HttpPolicyExtensions.HandleTransientHttpError()
+                    .WaitAndRetryAsync(sleepDurations)
+                    .WithPolicyKey("ReadPolicy");
 
-            var writePolicy = Policy.NoOpAsync()
-                .AsAsyncPolicy<HttpResponseMessage>()
-                .WithPolicyKey("WritePolicy");
+                var writePolicy = Policy.NoOpAsync()
+                    .AsAsyncPolicy<HttpResponseMessage>()
+                    .WithPolicyKey("WritePolicy");
 
-            var policies = new[]
-            {
-                readPolicy,
-                writePolicy,
-            };
+                var policies = new[]
+                {
+                    readPolicy,
+                    writePolicy,
+                };
 
-            IPolicyRegistry<string> registry = services.AddPolicyRegistry();
-
-            foreach (var policy in policies)
-            {
-                registry.Add(policy.PolicyKey, policy);
-            }
-
-            return services;
+                foreach (var policy in policies)
+                {
+                    registry.Add(policy.PolicyKey, policy);
+                }
+            });
         }
     }
 }
