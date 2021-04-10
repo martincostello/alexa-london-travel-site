@@ -14,7 +14,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
     /// <summary>
     /// A class containing tests for user preferences in the website.
     /// </summary>
-    public sealed class PreferencesTests : BrowserTest
+    public sealed class PreferencesTests : BrowserIntegrationTest
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PreferencesTests"/> class.

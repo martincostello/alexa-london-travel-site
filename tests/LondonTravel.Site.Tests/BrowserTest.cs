@@ -1,7 +1,7 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-namespace MartinCostello.LondonTravel.Site.Integration
+namespace MartinCostello.LondonTravel.Site
 {
     using System;
     using System.Collections.Generic;
@@ -9,44 +9,24 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using System.Linq;
     using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
-    using JustEat.HttpClientInterception;
-    using Microsoft.Extensions.Logging;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Chrome;
     using Pages;
-    using Xunit;
     using Xunit.Abstractions;
     using LogLevel = OpenQA.Selenium.LogLevel;
 
     /// <summary>
     /// The base class for browser tests.
     /// </summary>
-    [Collection(HttpServerCollection.Name)]
     public abstract class BrowserTest : IDisposable
     {
-        private bool _disposed;
-        private IDisposable? _scope;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="BrowserTest"/> class.
         /// </summary>
-        /// <param name="fixture">The fixture to use.</param>
         /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
-        protected BrowserTest(HttpServerFixture fixture, ITestOutputHelper outputHelper)
+        protected BrowserTest(ITestOutputHelper outputHelper)
         {
-            Fixture = fixture;
-            Fixture.SetOutputHelper(outputHelper);
             Output = outputHelper;
-
-            var logger = outputHelper.ToLogger<HttpClientInterceptorOptions>();
-
-            Fixture.Interceptor.OnSend = (request) =>
-            {
-                logger.LogInformation("HTTP request intercepted. {Request}", request);
-                return Task.CompletedTask;
-            };
-
-            _scope = Fixture.Interceptor.BeginScope();
         }
 
         /// <summary>
@@ -58,14 +38,14 @@ namespace MartinCostello.LondonTravel.Site.Integration
         }
 
         /// <summary>
-        /// Gets the <see cref="HttpServerFixture"/> to use.
-        /// </summary>
-        protected HttpServerFixture Fixture { get; }
-
-        /// <summary>
         /// Gets the <see cref="ITestOutputHelper"/> to use.
         /// </summary>
         protected ITestOutputHelper Output { get; }
+
+        /// <summary>
+        /// Gets the URI of the website being tested.
+        /// </summary>
+        protected abstract Uri ServerAddress { get; }
 
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
@@ -83,7 +63,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         /// The <see cref="ApplicationNavigator"/> to use for tests.
         /// </returns>
         protected ApplicationNavigator CreateNavigator()
-            => new ApplicationNavigator(Fixture.ServerAddress, CreateWebDriver());
+            => new ApplicationNavigator(ServerAddress, CreateWebDriver());
 
         /// <summary>
         /// Creates a new instance of <see cref="IWebDriver"/>.
@@ -228,17 +208,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         /// </param>
         protected virtual void Dispose(bool disposing)
         {
-            if (!_disposed)
-            {
-                if (disposing)
-                {
-                    Fixture?.ClearOutputHelper();
-                    _scope?.Dispose();
-                    _scope = null;
-                }
-
-                _disposed = true;
-            }
+            // No-op
         }
 
         private void OutputLogs(IWebDriver driver)

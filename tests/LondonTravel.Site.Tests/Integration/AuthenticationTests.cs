@@ -14,7 +14,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
     /// <summary>
     /// A class containing tests for authentication providers in the website.
     /// </summary>
-    public sealed class AuthenticationTests : BrowserTest
+    public sealed class AuthenticationTests : BrowserIntegrationTest
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AuthenticationTests"/> class.
