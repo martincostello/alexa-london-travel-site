@@ -57,6 +57,10 @@ namespace MartinCostello.LondonTravel.Site.EndToEnd
         [SkippableFact]
         public void Can_Sign_In_With_Twitter()
         {
+            Skip.IfNot(
+                string.IsNullOrEmpty(Environment.GetEnvironmentVariable("GITHUB_ACTIONS")),
+                "Sign-in blocked when run in GitHub Actions.");
+
             SignInWithSocialProvider(
                 "Twitter",
                 (driver, userName, password) =>
