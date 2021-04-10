@@ -57,6 +57,10 @@ namespace MartinCostello.LondonTravel.Site.EndToEnd
         [SkippableFact]
         public void Can_Sign_In_With_Twitter()
         {
+            Skip.IfNot(
+                string.IsNullOrEmpty(Environment.GetEnvironmentVariable("GITHUB_ACTIONS")),
+                "Sign-in blocked when run in GitHub Actions.");
+
             SignInWithSocialProvider(
                 "Twitter",
                 (driver, userName, password) =>
@@ -112,7 +116,7 @@ namespace MartinCostello.LondonTravel.Site.EndToEnd
             var userName = driver.FindElement(userNameSelector);
             userName.SendKeys(credentials.userName);
 
-            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
             wait.IgnoreExceptionTypes(typeof(StaleElementReferenceException));
             wait.Until((p) => p.FindElement(passwordSelector).Displayed);
 

@@ -20,8 +20,8 @@ env:
   DOTNET_NOLOGO: true
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
   NUGET_XMLDOC_MODE: skip
-  WEBSITE_URL_DEV: https://londontravel.martincostello.com
-  WEBSITE_URL_PROD: https://londontravel-dev.martincostello.com
+  WEBSITE_URL_DEV: https://londontravel-dev.martincostello.com
+  WEBSITE_URL_PROD: https://londontravel.martincostello.com
 
 jobs:
   build:
