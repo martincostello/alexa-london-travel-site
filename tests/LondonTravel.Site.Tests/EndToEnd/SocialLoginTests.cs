@@ -112,7 +112,7 @@ namespace MartinCostello.LondonTravel.Site.EndToEnd
             var userName = driver.FindElement(userNameSelector);
             userName.SendKeys(credentials.userName);
 
-            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
             wait.IgnoreExceptionTypes(typeof(StaleElementReferenceException));
             wait.Until((p) => p.FindElement(passwordSelector).Displayed);
 
