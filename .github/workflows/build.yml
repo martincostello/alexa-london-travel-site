@@ -106,6 +106,12 @@ jobs:
       run: dotnet test ./tests/LondonTravel.Site.Tests --filter Category=EndToEnd /p:CollectCoverage=false
       env:
         WEBSITE_URL: ${{ env.WEBSITE_URL_DEV }}
+        WEBSITE_USER_GOOGLE_USERNAME: ${{ secrets.WEBSITE_USER_GOOGLE_USERNAME }}
+        WEBSITE_USER_GOOGLE_PASSWORD: ${{ secrets.WEBSITE_USER_GOOGLE_PASSWORD }}
+        WEBSITE_USER_MICROSOFT_USERNAME: ${{ secrets.WEBSITE_USER_MICROSOFT_USERNAME }}
+        WEBSITE_USER_MICROSOFT_PASSWORD: ${{ secrets.WEBSITE_USER_MICROSOFT_PASSWORD }}
+        WEBSITE_USER_TWITTER_USERNAME: ${{ secrets.WEBSITE_USER_TWITTER_USERNAME }}
+        WEBSITE_USER_TWITTER_PASSWORD: ${{ secrets.WEBSITE_USER_TWITTER_PASSWORD }}
 
   deploy-prod:
     name: production
@@ -146,3 +152,9 @@ jobs:
       run: dotnet test ./tests/LondonTravel.Site.Tests --filter Category=EndToEnd /p:CollectCoverage=false
       env:
         WEBSITE_URL: ${{ env.WEBSITE_URL_PROD }}
+        WEBSITE_USER_GOOGLE_USERNAME: ${{ secrets.WEBSITE_USER_GOOGLE_USERNAME }}
+        WEBSITE_USER_GOOGLE_PASSWORD: ${{ secrets.WEBSITE_USER_GOOGLE_PASSWORD }}
+        WEBSITE_USER_MICROSOFT_USERNAME: ${{ secrets.WEBSITE_USER_MICROSOFT_USERNAME }}
+        WEBSITE_USER_MICROSOFT_PASSWORD: ${{ secrets.WEBSITE_USER_MICROSOFT_PASSWORD }}
+        WEBSITE_USER_TWITTER_USERNAME: ${{ secrets.WEBSITE_USER_TWITTER_USERNAME }}
+        WEBSITE_USER_TWITTER_PASSWORD: ${{ secrets.WEBSITE_USER_TWITTER_PASSWORD }}
