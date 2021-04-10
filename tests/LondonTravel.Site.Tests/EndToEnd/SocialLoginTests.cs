@@ -21,103 +21,75 @@ namespace MartinCostello.LondonTravel.Site.EndToEnd
         [SkippableFact]
         public void Can_Sign_In_With_Google()
         {
-            string? userName = Environment.GetEnvironmentVariable("WEBSITE_USER_GOOGLE_USERNAME");
-            string? password = Environment.GetEnvironmentVariable("WEBSITE_USER_GOOGLE_PASSWORD");
-
-            Skip.If(string.IsNullOrWhiteSpace(userName), "No Google username is configured.");
-            Skip.If(string.IsNullOrWhiteSpace(password), "No Google password is configured.");
-
             SignInWithSocialProvider(
-                "google",
-                (driver) =>
+                "Google",
+                (driver, userName, password) =>
                 {
                     var userNameSelector = By.CssSelector("input[type=email]");
                     var passwordSelector = By.CssSelector("input[type=password]");
 
-                    var userNameElement = driver.FindElement(userNameSelector);
-                    userNameElement.SendKeys(userName + Keys.Enter);
-
-                    var webDriverWait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
-                    webDriverWait.IgnoreExceptionTypes(typeof(StaleElementReferenceException));
-                    webDriverWait.Until((p) => p.FindElement(passwordSelector).Displayed);
-
-                    var passwordElement = driver.FindElement(passwordSelector);
-                    passwordElement.SendKeys(password + Keys.Enter);
-
-                    webDriverWait.Until((p) => p.Url.StartsWith(ServerAddress.ToString(), StringComparison.OrdinalIgnoreCase));
+                    SignIn(
+                        driver,
+                        userNameSelector,
+                        passwordSelector,
+                        (userName + Keys.Enter, password));
                 });
         }
 
         [SkippableFact]
         public void Can_Sign_In_With_Microsoft_Account()
         {
-            string? userName = Environment.GetEnvironmentVariable("WEBSITE_USER_MICROSOFT_USERNAME");
-            string? password = Environment.GetEnvironmentVariable("WEBSITE_USER_MICROSOFT_PASSWORD");
-
-            Skip.If(string.IsNullOrWhiteSpace(userName), "No Microsoft Account username is configured.");
-            Skip.If(string.IsNullOrWhiteSpace(password), "No Microsoft Account password is configured.");
-
             SignInWithSocialProvider(
-                "microsoft",
-                (driver) =>
+                "Microsoft",
+                (driver, userName, password) =>
                 {
                     var userNameSelector = By.CssSelector("input[type=email]");
                     var passwordSelector = By.CssSelector("input[type=password]");
 
-                    var userNameElement = driver.FindElement(userNameSelector);
-                    userNameElement.SendKeys(userName + Keys.Enter);
-
-                    var webDriverWait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
-                    webDriverWait.IgnoreExceptionTypes(typeof(StaleElementReferenceException));
-                    webDriverWait.Until((p) => p.FindElement(passwordSelector).Displayed);
-
-                    var passwordElement = driver.FindElement(passwordSelector);
-                    passwordElement.SendKeys(password + Keys.Enter);
-
-                    webDriverWait.Until((p) => p.Url.StartsWith(ServerAddress.ToString(), StringComparison.OrdinalIgnoreCase));
+                    SignIn(
+                        driver,
+                        userNameSelector,
+                        passwordSelector,
+                        (userName + Keys.Enter, password));
                 });
         }
 
         [SkippableFact]
         public void Can_Sign_In_With_Twitter()
         {
-            string? userName = Environment.GetEnvironmentVariable("WEBSITE_USER_TWITTER_USERNAME");
-            string? password = Environment.GetEnvironmentVariable("WEBSITE_USER_TWITTER_PASSWORD");
-
-            Skip.If(string.IsNullOrWhiteSpace(userName), "No Twitter username is configured.");
-            Skip.If(string.IsNullOrWhiteSpace(password), "No Twitter password is configured.");
-
             SignInWithSocialProvider(
-                "twitter",
-                (driver) =>
+                "Twitter",
+                (driver, userName, password) =>
                 {
                     var userNameSelector = By.Id("username_or_email");
                     var passwordSelector = By.CssSelector("input[type=password]");
 
-                    var userNameElement = driver.FindElement(userNameSelector);
-                    userNameElement.SendKeys(userName);
-
-                    var webDriverWait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
-                    webDriverWait.IgnoreExceptionTypes(typeof(StaleElementReferenceException));
-                    webDriverWait.Until((p) => p.FindElement(passwordSelector).Displayed);
-
-                    var passwordElement = driver.FindElement(passwordSelector);
-                    passwordElement.SendKeys(password + Keys.Enter);
-
-                    webDriverWait.Until((p) => p.Url.StartsWith(ServerAddress.ToString(), StringComparison.OrdinalIgnoreCase));
+                    SignIn(
+                        driver,
+                        userNameSelector,
+                        passwordSelector,
+                        (userName, password));
                 });
         }
 
-        private void SignInWithSocialProvider(string providerName, Action<IWebDriver> signIn)
+        private void SignInWithSocialProvider(string providerName, Action<IWebDriver, string, string> signIn)
         {
+            string? userName = Environment.GetEnvironmentVariable($"WEBSITE_USER_{providerName.ToUpperInvariant()}_USERNAME");
+            string? password = Environment.GetEnvironmentVariable($"WEBSITE_USER_{providerName.ToUpperInvariant()}_PASSWORD");
+
+            Skip.If(string.IsNullOrWhiteSpace(userName), $"No {providerName} username is configured.");
+            Skip.If(string.IsNullOrWhiteSpace(password), $"No {providerName} password is configured.");
+
             // Arrange
             AtPage<HomePage>(
                 (page) =>
                 {
+#pragma warning disable CA1308
                     page = page.SignIn()
-                               .SignInWithProvider(providerName);
+                               .SignInWithProvider(providerName.ToLowerInvariant());
+#pragma warning restore CA1308
 
-                    signIn(page.Navigator.Driver);
+                    signIn(page.Navigator.Driver, userName, password);
 
                     // Assert
                     page.IsAuthenticated().ShouldBeTrue();
@@ -129,6 +101,25 @@ namespace MartinCostello.LondonTravel.Site.EndToEnd
                     // Assert
                     page.IsAuthenticated().ShouldBeFalse();
                 });
+        }
+
+        private void SignIn(
+            IWebDriver driver,
+            By userNameSelector,
+            By passwordSelector,
+            (string userName, string password) credentials)
+        {
+            var userName = driver.FindElement(userNameSelector);
+            userName.SendKeys(credentials.userName);
+
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+            wait.IgnoreExceptionTypes(typeof(StaleElementReferenceException));
+            wait.Until((p) => p.FindElement(passwordSelector).Displayed);
+
+            var password = driver.FindElement(passwordSelector);
+            password.SendKeys(credentials.password + Keys.Enter);
+
+            wait.Until((p) => p.Url.StartsWith(ServerAddress.ToString(), StringComparison.OrdinalIgnoreCase));
         }
     }
 }
