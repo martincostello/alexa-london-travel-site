@@ -21,7 +21,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
     /// <summary>
     /// A class containing tests for the integration with Alexa.
     /// </summary>
-    public class AlexaTests : BrowserTest
+    public class AlexaTests : BrowserIntegrationTest
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AlexaTests"/> class.

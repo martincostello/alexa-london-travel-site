@@ -1,7 +1,7 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-namespace MartinCostello.LondonTravel.Site.Integration
+namespace MartinCostello.LondonTravel.Site
 {
     using System.Net.Http;
     using System.Net.Mime;
@@ -15,11 +15,11 @@ namespace MartinCostello.LondonTravel.Site.Integration
         {
             response.Content.ShouldNotBeNull();
             response.Content!.Headers.ContentType?.MediaType.ShouldBe(MediaTypeNames.Application.Json);
-            response.Content.Headers.ContentLength.ShouldNotBeNull();
-            response.Content.Headers.ContentLength.ShouldNotBe(0);
+            response.Content.Headers.ContentLength.HasValue.ShouldBeTrue();
+            response.Content.Headers.ContentLength.Value.ShouldBeGreaterThan(0);
 
-            string json = await response.Content.ReadAsStringAsync();
-            return JsonDocument.Parse(json);
+            var stream = await response.Content.ReadAsStreamAsync();
+            return await JsonDocument.ParseAsync(stream);
         }
     }
 }
