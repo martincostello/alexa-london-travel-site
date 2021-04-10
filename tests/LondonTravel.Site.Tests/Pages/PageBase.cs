@@ -13,7 +13,7 @@ namespace MartinCostello.LondonTravel.Site.Pages
             Navigator = navigator;
         }
 
-        protected ApplicationNavigator Navigator { get; }
+        protected internal ApplicationNavigator Navigator { get; }
 
         protected abstract string RelativeUri { get; }
 
