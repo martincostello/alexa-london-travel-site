@@ -20,6 +20,8 @@ env:
   DOTNET_NOLOGO: true
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
   NUGET_XMLDOC_MODE: skip
+  WEBSITE_URL_DEV: https://londontravel.martincostello.com
+  WEBSITE_URL_PROD: https://londontravel-dev.martincostello.com
 
 jobs:
   build:
@@ -70,7 +72,7 @@ jobs:
     runs-on: windows-latest
     environment:
       name: dev
-      url: https://londontravel-dev.martincostello.com
+      url: ${{ env.WEBSITE_URL_DEV }}
 
     steps:
 
@@ -86,13 +88,32 @@ jobs:
         slot-name: dev
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
 
+  test-dev:
+    name: test-dev
+    needs: deploy-dev
+    runs-on: windows-latest
+
+    steps:
+
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v1
+
+    - name: Run end-to-end tests
+      shell: pwsh
+      run: dotnet test ./tests/LondonTravel.Site.Tests --filter Category=EndToEnd /p:CollectCoverage=false
+      env:
+        WEBSITE_URL: ${{ env.WEBSITE_URL_DEV }}
+
   deploy-prod:
     name: production
-    needs: deploy-dev
+    needs: test-dev
     runs-on: windows-latest
     environment:
       name: production
-      url: https://londontravel.martincostello.com
+      url: ${{ env.WEBSITE_URL_PROD }}
 
     steps:
 
@@ -106,3 +127,22 @@ jobs:
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+
+  test-prod:
+    name: test-prod
+    needs: deploy-prod
+    runs-on: windows-latest
+
+    steps:
+
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v1
+
+    - name: Run end-to-end tests
+      shell: pwsh
+      run: dotnet test ./tests/LondonTravel.Site.Tests --filter Category=EndToEnd /p:CollectCoverage=false
+      env:
+        WEBSITE_URL: ${{ env.WEBSITE_URL_PROD }}
