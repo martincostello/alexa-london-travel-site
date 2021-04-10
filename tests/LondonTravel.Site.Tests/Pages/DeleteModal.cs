@@ -1,16 +1,16 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-namespace MartinCostello.LondonTravel.Site.Integration.Pages
+namespace MartinCostello.LondonTravel.Site.Pages
 {
     using System;
     using System.Threading;
     using OpenQA.Selenium;
 
-    public sealed class RemoveAlexaLinkModal : ModalBase
+    public sealed class DeleteModal : ModalBase
     {
-        public RemoveAlexaLinkModal(ApplicationNavigator navigator)
-            : base("remove-alexa", navigator)
+        public DeleteModal(ApplicationNavigator navigator)
+            : base("delete-account", navigator)
         {
         }
 
@@ -20,9 +20,9 @@ namespace MartinCostello.LondonTravel.Site.Integration.Pages
             return new ManagePage(Navigator);
         }
 
-        public ManagePage Confirm()
+        public HomePage Confirm()
         {
-            IWebElement button = Navigator.Driver.FindElement(By.CssSelector("[data-id='remove-alexa-confirm']"));
+            IWebElement button = Navigator.Driver.FindElement(By.CssSelector("[data-id='delete-account-confirm']"));
 
             // Wait for the JavaScript to enable the button
             using (var source = new CancellationTokenSource(TimeSpan.FromSeconds(10)))
@@ -35,7 +35,7 @@ namespace MartinCostello.LondonTravel.Site.Integration.Pages
             }
 
             button.Click();
-            return new ManagePage(Navigator);
+            return new HomePage(Navigator);
         }
     }
 }

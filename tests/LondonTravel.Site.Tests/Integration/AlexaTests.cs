@@ -10,7 +10,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using System.Net.Http.Headers;
     using System.Text.Json;
     using System.Threading.Tasks;
-    using MartinCostello.LondonTravel.Site.Integration.Pages;
+    using MartinCostello.LondonTravel.Site.Pages;
     using Microsoft.AspNetCore.WebUtilities;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Primitives;
