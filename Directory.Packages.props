@@ -1,6 +1,7 @@
 <Project>
   <PropertyGroup>
     <NodaTimeVersion>3.0.5</NodaTimeVersion>
+    <SwashbuckleAspNetCoreVersion>6.1.2</SwashbuckleAspNetCore>
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="AspNet.Security.OAuth.Amazon" Version="5.0.4" />
@@ -25,7 +26,7 @@
     <PackageVersion Include="Moq" Version="4.16.1" />
     <PackageVersion Include="NodaTime" Version="$(NodaTimeVersion)" />
     <PackageVersion Include="NodaTime.Testing" Version="$(NodaTimeVersion)" />
-    <PackageVersion Include="Polly" Version="7.2.1" />
+    <PackageVersion Include="Polly" Version="7.2.2" />
     <PackageVersion Include="Refit" Version="6.0.38" />
     <PackageVersion Include="ReportGenerator" Version="4.8.7" />
     <PackageVersion Include="Selenium.Support" Version="3.141.0" />
@@ -38,8 +39,8 @@
     <PackageVersion Include="Serilog.Sinks.UDP" Version="7.1.0" />
     <PackageVersion Include="Shouldly" Version="4.0.3" />
     <PackageVersion Include="StyleCop.Analyzers" Version="1.1.118" />
-    <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.1.2" />
-    <PackageVersion Include="Swashbuckle.AspNetCore.Annotations" Version="6.1.1" />
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="$(SwashbuckleAspNetCoreVersion)" />
+    <PackageVersion Include="Swashbuckle.AspNetCore.Annotations" Version="$(SwashbuckleAspNetCoreVersion)" />
     <PackageVersion Include="XliffTasks" Version="1.0.0-beta.20420.1" />
     <PackageVersion Include="xunit" Version="2.4.1" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="2.4.3" />
