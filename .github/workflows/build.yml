@@ -70,6 +70,7 @@ jobs:
     name: dev
     needs: build
     runs-on: windows-latest
+    concurrency: development_environment
     environment:
       name: dev
       url: ${{ env.WEBSITE_URL_DEV }}
@@ -117,6 +118,7 @@ jobs:
     name: production
     needs: test-dev
     runs-on: windows-latest
+    concurrency: production_environment
     environment:
       name: production
       url: ${{ env.WEBSITE_URL_PROD }}
