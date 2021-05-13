@@ -101,7 +101,7 @@ namespace MartinCostello.LondonTravel.Site
 #endif
 
             var timeout = TimeSpan.FromSeconds(15);
-            var driver = new ChromeDriver(chromeDriverDirectory, options, timeout);
+            var driver = new ChromeDriver(chromeDriverDirectory, options);
 
             try
             {
