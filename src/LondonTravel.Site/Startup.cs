@@ -102,6 +102,8 @@ namespace MartinCostello.LondonTravel.Site
 
             app.UseHttpMethodOverride();
 
+            app.UseResponseCompression();
+
             app.UseStaticFiles(CreateStaticFileOptions());
 
             app.UseRouting();
