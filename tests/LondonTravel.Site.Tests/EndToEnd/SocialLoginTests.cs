@@ -43,6 +43,10 @@ namespace MartinCostello.LondonTravel.Site.EndToEnd
         [SkippableFact]
         public void Can_Sign_In_With_Microsoft_Account()
         {
+            Skip.IfNot(
+                string.IsNullOrEmpty(Environment.GetEnvironmentVariable("GITHUB_ACTIONS")),
+                "Sign-in is being flaky in GitHub Actions.");
+
             SignInWithSocialProvider(
                 "Microsoft",
                 (driver, userName, password) =>
