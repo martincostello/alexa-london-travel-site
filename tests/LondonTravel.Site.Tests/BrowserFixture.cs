@@ -110,7 +110,7 @@ namespace MartinCostello.LondonTravel.Site
             }
             catch (Exception ex)
             {
-                OutputHelper.WriteLine("Failedto capture screenshot: " + ex);
+                OutputHelper.WriteLine("Failed to capture screenshot: " + ex);
             }
         }
 
