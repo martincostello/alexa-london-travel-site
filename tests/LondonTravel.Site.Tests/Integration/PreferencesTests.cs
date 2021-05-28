@@ -27,12 +27,13 @@ namespace MartinCostello.LondonTravel.Site.Integration
             Fixture.Services!.GetRequiredService<InMemoryDocumentStore>().Clear();
         }
 
-        [Fact]
-        public async Task Can_Manage_Preferences()
+        [Theory]
+        [ClassData(typeof(BrowsersTestData))]
+        public async Task Can_Manage_Preferences(string browserType)
         {
             // Arrange
             await AtPageAsync<HomePage>(
-                "chromium",
+                browserType,
                 async (page) =>
                 {
                     page = await page

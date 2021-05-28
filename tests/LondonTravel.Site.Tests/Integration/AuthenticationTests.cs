@@ -56,12 +56,13 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 });
         }
 
-        [Fact]
-        public async Task Can_Delete_Account()
+        [Theory]
+        [ClassData(typeof(BrowsersTestData))]
+        public async Task Can_Delete_Account(string browserType)
         {
             // Arrange
             await AtPageAsync<HomePage>(
-                "chromium",
+                browserType,
                 async (homepage) =>
                 {
                     ManagePage page = await homepage
@@ -85,12 +86,13 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 });
         }
 
-        [Fact]
-        public async Task Can_Link_Accounts()
+        [Theory]
+        [ClassData(typeof(BrowsersTestData))]
+        public async Task Can_Link_Accounts(string browserType)
         {
             // Arrange
             await AtPageAsync<HomePage>(
-                "chromium",
+                browserType,
                 async (homepage) =>
                 {
                     ManagePage page = await homepage

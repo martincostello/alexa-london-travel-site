@@ -33,12 +33,13 @@ namespace MartinCostello.LondonTravel.Site.Integration
             Fixture.Services!.GetRequiredService<InMemoryDocumentStore>().Clear();
         }
 
-        [Fact]
-        public async Task Can_Authorize_Alexa()
+        [Theory]
+        [ClassData(typeof(BrowsersTestData))]
+        public async Task Can_Authorize_Alexa(string browserType)
         {
             // Arrange
             await WithNavigatorAsync(
-                "chromium",
+                browserType,
                 async (navigator) =>
                 {
                     string relativeUri = BuildAuthorizationUri(navigator);
@@ -56,12 +57,13 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 });
         }
 
-        [Fact]
-        public async Task Can_Get_Preferences_From_Api()
+        [Theory]
+        [ClassData(typeof(BrowsersTestData))]
+        public async Task Can_Get_Preferences_From_Api(string browserType)
         {
             // Arrange
             await WithNavigatorAsync(
-                "chromium",
+                browserType,
                 async (navigator) =>
                 {
                     var page = await new SignInPage(navigator)
