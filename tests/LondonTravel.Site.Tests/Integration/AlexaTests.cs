@@ -5,7 +5,6 @@ namespace MartinCostello.LondonTravel.Site.Integration
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Net;
     using System.Net.Http.Headers;
     using System.Text.Json;
@@ -35,24 +34,25 @@ namespace MartinCostello.LondonTravel.Site.Integration
         }
 
         [Fact]
-        public void Can_Authorize_Alexa()
+        public async Task Can_Authorize_Alexa()
         {
             // Arrange
-            WithNavigator(
-                (navigator) =>
+            await WithNavigatorAsync(
+                "chromium",
+                async (navigator) =>
                 {
-                    Uri relativeUri = BuildAuthorizationUri(navigator);
+                    string relativeUri = BuildAuthorizationUri(navigator);
 
                     // Act
-                    navigator.NavigateTo(relativeUri);
+                    await navigator.NavigateToAsync(relativeUri);
 
-                    var page = new SignInPage(navigator)
-                        .SignInWithAmazon()
-                        .Manage();
+                    var page = await new SignInPage(navigator)
+                        .SignInWithAmazonAsync()
+                        .ThenAsync((p) => p.ManageAsync());
 
                     // Assert
-                    page.IsAuthenticated().ShouldBeTrue();
-                    page.IsLinkedToAlexa().ShouldBeTrue();
+                    await page.IsAuthenticatedAsync().ShouldBeTrue();
+                    await page.IsLinkedToAlexaAsync().ShouldBeTrue();
                 });
         }
 
@@ -61,29 +61,30 @@ namespace MartinCostello.LondonTravel.Site.Integration
         {
             // Arrange
             await WithNavigatorAsync(
+                "chromium",
                 async (navigator) =>
                 {
-                    var page = new SignInPage(navigator)
-                        .Navigate()
-                        .SignInWithAmazon()
-                        .Manage();
+                    var page = await new SignInPage(navigator)
+                        .NavigateAsync()
+                        .ThenAsync((p) => p.SignInWithAmazonAsync())
+                        .ThenAsync((p) => p.ManageAsync());
 
                     // Assert
-                    page.IsAuthenticated().ShouldBeTrue();
-                    page.IsLinkedToAlexa().ShouldBeFalse();
+                    await page.IsAuthenticatedAsync().ShouldBeTrue();
+                    await page.IsLinkedToAlexaAsync().ShouldBeFalse();
 
                     // Arrange
-                    Uri relativeUri = BuildAuthorizationUri(navigator);
+                    string relativeUri = BuildAuthorizationUri(navigator);
 
                     // Act
-                    navigator.NavigateTo(relativeUri);
+                    await navigator.NavigateToAsync(relativeUri);
 
                     // Assert
-                    page.IsAuthenticated().ShouldBeTrue();
-                    page.IsLinkedToAlexa().ShouldBeTrue();
+                    await page.IsAuthenticatedAsync().ShouldBeTrue();
+                    await page.IsLinkedToAlexaAsync().ShouldBeTrue();
 
                     // Arrange
-                    AuthenticationHeaderValue authorization = ParseAuthorization(navigator.Driver.Url);
+                    AuthenticationHeaderValue authorization = ParseAuthorization(navigator.Page.Url);
 
                     // Act
                     using var firstResult = await GetPreferencesAsync(authorization, HttpStatusCode.OK);
@@ -93,14 +94,20 @@ namespace MartinCostello.LondonTravel.Site.Integration
                     firstResult.RootElement.GetStringArray("favoriteLines").ShouldBe(Array.Empty<string>());
 
                     // Arrange
-                    HomePage homepage = navigator.GoToRoot();
+                    HomePage homepage = await navigator.GoToRootAsync();
 
-                    homepage
-                        .Lines()
-                        .First((p) => p.Name() == "District")
-                        .Toggle();
+                    var lines = await homepage.LinesAsync();
 
-                    homepage.UpdatePreferences();
+                    for (int i = 0; i < lines.Count; i++)
+                    {
+                        if (string.Equals(await lines[i].NameAsync(), "District", StringComparison.Ordinal))
+                        {
+                            await lines[i].ToggleAsync();
+                            break;
+                        }
+                    }
+
+                    await homepage.UpdatePreferencesAsync();
 
                     // Act
                     using var secondResult = await GetPreferencesAsync(authorization, HttpStatusCode.OK);
@@ -110,30 +117,30 @@ namespace MartinCostello.LondonTravel.Site.Integration
                     secondResult.RootElement.GetStringArray("favoriteLines").ShouldBe(new[] { "district" });
 
                     // Arrange
-                    page = homepage.Manage();
+                    page = await homepage.ManageAsync();
 
                     // Act
-                    page.UnlinkAlexa()
-                        .Close();
+                    await page.UnlinkAlexaAsync()
+                              .ThenAsync((p) => p.CloseAsync());
 
                     // Assert
-                    page.IsAuthenticated().ShouldBeTrue();
-                    page.IsLinkedToAlexa().ShouldBeTrue();
+                    await page.IsAuthenticatedAsync().ShouldBeTrue();
+                    await page.IsLinkedToAlexaAsync().ShouldBeTrue();
 
                     // Act
-                    page.UnlinkAlexa()
-                        .Confirm();
+                    await page.UnlinkAlexaAsync()
+                              .ThenAsync((p) => p.ConfirmAsync());
 
                     // Assert
-                    page.IsAuthenticated().ShouldBeTrue();
-                    page.IsLinkedToAlexa().ShouldBeFalse();
+                    await page.IsAuthenticatedAsync().ShouldBeTrue();
+                    await page.IsLinkedToAlexaAsync().ShouldBeFalse();
 
                     // Act and Assert
                     await GetPreferencesAsync(authorization, HttpStatusCode.Unauthorized);
                 });
         }
 
-        private static Uri BuildAuthorizationUri(ApplicationNavigator navigator)
+        private static string BuildAuthorizationUri(ApplicationNavigator navigator)
         {
             var queryString = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase)
             {
@@ -143,9 +150,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
                 ["state"] = "my_state",
             };
 
-            string uriString = QueryHelpers.AddQueryString("/alexa/authorize/", queryString);
-
-            return new Uri(uriString, UriKind.Relative);
+            return QueryHelpers.AddQueryString("/alexa/authorize/", queryString);
         }
 
         private static AuthenticationHeaderValue ParseAuthorization(string url)

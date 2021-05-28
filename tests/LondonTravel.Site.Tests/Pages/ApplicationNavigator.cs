@@ -4,52 +4,28 @@
 namespace MartinCostello.LondonTravel.Site.Pages
 {
     using System;
-    using OpenQA.Selenium;
+    using System.Threading.Tasks;
+    using Microsoft.Playwright;
 
-    public class ApplicationNavigator : IDisposable
+    public class ApplicationNavigator
     {
-        private bool _disposed;
-
-        public ApplicationNavigator(Uri baseUri, IWebDriver driver)
+        public ApplicationNavigator(Uri baseUri, IPage page)
         {
             BaseUri = baseUri;
-            Driver = driver;
-        }
-
-        ~ApplicationNavigator()
-        {
-            Dispose(false);
+            Page = page;
         }
 
         protected internal Uri BaseUri { get; }
 
-        protected internal IWebDriver Driver { get; }
+        protected internal IPage Page { get; }
 
-        public HomePage GoToRoot() => new HomePage(this).Navigate();
+        public async Task<HomePage> GoToRootAsync() => await new HomePage(this).NavigateAsync();
 
-        public void Dispose()
+        public async Task NavigateToAsync(string relativeUri)
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+            var url = new Uri(BaseUri, relativeUri);
 
-        public void NavigateTo(Uri relativeUri)
-        {
-            Uri url = new Uri(BaseUri, relativeUri);
-            Driver.Navigate().GoToUrl(url);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!_disposed)
-            {
-                if (disposing)
-                {
-                    Driver?.Dispose();
-                }
-
-                _disposed = true;
-            }
+            await Page.GotoAsync(url.ToString());
         }
     }
 }

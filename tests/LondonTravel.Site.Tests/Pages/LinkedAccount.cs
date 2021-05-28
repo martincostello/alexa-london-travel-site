@@ -3,30 +3,37 @@
 
 namespace MartinCostello.LondonTravel.Site.Pages
 {
-    using OpenQA.Selenium;
+    using System.Threading.Tasks;
+    using Microsoft.Playwright;
 
     public sealed class LinkedAccount
     {
-        internal LinkedAccount(ApplicationNavigator navigator, IWebElement element)
+        internal LinkedAccount(ApplicationNavigator navigator, IElementHandle element)
         {
             Navigator = navigator;
             RootElement = element;
-            NameElement = RootElement.FindElement(By.TagName("span"));
         }
 
         private ApplicationNavigator Navigator { get; }
 
-        private IWebElement NameElement { get; }
+        private IElementHandle RootElement { get; }
 
-        private IWebElement RootElement { get; }
+        public async Task<string> IdAsync()
+            => await RootElement.GetAttributeAsync("data-provider");
 
-        public string Id() => RootElement.GetAttribute("data-provider");
-
-        public string Name() => NameElement.Text.Trim();
-
-        public ManagePage Remove()
+        public async Task<string> NameAsync()
         {
-            RootElement.FindElement(By.CssSelector("input[type='submit']")).Click();
+            IElementHandle element = await RootElement.QuerySelectorAsync("span");
+            string text = await element.InnerTextAsync();
+            return text.Trim();
+        }
+
+        public async Task<ManagePage> RemoveAsync()
+        {
+            IElementHandle submit = await RootElement.QuerySelectorAsync("input[type='submit']");
+
+            await submit.ClickAsync();
+
             return new ManagePage(Navigator);
         }
     }

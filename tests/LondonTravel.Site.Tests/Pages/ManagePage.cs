@@ -5,7 +5,8 @@ namespace MartinCostello.LondonTravel.Site.Pages
 {
     using System.Collections.Generic;
     using System.Linq;
-    using OpenQA.Selenium;
+    using System.Threading.Tasks;
+    using Microsoft.Playwright;
 
     public sealed class ManagePage : PageBase
     {
@@ -16,34 +17,42 @@ namespace MartinCostello.LondonTravel.Site.Pages
 
         protected override string RelativeUri => "/manage/";
 
-        public DeleteModal DeleteAccount()
+        public async Task<DeleteModal> DeleteAccountAsync()
         {
-            Navigator.Driver.FindElement(By.CssSelector("[data-id='delete-account']")).Click();
+            await Navigator.Page.ClickAsync("[data-id='delete-account']");
             return new DeleteModal(Navigator);
         }
 
-        public bool IsLinkedToAlexa() =>
-            bool.Parse(Navigator.Driver.FindElement(By.CssSelector("[data-id='alexa-link']")).GetAttribute("data-is-linked"));
-
-        public IReadOnlyCollection<LinkedAccount> LinkedAccounts()
+        public async Task<bool> IsLinkedToAlexaAsync()
         {
-            return Navigator.Driver
-                .FindElements(By.CssSelector("[data-linked-account]"))
+            IElementHandle linked = await Navigator.Page.QuerySelectorAsync("[data-id='alexa-link']");
+
+            string value = await linked.GetAttributeAsync("data-is-linked");
+
+            return bool.Parse(value);
+        }
+
+        public async Task<IReadOnlyList<LinkedAccount>> LinkedAccountsAsync()
+        {
+            var elements = await Navigator.Page.QuerySelectorAllAsync("[data-linked-account]");
+
+            return elements
                 .Select((p) => new LinkedAccount(Navigator, p))
                 .ToList();
         }
 
-        public ManagePage SignInWithGoogle() => SignInWithProvider("google");
+        public async Task<ManagePage> SignInWithGoogleAsync()
+            => await SignInWithProviderAsync("google");
 
-        public ManagePage SignInWithProvider(string name)
+        public async Task<ManagePage> SignInWithProviderAsync(string name)
         {
-            Navigator.Driver.FindElement(By.CssSelector($"[data-id='sign-in-{name}']")).Click();
+            await Navigator.Page.ClickAsync($"[data-id='sign-in-{name}']");
             return new ManagePage(Navigator);
         }
 
-        public RemoveAlexaLinkModal UnlinkAlexa()
+        public async Task<RemoveAlexaLinkModal> UnlinkAlexaAsync()
         {
-            Navigator.Driver.FindElement(By.CssSelector("[data-id='remove-alexa-link']")).Click();
+            await Navigator.Page.ClickAsync("[data-id='remove-alexa-link']");
             return new RemoveAlexaLinkModal(Navigator);
         }
     }

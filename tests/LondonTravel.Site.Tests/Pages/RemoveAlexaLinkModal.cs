@@ -3,9 +3,7 @@
 
 namespace MartinCostello.LondonTravel.Site.Pages
 {
-    using System;
-    using System.Threading;
-    using OpenQA.Selenium;
+    using System.Threading.Tasks;
 
     public sealed class RemoveAlexaLinkModal : ModalBase
     {
@@ -14,27 +12,15 @@ namespace MartinCostello.LondonTravel.Site.Pages
         {
         }
 
-        public ManagePage Close()
+        public async Task<ManagePage> CloseAsync()
         {
-            CloseSelf();
+            await CloseSelfAsync();
             return new ManagePage(Navigator);
         }
 
-        public ManagePage Confirm()
+        public async Task<ManagePage> ConfirmAsync()
         {
-            IWebElement button = Navigator.Driver.FindElement(By.CssSelector("[data-id='remove-alexa-confirm']"));
-
-            // Wait for the JavaScript to enable the button
-            using (var source = new CancellationTokenSource(TimeSpan.FromSeconds(10)))
-            {
-                while (button.GetAttribute("disabled") != null)
-                {
-                    source.Token.ThrowIfCancellationRequested();
-                    Thread.Sleep(TimeSpan.FromSeconds(0.5));
-                }
-            }
-
-            button.Click();
+            await Navigator.Page.ClickAsync("[data-id='remove-alexa-confirm']");
             return new ManagePage(Navigator);
         }
     }

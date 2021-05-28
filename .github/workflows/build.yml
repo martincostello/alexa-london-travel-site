@@ -65,6 +65,22 @@ jobs:
         name: webapp
         path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
 
+    - name: Publish screenshots
+      uses: actions/upload-artifact@v2
+      if: ${{ always() }}
+      with:
+        name: screenshots
+        path: ./artifacts/screenshots/*
+        if-no-files-found: ignore
+
+    - name: Publish videos
+      uses: actions/upload-artifact@v2
+      if: ${{ always() }}
+      with:
+        name: videos
+        path: ./artifacts/videos/*
+        if-no-files-found: ignore
+
   deploy-dev:
     if: ${{ github.ref == 'refs/heads/main' }}
     name: dev
@@ -114,6 +130,22 @@ jobs:
         WEBSITE_USER_TWITTER_USERNAME: ${{ secrets.WEBSITE_USER_TWITTER_USERNAME }}
         WEBSITE_USER_TWITTER_PASSWORD: ${{ secrets.WEBSITE_USER_TWITTER_PASSWORD }}
 
+    - name: Publish screenshots
+      uses: actions/upload-artifact@v2
+      if: ${{ always() }}
+      with:
+        name: screenshots
+        path: ./artifacts/screenshots/*
+        if-no-files-found: ignore
+
+    - name: Publish videos
+      uses: actions/upload-artifact@v2
+      if: ${{ always() }}
+      with:
+        name: videos
+        path: ./artifacts/videos/*
+        if-no-files-found: ignore
+
   deploy-prod:
     name: production
     needs: test-dev
@@ -160,3 +192,19 @@ jobs:
         WEBSITE_USER_MICROSOFT_PASSWORD: ${{ secrets.WEBSITE_USER_MICROSOFT_PASSWORD }}
         WEBSITE_USER_TWITTER_USERNAME: ${{ secrets.WEBSITE_USER_TWITTER_USERNAME }}
         WEBSITE_USER_TWITTER_PASSWORD: ${{ secrets.WEBSITE_USER_TWITTER_PASSWORD }}
+
+    - name: Publish screenshots
+      uses: actions/upload-artifact@v2
+      if: ${{ always() }}
+      with:
+        name: screenshots
+        path: ./artifacts/screenshots/*
+        if-no-files-found: ignore
+
+    - name: Publish videos
+      uses: actions/upload-artifact@v2
+      if: ${{ always() }}
+      with:
+        name: videos
+        path: ./artifacts/videos/*
+        if-no-files-found: ignore

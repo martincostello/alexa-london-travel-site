@@ -3,37 +3,43 @@
 
 namespace MartinCostello.LondonTravel.Site.Pages
 {
-    using OpenQA.Selenium;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using Microsoft.Playwright;
 
     public sealed class LinePreference
     {
-        internal LinePreference(IWebDriver driver, IWebElement element)
+        internal LinePreference(IElementHandle element)
         {
-            Driver = driver;
             RootElement = element;
-            InputElement = RootElement.FindElement(By.TagName("input"));
         }
 
-        private IWebDriver Driver { get; }
+        private IElementHandle RootElement { get; }
 
-        private IWebElement InputElement { get; }
+        public async Task<string> IdAsync() => (await GetInputAttributeAsync("data-line-id")) !;
 
-        private IWebElement RootElement { get; }
+        public async Task<bool> IsSelectedAsync() => await GetInputAttributeAsync("checked") != null;
 
-        public string Id() => InputElement.GetAttribute("data-line-id");
+        public async Task<string> NameAsync() => (await GetInputAttributeAsync("data-line-name")) !;
 
-        public bool IsSelected() => InputElement.GetAttribute("checked") != null;
-
-        public string Name() => InputElement.GetAttribute("data-line-name");
-
-        public LinePreference Toggle()
+        public async Task<LinePreference> ToggleAsync()
         {
-            new OpenQA.Selenium.Interactions.Actions(Driver)
-                .MoveToElement(RootElement)
-                .Click(RootElement)
-                .Perform();
-
+            await RootElement.ClickAsync();
             return this;
+        }
+
+        private async Task<string?> GetInputAttributeAsync(string name)
+        {
+            IElementHandle element = await RootElement.QuerySelectorAsync("input");
+
+            try
+            {
+                return await element.GetAttributeAsync(name);
+            }
+            catch (KeyNotFoundException)
+            {
+                return null;
+            }
         }
     }
 }

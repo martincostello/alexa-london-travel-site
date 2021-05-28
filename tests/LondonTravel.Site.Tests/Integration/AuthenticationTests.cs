@@ -4,7 +4,7 @@
 namespace MartinCostello.LondonTravel.Site.Integration
 {
     using System.Collections.Generic;
-    using System.Linq;
+    using System.Threading.Tasks;
     using Microsoft.Extensions.DependencyInjection;
     using Pages;
     using Shouldly;
@@ -33,92 +33,95 @@ namespace MartinCostello.LondonTravel.Site.Integration
         [InlineData("google", "John")]
         [InlineData("microsoft", "John")]
         [InlineData("twitter", "@JohnSmith")]
-        public void Can_Sign_In_And_Out_With_External_Provider(string provider, string expected)
+        public async Task Can_Sign_In_And_Out_With_External_Provider(string provider, string expected)
         {
             // Arrange
-            AtPage<HomePage>(
-                (page) =>
+            await AtPageAsync<HomePage>(
+                "chromium",
+                async (page) =>
                 {
-                    page = page
-                        .SignIn()
-                        .SignInWithProvider(provider);
+                    page = await page
+                        .SignInAsync()
+                        .ThenAsync((p) => p.SignInWithProviderAsync(provider));
 
                     // Assert
-                    page.IsAuthenticated().ShouldBeTrue();
-                    page.UserName().ShouldBe(expected);
+                    await page.IsAuthenticatedAsync().ShouldBeTrue();
+                    await page.UserNameAsync().ShouldBe(expected);
 
                     // Act
-                    page = page.SignOut();
+                    page = await page.SignOutAsync();
 
                     // Assert
-                    page.IsAuthenticated().ShouldBeFalse();
+                    await page.IsAuthenticatedAsync().ShouldBeFalse();
                 });
         }
 
         [Fact]
-        public void Can_Delete_Account()
+        public async Task Can_Delete_Account()
         {
             // Arrange
-            AtPage<HomePage>(
-                (homepage) =>
+            await AtPageAsync<HomePage>(
+                "chromium",
+                async (homepage) =>
                 {
-                    ManagePage page = homepage
-                        .SignIn()
-                        .SignInWithAmazon()
-                        .Manage();
+                    ManagePage page = await homepage
+                        .SignInAsync()
+                        .ThenAsync((p) => p.SignInWithAmazonAsync())
+                        .ThenAsync((p) => p.ManageAsync());
 
                     // Act
-                    page.DeleteAccount()
-                        .Close();
+                    await page.DeleteAccountAsync()
+                              .ThenAsync((p) => p.CloseAsync());
 
                     // Assert
-                    page.IsAuthenticated().ShouldBeTrue();
+                    await page.IsAuthenticatedAsync().ShouldBeTrue();
 
                     // Act
-                    page.DeleteAccount()
-                        .Confirm();
+                    await page.DeleteAccountAsync()
+                              .ThenAsync((p) => p.ConfirmAsync());
 
                     // Assert
-                    page.IsAuthenticated().ShouldBeFalse();
+                    await page.IsAuthenticatedAsync().ShouldBeFalse();
                 });
         }
 
         [Fact]
-        public void Can_Link_Accounts()
+        public async Task Can_Link_Accounts()
         {
             // Arrange
-            AtPage<HomePage>(
-                (homepage) =>
+            await AtPageAsync<HomePage>(
+                "chromium",
+                async (homepage) =>
                 {
-                    ManagePage page = homepage
-                        .SignIn()
-                        .SignInWithAmazon()
-                        .Manage();
+                    ManagePage page = await homepage
+                        .SignInAsync()
+                        .ThenAsync((p) => p.SignInWithAmazonAsync())
+                        .ThenAsync((p) => p.ManageAsync());
 
                     // Assert
-                    IReadOnlyCollection<LinkedAccount> accounts = page.LinkedAccounts();
+                    IReadOnlyList<LinkedAccount> accounts = await page.LinkedAccountsAsync();
 
                     accounts.Count.ShouldBe(1);
-                    accounts.First().Name().ShouldBe("Amazon");
+                    await accounts[0].NameAsync().ShouldBe("Amazon");
 
                     // Act
-                    page = page.SignInWithGoogle();
+                    page = await page.SignInWithGoogleAsync();
 
                     // Assert
-                    accounts = page.LinkedAccounts();
+                    accounts = await page.LinkedAccountsAsync();
 
                     accounts.Count.ShouldBe(2);
-                    accounts.First().Name().ShouldBe("Amazon");
-                    accounts.Last().Name().ShouldBe("Google");
+                    await accounts[0].NameAsync().ShouldBe("Amazon");
+                    await accounts[^1].NameAsync().ShouldBe("Google");
 
                     // Act
-                    page = accounts.First().Remove();
+                    page = await accounts[0].RemoveAsync();
 
                     // Assert
-                    accounts = page.LinkedAccounts();
+                    accounts = await page.LinkedAccountsAsync();
 
                     accounts.Count.ShouldBe(1);
-                    accounts.First().Name().ShouldBe("Google");
+                    await accounts[0].NameAsync().ShouldBe("Google");
                 });
         }
     }

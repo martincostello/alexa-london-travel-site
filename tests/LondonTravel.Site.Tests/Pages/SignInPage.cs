@@ -3,7 +3,7 @@
 
 namespace MartinCostello.LondonTravel.Site.Pages
 {
-    using OpenQA.Selenium;
+    using System.Threading.Tasks;
 
     public sealed class SignInPage : PageBase
     {
@@ -14,11 +14,11 @@ namespace MartinCostello.LondonTravel.Site.Pages
 
         protected override string RelativeUri => "/account/sign-in/";
 
-        public HomePage SignInWithAmazon() => SignInWithProvider("amazon");
+        public async Task<HomePage> SignInWithAmazonAsync() => await SignInWithProviderAsync("amazon");
 
-        public HomePage SignInWithProvider(string name)
+        public async Task<HomePage> SignInWithProviderAsync(string name)
         {
-            Navigator.Driver.FindElement(By.CssSelector($"[data-id='sign-in-{name}']")).Click();
+            await Navigator.Page.ClickAsync($"[data-id='sign-in-{name}']");
             return new HomePage(Navigator);
         }
     }
