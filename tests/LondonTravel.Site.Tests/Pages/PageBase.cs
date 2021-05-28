@@ -3,8 +3,7 @@
 
 namespace MartinCostello.LondonTravel.Site.Pages
 {
-    using System;
-    using OpenQA.Selenium;
+    using System.Threading.Tasks;
 
     public abstract class PageBase
     {
@@ -15,24 +14,25 @@ namespace MartinCostello.LondonTravel.Site.Pages
 
         protected internal ApplicationNavigator Navigator { get; }
 
+        protected static string UserNameSelector { get; } = "[data-id='user-name']";
+
         protected abstract string RelativeUri { get; }
 
-        protected By UserNameSelector { get; } = By.CssSelector("[data-id='user-name']");
+        public async Task<bool> IsAuthenticatedAsync()
+            => bool.Parse(await (await Navigator.Page.QuerySelectorAsync("[data-id='content']")).GetAttributeAsync("data-authenticated"));
 
-        public bool IsAuthenticated() => bool.Parse(Navigator.Driver.FindElement(By.CssSelector("[data-id='content']")).GetAttribute("data-authenticated"));
+        public async Task<string> UserNameAsync()
+            => (await (await Navigator.Page.QuerySelectorAsync(UserNameSelector)).InnerTextAsync()).Trim();
 
-        public string UserName() => Navigator.Driver.FindElement(UserNameSelector).Text;
-
-        public HomePage SignOut()
+        public async Task<HomePage> SignOutAsync()
         {
-            Navigator.Driver.FindElement(By.CssSelector("[data-id='sign-out']")).Click();
+            await Navigator.Page.ClickAsync("[data-id='sign-out']");
             return new HomePage(Navigator);
         }
 
-        internal void NavigateToSelf()
+        internal async Task NavigateToSelfAsync()
         {
-            Uri relativeUri = new Uri(RelativeUri, UriKind.Relative);
-            Navigator.NavigateTo(relativeUri);
+            await Navigator.NavigateToAsync(RelativeUri);
         }
     }
 }

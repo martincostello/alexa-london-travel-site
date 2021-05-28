@@ -5,7 +5,7 @@ namespace MartinCostello.LondonTravel.Site.Pages
 {
     using System.Collections.Generic;
     using System.Linq;
-    using OpenQA.Selenium;
+    using System.Threading.Tasks;
 
     public sealed class HomePage : PageBase
     {
@@ -16,29 +16,30 @@ namespace MartinCostello.LondonTravel.Site.Pages
 
         protected override string RelativeUri => "/";
 
-        public IReadOnlyCollection<LinePreference> Lines()
+        public async Task<IReadOnlyList<LinePreference>> LinesAsync()
         {
-            return Navigator.Driver
-                .FindElements(By.CssSelector("[data-line-preference]"))
-                .Select((p) => new LinePreference(Navigator.Driver, p))
+            var elements = await Navigator.Page.QuerySelectorAllAsync("[data-line-preference]");
+
+            return elements
+                .Select((p) => new LinePreference(p))
                 .ToList();
         }
 
-        public ManagePage Manage()
+        public async Task<ManagePage> ManageAsync()
         {
-            Navigator.Driver.FindElement(UserNameSelector).Click();
+            await Navigator.Page.ClickAsync(UserNameSelector);
             return new ManagePage(Navigator);
         }
 
-        public HomePage UpdatePreferences()
+        public async Task<HomePage> UpdatePreferencesAsync()
         {
-            Navigator.Driver.FindElement(By.CssSelector("[data-id='save-preferences']")).Click();
+            await Navigator.Page.ClickAsync("[data-id='save-preferences']");
             return new HomePage(Navigator);
         }
 
-        public SignInPage SignIn()
+        public async Task<SignInPage> SignInAsync()
         {
-            Navigator.Driver.FindElement(By.CssSelector("[data-id='sign-in']")).Click();
+            await Navigator.Page.ClickAsync("[data-id='sign-in']");
             return new SignInPage(Navigator);
         }
     }

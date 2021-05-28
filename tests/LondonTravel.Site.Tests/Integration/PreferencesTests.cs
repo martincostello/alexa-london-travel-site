@@ -3,8 +3,9 @@
 
 namespace MartinCostello.LondonTravel.Site.Integration
 {
+    using System;
     using System.Collections.Generic;
-    using System.Linq;
+    using System.Threading.Tasks;
     using Microsoft.Extensions.DependencyInjection;
     using Pages;
     using Shouldly;
@@ -27,37 +28,82 @@ namespace MartinCostello.LondonTravel.Site.Integration
             Fixture.Services!.GetRequiredService<InMemoryDocumentStore>().Clear();
         }
 
-        [Fact]
-        public void Can_Manage_Preferences()
+        [Theory]
+        [ClassData(typeof(BrowsersTestData))]
+        public async Task Can_Manage_Preferences(string browserType)
         {
             // Arrange
-            AtPage<HomePage>(
-                (page) =>
+            await AtPageAsync<HomePage>(
+                browserType,
+                async (page) =>
                 {
-                    page = page
-                        .SignIn()
-                        .SignInWithAmazon();
+                    page = await page
+                        .SignInAsync()
+                        .ThenAsync((p) => p.SignInWithAmazonAsync());
 
                     // Act
-                    IReadOnlyCollection<LinePreference> lines = page.Lines();
+                    IReadOnlyList<LinePreference> lines = await page.LinesAsync();
 
                     // Assert
                     lines.Count.ShouldBeGreaterThan(2);
-                    lines.Count((p) => p.IsSelected()).ShouldBe(0);
+                    await CountSelectedLinesAsync(lines).ShouldBe(0);
 
                     // Act
-                    lines.First((p) => p.Name() == "District").Toggle();
-                    lines.First((p) => p.Name() == "Northern").Toggle();
-                    page = page.UpdatePreferences();
+                    LinePreference? district = await GetLineAsync(lines, "District");
+                    LinePreference? northern = await GetLineAsync(lines, "Northern");
+
+                    district.ShouldNotBeNull();
+                    northern.ShouldNotBeNull();
+
+                    await district.ToggleAsync();
+                    await northern.ToggleAsync();
+
+                    page = await page.UpdatePreferencesAsync();
 
                     // Assert
-                    lines = page.Lines();
+                    lines = await page.LinesAsync();
 
                     lines.Count.ShouldBeGreaterThan(2);
-                    lines.First((p) => p.Name() == "District").IsSelected().ShouldBeTrue();
-                    lines.First((p) => p.Name() == "Northern").IsSelected().ShouldBeTrue();
-                    lines.Count((p) => p.IsSelected()).ShouldBe(2);
+
+                    district = await GetLineAsync(lines, "District");
+                    northern = await GetLineAsync(lines, "Northern");
+
+                    district.ShouldNotBeNull();
+                    northern.ShouldNotBeNull();
+
+                    await district.IsSelectedAsync().ShouldBeTrue();
+                    await northern.IsSelectedAsync().ShouldBeTrue();
+
+                    await CountSelectedLinesAsync(lines).ShouldBe(2);
                 });
+
+            static async Task<LinePreference?> GetLineAsync(IEnumerable<LinePreference> collection, string name)
+            {
+                foreach (var line in collection)
+                {
+                    if (string.Equals(await line.NameAsync(), name, StringComparison.Ordinal))
+                    {
+                        return line;
+                    }
+                }
+
+                return null;
+            }
+
+            static async Task<int> CountSelectedLinesAsync(IEnumerable<LinePreference> collection)
+            {
+                int count = 0;
+
+                foreach (var line in collection)
+                {
+                    if (await line.IsSelectedAsync())
+                    {
+                        count++;
+                    }
+                }
+
+                return count;
+            }
         }
     }
 }

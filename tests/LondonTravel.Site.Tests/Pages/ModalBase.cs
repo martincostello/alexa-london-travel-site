@@ -3,7 +3,8 @@
 
 namespace MartinCostello.LondonTravel.Site.Pages
 {
-    using OpenQA.Selenium;
+    using System.Threading.Tasks;
+    using Microsoft.Playwright;
 
     public abstract class ModalBase
     {
@@ -13,15 +14,18 @@ namespace MartinCostello.LondonTravel.Site.Pages
             Navigator = navigator;
         }
 
-        protected By DialogSelector => By.CssSelector($"[data-id='modal-{Name}']");
+        protected string DialogSelector => $"[data-id='modal-{Name}']";
 
         protected string Name { get; }
 
         protected ApplicationNavigator Navigator { get; }
 
-        protected void CloseSelf()
+        protected async Task CloseSelfAsync()
         {
-            Navigator.Driver.FindElement(DialogSelector).FindElement(By.CssSelector("[data-dismiss='modal']")).Click();
+            IElementHandle modal = await Navigator.Page.QuerySelectorAsync(DialogSelector);
+            IElementHandle dismiss = await modal.QuerySelectorAsync("[data-dismiss='modal']");
+
+            await dismiss.ClickAsync();
         }
     }
 }

@@ -4,9 +4,9 @@
 namespace MartinCostello.LondonTravel.Site.EndToEnd
 {
     using System;
+    using System.Threading.Tasks;
     using MartinCostello.LondonTravel.Site.Pages;
-    using OpenQA.Selenium;
-    using OpenQA.Selenium.Support.UI;
+    using Microsoft.Playwright;
     using Shouldly;
     using Xunit;
     using Xunit.Abstractions;
@@ -19,72 +19,65 @@ namespace MartinCostello.LondonTravel.Site.EndToEnd
         }
 
         [SkippableFact]
-        public void Can_Sign_In_With_Google()
+        public async Task Can_Sign_In_With_Google()
         {
             Skip.IfNot(
                 string.IsNullOrEmpty(Environment.GetEnvironmentVariable("GITHUB_ACTIONS")),
                 "Sign-in blocked when run in GitHub Actions.");
 
-            SignInWithSocialProvider(
+            await SignInWithSocialProviderAsync(
                 "Google",
-                (driver, userName, password) =>
+                async (driver, userName, password) =>
                 {
-                    var userNameSelector = By.CssSelector("input[type=email]");
-                    var passwordSelector = By.CssSelector("input[type=password]");
-
-                    SignIn(
+                    await SignInAsync(
                         driver,
-                        userNameSelector,
-                        passwordSelector,
-                        (userName + Keys.Enter, password));
+                        "input[type=email]",
+                        "input[type=password]",
+                        (userName, password),
+                        sendEnterAfterUserName: true);
                 });
         }
 
         [SkippableFact]
-        public void Can_Sign_In_With_Microsoft_Account()
+        public async Task Can_Sign_In_With_Microsoft_Account()
         {
             Skip.IfNot(
                 string.IsNullOrEmpty(Environment.GetEnvironmentVariable("GITHUB_ACTIONS")),
                 "Sign-in is being flaky in GitHub Actions.");
 
-            SignInWithSocialProvider(
+            await SignInWithSocialProviderAsync(
                 "Microsoft",
-                (driver, userName, password) =>
+                async (driver, userName, password) =>
                 {
-                    var userNameSelector = By.CssSelector("input[type=email]");
-                    var passwordSelector = By.CssSelector("input[type=password]");
-
-                    SignIn(
+                    await SignInAsync(
                         driver,
-                        userNameSelector,
-                        passwordSelector,
-                        (userName + Keys.Enter, password));
+                        "input[type=email]",
+                        "input[type=password]",
+                        (userName, password),
+                        sendEnterAfterUserName: true);
                 });
         }
 
         [SkippableFact]
-        public void Can_Sign_In_With_Twitter()
+        public async Task Can_Sign_In_With_Twitter()
         {
             Skip.IfNot(
                 string.IsNullOrEmpty(Environment.GetEnvironmentVariable("GITHUB_ACTIONS")),
                 "Sign-in blocked when run in GitHub Actions.");
 
-            SignInWithSocialProvider(
+            await SignInWithSocialProviderAsync(
                 "Twitter",
-                (driver, userName, password) =>
+                async (driver, userName, password) =>
                 {
-                    var userNameSelector = By.Id("username_or_email");
-                    var passwordSelector = By.CssSelector("input[type=password]");
-
-                    SignIn(
+                    await SignInAsync(
                         driver,
-                        userNameSelector,
-                        passwordSelector,
+                        "id=username_or_email",
+                        "input[type=password]",
                         (userName, password));
                 });
         }
 
-        private void SignInWithSocialProvider(string providerName, Action<IWebDriver, string, string> signIn)
+        private async Task SignInWithSocialProviderAsync(string providerName, Func<IPage, string, string, Task> signIn)
         {
             string? userName = Environment.GetEnvironmentVariable($"WEBSITE_USER_{providerName.ToUpperInvariant()}_USERNAME");
             string? password = Environment.GetEnvironmentVariable($"WEBSITE_USER_{providerName.ToUpperInvariant()}_PASSWORD");
@@ -93,45 +86,57 @@ namespace MartinCostello.LondonTravel.Site.EndToEnd
             Skip.If(string.IsNullOrWhiteSpace(password), $"No {providerName} password is configured.");
 
             // Arrange
-            AtPage<HomePage>(
-                (page) =>
+            await AtPageAsync<HomePage>(
+                "chromium",
+                async (page) =>
                 {
 #pragma warning disable CA1308
-                    page = page.SignIn()
-                               .SignInWithProvider(providerName.ToLowerInvariant());
+                    page = await page.SignInAsync()
+                                     .ThenAsync((p) => p.SignInWithProviderAsync(providerName.ToLowerInvariant()));
 #pragma warning restore CA1308
 
-                    signIn(page.Navigator.Driver, userName, password);
+                    await signIn(page.Navigator.Page, userName, password);
 
                     // Assert
-                    page.IsAuthenticated().ShouldBeTrue();
-                    page.UserName().ShouldNotBeNullOrWhiteSpace();
+                    await page.IsAuthenticatedAsync().ShouldBeTrue();
+                    await page.UserNameAsync().ShouldNotBeNullOrWhiteSpace();
 
                     // Act
-                    page = page.SignOut();
+                    page = await page.SignOutAsync();
 
                     // Assert
-                    page.IsAuthenticated().ShouldBeFalse();
+                    await page.IsAuthenticatedAsync().ShouldBeFalse();
                 });
         }
 
-        private void SignIn(
-            IWebDriver driver,
-            By userNameSelector,
-            By passwordSelector,
-            (string userName, string password) credentials)
+        private async Task SignInAsync(
+            IPage page,
+            string userNameSelector,
+            string passwordSelector,
+            (string userName, string password) credentials,
+            bool sendEnterAfterUserName = false)
         {
-            var userName = driver.FindElement(userNameSelector);
-            userName.SendKeys(credentials.userName);
+            await page.WaitForURLAsync((p) => !p.StartsWith(Fixture.ServerAddress.ToString(), StringComparison.Ordinal));
 
-            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-            wait.IgnoreExceptionTypes(typeof(StaleElementReferenceException));
-            wait.Until((p) => p.FindElement(passwordSelector).Displayed);
+            IElementHandle userName = await page.WaitForSelectorAsync(userNameSelector);
 
-            var password = driver.FindElement(passwordSelector);
-            password.SendKeys(credentials.password + Keys.Enter);
+            await userName.TypeAsync(credentials.userName);
 
-            wait.Until((p) => p.Url.StartsWith(ServerAddress.ToString(), StringComparison.OrdinalIgnoreCase));
+            if (sendEnterAfterUserName)
+            {
+                await page.Keyboard.PressAsync("Enter");
+            }
+
+            // HACK Microsoft authentication has a transition that
+            // makes Playwright type the password in too soon.
+            await Task.Delay(TimeSpan.FromSeconds(2));
+
+            IElementHandle password = await page.WaitForSelectorAsync(passwordSelector);
+
+            await password.TypeAsync(credentials.password);
+            await page.Keyboard.PressAsync("Enter");
+
+            await page.WaitForURLAsync((p) => p.StartsWith(ServerAddress.ToString(), StringComparison.OrdinalIgnoreCase));
         }
     }
 }

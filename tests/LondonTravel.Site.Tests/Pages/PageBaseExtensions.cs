@@ -3,12 +3,14 @@
 
 namespace MartinCostello.LondonTravel.Site.Pages
 {
+    using System.Threading.Tasks;
+
     public static class PageBaseExtensions
     {
-        public static T Navigate<T>(this T page)
+        public static async Task<T> NavigateAsync<T>(this T page)
             where T : PageBase
         {
-            page.NavigateToSelf();
+            await page.NavigateToSelfAsync();
             return page;
         }
     }
