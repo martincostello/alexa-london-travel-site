@@ -116,7 +116,9 @@ namespace MartinCostello.LondonTravel.Site.EndToEnd
             (string userName, string password) credentials,
             bool sendEnterAfterUserName = false)
         {
-            IElementHandle userName = await page.QuerySelectorAsync(userNameSelector);
+            await page.WaitForURLAsync((p) => !p.StartsWith(Fixture.ServerAddress.ToString(), StringComparison.Ordinal));
+
+            IElementHandle userName = await page.WaitForSelectorAsync(userNameSelector);
 
             await userName.TypeAsync(credentials.userName);
 
@@ -125,13 +127,16 @@ namespace MartinCostello.LondonTravel.Site.EndToEnd
                 await page.Keyboard.PressAsync("Enter");
             }
 
-            IElementHandle password = await page.QuerySelectorAsync(passwordSelector);
+            // HACK Microsoft authentication has a transition that
+            // makes Playwright type the password in too soon.
+            await Task.Delay(TimeSpan.FromSeconds(2));
+
+            IElementHandle password = await page.WaitForSelectorAsync(passwordSelector);
 
             await password.TypeAsync(credentials.password);
             await page.Keyboard.PressAsync("Enter");
 
-            await page.WaitForURLAsync(
-                (p) => p.StartsWith(ServerAddress.ToString(), StringComparison.OrdinalIgnoreCase));
+            await page.WaitForURLAsync((p) => p.StartsWith(ServerAddress.ToString(), StringComparison.OrdinalIgnoreCase));
         }
     }
 }

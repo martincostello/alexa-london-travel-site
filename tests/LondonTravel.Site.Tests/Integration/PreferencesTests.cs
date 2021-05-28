@@ -3,6 +3,7 @@
 
 namespace MartinCostello.LondonTravel.Site.Integration
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Microsoft.Extensions.DependencyInjection;
@@ -80,7 +81,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             {
                 foreach (var line in collection)
                 {
-                    if (string.Equals(await line.NameAsync(), name, System.StringComparison.Ordinal))
+                    if (string.Equals(await line.NameAsync(), name, StringComparison.Ordinal))
                     {
                         return line;
                     }
