@@ -47,13 +47,11 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" />
     <PackageReference Include="XliffTasks" PrivateAssets="All" />
   </ItemGroup>
-  <Target Name="BundleAssets" BeforeTargets="PrepareForPublish">
+  <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">
     <Exec Command="npm ci" Condition=" '$(InstallWebPackages)' == 'true' " />
-  </Target>
-  <Target Name="PrepublishScript" DependsOnTargets="BundleAssets" BeforeTargets="Publish">
     <Exec Command="npm run publish" />
   </Target>
-  <Target Name="AddGeneratedContentItems" BeforeTargets="AssignTargetPaths" Condition=" '$(CI)' != '' ">
+  <Target Name="AddGeneratedContentItems" BeforeTargets="AssignTargetPaths" Condition="'$(CI)' != ''">
     <ItemGroup>
       <Content Include="wwwroot/**" CopyToPublishDirectory="PreserveNewest" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder);@(Content)" />
       <Content Include="wwwroot/.well-known/**" CopyToPublishDirectory="PreserveNewest" Exclude="$(DefaultItemExcludes)" />
