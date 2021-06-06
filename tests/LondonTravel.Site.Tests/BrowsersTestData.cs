@@ -12,6 +12,13 @@ namespace MartinCostello.LondonTravel.Site
         public IEnumerator<object[]> GetEnumerator()
         {
             yield return new object[] { "chromium" };
+            yield return new object[] { "chromium:chrome" };
+
+            if (!OperatingSystem.IsLinux())
+            {
+                yield return new object[] { "chromium:msedge" };
+            }
+
             yield return new object[] { "firefox" };
 
             if (OperatingSystem.IsMacOS())
