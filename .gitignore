@@ -20,8 +20,10 @@ node_modules
 obj
 packages
 project.lock.json
+src/LondonTravel.Site/.config/
 src/LondonTravel.Site/assets/scripts/ts/**/*.js
 src/LondonTravel.Site/assets/scripts/ts/**/*.js.map
+src/LondonTravel.Site/Properties/ServiceDependencies/
 src/LondonTravel.Site/wwwroot/assets/*
 !src/LondonTravel.Site/wwwroot/assets/img/
 src/LondonTravel.Site/wwwroot/lib/*
@@ -35,6 +37,8 @@ PublishProfiles
 *.log
 *.nupkg
 *.opensdf
+*.p8
+*.pfx
 *.[Pp]ublish.xml
 *.publishproj
 *.pubxml

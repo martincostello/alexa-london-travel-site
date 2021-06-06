@@ -14,7 +14,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
     using Shouldly;
     using Xunit;
 
-    public static class OAuthEventsHandlerTests
+    public static class AuthenticationBuilderExtensionsTests
     {
         [Theory]
         [InlineData("", "/?Message=LinkFailed")]
@@ -40,7 +40,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
             var logger = Mock.Of<ILogger>();
 
             // Act
-            await OAuthEventsHandler.HandleRemoteFailure(context, provider, secureDataFormat, logger, PropertiesProvider);
+            await AuthenticationBuilderExtensions.HandleRemoteFailure(context, provider, secureDataFormat, logger, PropertiesProvider);
 
             // Assert
             httpContext.Response.GetTypedHeaders().Location.OriginalString.ShouldBe(expected);
