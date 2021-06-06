@@ -192,7 +192,7 @@ namespace MartinCostello.LondonTravel.Site
             services.AddPolly();
             services.AddHttpClients();
 
-            services.AddApplicationAuthentication(() => ServiceProvider!);
+            services.AddApplicationAuthentication(Configuration);
         }
 
         /// <summary>

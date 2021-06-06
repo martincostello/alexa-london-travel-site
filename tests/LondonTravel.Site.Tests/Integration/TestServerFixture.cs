@@ -7,6 +7,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
     using System.IO;
     using System.Linq;
     using System.Reflection;
+    using AspNet.Security.OAuth.Apple;
     using JustEat.HttpClientInterception;
     using MartinCostello.Logging.XUnit;
     using MartinCostello.LondonTravel.Site.Services.Data;
@@ -75,6 +76,27 @@ namespace MartinCostello.LondonTravel.Site.Integration
                     services.AddSingleton<InMemoryDocumentStore>();
                     services.AddSingleton<IDocumentService>((p) => p.GetRequiredService<InMemoryDocumentStore>());
                     services.AddSingleton<IDocumentCollectionInitializer>((p) => p.GetRequiredService<InMemoryDocumentStore>());
+
+                    // Configure a test private key for Sign in with Apple
+                    services
+                        .AddOptions<AppleAuthenticationOptions>("Apple")
+                        .Configure((options) =>
+                        {
+                            options.GenerateClientSecret = true;
+                            options.ValidateTokens = false;
+                            options.PrivateKeyBytes = async (keyId) =>
+                            {
+                                string privateKey = await File.ReadAllTextAsync(Path.Combine("Integration", "apple-test-cert.p8"));
+
+                                if (privateKey.StartsWith("-----BEGIN PRIVATE KEY-----", StringComparison.Ordinal))
+                                {
+                                    string[] lines = privateKey.Split('\n');
+                                    privateKey = string.Join(string.Empty, lines[1..^1]);
+                                }
+
+                                return Convert.FromBase64String(privateKey);
+                            };
+                        });
                 });
 
             builder.ConfigureAppConfiguration(ConfigureTests)
