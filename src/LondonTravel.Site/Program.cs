@@ -39,8 +39,7 @@ namespace MartinCostello.LondonTravel.Site
         public static IHostBuilder CreateHostBuilder(string[] args)
         {
             return Host.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration((context, builder) => builder.ConfigureApplication(context))
-                .ConfigureLogging((context, builder) => builder.ConfigureLogging(context))
+                .ConfigureApplication()
                 .ConfigureWebHostDefaults(
                     (webBuilder) =>
                     {
