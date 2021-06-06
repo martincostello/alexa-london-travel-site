@@ -28,7 +28,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// The names of the authentication schemes that are disallowed for
         /// sign-in to link Alexa to an account. This field is read-only.
         /// </summary>
-        private static readonly string[] AuthenticationSchemesDisabledForAlexa = new[] { "apple", "github", "google" };
+        private static readonly string[] AuthenticationSchemesDisabledForAlexa = { "apple", "github", "google" };
 
         //// TODO Move more of the implementation into IAccountService
 
