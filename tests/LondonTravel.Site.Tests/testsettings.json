@@ -23,6 +23,11 @@
           "ClientId": "amazon-id",
           "ClientSecret": "amazon-secret"
         },
+        "Apple": {
+          "ClientId": "apple-id",
+          "KeyId": "apple-key-id",
+          "TeamId": "apple-team-id"
+        },
         "Facebook": {
           "ClientId": "facebook-id",
           "ClientSecret": "facebook-secret"

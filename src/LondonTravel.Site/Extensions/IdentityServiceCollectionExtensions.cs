@@ -51,6 +51,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
 
                 builder
                     .TryAddAmazon()
+                    .TryAddApple()
                     .TryAddFacebook()
                     .TryAddGitHub()
                     .TryAddGoogle()

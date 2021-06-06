@@ -18,6 +18,23 @@ body {
     color: #fff;
 }
 
+.btn-apple {
+    background-color: black;
+    border-color: rgb(0,0,0);
+    border-color: rgba(0,0,0,0.2);
+    color: #fff;
+}
+
+/* csslint ignore:start */
+.fa-apple {
+    border-right: 1px solid rgba(255,255,255,0.2) !important;
+}
+
+.btn-social > :first-child {
+    line-height: 38px !important;
+}
+/* csslint ignore:end */
+
 .loader {
     animation: spin 2s linear infinite;
     /* csslint ignore:start */

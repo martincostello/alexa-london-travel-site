@@ -4,11 +4,15 @@
 namespace MartinCostello.LondonTravel.Site.Identity
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Net.Http;
+    using Azure.Security.KeyVault.Secrets;
     using MartinCostello.LondonTravel.Site.Options;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authentication.OAuth;
+    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
 
     /// <summary>
@@ -42,6 +46,16 @@ namespace MartinCostello.LondonTravel.Site.Identity
         private ExternalAuthEvents AuthEvents => _serviceProviderFactory().GetRequiredService<ExternalAuthEvents>();
 
         /// <summary>
+        /// Gets the <see cref="IConfiguration"/> to use.
+        /// </summary>
+        private IConfiguration Configuration => _serviceProviderFactory().GetRequiredService<IConfiguration>();
+
+        /// <summary>
+        /// Gets the <see cref="IHostEnvironment"/> to use.
+        /// </summary>
+        private IHostEnvironment Environment => _serviceProviderFactory().GetRequiredService<IHostEnvironment>();
+
+        /// <summary>
         /// Gets the <see cref="IHttpClientFactory"/> to use.
         /// </summary>
         private IHttpClientFactory HttpClientFactory => _serviceProviderFactory().GetRequiredService<IHttpClientFactory>();
@@ -50,6 +64,11 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// Gets the <see cref="ILoggerFactory"/> to use.
         /// </summary>
         private ILoggerFactory LoggerFactory => _serviceProviderFactory().GetRequiredService<ILoggerFactory>();
+
+        /// <summary>
+        /// Gets the optional <see cref="SecretClient"/> to use.
+        /// </summary>
+        private SecretClient? SecretClient => _serviceProviderFactory().GetService<SecretClient>();
 
         /// <summary>
         /// Tries to configure Amazon authentication.
@@ -64,6 +83,65 @@ namespace MartinCostello.LondonTravel.Site.Identity
             if (TryGetProvider(name, out ExternalSignInOptions? signInOptions))
             {
                 _builder.AddAmazon((auth) => ConfigureOAuth(name, auth, signInOptions!));
+            }
+
+            return this;
+        }
+
+        /// <summary>
+        /// Tries to configure Apple authentication.
+        /// </summary>
+        /// <returns>
+        /// The current <see cref="ApplicationAuthorizationBuilder"/>.
+        /// </returns>
+        public ApplicationAuthorizationBuilder TryAddApple()
+        {
+            string name = "Apple";
+            string keyId = string.Empty;
+            string teamId = string.Empty;
+
+            ExternalSignInOptions? signInOptions = null;
+
+            bool isEnabled =
+                _options?.Authentication?.ExternalProviders?.TryGetValue(name, out signInOptions) == true &&
+                signInOptions?.IsEnabled == true &&
+                !string.IsNullOrEmpty(signInOptions.ClientId);
+
+            if (isEnabled)
+            {
+                _builder.AddApple((options) =>
+                {
+                    options.ClientId = signInOptions!.ClientId;
+                    options.KeyId = Configuration["Site:Authentication:ExternalProviders:Apple:KeyId"];
+                    options.TeamId = Configuration["Site:Authentication:ExternalProviders:Apple:TeamId"];
+
+                    var client = SecretClient;
+
+                    if (client is null)
+                    {
+                        options.UsePrivateKey(
+                            (keyId) =>
+                                Environment.ContentRootFileProvider.GetFileInfo($"AuthKey_{keyId}.p8"));
+                    }
+                    else
+                    {
+                        options.GenerateClientSecret = true;
+                        options.PrivateKeyBytes = async (keyId) =>
+                        {
+                            var secret = await client.GetSecretAsync($"AuthKey-{keyId}");
+
+                            string privateKey = secret.Value.Value;
+
+                            if (privateKey.StartsWith("-----BEGIN PRIVATE KEY-----", StringComparison.Ordinal))
+                            {
+                                string[] lines = privateKey.Split('\n');
+                                privateKey = string.Join(string.Empty, lines[1..^1]);
+                            }
+
+                            return Convert.FromBase64String(privateKey);
+                        };
+                    }
+                });
             }
 
             return this;
@@ -226,7 +304,9 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <returns>
         /// <see langword="true"/> if the specified provider is enabled; otherwise <see langword="false"/>.
         /// </returns>
-        private bool TryGetProvider(string name, out ExternalSignInOptions? options)
+        private bool TryGetProvider(
+            string name,
+            [NotNullWhen(true)] out ExternalSignInOptions? options)
         {
             options = null;
             ExternalSignInOptions? signInOptions = null;
@@ -234,8 +314,8 @@ namespace MartinCostello.LondonTravel.Site.Identity
             bool isEnabled =
                 _options?.Authentication?.ExternalProviders?.TryGetValue(name, out signInOptions) == true &&
                 signInOptions?.IsEnabled == true &&
-                !string.IsNullOrEmpty(signInOptions?.ClientId) &&
-                !string.IsNullOrEmpty(signInOptions?.ClientSecret);
+                !string.IsNullOrEmpty(signInOptions.ClientId) &&
+                !string.IsNullOrEmpty(signInOptions.ClientSecret);
 
             if (isEnabled)
             {

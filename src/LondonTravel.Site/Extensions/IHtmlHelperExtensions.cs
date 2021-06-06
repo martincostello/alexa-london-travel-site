@@ -18,6 +18,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         private static readonly IDictionary<string, string> _iconImageMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
             ["Amazon"] = "amazon",
+            ["Apple"] = "apple",
             ["Facebook"] = "facebook",
             ["GitHub"] = "github",
             ["Google"] = "google",
