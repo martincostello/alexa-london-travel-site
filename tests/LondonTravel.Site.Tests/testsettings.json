@@ -27,6 +27,10 @@
           "ClientId": "facebook-id",
           "ClientSecret": "facebook-secret"
         },
+        "GitHub": {
+          "ClientId": "github-id",
+          "ClientSecret": "github-secret"
+        },
         "Google": {
           "ClientId": "google-id",
           "ClientSecret": "google-secret"

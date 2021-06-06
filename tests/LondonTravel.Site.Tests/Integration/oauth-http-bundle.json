@@ -54,6 +54,43 @@
       }
     },
     {
+      "comment": "Token resource for GitHub login",
+      "uri": "https://github.com/login/oauth/access_token",
+      "method": "POST",
+      "contentFormat": "json",
+      "contentJson": {
+        "access_token": "secret-access-token",
+        "token_type": "bearer",
+        "scope": "repo,gist,user:email"
+      }
+    },
+    {
+      "comment": "User information resource for GitHub login",
+      "uri": "https://api.github.com/user",
+      "contentFormat": "json",
+      "contentJson": {
+        "login": "john-smith",
+        "id": 1,
+        "type": "User",
+        "name": "John Smith",
+        "company": "GitHub",
+        "location": "London, UK"
+      }
+    },
+    {
+      "comment": "Email resource for GitHub login",
+      "uri": "https://api.github.com/user/emails",
+      "contentFormat": "json",
+      "contentJson": [
+        {
+          "email": "github@john-smith.local",
+          "verified": true,
+          "primary": true,
+          "visibility": "public"
+        }
+      ]
+    },
+    {
       "comment": "Token resource for Google login",
       "uri": "https://oauth2.googleapis.com/token",
       "method": "POST",
