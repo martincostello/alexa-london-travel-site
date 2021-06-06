@@ -35,6 +35,8 @@ PublishProfiles
 *.log
 *.nupkg
 *.opensdf
+*.p8
+*.pfx
 *.[Pp]ublish.xml
 *.publishproj
 *.pubxml
