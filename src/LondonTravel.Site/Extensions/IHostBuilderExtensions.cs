@@ -7,37 +7,46 @@ namespace MartinCostello.LondonTravel.Site.Extensions
     using System.Diagnostics.CodeAnalysis;
     using Azure.Core;
     using Azure.Identity;
+    using Azure.Security.KeyVault.Secrets;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
 
-    /// <summary>
-    /// A class containing extension methods for the <see cref="IConfigurationBuilder"/> interface. This class cannot be inherited.
-    /// </summary>
-    public static class IConfigurationBuilderExtensions
+    internal static class IHostBuilderExtensions
     {
-        /// <summary>
-        /// Configures the application.
-        /// </summary>
-        /// <param name="builder">The <see cref="IConfigurationBuilder"/> to configure.</param>
-        /// <param name="context">The <see cref="HostBuilderContext"/> to use.</param>
-        /// <returns>
-        /// The <see cref="IConfigurationBuilder"/> passed as the value of <paramref name="builder"/>.
-        /// </returns>
-        public static IConfigurationBuilder ConfigureApplication(this IConfigurationBuilder builder, HostBuilderContext context)
+        public static IHostBuilder ConfigureApplication(this IHostBuilder builder)
         {
-            builder.AddApplicationInsightsSettings(developerMode: context.HostingEnvironment.IsDevelopment());
-
-            // Build the configuration so far, this ensures things like user secrets are available
-            IConfiguration config = builder.Build();
-
-            if (TryGetVaultUri(config, out Uri? vaultUri))
+            builder.ConfigureAppConfiguration((context, builder) =>
             {
-                var credential = CreateTokenCredential(config);
-                var manager = new AzureEnvironmentSecretManager(config.AzureEnvironment());
+                builder.AddApplicationInsightsSettings(developerMode: context.HostingEnvironment.IsDevelopment());
 
-                builder.AddAzureKeyVault(vaultUri, credential, manager);
-            }
+                // Build the configuration so far, this ensures things like user secrets are available
+                IConfiguration config = builder.Build();
+
+                if (TryGetVaultUri(config, out Uri? vaultUri))
+                {
+                    TokenCredential credential = CreateCredential(config);
+                    builder.AddAzureKeyVault(vaultUri, credential);
+                }
+            });
+
+            builder.ConfigureLogging((context, builder) => builder.ConfigureLogging(context));
+
+            builder.ConfigureServices((services) =>
+            {
+                services.AddSingleton((provider) =>
+                {
+                    var config = provider.GetRequiredService<IConfiguration>();
+
+                    if (!TryGetVaultUri(config, out Uri? vaultUri))
+                    {
+                        return null!;
+                    }
+
+                    TokenCredential credential = CreateCredential(config);
+                    return new SecretClient(vaultUri, credential);
+                });
+            });
 
             return builder;
         }
@@ -55,7 +64,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
             return false;
         }
 
-        private static TokenCredential CreateTokenCredential(IConfiguration configuration)
+        private static TokenCredential CreateCredential(IConfiguration configuration)
         {
             string clientId = configuration["AzureKeyVault:ClientId"];
             string clientSecret = configuration["AzureKeyVault:ClientSecret"];
