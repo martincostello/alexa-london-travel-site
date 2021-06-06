@@ -49,7 +49,7 @@ namespace MartinCostello.LondonTravel.Site
             }
             finally
             {
-                await TryCaptureVideoAsync(page);
+                await TryCaptureVideoAsync(page, testName!, browserType);
             }
         }
 
@@ -84,6 +84,20 @@ namespace MartinCostello.LondonTravel.Site
             return await playwright[browserType].LaunchAsync(options);
         }
 
+        private static string GenerateFileName(string testName, string browserType, string extension)
+        {
+            string os =
+                OperatingSystem.IsLinux() ? "linux" :
+                OperatingSystem.IsMacOS() ? "macos" :
+                OperatingSystem.IsWindows() ? "windows" :
+                "other";
+
+            browserType = browserType.Replace(":", string.Empty, StringComparison.Ordinal);
+
+            string utcNow = DateTimeOffset.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss", CultureInfo.InvariantCulture);
+            return $"{testName}_{browserType}_{os}_{utcNow}{extension}";
+        }
+
         private async Task TryCaptureScreenshotAsync(
             IPage page,
             string testName,
@@ -91,14 +105,8 @@ namespace MartinCostello.LondonTravel.Site
         {
             try
             {
-                string os =
-                    OperatingSystem.IsLinux() ? "linux" :
-                    OperatingSystem.IsMacOS() ? "macos" :
-                    OperatingSystem.IsWindows() ? "windows" :
-                    "other";
-
-                string utcNow = DateTimeOffset.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss", CultureInfo.InvariantCulture);
-                string path = Path.Combine("screenshots", $"{testName}_{browserType}_{os}_{utcNow}.png");
+                string fileName = GenerateFileName(testName, browserType, ".png");
+                string path = Path.Combine("screenshots", fileName);
 
                 await page.ScreenshotAsync(new PageScreenshotOptions()
                 {
@@ -113,19 +121,36 @@ namespace MartinCostello.LondonTravel.Site
             }
         }
 
-        private async Task TryCaptureVideoAsync(IPage page)
+        private async Task TryCaptureVideoAsync(
+            IPage page,
+            string testName,
+            string browserType)
         {
-            if (IsRunningInGitHubActions)
+            if (!IsRunningInGitHubActions)
             {
-                try
-                {
-                    await page.CloseAsync();
-                    OutputHelper.WriteLine($"Video saved to {await page.Video.PathAsync()}.");
-                }
-                catch (Exception ex)
-                {
-                    OutputHelper.WriteLine("Failed to capture video: " + ex);
-                }
+                return;
+            }
+
+            try
+            {
+                await page.CloseAsync();
+
+                string videoSource = await page.Video.PathAsync();
+
+                string? directory = Path.GetDirectoryName(videoSource);
+                string? extension = Path.GetExtension(videoSource);
+
+                string fileName = GenerateFileName(testName, browserType, extension!);
+
+                string videoDestination = Path.Combine(directory!, fileName);
+
+                File.Move(videoSource, videoDestination);
+
+                OutputHelper.WriteLine($"Video saved to {videoDestination}.");
+            }
+            catch (Exception ex)
+            {
+                OutputHelper.WriteLine("Failed to capture video: " + ex);
             }
         }
     }
