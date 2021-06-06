@@ -4,6 +4,7 @@
 namespace MartinCostello.LondonTravel.Site.Extensions
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using Azure.Core;
     using Azure.Identity;
     using Microsoft.Extensions.Configuration;
@@ -27,43 +28,51 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         {
             builder.AddApplicationInsightsSettings(developerMode: context.HostingEnvironment.IsDevelopment());
 
-            // Build the configuration so far
+            // Build the configuration so far, this ensures things like user secrets are available
             IConfiguration config = builder.Build();
 
-            // Get the settings for Azure Key Vault
-            string vault = config["AzureKeyVault:Uri"];
-            string clientId = config["AzureKeyVault:ClientId"];
-            string clientSecret = config["AzureKeyVault:ClientSecret"];
-            string tenantId = config["AzureKeyVault:TenantId"];
-
-            // Can Managed Service Identity be used instead of direct Key Vault integration?
-            bool canUseMsi =
-                !string.Equals(config["WEBSITE_DISABLE_MSI"], bool.TrueString, StringComparison.OrdinalIgnoreCase) &&
-                !string.IsNullOrEmpty(config["MSI_ENDPOINT"]) &&
-                !string.IsNullOrEmpty(config["MSI_SECRET"]);
-
-            bool canUseKeyVault =
-                !string.IsNullOrEmpty(vault) &&
-                (canUseMsi || (!string.IsNullOrEmpty(clientId) && !string.IsNullOrEmpty(clientSecret) && !string.IsNullOrEmpty(tenantId)));
-
-            if (canUseKeyVault)
+            if (TryGetVaultUri(config, out Uri? vaultUri))
             {
+                var credential = CreateTokenCredential(config);
                 var manager = new AzureEnvironmentSecretManager(config.AzureEnvironment());
-                TokenCredential credential;
 
-                if (canUseMsi)
-                {
-                    credential = new ManagedIdentityCredential();
-                }
-                else
-                {
-                    credential = new ClientSecretCredential(tenantId, clientId, clientSecret);
-                }
-
-                builder.AddAzureKeyVault(new Uri(vault), credential, manager);
+                builder.AddAzureKeyVault(vaultUri, credential, manager);
             }
 
             return builder;
+        }
+
+        private static bool TryGetVaultUri(IConfiguration configuration, [NotNullWhen(true)] out Uri? vaultUri)
+        {
+            string vault = configuration["AzureKeyVault:Uri"];
+
+            if (!string.IsNullOrEmpty(vault) && Uri.TryCreate(vault, UriKind.Absolute, out vaultUri))
+            {
+                return true;
+            }
+
+            vaultUri = null;
+            return false;
+        }
+
+        private static TokenCredential CreateTokenCredential(IConfiguration configuration)
+        {
+            string clientId = configuration["AzureKeyVault:ClientId"];
+            string clientSecret = configuration["AzureKeyVault:ClientSecret"];
+            string tenantId = configuration["AzureKeyVault:TenantId"];
+
+            if (!string.IsNullOrEmpty(clientId) &&
+                !string.IsNullOrEmpty(clientSecret) &&
+                !string.IsNullOrEmpty(tenantId))
+            {
+                // Use explicitly configured Azure Key Vault credentials
+                return new ClientSecretCredential(tenantId, clientId, clientSecret);
+            }
+            else
+            {
+                // Assume Managed Service Identity is configured and available
+                return new ManagedIdentityCredential();
+            }
         }
     }
 }
