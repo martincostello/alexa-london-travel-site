@@ -88,6 +88,28 @@ namespace MartinCostello.LondonTravel.Site.Identity
         }
 
         /// <summary>
+        /// Tries to configure GitHub authentication.
+        /// </summary>
+        /// <returns>
+        /// The current <see cref="ApplicationAuthorizationBuilder"/>.
+        /// </returns>
+        public ApplicationAuthorizationBuilder TryAddGitHub()
+        {
+            string name = "GitHub";
+
+            if (TryGetProvider(name, out ExternalSignInOptions? signInOptions))
+            {
+                _builder.AddGitHub((auth) =>
+                {
+                    ConfigureOAuth(name, auth, signInOptions!);
+                    auth.Scope.Add("user:email");
+                });
+            }
+
+            return this;
+        }
+
+        /// <summary>
         /// Tries to configure Google authentication.
         /// </summary>
         /// <returns>

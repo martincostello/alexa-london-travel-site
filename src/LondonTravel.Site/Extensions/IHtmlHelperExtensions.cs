@@ -19,6 +19,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         {
             ["Amazon"] = "amazon",
             ["Facebook"] = "facebook",
+            ["GitHub"] = "github",
             ["Google"] = "google",
             ["Microsoft"] = "windows",
             ["Twitter"] = "twitter",

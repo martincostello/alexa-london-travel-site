@@ -87,14 +87,19 @@ namespace MartinCostello.LondonTravel.Site.Extensions
                 throw new ArgumentNullException(nameof(value));
             }
 
-            string? name = value.FindFirst(ClaimTypes.GivenName)?.Value;
+            string[] givenNameClaims = { ClaimTypes.GivenName };
 
-            if (!string.IsNullOrWhiteSpace(name))
+            foreach (string claim in givenNameClaims)
             {
-                return name.Trim();
+                string? givenName = value.FindFirst(claim)?.Value;
+
+                if (!string.IsNullOrWhiteSpace(givenName))
+                {
+                    return givenName.Trim();
+                }
             }
 
-            name = value.FindFirst((c) => c.Type == ClaimTypes.Name && c.Value != value.GetUserId() && c.Value != value.GetEmail())?.Value;
+            string? name = value.FindFirst((c) => c.Type == ClaimTypes.Name && c.Value != value.GetUserId() && c.Value != value.GetEmail())?.Value;
 
             if (!string.IsNullOrWhiteSpace(name))
             {

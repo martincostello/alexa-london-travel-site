@@ -30,6 +30,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         [Theory]
         [InlineData("amazon", "John")]
         [InlineData("facebook", "John")]
+        [InlineData("github", "john-smith")]
         [InlineData("google", "John")]
         [InlineData("microsoft", "John")]
         [InlineData("twitter", "@JohnSmith")]
