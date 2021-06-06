@@ -65,7 +65,6 @@ namespace MartinCostello.LondonTravel.Site
             if (IsRunningInGitHubActions)
             {
                 options.RecordVideoDir = "videos";
-                options.RecordVideoSize = new RecordVideoSize() { Width = 800, Height = 600 };
             }
 
             return options;
