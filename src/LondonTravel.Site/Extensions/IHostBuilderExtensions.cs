@@ -25,8 +25,10 @@ namespace MartinCostello.LondonTravel.Site.Extensions
 
                 if (TryGetVaultUri(config, out Uri? vaultUri))
                 {
-                    TokenCredential credential = CreateCredential(config);
-                    builder.AddAzureKeyVault(vaultUri, credential);
+                    TokenCredential credential = CreateTokenCredential(config);
+                    var manager = new AzureEnvironmentSecretManager(config.AzureEnvironment());
+
+                    builder.AddAzureKeyVault(vaultUri, credential, manager);
                 }
             });
 
@@ -43,7 +45,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
                         return null!;
                     }
 
-                    TokenCredential credential = CreateCredential(config);
+                    TokenCredential credential = CreateTokenCredential(config);
                     return new SecretClient(vaultUri, credential);
                 });
             });
@@ -64,7 +66,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
             return false;
         }
 
-        private static TokenCredential CreateCredential(IConfiguration configuration)
+        private static TokenCredential CreateTokenCredential(IConfiguration configuration)
         {
             string clientId = configuration["AzureKeyVault:ClientId"];
             string clientSecret = configuration["AzureKeyVault:ClientSecret"];
