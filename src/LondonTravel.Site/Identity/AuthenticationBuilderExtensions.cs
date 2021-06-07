@@ -59,9 +59,11 @@ namespace MartinCostello.LondonTravel.Site.Identity
                            if (secretClient is not null)
                            {
                                providerOptions.GenerateClientSecret = true;
-                               providerOptions.PrivateKeyBytes = async (keyId) =>
+                               providerOptions.PrivateKeyBytes = async (keyId, cancellationToken) =>
                                {
-                                   var secret = await secretClient.GetSecretAsync($"AuthKey-{keyId}");
+                                   var secret = await secretClient.GetSecretAsync(
+                                       $"AuthKey-{keyId}",
+                                       cancellationToken: cancellationToken);
 
                                    string privateKey = secret.Value.Value;
 
