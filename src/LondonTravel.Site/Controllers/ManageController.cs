@@ -66,6 +66,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             var userLogins = (await _userManager.GetLoginsAsync(user))
                 .OrderBy((p) => p.ProviderDisplayName)
                 .ThenBy((p) => p.LoginProvider)
+                .ThenBy((p) => p.ProviderKey)
                 .ToList();
 
             var otherLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync())
