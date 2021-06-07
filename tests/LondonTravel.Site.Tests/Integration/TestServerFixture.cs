@@ -83,9 +83,11 @@ namespace MartinCostello.LondonTravel.Site.Integration
                         {
                             options.GenerateClientSecret = true;
                             options.ValidateTokens = false;
-                            options.PrivateKeyBytes = async (keyId) =>
+                            options.PrivateKeyBytes = async (keyId, cancellationToken) =>
                             {
-                                string privateKey = await File.ReadAllTextAsync(Path.Combine("Integration", "apple-test-cert.p8"));
+                                string privateKey = await File.ReadAllTextAsync(
+                                    Path.Combine("Integration", "apple-test-cert.p8"),
+                                    cancellationToken);
 
                                 if (privateKey.StartsWith("-----BEGIN PRIVATE KEY-----", StringComparison.Ordinal))
                                 {

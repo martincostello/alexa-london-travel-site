@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <AspNetSecurityOAuthVersion>6.0.0-preview.4.21305.44</AspNetSecurityOAuthVersion>
+    <AspNetSecurityOAuthVersion>6.0.0-preview.4.21307.54</AspNetSecurityOAuthVersion>
     <MicrosoftAspNetCoreAuthenticationVersion>6.0.0-preview.4.21253.5</MicrosoftAspNetCoreAuthenticationVersion>
     <NodaTimeVersion>3.0.5</NodaTimeVersion>
     <SwashbuckleAspNetCoreVersion>6.2.1</SwashbuckleAspNetCoreVersion>
