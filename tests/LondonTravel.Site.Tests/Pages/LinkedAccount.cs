@@ -18,21 +18,21 @@ namespace MartinCostello.LondonTravel.Site.Pages
 
         private IElementHandle RootElement { get; }
 
-        public async Task<string> IdAsync()
+        public async Task<string?> IdAsync()
             => await RootElement.GetAttributeAsync("data-provider");
 
         public async Task<string> NameAsync()
         {
-            IElementHandle element = await RootElement.QuerySelectorAsync("span");
-            string text = await element.InnerTextAsync();
+            IElementHandle? element = await RootElement.QuerySelectorAsync("span");
+            string text = await element!.InnerTextAsync();
             return text.Trim();
         }
 
         public async Task<ManagePage> RemoveAsync()
         {
-            IElementHandle submit = await RootElement.QuerySelectorAsync("input[type='submit']");
+            IElementHandle? submit = await RootElement.QuerySelectorAsync("input[type='submit']");
 
-            await submit.ClickAsync();
+            await submit!.ClickAsync();
 
             return new ManagePage(Navigator);
         }

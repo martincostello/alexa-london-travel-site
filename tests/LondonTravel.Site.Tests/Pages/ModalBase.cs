@@ -22,10 +22,10 @@ namespace MartinCostello.LondonTravel.Site.Pages
 
         protected async Task CloseSelfAsync()
         {
-            IElementHandle modal = await Navigator.Page.QuerySelectorAsync(DialogSelector);
-            IElementHandle dismiss = await modal.QuerySelectorAsync("[data-dismiss='modal']");
+            IElementHandle? modal = await Navigator.Page.QuerySelectorAsync(DialogSelector);
+            IElementHandle? dismiss = await modal!.QuerySelectorAsync("[data-dismiss='modal']");
 
-            await dismiss.ClickAsync();
+            await dismiss!.ClickAsync();
         }
     }
 }

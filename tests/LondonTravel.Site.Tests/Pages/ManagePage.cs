@@ -25,11 +25,11 @@ namespace MartinCostello.LondonTravel.Site.Pages
 
         public async Task<bool> IsLinkedToAlexaAsync()
         {
-            IElementHandle linked = await Navigator.Page.QuerySelectorAsync("[data-id='alexa-link']");
+            IElementHandle? linked = await Navigator.Page.QuerySelectorAsync("[data-id='alexa-link']");
 
-            string value = await linked.GetAttributeAsync("data-is-linked");
+            string? value = await linked!.GetAttributeAsync("data-is-linked");
 
-            return bool.Parse(value);
+            return bool.Parse(value ?? bool.FalseString);
         }
 
         public async Task<IReadOnlyList<LinkedAccount>> LinkedAccountsAsync()

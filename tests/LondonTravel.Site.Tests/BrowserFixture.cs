@@ -144,7 +144,7 @@ namespace MartinCostello.LondonTravel.Site
             {
                 await page.CloseAsync();
 
-                string videoSource = await page.Video.PathAsync();
+                string videoSource = await page.Video!.PathAsync();
 
                 string? directory = Path.GetDirectoryName(videoSource);
                 string? extension = Path.GetExtension(videoSource);

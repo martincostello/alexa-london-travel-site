@@ -118,9 +118,9 @@ namespace MartinCostello.LondonTravel.Site.EndToEnd
         {
             await page.WaitForURLAsync((p) => !p.StartsWith(Fixture.ServerAddress.ToString(), StringComparison.Ordinal));
 
-            IElementHandle userName = await page.WaitForSelectorAsync(userNameSelector);
+            IElementHandle? userName = await page.WaitForSelectorAsync(userNameSelector);
 
-            await userName.TypeAsync(credentials.userName);
+            await userName!.TypeAsync(credentials.userName);
 
             if (sendEnterAfterUserName)
             {
@@ -131,9 +131,9 @@ namespace MartinCostello.LondonTravel.Site.EndToEnd
             // makes Playwright type the password in too soon.
             await Task.Delay(TimeSpan.FromSeconds(2));
 
-            IElementHandle password = await page.WaitForSelectorAsync(passwordSelector);
+            IElementHandle? password = await page.WaitForSelectorAsync(passwordSelector);
 
-            await password.TypeAsync(credentials.password);
+            await password!.TypeAsync(credentials.password);
             await page.Keyboard.PressAsync("Enter");
 
             await page.WaitForURLAsync((p) => p.StartsWith(ServerAddress.ToString(), StringComparison.OrdinalIgnoreCase));
