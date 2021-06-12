@@ -30,7 +30,12 @@ namespace MartinCostello.LondonTravel.Site.Pages
 
         private async Task<string?> GetInputAttributeAsync(string name)
         {
-            IElementHandle element = await RootElement.QuerySelectorAsync("input");
+            IElementHandle? element = await RootElement.QuerySelectorAsync("input");
+
+            if (element is null)
+            {
+                return null;
+            }
 
             try
             {

@@ -19,10 +19,10 @@ namespace MartinCostello.LondonTravel.Site.Pages
         protected abstract string RelativeUri { get; }
 
         public async Task<bool> IsAuthenticatedAsync()
-            => bool.Parse(await (await Navigator.Page.QuerySelectorAsync("[data-id='content']")).GetAttributeAsync("data-authenticated"));
+            => bool.Parse(await (await Navigator.Page.QuerySelectorAsync("[data-id='content']")) !.GetAttributeAsync("data-authenticated") ?? bool.FalseString);
 
         public async Task<string> UserNameAsync()
-            => (await (await Navigator.Page.QuerySelectorAsync(UserNameSelector)).InnerTextAsync()).Trim();
+            => (await (await Navigator.Page.QuerySelectorAsync(UserNameSelector)) !.InnerTextAsync()).Trim();
 
         public async Task<HomePage> SignOutAsync()
         {
