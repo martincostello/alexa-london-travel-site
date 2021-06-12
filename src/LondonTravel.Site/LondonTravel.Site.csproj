@@ -73,18 +73,4 @@
     <Warning Condition=" $(_PseudoLocalizeInstalled) != 0 " Text="The PseudoLocalize .NET Core Global Tool is not installed. To install this tool, run the following command: dotnet tool install --global PseudoLocalize" />
     <Exec Condition=" $(_PseudoLocalizeInstalled) == 0 " Command="pseudo-localize %(_PseudloLocacalizedFiles.Identity) --overwrite --force" ConsoleToMsBuild="true" StandardOutputImportance="Normal" />
   </Target>
-  <PropertyGroup>
-    <_PlaywrightCLIInstalledCommand Condition=" $([MSBuild]::IsOsPlatform('Windows')) ">where playwright</_PlaywrightCLIInstalledCommand>
-    <_PlaywrightCLIInstalledCommand Condition=" !$([MSBuild]::IsOsPlatform('Windows')) ">type playwright</_PlaywrightCLIInstalledCommand>
-  </PropertyGroup>
-  <Target Name="DownloadBrowserDrivers" AfterTargets="Build">
-    <Exec Command="$(_PlaywrightCLIInstalledCommand)" ConsoleToMsBuild="true" IgnoreExitCode="true" StandardErrorImportance="Normal" StandardOutputImportance="Normal">
-      <Output TaskParameter="ExitCode" PropertyName="_PlaywrightCLIInstalled" />
-    </Exec>
-    <Warning Condition=" $(_PlaywrightCLIInstalled) != 0 AND '$(GITHUB_ACTIONS)' == '' " Text="The Playwright CLI .NET Global Tool is not installed. To install this tool, run the following command: dotnet tool install --global Microsoft.Playwright.CLI" />
-    <Exec Condition=" $(_PlaywrightCLIInstalled) != 0 AND '$(GITHUB_ACTIONS)' != '' " Command="dotnet tool install --global Microsoft.Playwright.CLI" ConsoleToMsBuild="true" StandardOutputImportance="Normal">
-      <Output TaskParameter="ExitCode" PropertyName="_PlaywrightCLIInstalled" />
-    </Exec>
-    <Exec Condition=" $(_PlaywrightCLIInstalled) == 0 " Command="playwright install" WorkingDirectory="$(MSBuildThisFileDirectory)../../" ConsoleToMsBuild="true" StandardOutputImportance="Normal" />
-  </Target>
 </Project>
