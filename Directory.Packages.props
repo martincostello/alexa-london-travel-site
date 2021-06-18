@@ -1,6 +1,7 @@
 <Project>
   <PropertyGroup>
     <AspNetSecurityOAuthVersion>5.0.6</AspNetSecurityOAuthVersion>
+    <MicrosoftAspNetCoreAuthenticationVersion>5.0.7</MicrosoftAspNetCoreAuthenticationVersion>
     <NodaTimeVersion>3.0.5</NodaTimeVersion>
     <SwashbuckleAspNetCoreVersion>6.1.4</SwashbuckleAspNetCoreVersion>
   </PropertyGroup>
@@ -16,10 +17,10 @@
     <PackageVersion Include="JustEat.HttpClientInterception" Version="3.1.0" />
     <PackageVersion Include="MartinCostello.Logging.XUnit" Version="0.1.1" />
     <PackageVersion Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.17.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Facebook" Version="5.0.7" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="5.0.7" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="5.0.7" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Twitter" Version="5.0.7" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Facebook" Version="$(MicrosoftAspNetCoreAuthenticationVersion)" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="$(MicrosoftAspNetCoreAuthenticationVersion)" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="$(MicrosoftAspNetCoreAuthenticationVersion)" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Twitter" Version="$(MicrosoftAspNetCoreAuthenticationVersion)" />
     <PackageVersion Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" Version="5.0.7" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="5.0.7" />
     <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.19.0" />
