@@ -1,5 +1,5 @@
 ﻿@model LinePreferencesViewModel
-@if (Model.UpdateResult == true)
+@if (Model?.UpdateResult == true)
 {
     <div class="sr-only">@SR.UpdateSuccessModalTitle</div>
     <div class="alert alert-success" role="alert" aria-hidden="true">

@@ -145,7 +145,6 @@ namespace MartinCostello.LondonTravel.Site
             services
                 .AddLocalization()
                 .AddControllersWithViews(ConfigureMvc)
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
                 .AddDataAnnotationsLocalization()
                 .AddJsonOptions(ConfigureJsonFormatter);
@@ -202,7 +201,7 @@ namespace MartinCostello.LondonTravel.Site
         internal static void ConfigureJsonFormatter(JsonOptions options)
         {
             // Omit nulls to reduce payload size
-            options.JsonSerializerOptions.IgnoreNullValues = true;
+            options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
 
             // Make JSON easier to read for debugging at the expense of larger payloads
             options.JsonSerializerOptions.WriteIndented = true;

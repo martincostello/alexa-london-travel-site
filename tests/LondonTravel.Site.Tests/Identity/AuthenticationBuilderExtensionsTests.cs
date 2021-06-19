@@ -43,7 +43,8 @@ namespace MartinCostello.LondonTravel.Site.Identity
             await AuthenticationBuilderExtensions.HandleRemoteFailure(context, provider, secureDataFormat, logger, PropertiesProvider);
 
             // Assert
-            httpContext.Response.GetTypedHeaders().Location.OriginalString.ShouldBe(expected);
+            httpContext.Response.GetTypedHeaders().Location.ShouldNotBeNull();
+            httpContext.Response.GetTypedHeaders().Location!.OriginalString.ShouldBe(expected);
         }
 
         private static IDictionary<string, string?> PropertiesProvider<T>(T value) => new Dictionary<string, string?>();

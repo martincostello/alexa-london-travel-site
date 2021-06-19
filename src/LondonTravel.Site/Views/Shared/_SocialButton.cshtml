@@ -1,6 +1,6 @@
 @model Microsoft.AspNetCore.Authentication.AuthenticationScheme
 <button type="submit"
-        class="btn btn-block btn-social @Html.GetSocialLoginButtonCss(Model.Name)"
+        class="btn btn-block btn-social @Html.GetSocialLoginButtonCss(Model!.Name)"
         name="provider"
         value="@Model.Name"
         title="@SR.SignInButtonAltText(Model.DisplayName!)"

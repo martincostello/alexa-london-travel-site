@@ -111,7 +111,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl, userId);
 
-            SiteContext.SetErrorRedirect(properties, Url.RouteUrl(SiteRoutes.Manage));
+            SiteContext.SetErrorRedirect(properties, Url.RouteUrl(SiteRoutes.Manage) !);
 
             _logger.LogInformation("Attempting to link user Id {UserId} to provider {ProviderName}.", userId, provider);
 

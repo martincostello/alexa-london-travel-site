@@ -245,7 +245,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
             if (alexaToken != null)
             {
                 viewResult.Url.ShouldNotContain(alexaToken);
-                viewResult.Url.ShouldNotContain(Uri.EscapeUriString(alexaToken));
+                viewResult.Url.ShouldNotContain(Uri.EscapeDataString(alexaToken));
             }
 
             user.AlexaToken.ShouldNotBe(alexaToken);

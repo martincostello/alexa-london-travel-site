@@ -3,7 +3,7 @@
     ViewBag.Title = SR.HomepageTitle;
 }
 @await Html.PartialAsync("_Alerts", Model)
-@if (!Model.IsAuthenticated)
+@if (!Model!.IsAuthenticated)
 {
     @await Html.PartialAsync("_Jumbotron")
     <div>
