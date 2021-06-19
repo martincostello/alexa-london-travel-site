@@ -8,7 +8,7 @@
 <h2>@SR.ManageTitle</h2>
 <hr />
 <div class="row">
-    <div class="col-md-@(Model.CanAddMoreLogins ? "8" : "12")">
+    <div class="col-md-@(Model!.CanAddMoreLogins ? "8" : "12")">
         <h3>@SR.ManageLinkedAccountsSubtitle</h3>
         <hr />
         <p data-id="alexa-link" data-is-linked="@Model.IsLinkedToAlexa.ToString().ToLowerInvariant()">

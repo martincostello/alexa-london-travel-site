@@ -344,7 +344,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
 
         private string GetErrorRedirectUrl()
         {
-            return Url.RouteUrl(IsReferrerRegistrationPage() ? SiteRoutes.Register : SiteRoutes.SignIn);
+            return Url.RouteUrl(IsReferrerRegistrationPage() ? SiteRoutes.Register : SiteRoutes.SignIn) !;
         }
 
         private bool IsReferrerRegistrationPage() => IsReferrerRoute(SiteRoutes.Register);
@@ -364,7 +364,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                 return false;
             }
 
-            string routeUrl = Url.RouteUrl(routeName);
+            string routeUrl = Url.RouteUrl(routeName) !;
 
             if (uri.IsAbsoluteUri)
             {
@@ -379,9 +379,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers
                     url = url.Substring(0, indexOfQuery);
                 }
 
-                var toTrim = new[] { '/' };
-
-                return string.Equals(url.TrimEnd(toTrim), routeUrl.TrimEnd(toTrim), StringComparison.OrdinalIgnoreCase);
+                return string.Equals(url.TrimEnd('/'), routeUrl.TrimEnd('/'), StringComparison.OrdinalIgnoreCase);
             }
         }
     }

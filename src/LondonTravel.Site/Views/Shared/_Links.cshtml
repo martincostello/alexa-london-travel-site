@@ -1,6 +1,6 @@
 @model Tuple<string, SiteOptions>
 @{
-    string canonical = Model.Item1;
+    string canonical = Model!.Item1;
     SiteOptions options = Model.Item2;
 }
     <link rel="dns-prefetch" href="https://@options?.ExternalLinks?.Cdn?.Host">

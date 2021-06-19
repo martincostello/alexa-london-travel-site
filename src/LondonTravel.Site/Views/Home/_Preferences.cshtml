@@ -1,7 +1,7 @@
 ﻿@model LinePreferencesViewModel
 <h2>@SR.ManagePreferencesTitle</h2>
 <hr />
-@if (!Model.IsLinkedToAlexa)
+@if (!Model!.IsLinkedToAlexa)
 {
     @await Html.PartialAsync("_SkillNotLinked")
 }

@@ -62,7 +62,10 @@ namespace MartinCostello.LondonTravel.Site.Extensions
 #pragma warning restore CA5351
 
             string hashString = HashToString(hash);
+
+#pragma warning disable SYSLIB0013
             string escapedFallback = Uri.EscapeUriString(fallbackImageUrl);
+#pragma warning restore SYSLIB0013
 
             return FormattableString.Invariant($"https://www.gravatar.com/avatar/{hashString}?s={size}&d={escapedFallback}");
         }

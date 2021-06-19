@@ -1,5 +1,5 @@
 ﻿@model LinePreferencesViewModel
-@if (Model.UpdateResult == false)
+@if (Model?.UpdateResult == false)
 {
     <div class="sr-only">@SR.UpdateFailureModalDescription</div>
     <div class="alert alert-warning" role="alert" aria-hidden="true">

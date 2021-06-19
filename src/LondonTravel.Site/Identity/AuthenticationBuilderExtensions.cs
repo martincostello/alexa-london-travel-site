@@ -263,8 +263,8 @@ namespace MartinCostello.LondonTravel.Site.Identity
                     var siteOptions = serviceProvider.GetRequiredService<SiteOptions>();
                     var provider = siteOptions!.Authentication!.ExternalProviders![name] !;
 
-                    options.ClientId = provider.ClientId;
-                    options.ClientSecret = provider.ClientSecret;
+                    options.ClientId = provider.ClientId!;
+                    options.ClientSecret = provider.ClientSecret!;
 
                     ConfigureRemoteAuthentication(name, options, serviceProvider);
 
@@ -282,7 +282,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                     {
                         var clock = context.HttpContext.RequestServices.GetRequiredService<ISystemClock>();
 
-                        context.Properties.ExpiresUtc = clock.UtcNow.AddDays(150);
+                        context.Properties!.ExpiresUtc = clock.UtcNow.AddDays(150);
                         context.Properties.IsPersistent = true;
 
                         return Task.CompletedTask;

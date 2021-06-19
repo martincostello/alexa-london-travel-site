@@ -1,5 +1,5 @@
 @model IEnumerable<FavoriteLineItem>
-@foreach (var line in Model)
+@foreach (var line in Model!)
 {
     <div class="col-xs-offset-1 col-xs-10 checkbox js-travel-line travel-line travel-line-@line.Id" data-line-preference>
         <label for="preference-@line.Id">

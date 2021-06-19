@@ -13,12 +13,12 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\LondonTravel.Site\LondonTravel.Site.csproj" />
-    <WebApplicationFactoryContentRootAttribute
-      Include="LondonTravel.Site"
-      AssemblyName="LondonTravel.Site"
-      ContentRootPath="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)../../src/LondonTravel.Site'))"
-      ContentRootTest="LondonTravel.Site.csproj"
-      Priority="-1" />
+    <AssemblyAttribute Include="Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactoryContentRootAttribute">
+      <_Parameter1>LondonTravel.Site</_Parameter1>
+      <_Parameter2>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)../../src/LondonTravel.Site'))</_Parameter2>
+      <_Parameter3>LondonTravel.Site.csproj</_Parameter3>
+      <_Parameter4>-1</_Parameter4>
+    </AssemblyAttribute>
   </ItemGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />

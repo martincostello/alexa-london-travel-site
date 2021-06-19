@@ -6,7 +6,7 @@
     bool renderAnalytics = string.Equals(Config.AzureEnvironment(), "production", StringComparison.OrdinalIgnoreCase);
 }
     <meta charset="utf-8" />
-    <title>@Model.Title</title>
+    <title>@Model!.Title</title>
     <meta name="author" content="@Model.Author" />
     <meta name="bitcoin" content="@Model.Bitcoin" />
     <meta name="copyright" content="@SR.CopyrightText" />
