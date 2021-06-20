@@ -61,7 +61,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             static IUserStore<LondonTravelUser> GetUserStore(IServiceProvider serviceProvider)
                 => serviceProvider.GetRequiredService<IUserStore<LondonTravelUser>>();
 
-            using (var scope = Fixture.Services.CreateScope())
+            await using (var scope = Fixture.Services.CreateAsyncScope())
             {
                 using IUserStore<LondonTravelUser> store = GetUserStore(scope.ServiceProvider);
 
@@ -142,7 +142,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             }
 
             // Arrange
-            using (var scope = Fixture.Services.CreateScope())
+            await using (var scope = Fixture.Services.CreateAsyncScope())
             {
                 using IUserStore<LondonTravelUser> store = GetUserStore(scope.ServiceProvider);
 
