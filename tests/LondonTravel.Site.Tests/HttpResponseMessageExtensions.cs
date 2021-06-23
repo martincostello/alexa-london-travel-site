@@ -4,8 +4,6 @@
 using System.Net.Http;
 using System.Net.Mime;
 using System.Text.Json;
-using System.Threading.Tasks;
-using Shouldly;
 
 namespace MartinCostello.LondonTravel.Site
 {
