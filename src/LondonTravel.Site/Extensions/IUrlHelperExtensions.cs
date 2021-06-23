@@ -13,11 +13,6 @@ namespace MartinCostello.LondonTravel.Site.Extensions
     public static class IUrlHelperExtensions
     {
         /// <summary>
-        /// An array containing the forward slash character. This field is read-only.
-        /// </summary>
-        private static readonly char[] ForwardSlash = new[] { '/' };
-
-        /// <summary>
         /// Converts a virtual (relative) path to an application absolute URI.
         /// </summary>
         /// <param name="value">The <see cref="IUrlHelper"/>.</param>
@@ -50,7 +45,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
 #pragma warning disable CA1308 // Normalize strings to uppercase
 
             // Azure Blob storage is case-sensitive, so force all URLs to lowercase
-            string url = value.ToAbsolute(cdn.Host, $"london-travel_{contentPath.ToLowerInvariant().TrimStart(ForwardSlash)}");
+            string url = value.ToAbsolute(cdn.Host, $"london-travel_{contentPath.ToLowerInvariant().TrimStart('/')}");
 
 #pragma warning restore CA1308 // Normalize strings to uppercase
 

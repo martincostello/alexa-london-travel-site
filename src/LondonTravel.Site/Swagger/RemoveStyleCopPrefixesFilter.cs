@@ -21,26 +21,32 @@ namespace MartinCostello.LondonTravel.Site.Swagger
         /// <inheritdoc />
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
-            if (context?.SchemaRepository?.Schemas != null)
+            if (context?.SchemaRepository?.Schemas is null)
             {
-                foreach (var definition in context.SchemaRepository.Schemas.Values)
-                {
-                    if (definition.Properties != null)
-                    {
-                        foreach (var property in definition.Properties.Values)
-                        {
-                            if (property.Description != null)
-                            {
-                                if (property.Description.StartsWith(Prefix, StringComparison.Ordinal))
-                                {
-                                    // Remove the StyleCop property prefix
-                                    property.Description = property.Description.Replace(Prefix, string.Empty, StringComparison.Ordinal);
+                return;
+            }
 
-                                    // Capitalize the first letter that's left over
-                                    property.Description = char.ToUpperInvariant(property.Description[0]) + property.Description.Substring(1);
-                                }
-                            }
-                        }
+            foreach (var definition in context.SchemaRepository.Schemas.Values)
+            {
+                if (definition.Properties is null)
+                {
+                    continue;
+                }
+
+                foreach (var property in definition.Properties.Values)
+                {
+                    if (property.Description is null)
+                    {
+                        continue;
+                    }
+
+                    if (property.Description.StartsWith(Prefix, StringComparison.Ordinal))
+                    {
+                        // Remove the StyleCop property prefix
+                        property.Description = property.Description.Replace(Prefix, string.Empty, StringComparison.Ordinal);
+
+                        // Capitalize the first letter that's left over
+                        property.Description = char.ToUpperInvariant(property.Description[0]) + property.Description.Substring(1);
                     }
                 }
             }
