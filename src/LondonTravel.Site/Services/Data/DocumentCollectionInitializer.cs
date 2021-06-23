@@ -1,11 +1,8 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System;
 using System.Collections.Concurrent;
 using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
 using MartinCostello.LondonTravel.Site.Options;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Logging;

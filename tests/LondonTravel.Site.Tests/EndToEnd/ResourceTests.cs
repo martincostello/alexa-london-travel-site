@@ -3,9 +3,6 @@
 
 using System.Net;
 using System.Net.Mime;
-using System.Threading.Tasks;
-using Shouldly;
-using Xunit;
 
 namespace MartinCostello.LondonTravel.Site.EndToEnd
 {

@@ -1,15 +1,9 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
-using AspNet.Security.OAuth.Amazon;
-using AspNet.Security.OAuth.Apple;
-using AspNet.Security.OAuth.GitHub;
 using JustEat.HttpClientInterception;
 using MartinCostello.LondonTravel.Site.Extensions;
 using Microsoft.AspNetCore.Authentication.Facebook;
@@ -20,8 +14,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
-using Xunit;
 
 namespace MartinCostello.LondonTravel.Site.Integration
 {
