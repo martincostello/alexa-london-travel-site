@@ -1,12 +1,12 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System;
+using MartinCostello.LondonTravel.Site.Options;
+using Microsoft.AspNetCore.Mvc;
+
 namespace MartinCostello.LondonTravel.Site.Extensions
 {
-    using System;
-    using Microsoft.AspNetCore.Mvc;
-    using Options;
-
     /// <summary>
     /// A class containing extension methods for the <see cref="IUrlHelper"/> class. This class cannot be inherited.
     /// </summary>

@@ -1,17 +1,17 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System;
+using System.Net.Http;
+using MartinCostello.LondonTravel.Site.Options;
+using MartinCostello.LondonTravel.Site.Services.Tfl;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Refit;
+
 namespace MartinCostello.LondonTravel.Site.Extensions
 {
-    using System;
-    using System.Net.Http;
-    using MartinCostello.LondonTravel.Site.Services.Tfl;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Options;
-    using Options;
-    using Refit;
-
     /// <summary>
     /// A class containing HTTP-related extension methods for the <see cref="IServiceCollection"/> interface. This class cannot be inherited.
     /// </summary>

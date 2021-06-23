@@ -1,19 +1,19 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading;
+using System.Threading.Tasks;
+using MartinCostello.LondonTravel.Site.Identity;
+using MartinCostello.LondonTravel.Site.Options;
+using MartinCostello.LondonTravel.Site.Services.Data;
+using Microsoft.Azure.Cosmos;
+
 namespace MartinCostello.LondonTravel.Site.Integration
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Linq.Expressions;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using MartinCostello.LondonTravel.Site.Identity;
-    using MartinCostello.LondonTravel.Site.Options;
-    using MartinCostello.LondonTravel.Site.Services.Data;
-    using Microsoft.Azure.Cosmos;
-
     /// <summary>
     /// A class representing an in-memory document store. This class cannot be inherited.
     /// </summary>

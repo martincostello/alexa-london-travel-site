@@ -1,26 +1,26 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using MartinCostello.LondonTravel.Site.Identity;
+using MartinCostello.LondonTravel.Site.Options;
+using MartinCostello.LondonTravel.Site.Telemetry;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Logging;
+using Moq;
+using Shouldly;
+using Xunit;
+
 namespace MartinCostello.LondonTravel.Site.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Security.Claims;
-    using System.Threading.Tasks;
-    using Identity;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.Controllers;
-    using Microsoft.AspNetCore.Routing;
-    using Microsoft.Extensions.Logging;
-    using Moq;
-    using Options;
-    using Shouldly;
-    using Telemetry;
-    using Xunit;
-
     /// <summary>
     /// A class containing tests for the <see cref="AlexaController"/> class. This class cannot be inherited.
     /// </summary>

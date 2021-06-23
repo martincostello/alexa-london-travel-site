@@ -1,21 +1,21 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System;
+using System.Security.Cryptography;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Razor.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.FileProviders;
+
 namespace MartinCostello.LondonTravel.Site.TagHelpers
 {
-    using System;
-    using System.Security.Cryptography;
-    using System.Text.Encodings.Web;
-    using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Mvc.Razor.Infrastructure;
-    using Microsoft.AspNetCore.Mvc.Routing;
-    using Microsoft.AspNetCore.Mvc.TagHelpers;
-    using Microsoft.AspNetCore.Mvc.ViewFeatures;
-    using Microsoft.AspNetCore.Razor.TagHelpers;
-    using Microsoft.Extensions.Caching.Memory;
-    using Microsoft.Extensions.FileProviders;
-
     /// <summary>
     /// A <see cref="ITagHelper"/> implementation targeting &lt;script&gt; elements to add subresource integrity attributes.
     /// </summary>

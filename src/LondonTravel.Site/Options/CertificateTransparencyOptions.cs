@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System;
+
 namespace MartinCostello.LondonTravel.Site.Options
 {
-    using System;
-
     /// <summary>
     /// A class representing the options to use for the <c>Expect-CT</c>
     /// HTTP response header. This class cannot be inherited.

@@ -1,19 +1,19 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Any;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
+
 namespace MartinCostello.LondonTravel.Site.Swagger
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
-    using System.Text.Json;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.Options;
-    using Microsoft.OpenApi.Any;
-    using Microsoft.OpenApi.Models;
-    using Swashbuckle.AspNetCore.SwaggerGen;
-
     /// <summary>
     /// A class representing an operation filter that adds the example to use for display in Swagger documentation. This class cannot be inherited.
     /// </summary>
