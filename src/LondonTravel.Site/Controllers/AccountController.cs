@@ -1,22 +1,22 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using MartinCostello.LondonTravel.Site.Identity;
+using MartinCostello.LondonTravel.Site.Options;
+using MartinCostello.LondonTravel.Site.Telemetry;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using NodaTime;
+
 namespace MartinCostello.LondonTravel.Site.Controllers
 {
-    using System;
-    using System.Linq;
-    using System.Security.Claims;
-    using System.Threading.Tasks;
-    using Identity;
-    using Microsoft.AspNetCore.Authentication;
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.Logging;
-    using NodaTime;
-    using Options;
-    using Telemetry;
-
     /// <summary>
     /// A class representing the controller for the <c>/account/</c> resource.
     /// </summary>

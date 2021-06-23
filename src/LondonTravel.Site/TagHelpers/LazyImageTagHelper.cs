@@ -1,14 +1,14 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Text.Encodings.Web;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Razor.TagHelpers;
+
 namespace MartinCostello.LondonTravel.Site.TagHelpers
 {
-    using System.Text.Encodings.Web;
-    using Microsoft.AspNetCore.Mvc.Routing;
-    using Microsoft.AspNetCore.Mvc.TagHelpers;
-    using Microsoft.AspNetCore.Mvc.ViewFeatures;
-    using Microsoft.AspNetCore.Razor.TagHelpers;
-
     /// <summary>
     /// A <see cref="ITagHelper"/> implementation targeting &lt;lazyimg&gt;
     /// elements that supports file versioning and lazy loading of images.

@@ -1,13 +1,13 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System;
+using System.Globalization;
+using System.Linq;
+using System.Reflection;
+
 namespace MartinCostello.LondonTravel.Site
 {
-    using System;
-    using System.Globalization;
-    using System.Linq;
-    using System.Reflection;
-
     /// <summary>
     /// A class containing Git metadata for the assembly. This class cannot be inherited.
     /// </summary>

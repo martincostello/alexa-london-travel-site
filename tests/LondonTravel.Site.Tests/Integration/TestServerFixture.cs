@@ -1,25 +1,25 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using AspNet.Security.OAuth.Apple;
+using JustEat.HttpClientInterception;
+using MartinCostello.Logging.XUnit;
+using MartinCostello.LondonTravel.Site.Services.Data;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Http;
+using Microsoft.Extensions.Logging;
+using Xunit.Abstractions;
+
 namespace MartinCostello.LondonTravel.Site.Integration
 {
-    using System;
-    using System.IO;
-    using System.Linq;
-    using System.Reflection;
-    using AspNet.Security.OAuth.Apple;
-    using JustEat.HttpClientInterception;
-    using MartinCostello.Logging.XUnit;
-    using MartinCostello.LondonTravel.Site.Services.Data;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Mvc.Testing;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Hosting;
-    using Microsoft.Extensions.Http;
-    using Microsoft.Extensions.Logging;
-    using Xunit.Abstractions;
-
     /// <summary>
     /// A class representing a factory for creating instances of the application.
     /// </summary>

@@ -1,16 +1,16 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using MartinCostello.LondonTravel.Site.Pages;
+using Microsoft.Extensions.DependencyInjection;
+using Shouldly;
+using Xunit;
+using Xunit.Abstractions;
+
 namespace MartinCostello.LondonTravel.Site.Integration
 {
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using Microsoft.Extensions.DependencyInjection;
-    using Pages;
-    using Shouldly;
-    using Xunit;
-    using Xunit.Abstractions;
-
     /// <summary>
     /// A class containing tests for authentication providers in the website.
     /// </summary>

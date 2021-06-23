@@ -1,12 +1,12 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.Playwright;
+
 namespace MartinCostello.LondonTravel.Site.Pages
 {
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using Microsoft.Playwright;
-
     public sealed class LinePreference
     {
         internal LinePreference(IElementHandle element)

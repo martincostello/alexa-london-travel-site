@@ -29,7 +29,7 @@
         "readonly"
       ],
       "systemUsingDirectivesFirst": true,
-      "usingDirectivesPlacement": "insideNamespace"
+      "usingDirectivesPlacement": "outsideNamespace"
     },
     "readabilityRules": {},
     "spacingRules": {}

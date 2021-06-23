@@ -1,29 +1,29 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading;
+using System.Threading.Tasks;
+using MartinCostello.LondonTravel.Site.Identity;
+using MartinCostello.LondonTravel.Site.Models;
+using MartinCostello.LondonTravel.Site.Services;
+using MartinCostello.LondonTravel.Site.Services.Data;
+using MartinCostello.LondonTravel.Site.Telemetry;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
+using Moq;
+using Shouldly;
+using Xunit;
+
 namespace MartinCostello.LondonTravel.Site.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Linq.Expressions;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Identity;
-    using MartinCostello.LondonTravel.Site.Services;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.Controllers;
-    using Microsoft.AspNetCore.Routing;
-    using Microsoft.Extensions.Caching.Memory;
-    using Microsoft.Extensions.Logging;
-    using Models;
-    using Moq;
-    using Services.Data;
-    using Shouldly;
-    using Telemetry;
-    using Xunit;
-
     /// <summary>
     /// A class containing tests for the <see cref="ApiController"/> class. This class cannot be inherited.
     /// </summary>

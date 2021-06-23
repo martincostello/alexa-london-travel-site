@@ -1,15 +1,15 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System;
+using System.Net;
+using System.Security.Cryptography;
+using MartinCostello.LondonTravel.Site.Telemetry;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
 namespace MartinCostello.LondonTravel.Site.Controllers
 {
-    using System;
-    using System.Net;
-    using System.Security.Cryptography;
-    using MartinCostello.LondonTravel.Site.Telemetry;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Mvc;
-
     /// <summary>
     /// A class representing the controller for the <c>/error</c> resource.
     /// </summary>

@@ -1,15 +1,15 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System;
+using System.Net.Http;
+using MartinCostello.LondonTravel.Site.Options;
+using Microsoft.Azure.Cosmos;
+using Microsoft.Azure.Cosmos.Fluent;
+using Microsoft.Extensions.DependencyInjection;
+
 namespace MartinCostello.LondonTravel.Site.Services.Data
 {
-    using System;
-    using System.Net.Http;
-    using Microsoft.Azure.Cosmos;
-    using Microsoft.Azure.Cosmos.Fluent;
-    using Microsoft.Extensions.DependencyInjection;
-    using Options;
-
     /// <summary>
     /// A class containing helper methods for DocumentDB operations. This class cannot be inherited.
     /// </summary>

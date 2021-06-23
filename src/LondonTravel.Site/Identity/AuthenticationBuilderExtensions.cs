@@ -1,28 +1,28 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
+using AspNet.Security.OAuth.Amazon;
+using AspNet.Security.OAuth.Apple;
+using AspNet.Security.OAuth.GitHub;
+using Azure.Security.KeyVault.Secrets;
+using MartinCostello.LondonTravel.Site.Options;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Facebook;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
+using Microsoft.AspNetCore.Authentication.OAuth;
+using Microsoft.AspNetCore.Authentication.Twitter;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+
 namespace MartinCostello.LondonTravel.Site.Identity
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net.Http;
-    using System.Threading.Tasks;
-    using AspNet.Security.OAuth.Amazon;
-    using AspNet.Security.OAuth.Apple;
-    using AspNet.Security.OAuth.GitHub;
-    using Azure.Security.KeyVault.Secrets;
-    using MartinCostello.LondonTravel.Site.Options;
-    using Microsoft.AspNetCore.Authentication;
-    using Microsoft.AspNetCore.Authentication.Facebook;
-    using Microsoft.AspNetCore.Authentication.Google;
-    using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
-    using Microsoft.AspNetCore.Authentication.OAuth;
-    using Microsoft.AspNetCore.Authentication.Twitter;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
-
     public static class AuthenticationBuilderExtensions
     {
         public static AuthenticationBuilder TryAddAmazon(

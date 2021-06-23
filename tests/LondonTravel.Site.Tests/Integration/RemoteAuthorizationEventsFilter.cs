@@ -1,20 +1,20 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System;
+using System.Collections.Specialized;
+using System.Threading.Tasks;
+using System.Web;
+using MartinCostello.LondonTravel.Site.Extensions;
+using MartinCostello.LondonTravel.Site.Identity;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
 namespace MartinCostello.LondonTravel.Site.Integration
 {
-    using System;
-    using System.Collections.Specialized;
-    using System.Threading.Tasks;
-    using System.Web;
-    using MartinCostello.LondonTravel.Site.Extensions;
-    using MartinCostello.LondonTravel.Site.Identity;
-    using Microsoft.AspNetCore.Authentication;
-    using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Hosting;
-
     /// <summary>
     /// A class representing a <see cref="IStartupFilter"/> that allows the tests to redirect external
     /// authentication provider requests back into the application. This class cannot be inherited.

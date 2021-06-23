@@ -1,19 +1,19 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System;
+using System.Net.Http;
+using MartinCostello.LondonTravel.Site.Options;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Cosmos;
+using Microsoft.Extensions.DependencyInjection;
+using Moq;
+using Shouldly;
+using Xunit;
+using Option = Microsoft.Extensions.Options.Options;
+
 namespace MartinCostello.LondonTravel.Site.Services.Data
 {
-    using System;
-    using System.Net.Http;
-    using MartinCostello.LondonTravel.Site.Options;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Azure.Cosmos;
-    using Microsoft.Extensions.DependencyInjection;
-    using Moq;
-    using Shouldly;
-    using Xunit;
-    using Options = Microsoft.Extensions.Options.Options;
-
     public static class DocumentHelpersTests
     {
         [Fact]
@@ -159,7 +159,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
             var services = new ServiceCollection()
                 .AddHttpClient()
-                .AddSingleton(Options.Create(new JsonOptions()))
+                .AddSingleton(Option.Create(new JsonOptions()))
                 .AddSingleton(options);
 
             using var serviceProvider = services.BuildServiceProvider();
@@ -185,7 +185,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
 
             var services = new ServiceCollection()
                 .AddHttpClient()
-                .AddSingleton(Options.Create(new JsonOptions()))
+                .AddSingleton(Option.Create(new JsonOptions()))
                 .AddSingleton(options);
 
             using var serviceProvider = services.BuildServiceProvider();

@@ -1,23 +1,23 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System;
+using System.Net.Http.Headers;
+using System.Net.Mime;
+using System.Threading;
+using System.Threading.Tasks;
+using MartinCostello.LondonTravel.Site.Identity;
+using MartinCostello.LondonTravel.Site.Models;
+using MartinCostello.LondonTravel.Site.Services;
+using MartinCostello.LondonTravel.Site.Swagger;
+using MartinCostello.LondonTravel.Site.Telemetry;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+
 namespace MartinCostello.LondonTravel.Site.Controllers
 {
-    using System;
-    using System.Net.Http.Headers;
-    using System.Net.Mime;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Identity;
-    using MartinCostello.LondonTravel.Site.Services;
-    using MartinCostello.LondonTravel.Site.Swagger;
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.Logging;
-    using Models;
-    using Telemetry;
-
     /// <summary>
     /// A class representing the controller for the <c>/api</c> resource.
     /// </summary>

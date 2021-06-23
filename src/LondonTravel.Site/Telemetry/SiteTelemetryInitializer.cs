@@ -1,17 +1,17 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Net.Http;
+using System.Net.Http.Headers;
+using MartinCostello.LondonTravel.Site.Extensions;
+using Microsoft.ApplicationInsights.Channel;
+using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+
 namespace MartinCostello.LondonTravel.Site.Telemetry
 {
-    using System.Net.Http;
-    using System.Net.Http.Headers;
-    using Extensions;
-    using Microsoft.ApplicationInsights.Channel;
-    using Microsoft.ApplicationInsights.DataContracts;
-    using Microsoft.ApplicationInsights.Extensibility;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.Extensions.Configuration;
-
     /// <summary>
     /// A class representing an Application Insights initializer for custom telemetry setup. This class cannot be inherited.
     /// </summary>

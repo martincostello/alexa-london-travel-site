@@ -1,19 +1,19 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using AspNet.Security.OAuth.Amazon;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Moq;
+using Shouldly;
+using Xunit;
+
 namespace MartinCostello.LondonTravel.Site.Identity
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using AspNet.Security.OAuth.Amazon;
-    using Microsoft.AspNetCore.Authentication;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.Extensions.Logging;
-    using Moq;
-    using Shouldly;
-    using Xunit;
-
     public static class AuthenticationBuilderExtensionsTests
     {
         [Theory]

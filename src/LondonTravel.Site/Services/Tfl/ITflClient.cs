@@ -1,13 +1,13 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using Refit;
+
 namespace MartinCostello.LondonTravel.Site.Services.Tfl
 {
-    using System.Collections.Generic;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Refit;
-
     /// <summary>
     /// Defines an HTTP client for the TfL API.
     /// </summary>
