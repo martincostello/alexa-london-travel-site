@@ -7,12 +7,20 @@ using System.IO;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using AspNet.Security.OAuth.Amazon;
+using AspNet.Security.OAuth.Apple;
+using AspNet.Security.OAuth.GitHub;
 using JustEat.HttpClientInterception;
 using MartinCostello.LondonTravel.Site.Extensions;
+using Microsoft.AspNetCore.Authentication.Facebook;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
+using Microsoft.AspNetCore.Authentication.Twitter;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Xunit;
 
 namespace MartinCostello.LondonTravel.Site.Integration
@@ -95,7 +103,17 @@ namespace MartinCostello.LondonTravel.Site.Integration
             base.ConfigureWebHost(builder);
 
             // Intercept remote authentication to redirect locally for browser UI tests
-            builder.ConfigureServices((p) => p.AddSingleton<IStartupFilter, RemoteAuthorizationEventsFilter>());
+            builder.ConfigureServices((p) =>
+            {
+                p.AddSingleton<ConfigureAuthenticationHandlers>();
+                p.AddSingleton<IPostConfigureOptions<AmazonAuthenticationOptions>>((r) => r.GetRequiredService<ConfigureAuthenticationHandlers>());
+                p.AddSingleton<IPostConfigureOptions<AppleAuthenticationOptions>>((r) => r.GetRequiredService<ConfigureAuthenticationHandlers>());
+                p.AddSingleton<IPostConfigureOptions<FacebookOptions>>((r) => r.GetRequiredService<ConfigureAuthenticationHandlers>());
+                p.AddSingleton<IPostConfigureOptions<GitHubAuthenticationOptions>>((r) => r.GetRequiredService<ConfigureAuthenticationHandlers>());
+                p.AddSingleton<IPostConfigureOptions<GoogleOptions>>((r) => r.GetRequiredService<ConfigureAuthenticationHandlers>());
+                p.AddSingleton<IPostConfigureOptions<MicrosoftAccountOptions>>((r) => r.GetRequiredService<ConfigureAuthenticationHandlers>());
+                p.AddSingleton<IPostConfigureOptions<TwitterOptions>>((r) => r.GetRequiredService<ConfigureAuthenticationHandlers>());
+            });
 
             builder.ConfigureKestrel(
                 (p) => p.ConfigureHttpsDefaults(

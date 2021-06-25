@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 using AspNet.Security.OAuth.Amazon;
 using AspNet.Security.OAuth.Apple;
@@ -160,6 +159,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
                         options.ConsumerKey = provider.ClientId;
                         options.ConsumerSecret = provider.ClientSecret;
                         options.RetrieveUserDetails = true;
+                        options.CorrelationCookie.Name = ApplicationCookie.Correlation.Name;
                         options.StateCookie.Name = ApplicationCookie.State.Name;
 
                         options.Events.OnRemoteFailure =
@@ -169,15 +169,6 @@ namespace MartinCostello.LondonTravel.Site.Identity
                                 options.StateDataFormat,
                                 context.HttpContext.RequestServices.GetRequiredService<ILogger<TwitterOptions>>(),
                                 (token) => token?.Properties?.Items);
-
-                        ConfigureRemoteAuthentication("Twitter", options, serviceProvider);
-
-                        var externalEvents = serviceProvider.GetService<ExternalAuthEvents>();
-
-                        if (externalEvents?.OnRedirectToTwitterAuthorizationEndpoint is not null)
-                        {
-                            options.Events.OnRedirectToAuthorizationEndpoint = externalEvents.OnRedirectToTwitterAuthorizationEndpoint;
-                        }
                     });
             }
 
@@ -265,8 +256,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
 
                     options.ClientId = provider.ClientId!;
                     options.ClientSecret = provider.ClientSecret!;
-
-                    ConfigureRemoteAuthentication(name, options, serviceProvider);
+                    options.CorrelationCookie.Name = ApplicationCookie.Correlation.Name;
 
                     options.Events.OnRemoteFailure = (context) =>
                     {
@@ -288,24 +278,8 @@ namespace MartinCostello.LondonTravel.Site.Identity
                         return Task.CompletedTask;
                     };
 
-                    var externalEvents = serviceProvider.GetService<ExternalAuthEvents>();
-
-                    if (externalEvents?.OnRedirectToOAuthAuthorizationEndpoint is not null)
-                    {
-                        options.Events.OnRedirectToAuthorizationEndpoint = externalEvents.OnRedirectToOAuthAuthorizationEndpoint;
-                    }
-
                     configure?.Invoke(options, serviceProvider);
                 });
-        }
-
-        private static void ConfigureRemoteAuthentication<T>(string name, T options, IServiceProvider serviceProvider)
-            where T : RemoteAuthenticationOptions
-        {
-            var httpClientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
-
-            options.Backchannel = httpClientFactory.CreateClient(name);
-            options.CorrelationCookie.Name = ApplicationCookie.Correlation.Name;
         }
 
         private static string? GetSiteErrorRedirect<T>(
