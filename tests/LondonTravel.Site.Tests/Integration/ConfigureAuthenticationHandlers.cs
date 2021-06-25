@@ -3,43 +3,61 @@
 
 using System;
 using System.Collections.Specialized;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
+using AspNet.Security.OAuth.Amazon;
+using AspNet.Security.OAuth.Apple;
+using AspNet.Security.OAuth.GitHub;
 using MartinCostello.LondonTravel.Site.Extensions;
-using MartinCostello.LondonTravel.Site.Identity;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Authentication.Facebook;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
+using Microsoft.AspNetCore.Authentication.OAuth;
+using Microsoft.AspNetCore.Authentication.Twitter;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 
 namespace MartinCostello.LondonTravel.Site.Integration
 {
-    /// <summary>
-    /// A class representing a <see cref="IStartupFilter"/> that allows the tests to redirect external
-    /// authentication provider requests back into the application. This class cannot be inherited.
-    /// </summary>
-    internal sealed class RemoteAuthorizationEventsFilter : IStartupFilter
+    public sealed class ConfigureAuthenticationHandlers :
+        IPostConfigureOptions<AmazonAuthenticationOptions>,
+        IPostConfigureOptions<AppleAuthenticationOptions>,
+        IPostConfigureOptions<FacebookOptions>,
+        IPostConfigureOptions<GitHubAuthenticationOptions>,
+        IPostConfigureOptions<GoogleOptions>,
+        IPostConfigureOptions<MicrosoftAccountOptions>,
+        IPostConfigureOptions<TwitterOptions>
     {
-        public RemoteAuthorizationEventsFilter(IHost host)
+        public ConfigureAuthenticationHandlers(
+            IHost host,
+            IHttpClientFactory httpClientFactory)
         {
             Host = host;
+            HttpClientFactory = httpClientFactory;
         }
 
         private IHost Host { get; }
 
-        /// <inheritdoc />
-        public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> next)
+        private IHttpClientFactory HttpClientFactory { get; }
+
+        public void PostConfigure(string name, AmazonAuthenticationOptions options) => Configure(name, options);
+
+        public void PostConfigure(string name, AppleAuthenticationOptions options) => Configure(name, options);
+
+        public void PostConfigure(string name, FacebookOptions options) => Configure(name, options);
+
+        public void PostConfigure(string name, GitHubAuthenticationOptions options) => Configure(name, options);
+
+        public void PostConfigure(string name, GoogleOptions options) => Configure(name, options);
+
+        public void PostConfigure(string name, MicrosoftAccountOptions options) => Configure(name, options);
+
+        public void PostConfigure(string name, TwitterOptions options)
         {
-            return (builder) =>
-            {
-                next(builder);
-
-                var events = builder.ApplicationServices.GetRequiredService<ExternalAuthEvents>();
-
-                events.OnRedirectToOAuthAuthorizationEndpoint = RedirectToSelfForOAuth;
-                events.OnRedirectToTwitterAuthorizationEndpoint = RedirectToSelfForTwitter;
-            };
+            options.Backchannel = HttpClientFactory.CreateClient(name);
+            options.Events.OnRedirectToAuthorizationEndpoint = RedirectToSelfForTwitter;
         }
 
         private static NameValueCollection ParseQueryString<T>(RedirectContext<T> context)
@@ -103,6 +121,13 @@ namespace MartinCostello.LondonTravel.Site.Integration
             };
 
             return Redirect(context, builder);
+        }
+
+        private void Configure<T>(string name, T options)
+            where T : OAuthOptions
+        {
+            options.Backchannel = HttpClientFactory.CreateClient(name);
+            options.Events.OnRedirectToAuthorizationEndpoint = RedirectToSelfForOAuth;
         }
     }
 }

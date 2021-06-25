@@ -34,8 +34,6 @@ namespace MartinCostello.LondonTravel.Site.Extensions
                 .AddUserStore<UserStore>()
                 .AddDefaultTokenProviders();
 
-            services.AddSingleton<ExternalAuthEvents>();
-
             services
                 .ConfigureApplicationCookie((options) => ConfigureAuthorizationCookie(options, ApplicationCookie.Application.Name))
                 .ConfigureExternalCookie((options) => ConfigureAuthorizationCookie(options, ApplicationCookie.External.Name));
