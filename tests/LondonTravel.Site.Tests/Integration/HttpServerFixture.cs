@@ -85,7 +85,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             if (ClientOptions.BaseAddress.IsLoopback &&
                 string.Equals(ClientOptions.BaseAddress.Scheme, "https", StringComparison.OrdinalIgnoreCase))
             {
-                handler.ServerCertificateCustomValidationCallback = (request, cert, chain, errors) => true;
+                handler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
             }
 
             var client = new HttpClient(handler, disposeHandler: true);
