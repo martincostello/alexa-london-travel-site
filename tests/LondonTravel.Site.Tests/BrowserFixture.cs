@@ -101,7 +101,7 @@ namespace MartinCostello.LondonTravel.Site
                 OperatingSystem.IsWindows() ? "windows" :
                 "other";
 
-            browserType = browserType.Replace(":", string.Empty, StringComparison.Ordinal);
+            browserType = browserType.Replace(':', '_');
 
             string utcNow = DateTimeOffset.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss", CultureInfo.InvariantCulture);
             return $"{testName}_{browserType}_{os}_{utcNow}{extension}";
