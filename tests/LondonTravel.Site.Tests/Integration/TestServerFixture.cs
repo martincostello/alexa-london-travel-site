@@ -2,7 +2,6 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.IO;
-using System.Reflection;
 using AspNet.Security.OAuth.Apple;
 using JustEat.HttpClientInterception;
 using MartinCostello.Logging.XUnit;
