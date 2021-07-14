@@ -45,7 +45,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         public Uri ServerAddress => ClientOptions.BaseAddress;
 
         /// <inheritdoc />
-        public override IServiceProvider? Services => _host?.Services;
+        public override IServiceProvider Services => _host?.Services!;
 
         /// <inheritdoc />
         async Task IAsyncLifetime.InitializeAsync()
@@ -149,7 +149,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
 
         private async Task CreateHttpServer()
         {
-            var builder = CreateHostBuilder().ConfigureWebHost(ConfigureWebHost);
+            var builder = CreateHostBuilder() !.ConfigureWebHost(ConfigureWebHost);
 
             _host = builder.Build();
 
