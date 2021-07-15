@@ -1,19 +1,14 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Text.Json;
-using System.Threading.Tasks;
 using MartinCostello.LondonTravel.Site.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using Shouldly;
-using Xunit;
-using Xunit.Abstractions;
 
 namespace MartinCostello.LondonTravel.Site.Integration
 {
@@ -61,7 +56,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             static IUserStore<LondonTravelUser> GetUserStore(IServiceProvider serviceProvider)
                 => serviceProvider.GetRequiredService<IUserStore<LondonTravelUser>>();
 
-            using (var scope = Fixture.Services.CreateScope())
+            await using (var scope = Fixture.Services.CreateAsyncScope())
             {
                 using IUserStore<LondonTravelUser> store = GetUserStore(scope.ServiceProvider);
 
@@ -142,7 +137,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             }
 
             // Arrange
-            using (var scope = Fixture.Services.CreateScope())
+            await using (var scope = Fixture.Services.CreateAsyncScope())
             {
                 using IUserStore<LondonTravelUser> store = GetUserStore(scope.ServiceProvider);
 

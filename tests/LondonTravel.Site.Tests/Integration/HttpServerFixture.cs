@@ -1,12 +1,9 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
 using AspNet.Security.OAuth.Amazon;
 using AspNet.Security.OAuth.Apple;
 using AspNet.Security.OAuth.GitHub;
@@ -21,7 +18,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Xunit;
 
 namespace MartinCostello.LondonTravel.Site.Integration
 {
@@ -49,7 +45,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
         public Uri ServerAddress => ClientOptions.BaseAddress;
 
         /// <inheritdoc />
-        public override IServiceProvider? Services => _host?.Services;
+        public override IServiceProvider Services => _host?.Services!;
 
         /// <inheritdoc />
         async Task IAsyncLifetime.InitializeAsync()
@@ -153,7 +149,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
 
         private async Task CreateHttpServer()
         {
-            var builder = CreateHostBuilder().ConfigureWebHost(ConfigureWebHost);
+            var builder = CreateHostBuilder() !.ConfigureWebHost(ConfigureWebHost);
 
             _host = builder.Build();
 

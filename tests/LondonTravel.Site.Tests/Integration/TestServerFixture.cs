@@ -1,7 +1,6 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System;
 using System.IO;
 using AspNet.Security.OAuth.Apple;
 using JustEat.HttpClientInterception;
@@ -15,7 +14,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Http;
 using Microsoft.Extensions.Logging;
-using Xunit.Abstractions;
 
 namespace MartinCostello.LondonTravel.Site.Integration
 {
@@ -83,9 +81,11 @@ namespace MartinCostello.LondonTravel.Site.Integration
                         {
                             options.GenerateClientSecret = true;
                             options.ValidateTokens = false;
-                            options.PrivateKeyBytes = async (keyId) =>
+                            options.PrivateKeyBytes = async (keyId, cancellationToken) =>
                             {
-                                string privateKey = await File.ReadAllTextAsync(Path.Combine("Integration", "apple-test-cert.p8"));
+                                string privateKey = await File.ReadAllTextAsync(
+                                    Path.Combine("Integration", "apple-test-cert.p8"),
+                                    cancellationToken);
 
                                 if (privateKey.StartsWith("-----BEGIN PRIVATE KEY-----", StringComparison.Ordinal))
                                 {

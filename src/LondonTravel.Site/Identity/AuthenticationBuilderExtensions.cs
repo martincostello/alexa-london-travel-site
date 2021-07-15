@@ -1,10 +1,7 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Net.Http;
 using AspNet.Security.OAuth.Amazon;
 using AspNet.Security.OAuth.Apple;
 using AspNet.Security.OAuth.GitHub;
@@ -59,9 +56,11 @@ namespace MartinCostello.LondonTravel.Site.Identity
                            if (secretClient is not null)
                            {
                                providerOptions.GenerateClientSecret = true;
-                               providerOptions.PrivateKeyBytes = async (keyId) =>
+                               providerOptions.PrivateKeyBytes = async (keyId, cancellationToken) =>
                                {
-                                   var secret = await secretClient.GetSecretAsync($"AuthKey-{keyId}");
+                                   var secret = await secretClient.GetSecretAsync(
+                                       $"AuthKey-{keyId}",
+                                       cancellationToken: cancellationToken);
 
                                    string privateKey = secret.Value.Value;
 

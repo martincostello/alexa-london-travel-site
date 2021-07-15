@@ -1,10 +1,7 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Threading.Tasks;
 using MartinCostello.LondonTravel.Site.Identity;
 using MartinCostello.LondonTravel.Site.Options;
 using MartinCostello.LondonTravel.Site.Telemetry;
@@ -68,11 +65,11 @@ namespace MartinCostello.LondonTravel.Site.Controllers
         /// </returns>
         public static string GenerateAccessToken()
         {
-            byte[] entropy = new byte[64];
+            byte[] entropy = Array.Empty<byte>();
 
             try
             {
-                RandomNumberGenerator.Fill(entropy);
+                entropy = RandomNumberGenerator.GetBytes(64);
 
                 return Convert.ToBase64String(entropy);
             }

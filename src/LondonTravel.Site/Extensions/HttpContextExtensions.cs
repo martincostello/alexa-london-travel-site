@@ -1,7 +1,6 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Http;
 
@@ -35,11 +34,11 @@ namespace MartinCostello.LondonTravel.Site.Extensions
 
             if (nonce == null)
             {
-                byte[] data = new byte[32];
+                byte[] data = Array.Empty<byte>();
 
                 try
                 {
-                    RandomNumberGenerator.Fill(data);
+                    data = RandomNumberGenerator.GetBytes(32);
 
                     nonce = Convert.ToBase64String(data).Replace("+", "/", StringComparison.Ordinal); // '+' causes encoding issues with TagHelpers
                 }

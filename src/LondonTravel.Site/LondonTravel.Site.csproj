@@ -8,10 +8,12 @@
     <RootNamespace>MartinCostello.LondonTravel.Site</RootNamespace>
     <SatelliteResourceLanguages>en,en-GB,en-US,qps-Ploc</SatelliteResourceLanguages>
     <Summary>Website for the London Travel Amazon Alexa skill.</Summary>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <TypeScriptToolsVersion>latest</TypeScriptToolsVersion>
     <UserSecretsId>londontravel.martincostello.com</UserSecretsId>
     <XlfLanguages>en-GB;en-US;qps-Ploc</XlfLanguages>
+    <!-- Workaround for https://github.com/dotnet/aspnetcore/issues/31719 -->
+    <UseRazorSourceGenerator>false</UseRazorSourceGenerator>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="parameters.xml" CopyToOutputDirectory="PreserveNewest" />
