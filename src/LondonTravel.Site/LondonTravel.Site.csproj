@@ -13,7 +13,6 @@
     <UserSecretsId>londontravel.martincostello.com</UserSecretsId>
     <XlfLanguages>en-GB;en-US;qps-Ploc</XlfLanguages>
     <!-- Workaround for https://github.com/dotnet/aspnetcore/issues/31719 -->
-    <_UseRazorSourceGenerator>false</_UseRazorSourceGenerator>
     <UseRazorSourceGenerator>false</UseRazorSourceGenerator>
   </PropertyGroup>
   <ItemGroup>
