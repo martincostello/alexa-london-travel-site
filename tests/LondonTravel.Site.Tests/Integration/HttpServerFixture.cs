@@ -4,31 +4,32 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
 using AspNet.Security.OAuth.Amazon;
 using AspNet.Security.OAuth.Apple;
 using AspNet.Security.OAuth.GitHub;
 using JustEat.HttpClientInterception;
-using MartinCostello.LondonTravel.Site.Extensions;
 using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
 using Microsoft.AspNetCore.Authentication.Twitter;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Hosting.Server.Features;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Xunit;
 
 namespace MartinCostello.LondonTravel.Site.Integration
 {
     /// <summary>
     /// A test fixture representing an HTTP server hosting the application. This class cannot be inherited.
     /// </summary>
-    public sealed class HttpServerFixture : TestServerFixture, IAsyncLifetime
+    public sealed class HttpServerFixture : TestServerFixture
     {
         private IHost? _host;
         private bool _disposed;
@@ -46,23 +47,22 @@ namespace MartinCostello.LondonTravel.Site.Integration
         /// <summary>
         /// Gets the server address of the application.
         /// </summary>
-        public Uri ServerAddress => ClientOptions.BaseAddress;
-
-        /// <inheritdoc />
-        public override IServiceProvider? Services => _host?.Services;
-
-        /// <inheritdoc />
-        async Task IAsyncLifetime.InitializeAsync()
-            => await EnsureHttpServerAsync();
-
-        /// <inheritdoc />
-        async Task IAsyncLifetime.DisposeAsync()
+        public Uri ServerAddress
         {
-            if (_host != null)
+            get
             {
-                await _host.StopAsync();
-                _host.Dispose();
-                _host = null;
+                EnsureServer();
+                return ClientOptions.BaseAddress;
+            }
+        }
+
+        /// <inheritdoc />
+        public override IServiceProvider? Services
+        {
+            get
+            {
+                EnsureServer();
+                return _host!.Services!;
             }
         }
 
@@ -128,6 +128,40 @@ namespace MartinCostello.LondonTravel.Site.Integration
         }
 
         /// <inheritdoc />
+        protected override IHost CreateHost(IHostBuilder builder)
+        {
+            builder.ConfigureWebHost((p) => p.UseKestrel());
+
+            _host = builder.Build();
+            _host.Start();
+
+            var server = _host.Services.GetRequiredService<IServer>();
+            var addresses = server.Features.Get<IServerAddressesFeature>();
+
+            ClientOptions.BaseAddress = addresses!.Addresses
+                .Select((p) => new Uri(p))
+                .Last();
+
+            // Force the configuration to reload now the server address is assigned
+            var config = _host.Services.GetRequiredService<IConfiguration>();
+
+            if (config is IConfigurationRoot root)
+            {
+                root.Reload();
+            }
+
+            // The base class still needs a separate host using TestServer
+            var testHostBuilder = CreateHostBuilder();
+            var testHost = testHostBuilder!
+                .ConfigureWebHost((p) => p.UseTestServer())
+                .Build();
+
+            testHost.Start();
+
+            return testHost;
+        }
+
+        /// <inheritdoc />
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
@@ -143,32 +177,13 @@ namespace MartinCostello.LondonTravel.Site.Integration
             }
         }
 
-        private async Task EnsureHttpServerAsync()
+        private void EnsureServer()
         {
-            if (_host == null)
+            if (_host is null)
             {
-                await CreateHttpServer();
-            }
-        }
-
-        private async Task CreateHttpServer()
-        {
-            var builder = CreateHostBuilder().ConfigureWebHost(ConfigureWebHost);
-
-            _host = builder.Build();
-
-            // Force creation of the Kestrel server and start it
-            var hostedService = _host.Services.GetRequiredService<IHostedService>();
-            await hostedService.StartAsync(default);
-
-            ClientOptions.BaseAddress = _host.GetAddress();
-
-            // Force the configuration to reload now the server address is assigned
-            var config = _host.Services.GetRequiredService<IConfiguration>();
-
-            if (config is IConfigurationRoot root)
-            {
-                root.Reload();
+                using (CreateDefaultClient())
+                {
+                }
             }
         }
 
@@ -200,7 +215,7 @@ namespace MartinCostello.LondonTravel.Site.Integration
             {
                 Data = new Dictionary<string, string>()
                 {
-                    ["Site:Alexa:RedirectUrls:3"] = Fixture.ServerAddress.ToString() + "manage/",
+                    ["Site:Alexa:RedirectUrls:3"] = Fixture.ClientOptions.BaseAddress.ToString() + "manage/",
                 };
             }
         }
