@@ -12,8 +12,6 @@
     <TypeScriptToolsVersion>latest</TypeScriptToolsVersion>
     <UserSecretsId>londontravel.martincostello.com</UserSecretsId>
     <XlfLanguages>en-GB;en-US;qps-Ploc</XlfLanguages>
-    <!-- Workaround for https://github.com/dotnet/aspnetcore/issues/31719 -->
-    <UseRazorSourceGenerator>false</UseRazorSourceGenerator>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="parameters.xml" CopyToOutputDirectory="PreserveNewest" />
