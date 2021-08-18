@@ -59,10 +59,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// </exception>
         public static LondonTravelRole FromClaim(Claim claim)
         {
-            if (claim == null)
-            {
-                throw new ArgumentNullException(nameof(claim));
-            }
+            ArgumentNullException.ThrowIfNull(claim);
 
             return new LondonTravelRole()
             {

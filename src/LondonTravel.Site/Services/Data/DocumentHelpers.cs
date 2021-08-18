@@ -26,10 +26,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// </exception>
         internal static CosmosClient CreateClient(IServiceProvider serviceProvider)
         {
-            if (serviceProvider == null)
-            {
-                throw new ArgumentNullException(nameof(serviceProvider));
-            }
+            ArgumentNullException.ThrowIfNull(serviceProvider);
 
             var options = serviceProvider.GetRequiredService<UserStoreOptions>();
             var httpClientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
@@ -57,15 +54,8 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             IHttpClientFactory httpClientFactory,
             CosmosSerializer? serializer = null)
         {
-            if (options == null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
-
-            if (httpClientFactory == null)
-            {
-                throw new ArgumentNullException(nameof(httpClientFactory));
-            }
+            ArgumentNullException.ThrowIfNull(options);
+            ArgumentNullException.ThrowIfNull(httpClientFactory);
 
             if (options.ServiceUri == null)
             {

@@ -56,15 +56,8 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             string collectionName,
             CancellationToken cancellationToken = default)
         {
-            if (client == null)
-            {
-                throw new ArgumentNullException(nameof(client));
-            }
-
-            if (collectionName == null)
-            {
-                throw new ArgumentNullException(nameof(collectionName));
-            }
+            ArgumentNullException.ThrowIfNull(client);
+            ArgumentNullException.ThrowIfNull(collectionName);
 
             if (_existingContainers.ContainsKey(collectionName))
             {

@@ -30,15 +30,8 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         /// </exception>
         public static string GetAvatarUrl(this ClaimsPrincipal value, string fallbackImageUrl, int size = 24)
         {
-            if (value == null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
-
-            if (fallbackImageUrl == null)
-            {
-                throw new ArgumentNullException(nameof(fallbackImageUrl));
-            }
+            ArgumentNullException.ThrowIfNull(value);
+            ArgumentNullException.ThrowIfNull(fallbackImageUrl);
 
             string? email = value.FindFirst(ClaimTypes.Email)?.Value;
 
@@ -79,10 +72,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         /// </exception>
         public static string GetDisplayName(this ClaimsPrincipal value)
         {
-            if (value == null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(value);
 
             string[] givenNameClaims = { ClaimTypes.GivenName };
 
@@ -120,11 +110,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         /// </exception>
         public static string? GetEmail(this ClaimsPrincipal value)
         {
-            if (value == null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
-
+            ArgumentNullException.ThrowIfNull(value);
             return value.FindFirst(ClaimTypes.Email)?.Value;
         }
 
@@ -140,11 +126,7 @@ namespace MartinCostello.LondonTravel.Site.Extensions
         /// </exception>
         public static string? GetUserId(this ClaimsPrincipal value)
         {
-            if (value == null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
-
+            ArgumentNullException.ThrowIfNull(value);
             return value.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         }
 

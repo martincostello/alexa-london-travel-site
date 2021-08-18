@@ -36,21 +36,15 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// </exception>
         public UserStore(IDocumentService service)
         {
-            _service = service ?? throw new ArgumentNullException(nameof(service));
+            ArgumentNullException.ThrowIfNull(service);
+            _service = service;
         }
 
         /// <inheritdoc />
         public Task AddLoginAsync(LondonTravelUser user, UserLoginInfo login, CancellationToken cancellationToken)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-
-            if (login == null)
-            {
-                throw new ArgumentNullException(nameof(login));
-            }
+            ArgumentNullException.ThrowIfNull(user);
+            ArgumentNullException.ThrowIfNull(login);
 
             if (user.Logins.Any((p) => p.LoginProvider == login.LoginProvider))
             {
@@ -65,10 +59,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <inheritdoc />
         public async Task<IdentityResult> CreateAsync(LondonTravelUser user, CancellationToken cancellationToken)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
+            ArgumentNullException.ThrowIfNull(user);
 
             user.Id = await _service.CreateAsync(user);
 
@@ -78,10 +69,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <inheritdoc />
         public async Task<IdentityResult> DeleteAsync(LondonTravelUser user, CancellationToken cancellationToken)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
+            ArgumentNullException.ThrowIfNull(user);
 
             if (string.IsNullOrEmpty(user.Id))
             {
@@ -104,10 +92,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <inheritdoc />
         public async Task<LondonTravelUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
         {
-            if (normalizedEmail == null)
-            {
-                throw new ArgumentNullException(nameof(normalizedEmail));
-            }
+            ArgumentNullException.ThrowIfNull(normalizedEmail);
 
             var results = await _service.GetAsync((p) => p.EmailNormalized == normalizedEmail, cancellationToken);
             var result = results.FirstOrDefault();
@@ -117,10 +102,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <inheritdoc />
         public async Task<LondonTravelUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
-            if (userId == null)
-            {
-                throw new ArgumentNullException(nameof(userId));
-            }
+            ArgumentNullException.ThrowIfNull(userId);
 
             var user = await _service.GetAsync(userId);
             return user!;
@@ -129,15 +111,8 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <inheritdoc />
         public async Task<LondonTravelUser> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
         {
-            if (loginProvider == null)
-            {
-                throw new ArgumentNullException(nameof(loginProvider));
-            }
-
-            if (providerKey == null)
-            {
-                throw new ArgumentNullException(nameof(providerKey));
-            }
+            ArgumentNullException.ThrowIfNull(loginProvider);
+            ArgumentNullException.ThrowIfNull(providerKey);
 
             var results = await _service.GetAsync(
                 (p) => p.Logins.Contains(new LondonTravelLoginInfo() { LoginProvider = loginProvider, ProviderKey = providerKey, ProviderDisplayName = null }) ||
@@ -151,10 +126,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <inheritdoc />
         public async Task<LondonTravelUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
-            if (normalizedUserName == null)
-            {
-                throw new ArgumentNullException(nameof(normalizedUserName));
-            }
+            ArgumentNullException.ThrowIfNull(normalizedUserName);
 
             var results = await _service.GetAsync((p) => p.UserNameNormalized == normalizedUserName, cancellationToken);
             var result = results.FirstOrDefault();
@@ -164,32 +136,21 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <inheritdoc />
         public Task<string> GetEmailAsync(LondonTravelUser user, CancellationToken cancellationToken)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-
+            ArgumentNullException.ThrowIfNull(user);
             return Task.FromResult(user.Email!);
         }
 
         /// <inheritdoc />
         public Task<bool> GetEmailConfirmedAsync(LondonTravelUser user, CancellationToken cancellationToken)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-
+            ArgumentNullException.ThrowIfNull(user);
             return Task.FromResult(user.EmailConfirmed);
         }
 
         /// <inheritdoc />
         public Task<IList<UserLoginInfo>> GetLoginsAsync(LondonTravelUser user, CancellationToken cancellationToken)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
+            ArgumentNullException.ThrowIfNull(user);
 
             IList<UserLoginInfo> logins = user.Logins
                 .Select((p) => new UserLoginInfo(p.LoginProvider, p.ProviderKey, p.ProviderDisplayName))
@@ -201,75 +162,44 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <inheritdoc />
         public Task<string> GetNormalizedEmailAsync(LondonTravelUser user, CancellationToken cancellationToken)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-
+            ArgumentNullException.ThrowIfNull(user);
             return Task.FromResult(user.EmailNormalized!);
         }
 
         /// <inheritdoc />
         public Task<string> GetNormalizedUserNameAsync(LondonTravelUser user, CancellationToken cancellationToken)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-
+            ArgumentNullException.ThrowIfNull(user);
             return Task.FromResult(user.UserNameNormalized!);
         }
 
         /// <inheritdoc />
         public Task<string> GetSecurityStampAsync(LondonTravelUser user, CancellationToken cancellationToken)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-
+            ArgumentNullException.ThrowIfNull(user);
             return Task.FromResult(user.SecurityStamp!);
         }
 
         /// <inheritdoc />
         public Task<string> GetUserIdAsync(LondonTravelUser user, CancellationToken cancellationToken)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-
+            ArgumentNullException.ThrowIfNull(user);
             return Task.FromResult(user.Id!);
         }
 
         /// <inheritdoc />
         public Task<string> GetUserNameAsync(LondonTravelUser user, CancellationToken cancellationToken)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-
+            ArgumentNullException.ThrowIfNull(user);
             return Task.FromResult(user.UserName!);
         }
 
         /// <inheritdoc />
         public Task RemoveLoginAsync(LondonTravelUser user, string loginProvider, string providerKey, CancellationToken cancellationToken)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-
-            if (loginProvider == null)
-            {
-                throw new ArgumentNullException(nameof(loginProvider));
-            }
-
-            if (providerKey == null)
-            {
-                throw new ArgumentNullException(nameof(providerKey));
-            }
+            ArgumentNullException.ThrowIfNull(user);
+            ArgumentNullException.ThrowIfNull(loginProvider);
+            ArgumentNullException.ThrowIfNull(providerKey);
 
             if (user.Logins != null)
             {
@@ -293,10 +223,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <inheritdoc />
         public Task SetEmailAsync(LondonTravelUser user, string email, CancellationToken cancellationToken)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
+            ArgumentNullException.ThrowIfNull(user);
 
             user.Email = email;
 
@@ -306,10 +233,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <inheritdoc />
         public Task SetEmailConfirmedAsync(LondonTravelUser user, bool confirmed, CancellationToken cancellationToken)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
+            ArgumentNullException.ThrowIfNull(user);
 
             user.EmailConfirmed = confirmed;
 
@@ -319,10 +243,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <inheritdoc />
         public Task SetNormalizedEmailAsync(LondonTravelUser user, string normalizedEmail, CancellationToken cancellationToken)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
+            ArgumentNullException.ThrowIfNull(user);
 
             user.EmailNormalized = normalizedEmail;
 
@@ -332,10 +253,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <inheritdoc />
         public Task SetNormalizedUserNameAsync(LondonTravelUser user, string normalizedName, CancellationToken cancellationToken)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
+            ArgumentNullException.ThrowIfNull(user);
 
             user.UserNameNormalized = normalizedName;
 
@@ -345,10 +263,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <inheritdoc />
         public Task SetSecurityStampAsync(LondonTravelUser user, string stamp, CancellationToken cancellationToken)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
+            ArgumentNullException.ThrowIfNull(user);
 
             user.SecurityStamp = stamp;
 
@@ -358,10 +273,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <inheritdoc />
         public Task SetUserNameAsync(LondonTravelUser user, string userName, CancellationToken cancellationToken)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
+            ArgumentNullException.ThrowIfNull(user);
 
             user.UserName = userName;
 
@@ -371,10 +283,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <inheritdoc />
         public async Task<IdentityResult> UpdateAsync(LondonTravelUser user, CancellationToken cancellationToken)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
+            ArgumentNullException.ThrowIfNull(user);
 
             if (user.CreatedAt == DateTime.MinValue)
             {
@@ -403,10 +312,7 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <inheritdoc />
         public Task<IList<string>> GetRolesAsync(LondonTravelUser user, CancellationToken cancellationToken)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
+            ArgumentNullException.ThrowIfNull(user);
 
             IList<string> roles = Array.Empty<string>();
 
@@ -433,15 +339,8 @@ namespace MartinCostello.LondonTravel.Site.Identity
         /// <inheritdoc />
         public Task<bool> IsInRoleAsync(LondonTravelUser user, string roleName, CancellationToken cancellationToken)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
-
-            if (roleName == null)
-            {
-                throw new ArgumentNullException(nameof(roleName));
-            }
+            ArgumentNullException.ThrowIfNull(user);
+            ArgumentNullException.ThrowIfNull(roleName);
 
             bool isInRole = false;
 

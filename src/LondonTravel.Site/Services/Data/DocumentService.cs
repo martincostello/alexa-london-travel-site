@@ -55,8 +55,11 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
             UserStoreOptions options,
             ILogger<DocumentService> logger)
         {
-            _client = client ?? throw new ArgumentNullException(nameof(client));
-            _initializer = initializer ?? throw new ArgumentNullException(nameof(initializer));
+            ArgumentNullException.ThrowIfNull(client);
+            ArgumentNullException.ThrowIfNull(initializer);
+
+            _client = client;
+            _initializer = initializer;
             _options = options;
             _logger = logger;
         }
@@ -64,10 +67,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// <inheritdoc />
         public async Task<string> CreateAsync(LondonTravelUser document)
         {
-            if (document == null)
-            {
-                throw new ArgumentNullException(nameof(document));
-            }
+            ArgumentNullException.ThrowIfNull(document);
 
             Container container = await GetContainerAsync();
 
@@ -92,10 +92,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// <inheritdoc />
         public async Task<bool> DeleteAsync(string id)
         {
-            if (id == null)
-            {
-                throw new ArgumentNullException(nameof(id));
-            }
+            ArgumentNullException.ThrowIfNull(id);
 
             Container container = await GetContainerAsync();
 
@@ -114,10 +111,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// <inheritdoc />
         public async Task<LondonTravelUser?> GetAsync(string id)
         {
-            if (id == null)
-            {
-                throw new ArgumentNullException(nameof(id));
-            }
+            ArgumentNullException.ThrowIfNull(id);
 
             Container container = await GetContainerAsync();
 
@@ -183,10 +177,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data
         /// <inheritdoc />
         public async Task<LondonTravelUser?> ReplaceAsync(LondonTravelUser document, string? etag)
         {
-            if (document == null)
-            {
-                throw new ArgumentNullException(nameof(document));
-            }
+            ArgumentNullException.ThrowIfNull(document);
 
             Container container = await GetContainerAsync();
 
