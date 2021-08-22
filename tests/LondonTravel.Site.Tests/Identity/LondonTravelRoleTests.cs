@@ -21,7 +21,7 @@ public static class LondonTravelRoleTests
     public static void LondonTravelRole_Can_Convert_From_And_To_Claim()
     {
         // Arrange
-        Claim expected = new Claim("type", "value", "valueType", "issuer");
+        var expected = new Claim("type", "value", "valueType", "issuer");
 
         // Act and Assert
         var role = LondonTravelRole.FromClaim(expected);

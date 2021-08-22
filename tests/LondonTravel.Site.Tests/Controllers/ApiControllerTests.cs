@@ -307,7 +307,7 @@ public static class ApiControllerTests
     /// </returns>
     private static IAccountService CreateClient(IEnumerable<LondonTravelUser> users)
     {
-        Mock<IDocumentService> mock = new Mock<IDocumentService>();
+        var mock = new Mock<IDocumentService>();
 
         mock.Setup((p) => p.GetAsync(It.IsAny<Expression<Func<LondonTravelUser, bool>>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((Expression<Func<LondonTravelUser, bool>> a, CancellationToken b) => users.Where(a.Compile()));

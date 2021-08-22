@@ -107,25 +107,14 @@ public static class LoggerSinkConfigurationExtensions
         /// </returns>
         private static SyslogLogLevel MapToSyslogLevel(LogEventLevel level)
         {
-            switch (level)
+            return level switch
             {
-                case LogEventLevel.Debug:
-                case LogEventLevel.Verbose:
-                    return SyslogLogLevel.Debug;
-
-                case LogEventLevel.Error:
-                    return SyslogLogLevel.Error;
-
-                case LogEventLevel.Fatal:
-                    return SyslogLogLevel.Critical;
-
-                case LogEventLevel.Warning:
-                    return SyslogLogLevel.Warn;
-
-                case LogEventLevel.Information:
-                default:
-                    return SyslogLogLevel.Info;
-            }
+                LogEventLevel.Debug or LogEventLevel.Verbose => SyslogLogLevel.Debug,
+                LogEventLevel.Error => SyslogLogLevel.Error,
+                LogEventLevel.Fatal => SyslogLogLevel.Critical,
+                LogEventLevel.Warning => SyslogLogLevel.Warn,
+                _ => SyslogLogLevel.Info,
+            };
         }
     }
 }

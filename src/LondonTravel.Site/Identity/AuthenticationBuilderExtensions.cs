@@ -195,20 +195,15 @@ public static class AuthenticationBuilderExtensions
         else
         {
             message = SiteMessage.LinkFailed;
-
-            var eventId = default(EventId);
             string errors = string.Join(";", context.Request.Query.Select((p) => $"'{p.Key}' = '{p.Value}'"));
-            string logMessage = $"Failed to sign-in using '{provider}': '{context.Failure?.Message}'. Errors: {errors}.";
 
-            if (IsCorrelationFailure(context))
-            {
-                // Not a server-side problem, so do not create log noise
-                logger.LogTrace(eventId, context.Failure, logMessage);
-            }
-            else
-            {
-                logger.LogError(eventId, context.Failure, logMessage);
-            }
+            logger.Log(
+                IsCorrelationFailure(context) ? LogLevel.Trace : LogLevel.Error, // Not a server-side problem, so do not create log noise
+                context.Failure,
+                "Failed to sign-in using {Provider}: {FailureMessage}. Errors: {Errors}.",
+                provider,
+                context.Failure?.Message,
+                errors);
         }
 
         context.Response.Redirect($"{path}?Message={message}");
@@ -222,9 +217,7 @@ public static class AuthenticationBuilderExtensions
         Options.AuthenticationOptions options,
         bool requiresClientSecret = true)
     {
-        ExternalSignInOptions? provider = null;
-
-        if (options.ExternalProviders?.TryGetValue(name, out provider) != true ||
+        if (options.ExternalProviders?.TryGetValue(name, out ExternalSignInOptions? provider) != true ||
             provider is null)
         {
             return false;

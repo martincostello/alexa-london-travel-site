@@ -44,7 +44,7 @@ public static class AlexaControllerTests
         string state = "Some State";
         string clientId = "SomeClientId";
         string responseType = "token";
-        Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
+        var redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
 
         SiteOptions options = CreateValidSiteOptions();
         options.Alexa!.IsLinkingEnabled = false;
@@ -67,7 +67,7 @@ public static class AlexaControllerTests
         // Arrange
         string state = "Some State";
         string responseType = "token";
-        Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
+        var redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
 
         using var target = CreateTarget();
 
@@ -86,7 +86,7 @@ public static class AlexaControllerTests
         // Arrange
         string state = "Some State";
         string responseType = "token";
-        Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
+        var redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
 
         using var target = CreateTarget();
 
@@ -105,7 +105,7 @@ public static class AlexaControllerTests
         // Arrange
         string state = "Some State";
         string clientId = "my-client-id";
-        Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
+        var redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
 
         using var target = CreateTarget();
 
@@ -124,7 +124,7 @@ public static class AlexaControllerTests
         // Arrange
         string state = "Some State";
         string clientId = "my-client-id";
-        Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
+        var redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
 
         using var target = CreateTarget();
 
@@ -167,7 +167,7 @@ public static class AlexaControllerTests
         string state = "Some State";
         string clientId = "my-client-id";
         string responseType = "token";
-        Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
+        var redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
 
         using var target = CreateTarget();
 
@@ -185,7 +185,7 @@ public static class AlexaControllerTests
         string state = "Some State";
         string clientId = "my-client-id";
         string responseType = "token";
-        Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
+        var redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
 
         var user = new LondonTravelUser();
         var result = IdentityResult.Failed(new IdentityError() { Code = "Error", Description = "Problem" });
@@ -210,7 +210,7 @@ public static class AlexaControllerTests
         string state = "Some State";
         string clientId = "my-client-id";
         string responseType = "token";
-        Uri redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
+        var redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
 
         var user = new LondonTravelUser()
         {

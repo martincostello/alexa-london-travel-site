@@ -29,7 +29,7 @@ internal sealed class AzureEnvironmentSecretManager : KeyVaultSecretManager
     /// <inheritdoc />
     public override string GetKey(KeyVaultSecret secret)
     {
-        return secret.Name.Substring(_prefix.Length)
+        return secret.Name[_prefix.Length..]
             .Replace("--", "_", StringComparison.Ordinal)
             .Replace("-", ":", StringComparison.Ordinal);
     }

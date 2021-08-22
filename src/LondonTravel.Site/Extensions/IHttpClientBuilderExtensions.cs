@@ -18,7 +18,7 @@ public static class IHttpClientBuilderExtensions
     /// <summary>
     /// The lazily-initialized User Agent to use for all requests. This field is read-only.
     /// </summary>
-    private static readonly Lazy<ProductInfoHeaderValue> _userAgent = new Lazy<ProductInfoHeaderValue>(CreateUserAgent);
+    private static readonly Lazy<ProductInfoHeaderValue> _userAgent = new(CreateUserAgent);
 
     /// <summary>
     /// Applies the default configuration to the <see cref="IHttpClientBuilder"/>.
@@ -124,7 +124,7 @@ public static class IHttpClientBuilderExtensions
 
         if (indexOfPlus > -1 && indexOfPlus < productVersion.Length - 1)
         {
-            string hash = productVersion.Substring(indexOfPlus + 1);
+            string hash = productVersion[(indexOfPlus + 1)..];
 
             if (hash.Length > 7)
             {
