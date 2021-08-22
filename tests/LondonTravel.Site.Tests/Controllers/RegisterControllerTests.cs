@@ -67,7 +67,7 @@ public static class RegisterControllerTests
         var model = view.Model.ShouldBeOfType<RegisterViewModel>();
 
         model.ShouldNotBeNull();
-        model.RegisteredUsers.ShouldBe(7000);
+        model.RegisteredUsers.ShouldBe(9_500);
     }
 
     /// <summary>
