@@ -1,36 +1,35 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-namespace MartinCostello.LondonTravel.Site.Pages
+namespace MartinCostello.LondonTravel.Site.Pages;
+
+public abstract class PageBase
 {
-    public abstract class PageBase
+    protected PageBase(ApplicationNavigator navigator)
     {
-        protected PageBase(ApplicationNavigator navigator)
-        {
-            Navigator = navigator;
-        }
+        Navigator = navigator;
+    }
 
-        protected internal ApplicationNavigator Navigator { get; }
+    protected internal ApplicationNavigator Navigator { get; }
 
-        protected static string UserNameSelector { get; } = "[data-id='user-name']";
+    protected static string UserNameSelector { get; } = "[data-id='user-name']";
 
-        protected abstract string RelativeUri { get; }
+    protected abstract string RelativeUri { get; }
 
-        public async Task<bool> IsAuthenticatedAsync()
-            => bool.Parse(await (await Navigator.Page.QuerySelectorAsync("[data-id='content']")) !.GetAttributeAsync("data-authenticated") ?? bool.FalseString);
+    public async Task<bool> IsAuthenticatedAsync()
+        => bool.Parse(await (await Navigator.Page.QuerySelectorAsync("[data-id='content']")) !.GetAttributeAsync("data-authenticated") ?? bool.FalseString);
 
-        public async Task<string> UserNameAsync()
-            => (await (await Navigator.Page.QuerySelectorAsync(UserNameSelector)) !.InnerTextAsync()).Trim();
+    public async Task<string> UserNameAsync()
+        => (await (await Navigator.Page.QuerySelectorAsync(UserNameSelector)) !.InnerTextAsync()).Trim();
 
-        public async Task<HomePage> SignOutAsync()
-        {
-            await Navigator.Page.ClickAsync("[data-id='sign-out']");
-            return new HomePage(Navigator);
-        }
+    public async Task<HomePage> SignOutAsync()
+    {
+        await Navigator.Page.ClickAsync("[data-id='sign-out']");
+        return new HomePage(Navigator);
+    }
 
-        internal async Task NavigateToSelfAsync()
-        {
-            await Navigator.NavigateToAsync(RelativeUri);
-        }
+    internal async Task NavigateToSelfAsync()
+    {
+        await Navigator.NavigateToAsync(RelativeUri);
     }
 }

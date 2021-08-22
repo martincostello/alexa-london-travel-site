@@ -3,28 +3,27 @@
 
 using Microsoft.Playwright;
 
-namespace MartinCostello.LondonTravel.Site.Pages
+namespace MartinCostello.LondonTravel.Site.Pages;
+
+public abstract class ModalBase
 {
-    public abstract class ModalBase
+    protected ModalBase(string name, ApplicationNavigator navigator)
     {
-        protected ModalBase(string name, ApplicationNavigator navigator)
-        {
-            Name = name;
-            Navigator = navigator;
-        }
+        Name = name;
+        Navigator = navigator;
+    }
 
-        protected string DialogSelector => $"[data-id='modal-{Name}']";
+    protected string DialogSelector => $"[data-id='modal-{Name}']";
 
-        protected string Name { get; }
+    protected string Name { get; }
 
-        protected ApplicationNavigator Navigator { get; }
+    protected ApplicationNavigator Navigator { get; }
 
-        protected async Task CloseSelfAsync()
-        {
-            IElementHandle? modal = await Navigator.Page.QuerySelectorAsync(DialogSelector);
-            IElementHandle? dismiss = await modal!.QuerySelectorAsync("[data-dismiss='modal']");
+    protected async Task CloseSelfAsync()
+    {
+        IElementHandle? modal = await Navigator.Page.QuerySelectorAsync(DialogSelector);
+        IElementHandle? dismiss = await modal!.QuerySelectorAsync("[data-dismiss='modal']");
 
-            await dismiss!.ClickAsync();
-        }
+        await dismiss!.ClickAsync();
     }
 }

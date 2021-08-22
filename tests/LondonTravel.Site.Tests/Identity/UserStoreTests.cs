@@ -6,477 +6,476 @@ using MartinCostello.LondonTravel.Site.Services.Data;
 using Microsoft.AspNetCore.Identity;
 using Moq;
 
-namespace MartinCostello.LondonTravel.Site.Identity
+namespace MartinCostello.LondonTravel.Site.Identity;
+
+public static class UserStoreTests
 {
-    public static class UserStoreTests
+    [Fact]
+    public static async Task Methods_Validate_Parameters()
     {
-        [Fact]
-        public static async Task Methods_Validate_Parameters()
-        {
-            // Arrange
-            var user = new LondonTravelUser();
-            var login = new UserLoginInfo("loginProvider", "providerKey", "displayName");
-            var cancellationToken = CancellationToken.None;
+        // Arrange
+        var user = new LondonTravelUser();
+        var login = new UserLoginInfo("loginProvider", "providerKey", "displayName");
+        var cancellationToken = CancellationToken.None;
 
-            using UserStore target = CreateStore();
+        using UserStore target = CreateStore();
 
-            // Act and Assert
+        // Act and Assert
 #nullable disable
-            await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.AddLoginAsync(null, login, cancellationToken));
-            await Assert.ThrowsAsync<ArgumentNullException>("login", () => target.AddLoginAsync(user, null, cancellationToken));
-            await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.CreateAsync(null, cancellationToken));
-            await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.DeleteAsync(null, cancellationToken));
-            await Assert.ThrowsAsync<ArgumentNullException>("normalizedEmail", () => target.FindByEmailAsync(null, cancellationToken));
-            await Assert.ThrowsAsync<ArgumentNullException>("userId", () => target.FindByIdAsync(null, cancellationToken));
-            await Assert.ThrowsAsync<ArgumentNullException>("loginProvider", () => target.FindByLoginAsync(null, "b", cancellationToken));
-            await Assert.ThrowsAsync<ArgumentNullException>("providerKey", () => target.FindByLoginAsync("a", null, cancellationToken));
-            await Assert.ThrowsAsync<ArgumentNullException>("normalizedUserName", () => target.FindByNameAsync(null, cancellationToken));
-            await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.GetEmailAsync(null, cancellationToken));
-            await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.GetEmailConfirmedAsync(null, cancellationToken));
-            await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.GetLoginsAsync(null, cancellationToken));
-            await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.GetNormalizedEmailAsync(null, cancellationToken));
-            await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.GetNormalizedUserNameAsync(null, cancellationToken));
-            await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.GetRolesAsync(null, cancellationToken));
-            await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.GetSecurityStampAsync(null, cancellationToken));
-            await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.GetUserIdAsync(null, cancellationToken));
-            await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.GetUserNameAsync(null, cancellationToken));
-            await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.RemoveLoginAsync(null, "a", "b", cancellationToken));
-            await Assert.ThrowsAsync<ArgumentNullException>("loginProvider", () => target.RemoveLoginAsync(user, null, "b", cancellationToken));
-            await Assert.ThrowsAsync<ArgumentNullException>("providerKey", () => target.RemoveLoginAsync(user, "a", null, cancellationToken));
-            await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.SetEmailAsync(null, "a", cancellationToken));
-            await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.SetEmailConfirmedAsync(null, true, cancellationToken));
-            await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.SetNormalizedEmailAsync(null, "a", cancellationToken));
-            await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.SetNormalizedUserNameAsync(null, "a", cancellationToken));
-            await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.SetSecurityStampAsync(null, "a", cancellationToken));
-            await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.SetUserNameAsync(null, "a", cancellationToken));
-            await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.SetEmailAsync(null, "a", cancellationToken));
-            await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.UpdateAsync(null, cancellationToken));
-            await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.GetRolesAsync(null, cancellationToken));
-            await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.IsInRoleAsync(null, "a", cancellationToken));
-            await Assert.ThrowsAsync<ArgumentNullException>("roleName", () => target.IsInRoleAsync(user, null, cancellationToken));
+        await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.AddLoginAsync(null, login, cancellationToken));
+        await Assert.ThrowsAsync<ArgumentNullException>("login", () => target.AddLoginAsync(user, null, cancellationToken));
+        await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.CreateAsync(null, cancellationToken));
+        await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.DeleteAsync(null, cancellationToken));
+        await Assert.ThrowsAsync<ArgumentNullException>("normalizedEmail", () => target.FindByEmailAsync(null, cancellationToken));
+        await Assert.ThrowsAsync<ArgumentNullException>("userId", () => target.FindByIdAsync(null, cancellationToken));
+        await Assert.ThrowsAsync<ArgumentNullException>("loginProvider", () => target.FindByLoginAsync(null, "b", cancellationToken));
+        await Assert.ThrowsAsync<ArgumentNullException>("providerKey", () => target.FindByLoginAsync("a", null, cancellationToken));
+        await Assert.ThrowsAsync<ArgumentNullException>("normalizedUserName", () => target.FindByNameAsync(null, cancellationToken));
+        await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.GetEmailAsync(null, cancellationToken));
+        await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.GetEmailConfirmedAsync(null, cancellationToken));
+        await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.GetLoginsAsync(null, cancellationToken));
+        await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.GetNormalizedEmailAsync(null, cancellationToken));
+        await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.GetNormalizedUserNameAsync(null, cancellationToken));
+        await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.GetRolesAsync(null, cancellationToken));
+        await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.GetSecurityStampAsync(null, cancellationToken));
+        await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.GetUserIdAsync(null, cancellationToken));
+        await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.GetUserNameAsync(null, cancellationToken));
+        await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.RemoveLoginAsync(null, "a", "b", cancellationToken));
+        await Assert.ThrowsAsync<ArgumentNullException>("loginProvider", () => target.RemoveLoginAsync(user, null, "b", cancellationToken));
+        await Assert.ThrowsAsync<ArgumentNullException>("providerKey", () => target.RemoveLoginAsync(user, "a", null, cancellationToken));
+        await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.SetEmailAsync(null, "a", cancellationToken));
+        await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.SetEmailConfirmedAsync(null, true, cancellationToken));
+        await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.SetNormalizedEmailAsync(null, "a", cancellationToken));
+        await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.SetNormalizedUserNameAsync(null, "a", cancellationToken));
+        await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.SetSecurityStampAsync(null, "a", cancellationToken));
+        await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.SetUserNameAsync(null, "a", cancellationToken));
+        await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.SetEmailAsync(null, "a", cancellationToken));
+        await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.UpdateAsync(null, cancellationToken));
+        await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.GetRolesAsync(null, cancellationToken));
+        await Assert.ThrowsAsync<ArgumentNullException>("user", () => target.IsInRoleAsync(null, "a", cancellationToken));
+        await Assert.ThrowsAsync<ArgumentNullException>("roleName", () => target.IsInRoleAsync(user, null, cancellationToken));
 #nullable enable
-        }
+    }
 
-        [Fact]
-        public static async Task Methods_That_Are_Not_Implemented_Throw()
+    [Fact]
+    public static async Task Methods_That_Are_Not_Implemented_Throw()
+    {
+        // Arrange
+        var user = new LondonTravelUser();
+        var roleName = "RoleName";
+        var cancellationToken = CancellationToken.None;
+
+        using UserStore target = CreateStore();
+
+        // Act and Assert
+        await Assert.ThrowsAsync<NotImplementedException>(() => target.AddToRoleAsync(user, roleName, cancellationToken));
+        await Assert.ThrowsAsync<NotImplementedException>(() => target.GetUsersInRoleAsync(roleName, cancellationToken));
+        await Assert.ThrowsAsync<NotImplementedException>(() => target.RemoveFromRoleAsync(user, roleName, cancellationToken));
+    }
+
+    [Fact]
+    public static async Task AddLoginAsync_Throws_If_Login_Exists_For_Provider()
+    {
+        // Arrange
+        var user = new LondonTravelUser();
+        user.Logins.Add(new LondonTravelLoginInfo() { LoginProvider = "acme" });
+
+        var login = new UserLoginInfo("acme", "providerKey", "displayName");
+
+        using UserStore target = CreateStore();
+
+        // Act and Assert
+        await Assert.ThrowsAsync<InvalidOperationException>(() => target.AddLoginAsync(user, login, CancellationToken.None));
+    }
+
+    [Fact]
+    public static async Task AddLoginAsync_Adds_Login()
+    {
+        // Arrange
+        var user = new LondonTravelUser();
+        var login = new UserLoginInfo("acme", "providerKey", "displayName");
+
+        using UserStore target = CreateStore();
+
+        // Act
+        await target.AddLoginAsync(user, login, CancellationToken.None);
+
+        // Assert
+        user.Logins.ShouldNotBeNull();
+        user.Logins.ShouldNotBeEmpty();
+        user.Logins.Count.ShouldBe(1);
+
+        var added = user.Logins[0];
+
+        added.ShouldNotBeNull();
+        added.LoginProvider.ShouldBe(login.LoginProvider);
+        added.ProviderDisplayName.ShouldBe(login.ProviderDisplayName);
+        added.ProviderKey.ShouldBe(login.ProviderKey);
+    }
+
+    [Fact]
+    public static async Task CreateAsync_Creates_User()
+    {
+        // Arrange
+        var user = new LondonTravelUser();
+
+        var mock = new Mock<IDocumentService>();
+
+        mock.Setup((p) => p.CreateAsync(user))
+            .ReturnsAsync("MyUserId");
+
+        using UserStore target = CreateStore(mock.Object);
+
+        // Act
+        var actual = await target.CreateAsync(user, CancellationToken.None);
+
+        // Assert
+        actual.ShouldBe(IdentityResult.Success);
+
+        user.Id.ShouldNotBeNullOrEmpty();
+        user.Id.ShouldBe("MyUserId");
+    }
+
+    [Fact]
+    public static async Task DeleteAsync_If_User_Exists()
+    {
+        // Arrange
+        var user = new LondonTravelUser()
         {
-            // Arrange
-            var user = new LondonTravelUser();
-            var roleName = "RoleName";
-            var cancellationToken = CancellationToken.None;
+            Id = "MyUserId",
+        };
 
-            using UserStore target = CreateStore();
+        var mock = new Mock<IDocumentService>();
 
-            // Act and Assert
-            await Assert.ThrowsAsync<NotImplementedException>(() => target.AddToRoleAsync(user, roleName, cancellationToken));
-            await Assert.ThrowsAsync<NotImplementedException>(() => target.GetUsersInRoleAsync(roleName, cancellationToken));
-            await Assert.ThrowsAsync<NotImplementedException>(() => target.RemoveFromRoleAsync(user, roleName, cancellationToken));
-        }
+        mock.Setup((p) => p.DeleteAsync(user.Id))
+            .ReturnsAsync(true);
 
-        [Fact]
-        public static async Task AddLoginAsync_Throws_If_Login_Exists_For_Provider()
+        using UserStore target = CreateStore(mock.Object);
+
+        // Act
+        var actual = await target.DeleteAsync(user, CancellationToken.None);
+
+        // Assert
+        actual.ShouldBe(IdentityResult.Success);
+    }
+
+    [Fact]
+    public static async Task DeleteAsync_If_User_Does_Not_Exist()
+    {
+        // Arrange
+        var user = new LondonTravelUser()
         {
-            // Arrange
-            var user = new LondonTravelUser();
-            user.Logins.Add(new LondonTravelLoginInfo() { LoginProvider = "acme" });
+            Id = "MyUserId",
+        };
 
-            var login = new UserLoginInfo("acme", "providerKey", "displayName");
+        var mock = new Mock<IDocumentService>();
 
-            using UserStore target = CreateStore();
+        mock.Setup((p) => p.DeleteAsync(user.Id))
+            .ReturnsAsync(false);
 
-            // Act and Assert
-            await Assert.ThrowsAsync<InvalidOperationException>(() => target.AddLoginAsync(user, login, CancellationToken.None));
-        }
+        using UserStore target = CreateStore(mock.Object);
 
-        [Fact]
-        public static async Task AddLoginAsync_Adds_Login()
+        // Act
+        var actual = await target.DeleteAsync(user, CancellationToken.None);
+
+        // Assert
+        actual.ShouldNotBe(IdentityResult.Success);
+        actual.Errors.ShouldNotBeEmpty();
+        actual.Errors.First().Code.ShouldBe("UserNotFound");
+    }
+
+    [Fact]
+    public static async Task DeleteAsync_Throws_If_No_User_Id()
+    {
+        // Arrange
+        var user = new LondonTravelUser()
         {
-            // Arrange
-            var user = new LondonTravelUser();
-            var login = new UserLoginInfo("acme", "providerKey", "displayName");
+            Id = string.Empty,
+        };
 
-            using UserStore target = CreateStore();
+        using UserStore target = CreateStore();
 
-            // Act
-            await target.AddLoginAsync(user, login, CancellationToken.None);
+        // Act and Assert
+        await Assert.ThrowsAsync<ArgumentException>("user", () => target.DeleteAsync(user, CancellationToken.None));
+    }
 
-            // Assert
-            user.Logins.ShouldNotBeNull();
-            user.Logins.ShouldNotBeEmpty();
-            user.Logins.Count.ShouldBe(1);
-
-            var added = user.Logins[0];
-
-            added.ShouldNotBeNull();
-            added.LoginProvider.ShouldBe(login.LoginProvider);
-            added.ProviderDisplayName.ShouldBe(login.ProviderDisplayName);
-            added.ProviderKey.ShouldBe(login.ProviderKey);
-        }
-
-        [Fact]
-        public static async Task CreateAsync_Creates_User()
+    [Fact]
+    public static async Task GetEmailAsync_Returns_Correct_Value()
+    {
+        // Arrange
+        var user = new LondonTravelUser()
         {
-            // Arrange
-            var user = new LondonTravelUser();
+            Email = "user@domain.com",
+        };
 
-            var mock = new Mock<IDocumentService>();
+        using UserStore target = CreateStore();
 
-            mock.Setup((p) => p.CreateAsync(user))
-                .ReturnsAsync("MyUserId");
+        // Act
+        var actual = await target.GetEmailAsync(user, CancellationToken.None);
 
-            using UserStore target = CreateStore(mock.Object);
+        // Assert
+        actual.ShouldBe("user@domain.com");
+    }
 
-            // Act
-            var actual = await target.CreateAsync(user, CancellationToken.None);
-
-            // Assert
-            actual.ShouldBe(IdentityResult.Success);
-
-            user.Id.ShouldNotBeNullOrEmpty();
-            user.Id.ShouldBe("MyUserId");
-        }
-
-        [Fact]
-        public static async Task DeleteAsync_If_User_Exists()
+    [Fact]
+    public static async Task GetEmailConfirmedAsync_Returns_Correct_Value()
+    {
+        // Arrange
+        var user = new LondonTravelUser()
         {
-            // Arrange
-            var user = new LondonTravelUser()
-            {
-                Id = "MyUserId",
-            };
+            EmailConfirmed = true,
+        };
 
-            var mock = new Mock<IDocumentService>();
+        using UserStore target = CreateStore();
 
-            mock.Setup((p) => p.DeleteAsync(user.Id))
-                .ReturnsAsync(true);
+        // Act
+        var actual = await target.GetEmailConfirmedAsync(user, CancellationToken.None);
 
-            using UserStore target = CreateStore(mock.Object);
+        // Assert
+        actual.ShouldBeTrue();
+    }
 
-            // Act
-            var actual = await target.DeleteAsync(user, CancellationToken.None);
-
-            // Assert
-            actual.ShouldBe(IdentityResult.Success);
-        }
-
-        [Fact]
-        public static async Task DeleteAsync_If_User_Does_Not_Exist()
+    [Fact]
+    public static async Task GetNormalizedEmailAsync_Returns_Correct_Value()
+    {
+        // Arrange
+        var user = new LondonTravelUser()
         {
-            // Arrange
-            var user = new LondonTravelUser()
-            {
-                Id = "MyUserId",
-            };
+            EmailNormalized = "user@domain.com",
+        };
 
-            var mock = new Mock<IDocumentService>();
+        using UserStore target = CreateStore();
 
-            mock.Setup((p) => p.DeleteAsync(user.Id))
-                .ReturnsAsync(false);
+        // Act
+        var actual = await target.GetNormalizedEmailAsync(user, CancellationToken.None);
 
-            using UserStore target = CreateStore(mock.Object);
+        // Assert
+        actual.ShouldBe("user@domain.com");
+    }
 
-            // Act
-            var actual = await target.DeleteAsync(user, CancellationToken.None);
-
-            // Assert
-            actual.ShouldNotBe(IdentityResult.Success);
-            actual.Errors.ShouldNotBeEmpty();
-            actual.Errors.First().Code.ShouldBe("UserNotFound");
-        }
-
-        [Fact]
-        public static async Task DeleteAsync_Throws_If_No_User_Id()
+    [Fact]
+    public static async Task GetNormalizedUserNameAsync_Returns_Correct_Value()
+    {
+        // Arrange
+        var user = new LondonTravelUser()
         {
-            // Arrange
-            var user = new LondonTravelUser()
-            {
-                Id = string.Empty,
-            };
+            UserNameNormalized = "user.name",
+        };
 
-            using UserStore target = CreateStore();
+        using UserStore target = CreateStore();
 
-            // Act and Assert
-            await Assert.ThrowsAsync<ArgumentException>("user", () => target.DeleteAsync(user, CancellationToken.None));
-        }
+        // Act
+        var actual = await target.GetNormalizedUserNameAsync(user, CancellationToken.None);
 
-        [Fact]
-        public static async Task GetEmailAsync_Returns_Correct_Value()
+        // Assert
+        actual.ShouldBe("user.name");
+    }
+
+    [Fact]
+    public static async Task GetSecurityStampAsync_Returns_Correct_Value()
+    {
+        // Arrange
+        var user = new LondonTravelUser()
         {
-            // Arrange
-            var user = new LondonTravelUser()
-            {
-                Email = "user@domain.com",
-            };
+            SecurityStamp = "MySecurityStamp",
+        };
 
-            using UserStore target = CreateStore();
+        using UserStore target = CreateStore();
 
-            // Act
-            var actual = await target.GetEmailAsync(user, CancellationToken.None);
+        // Act
+        var actual = await target.GetSecurityStampAsync(user, CancellationToken.None);
 
-            // Assert
-            actual.ShouldBe("user@domain.com");
-        }
+        // Assert
+        actual.ShouldBe("MySecurityStamp");
+    }
 
-        [Fact]
-        public static async Task GetEmailConfirmedAsync_Returns_Correct_Value()
+    [Fact]
+    public static async Task GetUserIdAsync_Returns_Correct_Value()
+    {
+        // Arrange
+        var user = new LondonTravelUser()
         {
-            // Arrange
-            var user = new LondonTravelUser()
-            {
-                EmailConfirmed = true,
-            };
+            Id = "123",
+        };
 
-            using UserStore target = CreateStore();
+        using UserStore target = CreateStore();
 
-            // Act
-            var actual = await target.GetEmailConfirmedAsync(user, CancellationToken.None);
+        // Act
+        var actual = await target.GetUserIdAsync(user, CancellationToken.None);
 
-            // Assert
-            actual.ShouldBeTrue();
-        }
+        // Assert
+        actual.ShouldBe("123");
+    }
 
-        [Fact]
-        public static async Task GetNormalizedEmailAsync_Returns_Correct_Value()
+    [Fact]
+    public static async Task GetUserNameAsync_Returns_Correct_Value()
+    {
+        // Arrange
+        var user = new LondonTravelUser()
         {
-            // Arrange
-            var user = new LondonTravelUser()
-            {
-                EmailNormalized = "user@domain.com",
-            };
+            UserName = "user.name",
+        };
 
-            using UserStore target = CreateStore();
+        using UserStore target = CreateStore();
 
-            // Act
-            var actual = await target.GetNormalizedEmailAsync(user, CancellationToken.None);
+        // Act
+        var actual = await target.GetUserNameAsync(user, CancellationToken.None);
 
-            // Assert
-            actual.ShouldBe("user@domain.com");
-        }
+        // Assert
+        actual.ShouldBe("user.name");
+    }
 
-        [Fact]
-        public static async Task GetNormalizedUserNameAsync_Returns_Correct_Value()
+    [Fact]
+    public static async Task SetEmailAsync_Sets_Correct_Property()
+    {
+        // Arrange
+        var expected = "user@domain.com";
+        var user = new LondonTravelUser();
+
+        using UserStore target = CreateStore();
+
+        // Act
+        await target.SetEmailAsync(user, expected, CancellationToken.None);
+
+        // Assert
+        user.Email.ShouldBe(expected);
+    }
+
+    [Fact]
+    public static async Task SetEmailConfirmedAsync_Sets_Correct_Property()
+    {
+        // Arrange
+        var expected = true;
+        var user = new LondonTravelUser();
+
+        using UserStore target = CreateStore();
+
+        // Act
+        await target.SetEmailConfirmedAsync(user, expected, CancellationToken.None);
+
+        // Assert
+        user.EmailConfirmed.ShouldBe(expected);
+    }
+
+    [Fact]
+    public static async Task SetNormalizedEmailAsync_Sets_Correct_Property()
+    {
+        // Arrange
+        var expected = "user@domain.com";
+        var user = new LondonTravelUser();
+
+        using UserStore target = CreateStore();
+
+        // Act
+        await target.SetNormalizedEmailAsync(user, expected, CancellationToken.None);
+
+        // Assert
+        user.EmailNormalized.ShouldBe(expected);
+    }
+
+    [Fact]
+    public static async Task SetNormalizedUserNameAsync_Sets_Correct_Property()
+    {
+        // Arrange
+        var expected = "user.name";
+        var user = new LondonTravelUser();
+
+        using UserStore target = CreateStore();
+
+        // Act
+        await target.SetNormalizedUserNameAsync(user, expected, CancellationToken.None);
+
+        // Assert
+        user.UserNameNormalized.ShouldBe(expected);
+    }
+
+    [Fact]
+    public static async Task SetSecurityStampAsync_Sets_Correct_Property()
+    {
+        // Arrange
+        var expected = "MySecurityStamp";
+        var user = new LondonTravelUser();
+
+        using UserStore target = CreateStore();
+
+        // Act
+        await target.SetSecurityStampAsync(user, expected, CancellationToken.None);
+
+        // Assert
+        user.SecurityStamp.ShouldBe(expected);
+    }
+
+    [Fact]
+    public static async Task SetUserNameAsync_Sets_Correct_Property()
+    {
+        // Arrange
+        var expected = "user.name";
+        var user = new LondonTravelUser();
+
+        using UserStore target = CreateStore();
+
+        // Act
+        await target.SetUserNameAsync(user, expected, CancellationToken.None);
+
+        // Assert
+        user.UserName.ShouldBe(expected);
+    }
+
+    [Fact]
+    public static async Task GetRolesAsync_Returns_Expected_Names()
+    {
+        // Arrange
+        var user = new LondonTravelUser();
+
+        user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, "admin", ClaimValueTypes.String, "https://londontravel.martincostello.com/")));
+        user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, "not-a-string", ClaimValueTypes.Email, "https://londontravel.martincostello.com/")));
+        user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, "wrong-issuer", ClaimValueTypes.String, "google")));
+        user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, string.Empty, ClaimValueTypes.String, "https://londontravel.martincostello.com/")));
+
+        var expected = new[]
         {
-            // Arrange
-            var user = new LondonTravelUser()
-            {
-                UserNameNormalized = "user.name",
-            };
+            "admin",
+        };
 
-            using UserStore target = CreateStore();
+        using UserStore target = CreateStore();
 
-            // Act
-            var actual = await target.GetNormalizedUserNameAsync(user, CancellationToken.None);
+        // Act
+        var actual = await target.GetRolesAsync(user, CancellationToken.None);
 
-            // Assert
-            actual.ShouldBe("user.name");
-        }
+        // Assert
+        actual.ShouldNotBeNull();
+        actual.ShouldBe(expected);
+    }
 
-        [Fact]
-        public static async Task GetSecurityStampAsync_Returns_Correct_Value()
-        {
-            // Arrange
-            var user = new LondonTravelUser()
-            {
-                SecurityStamp = "MySecurityStamp",
-            };
+    [Fact]
+    public static async Task IsInRoleAsync_Returns_Expected_Value()
+    {
+        // Arrange
+        var user = new LondonTravelUser();
+        var cancellationToken = CancellationToken.None;
 
-            using UserStore target = CreateStore();
+        user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, "admin", ClaimValueTypes.String, "https://londontravel.martincostello.com/")));
+        user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, "not-a-string", ClaimValueTypes.Email, "https://londontravel.martincostello.com/")));
+        user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, "wrong-issuer", ClaimValueTypes.String, "google")));
 
-            // Act
-            var actual = await target.GetSecurityStampAsync(user, CancellationToken.None);
+        using UserStore target = CreateStore();
 
-            // Assert
-            actual.ShouldBe("MySecurityStamp");
-        }
+        // Act and Assert
+        (await target.IsInRoleAsync(user, "admin", cancellationToken)).ShouldBeTrue();
+        (await target.IsInRoleAsync(user, "not-a-role", cancellationToken)).ShouldBeFalse();
+        (await target.IsInRoleAsync(user, "not-a-string", cancellationToken)).ShouldBeFalse();
+        (await target.IsInRoleAsync(user, "wrong-issuer", cancellationToken)).ShouldBeFalse();
+        (await target.IsInRoleAsync(user, string.Empty, cancellationToken)).ShouldBeFalse();
 
-        [Fact]
-        public static async Task GetUserIdAsync_Returns_Correct_Value()
-        {
-            // Arrange
-            var user = new LondonTravelUser()
-            {
-                Id = "123",
-            };
+        // Arrange
+        user.RoleClaims = null!;
 
-            using UserStore target = CreateStore();
+        // Act and Assert
+        (await target.IsInRoleAsync(user, "admin", cancellationToken)).ShouldBeFalse();
+    }
 
-            // Act
-            var actual = await target.GetUserIdAsync(user, CancellationToken.None);
-
-            // Assert
-            actual.ShouldBe("123");
-        }
-
-        [Fact]
-        public static async Task GetUserNameAsync_Returns_Correct_Value()
-        {
-            // Arrange
-            var user = new LondonTravelUser()
-            {
-                UserName = "user.name",
-            };
-
-            using UserStore target = CreateStore();
-
-            // Act
-            var actual = await target.GetUserNameAsync(user, CancellationToken.None);
-
-            // Assert
-            actual.ShouldBe("user.name");
-        }
-
-        [Fact]
-        public static async Task SetEmailAsync_Sets_Correct_Property()
-        {
-            // Arrange
-            var expected = "user@domain.com";
-            var user = new LondonTravelUser();
-
-            using UserStore target = CreateStore();
-
-            // Act
-            await target.SetEmailAsync(user, expected, CancellationToken.None);
-
-            // Assert
-            user.Email.ShouldBe(expected);
-        }
-
-        [Fact]
-        public static async Task SetEmailConfirmedAsync_Sets_Correct_Property()
-        {
-            // Arrange
-            var expected = true;
-            var user = new LondonTravelUser();
-
-            using UserStore target = CreateStore();
-
-            // Act
-            await target.SetEmailConfirmedAsync(user, expected, CancellationToken.None);
-
-            // Assert
-            user.EmailConfirmed.ShouldBe(expected);
-        }
-
-        [Fact]
-        public static async Task SetNormalizedEmailAsync_Sets_Correct_Property()
-        {
-            // Arrange
-            var expected = "user@domain.com";
-            var user = new LondonTravelUser();
-
-            using UserStore target = CreateStore();
-
-            // Act
-            await target.SetNormalizedEmailAsync(user, expected, CancellationToken.None);
-
-            // Assert
-            user.EmailNormalized.ShouldBe(expected);
-        }
-
-        [Fact]
-        public static async Task SetNormalizedUserNameAsync_Sets_Correct_Property()
-        {
-            // Arrange
-            var expected = "user.name";
-            var user = new LondonTravelUser();
-
-            using UserStore target = CreateStore();
-
-            // Act
-            await target.SetNormalizedUserNameAsync(user, expected, CancellationToken.None);
-
-            // Assert
-            user.UserNameNormalized.ShouldBe(expected);
-        }
-
-        [Fact]
-        public static async Task SetSecurityStampAsync_Sets_Correct_Property()
-        {
-            // Arrange
-            var expected = "MySecurityStamp";
-            var user = new LondonTravelUser();
-
-            using UserStore target = CreateStore();
-
-            // Act
-            await target.SetSecurityStampAsync(user, expected, CancellationToken.None);
-
-            // Assert
-            user.SecurityStamp.ShouldBe(expected);
-        }
-
-        [Fact]
-        public static async Task SetUserNameAsync_Sets_Correct_Property()
-        {
-            // Arrange
-            var expected = "user.name";
-            var user = new LondonTravelUser();
-
-            using UserStore target = CreateStore();
-
-            // Act
-            await target.SetUserNameAsync(user, expected, CancellationToken.None);
-
-            // Assert
-            user.UserName.ShouldBe(expected);
-        }
-
-        [Fact]
-        public static async Task GetRolesAsync_Returns_Expected_Names()
-        {
-            // Arrange
-            var user = new LondonTravelUser();
-
-            user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, "admin", ClaimValueTypes.String, "https://londontravel.martincostello.com/")));
-            user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, "not-a-string", ClaimValueTypes.Email, "https://londontravel.martincostello.com/")));
-            user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, "wrong-issuer", ClaimValueTypes.String, "google")));
-            user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, string.Empty, ClaimValueTypes.String, "https://londontravel.martincostello.com/")));
-
-            var expected = new[]
-            {
-                "admin",
-            };
-
-            using UserStore target = CreateStore();
-
-            // Act
-            var actual = await target.GetRolesAsync(user, CancellationToken.None);
-
-            // Assert
-            actual.ShouldNotBeNull();
-            actual.ShouldBe(expected);
-        }
-
-        [Fact]
-        public static async Task IsInRoleAsync_Returns_Expected_Value()
-        {
-            // Arrange
-            var user = new LondonTravelUser();
-            var cancellationToken = CancellationToken.None;
-
-            user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, "admin", ClaimValueTypes.String, "https://londontravel.martincostello.com/")));
-            user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, "not-a-string", ClaimValueTypes.Email, "https://londontravel.martincostello.com/")));
-            user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, "wrong-issuer", ClaimValueTypes.String, "google")));
-
-            using UserStore target = CreateStore();
-
-            // Act and Assert
-            (await target.IsInRoleAsync(user, "admin", cancellationToken)).ShouldBeTrue();
-            (await target.IsInRoleAsync(user, "not-a-role", cancellationToken)).ShouldBeFalse();
-            (await target.IsInRoleAsync(user, "not-a-string", cancellationToken)).ShouldBeFalse();
-            (await target.IsInRoleAsync(user, "wrong-issuer", cancellationToken)).ShouldBeFalse();
-            (await target.IsInRoleAsync(user, string.Empty, cancellationToken)).ShouldBeFalse();
-
-            // Arrange
-            user.RoleClaims = null!;
-
-            // Act and Assert
-            (await target.IsInRoleAsync(user, "admin", cancellationToken)).ShouldBeFalse();
-        }
-
-        private static UserStore CreateStore(IDocumentService? service = null)
-        {
-            return new UserStore(service ?? Mock.Of<IDocumentService>());
-        }
+    private static UserStore CreateStore(IDocumentService? service = null)
+    {
+        return new UserStore(service ?? Mock.Of<IDocumentService>());
     }
 }

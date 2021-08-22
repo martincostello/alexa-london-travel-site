@@ -16,115 +16,114 @@ using Microsoft.AspNetCore.Authentication.Twitter;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
-namespace MartinCostello.LondonTravel.Site.Integration
+namespace MartinCostello.LondonTravel.Site.Integration;
+
+public sealed class ConfigureAuthenticationHandlers :
+    IPostConfigureOptions<AmazonAuthenticationOptions>,
+    IPostConfigureOptions<AppleAuthenticationOptions>,
+    IPostConfigureOptions<FacebookOptions>,
+    IPostConfigureOptions<GitHubAuthenticationOptions>,
+    IPostConfigureOptions<GoogleOptions>,
+    IPostConfigureOptions<MicrosoftAccountOptions>,
+    IPostConfigureOptions<TwitterOptions>
 {
-    public sealed class ConfigureAuthenticationHandlers :
-        IPostConfigureOptions<AmazonAuthenticationOptions>,
-        IPostConfigureOptions<AppleAuthenticationOptions>,
-        IPostConfigureOptions<FacebookOptions>,
-        IPostConfigureOptions<GitHubAuthenticationOptions>,
-        IPostConfigureOptions<GoogleOptions>,
-        IPostConfigureOptions<MicrosoftAccountOptions>,
-        IPostConfigureOptions<TwitterOptions>
+    public ConfigureAuthenticationHandlers(
+        IHost host,
+        IHttpClientFactory httpClientFactory)
     {
-        public ConfigureAuthenticationHandlers(
-            IHost host,
-            IHttpClientFactory httpClientFactory)
+        Host = host;
+        HttpClientFactory = httpClientFactory;
+    }
+
+    private IHost Host { get; }
+
+    private IHttpClientFactory HttpClientFactory { get; }
+
+    public void PostConfigure(string name, AmazonAuthenticationOptions options) => Configure(name, options);
+
+    public void PostConfigure(string name, AppleAuthenticationOptions options) => Configure(name, options);
+
+    public void PostConfigure(string name, FacebookOptions options) => Configure(name, options);
+
+    public void PostConfigure(string name, GitHubAuthenticationOptions options) => Configure(name, options);
+
+    public void PostConfigure(string name, GoogleOptions options) => Configure(name, options);
+
+    public void PostConfigure(string name, MicrosoftAccountOptions options) => Configure(name, options);
+
+    public void PostConfigure(string name, TwitterOptions options)
+    {
+        options.Backchannel = HttpClientFactory.CreateClient(name);
+        options.Events.OnRedirectToAuthorizationEndpoint = RedirectToSelfForTwitter;
+    }
+
+    private static NameValueCollection ParseQueryString<T>(RedirectContext<T> context)
+        where T : AuthenticationSchemeOptions
+    {
+        return HttpUtility.ParseQueryString(new UriBuilder(context.RedirectUri).Uri.Query);
+    }
+
+    private static Task Redirect<T>(RedirectContext<T> context, UriBuilder builder)
+        where T : AuthenticationSchemeOptions
+    {
+        string location = builder.Uri.ToString();
+
+        context.Response.Redirect(location);
+        return Task.CompletedTask;
+    }
+
+    private static Task RedirectToSelfForOAuth<T>(RedirectContext<T> context)
+        where T : AuthenticationSchemeOptions
+    {
+        NameValueCollection queryString = ParseQueryString(context);
+
+        string? location = queryString["redirect_uri"];
+        string? state = queryString["state"];
+
+        queryString.Clear();
+
+        string code = Guid.NewGuid().ToString();
+
+        queryString.Add("code", code);
+        queryString.Add("state", state);
+
+        var builder = new UriBuilder(location!)
         {
-            Host = host;
-            HttpClientFactory = httpClientFactory;
-        }
+            Query = queryString.ToString() ?? string.Empty,
+        };
 
-        private IHost Host { get; }
+        return Redirect(context, builder);
+    }
 
-        private IHttpClientFactory HttpClientFactory { get; }
+    private Task RedirectToSelfForTwitter<T>(RedirectContext<T> context)
+        where T : AuthenticationSchemeOptions
+    {
+        NameValueCollection queryString = ParseQueryString(context);
 
-        public void PostConfigure(string name, AmazonAuthenticationOptions options) => Configure(name, options);
+        string? state = queryString["state"];
 
-        public void PostConfigure(string name, AppleAuthenticationOptions options) => Configure(name, options);
+        queryString.Clear();
 
-        public void PostConfigure(string name, FacebookOptions options) => Configure(name, options);
+        string oauthToken = "twitter-oath-token"; // Fixed because the Twitter provider compares values internally
+        string verifier = Guid.NewGuid().ToString();
 
-        public void PostConfigure(string name, GitHubAuthenticationOptions options) => Configure(name, options);
+        queryString.Add("state", state);
+        queryString.Add("oauth_token", oauthToken);
+        queryString.Add("oauth_verifier", verifier);
 
-        public void PostConfigure(string name, GoogleOptions options) => Configure(name, options);
-
-        public void PostConfigure(string name, MicrosoftAccountOptions options) => Configure(name, options);
-
-        public void PostConfigure(string name, TwitterOptions options)
+        var builder = new UriBuilder(Host.GetAddress())
         {
-            options.Backchannel = HttpClientFactory.CreateClient(name);
-            options.Events.OnRedirectToAuthorizationEndpoint = RedirectToSelfForTwitter;
-        }
+            Path = "/signin-twitter",
+            Query = queryString.ToString() ?? string.Empty,
+        };
 
-        private static NameValueCollection ParseQueryString<T>(RedirectContext<T> context)
-            where T : AuthenticationSchemeOptions
-        {
-            return HttpUtility.ParseQueryString(new UriBuilder(context.RedirectUri).Uri.Query);
-        }
+        return Redirect(context, builder);
+    }
 
-        private static Task Redirect<T>(RedirectContext<T> context, UriBuilder builder)
-            where T : AuthenticationSchemeOptions
-        {
-            string location = builder.Uri.ToString();
-
-            context.Response.Redirect(location);
-            return Task.CompletedTask;
-        }
-
-        private static Task RedirectToSelfForOAuth<T>(RedirectContext<T> context)
-            where T : AuthenticationSchemeOptions
-        {
-            NameValueCollection queryString = ParseQueryString(context);
-
-            string? location = queryString["redirect_uri"];
-            string? state = queryString["state"];
-
-            queryString.Clear();
-
-            string code = Guid.NewGuid().ToString();
-
-            queryString.Add("code", code);
-            queryString.Add("state", state);
-
-            var builder = new UriBuilder(location!)
-            {
-                Query = queryString.ToString() ?? string.Empty,
-            };
-
-            return Redirect(context, builder);
-        }
-
-        private Task RedirectToSelfForTwitter<T>(RedirectContext<T> context)
-            where T : AuthenticationSchemeOptions
-        {
-            NameValueCollection queryString = ParseQueryString(context);
-
-            string? state = queryString["state"];
-
-            queryString.Clear();
-
-            string oauthToken = "twitter-oath-token"; // Fixed because the Twitter provider compares values internally
-            string verifier = Guid.NewGuid().ToString();
-
-            queryString.Add("state", state);
-            queryString.Add("oauth_token", oauthToken);
-            queryString.Add("oauth_verifier", verifier);
-
-            var builder = new UriBuilder(Host.GetAddress())
-            {
-                Path = "/signin-twitter",
-                Query = queryString.ToString() ?? string.Empty,
-            };
-
-            return Redirect(context, builder);
-        }
-
-        private void Configure<T>(string name, T options)
-            where T : OAuthOptions
-        {
-            options.Backchannel = HttpClientFactory.CreateClient(name);
-            options.Events.OnRedirectToAuthorizationEndpoint = RedirectToSelfForOAuth;
-        }
+    private void Configure<T>(string name, T options)
+        where T : OAuthOptions
+    {
+        options.Backchannel = HttpClientFactory.CreateClient(name);
+        options.Events.OnRedirectToAuthorizationEndpoint = RedirectToSelfForOAuth;
     }
 }

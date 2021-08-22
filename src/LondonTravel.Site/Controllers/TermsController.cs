@@ -3,21 +3,20 @@
 
 using Microsoft.AspNetCore.Mvc;
 
-namespace MartinCostello.LondonTravel.Site.Controllers
+namespace MartinCostello.LondonTravel.Site.Controllers;
+
+/// <summary>
+/// A class representing the controller for the <c>/terms-of-service/</c> resource.
+/// </summary>
+[Route("terms-of-service", Name = SiteRoutes.TermsOfService)]
+public class TermsController : Controller
 {
     /// <summary>
-    /// A class representing the controller for the <c>/terms-of-service/</c> resource.
+    /// Gets the result for the <c>/terms-of-service/</c> action.
     /// </summary>
-    [Route("terms-of-service", Name = SiteRoutes.TermsOfService)]
-    public class TermsController : Controller
-    {
-        /// <summary>
-        /// Gets the result for the <c>/terms-of-service/</c> action.
-        /// </summary>
-        /// <returns>
-        /// The result for the <c>/terms-of-service/</c> action.
-        /// </returns>
-        [HttpGet]
-        public IActionResult Index() => View();
-    }
+    /// <returns>
+    /// The result for the <c>/terms-of-service/</c> action.
+    /// </returns>
+    [HttpGet]
+    public IActionResult Index() => View();
 }

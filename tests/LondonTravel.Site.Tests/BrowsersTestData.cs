@@ -3,28 +3,27 @@
 
 using System.Collections;
 
-namespace MartinCostello.LondonTravel.Site
+namespace MartinCostello.LondonTravel.Site;
+
+public sealed class BrowsersTestData : IEnumerable<object[]>
 {
-    public sealed class BrowsersTestData : IEnumerable<object[]>
+    public IEnumerator<object[]> GetEnumerator()
     {
-        public IEnumerator<object[]> GetEnumerator()
+        yield return new object[] { "chromium" };
+        yield return new object[] { "chromium:chrome" };
+
+        if (!OperatingSystem.IsLinux())
         {
-            yield return new object[] { "chromium" };
-            yield return new object[] { "chromium:chrome" };
-
-            if (!OperatingSystem.IsLinux())
-            {
-                yield return new object[] { "chromium:msedge" };
-            }
-
-            yield return new object[] { "firefox" };
-
-            if (OperatingSystem.IsMacOS())
-            {
-                yield return new object[] { "webkit" };
-            }
+            yield return new object[] { "chromium:msedge" };
         }
 
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        yield return new object[] { "firefox" };
+
+        if (OperatingSystem.IsMacOS())
+        {
+            yield return new object[] { "webkit" };
+        }
     }
+
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }

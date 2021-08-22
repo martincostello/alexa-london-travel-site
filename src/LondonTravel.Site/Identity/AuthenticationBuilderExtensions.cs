@@ -13,322 +13,321 @@ using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authentication.Twitter;
 
-namespace MartinCostello.LondonTravel.Site.Identity
+namespace MartinCostello.LondonTravel.Site.Identity;
+
+public static class AuthenticationBuilderExtensions
 {
-    public static class AuthenticationBuilderExtensions
+    public static AuthenticationBuilder TryAddAmazon(
+        this AuthenticationBuilder builder,
+        Options.AuthenticationOptions options)
     {
-        public static AuthenticationBuilder TryAddAmazon(
-            this AuthenticationBuilder builder,
-            Options.AuthenticationOptions options)
+        string name = "Amazon";
+
+        if (IsProviderEnabled(name, options))
         {
-            string name = "Amazon";
-
-            if (IsProviderEnabled(name, options))
-            {
-                builder.AddAmazon()
-                       .Configure<AmazonAuthenticationOptions>(name);
-            }
-
-            return builder;
+            builder.AddAmazon()
+                   .Configure<AmazonAuthenticationOptions>(name);
         }
 
-        public static AuthenticationBuilder TryAddApple(
-            this AuthenticationBuilder builder,
-            Options.AuthenticationOptions options)
-        {
-            string name = "Apple";
+        return builder;
+    }
 
-            if (IsProviderEnabled(name, options, requiresClientSecret: false))
-            {
-                builder.AddApple()
-                       .Configure<AppleAuthenticationOptions>(name, (providerOptions, serviceProvider) =>
+    public static AuthenticationBuilder TryAddApple(
+        this AuthenticationBuilder builder,
+        Options.AuthenticationOptions options)
+    {
+        string name = "Apple";
+
+        if (IsProviderEnabled(name, options, requiresClientSecret: false))
+        {
+            builder.AddApple()
+                   .Configure<AppleAuthenticationOptions>(name, (providerOptions, serviceProvider) =>
+                   {
+                       var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                       var secretClient = serviceProvider.GetService<SecretClient>();
+
+                       providerOptions.KeyId = configuration[$"Site:Authentication:ExternalProviders:{name}:KeyId"];
+                       providerOptions.TeamId = configuration[$"Site:Authentication:ExternalProviders:{name}:TeamId"];
+
+                       if (secretClient is not null)
                        {
-                           var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                           var secretClient = serviceProvider.GetService<SecretClient>();
-
-                           providerOptions.KeyId = configuration[$"Site:Authentication:ExternalProviders:{name}:KeyId"];
-                           providerOptions.TeamId = configuration[$"Site:Authentication:ExternalProviders:{name}:TeamId"];
-
-                           if (secretClient is not null)
+                           providerOptions.GenerateClientSecret = true;
+                           providerOptions.PrivateKeyBytes = async (keyId, cancellationToken) =>
                            {
-                               providerOptions.GenerateClientSecret = true;
-                               providerOptions.PrivateKeyBytes = async (keyId, cancellationToken) =>
+                               var secret = await secretClient.GetSecretAsync(
+                                   $"AuthKey-{keyId}",
+                                   cancellationToken: cancellationToken);
+
+                               string privateKey = secret.Value.Value;
+
+                               if (privateKey.StartsWith("-----BEGIN PRIVATE KEY-----", StringComparison.Ordinal))
                                {
-                                   var secret = await secretClient.GetSecretAsync(
-                                       $"AuthKey-{keyId}",
-                                       cancellationToken: cancellationToken);
+                                   string[] lines = privateKey.Split('\n');
+                                   privateKey = string.Join(string.Empty, lines[1..^1]);
+                               }
 
-                                   string privateKey = secret.Value.Value;
-
-                                   if (privateKey.StartsWith("-----BEGIN PRIVATE KEY-----", StringComparison.Ordinal))
-                                   {
-                                       string[] lines = privateKey.Split('\n');
-                                       privateKey = string.Join(string.Empty, lines[1..^1]);
-                                   }
-
-                                   return Convert.FromBase64String(privateKey);
-                               };
-                           }
-                       });
-            }
-
-            return builder;
+                               return Convert.FromBase64String(privateKey);
+                           };
+                       }
+                   });
         }
 
-        public static AuthenticationBuilder TryAddFacebook(
-            this AuthenticationBuilder builder,
-            Options.AuthenticationOptions options)
+        return builder;
+    }
+
+    public static AuthenticationBuilder TryAddFacebook(
+        this AuthenticationBuilder builder,
+        Options.AuthenticationOptions options)
+    {
+        string name = "Facebook";
+
+        if (IsProviderEnabled(name, options))
         {
-            string name = "Facebook";
-
-            if (IsProviderEnabled(name, options))
-            {
-                builder.AddFacebook()
-                       .Configure<FacebookOptions>(name);
-            }
-
-            return builder;
+            builder.AddFacebook()
+                   .Configure<FacebookOptions>(name);
         }
 
-        public static AuthenticationBuilder TryAddGitHub(
-            this AuthenticationBuilder builder,
-            Options.AuthenticationOptions options)
+        return builder;
+    }
+
+    public static AuthenticationBuilder TryAddGitHub(
+        this AuthenticationBuilder builder,
+        Options.AuthenticationOptions options)
+    {
+        string name = "GitHub";
+
+        if (IsProviderEnabled(name, options))
         {
-            string name = "GitHub";
-
-            if (IsProviderEnabled(name, options))
-            {
-                builder.AddGitHub()
-                       .Configure<GitHubAuthenticationOptions>(name, (p, _) => p.Scope.Add("user:email"));
-            }
-
-            return builder;
+            builder.AddGitHub()
+                   .Configure<GitHubAuthenticationOptions>(name, (p, _) => p.Scope.Add("user:email"));
         }
 
-        public static AuthenticationBuilder TryAddGoogle(
-            this AuthenticationBuilder builder,
-            Options.AuthenticationOptions options)
+        return builder;
+    }
+
+    public static AuthenticationBuilder TryAddGoogle(
+        this AuthenticationBuilder builder,
+        Options.AuthenticationOptions options)
+    {
+        string name = "Google";
+
+        if (IsProviderEnabled(name, options))
         {
-            string name = "Google";
-
-            if (IsProviderEnabled(name, options))
-            {
-                builder.AddGoogle()
-                       .Configure<GoogleOptions>(name);
-            }
-
-            return builder;
+            builder.AddGoogle()
+                   .Configure<GoogleOptions>(name);
         }
 
-        public static AuthenticationBuilder TryAddMicrosoft(
-            this AuthenticationBuilder builder,
-            Options.AuthenticationOptions options)
+        return builder;
+    }
+
+    public static AuthenticationBuilder TryAddMicrosoft(
+        this AuthenticationBuilder builder,
+        Options.AuthenticationOptions options)
+    {
+        string name = "Microsoft";
+
+        if (IsProviderEnabled(name, options))
         {
-            string name = "Microsoft";
-
-            if (IsProviderEnabled(name, options))
-            {
-                builder.AddMicrosoftAccount()
-                       .Configure<MicrosoftAccountOptions>(name);
-            }
-
-            return builder;
+            builder.AddMicrosoftAccount()
+                   .Configure<MicrosoftAccountOptions>(name);
         }
 
-        public static AuthenticationBuilder TryAddTwitter(
-            this AuthenticationBuilder builder,
-            Options.AuthenticationOptions options)
+        return builder;
+    }
+
+    public static AuthenticationBuilder TryAddTwitter(
+        this AuthenticationBuilder builder,
+        Options.AuthenticationOptions options)
+    {
+        string name = "Twitter";
+
+        if (IsProviderEnabled(name, options))
         {
-            string name = "Twitter";
-
-            if (IsProviderEnabled(name, options))
-            {
-                builder.AddTwitter()
-                    .Services
-                    .AddOptions<TwitterOptions>(name)
-                    .Configure<IServiceProvider>((options, serviceProvider) =>
-                    {
-                        var siteOptions = serviceProvider.GetRequiredService<SiteOptions>();
-                        var provider = siteOptions!.Authentication!.ExternalProviders![name] !;
-
-                        options.ConsumerKey = provider.ClientId;
-                        options.ConsumerSecret = provider.ClientSecret;
-                        options.RetrieveUserDetails = true;
-                        options.CorrelationCookie.Name = ApplicationCookie.Correlation.Name;
-                        options.StateCookie.Name = ApplicationCookie.State.Name;
-
-                        options.Events.OnRemoteFailure =
-                            (context) => HandleRemoteFailure(
-                                context,
-                                options.SignInScheme!,
-                                options.StateDataFormat,
-                                context.HttpContext.RequestServices.GetRequiredService<ILogger<TwitterOptions>>(),
-                                (token) => token?.Properties?.Items);
-                    });
-            }
-
-            return builder;
-        }
-
-        public static Task HandleRemoteFailure<T>(
-            RemoteFailureContext context,
-            string provider,
-            ISecureDataFormat<T> secureDataFormat,
-            ILogger logger,
-            Func<T, IDictionary<string, string?>?> propertiesProvider)
-        {
-            string? path = GetSiteErrorRedirect(context, secureDataFormat, propertiesProvider);
-
-            if (string.IsNullOrEmpty(path) ||
-                !Uri.TryCreate(path, UriKind.Relative, out Uri? notUsed))
-            {
-                path = "/";
-            }
-
-            SiteMessage message;
-
-            if (WasPermissionDenied(context))
-            {
-                message = SiteMessage.LinkDenied;
-                logger.LogTrace("User denied permission.");
-            }
-            else
-            {
-                message = SiteMessage.LinkFailed;
-
-                var eventId = default(EventId);
-                string errors = string.Join(";", context.Request.Query.Select((p) => $"'{p.Key}' = '{p.Value}'"));
-                string logMessage = $"Failed to sign-in using '{provider}': '{context.Failure?.Message}'. Errors: {errors}.";
-
-                if (IsCorrelationFailure(context))
-                {
-                    // Not a server-side problem, so do not create log noise
-                    logger.LogTrace(eventId, context.Failure, logMessage);
-                }
-                else
-                {
-                    logger.LogError(eventId, context.Failure, logMessage);
-                }
-            }
-
-            context.Response.Redirect($"{path}?Message={message}");
-            context.HandleResponse();
-
-            return Task.CompletedTask;
-        }
-
-        private static bool IsProviderEnabled(
-            string name,
-            Options.AuthenticationOptions options,
-            bool requiresClientSecret = true)
-        {
-            ExternalSignInOptions? provider = null;
-
-            if (options.ExternalProviders?.TryGetValue(name, out provider) != true ||
-                provider is null)
-            {
-                return false;
-            }
-
-            return
-                provider.IsEnabled &&
-                !string.IsNullOrEmpty(provider.ClientId) &&
-                (!requiresClientSecret || !string.IsNullOrEmpty(provider.ClientSecret));
-        }
-
-        private static void Configure<T>(
-            this AuthenticationBuilder builder,
-            string name,
-            Action<T, IServiceProvider>? configure = null)
-            where T : OAuthOptions
-        {
-            builder.Services
-                .AddOptions<T>(name)
+            builder.AddTwitter()
+                .Services
+                .AddOptions<TwitterOptions>(name)
                 .Configure<IServiceProvider>((options, serviceProvider) =>
                 {
                     var siteOptions = serviceProvider.GetRequiredService<SiteOptions>();
                     var provider = siteOptions!.Authentication!.ExternalProviders![name] !;
 
-                    options.ClientId = provider.ClientId!;
-                    options.ClientSecret = provider.ClientSecret!;
+                    options.ConsumerKey = provider.ClientId;
+                    options.ConsumerSecret = provider.ClientSecret;
+                    options.RetrieveUserDetails = true;
                     options.CorrelationCookie.Name = ApplicationCookie.Correlation.Name;
+                    options.StateCookie.Name = ApplicationCookie.State.Name;
 
-                    options.Events.OnRemoteFailure = (context) =>
-                    {
-                        return HandleRemoteFailure(
+                    options.Events.OnRemoteFailure =
+                        (context) => HandleRemoteFailure(
                             context,
-                            context.Scheme.Name,
+                            options.SignInScheme!,
                             options.StateDataFormat,
-                            context.HttpContext.RequestServices.GetRequiredService<ILogger<T>>(),
-                            (p) => p.Items);
-                    };
-
-                    options.Events.OnTicketReceived = (context) =>
-                    {
-                        var clock = context.HttpContext.RequestServices.GetRequiredService<ISystemClock>();
-
-                        context.Properties!.ExpiresUtc = clock.UtcNow.AddDays(150);
-                        context.Properties.IsPersistent = true;
-
-                        return Task.CompletedTask;
-                    };
-
-                    configure?.Invoke(options, serviceProvider);
+                            context.HttpContext.RequestServices.GetRequiredService<ILogger<TwitterOptions>>(),
+                            (token) => token?.Properties?.Items);
                 });
         }
 
-        private static string? GetSiteErrorRedirect<T>(
-            RemoteFailureContext context,
-            ISecureDataFormat<T> secureDataFormat,
-            Func<T, IDictionary<string, string?>?> propertiesProvider)
+        return builder;
+    }
+
+    public static Task HandleRemoteFailure<T>(
+        RemoteFailureContext context,
+        string provider,
+        ISecureDataFormat<T> secureDataFormat,
+        ILogger logger,
+        Func<T, IDictionary<string, string?>?> propertiesProvider)
+    {
+        string? path = GetSiteErrorRedirect(context, secureDataFormat, propertiesProvider);
+
+        if (string.IsNullOrEmpty(path) ||
+            !Uri.TryCreate(path, UriKind.Relative, out Uri? notUsed))
         {
-            var state = context.Request.Query["state"];
-            var stateData = secureDataFormat.Unprotect(state);
-            var properties = propertiesProvider?.Invoke(stateData!);
-
-            if (properties == null ||
-                !properties.TryGetValue(SiteContext.ErrorRedirectPropertyName, out string? value))
-            {
-                value = null;
-            }
-
-            return value;
+            path = "/";
         }
 
-        private static bool WasPermissionDenied(RemoteFailureContext context)
+        SiteMessage message;
+
+        if (WasPermissionDenied(context))
         {
-            string? error = context.Request.Query["error"].FirstOrDefault();
+            message = SiteMessage.LinkDenied;
+            logger.LogTrace("User denied permission.");
+        }
+        else
+        {
+            message = SiteMessage.LinkFailed;
 
-            if (string.Equals(error, "access_denied", StringComparison.Ordinal) ||
-                string.Equals(error, "consent_required", StringComparison.Ordinal))
+            var eventId = default(EventId);
+            string errors = string.Join(";", context.Request.Query.Select((p) => $"'{p.Key}' = '{p.Value}'"));
+            string logMessage = $"Failed to sign-in using '{provider}': '{context.Failure?.Message}'. Errors: {errors}.";
+
+            if (IsCorrelationFailure(context))
             {
-                return true;
+                // Not a server-side problem, so do not create log noise
+                logger.LogTrace(eventId, context.Failure, logMessage);
             }
-
-            string? reason = context.Request.Query["error_reason"].FirstOrDefault();
-
-            if (string.Equals(reason, "user_denied", StringComparison.Ordinal))
+            else
             {
-                return true;
+                logger.LogError(eventId, context.Failure, logMessage);
             }
-
-            string? description = context.Request.Query["error_description"].FirstOrDefault();
-
-            if (!string.IsNullOrEmpty(description) &&
-                description.Contains("denied", StringComparison.OrdinalIgnoreCase))
-            {
-                return true;
-            }
-
-            return context.Request.Query.ContainsKey("denied");
         }
 
-        private static bool IsCorrelationFailure(RemoteFailureContext context)
+        context.Response.Redirect($"{path}?Message={message}");
+        context.HandleResponse();
+
+        return Task.CompletedTask;
+    }
+
+    private static bool IsProviderEnabled(
+        string name,
+        Options.AuthenticationOptions options,
+        bool requiresClientSecret = true)
+    {
+        ExternalSignInOptions? provider = null;
+
+        if (options.ExternalProviders?.TryGetValue(name, out provider) != true ||
+            provider is null)
         {
-            // See https://github.com/aspnet/Security/blob/ad425163b29b1e09a41e84423b0dcbac797c9164/src/Microsoft.AspNetCore.Authentication.OAuth/OAuthHandler.cs#L66
-            // and https://github.com/aspnet/Security/blob/2d1c56ce5ccfc15c78dd49cee772f6be473f3ee2/src/Microsoft.AspNetCore.Authentication/RemoteAuthenticationHandler.cs#L203
-            // This effectively means that the user did not pass their cookies along correctly to correlate the request.
-            return string.Equals(context.Failure?.Message, "Correlation failed.", StringComparison.Ordinal);
+            return false;
         }
+
+        return
+            provider.IsEnabled &&
+            !string.IsNullOrEmpty(provider.ClientId) &&
+            (!requiresClientSecret || !string.IsNullOrEmpty(provider.ClientSecret));
+    }
+
+    private static void Configure<T>(
+        this AuthenticationBuilder builder,
+        string name,
+        Action<T, IServiceProvider>? configure = null)
+        where T : OAuthOptions
+    {
+        builder.Services
+            .AddOptions<T>(name)
+            .Configure<IServiceProvider>((options, serviceProvider) =>
+            {
+                var siteOptions = serviceProvider.GetRequiredService<SiteOptions>();
+                var provider = siteOptions!.Authentication!.ExternalProviders![name] !;
+
+                options.ClientId = provider.ClientId!;
+                options.ClientSecret = provider.ClientSecret!;
+                options.CorrelationCookie.Name = ApplicationCookie.Correlation.Name;
+
+                options.Events.OnRemoteFailure = (context) =>
+                {
+                    return HandleRemoteFailure(
+                        context,
+                        context.Scheme.Name,
+                        options.StateDataFormat,
+                        context.HttpContext.RequestServices.GetRequiredService<ILogger<T>>(),
+                        (p) => p.Items);
+                };
+
+                options.Events.OnTicketReceived = (context) =>
+                {
+                    var clock = context.HttpContext.RequestServices.GetRequiredService<ISystemClock>();
+
+                    context.Properties!.ExpiresUtc = clock.UtcNow.AddDays(150);
+                    context.Properties.IsPersistent = true;
+
+                    return Task.CompletedTask;
+                };
+
+                configure?.Invoke(options, serviceProvider);
+            });
+    }
+
+    private static string? GetSiteErrorRedirect<T>(
+        RemoteFailureContext context,
+        ISecureDataFormat<T> secureDataFormat,
+        Func<T, IDictionary<string, string?>?> propertiesProvider)
+    {
+        var state = context.Request.Query["state"];
+        var stateData = secureDataFormat.Unprotect(state);
+        var properties = propertiesProvider?.Invoke(stateData!);
+
+        if (properties == null ||
+            !properties.TryGetValue(SiteContext.ErrorRedirectPropertyName, out string? value))
+        {
+            value = null;
+        }
+
+        return value;
+    }
+
+    private static bool WasPermissionDenied(RemoteFailureContext context)
+    {
+        string? error = context.Request.Query["error"].FirstOrDefault();
+
+        if (string.Equals(error, "access_denied", StringComparison.Ordinal) ||
+            string.Equals(error, "consent_required", StringComparison.Ordinal))
+        {
+            return true;
+        }
+
+        string? reason = context.Request.Query["error_reason"].FirstOrDefault();
+
+        if (string.Equals(reason, "user_denied", StringComparison.Ordinal))
+        {
+            return true;
+        }
+
+        string? description = context.Request.Query["error_description"].FirstOrDefault();
+
+        if (!string.IsNullOrEmpty(description) &&
+            description.Contains("denied", StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        return context.Request.Query.ContainsKey("denied");
+    }
+
+    private static bool IsCorrelationFailure(RemoteFailureContext context)
+    {
+        // See https://github.com/aspnet/Security/blob/ad425163b29b1e09a41e84423b0dcbac797c9164/src/Microsoft.AspNetCore.Authentication.OAuth/OAuthHandler.cs#L66
+        // and https://github.com/aspnet/Security/blob/2d1c56ce5ccfc15c78dd49cee772f6be473f3ee2/src/Microsoft.AspNetCore.Authentication/RemoteAuthenticationHandler.cs#L203
+        // This effectively means that the user did not pass their cookies along correctly to correlate the request.
+        return string.Equals(context.Failure?.Message, "Correlation failed.", StringComparison.Ordinal);
     }
 }

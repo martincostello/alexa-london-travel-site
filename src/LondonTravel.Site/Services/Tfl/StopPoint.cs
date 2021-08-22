@@ -3,35 +3,34 @@
 
 using System.Text.Json.Serialization;
 
-namespace MartinCostello.LondonTravel.Site.Services.Tfl
+namespace MartinCostello.LondonTravel.Site.Services.Tfl;
+
+/// <summary>
+/// A class representing information about a stop point on a line. This class cannot be inherited.
+/// </summary>
+public sealed class StopPoint
 {
     /// <summary>
-    /// A class representing information about a stop point on a line. This class cannot be inherited.
+    /// Gets or sets the Id of the stop point.
     /// </summary>
-    public sealed class StopPoint
-    {
-        /// <summary>
-        /// Gets or sets the Id of the stop point.
-        /// </summary>
-        [JsonPropertyName("id")]
-        public string? Id { get; set; }
+    [JsonPropertyName("id")]
+    public string? Id { get; set; }
 
-        /// <summary>
-        /// Gets or sets the name of the stop point.
-        /// </summary>
-        [JsonPropertyName("commonName")]
-        public string? Name { get; set; }
+    /// <summary>
+    /// Gets or sets the name of the stop point.
+    /// </summary>
+    [JsonPropertyName("commonName")]
+    public string? Name { get; set; }
 
-        /// <summary>
-        /// Gets or sets the latitude of the stop point.
-        /// </summary>
-        [JsonPropertyName("lat")]
-        public double Latitude { get; set; }
+    /// <summary>
+    /// Gets or sets the latitude of the stop point.
+    /// </summary>
+    [JsonPropertyName("lat")]
+    public double Latitude { get; set; }
 
-        /// <summary>
-        /// Gets or sets the longitude of the stop point.
-        /// </summary>
-        [JsonPropertyName("lon")]
-        public double Longitude { get; set; }
-    }
+    /// <summary>
+    /// Gets or sets the longitude of the stop point.
+    /// </summary>
+    [JsonPropertyName("lon")]
+    public double Longitude { get; set; }
 }

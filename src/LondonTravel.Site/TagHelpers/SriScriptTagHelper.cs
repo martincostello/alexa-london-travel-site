@@ -11,87 +11,86 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.FileProviders;
 
-namespace MartinCostello.LondonTravel.Site.TagHelpers
+namespace MartinCostello.LondonTravel.Site.TagHelpers;
+
+/// <summary>
+/// A <see cref="ITagHelper"/> implementation targeting &lt;script&gt; elements to add subresource integrity attributes.
+/// </summary>
+[HtmlTargetElement("script", Attributes = AddSriAttributeName, TagStructure = TagStructure.NormalOrSelfClosing)]
+public class SriScriptTagHelper : LinkTagHelper
 {
     /// <summary>
-    /// A <see cref="ITagHelper"/> implementation targeting &lt;script&gt; elements to add subresource integrity attributes.
+    /// The name of the <c>asp-add-sri</c> attribute.
     /// </summary>
-    [HtmlTargetElement("script", Attributes = AddSriAttributeName, TagStructure = TagStructure.NormalOrSelfClosing)]
-    public class SriScriptTagHelper : LinkTagHelper
+    private const string AddSriAttributeName = "asp-add-sri";
+
+    /// <summary>
+    /// An array containing the <c>~</c> character.
+    /// </summary>
+    private static readonly char[] Tilde = new[] { '~' };
+
+    public SriScriptTagHelper(IWebHostEnvironment hostingEnvironment, TagHelperMemoryCacheProvider cacheProvider, IFileVersionProvider fileVersionProvider, HtmlEncoder htmlEncoder, JavaScriptEncoder javaScriptEncoder, IUrlHelperFactory urlHelperFactory)
+        : base(hostingEnvironment, cacheProvider, fileVersionProvider, htmlEncoder, javaScriptEncoder, urlHelperFactory)
     {
-        /// <summary>
-        /// The name of the <c>asp-add-sri</c> attribute.
-        /// </summary>
-        private const string AddSriAttributeName = "asp-add-sri";
+    }
 
-        /// <summary>
-        /// An array containing the <c>~</c> character.
-        /// </summary>
-        private static readonly char[] Tilde = new[] { '~' };
+    /// <summary>
+    /// Gets or sets a value indicating whether Subresource Integrity attributes should be added.
+    /// </summary>
+    [HtmlAttributeName(AddSriAttributeName)]
+    public bool? AddSubresourceIntegrity { get; set; }
 
-        public SriScriptTagHelper(IWebHostEnvironment hostingEnvironment, TagHelperMemoryCacheProvider cacheProvider, IFileVersionProvider fileVersionProvider, HtmlEncoder htmlEncoder, JavaScriptEncoder javaScriptEncoder, IUrlHelperFactory urlHelperFactory)
-            : base(hostingEnvironment, cacheProvider, fileVersionProvider, htmlEncoder, javaScriptEncoder, urlHelperFactory)
+    /// <inheritdoc />
+    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+        ArgumentNullException.ThrowIfNull(output);
+
+        if (AddSubresourceIntegrity != true)
         {
+            await base.ProcessAsync(context, output);
+            return;
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether Subresource Integrity attributes should be added.
-        /// </summary>
-        [HtmlAttributeName(AddSriAttributeName)]
-        public bool? AddSubresourceIntegrity { get; set; }
+        string? filePath = (context.AllAttributes["src"].Value as string)?.TrimStart(Tilde);
+        string? type = context.AllAttributes["type"]?.Value?.ToString() as string;
 
-        /// <inheritdoc />
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        if (string.IsNullOrEmpty(filePath) ||
+            (!string.IsNullOrEmpty(type) && !string.Equals(type, "text/javascript", StringComparison.OrdinalIgnoreCase)))
         {
-            ArgumentNullException.ThrowIfNull(context);
-            ArgumentNullException.ThrowIfNull(output);
-
-            if (AddSubresourceIntegrity != true)
-            {
-                await base.ProcessAsync(context, output);
-                return;
-            }
-
-            string? filePath = (context.AllAttributes["src"].Value as string)?.TrimStart(Tilde);
-            string? type = context.AllAttributes["type"]?.Value?.ToString() as string;
-
-            if (string.IsNullOrEmpty(filePath) ||
-                (!string.IsNullOrEmpty(type) && !string.Equals(type, "text/javascript", StringComparison.OrdinalIgnoreCase)))
-            {
-                // No file or not JavaScript
-                await base.ProcessAsync(context, output);
-                return;
-            }
-
-            IFileInfo fileInfo = HostingEnvironment.WebRootFileProvider.GetFileInfo(filePath);
-
-            if (!fileInfo.Exists)
-            {
-                // Not a local file
-                await base.ProcessAsync(context, output);
-                return;
-            }
-
-            string cacheKey = $"sri-hash-{fileInfo.PhysicalPath}";
-
-            if (!Cache.TryGetValue(cacheKey, out string hash))
-            {
-                using (var algorithm = SHA384.Create())
-                {
-                    using var stream = fileInfo.CreateReadStream();
-                    hash = Convert.ToBase64String(algorithm.ComputeHash(stream));
-                }
-
-                var options = new MemoryCacheEntryOptions()
-                {
-                    Size = hash.Length,
-                };
-
-                Cache.Set(cacheKey, hash, options);
-            }
-
-            output.Attributes.Add("integrity", $"sha384-{hash}");
-            output.Attributes.Add("crossorigin", "anonymous");
+            // No file or not JavaScript
+            await base.ProcessAsync(context, output);
+            return;
         }
+
+        IFileInfo fileInfo = HostingEnvironment.WebRootFileProvider.GetFileInfo(filePath);
+
+        if (!fileInfo.Exists)
+        {
+            // Not a local file
+            await base.ProcessAsync(context, output);
+            return;
+        }
+
+        string cacheKey = $"sri-hash-{fileInfo.PhysicalPath}";
+
+        if (!Cache.TryGetValue(cacheKey, out string hash))
+        {
+            using (var algorithm = SHA384.Create())
+            {
+                using var stream = fileInfo.CreateReadStream();
+                hash = Convert.ToBase64String(algorithm.ComputeHash(stream));
+            }
+
+            var options = new MemoryCacheEntryOptions()
+            {
+                Size = hash.Length,
+            };
+
+            Cache.Set(cacheKey, hash, options);
+        }
+
+        output.Attributes.Add("integrity", $"sha384-{hash}");
+        output.Attributes.Add("crossorigin", "anonymous");
     }
 }

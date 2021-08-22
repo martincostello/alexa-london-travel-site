@@ -3,17 +3,16 @@
 
 using System.Text.Json;
 
-namespace MartinCostello.LondonTravel.Site
+namespace MartinCostello.LondonTravel.Site;
+
+internal static class JsonElementExtensions
 {
-    internal static class JsonElementExtensions
-    {
-        internal static int GetInt32(this JsonElement element, string propertyName)
-            => element.GetProperty(propertyName).GetInt32();
+    internal static int GetInt32(this JsonElement element, string propertyName)
+        => element.GetProperty(propertyName).GetInt32();
 
-        internal static string? GetString(this JsonElement element, string propertyName)
-            => element.GetProperty(propertyName).GetString();
+    internal static string? GetString(this JsonElement element, string propertyName)
+        => element.GetProperty(propertyName).GetString();
 
-        internal static string?[] GetStringArray(this JsonElement element, string propertyName)
-            => element.GetProperty(propertyName).EnumerateArray().Select((p) => p.GetString()).ToArray();
-    }
+    internal static string?[] GetStringArray(this JsonElement element, string propertyName)
+        => element.GetProperty(propertyName).EnumerateArray().Select((p) => p.GetString()).ToArray();
 }

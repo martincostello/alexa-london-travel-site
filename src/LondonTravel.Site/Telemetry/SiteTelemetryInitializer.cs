@@ -7,84 +7,83 @@ using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
 
-namespace MartinCostello.LondonTravel.Site.Telemetry
+namespace MartinCostello.LondonTravel.Site.Telemetry;
+
+/// <summary>
+/// A class representing an Application Insights initializer for custom telemetry setup. This class cannot be inherited.
+/// </summary>
+internal sealed class SiteTelemetryInitializer : ITelemetryInitializer
 {
     /// <summary>
-    /// A class representing an Application Insights initializer for custom telemetry setup. This class cannot be inherited.
+    /// The <see cref="IConfiguration"/> to use. This field is read-only.
     /// </summary>
-    internal sealed class SiteTelemetryInitializer : ITelemetryInitializer
+    private readonly IConfiguration _config;
+
+    /// <summary>
+    /// The <see cref="IHttpContextAccessor"/> to use. This field is read-only.
+    /// </summary>
+    private readonly IHttpContextAccessor _contextAccessor;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SiteTelemetryInitializer"/> class.
+    /// </summary>
+    /// <param name="config">The <see cref="IConfiguration"/> to use.</param>
+    /// <param name="contextAccessor">The <see cref="IHttpContextAccessor"/> to use.</param>
+    public SiteTelemetryInitializer(IConfiguration config, IHttpContextAccessor contextAccessor)
     {
-        /// <summary>
-        /// The <see cref="IConfiguration"/> to use. This field is read-only.
-        /// </summary>
-        private readonly IConfiguration _config;
+        _config = config;
+        _contextAccessor = contextAccessor;
+    }
 
-        /// <summary>
-        /// The <see cref="IHttpContextAccessor"/> to use. This field is read-only.
-        /// </summary>
-        private readonly IHttpContextAccessor _contextAccessor;
+    /// <inheritdoc />
+    public void Initialize(ITelemetry telemetry)
+    {
+        telemetry.Context.GlobalProperties["AzureDatacenter"] = _config.AzureDatacenter();
+        telemetry.Context.GlobalProperties["AzureEnvironment"] = _config.AzureEnvironment();
+        telemetry.Context.GlobalProperties["GitCommit"] = GitMetadata.Commit;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SiteTelemetryInitializer"/> class.
-        /// </summary>
-        /// <param name="config">The <see cref="IConfiguration"/> to use.</param>
-        /// <param name="contextAccessor">The <see cref="IHttpContextAccessor"/> to use.</param>
-        public SiteTelemetryInitializer(IConfiguration config, IHttpContextAccessor contextAccessor)
+        if (_contextAccessor.HttpContext != null && string.IsNullOrEmpty(telemetry.Context.User.AuthenticatedUserId))
         {
-            _config = config;
-            _contextAccessor = contextAccessor;
+            if (_contextAccessor.HttpContext.User?.Identity?.IsAuthenticated == true)
+            {
+                telemetry.Context.User.AuthenticatedUserId = _contextAccessor.HttpContext.User.GetUserId();
+            }
         }
 
-        /// <inheritdoc />
-        public void Initialize(ITelemetry telemetry)
+        if (telemetry is DependencyTelemetry dependency)
         {
-            telemetry.Context.GlobalProperties["AzureDatacenter"] = _config.AzureDatacenter();
-            telemetry.Context.GlobalProperties["AzureEnvironment"] = _config.AzureEnvironment();
-            telemetry.Context.GlobalProperties["GitCommit"] = GitMetadata.Commit;
+            var activity = System.Diagnostics.Activity.Current;
 
-            if (_contextAccessor.HttpContext != null && string.IsNullOrEmpty(telemetry.Context.User.AuthenticatedUserId))
+            if (activity != null)
             {
-                if (_contextAccessor.HttpContext.User?.Identity?.IsAuthenticated == true)
+                foreach (var item in activity.Tags)
                 {
-                    telemetry.Context.User.AuthenticatedUserId = _contextAccessor.HttpContext.User.GetUserId();
+                    dependency.Properties[item.Key] = item.Value;
                 }
             }
 
-            if (telemetry is DependencyTelemetry dependency)
+            HttpResponseHeaders? headers = null;
+
+            // See https://github.com/Microsoft/ApplicationInsights-dotnet-server/issues/587#issuecomment-443927313
+            if (dependency.TryGetOperationDetail("HttpResponse", out object detail) && detail is HttpResponseMessage response)
             {
-                var activity = System.Diagnostics.Activity.Current;
+                headers = response.Headers;
+            }
+            else if (dependency.TryGetOperationDetail("HttpResponseHeaders", out detail) && detail is HttpResponseHeaders responseHeaders)
+            {
+                headers = responseHeaders;
+            }
 
-                if (activity != null)
+            if (headers != null && activity != null)
+            {
+                if (headers.TryGetValues("x-ms-activity-id", out var values))
                 {
-                    foreach (var item in activity.Tags)
-                    {
-                        dependency.Properties[item.Key] = item.Value;
-                    }
+                    activity.AddTag("Activity Id", string.Join(", ", values));
                 }
 
-                HttpResponseHeaders? headers = null;
-
-                // See https://github.com/Microsoft/ApplicationInsights-dotnet-server/issues/587#issuecomment-443927313
-                if (dependency.TryGetOperationDetail("HttpResponse", out object detail) && detail is HttpResponseMessage response)
+                if (headers.TryGetValues("x-ms-request-charge", out values))
                 {
-                    headers = response.Headers;
-                }
-                else if (dependency.TryGetOperationDetail("HttpResponseHeaders", out detail) && detail is HttpResponseHeaders responseHeaders)
-                {
-                    headers = responseHeaders;
-                }
-
-                if (headers != null && activity != null)
-                {
-                    if (headers.TryGetValues("x-ms-activity-id", out var values))
-                    {
-                        activity.AddTag("Activity Id", string.Join(", ", values));
-                    }
-
-                    if (headers.TryGetValues("x-ms-request-charge", out values))
-                    {
-                        activity.AddTag("Request Charge", string.Join(", ", values));
-                    }
+                    activity.AddTag("Request Charge", string.Join(", ", values));
                 }
             }
         }

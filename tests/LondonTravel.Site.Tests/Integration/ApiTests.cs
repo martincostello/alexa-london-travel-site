@@ -4,70 +4,69 @@
 using System.Net;
 using System.Net.Http.Headers;
 
-namespace MartinCostello.LondonTravel.Site.Integration
+namespace MartinCostello.LondonTravel.Site.Integration;
+
+/// <summary>
+/// A class containing tests for the API.
+/// </summary>
+public class ApiTests : IntegrationTest
 {
+    private const string Scheme = "bearer";
+
+    private const string RequestUri = "/api/preferences";
+
     /// <summary>
-    /// A class containing tests for the API.
+    /// Initializes a new instance of the <see cref="ApiTests"/> class.
     /// </summary>
-    public class ApiTests : IntegrationTest
+    /// <param name="fixture">The fixture to use.</param>
+    /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+    public ApiTests(TestServerFixture fixture, ITestOutputHelper outputHelper)
+        : base(fixture, outputHelper)
     {
-        private const string Scheme = "bearer";
+    }
 
-        private const string RequestUri = "/api/preferences";
+    [Fact]
+    public async Task Cannot_Get_Preferences_Unauthenticated()
+    {
+        // Arrange
+        using var client = Fixture.CreateClient();
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ApiTests"/> class.
-        /// </summary>
-        /// <param name="fixture">The fixture to use.</param>
-        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
-        public ApiTests(TestServerFixture fixture, ITestOutputHelper outputHelper)
-            : base(fixture, outputHelper)
-        {
-        }
+        // Act
+        using var response = await client.GetAsync(RequestUri);
 
-        [Fact]
-        public async Task Cannot_Get_Preferences_Unauthenticated()
-        {
-            // Arrange
-            using var client = Fixture.CreateClient();
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
 
-            // Act
-            using var response = await client.GetAsync(RequestUri);
+        using var result = await response.ReadAsJsonDocumentAsync();
 
-            // Assert
-            response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+        result.RootElement.GetString("requestId").ShouldNotBeNullOrWhiteSpace();
+        result.RootElement.GetString("message").ShouldBe("No access token specified.");
+        result.RootElement.GetInt32("statusCode").ShouldBe(401);
+        result.RootElement.GetStringArray("details").ShouldNotBeNull();
+        result.RootElement.GetStringArray("details").ShouldBeEmpty();
+    }
 
-            using var result = await response.ReadAsJsonDocumentAsync();
+    [Fact]
+    public async Task Cannot_Get_Preferences_With_Invalid_Token()
+    {
+        // Arrange
+        string accessToken = Guid.NewGuid().ToString();
 
-            result.RootElement.GetString("requestId").ShouldNotBeNullOrWhiteSpace();
-            result.RootElement.GetString("message").ShouldBe("No access token specified.");
-            result.RootElement.GetInt32("statusCode").ShouldBe(401);
-            result.RootElement.GetStringArray("details").ShouldNotBeNull();
-            result.RootElement.GetStringArray("details").ShouldBeEmpty();
-        }
+        using var client = Fixture.CreateClient();
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(Scheme, accessToken);
 
-        [Fact]
-        public async Task Cannot_Get_Preferences_With_Invalid_Token()
-        {
-            // Arrange
-            string accessToken = Guid.NewGuid().ToString();
+        // Act
+        using var response = await client.GetAsync(RequestUri);
 
-            using var client = Fixture.CreateClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(Scheme, accessToken);
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
 
-            // Act
-            using var response = await client.GetAsync(RequestUri);
+        using var result = await response.ReadAsJsonDocumentAsync();
 
-            // Assert
-            response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
-
-            using var result = await response.ReadAsJsonDocumentAsync();
-
-            result.RootElement.GetString("requestId").ShouldNotBeNullOrWhiteSpace();
-            result.RootElement.GetString("message").ShouldBe("Unauthorized.");
-            result.RootElement.GetInt32("statusCode").ShouldBe(401);
-            result.RootElement.GetStringArray("details").ShouldNotBeNull();
-            result.RootElement.GetStringArray("details").ShouldBeEmpty();
-        }
+        result.RootElement.GetString("requestId").ShouldNotBeNullOrWhiteSpace();
+        result.RootElement.GetString("message").ShouldBe("Unauthorized.");
+        result.RootElement.GetInt32("statusCode").ShouldBe(401);
+        result.RootElement.GetStringArray("details").ShouldNotBeNull();
+        result.RootElement.GetStringArray("details").ShouldBeEmpty();
     }
 }

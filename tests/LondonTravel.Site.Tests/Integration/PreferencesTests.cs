@@ -4,100 +4,99 @@
 using MartinCostello.LondonTravel.Site.Pages;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace MartinCostello.LondonTravel.Site.Integration
+namespace MartinCostello.LondonTravel.Site.Integration;
+
+/// <summary>
+/// A class containing tests for user preferences in the website.
+/// </summary>
+public sealed class PreferencesTests : BrowserIntegrationTest
 {
     /// <summary>
-    /// A class containing tests for user preferences in the website.
+    /// Initializes a new instance of the <see cref="PreferencesTests"/> class.
     /// </summary>
-    public sealed class PreferencesTests : BrowserIntegrationTest
+    /// <param name="fixture">The fixture to use.</param>
+    /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+    public PreferencesTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
+        : base(fixture, outputHelper)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PreferencesTests"/> class.
-        /// </summary>
-        /// <param name="fixture">The fixture to use.</param>
-        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
-        public PreferencesTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
-            : base(fixture, outputHelper)
+        Fixture.Services!.GetRequiredService<InMemoryDocumentStore>().Clear();
+    }
+
+    [Theory]
+    [ClassData(typeof(BrowsersTestData))]
+    public async Task Can_Manage_Preferences(string browserType)
+    {
+        // Arrange
+        await AtPageAsync<HomePage>(
+            browserType,
+            async (page) =>
+            {
+                page = await page
+                    .SignInAsync()
+                    .ThenAsync((p) => p.SignInWithAmazonAsync());
+
+                // Act
+                IReadOnlyList<LinePreference> lines = await page.LinesAsync();
+
+                // Assert
+                lines.Count.ShouldBeGreaterThan(2);
+                await CountSelectedLinesAsync(lines).ShouldBe(0);
+
+                // Act
+                LinePreference? district = await GetLineAsync(lines, "District");
+                LinePreference? northern = await GetLineAsync(lines, "Northern");
+
+                district.ShouldNotBeNull();
+                northern.ShouldNotBeNull();
+
+                await district.ToggleAsync();
+                await northern.ToggleAsync();
+
+                page = await page.UpdatePreferencesAsync();
+
+                // Assert
+                lines = await page.LinesAsync();
+
+                lines.Count.ShouldBeGreaterThan(2);
+
+                district = await GetLineAsync(lines, "District");
+                northern = await GetLineAsync(lines, "Northern");
+
+                district.ShouldNotBeNull();
+                northern.ShouldNotBeNull();
+
+                await district.IsSelectedAsync().ShouldBeTrue();
+                await northern.IsSelectedAsync().ShouldBeTrue();
+
+                await CountSelectedLinesAsync(lines).ShouldBe(2);
+            });
+
+        static async Task<LinePreference?> GetLineAsync(IEnumerable<LinePreference> collection, string name)
         {
-            Fixture.Services!.GetRequiredService<InMemoryDocumentStore>().Clear();
+            foreach (var line in collection)
+            {
+                if (string.Equals(await line.NameAsync(), name, StringComparison.Ordinal))
+                {
+                    return line;
+                }
+            }
+
+            return null;
         }
 
-        [Theory]
-        [ClassData(typeof(BrowsersTestData))]
-        public async Task Can_Manage_Preferences(string browserType)
+        static async Task<int> CountSelectedLinesAsync(IEnumerable<LinePreference> collection)
         {
-            // Arrange
-            await AtPageAsync<HomePage>(
-                browserType,
-                async (page) =>
-                {
-                    page = await page
-                        .SignInAsync()
-                        .ThenAsync((p) => p.SignInWithAmazonAsync());
+            int count = 0;
 
-                    // Act
-                    IReadOnlyList<LinePreference> lines = await page.LinesAsync();
-
-                    // Assert
-                    lines.Count.ShouldBeGreaterThan(2);
-                    await CountSelectedLinesAsync(lines).ShouldBe(0);
-
-                    // Act
-                    LinePreference? district = await GetLineAsync(lines, "District");
-                    LinePreference? northern = await GetLineAsync(lines, "Northern");
-
-                    district.ShouldNotBeNull();
-                    northern.ShouldNotBeNull();
-
-                    await district.ToggleAsync();
-                    await northern.ToggleAsync();
-
-                    page = await page.UpdatePreferencesAsync();
-
-                    // Assert
-                    lines = await page.LinesAsync();
-
-                    lines.Count.ShouldBeGreaterThan(2);
-
-                    district = await GetLineAsync(lines, "District");
-                    northern = await GetLineAsync(lines, "Northern");
-
-                    district.ShouldNotBeNull();
-                    northern.ShouldNotBeNull();
-
-                    await district.IsSelectedAsync().ShouldBeTrue();
-                    await northern.IsSelectedAsync().ShouldBeTrue();
-
-                    await CountSelectedLinesAsync(lines).ShouldBe(2);
-                });
-
-            static async Task<LinePreference?> GetLineAsync(IEnumerable<LinePreference> collection, string name)
+            foreach (var line in collection)
             {
-                foreach (var line in collection)
+                if (await line.IsSelectedAsync())
                 {
-                    if (string.Equals(await line.NameAsync(), name, StringComparison.Ordinal))
-                    {
-                        return line;
-                    }
+                    count++;
                 }
-
-                return null;
             }
 
-            static async Task<int> CountSelectedLinesAsync(IEnumerable<LinePreference> collection)
-            {
-                int count = 0;
-
-                foreach (var line in collection)
-                {
-                    if (await line.IsSelectedAsync())
-                    {
-                        count++;
-                    }
-                }
-
-                return count;
-            }
+            return count;
         }
     }
 }

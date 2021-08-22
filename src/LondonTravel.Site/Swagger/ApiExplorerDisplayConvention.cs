@@ -5,19 +5,18 @@ using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
-namespace MartinCostello.LondonTravel.Site.Swagger
+namespace MartinCostello.LondonTravel.Site.Swagger;
+
+/// <summary>
+/// A class representing the convention for displaying routes in API documentation. This class cannot be inherited.
+/// </summary>
+public sealed class ApiExplorerDisplayConvention : IActionModelConvention
 {
-    /// <summary>
-    /// A class representing the convention for displaying routes in API documentation. This class cannot be inherited.
-    /// </summary>
-    public sealed class ApiExplorerDisplayConvention : IActionModelConvention
+    /// <inheritdoc />
+    public void Apply(ActionModel action)
     {
-        /// <inheritdoc />
-        public void Apply(ActionModel action)
-        {
-            action.ApiExplorer.IsVisible =
-                action.Attributes.OfType<ProducesAttribute>().Any((p) => p.ContentTypes.Contains(MediaTypeNames.Application.Json)) &&
-                !action.Attributes.OfType<ApiExplorerSettingsAttribute>().Any((p) => p.IgnoreApi);
-        }
+        action.ApiExplorer.IsVisible =
+            action.Attributes.OfType<ProducesAttribute>().Any((p) => p.ContentTypes.Contains(MediaTypeNames.Application.Json)) &&
+            !action.Attributes.OfType<ApiExplorerSettingsAttribute>().Any((p) => p.IgnoreApi);
     }
 }

@@ -11,372 +11,371 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NodaTime;
 
-namespace MartinCostello.LondonTravel.Site.Controllers
+namespace MartinCostello.LondonTravel.Site.Controllers;
+
+/// <summary>
+/// A class representing the controller for the <c>/account/</c> resource.
+/// </summary>
+[Authorize]
+[Route("account", Name = SiteRoutes.Account)]
+public class AccountController : Controller
 {
     /// <summary>
-    /// A class representing the controller for the <c>/account/</c> resource.
+    /// The names of the authentication schemes that are disallowed for
+    /// sign-in to link Alexa to an account. This field is read-only.
     /// </summary>
-    [Authorize]
-    [Route("account", Name = SiteRoutes.Account)]
-    public class AccountController : Controller
+    private static readonly string[] AuthenticationSchemesDisabledForAlexa = { "apple", "github", "google" };
+
+    //// TODO Move more of the implementation into IAccountService
+
+    private readonly UserManager<LondonTravelUser> _userManager;
+    private readonly SignInManager<LondonTravelUser> _signInManager;
+    private readonly ISiteTelemetry _telemetry;
+    private readonly IClock _clock;
+    private readonly bool _isEnabled;
+    private readonly ILogger _logger;
+
+    public AccountController(
+        UserManager<LondonTravelUser> userManager,
+        SignInManager<LondonTravelUser> signInManager,
+        ISiteTelemetry telemetry,
+        IClock clock,
+        SiteOptions siteOptions,
+        ILogger<AccountController> logger)
     {
-        /// <summary>
-        /// The names of the authentication schemes that are disallowed for
-        /// sign-in to link Alexa to an account. This field is read-only.
-        /// </summary>
-        private static readonly string[] AuthenticationSchemesDisabledForAlexa = { "apple", "github", "google" };
+        _userManager = userManager;
+        _signInManager = signInManager;
+        _telemetry = telemetry;
+        _clock = clock;
+        _logger = logger;
 
-        //// TODO Move more of the implementation into IAccountService
+        _isEnabled =
+            siteOptions?.Authentication?.IsEnabled == true &&
+            siteOptions?.Authentication.ExternalProviders?.Any((p) => p.Value?.IsEnabled == true) == true;
+    }
 
-        private readonly UserManager<LondonTravelUser> _userManager;
-        private readonly SignInManager<LondonTravelUser> _signInManager;
-        private readonly ISiteTelemetry _telemetry;
-        private readonly IClock _clock;
-        private readonly bool _isEnabled;
-        private readonly ILogger _logger;
+    /// <summary>
+    /// Gets the result for the <c>/account/access-denied/</c> action.
+    /// </summary>
+    /// <returns>
+    /// The result for the <c>/account/access-denied/</c> action.
+    /// </returns>
+    [HttpGet]
+    [Route("access-denied", Name = SiteRoutes.AccessDenied)]
+    public IActionResult AccessDenied() => View();
 
-        public AccountController(
-            UserManager<LondonTravelUser> userManager,
-            SignInManager<LondonTravelUser> signInManager,
-            ISiteTelemetry telemetry,
-            IClock clock,
-            SiteOptions siteOptions,
-            ILogger<AccountController> logger)
+    /// <summary>
+    /// Gets the result for the <c>/account/sign-in/</c> action.
+    /// </summary>
+    /// <param name="returnUrl">The optional return URL once the user is signed-in.</param>
+    /// <returns>
+    /// The result for the <c>/account/sign-in/</c> action.
+    /// </returns>
+    [AllowAnonymous]
+    [HttpGet]
+    [Route("sign-in", Name = SiteRoutes.SignIn)]
+    public async Task<IActionResult> SignIn(string? returnUrl = null)
+    {
+        if (!_isEnabled)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _telemetry = telemetry;
-            _clock = clock;
-            _logger = logger;
-
-            _isEnabled =
-                siteOptions?.Authentication?.IsEnabled == true &&
-                siteOptions?.Authentication.ExternalProviders?.Any((p) => p.Value?.IsEnabled == true) == true;
+            return NotFound();
         }
 
-        /// <summary>
-        /// Gets the result for the <c>/account/access-denied/</c> action.
-        /// </summary>
-        /// <returns>
-        /// The result for the <c>/account/access-denied/</c> action.
-        /// </returns>
-        [HttpGet]
-        [Route("access-denied", Name = SiteRoutes.AccessDenied)]
-        public IActionResult AccessDenied() => View();
-
-        /// <summary>
-        /// Gets the result for the <c>/account/sign-in/</c> action.
-        /// </summary>
-        /// <param name="returnUrl">The optional return URL once the user is signed-in.</param>
-        /// <returns>
-        /// The result for the <c>/account/sign-in/</c> action.
-        /// </returns>
-        [AllowAnonymous]
-        [HttpGet]
-        [Route("sign-in", Name = SiteRoutes.SignIn)]
-        public async Task<IActionResult> SignIn(string? returnUrl = null)
+        if (User?.Identity?.IsAuthenticated == true)
         {
-            if (!_isEnabled)
-            {
-                return NotFound();
-            }
-
-            if (User?.Identity?.IsAuthenticated == true)
-            {
-                return RedirectToRoute(SiteRoutes.Home);
-            }
-
-            Uri? returnUri = null;
-
-            if (returnUrl != null &&
-                !Uri.TryCreate(returnUrl, UriKind.Relative, out returnUri))
-            {
-                return RedirectToRoute(SiteRoutes.Home);
-            }
-
-            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-
-            ViewData["ReturnUrl"] = returnUrl;
-
-            string viewName = nameof(SignIn);
-
-            if (IsRedirectAlexaAuthorization(returnUri?.ToString()))
-            {
-                viewName += "Alexa";
-                ViewData["AuthenticationSchemesToHide"] = AuthenticationSchemesDisabledForAlexa;
-            }
-
-            return View(viewName);
-        }
-
-        /// <summary>
-        /// Gets the result for the GET <c>/account/sign-out/</c> action.
-        /// </summary>
-        /// <returns>
-        /// The result for the <c>/account/sign-out/</c> action.
-        /// </returns>
-        [HttpGet]
-        [Route("sign-out", Name = SiteRoutes.SignOut)]
-        [ValidateAntiForgeryToken]
-        public IActionResult SignOutGet() => RedirectToRoute(SiteRoutes.Home);
-
-        /// <summary>
-        /// Gets the result for the POST <c>/account/sign-out/</c> action.
-        /// </summary>
-        /// <returns>
-        /// The result for the <c>/account/sign-out/</c> action.
-        /// </returns>
-        [HttpPost]
-        [Route("sign-out", Name = SiteRoutes.SignOut)]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SignOutPost()
-        {
-            if (!_isEnabled)
-            {
-                return NotFound();
-            }
-
-            string userId = _userManager.GetUserId(User);
-
-            await _signInManager.SignOutAsync();
-
-            _logger.LogInformation("User Id {UserId} signed out.", userId);
-
-            _telemetry.TrackSignOut(userId);
-
             return RedirectToRoute(SiteRoutes.Home);
         }
 
-        /// <summary>
-        /// Gets the result for the <c>/account/external-sign-in/</c> action.
-        /// </summary>
-        /// <param name="provider">The external provider name.</param>
-        /// <param name="returnUrl">The optional return URL once the user is signed-in.</param>
-        /// <returns>
-        /// The result for the <c>/account/external-sign-in/</c> action.
-        /// </returns>
-        [AllowAnonymous]
-        [HttpPost]
-        [Route("external-sign-in", Name = SiteRoutes.ExternalSignIn)]
-        [ValidateAntiForgeryToken]
-        public IActionResult ExternalSignIn(string? provider, string? returnUrl = null)
+        Uri? returnUri = null;
+
+        if (returnUrl != null &&
+            !Uri.TryCreate(returnUrl, UriKind.Relative, out returnUri))
         {
-            if (string.IsNullOrWhiteSpace(provider))
-            {
-                return BadRequest();
-            }
-
-            if (!_isEnabled)
-            {
-                return NotFound();
-            }
-
-            var redirectUrl = Url.RouteUrl(SiteRoutes.ExternalSignInCallback, new { ReturnUrl = returnUrl });
-            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
-
-            string errorRedirectUrl = GetErrorRedirectUrl();
-            SiteContext.SetErrorRedirect(properties, errorRedirectUrl);
-
-            return Challenge(properties, provider);
+            return RedirectToRoute(SiteRoutes.Home);
         }
 
-        /// <summary>
-        /// Gets the result for the <c>/account/external-sign-in-callback/</c> action.
-        /// </summary>
-        /// <param name="returnUrl">The optional return URL once the user is signed-in.</param>
-        /// <param name="remoteError">The remote error message, if any.</param>
-        /// <returns>
-        /// The result for the <c>/account/external-sign-in-callback/</c> action.
-        /// </returns>
-        [AllowAnonymous]
-        [Route("external-sign-in-callback", Name = SiteRoutes.ExternalSignInCallback)]
-        [HttpGet]
-        public async Task<IActionResult> ExternalSignInCallback(string? returnUrl = null, string? remoteError = null)
+        await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+
+        ViewData["ReturnUrl"] = returnUrl;
+
+        string viewName = nameof(SignIn);
+
+        if (IsRedirectAlexaAuthorization(returnUri?.ToString()))
         {
-            if (!_isEnabled)
+            viewName += "Alexa";
+            ViewData["AuthenticationSchemesToHide"] = AuthenticationSchemesDisabledForAlexa;
+        }
+
+        return View(viewName);
+    }
+
+    /// <summary>
+    /// Gets the result for the GET <c>/account/sign-out/</c> action.
+    /// </summary>
+    /// <returns>
+    /// The result for the <c>/account/sign-out/</c> action.
+    /// </returns>
+    [HttpGet]
+    [Route("sign-out", Name = SiteRoutes.SignOut)]
+    [ValidateAntiForgeryToken]
+    public IActionResult SignOutGet() => RedirectToRoute(SiteRoutes.Home);
+
+    /// <summary>
+    /// Gets the result for the POST <c>/account/sign-out/</c> action.
+    /// </summary>
+    /// <returns>
+    /// The result for the <c>/account/sign-out/</c> action.
+    /// </returns>
+    [HttpPost]
+    [Route("sign-out", Name = SiteRoutes.SignOut)]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> SignOutPost()
+    {
+        if (!_isEnabled)
+        {
+            return NotFound();
+        }
+
+        string userId = _userManager.GetUserId(User);
+
+        await _signInManager.SignOutAsync();
+
+        _logger.LogInformation("User Id {UserId} signed out.", userId);
+
+        _telemetry.TrackSignOut(userId);
+
+        return RedirectToRoute(SiteRoutes.Home);
+    }
+
+    /// <summary>
+    /// Gets the result for the <c>/account/external-sign-in/</c> action.
+    /// </summary>
+    /// <param name="provider">The external provider name.</param>
+    /// <param name="returnUrl">The optional return URL once the user is signed-in.</param>
+    /// <returns>
+    /// The result for the <c>/account/external-sign-in/</c> action.
+    /// </returns>
+    [AllowAnonymous]
+    [HttpPost]
+    [Route("external-sign-in", Name = SiteRoutes.ExternalSignIn)]
+    [ValidateAntiForgeryToken]
+    public IActionResult ExternalSignIn(string? provider, string? returnUrl = null)
+    {
+        if (string.IsNullOrWhiteSpace(provider))
+        {
+            return BadRequest();
+        }
+
+        if (!_isEnabled)
+        {
+            return NotFound();
+        }
+
+        var redirectUrl = Url.RouteUrl(SiteRoutes.ExternalSignInCallback, new { ReturnUrl = returnUrl });
+        var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+
+        string errorRedirectUrl = GetErrorRedirectUrl();
+        SiteContext.SetErrorRedirect(properties, errorRedirectUrl);
+
+        return Challenge(properties, provider);
+    }
+
+    /// <summary>
+    /// Gets the result for the <c>/account/external-sign-in-callback/</c> action.
+    /// </summary>
+    /// <param name="returnUrl">The optional return URL once the user is signed-in.</param>
+    /// <param name="remoteError">The remote error message, if any.</param>
+    /// <returns>
+    /// The result for the <c>/account/external-sign-in-callback/</c> action.
+    /// </returns>
+    [AllowAnonymous]
+    [Route("external-sign-in-callback", Name = SiteRoutes.ExternalSignInCallback)]
+    [HttpGet]
+    public async Task<IActionResult> ExternalSignInCallback(string? returnUrl = null, string? remoteError = null)
+    {
+        if (!_isEnabled)
+        {
+            return NotFound();
+        }
+
+        if (remoteError != null)
+        {
+            _logger.LogWarning(
+                "Error from external provider. {RemoteError}",
+                remoteError);
+
+            return View(nameof(SignIn));
+        }
+
+        var info = await _signInManager.GetExternalLoginInfoAsync();
+
+        if (info == null)
+        {
+            return RedirectToRoute(SiteRoutes.SignIn);
+        }
+
+        var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: true);
+
+        if (result.Succeeded)
+        {
+            string userId = _userManager.GetUserId(info.Principal);
+
+            _logger.LogInformation("User Id {UserId} signed in with provider {LoginProvider}.", userId, info.LoginProvider);
+            _telemetry.TrackSignIn(userId, info.LoginProvider);
+
+            return RedirectToLocal(returnUrl);
+        }
+
+        if (result.IsLockedOut)
+        {
+            return View("LockedOut");
+        }
+        else
+        {
+            LondonTravelUser? user = CreateSystemUser(info);
+
+            if (!Uri.TryCreate(returnUrl, UriKind.Relative, out Uri? returnUri))
             {
-                return NotFound();
+                returnUri = null;
             }
 
-            if (remoteError != null)
+            if (string.IsNullOrEmpty(user?.Email))
             {
-                _logger.LogWarning(
-                    "Error from external provider. {RemoteError}",
-                    remoteError);
-
-                return View(nameof(SignIn));
-            }
-
-            var info = await _signInManager.GetExternalLoginInfoAsync();
-
-            if (info == null)
-            {
-                return RedirectToRoute(SiteRoutes.SignIn);
-            }
-
-            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: true);
-
-            if (result.Succeeded)
-            {
-                string userId = _userManager.GetUserId(info.Principal);
-
-                _logger.LogInformation("User Id {UserId} signed in with provider {LoginProvider}.", userId, info.LoginProvider);
-                _telemetry.TrackSignIn(userId, info.LoginProvider);
-
-                return RedirectToLocal(returnUrl);
-            }
-
-            if (result.IsLockedOut)
-            {
-                return View("LockedOut");
-            }
-            else
-            {
-                LondonTravelUser? user = CreateSystemUser(info);
-
-                if (!Uri.TryCreate(returnUrl, UriKind.Relative, out Uri? returnUri))
-                {
-                    returnUri = null;
-                }
-
-                if (string.IsNullOrEmpty(user?.Email))
-                {
-                    ViewData["Message"] = nameof(SiteMessage.PermissionDenied);
-                    ViewData["ReturnUrl"] = returnUri?.ToString();
-
-                    return View("SignIn");
-                }
-
-                var identityResult = await _userManager.CreateAsync(user);
-
-                if (identityResult.Succeeded)
-                {
-                    await _signInManager.SignInAsync(user, isPersistent: true);
-
-                    _logger.LogInformation("New user account {UserId} created through {LoginProvider}.", user.Id, info.LoginProvider);
-
-                    _telemetry.TrackAccountCreated(user.Id!, user.Email, info.LoginProvider);
-
-                    if (returnUri != null && IsRedirectAlexaAuthorization(returnUri.ToString()))
-                    {
-                        return Redirect(returnUri.ToString());
-                    }
-                    else
-                    {
-                        return RedirectToRoute(SiteRoutes.Home, new { Message = SiteMessage.AccountCreated });
-                    }
-                }
-
-                bool isUserAlreadyRegistered = identityResult.Errors.Any((p) => p.Code.StartsWith("Duplicate", StringComparison.Ordinal));
-
-                AddErrors(identityResult);
-
-                if (isUserAlreadyRegistered)
-                {
-                    ViewData["Message"] = nameof(SiteMessage.AlreadyRegistered);
-                    ViewData["ReturnUrl"] = Url.RouteUrl("Manage");
-                }
-                else
-                {
-                    ViewData["ReturnUrl"] = returnUrl;
-                }
+                ViewData["Message"] = nameof(SiteMessage.PermissionDenied);
+                ViewData["ReturnUrl"] = returnUri?.ToString();
 
                 return View("SignIn");
             }
-        }
 
-        private void AddErrors(IdentityResult result)
-        {
-            foreach (var error in result.Errors)
+            var identityResult = await _userManager.CreateAsync(user);
+
+            if (identityResult.Succeeded)
             {
-                _logger?.LogWarning("{ErrorCode}: {ErrorDescription}", error.Code, error.Description);
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
-        }
+                await _signInManager.SignInAsync(user, isPersistent: true);
 
-        private IActionResult RedirectToLocal(string? returnUrl)
-        {
-            if (returnUrl != null && Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-            else
-            {
-                return RedirectToRoute(SiteRoutes.Home);
-            }
-        }
+                _logger.LogInformation("New user account {UserId} created through {LoginProvider}.", user.Id, info.LoginProvider);
 
-        private LondonTravelUser? CreateSystemUser(ExternalLoginInfo info)
-        {
-            var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+                _telemetry.TrackAccountCreated(user.Id!, user.Email, info.LoginProvider);
 
-            if (string.IsNullOrEmpty(email))
-            {
-                return null;
-            }
-
-            var givenName = info.Principal.FindFirstValue(ClaimTypes.GivenName);
-            var surname = info.Principal.FindFirstValue(ClaimTypes.Surname);
-
-            var user = new LondonTravelUser()
-            {
-                CreatedAt = _clock.GetCurrentInstant().ToDateTimeUtc(),
-                Email = email,
-                GivenName = givenName,
-                Surname = surname,
-                UserName = email,
-                EmailConfirmed = false,
-            };
-
-            user.Logins.Add(LondonTravelLoginInfo.FromUserLoginInfo(info));
-
-            foreach (var claim in info.Principal.Claims)
-            {
-                user.RoleClaims.Add(LondonTravelRole.FromClaim(claim));
-            }
-
-            return user;
-        }
-
-        private string GetErrorRedirectUrl()
-        {
-            return Url.RouteUrl(IsReferrerRegistrationPage() ? SiteRoutes.Register : SiteRoutes.SignIn) !;
-        }
-
-        private bool IsReferrerRegistrationPage() => IsReferrerRoute(SiteRoutes.Register);
-
-        private bool IsRedirectAlexaAuthorization(string? returnUrl) => IsUrlRoute(returnUrl, SiteRoutes.AuthorizeAlexa);
-
-        private bool IsReferrerRoute(string routeName)
-        {
-            return IsUrlRoute(HttpContext.Request.Headers["referer"], routeName);
-        }
-
-        private bool IsUrlRoute(string? url, string routeName)
-        {
-            if (string.IsNullOrWhiteSpace(url) ||
-                !Uri.TryCreate(url, UriKind.RelativeOrAbsolute, out Uri? uri))
-            {
-                return false;
-            }
-
-            string routeUrl = Url.RouteUrl(routeName) !;
-
-            if (uri.IsAbsoluteUri)
-            {
-                return string.Equals(uri.AbsolutePath, routeUrl, StringComparison.OrdinalIgnoreCase);
-            }
-            else
-            {
-                int indexOfQuery = url.IndexOf('?', StringComparison.Ordinal);
-
-                if (indexOfQuery > -1)
+                if (returnUri != null && IsRedirectAlexaAuthorization(returnUri.ToString()))
                 {
-                    url = url.Substring(0, indexOfQuery);
+                    return Redirect(returnUri.ToString());
                 }
-
-                return string.Equals(url.TrimEnd('/'), routeUrl.TrimEnd('/'), StringComparison.OrdinalIgnoreCase);
+                else
+                {
+                    return RedirectToRoute(SiteRoutes.Home, new { Message = SiteMessage.AccountCreated });
+                }
             }
+
+            bool isUserAlreadyRegistered = identityResult.Errors.Any((p) => p.Code.StartsWith("Duplicate", StringComparison.Ordinal));
+
+            AddErrors(identityResult);
+
+            if (isUserAlreadyRegistered)
+            {
+                ViewData["Message"] = nameof(SiteMessage.AlreadyRegistered);
+                ViewData["ReturnUrl"] = Url.RouteUrl("Manage");
+            }
+            else
+            {
+                ViewData["ReturnUrl"] = returnUrl;
+            }
+
+            return View("SignIn");
+        }
+    }
+
+    private void AddErrors(IdentityResult result)
+    {
+        foreach (var error in result.Errors)
+        {
+            _logger?.LogWarning("{ErrorCode}: {ErrorDescription}", error.Code, error.Description);
+            ModelState.AddModelError(string.Empty, error.Description);
+        }
+    }
+
+    private IActionResult RedirectToLocal(string? returnUrl)
+    {
+        if (returnUrl != null && Url.IsLocalUrl(returnUrl))
+        {
+            return Redirect(returnUrl);
+        }
+        else
+        {
+            return RedirectToRoute(SiteRoutes.Home);
+        }
+    }
+
+    private LondonTravelUser? CreateSystemUser(ExternalLoginInfo info)
+    {
+        var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+
+        if (string.IsNullOrEmpty(email))
+        {
+            return null;
+        }
+
+        var givenName = info.Principal.FindFirstValue(ClaimTypes.GivenName);
+        var surname = info.Principal.FindFirstValue(ClaimTypes.Surname);
+
+        var user = new LondonTravelUser()
+        {
+            CreatedAt = _clock.GetCurrentInstant().ToDateTimeUtc(),
+            Email = email,
+            GivenName = givenName,
+            Surname = surname,
+            UserName = email,
+            EmailConfirmed = false,
+        };
+
+        user.Logins.Add(LondonTravelLoginInfo.FromUserLoginInfo(info));
+
+        foreach (var claim in info.Principal.Claims)
+        {
+            user.RoleClaims.Add(LondonTravelRole.FromClaim(claim));
+        }
+
+        return user;
+    }
+
+    private string GetErrorRedirectUrl()
+    {
+        return Url.RouteUrl(IsReferrerRegistrationPage() ? SiteRoutes.Register : SiteRoutes.SignIn) !;
+    }
+
+    private bool IsReferrerRegistrationPage() => IsReferrerRoute(SiteRoutes.Register);
+
+    private bool IsRedirectAlexaAuthorization(string? returnUrl) => IsUrlRoute(returnUrl, SiteRoutes.AuthorizeAlexa);
+
+    private bool IsReferrerRoute(string routeName)
+    {
+        return IsUrlRoute(HttpContext.Request.Headers["referer"], routeName);
+    }
+
+    private bool IsUrlRoute(string? url, string routeName)
+    {
+        if (string.IsNullOrWhiteSpace(url) ||
+            !Uri.TryCreate(url, UriKind.RelativeOrAbsolute, out Uri? uri))
+        {
+            return false;
+        }
+
+        string routeUrl = Url.RouteUrl(routeName) !;
+
+        if (uri.IsAbsoluteUri)
+        {
+            return string.Equals(uri.AbsolutePath, routeUrl, StringComparison.OrdinalIgnoreCase);
+        }
+        else
+        {
+            int indexOfQuery = url.IndexOf('?', StringComparison.Ordinal);
+
+            if (indexOfQuery > -1)
+            {
+                url = url.Substring(0, indexOfQuery);
+            }
+
+            return string.Equals(url.TrimEnd('/'), routeUrl.TrimEnd('/'), StringComparison.OrdinalIgnoreCase);
         }
     }
 }

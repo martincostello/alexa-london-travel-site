@@ -3,46 +3,45 @@
 
 using System.Security.Claims;
 
-namespace MartinCostello.LondonTravel.Site.Identity
+namespace MartinCostello.LondonTravel.Site.Identity;
+
+public static class LondonTravelRoleTests
 {
-    public static class LondonTravelRoleTests
+    [Fact]
+    public static void FromClaim_Throws_If_Claim_Is_Null()
     {
-        [Fact]
-        public static void FromClaim_Throws_If_Claim_Is_Null()
-        {
-            // Arrange
-            Claim? claim = null;
+        // Arrange
+        Claim? claim = null;
 
-            // Act and Assert
-            Assert.Throws<ArgumentNullException>(() => LondonTravelRole.FromClaim(claim!));
-        }
+        // Act and Assert
+        Assert.Throws<ArgumentNullException>(() => LondonTravelRole.FromClaim(claim!));
+    }
 
-        [Fact]
-        public static void LondonTravelRole_Can_Convert_From_And_To_Claim()
-        {
-            // Arrange
-            Claim expected = new Claim("type", "value", "valueType", "issuer");
+    [Fact]
+    public static void LondonTravelRole_Can_Convert_From_And_To_Claim()
+    {
+        // Arrange
+        Claim expected = new Claim("type", "value", "valueType", "issuer");
 
-            // Act and Assert
-            var role = LondonTravelRole.FromClaim(expected);
+        // Act and Assert
+        var role = LondonTravelRole.FromClaim(expected);
 
-            // Assert
-            role.ShouldNotBeNull();
-            role.ClaimType.ShouldBe(expected.Type);
-            role.Issuer.ShouldBe(expected.Issuer);
-            role.Value.ShouldBe(expected.Value);
-            role.ValueType.ShouldBe(expected.ValueType);
+        // Assert
+        role.ShouldNotBeNull();
+        role.ClaimType.ShouldBe(expected.Type);
+        role.Issuer.ShouldBe(expected.Issuer);
+        role.Value.ShouldBe(expected.Value);
+        role.ValueType.ShouldBe(expected.ValueType);
 
-            // Act
-            var actual = role.ToClaim();
+        // Act
+        var actual = role.ToClaim();
 
-            // Assert
-            actual.ShouldNotBeNull();
-            actual.ShouldNotBeSameAs(expected);
-            actual.Issuer.ShouldBe(expected.Issuer);
-            actual.Type.ShouldBe(expected.Type);
-            actual.Value.ShouldBe(expected.Value);
-            actual.ValueType.ShouldBe(expected.ValueType);
-        }
+        // Assert
+        actual.ShouldNotBeNull();
+        actual.ShouldNotBeSameAs(expected);
+        actual.Issuer.ShouldBe(expected.Issuer);
+        actual.Type.ShouldBe(expected.Type);
+        actual.Value.ShouldBe(expected.Value);
+        actual.ValueType.ShouldBe(expected.ValueType);
     }
 }

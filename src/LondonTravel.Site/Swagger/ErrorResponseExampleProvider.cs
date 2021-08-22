@@ -3,24 +3,23 @@
 
 using MartinCostello.LondonTravel.Site.Models;
 
-namespace MartinCostello.LondonTravel.Site.Swagger
+namespace MartinCostello.LondonTravel.Site.Swagger;
+
+/// <summary>
+/// A class representing an implementation of <see cref="IExampleProvider"/>
+/// for the <see cref="ErrorResponse"/> class. This class cannot be inherited.
+/// </summary>
+public sealed class ErrorResponseExampleProvider : IExampleProvider
 {
-    /// <summary>
-    /// A class representing an implementation of <see cref="IExampleProvider"/>
-    /// for the <see cref="ErrorResponse"/> class. This class cannot be inherited.
-    /// </summary>
-    public sealed class ErrorResponseExampleProvider : IExampleProvider
+    /// <inheritdoc />
+    public object GetExample()
     {
-        /// <inheritdoc />
-        public object GetExample()
+        return new ErrorResponse()
         {
-            return new ErrorResponse()
-            {
-                Message = "Unauthorized.",
-                RequestId = "0HKT0TM6UJASI",
-                StatusCode = 401,
-                Details = new[] { "Only the Bearer authorization scheme is supported." },
-            };
-        }
+            Message = "Unauthorized.",
+            RequestId = "0HKT0TM6UJASI",
+            StatusCode = 401,
+            Details = new[] { "Only the Bearer authorization scheme is supported." },
+        };
     }
 }

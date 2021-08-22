@@ -5,62 +5,61 @@ using System.Net;
 using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Http;
 
-namespace MartinCostello.LondonTravel.Site.EndToEnd
+namespace MartinCostello.LondonTravel.Site.EndToEnd;
+
+[Collection(WebsiteCollection.Name)]
+[Trait("Category", "EndToEnd")]
+public class ApiTests
 {
-    [Collection(WebsiteCollection.Name)]
-    [Trait("Category", "EndToEnd")]
-    public class ApiTests
+    public ApiTests(WebsiteFixture fixture)
     {
-        public ApiTests(WebsiteFixture fixture)
-        {
-            Fixture = fixture;
-        }
+        Fixture = fixture;
+    }
 
-        private WebsiteFixture Fixture { get; }
+    private WebsiteFixture Fixture { get; }
 
-        [SkippableFact]
-        public async Task Cannot_Get_Preferences_Unauthenticated()
-        {
-            // Arrange
-            using var client = Fixture.CreateClient();
+    [SkippableFact]
+    public async Task Cannot_Get_Preferences_Unauthenticated()
+    {
+        // Arrange
+        using var client = Fixture.CreateClient();
 
-            // Act
-            using var response = await client.GetAsync("/api/preferences");
+        // Act
+        using var response = await client.GetAsync("/api/preferences");
 
-            // Assert
-            response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
 
-            using var result = await response.ReadAsJsonDocumentAsync();
+        using var result = await response.ReadAsJsonDocumentAsync();
 
-            result.RootElement.GetString("requestId").ShouldNotBeNullOrWhiteSpace();
-            result.RootElement.GetString("message").ShouldBe("No access token specified.");
-            result.RootElement.GetInt32("statusCode").ShouldBe(StatusCodes.Status401Unauthorized);
-            result.RootElement.GetStringArray("details").ShouldNotBeNull();
-            result.RootElement.GetStringArray("details").ShouldBeEmpty();
-        }
+        result.RootElement.GetString("requestId").ShouldNotBeNullOrWhiteSpace();
+        result.RootElement.GetString("message").ShouldBe("No access token specified.");
+        result.RootElement.GetInt32("statusCode").ShouldBe(StatusCodes.Status401Unauthorized);
+        result.RootElement.GetStringArray("details").ShouldNotBeNull();
+        result.RootElement.GetStringArray("details").ShouldBeEmpty();
+    }
 
-        [SkippableFact]
-        public async Task Cannot_Get_Preferences_With_Invalid_Token()
-        {
-            // Arrange
-            string accessToken = Guid.NewGuid().ToString();
+    [SkippableFact]
+    public async Task Cannot_Get_Preferences_With_Invalid_Token()
+    {
+        // Arrange
+        string accessToken = Guid.NewGuid().ToString();
 
-            using var client = Fixture.CreateClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", accessToken);
+        using var client = Fixture.CreateClient();
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", accessToken);
 
-            // Act
-            using var response = await client.GetAsync("/api/preferences");
+        // Act
+        using var response = await client.GetAsync("/api/preferences");
 
-            // Assert
-            response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
 
-            using var result = await response.ReadAsJsonDocumentAsync();
+        using var result = await response.ReadAsJsonDocumentAsync();
 
-            result.RootElement.GetString("requestId").ShouldNotBeNullOrWhiteSpace();
-            result.RootElement.GetString("message").ShouldBe("Unauthorized.");
-            result.RootElement.GetInt32("statusCode").ShouldBe(StatusCodes.Status401Unauthorized);
-            result.RootElement.GetStringArray("details").ShouldNotBeNull();
-            result.RootElement.GetStringArray("details").ShouldBeEmpty();
-        }
+        result.RootElement.GetString("requestId").ShouldNotBeNullOrWhiteSpace();
+        result.RootElement.GetString("message").ShouldBe("Unauthorized.");
+        result.RootElement.GetInt32("statusCode").ShouldBe(StatusCodes.Status401Unauthorized);
+        result.RootElement.GetStringArray("details").ShouldNotBeNull();
+        result.RootElement.GetStringArray("details").ShouldBeEmpty();
     }
 }

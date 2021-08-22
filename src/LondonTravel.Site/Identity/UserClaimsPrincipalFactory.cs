@@ -5,39 +5,38 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 
-namespace MartinCostello.LondonTravel.Site.Identity
+namespace MartinCostello.LondonTravel.Site.Identity;
+
+/// <summary>
+/// A custom implementation of <see cref="UserClaimsPrincipalFactory{LondonTravelUser, LondonTravelRole}"/>
+/// that adds additional claims to the principal when it is created by the application.
+/// </summary>
+public class UserClaimsPrincipalFactory : UserClaimsPrincipalFactory<LondonTravelUser, LondonTravelRole>
 {
     /// <summary>
-    /// A custom implementation of <see cref="UserClaimsPrincipalFactory{LondonTravelUser, LondonTravelRole}"/>
-    /// that adds additional claims to the principal when it is created by the application.
+    /// Initializes a new instance of the <see cref="UserClaimsPrincipalFactory"/> class.
     /// </summary>
-    public class UserClaimsPrincipalFactory : UserClaimsPrincipalFactory<LondonTravelUser, LondonTravelRole>
+    /// <param name="userManager">The <see cref="UserManager{LondonTravelUser}"/> to use.</param>
+    /// <param name="roleManager">The <see cref="RoleManager{LondonTravelRole}"/> to use.</param>
+    /// <param name="optionsAccessor">The <see cref="IOptions{IdentityOptions}"/> to use.</param>
+    public UserClaimsPrincipalFactory(UserManager<LondonTravelUser> userManager, RoleManager<LondonTravelRole> roleManager, IOptions<IdentityOptions> optionsAccessor)
+        : base(userManager, roleManager, optionsAccessor)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UserClaimsPrincipalFactory"/> class.
-        /// </summary>
-        /// <param name="userManager">The <see cref="UserManager{LondonTravelUser}"/> to use.</param>
-        /// <param name="roleManager">The <see cref="RoleManager{LondonTravelRole}"/> to use.</param>
-        /// <param name="optionsAccessor">The <see cref="IOptions{IdentityOptions}"/> to use.</param>
-        public UserClaimsPrincipalFactory(UserManager<LondonTravelUser> userManager, RoleManager<LondonTravelRole> roleManager, IOptions<IdentityOptions> optionsAccessor)
-            : base(userManager, roleManager, optionsAccessor)
-        {
-        }
+    }
 
-        /// <inheritdoc />
-        public async override Task<ClaimsPrincipal> CreateAsync(LondonTravelUser user)
-        {
-            var principal = await base.CreateAsync(user);
+    /// <inheritdoc />
+    public async override Task<ClaimsPrincipal> CreateAsync(LondonTravelUser user)
+    {
+        var principal = await base.CreateAsync(user);
 
-            if (principal.Identity is ClaimsIdentity identity && user?.RoleClaims != null)
+        if (principal.Identity is ClaimsIdentity identity && user?.RoleClaims != null)
+        {
+            foreach (LondonTravelRole role in user.RoleClaims)
             {
-                foreach (LondonTravelRole role in user.RoleClaims)
-                {
-                    identity.AddClaim(role.ToClaim());
-                }
+                identity.AddClaim(role.ToClaim());
             }
-
-            return principal;
         }
+
+        return principal;
     }
 }

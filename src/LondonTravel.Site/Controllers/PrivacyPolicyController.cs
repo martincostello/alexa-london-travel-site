@@ -3,21 +3,20 @@
 
 using Microsoft.AspNetCore.Mvc;
 
-namespace MartinCostello.LondonTravel.Site.Controllers
+namespace MartinCostello.LondonTravel.Site.Controllers;
+
+/// <summary>
+/// A class representing the controller for the <c>/privacy-policy/</c> resource.
+/// </summary>
+[Route("privacy-policy", Name = SiteRoutes.PrivacyPolicy)]
+public class PrivacyPolicyController : Controller
 {
     /// <summary>
-    /// A class representing the controller for the <c>/privacy-policy/</c> resource.
+    /// Gets the result for the <c>/privacy-policy/</c> action.
     /// </summary>
-    [Route("privacy-policy", Name = SiteRoutes.PrivacyPolicy)]
-    public class PrivacyPolicyController : Controller
-    {
-        /// <summary>
-        /// Gets the result for the <c>/privacy-policy/</c> action.
-        /// </summary>
-        /// <returns>
-        /// The result for the <c>/privacy-policy/</c> action.
-        /// </returns>
-        [HttpGet]
-        public IActionResult Index() => View();
-    }
+    /// <returns>
+    /// The result for the <c>/privacy-policy/</c> action.
+    /// </returns>
+    [HttpGet]
+    public IActionResult Index() => View();
 }

@@ -4,50 +4,49 @@
 using Polly;
 using Polly.Extensions.Http;
 
-namespace MartinCostello.LondonTravel.Site.Extensions
+namespace MartinCostello.LondonTravel.Site.Extensions;
+
+/// <summary>
+/// A class containing Polly-related extension methods for the <see cref="IServiceCollection"/> interface. This class cannot be inherited.
+/// </summary>
+public static class PollyServiceCollectionExtensions
 {
     /// <summary>
-    /// A class containing Polly-related extension methods for the <see cref="IServiceCollection"/> interface. This class cannot be inherited.
+    /// Adds Polly to the services.
     /// </summary>
-    public static class PollyServiceCollectionExtensions
+    /// <param name="services">The <see cref="IServiceCollection"/> to add Polly to.</param>
+    /// <returns>
+    /// The value specified by <paramref name="services"/>.
+    /// </returns>
+    public static IServiceCollection AddPolly(this IServiceCollection services)
     {
-        /// <summary>
-        /// Adds Polly to the services.
-        /// </summary>
-        /// <param name="services">The <see cref="IServiceCollection"/> to add Polly to.</param>
-        /// <returns>
-        /// The value specified by <paramref name="services"/>.
-        /// </returns>
-        public static IServiceCollection AddPolly(this IServiceCollection services)
+        return services.AddPolicyRegistry((_, registry) =>
         {
-            return services.AddPolicyRegistry((_, registry) =>
+            var sleepDurations = new[]
             {
-                var sleepDurations = new[]
-                {
-                    TimeSpan.FromSeconds(1),
-                    TimeSpan.FromSeconds(5),
-                    TimeSpan.FromSeconds(10),
-                };
+                TimeSpan.FromSeconds(1),
+                TimeSpan.FromSeconds(5),
+                TimeSpan.FromSeconds(10),
+            };
 
-                var readPolicy = HttpPolicyExtensions.HandleTransientHttpError()
-                    .WaitAndRetryAsync(sleepDurations)
-                    .WithPolicyKey("ReadPolicy");
+            var readPolicy = HttpPolicyExtensions.HandleTransientHttpError()
+                .WaitAndRetryAsync(sleepDurations)
+                .WithPolicyKey("ReadPolicy");
 
-                var writePolicy = Policy.NoOpAsync()
-                    .AsAsyncPolicy<HttpResponseMessage>()
-                    .WithPolicyKey("WritePolicy");
+            var writePolicy = Policy.NoOpAsync()
+                .AsAsyncPolicy<HttpResponseMessage>()
+                .WithPolicyKey("WritePolicy");
 
-                var policies = new[]
-                {
-                    readPolicy,
-                    writePolicy,
-                };
+            var policies = new[]
+            {
+                readPolicy,
+                writePolicy,
+            };
 
-                foreach (var policy in policies)
-                {
-                    registry.Add(policy.PolicyKey, policy);
-                }
-            });
-        }
+            foreach (var policy in policies)
+            {
+                registry.Add(policy.PolicyKey, policy);
+            }
+        });
     }
 }

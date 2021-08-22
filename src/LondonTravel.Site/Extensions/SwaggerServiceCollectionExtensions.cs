@@ -7,119 +7,118 @@ using MartinCostello.LondonTravel.Site.Swagger;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace MartinCostello.LondonTravel.Site.Extensions
+namespace MartinCostello.LondonTravel.Site.Extensions;
+
+/// <summary>
+/// A class containing Swagger-related extension methods for the <see cref="IServiceCollection"/> interface. This class cannot be inherited.
+/// </summary>
+public static class SwaggerServiceCollectionExtensions
 {
     /// <summary>
-    /// A class containing Swagger-related extension methods for the <see cref="IServiceCollection"/> interface. This class cannot be inherited.
+    /// Adds Swagger to the services.
     /// </summary>
-    public static class SwaggerServiceCollectionExtensions
+    /// <param name="value">The <see cref="IServiceCollection"/> to add the service to.</param>
+    /// <param name="environment">The current hosting environment.</param>
+    /// <returns>
+    /// The value specified by <paramref name="value"/>.
+    /// </returns>
+    public static IServiceCollection AddSwagger(this IServiceCollection value, IWebHostEnvironment environment)
     {
-        /// <summary>
-        /// Adds Swagger to the services.
-        /// </summary>
-        /// <param name="value">The <see cref="IServiceCollection"/> to add the service to.</param>
-        /// <param name="environment">The current hosting environment.</param>
-        /// <returns>
-        /// The value specified by <paramref name="value"/>.
-        /// </returns>
-        public static IServiceCollection AddSwagger(this IServiceCollection value, IWebHostEnvironment environment)
-        {
-            return value.AddSwaggerGen(
-                (p) =>
+        return value.AddSwaggerGen(
+            (p) =>
+            {
+                var provider = value.BuildServiceProvider();
+                var options = provider.GetRequiredService<SiteOptions>();
+
+                var terms = new UriBuilder()
                 {
-                    var provider = value.BuildServiceProvider();
-                    var options = provider.GetRequiredService<SiteOptions>();
+                    Scheme = "https",
+                    Host = options.Metadata?.Domain!,
+                    Path = "terms-of-service/",
+                };
 
-                    var terms = new UriBuilder()
+                var info = new OpenApiInfo()
+                {
+                    Contact = new OpenApiContact()
                     {
-                        Scheme = "https",
-                        Host = options.Metadata?.Domain!,
-                        Path = "terms-of-service/",
-                    };
-
-                    var info = new OpenApiInfo()
+                        Name = options.Metadata?.Author?.Name,
+                        Url = new Uri(options.Metadata?.Repository!, UriKind.Absolute),
+                    },
+                    Description = options.Metadata?.Description,
+                    License = new OpenApiLicense()
                     {
-                        Contact = new OpenApiContact()
-                        {
-                            Name = options.Metadata?.Author?.Name,
-                            Url = new Uri(options.Metadata?.Repository!, UriKind.Absolute),
-                        },
-                        Description = options.Metadata?.Description,
-                        License = new OpenApiLicense()
-                        {
-                            Name = "Apache 2.0",
-                            Url = new Uri("https://www.apache.org/licenses/LICENSE-2.0.html", UriKind.Absolute),
-                        },
-                        TermsOfService = terms.Uri,
-                        Title = options.Metadata?.Name,
-                        Version = string.Empty,
-                    };
+                        Name = "Apache 2.0",
+                        Url = new Uri("https://www.apache.org/licenses/LICENSE-2.0.html", UriKind.Absolute),
+                    },
+                    TermsOfService = terms.Uri,
+                    Title = options.Metadata?.Name,
+                    Version = string.Empty,
+                };
 
-                    p.EnableAnnotations();
+                p.EnableAnnotations();
 
-                    p.IgnoreObsoleteActions();
-                    p.IgnoreObsoleteProperties();
+                p.IgnoreObsoleteActions();
+                p.IgnoreObsoleteProperties();
 
-                    AddXmlCommentsIfExists(p, environment, "LondonTravel.Site.xml");
+                AddXmlCommentsIfExists(p, environment, "LondonTravel.Site.xml");
 
-                    p.SwaggerDoc("api", info);
+                p.SwaggerDoc("api", info);
 
-                    p.SchemaFilter<ExampleFilter>();
-                    p.OperationFilter<ExampleFilter>();
-                    p.OperationFilter<RemoveStyleCopPrefixesFilter>();
+                p.SchemaFilter<ExampleFilter>();
+                p.OperationFilter<ExampleFilter>();
+                p.OperationFilter<RemoveStyleCopPrefixesFilter>();
 
-                    string schemeName = "Access Token";
+                string schemeName = "Access Token";
 
-                    var securityScheme = new OpenApiSecurityScheme()
+                var securityScheme = new OpenApiSecurityScheme()
+                {
+                    In = ParameterLocation.Header,
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Description = "Access token authentication using a bearer token.",
+                    Reference = new OpenApiReference()
                     {
-                        In = ParameterLocation.Header,
-                        Name = "Authorization",
-                        Type = SecuritySchemeType.ApiKey,
-                        Description = "Access token authentication using a bearer token.",
-                        Reference = new OpenApiReference()
-                        {
-                            Id = schemeName,
-                            Type = ReferenceType.SecurityScheme,
-                        },
-                        UnresolvedReference = false,
-                    };
+                        Id = schemeName,
+                        Type = ReferenceType.SecurityScheme,
+                    },
+                    UnresolvedReference = false,
+                };
 
-                    var securityRequirement = new OpenApiSecurityRequirement()
-                    {
-                        { securityScheme, Array.Empty<string>() },
-                    };
+                var securityRequirement = new OpenApiSecurityRequirement()
+                {
+                    { securityScheme, Array.Empty<string>() },
+                };
 
-                    p.AddSecurityDefinition(schemeName, securityScheme);
-                    p.AddSecurityRequirement(securityRequirement);
-                });
+                p.AddSecurityDefinition(schemeName, securityScheme);
+                p.AddSecurityRequirement(securityRequirement);
+            });
+    }
+
+    /// <summary>
+    /// Adds XML comments to Swagger if the file exists.
+    /// </summary>
+    /// <param name="options">The Swagger options.</param>
+    /// <param name="environment">The current hosting environment.</param>
+    /// <param name="fileName">The XML comments file name to try to add.</param>
+    private static void AddXmlCommentsIfExists(SwaggerGenOptions options, IWebHostEnvironment environment, string fileName)
+    {
+        var modelType = typeof(Startup).GetTypeInfo();
+        string? applicationPath;
+
+        if (environment.IsDevelopment())
+        {
+            applicationPath = Path.GetDirectoryName(modelType.Assembly.Location);
+        }
+        else
+        {
+            applicationPath = environment.ContentRootPath;
         }
 
-        /// <summary>
-        /// Adds XML comments to Swagger if the file exists.
-        /// </summary>
-        /// <param name="options">The Swagger options.</param>
-        /// <param name="environment">The current hosting environment.</param>
-        /// <param name="fileName">The XML comments file name to try to add.</param>
-        private static void AddXmlCommentsIfExists(SwaggerGenOptions options, IWebHostEnvironment environment, string fileName)
+        var path = Path.GetFullPath(Path.Combine(applicationPath ?? ".", fileName));
+
+        if (File.Exists(path))
         {
-            var modelType = typeof(Startup).GetTypeInfo();
-            string? applicationPath;
-
-            if (environment.IsDevelopment())
-            {
-                applicationPath = Path.GetDirectoryName(modelType.Assembly.Location);
-            }
-            else
-            {
-                applicationPath = environment.ContentRootPath;
-            }
-
-            var path = Path.GetFullPath(Path.Combine(applicationPath ?? ".", fileName));
-
-            if (File.Exists(path))
-            {
-                options.IncludeXmlComments(path);
-            }
+            options.IncludeXmlComments(path);
         }
     }
 }

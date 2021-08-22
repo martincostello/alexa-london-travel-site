@@ -3,21 +3,20 @@
 
 using Microsoft.AspNetCore.Mvc;
 
-namespace MartinCostello.LondonTravel.Site.Controllers
+namespace MartinCostello.LondonTravel.Site.Controllers;
+
+/// <summary>
+/// A class representing the controller for the <c>/api</c> resource.
+/// </summary>
+[Route("api")]
+public class DocsController : Controller
 {
     /// <summary>
-    /// A class representing the controller for the <c>/api</c> resource.
+    /// Gets the result for the <c>/api/</c> action.
     /// </summary>
-    [Route("api")]
-    public class DocsController : Controller
-    {
-        /// <summary>
-        /// Gets the result for the <c>/api/</c> action.
-        /// </summary>
-        /// <returns>
-        /// The result for the <c>/api/</c> action.
-        /// </returns>
-        [HttpGet]
-        public IActionResult Index() => View();
-    }
+    /// <returns>
+    /// The result for the <c>/api/</c> action.
+    /// </returns>
+    [HttpGet]
+    public IActionResult Index() => View();
 }
