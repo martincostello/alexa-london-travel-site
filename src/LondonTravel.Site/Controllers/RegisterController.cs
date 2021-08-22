@@ -57,8 +57,8 @@ public class RegisterController : Controller
         catch (Exception)
 #pragma warning restore CA1031
         {
-            // Over 7,000 users as of 28/10/2018
-            return 7_000;
+            // Over 9,500 users as of 22/08/2021
+            return 9_500;
         }
     }
 }
