@@ -149,7 +149,7 @@ public static class AuthenticationBuilderExtensions
                 .Configure<IServiceProvider>((options, serviceProvider) =>
                 {
                     var siteOptions = serviceProvider.GetRequiredService<SiteOptions>();
-                    var provider = siteOptions!.Authentication!.ExternalProviders![name] !;
+                    var provider = siteOptions!.Authentication!.ExternalProviders![name]!;
 
                     options.ConsumerKey = provider.ClientId;
                     options.ConsumerSecret = provider.ClientSecret;
@@ -247,7 +247,7 @@ public static class AuthenticationBuilderExtensions
             .Configure<IServiceProvider>((options, serviceProvider) =>
             {
                 var siteOptions = serviceProvider.GetRequiredService<SiteOptions>();
-                var provider = siteOptions!.Authentication!.ExternalProviders![name] !;
+                var provider = siteOptions!.Authentication!.ExternalProviders![name]!;
 
                 options.ClientId = provider.ClientId!;
                 options.ClientSecret = provider.ClientSecret!;

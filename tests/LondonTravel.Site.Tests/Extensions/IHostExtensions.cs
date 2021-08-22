@@ -14,7 +14,7 @@ internal static class IHostExtensions
     {
         var server = host.Services.GetRequiredService<IServer>();
 
-        return server.Features.Get<IServerAddressesFeature>() !.Addresses
+        return server.Features.Get<IServerAddressesFeature>()!.Addresses
             .Select((p) => new Uri(p))
             .First();
     }

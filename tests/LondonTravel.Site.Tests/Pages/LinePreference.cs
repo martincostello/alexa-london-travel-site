@@ -14,11 +14,11 @@ public sealed class LinePreference
 
     private IElementHandle RootElement { get; }
 
-    public async Task<string> IdAsync() => (await GetInputAttributeAsync("data-line-id")) !;
+    public async Task<string> IdAsync() => (await GetInputAttributeAsync("data-line-id"))!;
 
-    public async Task<bool> IsSelectedAsync() => await GetInputAttributeAsync("checked") != null;
+    public async Task<bool> IsSelectedAsync() => await GetInputAttributeAsync("checked") is not null;
 
-    public async Task<string> NameAsync() => (await GetInputAttributeAsync("data-line-name")) !;
+    public async Task<string> NameAsync() => (await GetInputAttributeAsync("data-line-name"))!;
 
     public async Task<LinePreference> ToggleAsync()
     {

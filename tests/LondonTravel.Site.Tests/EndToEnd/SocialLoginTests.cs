@@ -108,14 +108,14 @@ public class SocialLoginTests : BrowserEndToEndTest
         IPage page,
         string userNameSelector,
         string passwordSelector,
-        (string userName, string password) credentials,
+        (string UserName, string Password) credentials,
         bool sendEnterAfterUserName = false)
     {
         await page.WaitForURLAsync((p) => !p.StartsWith(Fixture.ServerAddress.ToString(), StringComparison.Ordinal));
 
         IElementHandle? userName = await page.WaitForSelectorAsync(userNameSelector);
 
-        await userName!.TypeAsync(credentials.userName);
+        await userName!.TypeAsync(credentials.UserName);
 
         if (sendEnterAfterUserName)
         {
@@ -128,7 +128,7 @@ public class SocialLoginTests : BrowserEndToEndTest
 
         IElementHandle? password = await page.WaitForSelectorAsync(passwordSelector);
 
-        await password!.TypeAsync(credentials.password);
+        await password!.TypeAsync(credentials.Password);
         await page.Keyboard.PressAsync("Enter");
 
         await page.WaitForURLAsync((p) => p.StartsWith(ServerAddress.ToString(), StringComparison.OrdinalIgnoreCase));

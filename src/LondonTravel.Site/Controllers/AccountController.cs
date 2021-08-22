@@ -340,7 +340,7 @@ public class AccountController : Controller
 
     private string GetErrorRedirectUrl()
     {
-        return Url.RouteUrl(IsReferrerRegistrationPage() ? SiteRoutes.Register : SiteRoutes.SignIn) !;
+        return Url.RouteUrl(IsReferrerRegistrationPage() ? SiteRoutes.Register : SiteRoutes.SignIn)!;
     }
 
     private bool IsReferrerRegistrationPage() => IsReferrerRoute(SiteRoutes.Register);
@@ -360,7 +360,7 @@ public class AccountController : Controller
             return false;
         }
 
-        string routeUrl = Url.RouteUrl(routeName) !;
+        string routeUrl = Url.RouteUrl(routeName)!;
 
         if (uri.IsAbsoluteUri)
         {
