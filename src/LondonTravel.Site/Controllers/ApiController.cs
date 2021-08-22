@@ -9,9 +9,7 @@ using MartinCostello.LondonTravel.Site.Services;
 using MartinCostello.LondonTravel.Site.Swagger;
 using MartinCostello.LondonTravel.Site.Telemetry;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace MartinCostello.LondonTravel.Site.Controllers
 {

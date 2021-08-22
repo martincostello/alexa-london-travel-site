@@ -4,7 +4,6 @@
 using System.Net;
 using System.Security.Cryptography;
 using MartinCostello.LondonTravel.Site.Telemetry;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MartinCostello.LondonTravel.Site.Controllers

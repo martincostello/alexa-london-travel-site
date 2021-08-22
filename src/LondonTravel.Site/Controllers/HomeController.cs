@@ -6,7 +6,6 @@ using MartinCostello.LondonTravel.Site.Models;
 using MartinCostello.LondonTravel.Site.Services.Tfl;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace MartinCostello.LondonTravel.Site.Controllers
 {

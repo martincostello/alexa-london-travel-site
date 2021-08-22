@@ -3,7 +3,6 @@
 
 using System.Security.Cryptography;
 using System.Text.Encodings.Web;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Razor.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.TagHelpers;

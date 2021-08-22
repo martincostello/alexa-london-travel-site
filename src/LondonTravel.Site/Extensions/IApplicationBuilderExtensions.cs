@@ -3,9 +3,6 @@
 
 using MartinCostello.LondonTravel.Site.Middleware;
 using MartinCostello.LondonTravel.Site.Options;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
 namespace MartinCostello.LondonTravel.Site.Extensions

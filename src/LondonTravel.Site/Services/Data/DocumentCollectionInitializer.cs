@@ -5,7 +5,6 @@ using System.Collections.Concurrent;
 using System.Net;
 using MartinCostello.LondonTravel.Site.Options;
 using Microsoft.Azure.Cosmos;
-using Microsoft.Extensions.Logging;
 
 namespace MartinCostello.LondonTravel.Site.Services.Data
 {

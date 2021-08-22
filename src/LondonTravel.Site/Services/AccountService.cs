@@ -4,7 +4,6 @@
 using MartinCostello.LondonTravel.Site.Identity;
 using MartinCostello.LondonTravel.Site.Services.Data;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Logging;
 
 namespace MartinCostello.LondonTravel.Site.Services
 {

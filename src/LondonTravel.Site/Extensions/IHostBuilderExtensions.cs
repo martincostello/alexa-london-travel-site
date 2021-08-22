@@ -5,9 +5,6 @@ using System.Diagnostics.CodeAnalysis;
 using Azure.Core;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace MartinCostello.LondonTravel.Site.Extensions
 {

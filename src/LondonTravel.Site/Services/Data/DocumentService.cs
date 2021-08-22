@@ -7,7 +7,6 @@ using MartinCostello.LondonTravel.Site.Identity;
 using MartinCostello.LondonTravel.Site.Options;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Linq;
-using Microsoft.Extensions.Logging;
 
 namespace MartinCostello.LondonTravel.Site.Services.Data
 {
