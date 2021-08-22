@@ -18,6 +18,7 @@ env:
   DOTNET_GENERATE_ASPNET_CERTIFICATE: false
   DOTNET_MULTILEVEL_LOOKUP: 0
   DOTNET_NOLOGO: true
+  DOTNET_ROLL_FORWARD: Major # HACK Remove once Playwright supports .NET 6
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
   NUGET_XMLDOC_MODE: skip
   WEBSITE_URL_DEV: https://londontravel-dev.martincostello.com
@@ -44,12 +45,6 @@ jobs:
 
     - name: Checkout code
       uses: actions/checkout@v2
-
-    # HACK Install .NET 5 SDK for Microsoft.Playwright.CLI to work
-    - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.301
 
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v1
