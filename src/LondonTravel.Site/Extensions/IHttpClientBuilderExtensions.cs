@@ -113,8 +113,7 @@ public static class IHttpClientBuilderExtensions
     /// </returns>
     private static ProductInfoHeaderValue CreateUserAgent()
     {
-        string productVersion = typeof(Startup)
-            .GetTypeInfo()
+        string productVersion = typeof(SiteRoutes)
             .Assembly
             .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
             .InformationalVersion!;

@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Authentication.Twitter;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
-using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -87,7 +86,7 @@ public sealed class HttpServerFixture : TestServerFixture
 
         ConfigureClient(client);
 
-        client.BaseAddress = ClientOptions.BaseAddress;
+        client.BaseAddress = ServerAddress;
 
         return client;
     }
@@ -125,7 +124,9 @@ public sealed class HttpServerFixture : TestServerFixture
     /// <inheritdoc />
     protected override IHost CreateHost(IHostBuilder builder)
     {
-        builder.ConfigureWebHost((p) => p.UseKestrel());
+        var testHost = builder.Build();
+
+        builder.ConfigureWebHost(webHostBuilder => webHostBuilder.UseKestrel());
 
         _host = builder.Build();
         _host.Start();
@@ -144,12 +145,6 @@ public sealed class HttpServerFixture : TestServerFixture
         {
             root.Reload();
         }
-
-        // The base class still needs a separate host using TestServer
-        var testHostBuilder = CreateHostBuilder();
-        var testHost = testHostBuilder!
-            .ConfigureWebHost((p) => p.UseTestServer())
-            .Build();
 
         testHost.Start();
 

@@ -15,7 +15,9 @@ public static class SystemTextJsonCosmosSerializerTests
         // Arrange
         var options = new JsonOptions();
 
-        Startup.ConfigureJsonFormatter(options);
+        options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+        options.JsonSerializerOptions.PropertyNameCaseInsensitive = false;
+        options.JsonSerializerOptions.WriteIndented = true;
 
         var serializer = new SystemTextJsonCosmosSerializer(options.JsonSerializerOptions);
 

@@ -26,7 +26,7 @@ public sealed class CustomHttpHeadersMiddleware
     /// <summary>
     /// The options snapshot to use. This field is read-only.
     /// </summary>
-    private readonly IOptionsSnapshot<SiteOptions> _options;
+    private readonly IOptionsMonitor<SiteOptions> _options;
 
     /// <summary>
     /// The current <c>Expect-CT</c> HTTP response header value. This field is read-only.
@@ -54,7 +54,7 @@ public sealed class CustomHttpHeadersMiddleware
         RequestDelegate next,
         IWebHostEnvironment environment,
         IConfiguration config,
-        IOptionsSnapshot<SiteOptions> options)
+        IOptionsMonitor<SiteOptions> options)
     {
         _next = next;
         _config = config;
@@ -63,7 +63,7 @@ public sealed class CustomHttpHeadersMiddleware
         _isProduction = environment.IsProduction();
         _environmentName = config.AzureEnvironment();
 
-        _expectCTValue = BuildExpectCT(options.Value);
+        _expectCTValue = BuildExpectCT(options.CurrentValue);
     }
 
     /// <summary>
@@ -227,7 +227,7 @@ public sealed class CustomHttpHeadersMiddleware
     /// </returns>
     private string BuildContentSecurityPolicy(string? nonce, bool allowInlineStyles, bool isReport)
     {
-        var options = _options.Value;
+        var options = _options.CurrentValue;
         var cdn = GetCdnOriginForContentSecurityPolicy(options);
 
         var scriptDirectives = new List<string>()

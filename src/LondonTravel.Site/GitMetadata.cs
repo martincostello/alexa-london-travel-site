@@ -40,7 +40,7 @@ public static class GitMetadata
     /// </returns>
     private static string GetMetadataValue(string name, string defaultValue)
     {
-        return typeof(GitMetadata).GetTypeInfo().Assembly
+        return typeof(GitMetadata).Assembly
             .GetCustomAttributes<AssemblyMetadataAttribute>()
             .Where((p) => string.Equals(p.Key, name, StringComparison.Ordinal))
             .Select((p) => p.Value)

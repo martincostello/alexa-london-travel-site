@@ -26,7 +26,7 @@ public static class IApplicationBuilderExtensions
         this IApplicationBuilder value,
         IWebHostEnvironment environment,
         IConfiguration config,
-        IOptionsSnapshot<SiteOptions> options)
+        IOptionsMonitor<SiteOptions> options)
     {
         return value.UseMiddleware<CustomHttpHeadersMiddleware>(environment, config, options);
     }

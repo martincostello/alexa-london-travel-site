@@ -38,7 +38,7 @@ public static class AuthenticationBuilderExtensions
     {
         string name = "Apple";
 
-        if (IsProviderEnabled(name, options, requiresClientSecret: false))
+        if (IsProviderEnabled(name, options))
         {
             builder.AddApple()
                    .Configure<AppleAuthenticationOptions>(name, (providerOptions, serviceProvider) =>
@@ -212,10 +212,7 @@ public static class AuthenticationBuilderExtensions
         return Task.CompletedTask;
     }
 
-    private static bool IsProviderEnabled(
-        string name,
-        Options.AuthenticationOptions options,
-        bool requiresClientSecret = true)
+    private static bool IsProviderEnabled(string name, Options.AuthenticationOptions options)
     {
         if (options.ExternalProviders?.TryGetValue(name, out ExternalSignInOptions? provider) != true ||
             provider is null)
@@ -223,10 +220,7 @@ public static class AuthenticationBuilderExtensions
             return false;
         }
 
-        return
-            provider.IsEnabled &&
-            !string.IsNullOrEmpty(provider.ClientId) &&
-            (!requiresClientSecret || !string.IsNullOrEmpty(provider.ClientSecret));
+        return provider.IsEnabled;
     }
 
     private static void Configure<T>(
