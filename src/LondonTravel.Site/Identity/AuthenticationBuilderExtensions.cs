@@ -52,21 +52,13 @@ public static class AuthenticationBuilderExtensions
                        if (secretClient is not null)
                        {
                            providerOptions.GenerateClientSecret = true;
-                           providerOptions.PrivateKeyBytes = async (keyId, cancellationToken) =>
+                           providerOptions.PrivateKey = async (keyId, cancellationToken) =>
                            {
                                var secret = await secretClient.GetSecretAsync(
                                    $"AuthKey-{keyId}",
                                    cancellationToken: cancellationToken);
 
-                               string privateKey = secret.Value.Value;
-
-                               if (privateKey.StartsWith("-----BEGIN PRIVATE KEY-----", StringComparison.Ordinal))
-                               {
-                                   string[] lines = privateKey.Split('\n');
-                                   privateKey = string.Join(string.Empty, lines[1..^1]);
-                               }
-
-                               return Convert.FromBase64String(privateKey);
+                               return secret.Value.Value.AsMemory();
                            };
                        }
                    });

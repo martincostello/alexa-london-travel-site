@@ -80,19 +80,13 @@ public class TestServerFixture : WebApplicationFactory<ApplicationCookie>, ITest
                     {
                         options.GenerateClientSecret = true;
                         options.ValidateTokens = false;
-                        options.PrivateKeyBytes = async (keyId, cancellationToken) =>
+                        options.PrivateKey = async (keyId, cancellationToken) =>
                         {
                             string privateKey = await File.ReadAllTextAsync(
                                 Path.Combine("Integration", "apple-test-cert.p8"),
                                 cancellationToken);
 
-                            if (privateKey.StartsWith("-----BEGIN PRIVATE KEY-----", StringComparison.Ordinal))
-                            {
-                                string[] lines = privateKey.Split('\n');
-                                privateKey = string.Join(string.Empty, lines[1..^1]);
-                            }
-
-                            return Convert.FromBase64String(privateKey);
+                            return privateKey.AsMemory();
                         };
                     });
             });
