@@ -3,6 +3,8 @@
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <Description>https://londontravel.martincostello.com/</Description>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!-- HACK Workaround for https://github.com/dotnet/sdk/issues/20444 -->
+    <LangVersion Condition="'$(BuildingInsideVisualStudio)' == 'true'">preview</LangVersion>
     <OutputType>Exe</OutputType>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <RootNamespace>MartinCostello.LondonTravel.Site</RootNamespace>
