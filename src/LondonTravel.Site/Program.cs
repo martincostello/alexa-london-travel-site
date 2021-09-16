@@ -28,6 +28,10 @@ using NodaTime;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Host.ConfigureApplication();
+builder.WebHost.CaptureStartupErrors(true);
+builder.WebHost.ConfigureKestrel((p) => p.AddServerHeader = false);
+
 builder.Services.AddApplicationInsightsTelemetry(builder.Configuration);
 
 builder.Services.AddOptions();
@@ -61,29 +65,29 @@ builder.Services.AddAntiforgery(
     });
 
 builder.Services.AddCors((corsOptions) =>
-    {
-        var siteOptions = new SiteOptions();
-        builder.Configuration.Bind("Site", siteOptions);
+{
+    var siteOptions = new SiteOptions();
+    builder.Configuration.Bind("Site", siteOptions);
 
-        corsOptions.AddPolicy(
-            "DefaultCorsPolicy",
-            (policy) =>
+    corsOptions.AddPolicy(
+        "DefaultCorsPolicy",
+        (policy) =>
+        {
+            policy
+                .WithExposedHeaders(siteOptions?.Api?.Cors?.ExposedHeaders ?? Array.Empty<string>())
+                .WithHeaders(siteOptions?.Api?.Cors?.Headers ?? Array.Empty<string>())
+                .WithMethods(siteOptions?.Api?.Cors?.Methods ?? Array.Empty<string>());
+
+            if (builder.Environment.IsDevelopment())
             {
-                policy
-                    .WithExposedHeaders(siteOptions?.Api?.Cors?.ExposedHeaders ?? Array.Empty<string>())
-                    .WithHeaders(siteOptions?.Api?.Cors?.Headers ?? Array.Empty<string>())
-                    .WithMethods(siteOptions?.Api?.Cors?.Methods ?? Array.Empty<string>());
-
-                if (builder.Environment.IsDevelopment())
-                {
-                    policy.AllowAnyOrigin();
-                }
-                else
-                {
-                    policy.WithOrigins(siteOptions?.Api?.Cors?.Origins ?? Array.Empty<string>());
-                }
-            });
-    });
+                policy.AllowAnyOrigin();
+            }
+            else
+            {
+                policy.WithOrigins(siteOptions?.Api?.Cors?.Origins ?? Array.Empty<string>());
+            }
+        });
+});
 
 builder.Services
     .AddLocalization()
@@ -159,9 +163,6 @@ builder.Services.AddPolly();
 builder.Services.AddHttpClients();
 
 builder.Services.AddApplicationAuthentication(builder.Configuration);
-
-builder.WebHost.CaptureStartupErrors(true);
-builder.WebHost.ConfigureKestrel((p) => p.AddServerHeader = false);
 
 var app = builder.Build();
 

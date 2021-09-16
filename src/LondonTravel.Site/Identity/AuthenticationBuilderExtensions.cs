@@ -212,7 +212,10 @@ public static class AuthenticationBuilderExtensions
             return false;
         }
 
-        return provider.IsEnabled;
+        return
+            provider.IsEnabled &&
+            !string.IsNullOrEmpty(provider.ClientId) &&
+            !string.IsNullOrEmpty(provider.ClientSecret);
     }
 
     private static void Configure<T>(
