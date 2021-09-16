@@ -3,7 +3,8 @@ param(
     [Parameter(Mandatory = $false)][string] $Configuration = "Release",
     [Parameter(Mandatory = $false)][string] $VersionSuffix = "",
     [Parameter(Mandatory = $false)][string] $OutputPath = "",
-    [Parameter(Mandatory = $false)][switch] $SkipTests
+    [Parameter(Mandatory = $false)][switch] $SkipTests,
+    [Parameter(Mandatory = $false)][string] $Runtime = ""
 )
 
 $ErrorActionPreference = "Stop"
@@ -103,13 +104,24 @@ function DotNetTest {
 
 function DotNetPublish {
     param([string]$Project)
+
     $publishPath = (Join-Path $OutputPath "publish")
-    if ($VersionSuffix) {
-        & $dotnet publish $Project --output $publishPath --configuration $Configuration --version-suffix "$VersionSuffix"
+
+    $additionalArgs = @()
+
+    if (![string]::IsNullOrEmpty($Runtime)) {
+        $additionalArgs += "--self-contained"
+        $additionalArgs += "--runtime"
+        $additionalArgs += $Runtime
     }
-    else {
-        & $dotnet publish $Project --output $publishPath --configuration $Configuration
+
+    if (![string]::IsNullOrEmpty($VersionSuffix)) {
+        $additionalArgs += "--version-suffix"
+        $additionalArgs += $VersionSuffix
     }
+
+    & $dotnet publish $Project --output $publishPath --configuration $Configuration $additionalArgs
+
     if ($LASTEXITCODE -ne 0) {
         throw "dotnet publish failed with exit code $LASTEXITCODE"
     }
