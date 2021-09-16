@@ -42,7 +42,7 @@ public static class ClaimsPrincipalExtensions
         byte[] hash = System.Security.Cryptography.MD5.HashData(buffer);
 #pragma warning restore CA5351
 
-        string hashString = HashToString(hash);
+        string hashString = Convert.ToHexString(hash).ToLowerInvariant();
 
 #pragma warning disable SYSLIB0013
         string escapedFallback = Uri.EscapeUriString(fallbackImageUrl);
@@ -119,24 +119,5 @@ public static class ClaimsPrincipalExtensions
     {
         ArgumentNullException.ThrowIfNull(value);
         return value.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-    }
-
-    /// <summary>
-    /// Returns the string representation of the specified hash bytes.
-    /// </summary>
-    /// <param name="hash">An array containing the hash to convert to a string.</param>
-    /// <returns>
-    /// The string representation of <paramref name="hash"/>.
-    /// </returns>
-    private static string HashToString(byte[] hash)
-    {
-        var builder = new StringBuilder(hash.Length * 2);
-
-        for (int i = 0; i < hash.Length; i++)
-        {
-            builder.AppendFormat(CultureInfo.InvariantCulture, "{0:x2}", hash[i]);
-        }
-
-        return builder.ToString();
     }
 }
