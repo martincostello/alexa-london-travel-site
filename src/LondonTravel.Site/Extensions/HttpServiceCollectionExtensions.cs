@@ -27,7 +27,8 @@ public static class HttpServiceCollectionExtensions
             .AddHttpClient(Microsoft.Extensions.Options.Options.DefaultName)
             .ApplyDefaultConfiguration();
 
-        var options = services.BuildServiceProvider().GetRequiredService<SiteOptions>();
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<SiteOptions>();
 
         if (options.Authentication?.ExternalProviders != null)
         {
