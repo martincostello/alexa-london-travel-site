@@ -110,7 +110,7 @@ public class BrowserFixture
         try
         {
             string fileName = GenerateFileName(testName, browserType, ".png");
-            string path = Path.Combine("screenshots", fileName);
+            string path = Path.GetFullPath(Path.Combine("screenshots", fileName));
 
             await page.ScreenshotAsync(new PageScreenshotOptions()
             {
