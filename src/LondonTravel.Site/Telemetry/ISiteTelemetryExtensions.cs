@@ -212,7 +212,7 @@ public static class ISiteTelemetryExtensions
     {
         return new Dictionary<string, string>()
         {
-            { "UserId", userId },
+            ["UserId"] = userId,
         };
     }
 
