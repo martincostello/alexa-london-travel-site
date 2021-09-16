@@ -7,53 +7,52 @@ using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace MartinCostello.LondonTravel.Site.TagHelpers
+namespace MartinCostello.LondonTravel.Site.TagHelpers;
+
+/// <summary>
+/// A <see cref="ITagHelper"/> implementation targeting &lt;lazyimg&gt;
+/// elements that supports file versioning and lazy loading of images.
+/// </summary>
+[HtmlTargetElement("lazyimg", TagStructure = TagStructure.WithoutEndTag)]
+public class LazyImageTagHelper : ImageTagHelper
 {
     /// <summary>
-    /// A <see cref="ITagHelper"/> implementation targeting &lt;lazyimg&gt;
-    /// elements that supports file versioning and lazy loading of images.
+    /// The name of the <c>class</c> attribute.
     /// </summary>
-    [HtmlTargetElement("lazyimg", TagStructure = TagStructure.WithoutEndTag)]
-    public class LazyImageTagHelper : ImageTagHelper
+    private const string ClassAttributeName = "class";
+
+    /// <summary>
+    /// The name of the <c>data-original</c> attribute.
+    /// </summary>
+    private const string DataOriginalAttributeName = "data-original";
+
+    /// <summary>
+    /// The name of the <c>src</c> attribute.
+    /// </summary>
+    private const string SourceAttributeName = "src";
+
+    public LazyImageTagHelper(IFileVersionProvider fileVersionProvider, HtmlEncoder htmlEncoder, IUrlHelperFactory urlHelperFactory)
+        : base(fileVersionProvider, htmlEncoder, urlHelperFactory)
     {
-        /// <summary>
-        /// The name of the <c>class</c> attribute.
-        /// </summary>
-        private const string ClassAttributeName = "class";
+    }
 
-        /// <summary>
-        /// The name of the <c>data-original</c> attribute.
-        /// </summary>
-        private const string DataOriginalAttributeName = "data-original";
+    /// <inheritdoc />
+    public override void Process(TagHelperContext context, TagHelperOutput output)
+    {
+        base.Process(context, output);
 
-        /// <summary>
-        /// The name of the <c>src</c> attribute.
-        /// </summary>
-        private const string SourceAttributeName = "src";
+        // Get the non-lazy image and the current CSS
+        var dataOriginal = output.Attributes[SourceAttributeName].Value.ToString();
+        var css = output.Attributes[ClassAttributeName]?.Value?.ToString();
 
-        public LazyImageTagHelper(IFileVersionProvider fileVersionProvider, HtmlEncoder htmlEncoder, IUrlHelperFactory urlHelperFactory)
-            : base(fileVersionProvider, htmlEncoder, urlHelperFactory)
-        {
-        }
+        // Add a placeholder as the src, set the original to be the lazily-loaded
+        // image and add the CSS class to get the JavaScript to do the lazy loading.
+        output.Attributes.SetAttribute(ClassAttributeName, css += " lazy");
+        output.Attributes.SetAttribute(DataOriginalAttributeName, dataOriginal);
+        output.Attributes.SetAttribute(SourceAttributeName, "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7");
 
-        /// <inheritdoc />
-        public override void Process(TagHelperContext context, TagHelperOutput output)
-        {
-            base.Process(context, output);
-
-            // Get the non-lazy image and the current CSS
-            var dataOriginal = output.Attributes[SourceAttributeName].Value.ToString();
-            var css = output.Attributes[ClassAttributeName]?.Value?.ToString();
-
-            // Add a placeholder as the src, set the original to be the lazily-loaded
-            // image and add the CSS class to get the JavaScript to do the lazy loading.
-            output.Attributes.SetAttribute(ClassAttributeName, css += " lazy");
-            output.Attributes.SetAttribute(DataOriginalAttributeName, dataOriginal);
-            output.Attributes.SetAttribute(SourceAttributeName, "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7");
-
-            // Ensure the output tag is correct
-            output.TagName = "img";
-            output.TagMode = TagMode.SelfClosing;
-        }
+        // Ensure the output tag is correct
+        output.TagName = "img";
+        output.TagMode = TagMode.SelfClosing;
     }
 }

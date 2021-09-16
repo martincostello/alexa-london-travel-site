@@ -2,40 +2,37 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using MartinCostello.LondonTravel.Site.Options;
-using Shouldly;
-using Xunit;
 
-namespace MartinCostello.LondonTravel.Site.Models
+namespace MartinCostello.LondonTravel.Site.Models;
+
+/// <summary>
+/// A class containing unit tests for the <see cref="MetaModel"/> class.
+/// </summary>
+public static class MetaModelTests
 {
-    /// <summary>
-    /// A class containing unit tests for the <see cref="MetaModel"/> class.
-    /// </summary>
-    public static class MetaModelTests
+    [Fact]
+    public static void MetaModel_Create_Handles_Null_Options()
     {
-        [Fact]
-        public static void MetaModel_Create_Handles_Null_Options()
-        {
-            // Arrange
-            var options = null as MetadataOptions;
+        // Arrange
+        var options = null as MetadataOptions;
 
-            // Act
-            MetaModel actual = MetaModel.Create(options);
+        // Act
+        MetaModel actual = MetaModel.Create(options);
 
-            // Assert
-            actual.ShouldNotBeNull();
-        }
+        // Assert
+        actual.ShouldNotBeNull();
+    }
 
-        [Fact]
-        public static void MetaModel_Create_Handles_Null_Author()
-        {
-            // Arrange
-            var options = new MetadataOptions();
+    [Fact]
+    public static void MetaModel_Create_Handles_Null_Author()
+    {
+        // Arrange
+        var options = new MetadataOptions();
 
-            // Act
-            MetaModel actual = MetaModel.Create(options);
+        // Act
+        MetaModel actual = MetaModel.Create(options);
 
-            // Assert
-            actual.ShouldNotBeNull();
-        }
+        // Assert
+        actual.ShouldNotBeNull();
     }
 }

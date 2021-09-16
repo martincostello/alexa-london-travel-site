@@ -1,102 +1,94 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using MartinCostello.LondonTravel.Site.Options;
 using Microsoft.Extensions.Caching.Memory;
 using Refit;
 
-namespace MartinCostello.LondonTravel.Site.Services.Tfl
+namespace MartinCostello.LondonTravel.Site.Services.Tfl;
+
+/// <summary>
+/// A class representing the default implementation of <see cref="ITflService"/>.
+/// </summary>
+public sealed class TflService : ITflService
 {
     /// <summary>
-    /// A class representing the default implementation of <see cref="ITflService"/>.
+    /// The <see cref="ITflClient"/> to use. This field is read-only.
     /// </summary>
-    public sealed class TflService : ITflService
+    private readonly ITflClient _client;
+
+    /// <summary>
+    /// The <see cref="IMemoryCache"/> to use. This field is read-only.
+    /// </summary>
+    private readonly IMemoryCache _cache;
+
+    /// <summary>
+    /// The <see cref="TflOptions"/> to use. This field is read-only.
+    /// </summary>
+    private readonly TflOptions _options;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TflService"/> class.
+    /// </summary>
+    /// <param name="client">The <see cref="ITflClient"/> to use.</param>
+    /// <param name="cache">The <see cref="IMemoryCache"/> to use.</param>
+    /// <param name="options">The <see cref="TflOptions"/> to use.</param>
+    public TflService(ITflClient client, IMemoryCache cache, TflOptions options)
     {
-        /// <summary>
-        /// The <see cref="ITflClient"/> to use. This field is read-only.
-        /// </summary>
-        private readonly ITflClient _client;
+        _client = client;
+        _cache = cache;
+        _options = options;
+    }
 
-        /// <summary>
-        /// The <see cref="IMemoryCache"/> to use. This field is read-only.
-        /// </summary>
-        private readonly IMemoryCache _cache;
+    /// <inheritdoc />
+    public Task<ICollection<LineInfo>> GetLinesAsync(CancellationToken cancellationToken = default)
+    {
+        const string CacheKey = "TfL.AvailableLines";
+        string supportedModes = string.Join(',', _options.SupportedModes ?? Array.Empty<string>());
 
-        /// <summary>
-        /// The <see cref="TflOptions"/> to use. This field is read-only.
-        /// </summary>
-        private readonly TflOptions _options;
+        return GetWithCachingAsync(
+            CacheKey,
+            () => _client.GetLinesAsync(supportedModes, _options.AppId!, _options.AppKey!, cancellationToken));
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TflService"/> class.
-        /// </summary>
-        /// <param name="client">The <see cref="ITflClient"/> to use.</param>
-        /// <param name="cache">The <see cref="IMemoryCache"/> to use.</param>
-        /// <param name="options">The <see cref="TflOptions"/> to use.</param>
-        public TflService(ITflClient client, IMemoryCache cache, TflOptions options)
+    /// <inheritdoc />
+    public Task<ICollection<StopPoint>> GetStopPointsByLineAsync(string lineId, CancellationToken cancellationToken = default)
+    {
+        string cacheKey = $"TfL.{lineId}.StopPoints";
+
+        return GetWithCachingAsync(
+            cacheKey,
+            () => _client.GetStopPointsAsync(lineId, _options.AppId!, _options.AppKey!, cancellationToken));
+    }
+
+    /// <summary>
+    /// Calls the specified delegate as an asynchronous operation,
+    /// storing the result in the cache if the response is cacheable.
+    /// </summary>
+    /// <typeparam name="T">The type of the resource to return.</typeparam>
+    /// <param name="cacheKey">The cache key to use for the response.</param>
+    /// <param name="operation">A delegate to a method to use to get the API response.</param>
+    /// <returns>
+    /// A <see cref="Task{TResult}"/> representing the asychronous operation to get the
+    /// resource of <typeparamref name="T"/> from calling the specified delegate.
+    /// </returns>
+    private async Task<T> GetWithCachingAsync<T>(string cacheKey, Func<Task<ApiResponse<T>>> operation)
+    {
+        if (!_cache.TryGetValue(cacheKey, out T? result))
         {
-            _client = client;
-            _cache = cache;
-            _options = options;
-        }
+            using var response = await operation();
+            await response.EnsureSuccessStatusCodeAsync();
 
-        /// <inheritdoc />
-        public Task<ICollection<LineInfo>> GetLinesAsync(CancellationToken cancellationToken = default)
-        {
-            const string CacheKey = "TfL.AvailableLines";
-            string supportedModes = string.Join(",", _options.SupportedModes ?? Array.Empty<string>());
+            result = response.Content;
 
-            return GetWithCachingAsync(
-                CacheKey,
-                () => _client.GetLinesAsync(supportedModes, _options.AppId!, _options.AppKey!, cancellationToken));
-        }
-
-        /// <inheritdoc />
-        public Task<ICollection<StopPoint>> GetStopPointsByLineAsync(string lineId, CancellationToken cancellationToken = default)
-        {
-            string cacheKey = $"TfL.{lineId}.StopPoints";
-
-            return GetWithCachingAsync(
-                cacheKey,
-                () => _client.GetStopPointsAsync(lineId, _options.AppId!, _options.AppKey!, cancellationToken));
-        }
-
-        /// <summary>
-        /// Calls the specified delegate as an asynchronous operation,
-        /// storing the result in the cache if the response is cacheable.
-        /// </summary>
-        /// <typeparam name="T">The type of the resource to return.</typeparam>
-        /// <param name="cacheKey">The cache key to use for the response.</param>
-        /// <param name="operation">A delegate to a method to use to get the API response.</param>
-        /// <returns>
-        /// A <see cref="Task{TResult}"/> representing the asychronous operation to get the
-        /// resource of <typeparamref name="T"/> from calling the specified delegate.
-        /// </returns>
-        private async Task<T> GetWithCachingAsync<T>(string cacheKey, Func<Task<ApiResponse<T>>> operation)
-        {
-            if (!_cache.TryGetValue(cacheKey, out T? result))
+            if (!string.IsNullOrEmpty(cacheKey) &&
+                response.Headers.CacheControl != null &&
+                response.Headers.CacheControl.MaxAge.HasValue)
             {
-                using var response = await operation();
-
-#pragma warning disable CA2000
-                await response.EnsureSuccessStatusCodeAsync();
-#pragma warning restore CA2000
-
-                result = response.Content;
-
-                if (!string.IsNullOrEmpty(cacheKey) &&
-                    response.Headers.CacheControl != null &&
-                    response.Headers.CacheControl.MaxAge.HasValue)
-                {
-                    _cache.Set(cacheKey, result, absoluteExpirationRelativeToNow: response.Headers.CacheControl.MaxAge.Value);
-                }
+                _cache.Set(cacheKey, result, absoluteExpirationRelativeToNow: response.Headers.CacheControl.MaxAge.Value);
             }
-
-            return result!;
         }
+
+        return result!;
     }
 }

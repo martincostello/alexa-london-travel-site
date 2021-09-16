@@ -1,185 +1,178 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
-using System.Threading.Tasks;
 using MartinCostello.LondonTravel.Site.Pages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;
-using Shouldly;
-using Xunit;
-using Xunit.Abstractions;
 
-namespace MartinCostello.LondonTravel.Site.Integration
+namespace MartinCostello.LondonTravel.Site.Integration;
+
+/// <summary>
+/// A class containing tests for the integration with Alexa.
+/// </summary>
+public class AlexaTests : BrowserIntegrationTest
 {
     /// <summary>
-    /// A class containing tests for the integration with Alexa.
+    /// Initializes a new instance of the <see cref="AlexaTests"/> class.
     /// </summary>
-    public class AlexaTests : BrowserIntegrationTest
+    /// <param name="fixture">The fixture to use.</param>
+    /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+    public AlexaTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
+        : base(fixture, outputHelper)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AlexaTests"/> class.
-        /// </summary>
-        /// <param name="fixture">The fixture to use.</param>
-        /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
-        public AlexaTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
-            : base(fixture, outputHelper)
-        {
-            Fixture.Services!.GetRequiredService<InMemoryDocumentStore>().Clear();
-        }
+        Fixture.Services!.GetRequiredService<InMemoryDocumentStore>().Clear();
+    }
 
-        [Theory]
-        [ClassData(typeof(BrowsersTestData))]
-        public async Task Can_Authorize_Alexa(string browserType)
-        {
-            // Arrange
-            await WithNavigatorAsync(
-                browserType,
-                async (navigator) =>
-                {
-                    string relativeUri = BuildAuthorizationUri(navigator);
-
-                    // Act
-                    await navigator.NavigateToAsync(relativeUri);
-
-                    var page = await new SignInPage(navigator)
-                        .SignInWithAmazonAsync()
-                        .ThenAsync((p) => p.ManageAsync());
-
-                    // Assert
-                    await page.IsAuthenticatedAsync().ShouldBeTrue();
-                    await page.IsLinkedToAlexaAsync().ShouldBeTrue();
-                });
-        }
-
-        [Theory]
-        [ClassData(typeof(BrowsersTestData))]
-        public async Task Can_Get_Preferences_From_Api(string browserType)
-        {
-            // Arrange
-            await WithNavigatorAsync(
-                browserType,
-                async (navigator) =>
-                {
-                    var page = await new SignInPage(navigator)
-                        .NavigateAsync()
-                        .ThenAsync((p) => p.SignInWithAmazonAsync())
-                        .ThenAsync((p) => p.ManageAsync());
-
-                    // Assert
-                    await page.IsAuthenticatedAsync().ShouldBeTrue();
-                    await page.IsLinkedToAlexaAsync().ShouldBeFalse();
-
-                    // Arrange
-                    string relativeUri = BuildAuthorizationUri(navigator);
-
-                    // Act
-                    await navigator.NavigateToAsync(relativeUri);
-
-                    // Assert
-                    await page.IsAuthenticatedAsync().ShouldBeTrue();
-                    await page.IsLinkedToAlexaAsync().ShouldBeTrue();
-
-                    // Arrange
-                    AuthenticationHeaderValue authorization = ParseAuthorization(navigator.Page.Url);
-
-                    // Act
-                    using var firstResult = await GetPreferencesAsync(authorization, HttpStatusCode.OK);
-
-                    // Assert
-                    firstResult.RootElement.GetString("userId").ShouldNotBeNullOrWhiteSpace();
-                    firstResult.RootElement.GetStringArray("favoriteLines").ShouldBe(Array.Empty<string>());
-
-                    // Arrange
-                    HomePage homepage = await navigator.GoToRootAsync();
-
-                    var lines = await homepage.LinesAsync();
-
-                    for (int i = 0; i < lines.Count; i++)
-                    {
-                        if (string.Equals(await lines[i].NameAsync(), "District", StringComparison.Ordinal))
-                        {
-                            await lines[i].ToggleAsync();
-                            break;
-                        }
-                    }
-
-                    await homepage.UpdatePreferencesAsync();
-
-                    // Act
-                    using var secondResult = await GetPreferencesAsync(authorization, HttpStatusCode.OK);
-
-                    // Assert
-                    secondResult.RootElement.GetString("userId").ShouldNotBeNullOrWhiteSpace();
-                    secondResult.RootElement.GetStringArray("favoriteLines").ShouldBe(new[] { "district" });
-
-                    // Arrange
-                    page = await homepage.ManageAsync();
-
-                    // Act
-                    await page.UnlinkAlexaAsync()
-                              .ThenAsync((p) => p.CloseAsync());
-
-                    // Assert
-                    await page.IsAuthenticatedAsync().ShouldBeTrue();
-                    await page.IsLinkedToAlexaAsync().ShouldBeTrue();
-
-                    // Act
-                    await page.UnlinkAlexaAsync()
-                              .ThenAsync((p) => p.ConfirmAsync());
-
-                    // Assert
-                    await page.IsAuthenticatedAsync().ShouldBeTrue();
-                    await page.IsLinkedToAlexaAsync().ShouldBeFalse();
-
-                    // Act and Assert
-                    await GetPreferencesAsync(authorization, HttpStatusCode.Unauthorized);
-                });
-        }
-
-        private static string BuildAuthorizationUri(ApplicationNavigator navigator)
-        {
-            var queryString = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase)
+    [Theory]
+    [ClassData(typeof(BrowsersTestData))]
+    public async Task Can_Authorize_Alexa(string browserType)
+    {
+        // Arrange
+        await WithNavigatorAsync(
+            browserType,
+            async (navigator) =>
             {
-                ["client_id"] = "alexa-london-travel",
-                ["redirect_uri"] = new Uri(navigator.BaseUri, new Uri("/manage/", UriKind.Relative)).ToString(),
-                ["response_type"] = "token",
-                ["state"] = "my_state",
-            };
+                string relativeUri = BuildAuthorizationUri(navigator);
 
-            return QueryHelpers.AddQueryString("/alexa/authorize/", queryString);
-        }
+                // Act
+                await navigator.NavigateToAsync(relativeUri);
 
-        private static AuthenticationHeaderValue ParseAuthorization(string url)
+                var page = await new SignInPage(navigator)
+                    .SignInWithAmazonAsync()
+                    .ThenAsync((p) => p.ManageAsync());
+
+                // Assert
+                await page.IsAuthenticatedAsync().ShouldBeTrue();
+                await page.IsLinkedToAlexaAsync().ShouldBeTrue();
+            });
+    }
+
+    [Theory]
+    [ClassData(typeof(BrowsersTestData))]
+    public async Task Can_Get_Preferences_From_Api(string browserType)
+    {
+        // Arrange
+        await WithNavigatorAsync(
+            browserType,
+            async (navigator) =>
+            {
+                var page = await new SignInPage(navigator)
+                    .NavigateAsync()
+                    .ThenAsync((p) => p.SignInWithAmazonAsync())
+                    .ThenAsync((p) => p.ManageAsync());
+
+                // Assert
+                await page.IsAuthenticatedAsync().ShouldBeTrue();
+                await page.IsLinkedToAlexaAsync().ShouldBeFalse();
+
+                // Arrange
+                string relativeUri = BuildAuthorizationUri(navigator);
+
+                // Act
+                await navigator.NavigateToAsync(relativeUri);
+
+                // Assert
+                await page.IsAuthenticatedAsync().ShouldBeTrue();
+                await page.IsLinkedToAlexaAsync().ShouldBeTrue();
+
+                // Arrange
+                AuthenticationHeaderValue authorization = ParseAuthorization(navigator.Page.Url);
+
+                // Act
+                using var firstResult = await GetPreferencesAsync(authorization, HttpStatusCode.OK);
+
+                // Assert
+                firstResult.RootElement.GetString("userId").ShouldNotBeNullOrWhiteSpace();
+                firstResult.RootElement.GetStringArray("favoriteLines").ShouldBe(Array.Empty<string>());
+
+                // Arrange
+                HomePage homepage = await navigator.GoToRootAsync();
+
+                var lines = await homepage.LinesAsync();
+
+                for (int i = 0; i < lines.Count; i++)
+                {
+                    if (string.Equals(await lines[i].NameAsync(), "District", StringComparison.Ordinal))
+                    {
+                        await lines[i].ToggleAsync();
+                        break;
+                    }
+                }
+
+                await homepage.UpdatePreferencesAsync();
+
+                // Act
+                using var secondResult = await GetPreferencesAsync(authorization, HttpStatusCode.OK);
+
+                // Assert
+                secondResult.RootElement.GetString("userId").ShouldNotBeNullOrWhiteSpace();
+                secondResult.RootElement.GetStringArray("favoriteLines").ShouldBe(new[] { "district" });
+
+                // Arrange
+                page = await homepage.ManageAsync();
+
+                // Act
+                await page.UnlinkAlexaAsync()
+                          .ThenAsync((p) => p.CloseAsync());
+
+                // Assert
+                await page.IsAuthenticatedAsync().ShouldBeTrue();
+                await page.IsLinkedToAlexaAsync().ShouldBeTrue();
+
+                // Act
+                await page.UnlinkAlexaAsync()
+                          .ThenAsync((p) => p.ConfirmAsync());
+
+                // Assert
+                await page.IsAuthenticatedAsync().ShouldBeTrue();
+                await page.IsLinkedToAlexaAsync().ShouldBeFalse();
+
+                // Act and Assert
+                await GetPreferencesAsync(authorization, HttpStatusCode.Unauthorized);
+            });
+    }
+
+    private static string BuildAuthorizationUri(ApplicationNavigator navigator)
+    {
+        var queryString = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase)
         {
-            var hash = new UriBuilder(url).Fragment;
+            ["client_id"] = "alexa-london-travel",
+            ["redirect_uri"] = new Uri(navigator.BaseUri, new Uri("/manage/", UriKind.Relative)).ToString(),
+            ["response_type"] = "token",
+            ["state"] = "my_state",
+        };
 
-            Dictionary<string, StringValues> values = QueryHelpers.ParseQuery(hash);
+        return QueryHelpers.AddQueryString("/alexa/authorize/", queryString);
+    }
 
-            string scheme = values["token_type"];
-            string parameter = values["access_token"];
+    private static AuthenticationHeaderValue ParseAuthorization(string url)
+    {
+        var hash = new UriBuilder(url).Fragment;
 
-            return new AuthenticationHeaderValue(scheme, parameter);
-        }
+        Dictionary<string, StringValues> values = QueryHelpers.ParseQuery(hash);
 
-        private async Task<JsonDocument> GetPreferencesAsync(AuthenticationHeaderValue authorization, HttpStatusCode expected)
-        {
-            // Arrange
-            using var client = Fixture.CreateHttpClient();
-            client.DefaultRequestHeaders.Authorization = authorization;
+        string scheme = values["token_type"];
+        string parameter = values["access_token"];
 
-            // Act
-            using var response = await client.GetAsync("/api/preferences");
+        return new AuthenticationHeaderValue(scheme, parameter);
+    }
 
-            // Assert
-            response.StatusCode.ShouldBe(expected);
+    private async Task<JsonDocument> GetPreferencesAsync(AuthenticationHeaderValue authorization, HttpStatusCode expected)
+    {
+        // Arrange
+        using var client = Fixture.CreateHttpClient();
+        client.DefaultRequestHeaders.Authorization = authorization;
 
-            return await response.ReadAsJsonDocumentAsync();
-        }
+        // Act
+        using var response = await client.GetAsync("/api/preferences");
+
+        // Assert
+        response.StatusCode.ShouldBe(expected);
+
+        return await response.ReadAsJsonDocumentAsync();
     }
 }

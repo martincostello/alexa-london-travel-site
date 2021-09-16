@@ -3,22 +3,21 @@
 
 using MartinCostello.LondonTravel.Site.Models;
 
-namespace MartinCostello.LondonTravel.Site.Swagger
+namespace MartinCostello.LondonTravel.Site.Swagger;
+
+/// <summary>
+/// A class representing an implementation of <see cref="IExampleProvider"/>
+/// for the <see cref="PreferencesResponse"/> class. This class cannot be inherited.
+/// </summary>
+public sealed class PreferencesResponseExampleProvider : IExampleProvider
 {
-    /// <summary>
-    /// A class representing an implementation of <see cref="IExampleProvider"/>
-    /// for the <see cref="PreferencesResponse"/> class. This class cannot be inherited.
-    /// </summary>
-    public sealed class PreferencesResponseExampleProvider : IExampleProvider
+    /// <inheritdoc />
+    public object GetExample()
     {
-        /// <inheritdoc />
-        public object GetExample()
+        return new PreferencesResponse()
         {
-            return new PreferencesResponse()
-            {
-                FavoriteLines = new[] { "northern", "victoria" },
-                UserId = "578a0443-2208-4fb3-8e33-92351e58b685",
-            };
-        }
+            FavoriteLines = new[] { "northern", "victoria" },
+            UserId = "578a0443-2208-4fb3-8e33-92351e58b685",
+        };
     }
 }

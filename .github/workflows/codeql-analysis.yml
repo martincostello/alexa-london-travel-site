@@ -9,6 +9,9 @@ on:
     - cron: '0 6 * * 1'
   workflow_dispatch:
 
+env:
+  DOTNET_ROLL_FORWARD: Major # HACK Remove once Playwright supports .NET 6
+
 jobs:
   code-ql:
 
@@ -17,6 +20,9 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v1
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v1

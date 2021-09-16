@@ -1,25 +1,22 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 
-namespace MartinCostello.LondonTravel.Site.Models
+namespace MartinCostello.LondonTravel.Site.Models;
+
+public class ManageViewModel
 {
-    public class ManageViewModel
-    {
-        public IList<UserLoginInfo> CurrentLogins { get; set; } = Array.Empty<UserLoginInfo>();
+    public IList<UserLoginInfo> CurrentLogins { get; set; } = Array.Empty<UserLoginInfo>();
 
-        public IList<AuthenticationScheme> OtherLogins { get; set; } = Array.Empty<AuthenticationScheme>();
+    public IList<AuthenticationScheme> OtherLogins { get; set; } = Array.Empty<AuthenticationScheme>();
 
-        public bool CanAddMoreLogins => OtherLogins?.Count > 0;
+    public bool CanAddMoreLogins => OtherLogins?.Count > 0;
 
-        public string ETag { get; set; } = string.Empty;
+    public string ETag { get; set; } = string.Empty;
 
-        public bool IsLinkedToAlexa { get; set; }
+    public bool IsLinkedToAlexa { get; set; }
 
-        public bool ShowRemoveButton => CurrentLogins?.Count > 1;
-    }
+    public bool ShowRemoveButton => CurrentLogins?.Count > 1;
 }

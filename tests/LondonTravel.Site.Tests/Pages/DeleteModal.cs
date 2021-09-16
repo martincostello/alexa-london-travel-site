@@ -1,27 +1,24 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System.Threading.Tasks;
+namespace MartinCostello.LondonTravel.Site.Pages;
 
-namespace MartinCostello.LondonTravel.Site.Pages
+public sealed class DeleteModal : ModalBase
 {
-    public sealed class DeleteModal : ModalBase
+    public DeleteModal(ApplicationNavigator navigator)
+        : base("delete-account", navigator)
     {
-        public DeleteModal(ApplicationNavigator navigator)
-            : base("delete-account", navigator)
-        {
-        }
+    }
 
-        public async Task<ManagePage> CloseAsync()
-        {
-            await CloseSelfAsync();
-            return new ManagePage(Navigator);
-        }
+    public async Task<ManagePage> CloseAsync()
+    {
+        await CloseSelfAsync();
+        return new ManagePage(Navigator);
+    }
 
-        public async Task<HomePage> ConfirmAsync()
-        {
-            await Navigator.Page.ClickAsync("[data-id='delete-account-confirm']");
-            return new HomePage(Navigator);
-        }
+    public async Task<HomePage> ConfirmAsync()
+    {
+        await Navigator.Page.ClickAsync("[data-id='delete-account-confirm']");
+        return new HomePage(Navigator);
     }
 }

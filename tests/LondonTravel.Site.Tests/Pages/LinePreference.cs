@@ -1,50 +1,47 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.Playwright;
 
-namespace MartinCostello.LondonTravel.Site.Pages
+namespace MartinCostello.LondonTravel.Site.Pages;
+
+public sealed class LinePreference
 {
-    public sealed class LinePreference
+    internal LinePreference(IElementHandle element)
     {
-        internal LinePreference(IElementHandle element)
+        RootElement = element;
+    }
+
+    private IElementHandle RootElement { get; }
+
+    public async Task<string> IdAsync() => (await GetInputAttributeAsync("data-line-id"))!;
+
+    public async Task<bool> IsSelectedAsync() => await GetInputAttributeAsync("checked") is not null;
+
+    public async Task<string> NameAsync() => (await GetInputAttributeAsync("data-line-name"))!;
+
+    public async Task<LinePreference> ToggleAsync()
+    {
+        await RootElement.ClickAsync();
+        return this;
+    }
+
+    private async Task<string?> GetInputAttributeAsync(string name)
+    {
+        IElementHandle? element = await RootElement.QuerySelectorAsync("input");
+
+        if (element is null)
         {
-            RootElement = element;
+            return null;
         }
 
-        private IElementHandle RootElement { get; }
-
-        public async Task<string> IdAsync() => (await GetInputAttributeAsync("data-line-id")) !;
-
-        public async Task<bool> IsSelectedAsync() => await GetInputAttributeAsync("checked") != null;
-
-        public async Task<string> NameAsync() => (await GetInputAttributeAsync("data-line-name")) !;
-
-        public async Task<LinePreference> ToggleAsync()
+        try
         {
-            await RootElement.ClickAsync();
-            return this;
+            return await element.GetAttributeAsync(name);
         }
-
-        private async Task<string?> GetInputAttributeAsync(string name)
+        catch (KeyNotFoundException)
         {
-            IElementHandle? element = await RootElement.QuerySelectorAsync("input");
-
-            if (element is null)
-            {
-                return null;
-            }
-
-            try
-            {
-                return await element.GetAttributeAsync(name);
-            }
-            catch (KeyNotFoundException)
-            {
-                return null;
-            }
+            return null;
         }
     }
 }

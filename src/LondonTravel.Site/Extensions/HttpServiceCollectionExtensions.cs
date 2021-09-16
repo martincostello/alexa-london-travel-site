@@ -1,82 +1,79 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System;
-using System.Net.Http;
 using MartinCostello.LondonTravel.Site.Options;
 using MartinCostello.LondonTravel.Site.Services.Tfl;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Refit;
 
-namespace MartinCostello.LondonTravel.Site.Extensions
+namespace MartinCostello.LondonTravel.Site.Extensions;
+
+/// <summary>
+/// A class containing HTTP-related extension methods for the <see cref="IServiceCollection"/> interface. This class cannot be inherited.
+/// </summary>
+public static class HttpServiceCollectionExtensions
 {
     /// <summary>
-    /// A class containing HTTP-related extension methods for the <see cref="IServiceCollection"/> interface. This class cannot be inherited.
+    /// Adds HTTP clients to the services.
     /// </summary>
-    public static class HttpServiceCollectionExtensions
+    /// <param name="services">The <see cref="IServiceCollection"/> to add the services to.</param>
+    /// <returns>
+    /// The value specified by <paramref name="services"/>.
+    /// </returns>
+    public static IServiceCollection AddHttpClients(this IServiceCollection services)
     {
-        /// <summary>
-        /// Adds HTTP clients to the services.
-        /// </summary>
-        /// <param name="services">The <see cref="IServiceCollection"/> to add the services to.</param>
-        /// <returns>
-        /// The value specified by <paramref name="services"/>.
-        /// </returns>
-        public static IServiceCollection AddHttpClients(this IServiceCollection services)
+        services
+            .AddHttpClient(Microsoft.Extensions.Options.Options.DefaultName)
+            .ApplyDefaultConfiguration();
+
+        using var serviceProvider = services.BuildServiceProvider();
+        var options = serviceProvider.GetRequiredService<SiteOptions>();
+
+        if (options.Authentication?.ExternalProviders != null)
         {
-            services
-                .AddHttpClient(Microsoft.Extensions.Options.Options.DefaultName)
-                .ApplyDefaultConfiguration();
-
-            var options = services.BuildServiceProvider().GetRequiredService<SiteOptions>();
-
-            if (options.Authentication?.ExternalProviders != null)
+            foreach (string providerName in options.Authentication.ExternalProviders.Keys)
             {
-                foreach (string providerName in options.Authentication.ExternalProviders.Keys)
-                {
-                    services
-                        .AddHttpClient(providerName)
-                        .ApplyDefaultConfiguration()
-                        .ApplyRemoteAuthenticationConfiguration();
-                }
+                services
+                    .AddHttpClient(providerName)
+                    .ApplyDefaultConfiguration()
+                    .ApplyRemoteAuthenticationConfiguration();
             }
-
-            services
-                .AddHttpClient(nameof(ITflClient))
-                .AddTypedClient(AddTfl)
-                .ApplyDefaultConfiguration();
-
-            services.AddSingleton<IHttpContentSerializer>(
-                (p) =>
-                {
-                    var options = p.GetRequiredService<IOptions<JsonOptions>>().Value;
-                    return new SystemTextJsonContentSerializer(options.JsonSerializerOptions);
-                });
-
-            return services;
         }
 
-        /// <summary>
-        /// Adds a typed client for the TfL API.
-        /// </summary>
-        /// <param name="client">The <see cref="HttpClient"/> to configure the client with.</param>
-        /// <param name="provider">The <see cref="IServiceProvider"/> to use.</param>
-        /// <returns>
-        /// The <see cref="ITflClient"/> to use.
-        /// </returns>
-        private static ITflClient AddTfl(HttpClient client, IServiceProvider provider)
-        {
-            client.BaseAddress = provider.GetRequiredService<TflOptions>().BaseUri;
+        services
+            .AddHttpClient(nameof(ITflClient))
+            .AddTypedClient(AddTfl)
+            .ApplyDefaultConfiguration();
 
-            var settings = new RefitSettings()
+        services.AddSingleton<IHttpContentSerializer>(
+            (p) =>
             {
-                ContentSerializer = provider.GetRequiredService<IHttpContentSerializer>(),
-                HttpMessageHandlerFactory = () => provider.GetRequiredService<IHttpMessageHandlerFactory>().CreateHandler(),
-            };
+                var options = p.GetRequiredService<IOptions<JsonOptions>>().Value;
+                return new SystemTextJsonContentSerializer(options.JsonSerializerOptions);
+            });
 
-            return RestService.For<ITflClient>(client, settings);
-        }
+        return services;
+    }
+
+    /// <summary>
+    /// Adds a typed client for the TfL API.
+    /// </summary>
+    /// <param name="client">The <see cref="HttpClient"/> to configure the client with.</param>
+    /// <param name="provider">The <see cref="IServiceProvider"/> to use.</param>
+    /// <returns>
+    /// The <see cref="ITflClient"/> to use.
+    /// </returns>
+    private static ITflClient AddTfl(HttpClient client, IServiceProvider provider)
+    {
+        client.BaseAddress = provider.GetRequiredService<TflOptions>().BaseUri;
+
+        var settings = new RefitSettings()
+        {
+            ContentSerializer = provider.GetRequiredService<IHttpContentSerializer>(),
+            HttpMessageHandlerFactory = () => provider.GetRequiredService<IHttpMessageHandlerFactory>().CreateHandler(),
+        };
+
+        return RestService.For<ITflClient>(client, settings);
     }
 }

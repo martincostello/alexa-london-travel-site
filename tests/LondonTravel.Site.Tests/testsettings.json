@@ -56,6 +56,10 @@
         "CollectionName": "Users_Tests",
         "CurrentLocation": "UK South"
       }
+    },
+    "Tfl": {
+      "AppId": "app-id",
+      "AppKey": "app-key"
     }
   }
 }

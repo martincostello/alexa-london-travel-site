@@ -3,113 +3,109 @@
 
 using System.Net;
 using System.Net.Mime;
-using System.Threading.Tasks;
-using Shouldly;
-using Xunit;
 
-namespace MartinCostello.LondonTravel.Site.EndToEnd
+namespace MartinCostello.LondonTravel.Site.EndToEnd;
+
+[Collection(WebsiteCollection.Name)]
+[Trait("Category", "EndToEnd")]
+public class ResourceTests
 {
-    [Collection(WebsiteCollection.Name)]
-    [Trait("Category", "EndToEnd")]
-    public class ResourceTests
+    public ResourceTests(WebsiteFixture fixture)
     {
-        public ResourceTests(WebsiteFixture fixture)
+        Fixture = fixture;
+    }
+
+    private WebsiteFixture Fixture { get; }
+
+    [SkippableTheory]
+    [InlineData("/", MediaTypeNames.Text.Html)]
+    [InlineData("/account/register/", MediaTypeNames.Text.Html)]
+    [InlineData("/account/sign-in/", MediaTypeNames.Text.Html)]
+    [InlineData("/api/", MediaTypeNames.Text.Html)]
+    [InlineData("/apple-app-site-association", MediaTypeNames.Application.Json)]
+    [InlineData("/assets/css/site.css", "text/css")]
+    [InlineData("/assets/css/site.css.map", MediaTypeNames.Text.Plain)]
+    [InlineData("/assets/css/site.min.css", "text/css")]
+    [InlineData("/assets/css/site.min.css.map", MediaTypeNames.Text.Plain)]
+    [InlineData("/assets/js/site.js", "application/javascript")]
+    [InlineData("/assets/js/site.js.map", MediaTypeNames.Text.Plain)]
+    [InlineData("/assets/js/site.min.js", "application/javascript")]
+    [InlineData("/assets/js/site.min.js.map", MediaTypeNames.Text.Plain)]
+    [InlineData("/assets/js/site.manage.js", "application/javascript")]
+    [InlineData("/assets/js/site.manage.js.map", MediaTypeNames.Text.Plain)]
+    [InlineData("/assets/js/site.manage.min.js", "application/javascript")]
+    [InlineData("/assets/js/site.manage.min.js.map", MediaTypeNames.Text.Plain)]
+    [InlineData("/assets/js/site.preferences.js", "application/javascript")]
+    [InlineData("/assets/js/site.preferences.js.map", MediaTypeNames.Text.Plain)]
+    [InlineData("/assets/js/site.preferences.min.js", "application/javascript")]
+    [InlineData("/assets/js/site.preferences.min.js.map", MediaTypeNames.Text.Plain)]
+    [InlineData("/.well-known/apple-app-site-association", MediaTypeNames.Application.Json)]
+    [InlineData("/.well-known/assetlinks.json", MediaTypeNames.Application.Json)]
+    [InlineData("/.well-known/security.txt", MediaTypeNames.Text.Plain)]
+    [InlineData("/BingSiteAuth.xml", MediaTypeNames.Text.Xml)]
+    [InlineData("/browserconfig.xml", MediaTypeNames.Text.Xml)]
+    [InlineData("/error.html", MediaTypeNames.Text.Html)]
+    [InlineData("/favicon.ico", "image/x-icon")]
+    [InlineData("/googled1107923138d0b79.html", MediaTypeNames.Text.Html)]
+    [InlineData("/help/", MediaTypeNames.Text.Html)]
+    [InlineData("/humans.txt", MediaTypeNames.Text.Plain)]
+    [InlineData("/keybase.txt", MediaTypeNames.Text.Plain)]
+    [InlineData("/manifest.webmanifest", "application/manifest+json")]
+    [InlineData("/pgp-key.txt", MediaTypeNames.Text.Plain)]
+    [InlineData("/privacy-policy/", MediaTypeNames.Text.Html)]
+    [InlineData("/robots.txt", MediaTypeNames.Text.Plain)]
+    [InlineData("/security.txt", MediaTypeNames.Text.Plain)]
+    [InlineData("/service-worker.js", "application/javascript")]
+    [InlineData("/sitemap.xml", MediaTypeNames.Text.Xml)]
+    [InlineData("/swagger/api/swagger.json", MediaTypeNames.Application.Json)]
+    [InlineData("/technology/", MediaTypeNames.Text.Html)]
+    [InlineData("/terms-of-service/", MediaTypeNames.Text.Html)]
+    public async Task Can_Load_Resource(string requestUri, string contentType)
+    {
+        // Arrange
+        using var client = Fixture.CreateClient();
+
+        // Act
+        using var response = await client.GetAsync(requestUri);
+
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.OK, $"Failed to get {requestUri}. {await response.Content!.ReadAsStringAsync()}");
+        response.Content.Headers.ContentType?.MediaType.ShouldBe(contentType);
+        response.Content.Headers.ContentLength.ShouldNotBeNull();
+        response.Content.Headers.ContentLength.ShouldNotBe(0);
+    }
+
+    [SkippableFact]
+    public async Task Response_Headers_Contains_Expected_Headers()
+    {
+        // Arrange
+        string[] expectedHeaders = new[]
         {
-            Fixture = fixture;
-        }
+            "content-security-policy",
+            "content-security-policy-report-only",
+            "feature-policy",
+            "NEL",
+            "Referrer-Policy",
+            "Report-To",
+            "X-Content-Type-Options",
+            "X-CSP-Nonce",
+            "X-Datacenter",
+            "X-Download-Options",
+            "X-Frame-Options",
+            "X-Instance",
+            "X-Request-Id",
+            "X-Revision",
+            "X-XSS-Protection",
+        };
 
-        private WebsiteFixture Fixture { get; }
+        // Act
+        using var client = Fixture.CreateClient();
+        var response = await client.GetAsync("/");
 
-        [SkippableTheory]
-        [InlineData("/", MediaTypeNames.Text.Html)]
-        [InlineData("/account/register/", MediaTypeNames.Text.Html)]
-        [InlineData("/account/sign-in/", MediaTypeNames.Text.Html)]
-        [InlineData("/api/", MediaTypeNames.Text.Html)]
-        [InlineData("/apple-app-site-association", MediaTypeNames.Application.Json)]
-        [InlineData("/assets/css/site.css", "text/css")]
-        [InlineData("/assets/css/site.css.map", MediaTypeNames.Text.Plain)]
-        [InlineData("/assets/css/site.min.css", "text/css")]
-        [InlineData("/assets/css/site.min.css.map", MediaTypeNames.Text.Plain)]
-        [InlineData("/assets/js/site.js", "application/javascript")]
-        [InlineData("/assets/js/site.js.map", MediaTypeNames.Text.Plain)]
-        [InlineData("/assets/js/site.min.js", "application/javascript")]
-        [InlineData("/assets/js/site.min.js.map", MediaTypeNames.Text.Plain)]
-        [InlineData("/assets/js/site.manage.js", "application/javascript")]
-        [InlineData("/assets/js/site.manage.js.map", MediaTypeNames.Text.Plain)]
-        [InlineData("/assets/js/site.manage.min.js", "application/javascript")]
-        [InlineData("/assets/js/site.manage.min.js.map", MediaTypeNames.Text.Plain)]
-        [InlineData("/assets/js/site.preferences.js", "application/javascript")]
-        [InlineData("/assets/js/site.preferences.js.map", MediaTypeNames.Text.Plain)]
-        [InlineData("/assets/js/site.preferences.min.js", "application/javascript")]
-        [InlineData("/assets/js/site.preferences.min.js.map", MediaTypeNames.Text.Plain)]
-        [InlineData("/.well-known/apple-app-site-association", MediaTypeNames.Application.Json)]
-        [InlineData("/.well-known/assetlinks.json", MediaTypeNames.Application.Json)]
-        [InlineData("/.well-known/security.txt", MediaTypeNames.Text.Plain)]
-        [InlineData("/BingSiteAuth.xml", MediaTypeNames.Text.Xml)]
-        [InlineData("/browserconfig.xml", MediaTypeNames.Text.Xml)]
-        [InlineData("/error.html", MediaTypeNames.Text.Html)]
-        [InlineData("/favicon.ico", "image/x-icon")]
-        [InlineData("/googled1107923138d0b79.html", MediaTypeNames.Text.Html)]
-        [InlineData("/help/", MediaTypeNames.Text.Html)]
-        [InlineData("/humans.txt", MediaTypeNames.Text.Plain)]
-        [InlineData("/keybase.txt", MediaTypeNames.Text.Plain)]
-        [InlineData("/manifest.webmanifest", "application/manifest+json")]
-        [InlineData("/pgp-key.txt", MediaTypeNames.Text.Plain)]
-        [InlineData("/privacy-policy/", MediaTypeNames.Text.Html)]
-        [InlineData("/robots.txt", MediaTypeNames.Text.Plain)]
-        [InlineData("/security.txt", MediaTypeNames.Text.Plain)]
-        [InlineData("/service-worker.js", "application/javascript")]
-        [InlineData("/sitemap.xml", MediaTypeNames.Text.Xml)]
-        [InlineData("/swagger/api/swagger.json", MediaTypeNames.Application.Json)]
-        [InlineData("/technology/", MediaTypeNames.Text.Html)]
-        [InlineData("/terms-of-service/", MediaTypeNames.Text.Html)]
-        public async Task Can_Load_Resource(string requestUri, string contentType)
+        // Assert
+        foreach (string expected in expectedHeaders)
         {
-            // Arrange
-            using var client = Fixture.CreateClient();
-
-            // Act
-            using var response = await client.GetAsync(requestUri);
-
-            // Assert
-            response.StatusCode.ShouldBe(HttpStatusCode.OK, $"Failed to get {requestUri}. {await response.Content!.ReadAsStringAsync()}");
-            response.Content.Headers.ContentType?.MediaType.ShouldBe(contentType);
-            response.Content.Headers.ContentLength.ShouldNotBeNull();
-            response.Content.Headers.ContentLength.ShouldNotBe(0);
-        }
-
-        [SkippableFact]
-        public async Task Response_Headers_Contains_Expected_Headers()
-        {
-            // Arrange
-            string[] expectedHeaders = new[]
-            {
-                "content-security-policy",
-                "content-security-policy-report-only",
-                "feature-policy",
-                "NEL",
-                "Referrer-Policy",
-                "Report-To",
-                "X-Content-Type-Options",
-                "X-CSP-Nonce",
-                "X-Datacenter",
-                "X-Download-Options",
-                "X-Frame-Options",
-                "X-Instance",
-                "X-Request-Id",
-                "X-Revision",
-                "X-XSS-Protection",
-            };
-
-            // Act
-            using var client = Fixture.CreateClient();
-            var response = await client.GetAsync("/");
-
-            // Assert
-            foreach (string expected in expectedHeaders)
-            {
-                response.Headers.Contains(expected).ShouldBeTrue($"The '{expected}' response header was not found.");
-            }
+            response.Headers.Contains(expected).ShouldBeTrue($"The '{expected}' response header was not found.");
         }
     }
 }

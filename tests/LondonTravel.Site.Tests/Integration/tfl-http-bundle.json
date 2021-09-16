@@ -5,7 +5,7 @@
   "comment": "HTTP bundles for testing the TfL API integration.",
   "items": [
     {
-      "uri": "https://api.tfl.gov.uk/Line/Mode/dlr%2Coverground%2Ctflrail%2Ctube?app_id=&app_key=",
+      "uri": "https://api.tfl.gov.uk/Line/Mode/dlr%2Coverground%2Ctflrail%2Ctube?app_id=app-id&app_key=app-key",
       "contentFormat": "json",
       "contentJson": [
         {
