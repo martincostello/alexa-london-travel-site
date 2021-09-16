@@ -49,7 +49,7 @@ public class AccountService : IAccountService
             }
             catch (Exception ex)
             {
-                _logger.LogError(default, ex, "Failed to find user by access token.");
+                _logger.LogError(ex, "Failed to find user by access token.");
                 throw;
             }
         }

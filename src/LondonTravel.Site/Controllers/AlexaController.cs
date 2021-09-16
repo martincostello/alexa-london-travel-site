@@ -138,7 +138,7 @@ public class AlexaController : Controller
         catch (Exception ex)
 #pragma warning restore CA1031
         {
-            _logger.LogError(default, ex, "Failed to link account to Alexa.");
+            _logger.LogError(ex, "Failed to link account to Alexa.");
             return RedirectForError(redirectUri, state);
         }
     }
