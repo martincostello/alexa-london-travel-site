@@ -166,14 +166,16 @@ public sealed class CustomHttpHeadersMiddleware
         {
             if (options?.ExternalLinks?.Reports?.ExpectCTEnforce != null)
             {
-                builder.Append($" report-uri {options.ExternalLinks.Reports.ExpectCTEnforce}");
+                builder.Append(" report-uri ");
+                builder.Append(options.ExternalLinks.Reports.ExpectCTEnforce);
             }
         }
         else
         {
             if (options?.ExternalLinks?.Reports?.ExpectCTReportOnly != null)
             {
-                builder.Append($" report-uri {options.ExternalLinks.Reports.ExpectCTReportOnly}");
+                builder.Append(" report-uri ");
+                builder.Append(options.ExternalLinks.Reports.ExpectCTReportOnly);
             }
         }
 
@@ -206,11 +208,12 @@ public sealed class CustomHttpHeadersMiddleware
             return string.Empty;
         }
 
-        var builder = new StringBuilder($"{baseUri.Host}");
+        var builder = new StringBuilder(baseUri.Host);
 
         if (!baseUri.IsDefaultPort)
         {
-            builder.Append($":{baseUri.Port}");
+            builder.Append(':');
+            builder.Append(baseUri.Port);
         }
 
         return builder.ToString();
