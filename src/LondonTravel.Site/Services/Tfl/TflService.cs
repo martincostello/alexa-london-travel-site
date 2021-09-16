@@ -44,7 +44,7 @@ public sealed class TflService : ITflService
     public Task<ICollection<LineInfo>> GetLinesAsync(CancellationToken cancellationToken = default)
     {
         const string CacheKey = "TfL.AvailableLines";
-        string supportedModes = string.Join(",", _options.SupportedModes ?? Array.Empty<string>());
+        string supportedModes = string.Join(',', _options.SupportedModes ?? Array.Empty<string>());
 
         return GetWithCachingAsync(
             CacheKey,

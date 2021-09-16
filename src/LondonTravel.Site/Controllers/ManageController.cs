@@ -379,7 +379,7 @@ public class ManageController : Controller
 
     private static string FormatErrors(IdentityResult result)
     {
-        return string.Join(";", result.Errors.Select((p) => $"{p.Code}: {p.Description}"));
+        return string.Join(';', result.Errors.Select((p) => $"{p.Code}: {p.Description}"));
     }
 
     private async Task<bool> AreLinesValidAsync(UpdateLinePreferencesViewModel model, CancellationToken cancellationToken)

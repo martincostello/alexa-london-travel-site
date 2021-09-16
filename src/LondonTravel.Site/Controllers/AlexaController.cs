@@ -204,7 +204,7 @@ public class AlexaController : Controller
             _logger.LogError(
                 "Failed to generate Alexa access token for user Id {UserId}: {Errors}.",
                 user.Id,
-                string.Join(";", result.Errors.Select((p) => $"{p.Code}: {p.Description}")));
+                string.Join(';', result.Errors.Select((p) => $"{p.Code}: {p.Description}")));
         }
 
         return result.Succeeded;

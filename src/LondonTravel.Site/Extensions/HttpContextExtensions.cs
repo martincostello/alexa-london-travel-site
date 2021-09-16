@@ -39,7 +39,7 @@ public static class HttpContextExtensions
             {
                 data = RandomNumberGenerator.GetBytes(32);
 
-                nonce = Convert.ToBase64String(data).Replace("+", "/", StringComparison.Ordinal); // '+' causes encoding issues with TagHelpers
+                nonce = Convert.ToBase64String(data).Replace('+', '/'); // '+' causes encoding issues with TagHelpers
             }
             finally
             {

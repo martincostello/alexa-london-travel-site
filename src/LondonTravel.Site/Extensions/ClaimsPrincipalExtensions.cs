@@ -12,11 +12,6 @@ namespace MartinCostello.LondonTravel.Site.Extensions;
 public static class ClaimsPrincipalExtensions
 {
     /// <summary>
-    /// An array containing the space character. This field is read-only.
-    /// </summary>
-    private static readonly char[] Space = new[] { ' ' };
-
-    /// <summary>
     /// Gets the URL of the avatar image to use for the specified claims principal.
     /// </summary>
     /// <param name="value">The user to get the avatar image URL for.</param>
@@ -87,7 +82,7 @@ public static class ClaimsPrincipalExtensions
         if (!string.IsNullOrWhiteSpace(name))
         {
             name = name.Trim()
-                .Split(Space, StringSplitOptions.RemoveEmptyEntries)
+                .Split(' ', StringSplitOptions.RemoveEmptyEntries)
                 .FirstOrDefault();
         }
 

@@ -24,11 +24,6 @@ public class SriScriptTagHelper : LinkTagHelper
     /// </summary>
     private const string AddSriAttributeName = "asp-add-sri";
 
-    /// <summary>
-    /// An array containing the <c>~</c> character.
-    /// </summary>
-    private static readonly char[] Tilde = new[] { '~' };
-
     public SriScriptTagHelper(IWebHostEnvironment hostingEnvironment, TagHelperMemoryCacheProvider cacheProvider, IFileVersionProvider fileVersionProvider, HtmlEncoder htmlEncoder, JavaScriptEncoder javaScriptEncoder, IUrlHelperFactory urlHelperFactory)
         : base(hostingEnvironment, cacheProvider, fileVersionProvider, htmlEncoder, javaScriptEncoder, urlHelperFactory)
     {
@@ -52,8 +47,8 @@ public class SriScriptTagHelper : LinkTagHelper
             return;
         }
 
-        string? filePath = (context.AllAttributes["src"].Value as string)?.TrimStart(Tilde);
-        string? type = context.AllAttributes["type"]?.Value?.ToString() as string;
+        string? filePath = (context.AllAttributes["src"].Value as string)?.TrimStart('~');
+        string? type = context.AllAttributes["type"]?.Value?.ToString();
 
         if (string.IsNullOrEmpty(filePath) ||
             (!string.IsNullOrEmpty(type) && !string.Equals(type, "text/javascript", StringComparison.OrdinalIgnoreCase)))

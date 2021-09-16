@@ -37,7 +37,7 @@ public static class HttpRequestExtensions
 
         string canonicalUri = builder.Uri.AbsoluteUri.ToLowerInvariant();
 
-        if (!canonicalUri.EndsWith("/", StringComparison.Ordinal))
+        if (!canonicalUri.EndsWith('/'))
         {
             canonicalUri += "/";
         }

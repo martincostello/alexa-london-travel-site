@@ -310,7 +310,7 @@ public sealed class CustomHttpHeadersMiddleware
             if (origins.Count > 0)
             {
                 builder.Append(' ');
-                builder.Append(string.Join(" ", origins));
+                builder.Append(string.Join(' ', origins));
             }
 
             builder.Append(';');

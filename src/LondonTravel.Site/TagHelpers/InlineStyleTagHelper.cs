@@ -42,11 +42,6 @@ public class InlineStyleTagHelper : LinkTagHelper
     /// </summary>
     private static readonly string[] NewLine = new[] { Environment.NewLine };
 
-    /// <summary>
-    /// An array containing the <c>~</c> character.
-    /// </summary>
-    private static readonly char[] Tilde = new[] { '~' };
-
     public InlineStyleTagHelper(IWebHostEnvironment hostingEnvironment, TagHelperMemoryCacheProvider cacheProvider, IFileVersionProvider fileVersionProvider, HtmlEncoder htmlEncoder, JavaScriptEncoder javaScriptEncoder, IUrlHelperFactory urlHelperFactory)
         : base(hostingEnvironment, cacheProvider, fileVersionProvider, htmlEncoder, javaScriptEncoder, urlHelperFactory)
     {
@@ -81,7 +76,7 @@ public class InlineStyleTagHelper : LinkTagHelper
             return;
         }
 
-        string? filePath = (context.AllAttributes["href"].Value as string)?.TrimStart(Tilde);
+        string? filePath = (context.AllAttributes["href"].Value as string)?.TrimStart('~');
         IFileInfo fileInfo = HostingEnvironment.WebRootFileProvider.GetFileInfo(filePath);
 
         if (!fileInfo.Exists || filePath == null)

@@ -187,7 +187,7 @@ public static class AuthenticationBuilderExtensions
         else
         {
             message = SiteMessage.LinkFailed;
-            string errors = string.Join(";", context.Request.Query.Select((p) => $"'{p.Key}' = '{p.Value}'"));
+            string errors = string.Join(';', context.Request.Query.Select((p) => $"'{p.Key}' = '{p.Value}'"));
 
             logger.Log(
                 IsCorrelationFailure(context) ? LogLevel.Trace : LogLevel.Error, // Not a server-side problem, so do not create log noise
