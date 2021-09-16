@@ -134,9 +134,7 @@ public class AlexaController : Controller
             string tokenRedirectUrl = BuildRedirectUrl(redirectUri!, state, accessToken);
             return Redirect(tokenRedirectUrl);
         }
-#pragma warning disable CA1031
         catch (Exception ex)
-#pragma warning restore CA1031
         {
             _logger.LogError(ex, "Failed to link account to Alexa.");
             return RedirectForError(redirectUri, state);

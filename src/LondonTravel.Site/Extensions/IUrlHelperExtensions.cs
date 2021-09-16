@@ -41,12 +41,8 @@ public static class IUrlHelperExtensions
             return string.Empty;
         }
 
-#pragma warning disable CA1308 // Normalize strings to uppercase
-
         // Azure Blob storage is case-sensitive, so force all URLs to lowercase
         string url = value.ToAbsolute(cdn.Host, $"london-travel_{contentPath.ToLowerInvariant().TrimStart('/')}");
-
-#pragma warning restore CA1308 // Normalize strings to uppercase
 
         // asp-append-version="true" does not work for non-local resources
         if (appendVersion)

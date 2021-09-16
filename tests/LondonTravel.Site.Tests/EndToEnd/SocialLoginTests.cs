@@ -85,10 +85,8 @@ public class SocialLoginTests : BrowserEndToEndTest
             "chromium",
             async (page) =>
             {
-#pragma warning disable CA1308
                 page = await page.SignInAsync()
                                  .ThenAsync((p) => p.SignInWithProviderAsync(providerName.ToLowerInvariant()));
-#pragma warning restore CA1308
 
                 await signIn(page.Navigator.Page, userName, password);
 

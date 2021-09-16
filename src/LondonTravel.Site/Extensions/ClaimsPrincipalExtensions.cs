@@ -40,15 +40,11 @@ public static class ClaimsPrincipalExtensions
             return fallbackImageUrl;
         }
 
-#pragma warning disable CA1308
         string normalized = email.Trim().ToLowerInvariant();
-#pragma warning restore CA1308
         byte[] buffer = Encoding.UTF8.GetBytes(normalized);
 
 #pragma warning disable CA5351
-#pragma warning disable SCS0006
         byte[] hash = System.Security.Cryptography.MD5.HashData(buffer);
-#pragma warning restore SCS0006
 #pragma warning restore CA5351
 
         string hashString = HashToString(hash);

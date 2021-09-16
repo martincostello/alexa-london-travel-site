@@ -8,7 +8,6 @@ namespace MartinCostello.LondonTravel.Site.Options;
 /// </summary>
 public sealed class ApiCorsOptions
 {
-#pragma warning disable SA1011
     /// <summary>
     /// Gets or sets the names of the HTTP response headers exposed.
     /// </summary>
@@ -28,5 +27,4 @@ public sealed class ApiCorsOptions
     /// Gets or sets the allowed CORS origins.
     /// </summary>
     public string[]? Origins { get; set; }
-#pragma warning restore SA1011
 }

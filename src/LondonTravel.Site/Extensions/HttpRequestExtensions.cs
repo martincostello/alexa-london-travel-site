@@ -35,9 +35,7 @@ public static class HttpRequestExtensions
         builder.Query = string.Empty;
         builder.Scheme = "https";
 
-#pragma warning disable CA1308 // Normalize strings to uppercase
         string canonicalUri = builder.Uri.AbsoluteUri.ToLowerInvariant();
-#pragma warning restore CA1308 // Normalize strings to uppercase
 
         if (!canonicalUri.EndsWith("/", StringComparison.Ordinal))
         {

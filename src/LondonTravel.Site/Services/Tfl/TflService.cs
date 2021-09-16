@@ -77,10 +77,7 @@ public sealed class TflService : ITflService
         if (!_cache.TryGetValue(cacheKey, out T? result))
         {
             using var response = await operation();
-
-#pragma warning disable CA2000
             await response.EnsureSuccessStatusCodeAsync();
-#pragma warning restore CA2000
 
             result = response.Content;
 

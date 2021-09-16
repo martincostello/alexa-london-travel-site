@@ -36,9 +36,7 @@ public static class IHtmlHelperExtensions
     public static string GetSocialLoginButtonCss(this IHtmlHelper html, string authenticationScheme)
 #pragma warning restore CA1801
     {
-#pragma warning disable CA1308 // Normalize strings to uppercase
         return $"btn-{authenticationScheme?.ToLowerInvariant()}";
-#pragma warning restore CA1308 // Normalize strings to uppercase
     }
 
     /// <summary>

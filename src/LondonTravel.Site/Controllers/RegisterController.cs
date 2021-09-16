@@ -53,9 +53,7 @@ public class RegisterController : Controller
             // Deduct one for "over X,000 users".
             return ((count - 1) / 1000) * 1000;
         }
-#pragma warning disable CA1031
         catch (Exception)
-#pragma warning restore CA1031
         {
             // Over 9,500 users as of 22/08/2021
             return 9_500;
