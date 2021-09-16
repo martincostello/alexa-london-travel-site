@@ -33,7 +33,7 @@ public static class HttpRequestExtensions
 
         builder.Path = path ?? request.Path;
         builder.Query = string.Empty;
-        builder.Scheme = "https";
+        builder.Scheme = Uri.UriSchemeHttps;
 
         string canonicalUri = builder.Uri.AbsoluteUri.ToLowerInvariant();
 
