@@ -32,10 +32,9 @@ public static class IHtmlHelperExtensions
     /// <returns>
     /// The CSS class to use for a button for the authentication scheme.
     /// </returns>
-#pragma warning disable CA1801
     public static string GetSocialLoginButtonCss(this IHtmlHelper html, string authenticationScheme)
-#pragma warning restore CA1801
     {
+        ArgumentNullException.ThrowIfNull(html);
         return $"btn-{authenticationScheme?.ToLowerInvariant()}";
     }
 
@@ -47,10 +46,10 @@ public static class IHtmlHelperExtensions
     /// <returns>
     /// The CSS class to use for an icon for the authentication scheme.
     /// </returns>
-#pragma warning disable CA1801
     public static string GetSocialLoginIconCss(this IHtmlHelper html, string authenticationScheme)
-#pragma warning restore CA1801
     {
+        ArgumentNullException.ThrowIfNull(html);
+
         if (string.IsNullOrEmpty(authenticationScheme))
         {
             return string.Empty;
