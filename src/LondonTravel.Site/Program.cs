@@ -54,14 +54,13 @@ if (!string.IsNullOrWhiteSpace(connectionString))
         relativePath);
 }
 
-builder.Services.AddAntiforgery(
-    (p) =>
-    {
-        p.Cookie.Name = ApplicationCookie.Antiforgery.Name;
-        p.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-        p.FormFieldName = "_anti-forgery";
-        p.HeaderName = "x-anti-forgery";
-    });
+builder.Services.AddAntiforgery((options) =>
+{
+    options.Cookie.Name = ApplicationCookie.Antiforgery.Name;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.FormFieldName = "_anti-forgery";
+    options.HeaderName = "x-anti-forgery";
+});
 
 builder.Services.AddCors((corsOptions) =>
 {
@@ -113,20 +112,18 @@ builder.Services
         options.JsonSerializerOptions.PropertyNameCaseInsensitive = false;
     });
 
-builder.Services.AddRouting(
-    (p) =>
-    {
-        p.AppendTrailingSlash = true;
-        p.LowercaseUrls = true;
-    });
+builder.Services.AddRouting((options) =>
+{
+    options.AppendTrailingSlash = true;
+    options.LowercaseUrls = true;
+});
 
-builder.Services.AddHsts(
-    (p) =>
-    {
-        p.MaxAge = TimeSpan.FromDays(365);
-        p.IncludeSubDomains = false;
-        p.Preload = false;
-    });
+builder.Services.AddHsts((options) =>
+{
+    options.IncludeSubDomains = false;
+    options.MaxAge = TimeSpan.FromDays(365);
+    options.Preload = false;
+});
 
 builder.Services.AddSwagger(builder.Environment);
 
@@ -134,11 +131,11 @@ builder.Services.Configure<GzipCompressionProviderOptions>((p) => p.Level = Comp
 builder.Services.Configure<BrotliCompressionProviderOptions>((p) => p.Level = CompressionLevel.Fastest);
 
 builder.Services.AddResponseCaching();
-builder.Services.AddResponseCompression((p) =>
+builder.Services.AddResponseCompression((options) =>
 {
-    p.EnableForHttps = true;
-    p.Providers.Add<BrotliCompressionProvider>();
-    p.Providers.Add<GzipCompressionProvider>();
+    options.EnableForHttps = true;
+    options.Providers.Add<BrotliCompressionProvider>();
+    options.Providers.Add<GzipCompressionProvider>();
 });
 
 builder.Services.AddSingleton<IClock>((_) => SystemClock.Instance);
@@ -199,11 +196,11 @@ app.UseRouting();
 
 app.UseIdentity(options.CurrentValue);
 
-app.UseEndpoints((endpoints) => endpoints.MapDefaultControllerRoute());
+app.MapDefaultControllerRoute();
 
 app.UseSwagger();
 
-app.UseCookiePolicy(new CookiePolicyOptions()
+app.UseCookiePolicy(new()
 {
     HttpOnly = HttpOnlyPolicy.Always,
     Secure = CookieSecurePolicy.Always,
@@ -211,7 +208,7 @@ app.UseCookiePolicy(new CookiePolicyOptions()
 
 app.Run();
 
-void SetCacheHeaders(StaticFileResponseContext context, bool isDevelopment)
+static void SetCacheHeaders(StaticFileResponseContext context, bool isDevelopment)
 {
     var maxAge = TimeSpan.FromDays(7);
 

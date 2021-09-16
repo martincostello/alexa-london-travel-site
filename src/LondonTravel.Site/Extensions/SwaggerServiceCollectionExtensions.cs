@@ -23,74 +23,73 @@ public static class SwaggerServiceCollectionExtensions
     /// </returns>
     public static IServiceCollection AddSwagger(this IServiceCollection value, IWebHostEnvironment environment)
     {
-        return value.AddSwaggerGen(
-            (p) =>
+        return value.AddSwaggerGen((options) =>
+        {
+            var provider = value.BuildServiceProvider();
+            var siteOptions = provider.GetRequiredService<SiteOptions>();
+
+            var terms = new UriBuilder()
             {
-                var provider = value.BuildServiceProvider();
-                var options = provider.GetRequiredService<SiteOptions>();
+                Scheme = "https",
+                Host = siteOptions.Metadata?.Domain!,
+                Path = "terms-of-service/",
+            };
 
-                var terms = new UriBuilder()
+            var info = new OpenApiInfo()
+            {
+                Contact = new()
                 {
-                    Scheme = "https",
-                    Host = options.Metadata?.Domain!,
-                    Path = "terms-of-service/",
-                };
-
-                var info = new OpenApiInfo()
+                    Name = siteOptions.Metadata?.Author?.Name,
+                    Url = new Uri(siteOptions.Metadata?.Repository!, UriKind.Absolute),
+                },
+                Description = siteOptions.Metadata?.Description,
+                License = new()
                 {
-                    Contact = new OpenApiContact()
-                    {
-                        Name = options.Metadata?.Author?.Name,
-                        Url = new Uri(options.Metadata?.Repository!, UriKind.Absolute),
-                    },
-                    Description = options.Metadata?.Description,
-                    License = new OpenApiLicense()
-                    {
-                        Name = "Apache 2.0",
-                        Url = new Uri("https://www.apache.org/licenses/LICENSE-2.0.html", UriKind.Absolute),
-                    },
-                    TermsOfService = terms.Uri,
-                    Title = options.Metadata?.Name,
-                    Version = string.Empty,
-                };
+                    Name = "Apache 2.0",
+                    Url = new Uri("https://www.apache.org/licenses/LICENSE-2.0.html", UriKind.Absolute),
+                },
+                TermsOfService = terms.Uri,
+                Title = siteOptions.Metadata?.Name,
+                Version = string.Empty,
+            };
 
-                p.EnableAnnotations();
+            options.EnableAnnotations();
 
-                p.IgnoreObsoleteActions();
-                p.IgnoreObsoleteProperties();
+            options.IgnoreObsoleteActions();
+            options.IgnoreObsoleteProperties();
 
-                AddXmlCommentsIfExists(p, environment, "LondonTravel.Site.xml");
+            AddXmlCommentsIfExists(options, environment, "LondonTravel.Site.xml");
 
-                p.SwaggerDoc("api", info);
+            options.SwaggerDoc("api", info);
 
-                p.SchemaFilter<ExampleFilter>();
-                p.OperationFilter<ExampleFilter>();
-                p.OperationFilter<RemoveStyleCopPrefixesFilter>();
+            options.SchemaFilter<ExampleFilter>();
+            options.OperationFilter<ExampleFilter>();
+            options.OperationFilter<RemoveStyleCopPrefixesFilter>();
 
-                string schemeName = "Access Token";
+            string schemeName = "Access Token";
 
-                var securityScheme = new OpenApiSecurityScheme()
+            var securityScheme = new OpenApiSecurityScheme()
+            {
+                In = ParameterLocation.Header,
+                Name = "Authorization",
+                Type = SecuritySchemeType.ApiKey,
+                Description = "Access token authentication using a bearer token.",
+                Reference = new()
                 {
-                    In = ParameterLocation.Header,
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey,
-                    Description = "Access token authentication using a bearer token.",
-                    Reference = new OpenApiReference()
-                    {
-                        Id = schemeName,
-                        Type = ReferenceType.SecurityScheme,
-                    },
-                    UnresolvedReference = false,
-                };
+                    Id = schemeName,
+                    Type = ReferenceType.SecurityScheme,
+                },
+                UnresolvedReference = false,
+            };
 
-                var securityRequirement = new OpenApiSecurityRequirement()
-                {
-                    { securityScheme, Array.Empty<string>() },
-                };
+            var securityRequirement = new OpenApiSecurityRequirement()
+            {
+                [securityScheme] = Array.Empty<string>(),
+            };
 
-                p.AddSecurityDefinition(schemeName, securityScheme);
-                p.AddSecurityRequirement(securityRequirement);
-            });
+            options.AddSecurityDefinition(schemeName, securityScheme);
+            options.AddSecurityRequirement(securityRequirement);
+        });
     }
 
     /// <summary>
