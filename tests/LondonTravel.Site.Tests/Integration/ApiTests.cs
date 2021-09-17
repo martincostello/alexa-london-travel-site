@@ -3,6 +3,8 @@
 
 using System.Net;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace MartinCostello.LondonTravel.Site.Integration;
 
@@ -124,5 +126,23 @@ public class ApiTests : IntegrationTest
         result.RootElement.GetInt32("statusCode").ShouldBe(401);
         result.RootElement.GetStringArray("details").ShouldNotBeNull();
         result.RootElement.GetStringArray("details").ShouldBeEmpty();
+    }
+
+    [Fact]
+    public async Task OpenApi_Documentation_Only_Exposes_Expected_Operations()
+    {
+        // Arrange
+        using var client = Fixture.CreateClient();
+
+        // Act
+        using var actual = await client.GetFromJsonAsync<JsonDocument>("/swagger/api/swagger.json");
+
+        // Assert
+        actual.ShouldNotBeNull();
+        actual.RootElement.GetString("openapi").ShouldBe("3.0.1");
+        actual.RootElement.GetProperty("info").ValueKind.ShouldBe(JsonValueKind.Object);
+        actual.RootElement.GetProperty("components").GetProperty("schemas").EnumerateObject().Count().ShouldBe(2);
+        actual.RootElement.GetProperty("paths").EnumerateObject().Count().ShouldBe(1);
+        actual.RootElement.GetProperty("security").GetArrayLength().ShouldBe(1);
     }
 }
