@@ -54,6 +54,9 @@ public sealed class PreferencesTests : BrowserIntegrationTest
 
                 page = await page.UpdatePreferencesAsync();
 
+                // Give the UI time to update
+                await Task.Delay(TimeSpan.FromSeconds(1));
+
                 // Assert
                 lines = await page.LinesAsync();
 
