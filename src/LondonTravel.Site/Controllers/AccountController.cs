@@ -73,7 +73,7 @@ public class AccountController : Controller
 
         if (User?.Identity?.IsAuthenticated == true)
         {
-            return RedirectToRoute(SiteRoutes.Home);
+            return RedirectToPage(SiteRoutes.Home);
         }
 
         Uri? returnUri = null;
@@ -81,7 +81,7 @@ public class AccountController : Controller
         if (returnUrl != null &&
             !Uri.TryCreate(returnUrl, UriKind.Relative, out returnUri))
         {
-            return RedirectToRoute(SiteRoutes.Home);
+            return RedirectToPage(SiteRoutes.Home);
         }
 
         await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
@@ -123,7 +123,7 @@ public class AccountController : Controller
 
         _telemetry.TrackSignOut(userId);
 
-        return RedirectToRoute(SiteRoutes.Home);
+        return RedirectToPage(SiteRoutes.Home);
     }
 
     /// <summary>
@@ -239,7 +239,7 @@ public class AccountController : Controller
                 }
                 else
                 {
-                    return RedirectToRoute(SiteRoutes.Home, new { Message = SiteMessage.AccountCreated });
+                    return RedirectToPage(SiteRoutes.Home, new { Message = SiteMessage.AccountCreated });
                 }
             }
 
@@ -265,7 +265,7 @@ public class AccountController : Controller
     {
         foreach (var error in result.Errors)
         {
-            _logger?.LogWarning("{ErrorCode}: {ErrorDescription}", error.Code, error.Description);
+            Log.IdentityError(_logger, error.Code, error.Description);
             ModelState.AddModelError(string.Empty, error.Description);
         }
     }
@@ -278,7 +278,7 @@ public class AccountController : Controller
         }
         else
         {
-            return RedirectToRoute(SiteRoutes.Home);
+            return RedirectToPage(SiteRoutes.Home);
         }
     }
 

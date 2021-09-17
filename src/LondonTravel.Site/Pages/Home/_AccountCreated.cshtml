@@ -1,4 +1,4 @@
-﻿@if (User?.Identity?.IsAuthenticated == true &&
+@if (User?.Identity?.IsAuthenticated == true &&
      string.Equals(Context.Request.Query["Message"], nameof(SiteMessage.AccountCreated), StringComparison.OrdinalIgnoreCase))
 {
     <div class="alert alert-success" role="alert">

@@ -20,7 +20,7 @@ public static class SiteRoutes
 
     public const string Help = "/Help/Index";
 
-    public const string Home = nameof(Home);
+    public const string Home = "/Home/Index";
 
     public const string LinkAccount = nameof(LinkAccount);
 

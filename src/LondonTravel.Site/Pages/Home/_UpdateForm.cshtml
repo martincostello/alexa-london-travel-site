@@ -1,4 +1,4 @@
-@model LinePreferencesViewModel
+@model MartinCostello.LondonTravel.Site.Pages.Home.Index
 <form asp-route="@SiteRoutes.UpdateLinePreferences" class="js-preferences-container" method="post">
     <input type="hidden" name="@(nameof(UpdateLinePreferencesViewModel.ETag))" value="@Model!.ETag" />
     @if (Model!.HasFavorites)

@@ -282,7 +282,7 @@ public class ManageController : Controller
 
                 _telemetry.TrackAccountDeleted(user.Id!, user.Email!);
 
-                return RedirectToRoute(SiteRoutes.Home, new { Message = SiteMessage.AccountDeleted });
+                return RedirectToPage(SiteRoutes.Home, new { Message = SiteMessage.AccountDeleted });
             }
             else
             {
@@ -357,7 +357,7 @@ public class ManageController : Controller
             updated = result.Succeeded;
         }
 
-        return RedirectToRoute(SiteRoutes.Home, new { UpdateSuccess = updated });
+        return RedirectToPage(SiteRoutes.Home, new { UpdateSuccess = updated });
     }
 
     private static string FormatErrors(IdentityResult result)

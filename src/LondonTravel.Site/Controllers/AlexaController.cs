@@ -227,7 +227,7 @@ public class AlexaController : Controller
 
         if (redirectUri == null)
         {
-            url = $"{Url.RouteUrl(SiteRoutes.Home)}#{fragment}";
+            url = Url.Page(SiteRoutes.Home) + "#" + fragment;
         }
         else
         {

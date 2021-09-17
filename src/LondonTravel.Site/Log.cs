@@ -339,6 +339,24 @@ namespace MartinCostello.LondonTravel.Site
         public static partial void CreatedCollection(ILogger logger, string collectionName, string? databaseName);
 
         [LoggerMessage(
+           EventId = 56,
+           Level = LogLevel.Error,
+           Message = "Failed to get user to render preferences.")]
+        public static partial void FailedToGetUser(ILogger logger);
+
+        [LoggerMessage(
+           EventId = 57,
+           Level = LogLevel.Error,
+           Message = "Failed to map TfL lines as there were no values.")]
+        public static partial void FailedToMapUserPreferences(ILogger logger);
+
+        [LoggerMessage(
+           EventId = 58,
+           Level = LogLevel.Warning,
+           Message = "{ErrorCode}: {ErrorDescription}")]
+        public static partial void IdentityError(ILogger logger, string errorCode, string errorDescription);
+
+        [LoggerMessage(
             EventId = 1,
             Level = LogLevel.Information,
             Message = "Successfully authorized API request for preferences for user Id {UserId}. IP: {RemoteIP}; User Agent: {UserAgent}.")]

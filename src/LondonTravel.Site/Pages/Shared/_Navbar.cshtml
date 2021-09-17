@@ -1,7 +1,7 @@
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
-            <a asp-route="@SiteRoutes.Home" class="navbar-brand" title="@SR.HomepageLinkAltText" data-ga-label="Homepage Navbar">
+            <a asp-page="@SiteRoutes.Home" class="navbar-brand" title="@SR.HomepageLinkAltText" data-ga-label="Homepage Navbar">
                 <span>
                     @SR.BrandName
                     <lazyimg src="@Url.CdnContent("avatar.png", Options)" alt="@SR.BrandName" title="@SR.BrandName" aria-hidden="true" />
