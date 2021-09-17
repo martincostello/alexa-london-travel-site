@@ -1,0 +1,162 @@
+@page "/technology"
+@model MartinCostello.LondonTravel.Site.Pages.Technology.Index
+@{
+    ViewBag.MetaDescription = SR.TechnologyMetaDescription;
+    ViewBag.Title = SR.TechnologyMetaTitle;
+}
+<div>
+    <h1>@SR.TechnologyTitle</h1>
+    <hr />
+    <p>
+        <em>London Travel</em> is an Open Source Software (OSS) skill for Amazon Alexa, whose source
+        code is hosted in
+        <a href="https://github.com/martincostello/alexa-london-travel" rel="noopener noreferrer" target="_blank" title="London Travel on GitHub" data-ga-label="London Travel Skill GitHub">
+            GitHub.
+            <i class="fa fa-external-link" aria-hidden="true"></i>
+        </a>
+    </p>
+    <p>
+        It uses a variety of free and OSS technology to help you find out about the status of the London Underground,
+        Docklands Light Railway (DLR), TfL Rail and London Overground using the
+        <a href="https://api.tfl.gov.uk/" rel="noopener noreferrer" target="_blank" title="The TfL API" data-ga-label="TfL API">
+            Transport for London (TfL) API.
+            <i class="fa fa-external-link" aria-hidden="true"></i>
+        </a>
+    </p>
+    <p>
+        This page lists the various technologies, both open and closed source, free and paid, that help enable its features.
+    </p>
+    <hr />
+    <section>
+        <h2>Skill</h2>
+        <p>
+            The skill itself is written in JavaScript for node.js using the
+            <a href="https://github.com/alexa-js/alexa-app-server" rel="noopener noreferrer" target="_blank" title="Alexa App Server on GitHub" data-ga-label="Alexa App Server">
+                Alexa App Server
+                <i class="fa fa-external-link" aria-hidden="true"></i>
+            </a>
+            module for the intents it provides for use with an Alexa-enabled device. The code itself is hosted in
+            <a href="https://aws.amazon.com/" rel="noopener noreferrer" target="_blank" title="Amazon Web Services" data-ga-label="Amazon Web Services">
+                Amazon Web Services (AWS)
+                <i class="fa fa-external-link" aria-hidden="true"></i>
+            </a>
+            as an AWS Lambda function. It can also be linked to an account created using this website to enable
+            personalisation, such as for the status of lines you regularly use.
+        </p>
+        <p>
+            The technologies used to develop, deploy and run the skill include:
+            <ul>
+                <li>alexa-app-server</li>
+                <li>Application Insights</li>
+                <li>AWS CloudWatch</li>
+                <li>AWS Lambda</li>
+                <li>AWS X-Ray</li>
+                <li>BuildStats.info</li>
+                <li>CodeCov</li>
+                <li>GitHub</li>
+                <li>Istanbul</li>
+                <li>JSHint</li>
+                <li>mocha</li>
+                <li>nock</li>
+                <li>node.js</li>
+                <li>npm</li>
+                <li>Shields.io</li>
+                <li>Sinon.js</li>
+                <li>TfL API</li>
+            </ul>
+        </p>
+    </section>
+    <hr />
+    <section>
+        <h2>Website</h2>
+        <p>
+            This website is written in C# for ASP.NET Core with HTML and TypeScript, and is hosted in
+            <a href="https://azure.microsoft.com/" rel="noopener noreferrer" target="_blank" title="Microsoft Azure" data-ga-label="Microsoft Azure">
+                Microsoft Azure.
+                <i class="fa fa-external-link" aria-hidden="true"></i>
+            </a>
+        </p>
+        <p>
+            The website provides pages to support creating an account to link to the skill, as well as pages for managing
+            your account and setting up your preferences for personalised functionality within the skill. It also provides
+            the REST API used by the skill to retrieve your preferences when linked to an account.
+        </p>
+        <p>
+            The technologies used to develop, deploy and run the website include:
+            <ul>
+                <li>Amazon Login</li>
+                <li>Application Insights</li>
+                <li>ASP.NET Core</li>
+                <li>AspNet.Security.OAuth.Providers</li>
+                <li>Azure App Service</li>
+                <li>Azure Blob Storage</li>
+                <li>Azure CDN</li>
+                <li>Azure Cosmos DB</li>
+                <li>Azure Key Vault</li>
+                <li>Bootstrap</li>
+                <li>Bootswatch</li>
+                <li>BuildStats.info</li>
+                <li>BundlerMinifier</li>
+                <li>CloudFlare CDN</li>
+                <li>DNSimple</li>
+                <li>Facebook</li>
+                <li>Font Awesome</li>
+                <li>GitHub</li>
+                <li>Google Accounts</li>
+                <li>Google Analytics</li>
+                <li>Gravatar</li>
+                <li>gulp</li>
+                <li>Jasmine</li>
+                <li>jQuery</li>
+                <li>jquery.lazyload</li>
+                <li>JSHint</li>
+                <li>Microsoft Accounts</li>
+                <li>Moment.js</li>
+                <li>Moq</li>
+                <li>npm</li>
+                <li>NuGet</li>
+                <li>PhantomJS</li>
+                <li>report-uri.io</li>
+                <li>Serilog</li>
+                <li>Shields.io</li>
+                <li>Shouldly</li>
+                <li>StyleCop Analyzers</li>
+                <li>Swashbuckle.AspNetCore</li>
+                <li>TfL API</li>
+                <li>Twitter</li>
+                <li>TypeScript</li>
+                <li>xUnit.net</li>
+            </ul>
+        </p>
+    </section>
+    <section>
+        <h3>Community Contributions</h3>
+        <p>
+            Some of the functionality implemented or needed for this skill or website has been
+            contributed back to the Open Source community for re-use by others. Examples include:
+            <ul>
+                <li>
+                    alexa-app-server:
+                    <a href="https://github.com/alexa-js/alexa-app-server/pull/88" rel="noopener noreferrer" target="_blank" title="View alexa-app-server Pull Request on GitHub" data-ga-label="alexa-app-server PR 88">
+                        Support additional request properties in test page
+                        <i class="fa fa-external-link" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li>
+                    AspNet.Security.OAuth.Providers:
+                    <a href="https://github.com/aspnet-contrib/AspNet.Security.OAuth.Providers/pull/157" rel="noopener noreferrer" target="_blank" title="View AspNet.Security.OAuth.Providers Pull Request on GitHub" data-ga-label="AspNet.Security.OAuth.Providers PR 157">
+                        Add Amazon provider
+                        <i class="fa fa-external-link" aria-hidden="true"></i>
+                    </a>
+                </li>
+            </ul>
+        </p>
+    </section>
+    <section>
+        <h3>Acknowledgements</h3>
+        <p>
+            Thank you to all the Open Source Software, their contributors, and free services, that make this skill and website possible.
+            <i class="fa fa-heart" aria-hidden="true"></i>
+        </p>
+    </section>
+</div>

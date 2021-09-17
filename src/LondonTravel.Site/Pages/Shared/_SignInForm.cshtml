@@ -1,0 +1,26 @@
+@inject Microsoft.AspNetCore.Identity.SignInManager<LondonTravelUser> SignInManager
+@{
+    var schemes = (await SignInManager.GetExternalAuthenticationSchemesAsync())
+        .OrderBy((p) => p.DisplayName)
+        .ThenBy((p) => p.Name)
+        .ToList();
+
+    var schemesToHide = ViewData["AuthenticationSchemesToHide"] as IEnumerable<string>;
+
+    if (schemesToHide != null)
+    {
+        schemes = schemes
+            .Where((p) => !schemesToHide.Contains(p.Name, StringComparer.OrdinalIgnoreCase))
+            .ToList();
+    }
+}
+<form asp-route="@SiteRoutes.ExternalSignIn" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+    <div>
+        <p>
+            @foreach (var scheme in schemes)
+            {
+                @await Html.PartialAsync("_SocialButton", scheme)
+            }
+        </p>
+    </div>
+</form>

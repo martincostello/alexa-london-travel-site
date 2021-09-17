@@ -112,6 +112,8 @@ builder.Services
         options.JsonSerializerOptions.PropertyNameCaseInsensitive = false;
     });
 
+builder.Services.AddRazorPages();
+
 builder.Services.AddRouting((options) =>
 {
     options.AppendTrailingSlash = true;
@@ -197,6 +199,9 @@ app.UseRouting();
 app.UseIdentity(options.CurrentValue);
 
 app.MapDefaultControllerRoute();
+app.MapRazorPages();
+
+app.MapRedirects();
 
 app.UseSwagger();
 

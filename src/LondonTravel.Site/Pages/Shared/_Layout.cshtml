@@ -1,0 +1,63 @@
+@inject IConfiguration Config
+@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
+<!DOCTYPE html>
+<html lang="en-gb">
+<head prefix="og: http://ogp.me/ns#">
+@{
+    string canonicalUri = Context.Request.Canonical();
+    string image = ViewBag.MetaImage ?? string.Empty;
+
+    if (!string.IsNullOrEmpty(image))
+    {
+        image = Url.Content(image)!;
+    }
+
+    var model = MetaModel.Create(
+        Options.Metadata,
+        canonicalUri: canonicalUri,
+        description: ViewBag.MetaDescription as string,
+        imageUri: image,
+        imageAltText: ViewBag.MetaImageAltText as string,
+        robots: ViewBag.MetaRobots as string,
+        title: ViewBag.Title as string);
+}
+    @await Html.PartialAsync("_Meta", model)
+    @await Html.PartialAsync("_Links", Tuple.Create(canonicalUri, Options))
+    @await RenderSectionAsync("links", required: false)
+    @await RenderSectionAsync("meta", required: false)
+    @await Html.PartialAsync("_StylesHead")
+    @await RenderSectionAsync("stylesHead", required: false)
+    <script type="text/javascript" nonce="@Context.EnsureCspNonce()">
+        @Html.Raw(JavaScriptSnippet.ScriptBody)
+    </script>
+    <script type="text/javascript" nonce="@Context.EnsureCspNonce()">
+        if (self == top) {
+            document.documentElement.className = document.documentElement.className.replace(/\bjs-flash\b/, '');
+        }
+        else {
+            top.location = self.location;
+        }
+    </script>
+</head>
+<body>
+    @await Html.PartialAsync("_Navbar")
+    <main class="container body-content" data-authenticated="@((User?.Identity?.IsAuthenticated == true).ToString().ToLowerInvariant())" data-id="content">
+        @RenderBody()
+        @await Html.PartialAsync("_Footer", Options)
+    </main>
+    @await Html.PartialAsync("_StylesBody")
+    @await RenderSectionAsync("stylesBody", required: false)
+    @await Html.PartialAsync("_Scripts")
+    @await RenderSectionAsync("scripts", required: false)
+</body>
+<!--
+    Environment: @Config.AzureEnvironment()
+    Datacenter:  @Config.AzureDatacenter()
+    Instance:    @Environment.MachineName
+    Branch:      @GitMetadata.Branch
+    Commit:      @GitMetadata.Commit
+    Deployment:  @GitMetadata.DeployId
+    Timestamp:   @GitMetadata.Timestamp.ToString("u", CultureInfo.InvariantCulture)
+    Version:     @System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription
+-->
+</html>

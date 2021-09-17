@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewBag.MetaDescription = SR.SignInMetaDescription;
     ViewBag.MetaRobots = "NOINDEX";
     ViewBag.Title = SR.SignInTitle;
@@ -21,7 +21,7 @@
                 @SR.SignInRegisterText
             </p>
             <p>
-                <a class="btn btn-primary btn-lg" asp-route="@SiteRoutes.Register" title="@SR.RegisterLinkAltText" data-ga-label="Register (Button)">
+                <a class="btn btn-primary btn-lg" asp-page="@SiteRoutes.Register" title="@SR.RegisterLinkAltText" data-ga-label="Register (Button)">
                     @SR.RegisterLinkText
                     <i class="fa fa-user-plus" aria-hidden="true"></i>
                 </a>

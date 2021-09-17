@@ -55,16 +55,6 @@ public class AccountController : Controller
     }
 
     /// <summary>
-    /// Gets the result for the <c>/account/access-denied/</c> action.
-    /// </summary>
-    /// <returns>
-    /// The result for the <c>/account/access-denied/</c> action.
-    /// </returns>
-    [HttpGet]
-    [Route("access-denied", Name = SiteRoutes.AccessDenied)]
-    public IActionResult AccessDenied() => View();
-
-    /// <summary>
     /// Gets the result for the <c>/account/sign-in/</c> action.
     /// </summary>
     /// <param name="returnUrl">The optional return URL once the user is signed-in.</param>
@@ -108,17 +98,6 @@ public class AccountController : Controller
 
         return View(viewName);
     }
-
-    /// <summary>
-    /// Gets the result for the GET <c>/account/sign-out/</c> action.
-    /// </summary>
-    /// <returns>
-    /// The result for the <c>/account/sign-out/</c> action.
-    /// </returns>
-    [HttpGet]
-    [Route("sign-out", Name = SiteRoutes.SignOut)]
-    [ValidateAntiForgeryToken]
-    public IActionResult SignOutGet() => RedirectToRoute(SiteRoutes.Home);
 
     /// <summary>
     /// Gets the result for the POST <c>/account/sign-out/</c> action.
@@ -340,19 +319,19 @@ public class AccountController : Controller
 
     private string GetErrorRedirectUrl()
     {
-        return Url.RouteUrl(IsReferrerRegistrationPage() ? SiteRoutes.Register : SiteRoutes.SignIn)!;
+        return (IsReferrerRegistrationPage() ? Url.Page(SiteRoutes.Register) : Url.RouteUrl(SiteRoutes.SignIn))!;
     }
 
-    private bool IsReferrerRegistrationPage() => IsReferrerRoute(SiteRoutes.Register);
+    private bool IsReferrerRegistrationPage() => IsReferrerPageOrRoute(SiteRoutes.Register);
 
-    private bool IsRedirectAlexaAuthorization(string? returnUrl) => IsUrlRoute(returnUrl, SiteRoutes.AuthorizeAlexa);
+    private bool IsRedirectAlexaAuthorization(string? returnUrl) => IsUrlPageOrRoute(returnUrl, SiteRoutes.AuthorizeAlexa);
 
-    private bool IsReferrerRoute(string routeName)
+    private bool IsReferrerPageOrRoute(string routeName)
     {
-        return IsUrlRoute(HttpContext.Request.Headers["referer"], routeName);
+        return IsUrlPageOrRoute(HttpContext.Request.Headers["referer"], routeName);
     }
 
-    private bool IsUrlRoute(string? url, string routeName)
+    private bool IsUrlPageOrRoute(string? url, string pageOrRouteName)
     {
         if (string.IsNullOrWhiteSpace(url) ||
             !Uri.TryCreate(url, UriKind.RelativeOrAbsolute, out Uri? uri))
@@ -360,11 +339,16 @@ public class AccountController : Controller
             return false;
         }
 
-        string routeUrl = Url.RouteUrl(routeName)!;
+        string? targetUrl = Url.RouteUrl(pageOrRouteName);
+
+        if (targetUrl is null)
+        {
+            targetUrl = Url.Page(pageOrRouteName);
+        }
 
         if (uri.IsAbsoluteUri)
         {
-            return string.Equals(uri.AbsolutePath, routeUrl, StringComparison.OrdinalIgnoreCase);
+            return string.Equals(uri.AbsolutePath, targetUrl, StringComparison.OrdinalIgnoreCase);
         }
         else
         {
@@ -375,7 +359,7 @@ public class AccountController : Controller
                 url = url.Substring(0, indexOfQuery);
             }
 
-            return string.Equals(url.TrimEnd('/'), routeUrl.TrimEnd('/'), StringComparison.OrdinalIgnoreCase);
+            return string.Equals(url.TrimEnd('/'), targetUrl!.TrimEnd('/'), StringComparison.OrdinalIgnoreCase);
         }
     }
 }

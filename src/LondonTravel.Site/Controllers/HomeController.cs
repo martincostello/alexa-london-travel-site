@@ -68,17 +68,6 @@ public class HomeController : Controller
     }
 
     /// <summary>
-    /// Gets the result for the <c>/register/</c> action.
-    /// </summary>
-    /// <returns>
-    /// The result for the <c>/register/</c> action.
-    /// </returns>
-    [HttpGet]
-    [Route("/register")]
-    [Route("/sign-up")]
-    public IActionResult Register() => RedirectToRoute(SiteRoutes.Register);
-
-    /// <summary>
     /// Maps the user's preferences onto the specified view model as an asynchronous operation.
     /// </summary>
     /// <param name="model">The view model to map.</param>
