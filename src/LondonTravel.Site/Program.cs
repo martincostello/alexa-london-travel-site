@@ -99,18 +99,9 @@ builder.Services
         }
     })
     .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
-    .AddDataAnnotationsLocalization()
-    .AddJsonOptions((options) =>
-    {
-        // Omit nulls to reduce payload size
-        options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+    .AddDataAnnotationsLocalization();
 
-        // Make JSON easier to read for debugging at the expense of larger payloads
-        options.JsonSerializerOptions.WriteIndented = true;
-
-        // Opt-out of case insensitivity on property names
-        options.JsonSerializerOptions.PropertyNameCaseInsensitive = false;
-    });
+builder.Services.AddRazorPages();
 
 builder.Services.AddRouting((options) =>
 {
@@ -125,6 +116,7 @@ builder.Services.AddHsts((options) =>
     options.Preload = false;
 });
 
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwagger(builder.Environment);
 
 builder.Services.Configure<GzipCompressionProviderOptions>((p) => p.Level = CompressionLevel.Fastest);
@@ -136,6 +128,13 @@ builder.Services.AddResponseCompression((options) =>
     options.EnableForHttps = true;
     options.Providers.Add<BrotliCompressionProvider>();
     options.Providers.Add<GzipCompressionProvider>();
+});
+
+builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>((options) =>
+{
+    options.SerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+    options.SerializerOptions.PropertyNameCaseInsensitive = false;
+    options.SerializerOptions.WriteIndented = true;
 });
 
 builder.Services.AddSingleton<IClock>((_) => SystemClock.Instance);
@@ -150,6 +149,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<SiteResources>();
 
 builder.Services.AddTransient<IAccountService, AccountService>();
+builder.Services.AddTransient<AlexaService>();
 builder.Services.AddTransient<ITflService, TflService>();
 builder.Services.AddTransient((p) => p.GetRequiredService<IOptionsMonitor<SiteOptions>>().CurrentValue);
 builder.Services.AddTransient((p) => p.GetRequiredService<IOptionsMonitor<SiteOptions>>().CurrentValue.Authentication!.UserStore!);
@@ -197,6 +197,11 @@ app.UseRouting();
 app.UseIdentity(options.CurrentValue);
 
 app.MapDefaultControllerRoute();
+app.MapRazorPages();
+
+app.MapAlexa();
+app.MapApi(app.Logger);
+app.MapRedirects();
 
 app.UseSwagger();
 

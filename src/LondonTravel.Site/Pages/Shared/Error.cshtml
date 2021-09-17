@@ -1,0 +1,20 @@
+@page "/error"
+@model MartinCostello.LondonTravel.Site.Pages.Shared.Error
+@{
+    ViewBag.MetaDescription = string.Empty;
+    ViewBag.MetaRobots = "NOINDEX";
+    ViewBag.Title = Model.Title ?? SR.ErrorTitle;
+    ViewBag.Subtitle = Model.Subtitle ?? SR.ErrorSubtitle(Model.ErrorStatusCode);
+    ViewBag.Message = Model.Message ?? SR.ErrorMessage;
+
+    string modifier = (ViewBag.IsUserError ?? false) ? "primary" : "danger";
+}
+<h1 class="text-@modifier">@ViewBag.Subtitle</h1>
+<h2 class="text-@modifier">@ViewBag.Message</h2>
+
+@if (Model.ShowRequestId)
+{
+    <p>
+        <strong>@SR.ErrorRequestId</strong> <code>@Model.RequestId</code>
+    </p>
+}

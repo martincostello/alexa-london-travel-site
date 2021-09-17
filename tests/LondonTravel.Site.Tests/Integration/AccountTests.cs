@@ -43,7 +43,7 @@ public class AccountTests : IntegrationTest
             UserNameNormalized = emailAddress,
         };
 
-        string accessToken = Controllers.AlexaController.GenerateAccessToken();
+        string accessToken = Services.AlexaService.GenerateAccessToken();
         string[] favoriteLines = new[] { "district", "northern" };
         string userId;
 

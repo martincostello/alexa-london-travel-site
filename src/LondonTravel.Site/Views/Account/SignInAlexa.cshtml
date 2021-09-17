@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewBag.MetaDescription = SR.AlexaSignInMetaDescription;
     ViewBag.MetaRobots = "NOINDEX";
     ViewBag.Title = SR.AlexaSignInTitle;
@@ -40,12 +40,12 @@
         @SR.RegisterParagraph3
         <ul>
             <li>
-                <a asp-route="@SiteRoutes.PrivacyPolicy" class="small" rel="noopener" title="@SR.PrivacyPolicyLinkAltText" data-ga-label="Privacy Policy (Register)">
+                <a asp-page="@SiteRoutes.PrivacyPolicy" class="small" rel="noopener" title="@SR.PrivacyPolicyLinkAltText" data-ga-label="Privacy Policy (Register)">
                     @SR.PrivacyPolicyLinkText
                 </a>
             </li>
             <li>
-                <a asp-route="@SiteRoutes.TermsOfService" class="small" rel="noopener" title="@SR.TermsOfServiceLinkAltText" data-ga-label="Terms of Service (Register)">
+                <a asp-page="@SiteRoutes.TermsOfService" class="small" rel="noopener" title="@SR.TermsOfServiceLinkAltText" data-ga-label="Terms of Service (Register)">
                     @SR.TermsOfServiceLinkText
                 </a>
             </li>

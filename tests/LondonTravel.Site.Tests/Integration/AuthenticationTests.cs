@@ -116,6 +116,9 @@ public sealed class AuthenticationTests : BrowserIntegrationTest
                 // Act
                 page = await accounts[0].RemoveAsync();
 
+                // Wait for the UI to update
+                await Task.Delay(TimeSpan.FromSeconds(1));
+
                 // Assert
                 accounts = await page.LinkedAccountsAsync();
 

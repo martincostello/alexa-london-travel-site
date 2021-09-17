@@ -13,9 +13,6 @@ using NodaTime;
 
 namespace MartinCostello.LondonTravel.Site.Controllers;
 
-/// <summary>
-/// A class representing the controller for the <c>/account/</c> resource.
-/// </summary>
 [Authorize]
 [Route("account", Name = SiteRoutes.Account)]
 public class AccountController : Controller
@@ -54,23 +51,6 @@ public class AccountController : Controller
             siteOptions?.Authentication.ExternalProviders?.Any((p) => p.Value?.IsEnabled == true) == true;
     }
 
-    /// <summary>
-    /// Gets the result for the <c>/account/access-denied/</c> action.
-    /// </summary>
-    /// <returns>
-    /// The result for the <c>/account/access-denied/</c> action.
-    /// </returns>
-    [HttpGet]
-    [Route("access-denied", Name = SiteRoutes.AccessDenied)]
-    public IActionResult AccessDenied() => View();
-
-    /// <summary>
-    /// Gets the result for the <c>/account/sign-in/</c> action.
-    /// </summary>
-    /// <param name="returnUrl">The optional return URL once the user is signed-in.</param>
-    /// <returns>
-    /// The result for the <c>/account/sign-in/</c> action.
-    /// </returns>
     [AllowAnonymous]
     [HttpGet]
     [Route("sign-in", Name = SiteRoutes.SignIn)]
@@ -83,7 +63,7 @@ public class AccountController : Controller
 
         if (User?.Identity?.IsAuthenticated == true)
         {
-            return RedirectToRoute(SiteRoutes.Home);
+            return RedirectToPage(SiteRoutes.Home);
         }
 
         Uri? returnUri = null;
@@ -91,7 +71,7 @@ public class AccountController : Controller
         if (returnUrl != null &&
             !Uri.TryCreate(returnUrl, UriKind.Relative, out returnUri))
         {
-            return RedirectToRoute(SiteRoutes.Home);
+            return RedirectToPage(SiteRoutes.Home);
         }
 
         await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
@@ -109,23 +89,6 @@ public class AccountController : Controller
         return View(viewName);
     }
 
-    /// <summary>
-    /// Gets the result for the GET <c>/account/sign-out/</c> action.
-    /// </summary>
-    /// <returns>
-    /// The result for the <c>/account/sign-out/</c> action.
-    /// </returns>
-    [HttpGet]
-    [Route("sign-out", Name = SiteRoutes.SignOut)]
-    [ValidateAntiForgeryToken]
-    public IActionResult SignOutGet() => RedirectToRoute(SiteRoutes.Home);
-
-    /// <summary>
-    /// Gets the result for the POST <c>/account/sign-out/</c> action.
-    /// </summary>
-    /// <returns>
-    /// The result for the <c>/account/sign-out/</c> action.
-    /// </returns>
     [HttpPost]
     [Route("sign-out", Name = SiteRoutes.SignOut)]
     [ValidateAntiForgeryToken]
@@ -140,21 +103,13 @@ public class AccountController : Controller
 
         await _signInManager.SignOutAsync();
 
-        _logger.LogInformation("User Id {UserId} signed out.", userId);
+        Log.UserSignedOut(_logger, userId);
 
         _telemetry.TrackSignOut(userId);
 
-        return RedirectToRoute(SiteRoutes.Home);
+        return RedirectToPage(SiteRoutes.Home);
     }
 
-    /// <summary>
-    /// Gets the result for the <c>/account/external-sign-in/</c> action.
-    /// </summary>
-    /// <param name="provider">The external provider name.</param>
-    /// <param name="returnUrl">The optional return URL once the user is signed-in.</param>
-    /// <returns>
-    /// The result for the <c>/account/external-sign-in/</c> action.
-    /// </returns>
     [AllowAnonymous]
     [HttpPost]
     [Route("external-sign-in", Name = SiteRoutes.ExternalSignIn)]
@@ -180,14 +135,6 @@ public class AccountController : Controller
         return Challenge(properties, provider);
     }
 
-    /// <summary>
-    /// Gets the result for the <c>/account/external-sign-in-callback/</c> action.
-    /// </summary>
-    /// <param name="returnUrl">The optional return URL once the user is signed-in.</param>
-    /// <param name="remoteError">The remote error message, if any.</param>
-    /// <returns>
-    /// The result for the <c>/account/external-sign-in-callback/</c> action.
-    /// </returns>
     [AllowAnonymous]
     [Route("external-sign-in-callback", Name = SiteRoutes.ExternalSignInCallback)]
     [HttpGet]
@@ -200,10 +147,7 @@ public class AccountController : Controller
 
         if (remoteError != null)
         {
-            _logger.LogWarning(
-                "Error from external provider. {RemoteError}",
-                remoteError);
-
+            Log.RemoteSignInError(_logger, remoteError);
             return View(nameof(SignIn));
         }
 
@@ -220,7 +164,7 @@ public class AccountController : Controller
         {
             string userId = _userManager.GetUserId(info.Principal);
 
-            _logger.LogInformation("User Id {UserId} signed in with provider {LoginProvider}.", userId, info.LoginProvider);
+            Log.UserSignedIn(_logger, userId, info.LoginProvider);
             _telemetry.TrackSignIn(userId, info.LoginProvider);
 
             return RedirectToLocal(returnUrl);
@@ -253,7 +197,7 @@ public class AccountController : Controller
             {
                 await _signInManager.SignInAsync(user, isPersistent: true);
 
-                _logger.LogInformation("New user account {UserId} created through {LoginProvider}.", user.Id, info.LoginProvider);
+                Log.UserCreated(_logger, user.Id, info.LoginProvider);
 
                 _telemetry.TrackAccountCreated(user.Id!, user.Email, info.LoginProvider);
 
@@ -263,7 +207,7 @@ public class AccountController : Controller
                 }
                 else
                 {
-                    return RedirectToRoute(SiteRoutes.Home, new { Message = SiteMessage.AccountCreated });
+                    return RedirectToPage(SiteRoutes.Home, new { Message = SiteMessage.AccountCreated });
                 }
             }
 
@@ -285,11 +229,38 @@ public class AccountController : Controller
         }
     }
 
+    private static bool IsRedirectAlexaAuthorization(string? returnUrl) => IsUrlOtherUrl(returnUrl, "/alexa/authorize");
+
+    private static bool IsUrlOtherUrl(string? url, string targetUrl)
+    {
+        if (string.IsNullOrWhiteSpace(url) ||
+            !Uri.TryCreate(url, UriKind.RelativeOrAbsolute, out Uri? uri))
+        {
+            return false;
+        }
+
+        if (uri.IsAbsoluteUri)
+        {
+            return string.Equals(uri.AbsolutePath, targetUrl, StringComparison.OrdinalIgnoreCase);
+        }
+        else
+        {
+            int indexOfQuery = url.IndexOf('?', StringComparison.Ordinal);
+
+            if (indexOfQuery > -1)
+            {
+                url = url.Substring(0, indexOfQuery);
+            }
+
+            return string.Equals(url.TrimEnd('/'), targetUrl!.TrimEnd('/'), StringComparison.OrdinalIgnoreCase);
+        }
+    }
+
     private void AddErrors(IdentityResult result)
     {
         foreach (var error in result.Errors)
         {
-            _logger?.LogWarning("{ErrorCode}: {ErrorDescription}", error.Code, error.Description);
+            Log.IdentityError(_logger, error.Code, error.Description);
             ModelState.AddModelError(string.Empty, error.Description);
         }
     }
@@ -302,7 +273,7 @@ public class AccountController : Controller
         }
         else
         {
-            return RedirectToRoute(SiteRoutes.Home);
+            return RedirectToPage(SiteRoutes.Home);
         }
     }
 
@@ -340,19 +311,17 @@ public class AccountController : Controller
 
     private string GetErrorRedirectUrl()
     {
-        return Url.RouteUrl(IsReferrerRegistrationPage() ? SiteRoutes.Register : SiteRoutes.SignIn)!;
+        return (IsReferrerRegistrationPage() ? Url.Page(SiteRoutes.Register) : Url.RouteUrl(SiteRoutes.SignIn))!;
     }
 
-    private bool IsReferrerRegistrationPage() => IsReferrerRoute(SiteRoutes.Register);
+    private bool IsReferrerRegistrationPage() => IsReferrerPageOrRoute(SiteRoutes.Register);
 
-    private bool IsRedirectAlexaAuthorization(string? returnUrl) => IsUrlRoute(returnUrl, SiteRoutes.AuthorizeAlexa);
-
-    private bool IsReferrerRoute(string routeName)
+    private bool IsReferrerPageOrRoute(string routeName)
     {
-        return IsUrlRoute(HttpContext.Request.Headers["referer"], routeName);
+        return IsUrlPageOrRoute(HttpContext.Request.Headers["referer"], routeName);
     }
 
-    private bool IsUrlRoute(string? url, string routeName)
+    private bool IsUrlPageOrRoute(string? url, string pageOrRouteName)
     {
         if (string.IsNullOrWhiteSpace(url) ||
             !Uri.TryCreate(url, UriKind.RelativeOrAbsolute, out Uri? uri))
@@ -360,11 +329,16 @@ public class AccountController : Controller
             return false;
         }
 
-        string routeUrl = Url.RouteUrl(routeName)!;
+        string? targetUrl = Url.RouteUrl(pageOrRouteName);
+
+        if (targetUrl is null)
+        {
+            targetUrl = Url.Page(pageOrRouteName);
+        }
 
         if (uri.IsAbsoluteUri)
         {
-            return string.Equals(uri.AbsolutePath, routeUrl, StringComparison.OrdinalIgnoreCase);
+            return string.Equals(uri.AbsolutePath, targetUrl, StringComparison.OrdinalIgnoreCase);
         }
         else
         {
@@ -375,7 +349,7 @@ public class AccountController : Controller
                 url = url.Substring(0, indexOfQuery);
             }
 
-            return string.Equals(url.TrimEnd('/'), routeUrl.TrimEnd('/'), StringComparison.OrdinalIgnoreCase);
+            return string.Equals(url.TrimEnd('/'), targetUrl!.TrimEnd('/'), StringComparison.OrdinalIgnoreCase);
         }
     }
 }

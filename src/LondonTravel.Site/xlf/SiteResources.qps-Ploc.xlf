@@ -237,6 +237,11 @@
         <target state="translated">[Ýöûŕẋẋ ŕéǫûéšţẋẋẋ ţööķẋẋ ţööẋ ļöñĝẋẋ ţöẋ þŕöçéšš·ẋẋẋ]</target>
         <note />
       </trans-unit>
+      <trans-unit id="ErrorRequestId">
+        <source>Request ID:</source>
+        <target state="translated">[Ŕéǫûéšţẋẋẋ ÎÐ∶ẋ]</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ErrorSubtitle">
         <source>Error (HTTP {0})</source>
         <target state="translated">[Éŕŕöŕẋẋ (ĤŢŢÞẋẋ {0})ẋ]</target>

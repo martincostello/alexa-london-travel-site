@@ -41,7 +41,7 @@ public static class ILoggingBuilderExtensions
             loggerConfig.WriteTo.Papertrail(papertrailHostname, context.Configuration.PapertrailPort());
         }
 
-        Log.Logger = loggerConfig.CreateLogger();
+        Serilog.Log.Logger = loggerConfig.CreateLogger();
         return builder.AddSerilog(dispose: true);
     }
 }

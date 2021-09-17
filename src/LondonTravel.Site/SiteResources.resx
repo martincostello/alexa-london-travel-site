@@ -573,4 +573,7 @@
   <data name="RegisterParagraph4" xml:space="preserve">
     <value>More than {0:N0} users have registered an account.</value>
   </data>
+  <data name="ErrorRequestId" xml:space="preserve">
+    <value>Request ID:</value>
+  </data>
 </root>

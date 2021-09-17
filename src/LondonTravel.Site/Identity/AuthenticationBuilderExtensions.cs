@@ -182,20 +182,32 @@ public static class AuthenticationBuilderExtensions
         if (WasPermissionDenied(context))
         {
             message = SiteMessage.LinkDenied;
-            logger.LogTrace("User denied permission.");
+            Log.PermissionDenied(logger);
         }
         else
         {
             message = SiteMessage.LinkFailed;
             string errors = string.Join(';', context.Request.Query.Select((p) => $"'{p.Key}' = '{p.Value}'"));
 
-            logger.Log(
-                IsCorrelationFailure(context) ? LogLevel.Trace : LogLevel.Error, // Not a server-side problem, so do not create log noise
-                context.Failure,
-                "Failed to sign-in using {Provider}: {FailureMessage}. Errors: {Errors}.",
-                provider,
-                context.Failure?.Message,
-                errors);
+            if (IsCorrelationFailure(context))
+            {
+                // Not a server-side problem, so do not create log noise
+                Log.CorrelationFailed(
+                    logger,
+                    context.Failure,
+                    provider,
+                    context.Failure?.Message,
+                    errors);
+            }
+            else
+            {
+                Log.SignInFailed(
+                    logger,
+                    context.Failure,
+                    provider,
+                    context.Failure?.Message,
+                    errors);
+            }
         }
 
         context.Response.Redirect($"{path}?Message={message}");

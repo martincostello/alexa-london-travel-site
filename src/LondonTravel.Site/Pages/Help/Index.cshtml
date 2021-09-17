@@ -1,0 +1,143 @@
+@page "/help"
+@model MartinCostello.LondonTravel.Site.Pages.Help.Index
+@{
+    ViewBag.MetaDescription = SR.HelpMetaDescription;
+    ViewBag.Title = SR.HelpTitle;
+}
+<div>
+    <h1>@SR.HelpTitle</h1>
+
+    <h2>London Travel Alexa Skill</h2>
+    <p>
+        See the topics below for help with the London Travel Alexa skill.
+    </p>
+
+    <h3 id="installation">Installing the skill</h3>
+    <p>
+        You can install the Alexa skill from the <a href="@Options.ExternalLinks?.Skill" rel="noopener" target="_blank" title="@SR.InstallLinkAltText" data-ga-label="Help Install">amazon.co.uk</a> website.
+    </p>
+
+    <h3 id="check-disruption">Checking for disruption</h3>
+    <p>
+        To check for disruption on any of the supported Transport for London (TfL) lines, ask:
+    </p>
+    <blockquote>
+        <p>
+            <i>
+                &quot;Alexa, ask London Travel are there any line closures?&quot;
+            </i>
+        </p>
+    </blockquote>
+    <p>
+        The following lines are currently supported:
+        <ul>
+            <li>All London Underground tube lines</li>
+            <li>Docklands Light Railway (DLR)</li>
+            <li>London Overground</li>
+            <li>TfL Rail</li>
+        </ul>
+    </p>
+
+    <h3 id="check-status">Checking the status of a specific line</h3>
+    <p>
+        To check for the status of a specific London Underground line, the DLR,
+        London Overground or TfL Rail, ask Alexa about the line you are interested in. For example:
+    </p>
+    <blockquote>
+        <p>
+            <i>
+                &quot;Alexa, ask London Travel what's the status of the Northern line?&quot;
+            </i>
+        </p>
+    </blockquote>
+
+    <h3 id="your-commute">Asking about your commute</h3>
+    @if (Model!.ShowLinkingNote)
+    {
+        <p>
+            <span class="label label-info">Note</span>
+            <em>
+                First you must <a href="#account-linking" title="Linking your account to Alexa" data-ga-label="Help Link Account">link an account</a>
+                using the Alexa app and choose at least one favourite line in your <a href="#line-preferences" data-ga-label="Help Line Preferences">preferences</a>.
+            </em>
+        </p>
+    }
+    <p>
+        Once you have selected at least one favourite line for your commute, you can ask Alexa about your
+        commute. Alexa will respond by telling you the status for each of your favourite lines.
+    </p>
+    <blockquote>
+        <p>
+            <i>
+                @SR.CommuteSkillInvocation
+            </i>
+        </p>
+    </blockquote>
+
+    <h3 id="account-linking">Linking your account</h3>
+    <p>
+        To link your existing London Travel account to the London Travel skill:
+        <ol>
+            <li>Open the Alexa app on your device</li>
+            <li>Go to <strong>Skills</strong></li>
+            <li>Go to <strong>Your Skills</strong></li>
+            <li>Select <strong>@SR.BrandName</strong></li>
+            <li>Click <strong>Link Account</strong></li>
+            <li>Sign in with an account linked to your London Travel account</li>
+        </ol>
+    </p>
+
+    <h2>London Travel Website</h2>
+    <p>
+        See the topics below for help with this website.
+    </p>
+
+    <h3 id="registration">Registering</h3>
+    <p>
+        To register for a London Travel account, visit the
+        <a asp-page="@SiteRoutes.Register" title="@SR.RegisterLinkAltText" data-ga-label="Help Register">registration</a>
+        page and sign-in with an external account, for example with Facebook or Google. Once you
+        have signed in to the chosen external account, a new London Travel account will be created
+        using the email address associated with the account you signed-in with.
+    </p>
+    <p>
+        Once you have created your account, you can save your favourite line(s) for use from the Alexa skill once it has been linked to your account.
+    </p>
+
+    <h3 id="signing-in">Signing in</h3>
+    <p>
+        To sign in to your London Travel account, visit the
+        <a href="@Url.RouteUrl(SiteRoutes.SignIn)" title="@SR.SignInLinkAltText" data-ga-label="Help Sign-In">sign-in</a>
+        page and sign-in with an external account you have already linked to your London Travel account.
+    </p>
+
+    <h3 id="line-preferences">Setting your preferences</h3>
+    <p>
+        To set your preferences, such as your favourite lines, visit the
+        <a asp-page="@SiteRoutes.Home" title="@SR.HomepageLinkAltText" data-ga-label="Help Homepage">homepage</a>.
+        From there you can select the line(s) which you're interested in by checking one or more lines, for example the lines
+        you use to travel to and from work, and click the <strong>@SR.SavePreferencesButtonText</strong> button.
+    </p>
+
+    <h3 id="account-management">Managing your account</h3>
+    <p>
+        You can use the <a href="@Url.RouteUrl(SiteRoutes.Manage)" title="@SR.ManageLinkAltText" data-ga-label="Helep Manage">account management</a>
+        page to manage your London Travel account. For example, you can:
+        <ul>
+            <li>See whether your account is linked to the Alexa app</li>
+            <li>Link your account to other external services for signing-in</li>
+            <li>Unlink your account from the Alexa skill</li>
+            <li>Delete your account</li>
+        </ul>
+    </p>
+
+    <h2 id="contact">Contact Information</h2>
+    <p>
+        If you need any further help with either the London Travel Alexa skill, or this website, you can either:
+        <ul>
+            <li>Open an issue in GitHub for the <a href="https://github.com/martincostello/alexa-london-travel/issues/new" rel="noopener noreferrer" target="_blank" title="Open GitHub issues for the London Travel Alexa skill" data-ga-label="Help GitHub Skill">skill <i class="fa fa-external-link" aria-hidden="true"></i></a></li>
+            <li>Open an issue in GitHub for this <a href="https://github.com/martincostello/alexa-london-travel-site/issues/new" rel="noopener noreferrer" target="_blank" title="Open GitHub issues for the London Travel Alexa website" data-ga-label="Help GitHub Site">website <i class="fa fa-external-link" aria-hidden="true"></i></a></li>
+            <li>Contact me over on <a href="https://twitter.com/@(Options.Metadata?.Author?.SocialMedia?.Twitter)" rel="noopener noreferrer" target="_blank" title="View Martin's Twitter profile." data-ga-label="Help Twitter">Twitter <i class="fa fa-external-link" aria-hidden="true"></i></a></li>
+        </ul>
+    </p>
+</div>

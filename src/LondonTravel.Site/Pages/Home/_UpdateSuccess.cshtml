@@ -1,0 +1,13 @@
+@model MartinCostello.LondonTravel.Site.Pages.Home.Index
+@if (Model?.UpdateResult == true)
+{
+    <div class="sr-only">@SR.UpdateSuccessModalTitle</div>
+    <div class="alert alert-success" role="alert" aria-hidden="true">
+        <button type="button" class="close" data-dismiss="alert" aria-label="@SR.CloseButtonText" data-ga-label="Save Preferences Success Dismissed">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <p class="lead">
+            @SR.UpdateSuccessModalTitle
+        </p>
+    </div>
+}
