@@ -7,10 +7,24 @@ public static class RedirectsModule
 {
     public static IEndpointRouteBuilder MapRedirects(this IEndpointRouteBuilder app)
     {
-        app.MapGet("/register", () => Results.Redirect("/account/register/"));
-        app.MapGet("/sign-out", () => Results.Redirect("/"));
-        app.MapGet("/sign-up", () => Results.Redirect("/account/register/"));
-        app.MapGet("/support", () => Results.Redirect("/help/"));
+        // TODO Restore the malicious crawler stuff
+        void Redirect(string originalPath, string newPath)
+        {
+            app.MapGet(originalPath, () => Results.Redirect(newPath)).ExcludeFromDescription();
+        }
+
+        var redirections = new (string OldPath, string NewPath)[]
+        {
+            ("/register", "/account/register/"),
+            ("/sign-out", "/"),
+            ("/sign-up", "/account/register/"),
+            ("/support", "/help/"),
+        };
+
+        foreach ((string originalPath, string newPath) in redirections)
+        {
+            Redirect(originalPath, newPath);
+        }
 
         return app;
     }

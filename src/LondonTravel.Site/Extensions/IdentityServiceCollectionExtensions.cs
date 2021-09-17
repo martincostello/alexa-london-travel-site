@@ -48,6 +48,15 @@ public static class IdentityServiceCollectionExtensions
                 .TryAddGoogle(siteOptions.Authentication)
                 .TryAddMicrosoft(siteOptions.Authentication)
                 .TryAddTwitter(siteOptions.Authentication);
+
+            services.AddAuthorization((options) =>
+            {
+                options.AddPolicy("admin", (policy) =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireRole("ADMINISTRATOR");
+                });
+            });
         }
 
         return services;

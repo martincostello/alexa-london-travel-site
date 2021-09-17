@@ -9,7 +9,7 @@ namespace MartinCostello.LondonTravel.Site.Swagger;
 /// A class representing an implementation of <see cref="IExampleProvider"/>
 /// for the <see cref="PreferencesResponse"/> class. This class cannot be inherited.
 /// </summary>
-public sealed class PreferencesResponseExampleProvider : IExampleProvider
+public sealed class PreferencesResponseExampleProvider : IExampleProvider<PreferencesResponse>
 {
     /// <inheritdoc />
     public object GetExample()
