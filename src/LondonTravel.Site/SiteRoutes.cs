@@ -18,7 +18,7 @@ public static class SiteRoutes
 
     public const string ExternalSignInCallback = nameof(ExternalSignInCallback);
 
-    public const string Help = "/Help";
+    public const string Help = "/Help/Index";
 
     public const string Home = nameof(Home);
 
@@ -28,7 +28,7 @@ public static class SiteRoutes
 
     public const string Manage = nameof(Manage);
 
-    public const string PrivacyPolicy = "/PrivacyPolicy";
+    public const string PrivacyPolicy = "/PrivacyPolicy/Index";
 
     public const string Register = "/Account/Register";
 
@@ -40,9 +40,9 @@ public static class SiteRoutes
 
     public const string SignOut = nameof(SignOut);
 
-    public const string Technology = "/Technology";
+    public const string Technology = "/Technology/Index";
 
-    public const string TermsOfService = "/Terms";
+    public const string TermsOfService = "/Terms/Index";
 
     public const string UpdateLinePreferences = nameof(UpdateLinePreferences);
 }
