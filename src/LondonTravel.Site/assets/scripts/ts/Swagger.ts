@@ -36,6 +36,7 @@ window.onload = () => {
             jsonEditor: true,
             showRequestHeaders: true,
             supportedSubmitMethods: ["get"],
+            tryItOutEnabled: true,
             validatorUrl: null,
             responseInterceptor: (response: any): any => {
                 // Delete overly-verbose headers from the UI
