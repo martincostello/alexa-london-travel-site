@@ -205,4 +205,63 @@ public class ResourceTests : IntegrationTest
         response.StatusCode.ShouldBe(expected);
         response.Content!.Headers.ContentType?.MediaType.ShouldBe("text/html");
     }
+
+    [Theory]
+    [InlineData("/.env")]
+    [InlineData("/.git")]
+    [InlineData("/.git/head")]
+    [InlineData("/admin.php")]
+    [InlineData("/admin")]
+    [InlineData("/admin/")]
+    [InlineData("/admin/index.php")]
+    [InlineData("/administration")]
+    [InlineData("/administration/")]
+    [InlineData("/administration/index.php")]
+    [InlineData("/administrator")]
+    [InlineData("/administrator/")]
+    [InlineData("/administrator/index.php")]
+    [InlineData("/appsettings.json")]
+    [InlineData("/bin/site.dll")]
+    [InlineData("/obj/site.dll")]
+    [InlineData("/package.json")]
+    [InlineData("/package-lock.json")]
+    [InlineData("/parameters.xml")]
+    [InlineData("/web.config")]
+    [InlineData("/wp-admin/blah")]
+    [InlineData("/xmlrpc.php")]
+    public async Task Crawler_Spam_Is_Redirected_To_YouTube(string requestUri)
+    {
+        // Arrange
+        using var client = Fixture.CreateClient();
+
+        // Act
+        using (var response = await client.GetAsync(requestUri))
+        {
+            // Assert
+            response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
+            response.Headers.Location?.Host.ShouldBe("www.youtube.com");
+        }
+
+        // Arrange
+        using (var message = new HttpRequestMessage(HttpMethod.Head, requestUri))
+        {
+            // Act
+            using var response = await client.SendAsync(message);
+
+            // Assert
+            response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
+            response.Headers.Location?.Host.ShouldBe("www.youtube.com");
+        }
+
+        // Arrange
+        using (var content = new StringContent(string.Empty))
+        {
+            // Act
+            using var response = await client.PostAsync(requestUri, content);
+
+            // Assert
+            response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
+            response.Headers.Location?.Host.ShouldBe("www.youtube.com");
+        }
+    }
 }

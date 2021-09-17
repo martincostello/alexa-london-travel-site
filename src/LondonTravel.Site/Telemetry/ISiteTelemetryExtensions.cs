@@ -193,6 +193,15 @@ public static class ISiteTelemetryExtensions
     }
 
     /// <summary>
+    /// Tracks a suspicious crawler request.
+    /// </summary>
+    /// <param name="telemetry">The <see cref="ISiteTelemetry"/> to use.</param>
+    public static void TrackSuspiciousCrawler(this ISiteTelemetry telemetry)
+    {
+        telemetry.TrackEvent("SuspiciousCrawler");
+    }
+
+    /// <summary>
     /// Creates a properties dictionary container the specified user Id.
     /// </summary>
     /// <param name="userId">The user Id.</param>
