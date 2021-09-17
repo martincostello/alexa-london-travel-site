@@ -90,6 +90,8 @@ public class SiteResources
 
     public string? ErrorMessage => _localizer[nameof(ErrorMessage)];
 
+    public string? ErrorRequestId => _localizer[nameof(ErrorRequestId)];
+
     public string? HelpTitle => _localizer[nameof(HelpTitle)];
 
     public string? HelpMetaDescription => _localizer[nameof(HelpMetaDescription)];

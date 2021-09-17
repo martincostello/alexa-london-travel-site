@@ -202,6 +202,11 @@
         <target state="translated">Sorry, something went wrong.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ErrorRequestId">
+        <source>Request ID:</source>
+        <target state="translated">Request ID:</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ErrorSubtitle">
         <source>Error (HTTP {0})</source>
         <target state="translated">Error (HTTP {0})</target>

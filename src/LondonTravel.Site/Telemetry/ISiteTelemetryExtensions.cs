@@ -1,4 +1,4 @@
-﻿// Copyright (c) Martin Costello, 2017. All rights reserved.
+// Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 namespace MartinCostello.LondonTravel.Site.Telemetry;
@@ -190,15 +190,6 @@ public static class ISiteTelemetryExtensions
         var properties = CreatePropertiesForUser(userId);
 
         telemetry.TrackEvent("SignOut", properties);
-    }
-
-    /// <summary>
-    /// Tracks a suspicious crawler request.
-    /// </summary>
-    /// <param name="telemetry">The <see cref="ISiteTelemetry"/> to use.</param>
-    public static void TrackSuspiciousCrawler(this ISiteTelemetry telemetry)
-    {
-        telemetry.TrackEvent("SuspiciousCrawler");
     }
 
     /// <summary>
