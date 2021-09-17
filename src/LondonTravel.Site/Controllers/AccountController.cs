@@ -13,9 +13,6 @@ using NodaTime;
 
 namespace MartinCostello.LondonTravel.Site.Controllers;
 
-/// <summary>
-/// A class representing the controller for the <c>/account/</c> resource.
-/// </summary>
 [Authorize]
 [Route("account", Name = SiteRoutes.Account)]
 public class AccountController : Controller
@@ -54,13 +51,6 @@ public class AccountController : Controller
             siteOptions?.Authentication.ExternalProviders?.Any((p) => p.Value?.IsEnabled == true) == true;
     }
 
-    /// <summary>
-    /// Gets the result for the <c>/account/sign-in/</c> action.
-    /// </summary>
-    /// <param name="returnUrl">The optional return URL once the user is signed-in.</param>
-    /// <returns>
-    /// The result for the <c>/account/sign-in/</c> action.
-    /// </returns>
     [AllowAnonymous]
     [HttpGet]
     [Route("sign-in", Name = SiteRoutes.SignIn)]
@@ -99,12 +89,6 @@ public class AccountController : Controller
         return View(viewName);
     }
 
-    /// <summary>
-    /// Gets the result for the POST <c>/account/sign-out/</c> action.
-    /// </summary>
-    /// <returns>
-    /// The result for the <c>/account/sign-out/</c> action.
-    /// </returns>
     [HttpPost]
     [Route("sign-out", Name = SiteRoutes.SignOut)]
     [ValidateAntiForgeryToken]
@@ -126,14 +110,6 @@ public class AccountController : Controller
         return RedirectToPage(SiteRoutes.Home);
     }
 
-    /// <summary>
-    /// Gets the result for the <c>/account/external-sign-in/</c> action.
-    /// </summary>
-    /// <param name="provider">The external provider name.</param>
-    /// <param name="returnUrl">The optional return URL once the user is signed-in.</param>
-    /// <returns>
-    /// The result for the <c>/account/external-sign-in/</c> action.
-    /// </returns>
     [AllowAnonymous]
     [HttpPost]
     [Route("external-sign-in", Name = SiteRoutes.ExternalSignIn)]
@@ -159,14 +135,6 @@ public class AccountController : Controller
         return Challenge(properties, provider);
     }
 
-    /// <summary>
-    /// Gets the result for the <c>/account/external-sign-in-callback/</c> action.
-    /// </summary>
-    /// <param name="returnUrl">The optional return URL once the user is signed-in.</param>
-    /// <param name="remoteError">The remote error message, if any.</param>
-    /// <returns>
-    /// The result for the <c>/account/external-sign-in-callback/</c> action.
-    /// </returns>
     [AllowAnonymous]
     [Route("external-sign-in-callback", Name = SiteRoutes.ExternalSignInCallback)]
     [HttpGet]
@@ -261,6 +229,33 @@ public class AccountController : Controller
         }
     }
 
+    private static bool IsRedirectAlexaAuthorization(string? returnUrl) => IsUrlOtherUrl(returnUrl, "/alexa/authorize");
+
+    private static bool IsUrlOtherUrl(string? url, string targetUrl)
+    {
+        if (string.IsNullOrWhiteSpace(url) ||
+            !Uri.TryCreate(url, UriKind.RelativeOrAbsolute, out Uri? uri))
+        {
+            return false;
+        }
+
+        if (uri.IsAbsoluteUri)
+        {
+            return string.Equals(uri.AbsolutePath, targetUrl, StringComparison.OrdinalIgnoreCase);
+        }
+        else
+        {
+            int indexOfQuery = url.IndexOf('?', StringComparison.Ordinal);
+
+            if (indexOfQuery > -1)
+            {
+                url = url.Substring(0, indexOfQuery);
+            }
+
+            return string.Equals(url.TrimEnd('/'), targetUrl!.TrimEnd('/'), StringComparison.OrdinalIgnoreCase);
+        }
+    }
+
     private void AddErrors(IdentityResult result)
     {
         foreach (var error in result.Errors)
@@ -320,8 +315,6 @@ public class AccountController : Controller
     }
 
     private bool IsReferrerRegistrationPage() => IsReferrerPageOrRoute(SiteRoutes.Register);
-
-    private bool IsRedirectAlexaAuthorization(string? returnUrl) => IsUrlPageOrRoute(returnUrl, SiteRoutes.AuthorizeAlexa);
 
     private bool IsReferrerPageOrRoute(string routeName)
     {

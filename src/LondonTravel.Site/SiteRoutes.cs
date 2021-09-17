@@ -10,8 +10,6 @@ public static class SiteRoutes
 {
     public const string Account = nameof(Account);
 
-    public const string AuthorizeAlexa = nameof(AuthorizeAlexa);
-
     public const string DeleteAccount = nameof(DeleteAccount);
 
     public const string ExternalSignIn = nameof(ExternalSignIn);

@@ -149,6 +149,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<SiteResources>();
 
 builder.Services.AddTransient<IAccountService, AccountService>();
+builder.Services.AddTransient<AlexaService>();
 builder.Services.AddTransient<ITflService, TflService>();
 builder.Services.AddTransient((p) => p.GetRequiredService<IOptionsMonitor<SiteOptions>>().CurrentValue);
 builder.Services.AddTransient((p) => p.GetRequiredService<IOptionsMonitor<SiteOptions>>().CurrentValue.Authentication!.UserStore!);
@@ -198,6 +199,7 @@ app.UseIdentity(options.CurrentValue);
 app.MapDefaultControllerRoute();
 app.MapRazorPages();
 
+app.MapAlexa();
 app.MapApi(app.Logger);
 app.MapRedirects();
 

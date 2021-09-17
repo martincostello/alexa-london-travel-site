@@ -7,29 +7,12 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace MartinCostello.LondonTravel.Site.Services;
 
-public class AccountService : IAccountService
+public sealed class AccountService : IAccountService
 {
-    /// <summary>
-    /// The <see cref="IDocumentService"/> to use. This field is read-only.
-    /// </summary>
     private readonly IDocumentService _service;
-
-    /// <summary>
-    /// The <see cref="IMemoryCache"/> to use. This field is read-only.
-    /// </summary>
     private readonly IMemoryCache _cache;
-
-    /// <summary>
-    /// The <see cref="ILogger"/> to use. This field is read-only.
-    /// </summary>
     private readonly ILogger _logger;
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="AccountService"/> class.
-    /// </summary>
-    /// <param name="service">The <see cref="IDocumentService"/> to use.</param>
-    /// <param name="cache">The <see cref="IMemoryCache"/> to use.</param>
-    /// <param name="logger">The <see cref="ILogger"/> to use.</param>
     public AccountService(IDocumentService service, IMemoryCache cache, ILogger<AccountService> logger)
     {
         _service = service;

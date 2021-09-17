@@ -12,9 +12,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MartinCostello.LondonTravel.Site.Controllers;
 
-/// <summary>
-/// A class representing the controller for the <c>/manage/</c> resource.
-/// </summary>
 [Authorize]
 [Route("manage", Name = SiteRoutes.Manage)]
 public class ManageController : Controller
@@ -39,12 +36,6 @@ public class ManageController : Controller
         _logger = logger;
     }
 
-    /// <summary>
-    /// Gets the result for the <c>/manage/</c> action.
-    /// </summary>
-    /// <returns>
-    /// The result for the <c>/manage/</c> action.
-    /// </returns>
     [HttpGet]
     public async Task<IActionResult> Index()
     {
