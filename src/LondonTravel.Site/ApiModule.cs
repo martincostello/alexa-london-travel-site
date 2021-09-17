@@ -32,7 +32,7 @@ public static partial class ApiModule
             ISiteTelemetry telemetry,
             CancellationToken cancellationToken) =>
         {
-            logger.LogTrace("Received API request for user preferences.");
+            Log.RequestForPreferences(logger);
 
             // TODO Consider allowing implicit access if the user is signed-in (i.e. access from a browser)
             if (string.IsNullOrWhiteSpace(authorizationHeader))

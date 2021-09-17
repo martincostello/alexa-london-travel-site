@@ -86,7 +86,7 @@ public sealed class DocumentCollectionInitializer : IDocumentCollectionInitializ
 
         if (created)
         {
-            _logger.LogInformation("Created database {DatabaseName}.", _databaseName);
+            Log.CreatedDatabase(_logger, _databaseName);
         }
 
         return response.Database;
@@ -117,7 +117,7 @@ public sealed class DocumentCollectionInitializer : IDocumentCollectionInitializ
 
         if (created)
         {
-            _logger.LogInformation("Created collection {CollectionName} in database {DatabaseName}.", id, _databaseName);
+            Log.CreatedCollection(_logger, id, _databaseName);
         }
 
         return created;

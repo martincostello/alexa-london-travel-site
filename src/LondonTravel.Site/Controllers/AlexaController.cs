@@ -118,7 +118,7 @@ public class AlexaController : Controller
 
             if (user == null)
             {
-                _logger.LogError("Failed to get user to link account to Alexa.");
+                Log.AlexaLinkFailedUserNotFound(_logger);
                 return RedirectForError(redirectUri, state);
             }
 
@@ -136,7 +136,7 @@ public class AlexaController : Controller
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to link account to Alexa.");
+            Log.AlexaLinkFailed(_logger, ex);
             return RedirectForError(redirectUri, state);
         }
     }
@@ -177,11 +177,11 @@ public class AlexaController : Controller
 
         if (hasExistingToken)
         {
-            _logger.LogTrace("Regenerating Alexa access token for user Id {UserId}.", user.Id);
+            Log.RegeneratingAccessToken(_logger, user.Id);
         }
         else
         {
-            _logger.LogTrace("Generating Alexa access token for user Id {UserId}.", user.Id);
+            Log.GeneratingAccessToken(_logger, user.Id);
         }
 
         user.AlexaToken = accessToken;
@@ -192,17 +192,17 @@ public class AlexaController : Controller
         {
             if (hasExistingToken)
             {
-                _logger.LogTrace("Regenerated Alexa access token for user Id {UserId}.", user.Id);
+                Log.RegeneratedAccessToken(_logger, user.Id);
             }
             else
             {
-                _logger.LogTrace("Generated Alexa access token for user Id {UserId}.", user.Id);
+                Log.GeneratedAccessToken(_logger, user.Id);
             }
         }
         else
         {
-            _logger.LogError(
-                "Failed to generate Alexa access token for user Id {UserId}: {Errors}.",
+            Log.AccessTokenGenerationFailed(
+                _logger,
                 user.Id,
                 string.Join(';', result.Errors.Select((p) => $"{p.Code}: {p.Description}")));
         }
@@ -263,7 +263,7 @@ public class AlexaController : Controller
 
         if (!string.Equals(clientId, _options?.ClientId, StringComparison.Ordinal))
         {
-            _logger.LogWarning("Invalid client Id {ClientId} specified.", clientId);
+            Log.InvalidClientId(_logger, clientId);
 
             error = "unauthorized_client";
             return false;
@@ -273,7 +273,7 @@ public class AlexaController : Controller
 
         if (!string.Equals(responseType, ImplicitFlowResponseType, StringComparison.Ordinal))
         {
-            _logger.LogWarning("Invalid response type {ResponseType} specified.", responseType);
+            Log.InvalidResponseType(_logger, responseType);
 
             error = "unsupported_response_type";
             return false;
@@ -293,19 +293,19 @@ public class AlexaController : Controller
     {
         if (redirectUri == null)
         {
-            _logger.LogWarning("No redirection URI specified.");
+            Log.NoRedirectUri(_logger);
             return false;
         }
 
         if (!redirectUri.IsAbsoluteUri)
         {
-            _logger.LogWarning("The specified redirection URI {RedirectionUri} is not an absolute URI.", redirectUri);
+            Log.RedirectUriIsNotAbolute(_logger, redirectUri);
             return false;
         }
 
         if (_options?.RedirectUrls?.Contains(redirectUri.ToString(), StringComparer.OrdinalIgnoreCase) == false)
         {
-            _logger.LogWarning("The specified redirection URI {RedirectionUri} is not authorized.", redirectUri);
+            Log.RedirectUriIsNotAuthorized(_logger, redirectUri);
             return false;
         }
 

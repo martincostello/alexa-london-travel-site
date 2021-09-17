@@ -70,8 +70,8 @@ public sealed class DocumentService : IDocumentService
 
         Container container = await GetContainerAsync();
 
-        _logger.LogTrace(
-            "Creating document in collection {CollectionName} of database {DatabaseName}.",
+        Log.CreatingDocument(
+            _logger,
             _options.CollectionName,
             _options.DatabaseName);
 
@@ -79,8 +79,8 @@ public sealed class DocumentService : IDocumentService
 
         var result = await container.CreateItemAsync(document);
 
-        _logger.LogTrace(
-            "Created document in collection {CollectionName} of database {DatabaseName}. Id: {ResourceId}.",
+        Log.CreatedDocument(
+            _logger,
             _options.CollectionName,
             _options.DatabaseName,
             result.Resource.Id);
@@ -131,8 +131,8 @@ public sealed class DocumentService : IDocumentService
     {
         Container container = await GetContainerAsync();
 
-        _logger.LogTrace(
-            "Querying documents in collection {CollectionName} of database {DatabaseName}.",
+        Log.QueryingDocuments(
+            _logger,
             _options.CollectionName,
             _options.DatabaseName);
 
@@ -147,8 +147,8 @@ public sealed class DocumentService : IDocumentService
             documents.AddRange(items.Resource);
         }
 
-        _logger.LogTrace(
-            "Found {DocumentCount:N0} document(s) in collection {CollectionName} of database {DatabaseName} that matched query.",
+        Log.QueriedDocuments(
+            _logger,
             documents.Count,
             _options.CollectionName,
             _options.DatabaseName);
@@ -182,8 +182,8 @@ public sealed class DocumentService : IDocumentService
 
         string? id = document.Id;
 
-        _logger.LogTrace(
-            "Replacing document with Id {Id} in collection {CollectionName} of database {DatabaseName}.",
+        Log.ReplacingDocument(
+            _logger,
             id,
             _options.CollectionName,
             _options.DatabaseName);
@@ -194,8 +194,8 @@ public sealed class DocumentService : IDocumentService
         {
             LondonTravelUser updated = await container.ReplaceItemAsync(document, id, requestOptions: requestOptions);
 
-            _logger.LogTrace(
-                "Replaced document with Id {Id} in collection {CollectionName} of database {DatabaseName}.",
+            Log.ReplacedDocument(
+                _logger,
                 id,
                 _options.CollectionName,
                 _options.DatabaseName);
@@ -204,8 +204,8 @@ public sealed class DocumentService : IDocumentService
         }
         catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.PreconditionFailed)
         {
-            _logger.LogWarning(
-                "Failed to replace document with Id {Id} in collection {CollectionName} of database {DatabaseName} as the write would conflict. ETag: {ETag}.",
+            Log.ReplaceFailedWithConflict(
+                _logger,
                 id,
                 _options.CollectionName,
                 _options.DatabaseName,

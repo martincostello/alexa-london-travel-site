@@ -119,7 +119,7 @@ public class AccountController : Controller
 
         await _signInManager.SignOutAsync();
 
-        _logger.LogInformation("User Id {UserId} signed out.", userId);
+        Log.UserSignedOut(_logger, userId);
 
         _telemetry.TrackSignOut(userId);
 
@@ -179,10 +179,7 @@ public class AccountController : Controller
 
         if (remoteError != null)
         {
-            _logger.LogWarning(
-                "Error from external provider. {RemoteError}",
-                remoteError);
-
+            Log.RemoteSignInError(_logger, remoteError);
             return View(nameof(SignIn));
         }
 
@@ -199,7 +196,7 @@ public class AccountController : Controller
         {
             string userId = _userManager.GetUserId(info.Principal);
 
-            _logger.LogInformation("User Id {UserId} signed in with provider {LoginProvider}.", userId, info.LoginProvider);
+            Log.UserSignedIn(_logger, userId, info.LoginProvider);
             _telemetry.TrackSignIn(userId, info.LoginProvider);
 
             return RedirectToLocal(returnUrl);
@@ -232,7 +229,7 @@ public class AccountController : Controller
             {
                 await _signInManager.SignInAsync(user, isPersistent: true);
 
-                _logger.LogInformation("New user account {UserId} created through {LoginProvider}.", user.Id, info.LoginProvider);
+                Log.UserCreated(_logger, user.Id, info.LoginProvider);
 
                 _telemetry.TrackAccountCreated(user.Id!, user.Email, info.LoginProvider);
 

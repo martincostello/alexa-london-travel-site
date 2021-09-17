@@ -52,8 +52,7 @@ public class ManageController : Controller
 
         if (user == null)
         {
-            _logger.LogError("Failed to get user to manage account.");
-
+            Log.FailedToGetUserToManageAccount(_logger);
             return View("Error");
         }
 
@@ -107,7 +106,7 @@ public class ManageController : Controller
 
         SiteContext.SetErrorRedirect(properties, Url.RouteUrl(SiteRoutes.Manage)!);
 
-        _logger.LogInformation("Attempting to link user Id {UserId} to provider {ProviderName}.", userId, provider);
+        Log.AttemptingToLinkUser(_logger, userId, provider);
 
         _telemetry.TrackLinkExternalAccountStart(userId, provider);
 
@@ -122,8 +121,7 @@ public class ManageController : Controller
 
         if (user == null)
         {
-            _logger.LogError("Failed to get user to link account.");
-
+            Log.FailedToGetUserToManageAccount(_logger);
             return View("Error");
         }
 
@@ -132,12 +130,11 @@ public class ManageController : Controller
 
         if (info == null)
         {
-            _logger.LogError("Failed to get external login info for user Id {UserId} to link account.", userId);
-
+            Log.FailedToGetExternalLogin(_logger, userId);
             return RedirectToRoute(SiteRoutes.Manage, new { Message = SiteMessage.Error });
         }
 
-        _logger.LogTrace("Adding login for provider {ProviderName} to user Id {UserId}.", info.LoginProvider, userId);
+        Log.AddingExternalLogin(_logger, info.LoginProvider, userId);
 
         var result = await _userManager.AddLoginAsync(user, info);
         var message = SiteMessage.Error;
@@ -146,7 +143,7 @@ public class ManageController : Controller
         {
             _telemetry.TrackLinkExternalAccountSuccess(userId, info.LoginProvider);
 
-            _logger.LogInformation("Added login for provider {ProviderName} to user Id {UserId}.", info.LoginProvider, userId);
+            Log.AddedExternalLogin(_logger, info.LoginProvider, userId);
 
             message = SiteMessage.LinkSuccess;
 
@@ -154,12 +151,12 @@ public class ManageController : Controller
 
             if (result.Succeeded)
             {
-                _logger.LogInformation("Updated claims for user Id {UserId} for provider {ProviderName}.", userId, info.LoginProvider);
+                Log.UpdatedUserClaims(_logger, userId, info.LoginProvider);
             }
             else
             {
-                _logger.LogError(
-                    "Failed to update user Id {UserId} with additional role claims for provider {ProviderName}: {Errors}.",
+                Log.UpdatingUserClaimsFailed(
+                    _logger,
                     userId,
                     info.LoginProvider,
                     FormatErrors(result));
@@ -171,8 +168,8 @@ public class ManageController : Controller
         {
             _telemetry.TrackLinkExternalAccountFailed(userId, info.LoginProvider);
 
-            _logger.LogError(
-                "Failed to add external login info for user Id {UserId}: {Errors}.",
+            Log.AddingExternalLoginFailed(
+                _logger,
                 userId,
                 FormatErrors(result));
         }
@@ -197,16 +194,13 @@ public class ManageController : Controller
 
         if (user != null)
         {
-            _logger.LogTrace("Removing login for provider {ProviderName} from user Id {UserId}.", account.LoginProvider, user.Id);
+            Log.RemovingExternalLogin(_logger, account.LoginProvider, user.Id);
 
             var result = await _userManager.RemoveLoginAsync(user, account.LoginProvider, account.ProviderKey);
 
             if (result.Succeeded)
             {
-                _logger.LogInformation(
-                    "Removed login for {ProviderName} from user Id {UserId}.",
-                    account.LoginProvider,
-                    user.Id);
+                Log.RemovedExternalLogin(_logger, account.LoginProvider, user.Id);
 
                 await _signInManager.SignInAsync(user, isPersistent: true);
 
@@ -216,8 +210,8 @@ public class ManageController : Controller
             }
             else
             {
-                _logger.LogError(
-                    "Failed to remove external login info from user Id {UserId} for provider {ProviderName}: {Errors}.",
+                Log.RemovingExternalLoginFailed(
+                    _logger,
                     user.Id,
                     account.LoginProvider,
                     FormatErrors(result));
@@ -242,7 +236,7 @@ public class ManageController : Controller
 
         if (user != null)
         {
-            _logger.LogTrace("Removing Alexa link from user Id {UserId}.", user.Id);
+            Log.RemovingAlexaLink(_logger, user.Id);
 
             user.AlexaToken = null;
             user.ETag = etag;
@@ -253,16 +247,13 @@ public class ManageController : Controller
             {
                 _telemetry.TrackRemoveAlexaLink(user.Id!);
 
-                _logger.LogInformation("Removed Alexa link from user Id {UserId}.", user.Id);
+                Log.RemovedAlexaLink(_logger, user.Id);
 
                 message = SiteMessage.RemoveAlexaLinkSuccess;
             }
             else
             {
-                _logger.LogError(
-                    "Failed to remove Alexa link from user Id {UserId}: {Errors}.",
-                    user.Id,
-                    FormatErrors(result));
+                Log.RemovingAlexaLinkFailed(_logger, user.Id, FormatErrors(result));
             }
         }
 
@@ -276,15 +267,15 @@ public class ManageController : Controller
     {
         var user = await GetCurrentUserAsync();
 
-        if (user != null)
+        if (user is not null)
         {
-            _logger.LogTrace("Deleting user Id {UserId}.", user.Id);
+            Log.DeletingUser(_logger, user.Id);
 
             var result = await _userManager.DeleteAsync(user);
 
             if (result.Succeeded)
             {
-                _logger.LogInformation("Deleted user Id {UserId}.", user.Id);
+                Log.DeletedUser(_logger, user.Id);
 
                 await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
                 await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
@@ -295,15 +286,12 @@ public class ManageController : Controller
             }
             else
             {
-                _logger.LogError(
-                    "Failed to delete user Id {UserId}: {Errors}.",
-                    user.Id,
-                    FormatErrors(result));
+                Log.DeletingUserFailed(_logger, user.Id, FormatErrors(result));
             }
         }
         else
         {
-            _logger.LogError("Failed to get user to delete account.");
+            Log.FailedToGetUserToDeleteAccount(_logger);
         }
 
         return RedirectToRoute(SiteRoutes.Manage, new { Message = SiteMessage.Error });
@@ -326,8 +314,7 @@ public class ManageController : Controller
 
         if (user == null)
         {
-            _logger.LogError("Failed to get user to update line preferences.");
-
+            Log.FailedToGetUserToUpdateLinePreferences(_logger);
             return View("Error");
         }
 
@@ -345,7 +332,7 @@ public class ManageController : Controller
                 return BadRequest();
             }
 
-            _logger.LogTrace("Updating line preferences for user Id {UserId}.", user.Id);
+            Log.UpdatingLinePreferences(_logger, user.Id);
 
             var existingLines = user.FavoriteLines;
             var newLines = user.FavoriteLines = (model.FavoriteLines ?? Array.Empty<string>())
@@ -360,15 +347,11 @@ public class ManageController : Controller
             if (result.Succeeded)
             {
                 _telemetry.TrackLinePreferencesUpdated(user.Id!, existingLines, newLines);
-
-                _logger.LogInformation("Updated line preferences for user Id {UserId}.", user.Id);
+                Log.UpdatedLinePreferences(_logger, user.Id);
             }
             else
             {
-                _logger.LogWarning(
-                    "Failed to update line preferences for user '{UserId}' as it would cause a write conflict. ETag: {ETag}.",
-                    user.Id,
-                    model.ETag);
+                Log.UpdatingLinePreferencesFailed(_logger, user.Id, model.ETag);
             }
 
             updated = result.Succeeded;
