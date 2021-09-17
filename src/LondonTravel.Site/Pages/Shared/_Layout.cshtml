@@ -51,13 +51,13 @@
     @await RenderSectionAsync("scripts", required: false)
 </body>
 <!--
-    Environment: @Config.AzureEnvironment()
-    Datacenter:  @Config.AzureDatacenter()
-    Instance:    @Environment.MachineName
-    Branch:      @GitMetadata.Branch
-    Commit:      @GitMetadata.Commit
-    Deployment:  @GitMetadata.DeployId
-    Timestamp:   @GitMetadata.Timestamp.ToString("u", CultureInfo.InvariantCulture)
-    Version:     @System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription
+    Commit SHA:    @(GitMetadata.Commit)
+    Commit branch: @(GitMetadata.Branch)
+    Datacenter:    @Config.AzureDatacenter()
+    Deployment:    https://github.com/martincostello/alexa-london-travel-site/actions/runs/@(GitMetadata.DeployId)
+    Environment:   @Config.AzureEnvironment()
+    Instance:      @Environment.MachineName
+    Timestamp:     @GitMetadata.Timestamp.ToString("u", CultureInfo.InvariantCulture)
+    Version:       @System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription
 -->
 </html>
