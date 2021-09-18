@@ -72,6 +72,11 @@ public class Index : PageModel
 
     public async Task OnGet(string? updateSuccess = null)
     {
+        if (User.Identity?.IsAuthenticated == false)
+        {
+            return;
+        }
+
         var user = await _userManager.GetUserAsync(User);
 
         if (user == null)
