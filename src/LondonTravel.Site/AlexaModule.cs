@@ -17,16 +17,14 @@ public static class AlexaModule
             [FromQuery(Name = "response_type")] string? responseType,
             [FromQuery(Name = "redirect_uri")] BindableUri? redirectUri,
             ClaimsPrincipal user,
-            AlexaService service,
-            CancellationToken cancellationToken) =>
+            AlexaService service) =>
         {
             return await service.AuthorizeSkillAsync(
                 state,
                 clientId,
                 responseType,
                 redirectUri,
-                user,
-                cancellationToken);
+                user);
         })
         .ExcludeFromDescription()
         .RequireAuthorization();
