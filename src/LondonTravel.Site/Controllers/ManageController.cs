@@ -47,10 +47,7 @@ public class ManageController : Controller
             return View("Error");
         }
 
-        var userLogins = (await _userManager.GetLoginsAsync(user))
-            .OrderBy((p) => p.ProviderDisplayName)
-            .ThenBy((p) => p.LoginProvider)
-            .ToList();
+        var userLogins = await _userManager.GetLoginsAsync(user);
 
         var otherLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync())
             .Where((p) => userLogins.All((r) => p.Name != r.LoginProvider))
@@ -65,6 +62,11 @@ public class ManageController : Controller
                 login.ProviderDisplayName = login.LoginProvider;
             }
         }
+
+        userLogins = userLogins
+            .OrderBy((p) => p.ProviderDisplayName)
+            .ThenBy((p) => p.LoginProvider)
+            .ToList();
 
         var model = new ManageViewModel()
         {
