@@ -27,6 +27,7 @@ public static class IdentityServiceCollectionExtensions
             .AddIdentity<LondonTravelUser, LondonTravelRole>((options) => options.User.RequireUniqueEmail = true)
             .AddClaimsPrincipalFactory<UserClaimsPrincipalFactory>()
             .AddRoleStore<RoleStore>()
+            .AddUserManager<LondonTravelUserManager>()
             .AddUserStore<UserStore>()
             .AddDefaultTokenProviders();
 
