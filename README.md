@@ -18,18 +18,12 @@ The repository is hosted in [GitHub](https://github.com/martincostello/alexa-lon
 
 ## Building and Testing
 
-To build and test the website run one of the following commands:
-
-**Linux/macOS**
-
-```sh
-./build.sh
-```
-
-**Windows**
+To build and test the website run the following commands from your terminal of choice:
 
 ```powershell
-.\build.ps1
+git clone https://github.com/martincostello/alexa-london-travel-site.git
+cd alexa-london-travel-site
+./build.ps1
 ```
 
 ## License
