@@ -59,8 +59,7 @@ public class AlexaServiceTests
             clientId,
             responseType,
             redirectUri,
-            new ClaimsPrincipal(),
-            CancellationToken.None);
+            new ClaimsPrincipal());
 
         // Assert
         actual.ShouldNotBeNull();
@@ -90,8 +89,7 @@ public class AlexaServiceTests
             clientId,
             responseType,
             redirectUri,
-            new ClaimsPrincipal(),
-            CancellationToken.None);
+            new ClaimsPrincipal());
 
         // Assert
         await AssertRedirect(
@@ -117,8 +115,7 @@ public class AlexaServiceTests
             clientId,
             responseType,
             redirectUri,
-            new ClaimsPrincipal(),
-            CancellationToken.None);
+            new ClaimsPrincipal());
 
         // Assert
         await AssertRedirect(
@@ -144,8 +141,7 @@ public class AlexaServiceTests
             clientId,
             responseType,
             redirectUri,
-            new ClaimsPrincipal(),
-            CancellationToken.None);
+            new ClaimsPrincipal());
 
         // Assert
         await AssertRedirect(
@@ -171,8 +167,7 @@ public class AlexaServiceTests
             clientId,
             responseType,
             redirectUri,
-            new ClaimsPrincipal(),
-            CancellationToken.None);
+            new ClaimsPrincipal());
 
         // Assert
         await AssertRedirect(
@@ -203,8 +198,7 @@ public class AlexaServiceTests
             clientId,
             responseType,
             redirectUri,
-            new ClaimsPrincipal(),
-            CancellationToken.None);
+            new ClaimsPrincipal());
 
         // Assert
         actual.ShouldNotBeNull();
@@ -233,8 +227,7 @@ public class AlexaServiceTests
             clientId,
             responseType,
             redirectUri,
-            new ClaimsPrincipal(),
-            CancellationToken.None);
+            new ClaimsPrincipal());
 
         // Assert
         await AssertRedirect(
@@ -264,8 +257,7 @@ public class AlexaServiceTests
             clientId,
             responseType,
             redirectUri,
-            new ClaimsPrincipal(),
-            CancellationToken.None);
+            new ClaimsPrincipal());
 
         // Assert
         await AssertRedirect(
@@ -301,8 +293,7 @@ public class AlexaServiceTests
             clientId,
             responseType,
             redirectUri,
-            new ClaimsPrincipal(),
-            CancellationToken.None);
+            new ClaimsPrincipal());
 
         // Assert
         actual.ShouldNotBeNull();

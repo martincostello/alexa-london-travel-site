@@ -49,8 +49,7 @@ public sealed class AlexaService
         string? clientId,
         string? responseType,
         Uri? redirectUri,
-        ClaimsPrincipal user,
-        CancellationToken cancellationToken)
+        ClaimsPrincipal user)
     {
         if (_options?.IsLinkingEnabled != true)
         {

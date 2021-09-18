@@ -134,11 +134,11 @@ gulp.task("test:js", gulp.series("test:js:karma"));
 gulp.task("test", gulp.series("test:js"));
 
 gulp.task("watch", function () {
-    getBundles(regex.js).forEach(function (bundle) {
-        gulp.watch(bundle.inputFiles, ["min:js"]);
-    });
     getBundles(regex.css).forEach(function (bundle) {
-        gulp.watch(bundle.inputFiles, ["min:css"]);
+        gulp.watch(bundle.inputFiles, gulp.series("min:css"));
+    });
+    getBundles(regex.js).forEach(function (bundle) {
+        gulp.watch(bundle.inputFiles, gulp.series("min:js"));
     });
 });
 
