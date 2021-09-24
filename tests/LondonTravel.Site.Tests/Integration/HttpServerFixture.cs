@@ -6,13 +6,12 @@ using AspNet.Security.OAuth.Amazon;
 using AspNet.Security.OAuth.Apple;
 using AspNet.Security.OAuth.GitHub;
 using JustEat.HttpClientInterception;
+using MartinCostello.LondonTravel.Site.Extensions;
 using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
 using Microsoft.AspNetCore.Authentication.Twitter;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Server;
-using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -99,14 +98,17 @@ public sealed class HttpServerFixture : TestServerFixture
         // Intercept remote authentication to redirect locally for browser UI tests
         builder.ConfigureServices((p) =>
         {
+            static ConfigureAuthenticationHandlers ResolvePostConfigureOptions(IServiceProvider serviceProvider)
+                => serviceProvider.GetRequiredService<ConfigureAuthenticationHandlers>();
+
             p.AddSingleton<ConfigureAuthenticationHandlers>();
-            p.AddSingleton<IPostConfigureOptions<AmazonAuthenticationOptions>>((r) => r.GetRequiredService<ConfigureAuthenticationHandlers>());
-            p.AddSingleton<IPostConfigureOptions<AppleAuthenticationOptions>>((r) => r.GetRequiredService<ConfigureAuthenticationHandlers>());
-            p.AddSingleton<IPostConfigureOptions<FacebookOptions>>((r) => r.GetRequiredService<ConfigureAuthenticationHandlers>());
-            p.AddSingleton<IPostConfigureOptions<GitHubAuthenticationOptions>>((r) => r.GetRequiredService<ConfigureAuthenticationHandlers>());
-            p.AddSingleton<IPostConfigureOptions<GoogleOptions>>((r) => r.GetRequiredService<ConfigureAuthenticationHandlers>());
-            p.AddSingleton<IPostConfigureOptions<MicrosoftAccountOptions>>((r) => r.GetRequiredService<ConfigureAuthenticationHandlers>());
-            p.AddSingleton<IPostConfigureOptions<TwitterOptions>>((r) => r.GetRequiredService<ConfigureAuthenticationHandlers>());
+            p.AddSingleton<IPostConfigureOptions<AmazonAuthenticationOptions>>(ResolvePostConfigureOptions);
+            p.AddSingleton<IPostConfigureOptions<AppleAuthenticationOptions>>(ResolvePostConfigureOptions);
+            p.AddSingleton<IPostConfigureOptions<FacebookOptions>>(ResolvePostConfigureOptions);
+            p.AddSingleton<IPostConfigureOptions<GitHubAuthenticationOptions>>(ResolvePostConfigureOptions);
+            p.AddSingleton<IPostConfigureOptions<GoogleOptions>>(ResolvePostConfigureOptions);
+            p.AddSingleton<IPostConfigureOptions<MicrosoftAccountOptions>>(ResolvePostConfigureOptions);
+            p.AddSingleton<IPostConfigureOptions<TwitterOptions>>(ResolvePostConfigureOptions);
         });
 
         builder.ConfigureKestrel(
@@ -131,12 +133,7 @@ public sealed class HttpServerFixture : TestServerFixture
         _host = builder.Build();
         _host.Start();
 
-        var server = _host.Services.GetRequiredService<IServer>();
-        var addresses = server.Features.Get<IServerAddressesFeature>();
-
-        ClientOptions.BaseAddress = addresses!.Addresses
-            .Select((p) => new Uri(p))
-            .Last();
+        ClientOptions.BaseAddress = _host.GetAddress();
 
         // Force the configuration to reload now the server address is assigned
         var config = _host.Services.GetRequiredService<IConfiguration>();
