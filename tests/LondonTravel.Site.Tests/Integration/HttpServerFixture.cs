@@ -6,13 +6,12 @@ using AspNet.Security.OAuth.Amazon;
 using AspNet.Security.OAuth.Apple;
 using AspNet.Security.OAuth.GitHub;
 using JustEat.HttpClientInterception;
+using MartinCostello.LondonTravel.Site.Extensions;
 using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
 using Microsoft.AspNetCore.Authentication.Twitter;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Server;
-using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -131,12 +130,7 @@ public sealed class HttpServerFixture : TestServerFixture
         _host = builder.Build();
         _host.Start();
 
-        var server = _host.Services.GetRequiredService<IServer>();
-        var addresses = server.Features.Get<IServerAddressesFeature>();
-
-        ClientOptions.BaseAddress = addresses!.Addresses
-            .Select((p) => new Uri(p))
-            .Last();
+        ClientOptions.BaseAddress = _host.GetAddress();
 
         // Force the configuration to reload now the server address is assigned
         var config = _host.Services.GetRequiredService<IConfiguration>();
