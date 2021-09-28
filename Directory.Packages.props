@@ -27,7 +27,7 @@
     <PackageVersion Include="Microsoft.DotNet.XliffTasks" Version="1.0.0-beta.21452.1" />
     <PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="6.0.0-rc.1.21452.15" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
-    <PackageVersion Include="Microsoft.Playwright" Version="1.14.1" />
+    <PackageVersion Include="Microsoft.Playwright" Version="1.15.0" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.0.0" />
     <PackageVersion Include="Moq" Version="4.16.1" />
     <PackageVersion Include="NodaTime" Version="$(NodaTimeVersion)" />
