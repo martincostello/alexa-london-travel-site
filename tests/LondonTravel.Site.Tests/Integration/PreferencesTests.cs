@@ -72,6 +72,31 @@ public sealed class PreferencesTests : BrowserIntegrationTest
                 await northern.IsSelectedAsync().ShouldBeTrue();
 
                 await CountSelectedLinesAsync(lines).ShouldBe(2);
+
+                // Arrange
+                await northern.ToggleAsync();
+
+                // Act
+                page = await page.UpdatePreferencesAsync();
+
+                // Give the UI time to update
+                await Task.Delay(TimeSpan.FromSeconds(1));
+
+                // Assert
+                lines = await page.LinesAsync();
+
+                lines.Count.ShouldBeGreaterThan(2);
+
+                district = await GetLineAsync(lines, "District");
+                northern = await GetLineAsync(lines, "Northern");
+
+                district.ShouldNotBeNull();
+                northern.ShouldNotBeNull();
+
+                await district.IsSelectedAsync().ShouldBeTrue();
+                await northern.IsSelectedAsync().ShouldBeFalse();
+
+                await CountSelectedLinesAsync(lines).ShouldBe(1);
             });
 
         static async Task<LinePreference?> GetLineAsync(IEnumerable<LinePreference> collection, string name)
