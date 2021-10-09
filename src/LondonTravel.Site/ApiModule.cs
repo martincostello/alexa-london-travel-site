@@ -26,7 +26,7 @@ public static partial class ApiModule
         .RequireAuthorization("admin");
 
         app.MapGet("/api/preferences", async (
-            [FromHeader(Name = "Authorization")] [SwaggerParameter("The authorization header.")] string? authorizationHeader,
+            [FromHeader(Name = "Authorization")][SwaggerParameter("The authorization header.")] string? authorizationHeader,
             HttpContext httpContext,
             IAccountService service,
             ISiteTelemetry telemetry,
