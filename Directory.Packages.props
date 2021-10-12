@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
-    <AspNetSecurityOAuthVersion>6.0.0-rc.1.21509.56</AspNetSecurityOAuthVersion>
-    <MicrosoftAspNetCoreAuthenticationVersion>6.0.0-rc.1.21452.15</MicrosoftAspNetCoreAuthenticationVersion>
+    <AspNetSecurityOAuthVersion>6.0.0-rc.2.21512.68</AspNetSecurityOAuthVersion>
+    <MicrosoftAspNetCoreAuthenticationVersion>6.0.0-rc.2.21480.10</MicrosoftAspNetCoreAuthenticationVersion>
     <NodaTimeVersion>3.0.7</NodaTimeVersion>
     <SwashbuckleAspNetCoreVersion>6.2.2</SwashbuckleAspNetCoreVersion>
   </PropertyGroup>
@@ -21,11 +21,11 @@
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="$(MicrosoftAspNetCoreAuthenticationVersion)" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="$(MicrosoftAspNetCoreAuthenticationVersion)" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.Twitter" Version="$(MicrosoftAspNetCoreAuthenticationVersion)" />
-    <PackageVersion Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" Version="6.0.0-rc.1.21452.15" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.0-rc.1.21452.15" />
+    <PackageVersion Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" Version="6.0.0-rc.2.21480.10" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.0-rc.2.21480.10" />
     <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.21.0" />
     <PackageVersion Include="Microsoft.DotNet.XliffTasks" Version="1.0.0-beta.21452.1" />
-    <PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="6.0.0-rc.1.21452.15" />
+    <PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="6.0.0-rc.2.21480.10" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
     <PackageVersion Include="Microsoft.Playwright" Version="1.15.4" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.0.0" />

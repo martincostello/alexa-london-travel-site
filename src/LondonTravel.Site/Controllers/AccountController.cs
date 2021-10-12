@@ -23,8 +23,6 @@ public class AccountController : Controller
     /// </summary>
     private static readonly string[] AuthenticationSchemesDisabledForAlexa = { "apple", "github", "google" };
 
-    //// TODO Move more of the implementation into IAccountService
-
     private readonly UserManager<LondonTravelUser> _userManager;
     private readonly SignInManager<LondonTravelUser> _signInManager;
     private readonly ISiteTelemetry _telemetry;

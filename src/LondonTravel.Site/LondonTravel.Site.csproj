@@ -3,6 +3,7 @@
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <Description>https://londontravel.martincostello.com/</Description>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CA1716</NoWarn>
     <OutputType>Exe</OutputType>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <RootNamespace>MartinCostello.LondonTravel.Site</RootNamespace>
