@@ -35,6 +35,7 @@ public static class ClaimsPrincipalExtensions
             return fallbackImageUrl;
         }
 
+#pragma warning disable CA1308
         string normalized = email.Trim().ToLowerInvariant();
         byte[] buffer = Encoding.UTF8.GetBytes(normalized);
 
@@ -43,6 +44,7 @@ public static class ClaimsPrincipalExtensions
 #pragma warning restore CA5351
 
         string hashString = Convert.ToHexString(hash).ToLowerInvariant();
+#pragma warning restore CA1308
 
 #pragma warning disable SYSLIB0013
         string escapedFallback = Uri.EscapeUriString(fallbackImageUrl);

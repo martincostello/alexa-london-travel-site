@@ -231,7 +231,7 @@ public sealed class CustomHttpHeadersMiddleware
     private string BuildContentSecurityPolicy(string? nonce, bool allowInlineStyles, bool isReport)
     {
         var options = _options.CurrentValue;
-        var cdn = GetCdnOriginForContentSecurityPolicy(options);
+        string? cdn = GetCdnOriginForContentSecurityPolicy(options);
 
         var scriptDirectives = new List<string>()
         {
@@ -326,7 +326,7 @@ public sealed class CustomHttpHeadersMiddleware
 
         if (options?.ExternalLinks?.Reports?.ContentSecurityPolicy != null)
         {
-            builder.Append($"report-uri {options.ExternalLinks.Reports.ContentSecurityPolicy};");
+            builder.Append(CultureInfo.InvariantCulture, $"report-uri {options.ExternalLinks.Reports.ContentSecurityPolicy};");
         }
 
         return builder.ToString();

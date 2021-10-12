@@ -37,7 +37,9 @@ builder.Services.AddOptions();
 builder.Services.Configure<SiteOptions>(builder.Configuration.GetSection("Site"));
 builder.Services.Configure<ApplicationInsightsServiceOptions>((p) => p.ApplicationVersion = GitMetadata.Commit);
 
+#pragma warning disable CA1308
 string environment = builder.Configuration.AzureEnvironment().ToLowerInvariant();
+#pragma warning restore CA1308
 
 var dataProtection = builder.Services
     .AddDataProtection()

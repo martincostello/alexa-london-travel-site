@@ -105,7 +105,7 @@ public class AnnotationsOperationFilter : IOperationFilter
 
         foreach (var swaggerResponseAttribute in swaggerResponseAttributes)
         {
-            var statusCode = swaggerResponseAttribute.StatusCode.ToString();
+            string? statusCode = swaggerResponseAttribute.StatusCode.ToString(CultureInfo.InvariantCulture);
 
             if (operation.Responses == null)
             {
@@ -128,7 +128,7 @@ public class AnnotationsOperationFilter : IOperationFilter
             {
                 response.Content.Clear();
 
-                foreach (var contentType in swaggerResponseAttribute.ContentTypes)
+                foreach (string? contentType in swaggerResponseAttribute.ContentTypes)
                 {
                     var schema = (swaggerResponseAttribute.Type != null && swaggerResponseAttribute.Type != typeof(void))
                         ? context.SchemaGenerator.GenerateSchema(swaggerResponseAttribute.Type, context.SchemaRepository)

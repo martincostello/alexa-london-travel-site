@@ -88,7 +88,9 @@ public sealed class AlexaService
             string tokenRedirectUrl = BuildRedirectUrl(redirectUri!, state, accessToken);
             return Results.Redirect(tokenRedirectUrl);
         }
+#pragma warning disable CA1031
         catch (Exception ex)
+#pragma warning restore CA1031
         {
             Log.AlexaLinkFailed(_logger, ex);
             return RedirectForError(redirectUri, state);

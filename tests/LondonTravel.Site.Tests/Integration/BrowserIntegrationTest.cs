@@ -30,8 +30,10 @@ public abstract class BrowserIntegrationTest : BrowserTest
 
         Fixture.Interceptor.OnSend = (request) =>
         {
+#pragma warning disable CA1848
             logger.LogInformation("HTTP request intercepted. {Request}", request);
             return Task.CompletedTask;
+#pragma warning restore CA1848
         };
 
         _scope = Fixture.Interceptor.BeginScope();

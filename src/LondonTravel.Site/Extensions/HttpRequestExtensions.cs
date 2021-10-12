@@ -35,7 +35,9 @@ public static class HttpRequestExtensions
         builder.Query = string.Empty;
         builder.Scheme = Uri.UriSchemeHttps;
 
+#pragma warning disable CA1308
         string canonicalUri = builder.Uri.AbsoluteUri.ToLowerInvariant();
+#pragma warning restore CA1308
 
         if (!canonicalUri.EndsWith('/'))
         {

@@ -35,7 +35,10 @@ public static class IHtmlHelperExtensions
     public static string GetSocialLoginButtonCss(this IHtmlHelper html, string authenticationScheme)
     {
         ArgumentNullException.ThrowIfNull(html);
+
+#pragma warning disable CA1308
         return $"btn-{authenticationScheme?.ToLowerInvariant()}";
+#pragma warning restore CA1308
     }
 
     /// <summary>
