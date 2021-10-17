@@ -15,7 +15,7 @@ namespace MartinCostello.LondonTravel.Site.Controllers;
 
 [Authorize]
 [Route("account", Name = SiteRoutes.Account)]
-public class AccountController : Controller
+public partial class AccountController : Controller
 {
     /// <summary>
     /// The names of the authentication schemes that are disallowed for
@@ -124,7 +124,7 @@ public class AccountController : Controller
             return NotFound();
         }
 
-        var redirectUrl = Url.RouteUrl(SiteRoutes.ExternalSignInCallback, new { ReturnUrl = returnUrl });
+        string? redirectUrl = Url.RouteUrl(SiteRoutes.ExternalSignInCallback, new { ReturnUrl = returnUrl });
         var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
 
         string errorRedirectUrl = GetErrorRedirectUrl();
@@ -247,7 +247,7 @@ public class AccountController : Controller
 
             if (indexOfQuery > -1)
             {
-                url = url.Substring(0, indexOfQuery);
+                url = url[..indexOfQuery];
             }
 
             return string.Equals(url.TrimEnd('/'), targetUrl!.TrimEnd('/'), StringComparison.OrdinalIgnoreCase);
@@ -277,15 +277,15 @@ public class AccountController : Controller
 
     private LondonTravelUser? CreateSystemUser(ExternalLoginInfo info)
     {
-        var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+        string? email = info.Principal.FindFirstValue(ClaimTypes.Email);
 
         if (string.IsNullOrEmpty(email))
         {
             return null;
         }
 
-        var givenName = info.Principal.FindFirstValue(ClaimTypes.GivenName);
-        var surname = info.Principal.FindFirstValue(ClaimTypes.Surname);
+        string? givenName = info.Principal.FindFirstValue(ClaimTypes.GivenName);
+        string? surname = info.Principal.FindFirstValue(ClaimTypes.Surname);
 
         var user = new LondonTravelUser()
         {
@@ -344,10 +344,44 @@ public class AccountController : Controller
 
             if (indexOfQuery > -1)
             {
-                url = url.Substring(0, indexOfQuery);
+                url = url[..indexOfQuery];
             }
 
             return string.Equals(url.TrimEnd('/'), targetUrl!.TrimEnd('/'), StringComparison.OrdinalIgnoreCase);
         }
+    }
+
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    private static partial class Log
+    {
+        [LoggerMessage(
+            EventId = 1,
+            Level = LogLevel.Information,
+            Message = "User Id {UserId} signed out.")]
+        public static partial void UserSignedOut(ILogger logger, string userId);
+
+        [LoggerMessage(
+            EventId = 2,
+            Level = LogLevel.Warning,
+            Message = "Error from external provider. {RemoteError}")]
+        public static partial void RemoteSignInError(ILogger logger, string remoteError);
+
+        [LoggerMessage(
+            EventId = 3,
+            Level = LogLevel.Information,
+            Message = "User Id {UserId} signed in with provider {LoginProvider}.")]
+        public static partial void UserSignedIn(ILogger logger, string userId, string loginProvider);
+
+        [LoggerMessage(
+            EventId = 4,
+            Level = LogLevel.Information,
+            Message = "New user account {UserId} created through {LoginProvider}.")]
+        public static partial void UserCreated(ILogger logger, string? userId, string loginProvider);
+
+        [LoggerMessage(
+           EventId = 5,
+           Level = LogLevel.Warning,
+           Message = "{ErrorCode}: {ErrorDescription}")]
+        public static partial void IdentityError(ILogger logger, string errorCode, string errorDescription);
     }
 }

@@ -11,7 +11,7 @@ using Microsoft.Extensions.Options;
 
 namespace MartinCostello.LondonTravel.Site.Services;
 
-public sealed class AlexaService
+public sealed partial class AlexaService
 {
     private readonly ILogger _logger;
     private readonly AlexaOptions _options;
@@ -227,5 +227,81 @@ public sealed class AlexaService
         }
 
         return true;
+    }
+
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    private static partial class Log
+    {
+        [LoggerMessage(
+            EventId = 1,
+            Level = LogLevel.Error,
+            Message = "Failed to get user to link account to Alexa.")]
+        public static partial void AlexaLinkFailedUserNotFound(ILogger logger);
+
+        [LoggerMessage(
+            EventId = 2,
+            Level = LogLevel.Error,
+            Message = "Failed to link account to Alexa.")]
+        public static partial void AlexaLinkFailed(ILogger logger, Exception exception);
+
+        [LoggerMessage(
+            EventId = 3,
+            Level = LogLevel.Trace,
+            Message = "Generating Alexa access token for user Id {UserId}.")]
+        public static partial void GeneratingAccessToken(ILogger logger, string? userId);
+
+        [LoggerMessage(
+            EventId = 4,
+            Level = LogLevel.Trace,
+            Message = "Generated Alexa access token for user Id {UserId}.")]
+        public static partial void GeneratedAccessToken(ILogger logger, string? userId);
+
+        [LoggerMessage(
+            EventId = 5,
+            Level = LogLevel.Trace,
+            Message = "Regenerating Alexa access token for user Id {UserId}.")]
+        public static partial void RegeneratingAccessToken(ILogger logger, string? userId);
+
+        [LoggerMessage(
+            EventId = 6,
+            Level = LogLevel.Trace,
+            Message = "Regenerated Alexa access token for user Id {UserId}.")]
+        public static partial void RegeneratedAccessToken(ILogger logger, string? userId);
+
+        [LoggerMessage(
+           EventId = 7,
+           Level = LogLevel.Error,
+           Message = "Failed to generate Alexa access token for user Id {UserId}: {Errors}.")]
+        public static partial void AccessTokenGenerationFailed(ILogger logger, string? userId, string errors);
+
+        [LoggerMessage(
+           EventId = 8,
+           Level = LogLevel.Warning,
+           Message = "Invalid client Id {ClientId} specified.")]
+        public static partial void InvalidClientId(ILogger logger, string? clientId);
+
+        [LoggerMessage(
+           EventId = 9,
+           Level = LogLevel.Warning,
+           Message = "Invalid response type {ResponseType} specified.")]
+        public static partial void InvalidResponseType(ILogger logger, string? responseType);
+
+        [LoggerMessage(
+           EventId = 10,
+           Level = LogLevel.Warning,
+           Message = "No redirection URI specified.")]
+        public static partial void NoRedirectUri(ILogger logger);
+
+        [LoggerMessage(
+           EventId = 11,
+           Level = LogLevel.Warning,
+           Message = "The specified redirection URI {RedirectionUri} is not an absolute URI.")]
+        public static partial void RedirectUriIsNotAbolute(ILogger logger, Uri redirectionUri);
+
+        [LoggerMessage(
+           EventId = 12,
+           Level = LogLevel.Warning,
+           Message = "The specified redirection URI {RedirectionUri} is not authorized.")]
+        public static partial void RedirectUriIsNotAuthorized(ILogger logger, Uri redirectionUri);
     }
 }

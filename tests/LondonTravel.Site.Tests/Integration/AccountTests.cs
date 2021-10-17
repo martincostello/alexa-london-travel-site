@@ -30,7 +30,7 @@ public class AccountTests : IntegrationTest
     public async Task Can_Perform_Operations_On_Users_And_Get_Preferences_From_Api()
     {
         // Arrange
-        var emailAddress = $"some.user.{Guid.NewGuid()}@some.domain.com";
+        string? emailAddress = $"some.user.{Guid.NewGuid()}@some.domain.com";
 
         var user = new LondonTravelUser()
         {
@@ -46,11 +46,6 @@ public class AccountTests : IntegrationTest
         string accessToken = Services.AlexaService.GenerateAccessToken();
         string[] favoriteLines = new[] { "district", "northern" };
         string userId;
-
-        // HACK Force server start-up
-        using (Fixture.CreateDefaultClient())
-        {
-        }
 
         static IUserStore<LondonTravelUser> GetUserStore(IServiceProvider serviceProvider)
             => serviceProvider.GetRequiredService<IUserStore<LondonTravelUser>>();
