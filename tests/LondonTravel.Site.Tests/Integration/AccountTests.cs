@@ -47,11 +47,6 @@ public class AccountTests : IntegrationTest
         string[] favoriteLines = new[] { "district", "northern" };
         string userId;
 
-        // HACK Force server start-up
-        using (Fixture.CreateDefaultClient())
-        {
-        }
-
         static IUserStore<LondonTravelUser> GetUserStore(IServiceProvider serviceProvider)
             => serviceProvider.GetRequiredService<IUserStore<LondonTravelUser>>();
 
