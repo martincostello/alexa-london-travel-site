@@ -13,7 +13,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data;
 /// <summary>
 /// A class representing an implementation of <see cref="IDocumentService"/>. This class cannot be inherited.
 /// </summary>
-public sealed class DocumentService : IDocumentService
+public sealed partial class DocumentService : IDocumentService
 {
     /// <summary>
     /// The <see cref="CosmosClient"/> to use. This field is read-only.
@@ -246,5 +246,51 @@ public sealed class DocumentService : IDocumentService
         await _initializer.EnsureCollectionExistsAsync(_client, _options.CollectionName!);
 
         return _client.GetContainer(_options.DatabaseName, _options.CollectionName);
+    }
+
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    private static partial class Log
+    {
+        [LoggerMessage(
+            EventId = 1,
+            Level = LogLevel.Trace,
+            Message = "Creating document in collection {CollectionName} of database {DatabaseName}.")]
+        public static partial void CreatingDocument(ILogger logger, string? collectionName, string? databaseName);
+
+        [LoggerMessage(
+            EventId = 2,
+            Level = LogLevel.Trace,
+            Message = "Created document in collection {CollectionName} of database {DatabaseName}. Id: {ResourceId}.")]
+        public static partial void CreatedDocument(ILogger logger, string? collectionName, string? databaseName, string? resourceId);
+
+        [LoggerMessage(
+            EventId = 3,
+            Level = LogLevel.Trace,
+            Message = "Querying documents in collection {CollectionName} of database {DatabaseName}.")]
+        public static partial void QueryingDocuments(ILogger logger, string? collectionName, string? databaseName);
+
+        [LoggerMessage(
+            EventId = 4,
+            Level = LogLevel.Trace,
+            Message = "Found {DocumentCount:N0} document(s) in collection {CollectionName} of database {DatabaseName} that matched query.")]
+        public static partial void QueriedDocuments(ILogger logger, int documentCount, string? collectionName, string? databaseName);
+
+        [LoggerMessage(
+            EventId = 5,
+            Level = LogLevel.Trace,
+            Message = "Replacing document with Id {ResourceId} in collection {CollectionName} of database {DatabaseName}.")]
+        public static partial void ReplacingDocument(ILogger logger, string? resourceId, string? collectionName, string? databaseName);
+
+        [LoggerMessage(
+            EventId = 6,
+            Level = LogLevel.Trace,
+            Message = "Replaced document with Id {ResourceId} in collection {CollectionName} of database {DatabaseName}.")]
+        public static partial void ReplacedDocument(ILogger logger, string? resourceId, string? collectionName, string? databaseName);
+
+        [LoggerMessage(
+            EventId = 7,
+            Level = LogLevel.Warning,
+            Message = "Failed to replace document with Id {ResourceId} in collection {CollectionName} of database {DatabaseName} as the write would conflict. ETag: {ETag}.")]
+        public static partial void ReplaceFailedWithConflict(ILogger logger, string? resourceId, string? collectionName, string? databaseName, string? etag);
     }
 }

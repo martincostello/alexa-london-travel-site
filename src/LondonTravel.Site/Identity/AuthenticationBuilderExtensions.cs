@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Authentication.Twitter;
 
 namespace MartinCostello.LondonTravel.Site.Identity;
 
-public static class AuthenticationBuilderExtensions
+public static partial class AuthenticationBuilderExtensions
 {
     public static AuthenticationBuilder TryAddAmazon(
         this AuthenticationBuilder builder,
@@ -320,5 +320,27 @@ public static class AuthenticationBuilderExtensions
         // and https://github.com/aspnet/Security/blob/2d1c56ce5ccfc15c78dd49cee772f6be473f3ee2/src/Microsoft.AspNetCore.Authentication/RemoteAuthenticationHandler.cs#L203
         // This effectively means that the user did not pass their cookies along correctly to correlate the request.
         return string.Equals(context.Failure?.Message, "Correlation failed.", StringComparison.Ordinal);
+    }
+
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    private static partial class Log
+    {
+        [LoggerMessage(
+            EventId = 1,
+            Level = LogLevel.Trace,
+            Message = "User denied permission.")]
+        public static partial void PermissionDenied(ILogger logger);
+
+        [LoggerMessage(
+            EventId = 2,
+            Level = LogLevel.Trace,
+            Message = "Failed to sign-in using {Provider} due to a correlation failure: {FailureMessage}. Errors: {Errors}.")]
+        public static partial void CorrelationFailed(ILogger logger, Exception? exception, string provider, string? failureMessage, string errors);
+
+        [LoggerMessage(
+            EventId = 3,
+            Level = LogLevel.Error,
+            Message = "Failed to sign-in using {Provider}: {FailureMessage}. Errors: {Errors}.")]
+        public static partial void SignInFailed(ILogger logger, Exception? exception, string provider, string? failureMessage, string errors);
     }
 }

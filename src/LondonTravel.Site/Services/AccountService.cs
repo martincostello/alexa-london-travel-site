@@ -7,7 +7,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace MartinCostello.LondonTravel.Site.Services;
 
-public sealed class AccountService : IAccountService
+public sealed partial class AccountService : IAccountService
 {
     private readonly IDocumentService _service;
     private readonly IMemoryCache _cache;
@@ -59,4 +59,14 @@ public sealed class AccountService : IAccountService
 
     private Task<long> GetUserCountFromDocumentStoreAsync()
         => _service.GetDocumentCountAsync();
+
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    private static partial class Log
+    {
+        [LoggerMessage(
+            EventId = 1,
+            Level = LogLevel.Error,
+            Message = "Failed to find user by access token.")]
+        public static partial void FailedToFindUserByAccessToken(ILogger logger, Exception exception);
+    }
 }

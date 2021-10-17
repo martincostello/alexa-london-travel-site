@@ -12,7 +12,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Data;
 /// A class representing the default implementation of
 /// <see cref="IDocumentCollectionInitializer"/>. This class cannot be inherited.
 /// </summary>
-public sealed class DocumentCollectionInitializer : IDocumentCollectionInitializer
+public sealed partial class DocumentCollectionInitializer : IDocumentCollectionInitializer
 {
     /// <summary>
     /// The logger to use. This field is read-only.
@@ -121,5 +121,21 @@ public sealed class DocumentCollectionInitializer : IDocumentCollectionInitializ
         }
 
         return created;
+    }
+
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    private static partial class Log
+    {
+        [LoggerMessage(
+            EventId = 1,
+            Level = LogLevel.Information,
+            Message = "Created database {DatabaseName}.")]
+        public static partial void CreatedDatabase(ILogger logger, string? databaseName);
+
+        [LoggerMessage(
+           EventId = 2,
+           Level = LogLevel.Information,
+           Message = "Created collection {CollectionName} in database {DatabaseName}.")]
+        public static partial void CreatedCollection(ILogger logger, string collectionName, string? databaseName);
     }
 }

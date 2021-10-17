@@ -30,7 +30,7 @@ public class AccountTests : IntegrationTest
     public async Task Can_Perform_Operations_On_Users_And_Get_Preferences_From_Api()
     {
         // Arrange
-        var emailAddress = $"some.user.{Guid.NewGuid()}@some.domain.com";
+        string? emailAddress = $"some.user.{Guid.NewGuid()}@some.domain.com";
 
         var user = new LondonTravelUser()
         {

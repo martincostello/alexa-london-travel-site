@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MartinCostello.LondonTravel.Site.Pages.Home;
 
-public class Index : PageModel
+public partial class Index : PageModel
 {
     private readonly UserManager<LondonTravelUser> _userManager;
     private readonly ITflServiceFactory _tflFactory;
@@ -134,5 +134,21 @@ public class Index : PageModel
                 favorite.IsFavorite = userFavorites.Contains(favorite.Id, StringComparer.Ordinal);
             }
         }
+    }
+
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+    private static partial class Log
+    {
+        [LoggerMessage(
+           EventId = 56,
+           Level = LogLevel.Error,
+           Message = "Failed to get user to render preferences.")]
+        public static partial void FailedToGetUser(ILogger logger);
+
+        [LoggerMessage(
+           EventId = 57,
+           Level = LogLevel.Error,
+           Message = "Failed to map TfL lines as there were no values.")]
+        public static partial void FailedToMapUserPreferences(ILogger logger);
     }
 }
