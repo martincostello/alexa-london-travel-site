@@ -85,6 +85,7 @@ public class ResourceTests
             "content-security-policy-report-only",
             "feature-policy",
             "NEL",
+            "Permissions-Policy",
             "Referrer-Policy",
             "Report-To",
             "X-Content-Type-Options",
