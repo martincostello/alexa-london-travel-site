@@ -43,6 +43,7 @@ window.onload = () => {
                 delete response.headers["content-security-policy"];
                 delete response.headers["content-security-policy-report-only"];
                 delete response.headers["feature-policy"];
+                delete response.headers["permissions-policy"];
             }
         });
 
