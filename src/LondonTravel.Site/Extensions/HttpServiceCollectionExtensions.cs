@@ -50,7 +50,9 @@ public static class HttpServiceCollectionExtensions
             (p) =>
             {
                 var options = p.GetRequiredService<IOptions<JsonOptions>>().Value;
-                return new SystemTextJsonContentSerializer(options.JsonSerializerOptions);
+                var context = new ApplicationJsonSerializerContext(options.JsonSerializerOptions);
+
+                return new SystemTextJsonContentSerializerForSourceGenerator(context);
             });
 
         return services;
