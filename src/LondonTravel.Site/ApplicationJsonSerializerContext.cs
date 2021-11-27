@@ -3,13 +3,16 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
+using MartinCostello.LondonTravel.Site.Models;
 using MartinCostello.LondonTravel.Site.Services.Tfl;
 
-namespace MartinCostello.LondonTravel.Site.Extensions;
+namespace MartinCostello.LondonTravel.Site;
 
 [ExcludeFromCodeCoverage]
+[JsonSerializable(typeof(ErrorResponse))]
 [JsonSerializable(typeof(ICollection<LineInfo>))]
 [JsonSerializable(typeof(ICollection<StopPoint>))]
+[JsonSerializable(typeof(PreferencesResponse))]
 internal sealed partial class ApplicationJsonSerializerContext : JsonSerializerContext
 {
 }
