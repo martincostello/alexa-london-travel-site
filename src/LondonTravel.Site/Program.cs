@@ -5,6 +5,7 @@
 
 using System.IO.Compression;
 using System.Net.Mime;
+using System.Text.Json.Serialization;
 using MartinCostello.LondonTravel.Site;
 using MartinCostello.LondonTravel.Site.Extensions;
 using MartinCostello.LondonTravel.Site.Options;
@@ -17,7 +18,7 @@ using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.StaticFiles;
@@ -97,7 +98,7 @@ builder.Services
 
         if (!builder.Environment.IsDevelopment())
         {
-            options.Filters.Add(new RequireHttpsAttribute());
+            options.Filters.Add(new Microsoft.AspNetCore.Mvc.RequireHttpsAttribute());
         }
     })
     .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
@@ -132,11 +133,17 @@ builder.Services.AddResponseCompression((options) =>
     options.Providers.Add<GzipCompressionProvider>();
 });
 
-builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>((options) =>
+builder.Services.Configure<JsonOptions>((options) =>
 {
     options.SerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
     options.SerializerOptions.PropertyNameCaseInsensitive = false;
     options.SerializerOptions.WriteIndented = true;
+});
+
+builder.Services.AddSingleton<JsonSerializerContext>((p) =>
+{
+    var options = p.GetRequiredService<IOptions<JsonOptions>>().Value;
+    return new ApplicationJsonSerializerContext(options.SerializerOptions);
 });
 
 builder.Services.AddSingleton<IClock>((_) => SystemClock.Instance);

@@ -56,7 +56,7 @@ public static class RedirectsModule
             Redirect(originalPath, newPath);
         }
 
-        var crawlerPaths = new[]
+        string[] crawlerPaths =
         {
             ".env",
             ".git/{*catchall}",

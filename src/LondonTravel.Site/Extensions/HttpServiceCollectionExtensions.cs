@@ -1,10 +1,9 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Text.Json.Serialization;
 using MartinCostello.LondonTravel.Site.Options;
 using MartinCostello.LondonTravel.Site.Services.Tfl;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using Refit;
 
 namespace MartinCostello.LondonTravel.Site.Extensions;
@@ -46,14 +45,11 @@ public static class HttpServiceCollectionExtensions
             .AddTypedClient(AddTfl)
             .ApplyDefaultConfiguration();
 
-        services.AddSingleton<IHttpContentSerializer>(
-            (p) =>
-            {
-                var options = p.GetRequiredService<IOptions<JsonOptions>>().Value;
-                var context = new ApplicationJsonSerializerContext(options.JsonSerializerOptions);
-
-                return new SystemTextJsonContentSerializerForSourceGenerator(context);
-            });
+        services.AddSingleton<IHttpContentSerializer>((p) =>
+        {
+            var context = p.GetRequiredService<JsonSerializerContext>();
+            return new SystemTextJsonContentSerializerForSourceGenerator(context);
+        });
 
         return services;
     }
