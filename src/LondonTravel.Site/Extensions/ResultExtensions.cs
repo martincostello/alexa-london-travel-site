@@ -24,7 +24,7 @@ public static class ResultExtensions
     /// <param name="contentType">The content-type to set on the response.</param>
     /// <param name="statusCode">The status code to set on the response.</param>
     /// <returns>
-    /// The created <see cref="JsonResult{Type}"/> that serializes the specified
+    /// The created <see cref="JsonResult"/> that serializes the specified
     /// <paramref name="value"/> as JSON format for the response.</returns>
     /// <remarks>
     /// Callers should cache an instance of serializer settings to avoid recreating cached data with each call.
@@ -58,7 +58,7 @@ public static class ResultExtensions
     /// <param name="contentType">The content-type to set on the response.</param>
     /// <param name="statusCode">The status code to set on the response.</param>
     /// <returns>
-    /// The created <see cref="JsonResult{Type}"/> that serializes the specified
+    /// The created <see cref="JsonResult"/> that serializes the specified
     /// <paramref name="value"/> as JSON format for the response.</returns>
     /// <remarks>
     /// Callers should cache an instance of serializer settings to avoid recreating cached data with each call.
