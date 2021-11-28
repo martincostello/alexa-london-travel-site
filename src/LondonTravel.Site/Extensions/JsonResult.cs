@@ -1,7 +1,6 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 namespace Microsoft.AspNetCore.Http.Result;
@@ -12,7 +11,6 @@ namespace Microsoft.AspNetCore.Http.Result;
 /// <remarks>
 /// Based on https://raw.githubusercontent.com/dotnet/aspnetcore/main/src/Http/Http.Results/src/JsonResult.cs.
 /// </remarks>
-[ExcludeFromCodeCoverage]
 internal sealed partial class JsonResult : IResult
 {
     /// <summary>
@@ -43,34 +41,15 @@ internal sealed partial class JsonResult : IResult
     /// <inheritdoc />
     Task IResult.ExecuteAsync(HttpContext httpContext)
     {
-        var logger = httpContext.RequestServices.GetRequiredService<ILogger<JsonResult>>();
-        Log.JsonResultExecuting(logger, Value);
-
         if (StatusCode is int statusCode)
         {
             httpContext.Response.StatusCode = statusCode;
         }
 
-        return httpContext.Response.WriteAsJsonAsync(Value, InputType, JsonSerializerContext, ContentType);
-    }
-
-    private static partial class Log
-    {
-        public static void JsonResultExecuting(ILogger logger, object? value)
-        {
-            if (logger.IsEnabled(LogLevel.Information))
-            {
-                string? type = value == null ? "null" : value.GetType().FullName!;
-                JsonResultExecuting(logger, type);
-            }
-        }
-
-        [LoggerMessage(
-            1,
-            LogLevel.Information,
-            "Executing JsonResult, writing value of type '{Type}'.",
-            EventName = "JsonResultExecuting",
-            SkipEnabledCheck = true)]
-        private static partial void JsonResultExecuting(ILogger logger, string type);
+        return httpContext.Response.WriteAsJsonAsync(
+            Value,
+            InputType,
+            ContentType,
+            httpContext.RequestAborted);
     }
 }
