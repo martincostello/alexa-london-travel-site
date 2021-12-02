@@ -5,7 +5,6 @@
 
 using System.IO.Compression;
 using System.Net.Mime;
-using System.Text.Json.Serialization;
 using MartinCostello.LondonTravel.Site;
 using MartinCostello.LondonTravel.Site.Extensions;
 using MartinCostello.LondonTravel.Site.Options;
@@ -138,12 +137,7 @@ builder.Services.Configure<JsonOptions>((options) =>
     options.SerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
     options.SerializerOptions.PropertyNameCaseInsensitive = false;
     options.SerializerOptions.WriteIndented = true;
-});
-
-builder.Services.AddSingleton<JsonSerializerContext>((p) =>
-{
-    var options = p.GetRequiredService<IOptions<JsonOptions>>().Value;
-    return new ApplicationJsonSerializerContext(options.SerializerOptions);
+    options.SerializerOptions.AddContext<ApplicationJsonSerializerContext>();
 });
 
 builder.Services.AddSingleton<IClock>((_) => SystemClock.Instance);
