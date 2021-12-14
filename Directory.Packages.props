@@ -21,7 +21,7 @@
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="$(MicrosoftAspNetCoreAuthenticationVersion)" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="$(MicrosoftAspNetCoreAuthenticationVersion)" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.Twitter" Version="$(MicrosoftAspNetCoreAuthenticationVersion)" />
-    <PackageVersion Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" Version="6.0.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" Version="6.0.1" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.0" />
     <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.23.0" />
     <PackageVersion Include="Microsoft.DotNet.XliffTasks" Version="1.0.0-beta.21452.1" />
