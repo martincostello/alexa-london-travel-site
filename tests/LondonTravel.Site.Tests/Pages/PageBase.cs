@@ -17,10 +17,27 @@ public abstract class PageBase
     protected abstract string RelativeUri { get; }
 
     public async Task<bool> IsAuthenticatedAsync()
-        => bool.Parse(await (await Navigator.Page.QuerySelectorAsync("[data-id='content']"))!.GetAttributeAsync("data-authenticated") ?? bool.FalseString);
+    {
+        const string ContentSelector = "[data-id='content']";
+
+        var content = await Navigator.Page.QuerySelectorAsync(ContentSelector);
+        content.ShouldNotBeNull($"Could not find selector '{ContentSelector}'.");
+
+        string? isAuthenticated = await content.GetAttributeAsync("data-authenticated");
+
+        return bool.Parse(isAuthenticated ?? bool.FalseString);
+    }
 
     public async Task<string> UserNameAsync()
-        => (await (await Navigator.Page.QuerySelectorAsync(UserNameSelector))!.InnerTextAsync()).Trim();
+    {
+        var element = await Navigator.Page.QuerySelectorAsync(UserNameSelector);
+        element.ShouldNotBeNull($"Could not find selector '{UserNameSelector}'.");
+
+        string userName = await element.InnerTextAsync();
+        userName.ShouldNotBeNull();
+
+        return userName.Trim();
+    }
 
     public async Task<HomePage> SignOutAsync()
     {
