@@ -19,6 +19,7 @@ public abstract class BrowserEndToEndTest : BrowserTest
         : base(outputHelper)
     {
         Fixture = fixture;
+        CaptureTrace = false; // Disabled due to use of secrets for credentials
     }
 
     /// <summary>

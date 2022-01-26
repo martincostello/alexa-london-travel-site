@@ -13,7 +13,9 @@ public class BrowserFixture
         OutputHelper = outputHelper;
     }
 
-    private static bool IsRunningInGitHubActions { get; } = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("GITHUB_ACTIONS"));
+    public bool CaptureTrace { get; set; }
+
+    public bool CaptureVideo { get; set; }
 
     private ITestOutputHelper OutputHelper { get; }
 
@@ -26,9 +28,21 @@ public class BrowserFixture
 
         await using IBrowser browser = await CreateBrowserAsync(playwright, browserType);
 
-        BrowserNewPageOptions options = CreatePageOptions();
+        BrowserNewContextOptions options = CreatePageOptions();
+        await using IBrowserContext context = await browser.NewContextAsync(options);
 
-        IPage page = await browser.NewPageAsync(options);
+        if (CaptureTrace)
+        {
+            await context.Tracing.StartAsync(new()
+            {
+                Screenshots = true,
+                Snapshots = true,
+                Sources = true,
+                Title = testName!,
+            });
+        }
+
+        IPage page = await context.NewPageAsync();
 
         page.Console += (_, e) => OutputHelper.WriteLine(e.Text);
         page.PageError += (_, e) => OutputHelper.WriteLine(e);
@@ -44,20 +58,28 @@ public class BrowserFixture
         }
         finally
         {
+            if (CaptureTrace)
+            {
+                string traceName = GenerateFileName(testName!, browserType, ".zip");
+                string path = Path.Combine("traces", traceName);
+
+                await context.Tracing.StopAsync(new() { Path = path });
+            }
+
             await TryCaptureVideoAsync(page, testName!, browserType);
         }
     }
 
-    protected virtual BrowserNewPageOptions CreatePageOptions()
+    protected virtual BrowserNewContextOptions CreatePageOptions()
     {
-        var options = new BrowserNewPageOptions()
+        var options = new BrowserNewContextOptions()
         {
             IgnoreHTTPSErrors = true,
             Locale = "en-GB",
             TimezoneId = "Europe/London",
         };
 
-        if (IsRunningInGitHubActions)
+        if (CaptureVideo)
         {
             options.RecordVideoDir = "videos";
         }
@@ -130,7 +152,7 @@ public class BrowserFixture
         string testName,
         string browserType)
     {
-        if (!IsRunningInGitHubActions)
+        if (!CaptureVideo || page.Video is null)
         {
             return;
         }
@@ -139,7 +161,7 @@ public class BrowserFixture
         {
             await page.CloseAsync();
 
-            string videoSource = await page.Video!.PathAsync();
+            string videoSource = await page.Video.PathAsync();
 
             string? directory = Path.GetDirectoryName(videoSource);
             string? extension = Path.GetExtension(videoSource);
