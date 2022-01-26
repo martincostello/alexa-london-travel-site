@@ -28,6 +28,10 @@ public abstract class BrowserTest : IDisposable
         Dispose(false);
     }
 
+    protected bool CaptureTrace { get; set; } = IsRunningInGitHubActions;
+
+    protected bool CaptureVideo { get; set; } = IsRunningInGitHubActions;
+
     /// <summary>
     /// Gets the <see cref="ITestOutputHelper"/> to use.
     /// </summary>
@@ -37,6 +41,8 @@ public abstract class BrowserTest : IDisposable
     /// Gets the URI of the website being tested.
     /// </summary>
     protected abstract Uri ServerAddress { get; }
+
+    private static bool IsRunningInGitHubActions { get; } = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("GITHUB_ACTIONS"));
 
     /// <summary>
     /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
@@ -61,7 +67,11 @@ public abstract class BrowserTest : IDisposable
         Func<ApplicationNavigator, Task> test,
         [CallerMemberName] string? testName = null)
     {
-        var fixture = new BrowserFixture(Output);
+        var fixture = new BrowserFixture(Output)
+        {
+            CaptureTrace = CaptureTrace,
+            CaptureVideo = CaptureVideo,
+        };
 
         await fixture.WithPageAsync(
             browserType,
