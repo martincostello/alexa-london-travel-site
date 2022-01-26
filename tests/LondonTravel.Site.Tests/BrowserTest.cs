@@ -103,7 +103,7 @@ public abstract class BrowserTest : IDisposable
             browserType,
             async (navigator) =>
             {
-                T? page = Activator.CreateInstance(typeof(T), navigator) as T;
+                var page = Activator.CreateInstance(typeof(T), navigator) as T;
                 await page!.NavigateAsync();
 
                 await test(navigator, page!);

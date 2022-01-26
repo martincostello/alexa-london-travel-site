@@ -53,6 +53,11 @@ public class BrowserFixture
         }
         catch (Exception)
         {
+            await TryCaptureScreenshotAsync(page, testName!, browserType);
+            throw;
+        }
+        finally
+        {
             if (CaptureTrace)
             {
                 string traceName = GenerateFileName(testName!, browserType, ".zip");
@@ -61,11 +66,6 @@ public class BrowserFixture
                 await context.Tracing.StopAsync(new() { Path = path });
             }
 
-            await TryCaptureScreenshotAsync(page, testName!, browserType);
-            throw;
-        }
-        finally
-        {
             await TryCaptureVideoAsync(page, testName!, browserType);
         }
     }
