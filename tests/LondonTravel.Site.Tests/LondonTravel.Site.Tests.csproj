@@ -32,15 +32,4 @@
   <ItemGroup>
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
-  <PropertyGroup>
-    <_PlaywrightCLIInstalledCommand Condition=" $([MSBuild]::IsOsPlatform('Windows')) ">where playwright</_PlaywrightCLIInstalledCommand>
-    <_PlaywrightCLIInstalledCommand Condition=" !$([MSBuild]::IsOsPlatform('Windows')) ">type playwright</_PlaywrightCLIInstalledCommand>
-  </PropertyGroup>
-  <Target Name="DownloadBrowserDrivers" AfterTargets="Build">
-    <Exec Command="$(_PlaywrightCLIInstalledCommand)" ConsoleToMsBuild="true" IgnoreExitCode="true" StandardErrorImportance="Normal" StandardOutputImportance="Normal">
-      <Output TaskParameter="ExitCode" PropertyName="_PlaywrightCLIInstalled" />
-    </Exec>
-    <Warning Condition=" $(_PlaywrightCLIInstalled) != 0 AND '$(GITHUB_ACTIONS)' == '' " Text="The Playwright CLI .NET Global Tool is not installed. To install this tool, run the following command: dotnet tool install --global Microsoft.Playwright.CLI" />
-    <Exec Condition=" $(_PlaywrightCLIInstalled) == 0 " Command="playwright install" WorkingDirectory="$(MSBuildThisFileDirectory)../../" ConsoleToMsBuild="true" StandardOutputImportance="Normal" />
-  </Target>
 </Project>
