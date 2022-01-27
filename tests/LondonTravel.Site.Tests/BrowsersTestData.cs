@@ -6,23 +6,23 @@ using Microsoft.Playwright;
 
 namespace MartinCostello.LondonTravel.Site;
 
-public sealed class BrowsersTestData : IEnumerable<object[]>
+public sealed class BrowsersTestData : IEnumerable<object?[]>
 {
-    public IEnumerator<object[]> GetEnumerator()
+    public IEnumerator<object?[]> GetEnumerator()
     {
-        yield return new object[] { BrowserType.Chromium };
-        yield return new object[] { $"{BrowserType.Chromium}:chrome" };
+        yield return new[] { BrowserType.Chromium, null };
+        yield return new[] { BrowserType.Chromium, "chrome" };
 
         if (!OperatingSystem.IsLinux())
         {
-            yield return new object[] { $"{BrowserType.Chromium}:msedge" };
+            yield return new[] { BrowserType.Chromium, "msedge" };
         }
 
-        yield return new object[] { BrowserType.Firefox };
+        yield return new[] { BrowserType.Firefox, null };
 
         if (OperatingSystem.IsMacOS())
         {
-            yield return new object[] { BrowserType.Webkit };
+            yield return new[] { BrowserType.Webkit, null };
         }
     }
 

@@ -34,7 +34,8 @@ public sealed class AuthenticationTests : BrowserIntegrationTest
     {
         // Arrange
         await AtPageAsync<HomePage>(
-            "chromium",
+            Microsoft.Playwright.BrowserType.Chromium,
+            null,
             async (page) =>
             {
                 page = await page
@@ -55,11 +56,12 @@ public sealed class AuthenticationTests : BrowserIntegrationTest
 
     [Theory]
     [ClassData(typeof(BrowsersTestData))]
-    public async Task Can_Delete_Account(string browserType)
+    public async Task Can_Delete_Account(string browserType, string? browserChannel)
     {
         // Arrange
         await AtPageAsync<HomePage>(
             browserType,
+            browserChannel,
             async (homepage) =>
             {
                 ManagePage page = await homepage
@@ -85,11 +87,12 @@ public sealed class AuthenticationTests : BrowserIntegrationTest
 
     [Theory]
     [ClassData(typeof(BrowsersTestData))]
-    public async Task Can_Link_Accounts(string browserType)
+    public async Task Can_Link_Accounts(string browserType, string? browserChannel)
     {
         // Arrange
         await AtPageAsync<HomePage>(
             browserType,
+            browserChannel,
             async (homepage) =>
             {
                 ManagePage page = await homepage

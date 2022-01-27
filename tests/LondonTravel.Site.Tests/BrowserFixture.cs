@@ -8,41 +8,46 @@ namespace MartinCostello.LondonTravel.Site;
 
 public class BrowserFixture
 {
-    public BrowserFixture(ITestOutputHelper outputHelper)
+    private const string VideosDirectory = "videos";
+
+    public BrowserFixture(
+        BrowserFixtureOptions options,
+        ITestOutputHelper outputHelper)
     {
+        Options = options;
         OutputHelper = outputHelper;
     }
 
-    public bool CaptureTrace { get; set; }
+    internal static bool IsRunningInGitHubActions { get; } = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("GITHUB_ACTIONS"));
 
-    public bool CaptureVideo { get; set; }
+    private BrowserFixtureOptions Options { get; }
 
     private ITestOutputHelper OutputHelper { get; }
 
     public async Task WithPageAsync(
-        string browserType,
         Func<IPage, Task> action,
         [CallerMemberName] string? testName = null)
     {
-        using IPlaywright playwright = await Playwright.CreateAsync();
+        string activeTestName = Options.TestName ?? testName!;
 
-        await using IBrowser browser = await CreateBrowserAsync(playwright, browserType);
+        using var playwright = await Playwright.CreateAsync();
+        await using var browser = await CreateBrowserAsync(playwright);
 
-        BrowserNewContextOptions options = CreatePageOptions();
-        await using IBrowserContext context = await browser.NewContextAsync(options);
+        var options = CreateContextOptions();
+        await using var context = await browser.NewContextAsync(options);
 
-        if (CaptureTrace)
+        if (Options.CaptureTrace)
         {
             await context.Tracing.StartAsync(new()
             {
                 Screenshots = true,
                 Snapshots = true,
                 Sources = true,
-                Title = testName!,
+                Title = activeTestName,
             });
         }
 
-        IPage page = await context.NewPageAsync();
+        var page = await context.NewPageAsync();
 
         page.Console += (_, e) => OutputHelper.WriteLine(e.Text);
         page.PageError += (_, e) => OutputHelper.WriteLine(e);
@@ -53,24 +58,26 @@ public class BrowserFixture
         }
         catch (Exception)
         {
-            await TryCaptureScreenshotAsync(page, testName!, browserType);
+            await TryCaptureScreenshotAsync(page, activeTestName);
             throw;
         }
         finally
         {
-            if (CaptureTrace)
+            if (Options.CaptureTrace)
             {
-                string traceName = GenerateFileName(testName!, browserType, ".zip");
+                string traceName = GenerateFileName(activeTestName, ".zip");
                 string path = Path.Combine("traces", traceName);
 
                 await context.Tracing.StopAsync(new() { Path = path });
+
+                OutputHelper.WriteLine($"Trace saved to {path}.");
             }
 
-            await TryCaptureVideoAsync(page, testName!, browserType);
+            await TryCaptureVideoAsync(page, activeTestName);
         }
     }
 
-    protected virtual BrowserNewContextOptions CreatePageOptions()
+    protected virtual BrowserNewContextOptions CreateContextOptions()
     {
         var options = new BrowserNewContextOptions()
         {
@@ -79,17 +86,20 @@ public class BrowserFixture
             TimezoneId = "Europe/London",
         };
 
-        if (CaptureVideo)
+        if (Options.CaptureVideo)
         {
-            options.RecordVideoDir = "videos";
+            options.RecordVideoDir = VideosDirectory;
         }
 
         return options;
     }
 
-    private static async Task<IBrowser> CreateBrowserAsync(IPlaywright playwright, string browserType)
+    private async Task<IBrowser> CreateBrowserAsync(IPlaywright playwright)
     {
-        var options = new BrowserTypeLaunchOptions();
+        var options = new BrowserTypeLaunchOptions()
+        {
+            Channel = Options.BrowserChannel,
+        };
 
         if (System.Diagnostics.Debugger.IsAttached)
         {
@@ -98,20 +108,18 @@ public class BrowserFixture
             options.SlowMo = 100;
         }
 
-        string[] split = browserType.Split(':');
-
-        browserType = split[0];
-
-        if (split.Length > 1)
-        {
-            options.Channel = split[1];
-        }
-
-        return await playwright[browserType].LaunchAsync(options);
+        return await playwright[Options.BrowserType].LaunchAsync(options);
     }
 
-    private static string GenerateFileName(string testName, string browserType, string extension)
+    private string GenerateFileName(string testName, string extension)
     {
+        string browserType = Options.BrowserType;
+
+        if (!string.IsNullOrEmpty(Options.BrowserChannel))
+        {
+            browserType += "_" + Options.BrowserChannel;
+        }
+
         string os =
             OperatingSystem.IsLinux() ? "linux" :
             OperatingSystem.IsMacOS() ? "macos" :
@@ -126,18 +134,14 @@ public class BrowserFixture
 
     private async Task TryCaptureScreenshotAsync(
         IPage page,
-        string testName,
-        string browserType)
+        string testName)
     {
         try
         {
-            string fileName = GenerateFileName(testName, browserType, ".png");
-            string path = Path.GetFullPath(Path.Combine("screenshots", fileName));
+            string fileName = GenerateFileName(testName, ".png");
+            string path = Path.Combine("screenshots", fileName);
 
-            await page.ScreenshotAsync(new PageScreenshotOptions()
-            {
-                Path = path,
-            });
+            await page.ScreenshotAsync(new() { Path = path });
 
             OutputHelper.WriteLine($"Screenshot saved to {path}.");
         }
@@ -147,32 +151,22 @@ public class BrowserFixture
         }
     }
 
-    private async Task TryCaptureVideoAsync(
-        IPage page,
-        string testName,
-        string browserType)
+    private async Task TryCaptureVideoAsync(IPage page, string testName)
     {
-        if (!CaptureVideo || page.Video is null)
+        if (!Options.CaptureVideo || page.Video is null)
         {
             return;
         }
 
         try
         {
+            string fileName = GenerateFileName(testName, ".webm");
+            string path = Path.Combine(VideosDirectory, fileName);
+
             await page.CloseAsync();
+            await page.Video.SaveAsAsync(path);
 
-            string videoSource = await page.Video.PathAsync();
-
-            string? directory = Path.GetDirectoryName(videoSource);
-            string? extension = Path.GetExtension(videoSource);
-
-            string fileName = GenerateFileName(testName, browserType, extension!);
-
-            string videoDestination = Path.Combine(directory!, fileName);
-
-            File.Move(videoSource, videoDestination);
-
-            OutputHelper.WriteLine($"Video saved to {videoDestination}.");
+            OutputHelper.WriteLine($"Video saved to {path}.");
         }
         catch (Exception ex)
         {

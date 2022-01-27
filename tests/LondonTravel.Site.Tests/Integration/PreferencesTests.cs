@@ -24,11 +24,12 @@ public sealed class PreferencesTests : BrowserIntegrationTest
 
     [Theory]
     [ClassData(typeof(BrowsersTestData))]
-    public async Task Can_Manage_Preferences(string browserType)
+    public async Task Can_Manage_Preferences(string browserType, string? browserChannel)
     {
         // Arrange
         await AtPageAsync<HomePage>(
             browserType,
+            browserChannel,
             async (page) =>
             {
                 page = await page
