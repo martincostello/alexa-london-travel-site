@@ -82,7 +82,8 @@ public class SocialLoginTests : BrowserEndToEndTest
 
         // Arrange
         await AtPageAsync<HomePage>(
-            "chromium",
+            BrowserType.Chromium,
+            null,
             async (page) =>
             {
                 page = await page.SignInAsync()

@@ -29,11 +29,12 @@ public class AlexaTests : BrowserIntegrationTest
 
     [Theory]
     [ClassData(typeof(BrowsersTestData))]
-    public async Task Can_Authorize_Alexa(string browserType)
+    public async Task Can_Authorize_Alexa(string browserType, string? browserChannel)
     {
         // Arrange
         await WithNavigatorAsync(
             browserType,
+            browserChannel,
             async (navigator) =>
             {
                 string relativeUri = BuildAuthorizationUri(navigator);
@@ -53,11 +54,12 @@ public class AlexaTests : BrowserIntegrationTest
 
     [Theory]
     [ClassData(typeof(BrowsersTestData))]
-    public async Task Can_Get_Preferences_From_Api(string browserType)
+    public async Task Can_Get_Preferences_From_Api(string browserType, string? browserChannel)
     {
         // Arrange
         await WithNavigatorAsync(
             browserType,
+            browserChannel,
             async (navigator) =>
             {
                 var page = await new SignInPage(navigator)
@@ -151,7 +153,7 @@ public class AlexaTests : BrowserIntegrationTest
 
     private static AuthenticationHeaderValue ParseAuthorization(string url)
     {
-        var hash = new UriBuilder(url).Fragment;
+        string? hash = new UriBuilder(url).Fragment;
 
         Dictionary<string, StringValues> values = QueryHelpers.ParseQuery(hash);
 
