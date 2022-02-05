@@ -128,7 +128,7 @@ jobs:
 
     - name: Run end-to-end tests
       shell: pwsh
-      run: dotnet test ./tests/LondonTravel.Site.Tests --filter Category=EndToEnd /p:CollectCoverage=false
+      run: dotnet test ./tests/LondonTravel.Site.Tests --configuration Release --filter Category=EndToEnd /p:CollectCoverage=false
       env:
         WEBSITE_URL: ${{ env.WEBSITE_URL_DEV }}
         WEBSITE_USER_GOOGLE_USERNAME: ${{ secrets.WEBSITE_USER_GOOGLE_USERNAME }}
@@ -199,7 +199,7 @@ jobs:
 
     - name: Run end-to-end tests
       shell: pwsh
-      run: dotnet test ./tests/LondonTravel.Site.Tests --filter Category=EndToEnd /p:CollectCoverage=false
+      run: dotnet test ./tests/LondonTravel.Site.Tests --configuration Release --filter Category=EndToEnd /p:CollectCoverage=false
       env:
         WEBSITE_URL: ${{ env.WEBSITE_URL_PROD }}
         WEBSITE_USER_GOOGLE_USERNAME: ${{ secrets.WEBSITE_USER_GOOGLE_USERNAME }}
