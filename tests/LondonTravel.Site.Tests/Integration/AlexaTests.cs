@@ -157,10 +157,10 @@ public class AlexaTests : BrowserIntegrationTest
 
         Dictionary<string, StringValues> values = QueryHelpers.ParseQuery(hash);
 
-        string scheme = values["token_type"];
-        string parameter = values["access_token"];
+        string? scheme = values["token_type"];
+        string? parameter = values["access_token"];
 
-        return new AuthenticationHeaderValue(scheme, parameter);
+        return new AuthenticationHeaderValue(scheme!, parameter);
     }
 
     private async Task<JsonDocument> GetPreferencesAsync(AuthenticationHeaderValue authorization, HttpStatusCode expected)

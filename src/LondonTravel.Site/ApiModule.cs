@@ -114,17 +114,17 @@ public static partial class ApiModule
     {
         public static void AccessAuthorized(ILogger logger, string? userId, HttpContext httpContext)
         {
-            AccessAuthorized(logger, userId, httpContext.Connection.RemoteIpAddress, httpContext.Request.Headers["User-Agent"]);
+            AccessAuthorized(logger, userId, httpContext.Connection.RemoteIpAddress, httpContext.Request.Headers["User-Agent"]!);
         }
 
         public static void AccessDeniedNoAuthorization(ILogger logger, HttpContext httpContext)
         {
-            AccessDeniedNoAuthorization(logger, httpContext.Connection.RemoteIpAddress, httpContext.Request.Headers["User-Agent"]);
+            AccessDeniedNoAuthorization(logger, httpContext.Connection.RemoteIpAddress, httpContext.Request.Headers["User-Agent"]!);
         }
 
         public static void AccessDeniedUnknownToken(ILogger logger, HttpContext httpContext)
         {
-            AccessDeniedUnknownToken(logger, httpContext.Connection.RemoteIpAddress, httpContext.Request.Headers["User-Agent"]);
+            AccessDeniedUnknownToken(logger, httpContext.Connection.RemoteIpAddress, httpContext.Request.Headers["User-Agent"]!);
         }
 
         [LoggerMessage(

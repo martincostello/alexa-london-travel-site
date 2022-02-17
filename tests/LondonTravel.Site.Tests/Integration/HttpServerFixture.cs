@@ -208,7 +208,7 @@ public sealed class HttpServerFixture : TestServerFixture
 
         public override void Load()
         {
-            Data = new Dictionary<string, string>()
+            Data = new Dictionary<string, string?>()
             {
                 ["Site:Alexa:RedirectUrls:3"] = Fixture.ClientOptions.BaseAddress.ToString() + "manage/",
             };

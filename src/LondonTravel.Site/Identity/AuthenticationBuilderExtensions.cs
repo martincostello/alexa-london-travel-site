@@ -46,8 +46,8 @@ public static partial class AuthenticationBuilderExtensions
                        var configuration = serviceProvider.GetRequiredService<IConfiguration>();
                        var secretClient = serviceProvider.GetService<SecretClient>();
 
-                       providerOptions.KeyId = configuration[$"Site:Authentication:ExternalProviders:{name}:KeyId"];
-                       providerOptions.TeamId = configuration[$"Site:Authentication:ExternalProviders:{name}:TeamId"];
+                       providerOptions.KeyId = configuration[$"Site:Authentication:ExternalProviders:{name}:KeyId"] ?? string.Empty;
+                       providerOptions.TeamId = configuration[$"Site:Authentication:ExternalProviders:{name}:TeamId"] ?? string.Empty;
 
                        if (secretClient is not null)
                        {
