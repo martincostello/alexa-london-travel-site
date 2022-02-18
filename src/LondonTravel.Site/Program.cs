@@ -14,7 +14,6 @@ using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.StaticFiles;
@@ -129,7 +128,7 @@ builder.Services.AddResponseCompression((options) =>
     options.Providers.Add<GzipCompressionProvider>();
 });
 
-builder.Services.Configure<JsonOptions>((options) =>
+builder.Services.ConfigureRouteHandlerJsonOptions((options) =>
 {
     options.SerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
     options.SerializerOptions.PropertyNameCaseInsensitive = false;
