@@ -46,7 +46,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v2
 
     - name: Build, test and publish
       shell: pwsh
@@ -124,7 +124,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v2
 
     - name: Run end-to-end tests
       shell: pwsh
@@ -195,7 +195,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v2
 
     - name: Run end-to-end tests
       shell: pwsh
