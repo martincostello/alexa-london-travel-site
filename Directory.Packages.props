@@ -43,7 +43,7 @@
     <PackageVersion Include="Serilog.Sinks.Console" Version="4.0.1" />
     <PackageVersion Include="Serilog.Sinks.UDP" Version="7.1.0" />
     <PackageVersion Include="Shouldly" Version="4.0.3" />
-    <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.406" />
+    <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.66" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="$(SwashbuckleAspNetCoreVersion)" />
     <PackageVersion Include="Swashbuckle.AspNetCore.Annotations" Version="$(SwashbuckleAspNetCoreVersion)" />
     <PackageVersion Include="xunit" Version="2.4.1" />
