@@ -63,7 +63,6 @@ public static class SwaggerServiceCollectionExtensions
             options.SwaggerDoc("api", info);
 
             options.SchemaFilter<ExampleFilter>();
-            options.OperationFilter<AnnotationsOperationFilter>();
             options.OperationFilter<ExampleFilter>();
             options.OperationFilter<RemoveStyleCopPrefixesFilter>();
 
