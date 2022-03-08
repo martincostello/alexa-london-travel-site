@@ -65,7 +65,7 @@ internal sealed class ExampleFilter : IOperationFilter, ISchemaFilter
     internal static IOpenApiAny FormatAsJson(object? examples, JsonSerializerOptions? options = null)
     {
         // Apply any formatting rules configured for the API (e.g. camel casing)
-        var json = JsonSerializer.Serialize(examples, options);
+        string? json = JsonSerializer.Serialize(examples, options);
         using var document = JsonDocument.Parse(json);
 
         var result = new OpenApiObject();
@@ -93,23 +93,19 @@ internal sealed class ExampleFilter : IOperationFilter, ISchemaFilter
     private static IList<T> GetAttributes<T>(ApiDescription apiDescription)
         where T : Attribute
     {
+        IEnumerable<T> attributes = Enumerable.Empty<T>();
+
         if (apiDescription.TryGetMethodInfo(out MethodInfo methodInfo))
         {
-            return methodInfo
-                .GetCustomAttributes<T>(inherit: true)
-                .ToArray();
+            attributes = attributes.Concat(methodInfo.GetCustomAttributes<T>(inherit: true));
         }
-        else if (apiDescription.ActionDescriptor is not null)
+
+        if (apiDescription.ActionDescriptor is not null)
         {
-            return apiDescription.ActionDescriptor.EndpointMetadata
-                .OfType<T>()
-                .Distinct()
-                .ToArray();
+            attributes = attributes.Concat(apiDescription.ActionDescriptor.EndpointMetadata.OfType<T>());
         }
-        else
-        {
-            return Array.Empty<T>();
-        }
+
+        return attributes.ToArray();
     }
 
     /// <summary>
@@ -187,7 +183,7 @@ internal sealed class ExampleFilter : IOperationFilter, ISchemaFilter
     private IOpenApiAny CreateExample(Type exampleType)
     {
         var provider = Activator.CreateInstance(exampleType) as IExampleProvider;
-        var examples = provider!.GetExample();
+        object? examples = provider!.GetExample();
 
         return FormatAsJson(examples, _options);
     }
