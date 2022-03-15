@@ -372,7 +372,7 @@ public partial class ManageController : Controller
         return true;
     }
 
-    private async Task<LondonTravelUser> GetCurrentUserAsync()
+    private async Task<LondonTravelUser?> GetCurrentUserAsync()
     {
         return await _userManager.GetUserAsync(HttpContext.User);
     }
@@ -433,7 +433,7 @@ public partial class ManageController : Controller
            EventId = 2,
            Level = LogLevel.Information,
            Message = "Attempting to link user Id {UserId} to provider {ProviderName}.")]
-        public static partial void AttemptingToLinkUser(ILogger logger, string userId, string providerName);
+        public static partial void AttemptingToLinkUser(ILogger logger, string? userId, string providerName);
 
         [LoggerMessage(
            EventId = 3,

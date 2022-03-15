@@ -69,7 +69,7 @@ public class SriScriptTagHelper : LinkTagHelper
 
         string cacheKey = $"sri-hash-{fileInfo.PhysicalPath}";
 
-        if (!Cache.TryGetValue(cacheKey, out string hash))
+        if (!Cache.TryGetValue(cacheKey, out string? hash))
         {
             using (var algorithm = SHA384.Create())
             {

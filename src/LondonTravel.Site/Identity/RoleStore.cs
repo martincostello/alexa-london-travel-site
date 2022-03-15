@@ -29,19 +29,19 @@ public sealed class RoleStore : IRoleStore<LondonTravelRole>
     }
 
     /// <inheritdoc />
-    public Task<LondonTravelRole> FindByIdAsync(string roleId, CancellationToken cancellationToken)
+    public Task<LondonTravelRole?> FindByIdAsync(string roleId, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
     /// <inheritdoc />
-    public Task<LondonTravelRole> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
+    public Task<LondonTravelRole?> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
     /// <inheritdoc />
-    public Task<string> GetNormalizedRoleNameAsync(LondonTravelRole role, CancellationToken cancellationToken)
+    public Task<string?> GetNormalizedRoleNameAsync(LondonTravelRole role, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
@@ -53,19 +53,19 @@ public sealed class RoleStore : IRoleStore<LondonTravelRole>
     }
 
     /// <inheritdoc />
-    public Task<string> GetRoleNameAsync(LondonTravelRole role, CancellationToken cancellationToken)
+    public Task<string?> GetRoleNameAsync(LondonTravelRole role, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
     /// <inheritdoc />
-    public Task SetNormalizedRoleNameAsync(LondonTravelRole role, string normalizedName, CancellationToken cancellationToken)
+    public Task SetNormalizedRoleNameAsync(LondonTravelRole role, string? normalizedName, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
     /// <inheritdoc />
-    public Task SetRoleNameAsync(LondonTravelRole role, string roleName, CancellationToken cancellationToken)
+    public Task SetRoleNameAsync(LondonTravelRole role, string? roleName, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

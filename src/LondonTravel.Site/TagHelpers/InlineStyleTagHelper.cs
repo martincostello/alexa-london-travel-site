@@ -88,7 +88,7 @@ public class InlineStyleTagHelper : LinkTagHelper
 
         string cacheKey = $"inline-css-{fileInfo.PhysicalPath}-{MinifyInlined == true}";
 
-        if (!Cache.TryGetValue(cacheKey, out string css))
+        if (!Cache.TryGetValue(cacheKey, out string? css))
         {
             using (var stream = File.OpenRead(fileInfo.PhysicalPath))
             {
