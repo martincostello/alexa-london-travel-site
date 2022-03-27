@@ -49,7 +49,7 @@ string connectionString = builder.Configuration.AzureStorageConnectionString();
 
 if (!string.IsNullOrWhiteSpace(connectionString))
 {
-    string relativePath = $"/london-travel/{environment}/keys.xml";
+    string relativePath = $"london-travel/{environment}/keys.xml";
     dataProtection.PersistKeysToAzureBlobStorage(
         connectionString,
         "data-protection",
