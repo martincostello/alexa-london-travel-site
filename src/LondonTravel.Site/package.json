@@ -31,7 +31,7 @@
     "karma": "^6.3.17",
     "karma-chrome-launcher": "^3.1.1",
     "karma-html-detailed-reporter": "^2.1.0",
-    "karma-jasmine": "^4.0.1",
+    "karma-jasmine": "^4.0.2",
     "karma-typescript": "^5.5.3",
     "kind-of": "^6.0.3",
     "lodash": "^4.17.21",
