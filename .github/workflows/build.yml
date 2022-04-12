@@ -116,7 +116,8 @@ jobs:
   test-dev:
     name: test-dev
     needs: deploy-dev
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
+    concurrency: development_environment
 
     steps:
 
@@ -187,7 +188,8 @@ jobs:
   test-prod:
     name: test-prod
     needs: deploy-prod
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
+    concurrency: production_environment
 
     steps:
 
