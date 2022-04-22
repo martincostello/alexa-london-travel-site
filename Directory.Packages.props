@@ -3,7 +3,7 @@
     <AspNetSecurityOAuthVersion>6.0.6</AspNetSecurityOAuthVersion>
     <MicrosoftAspNetCoreAuthenticationVersion>6.0.4</MicrosoftAspNetCoreAuthenticationVersion>
     <NodaTimeVersion>3.1.0</NodaTimeVersion>
-    <SwashbuckleAspNetCoreVersion>6.3.0</SwashbuckleAspNetCoreVersion>
+    <SwashbuckleAspNetCoreVersion>6.3.1</SwashbuckleAspNetCoreVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="AspNet.Security.OAuth.Amazon" Version="$(AspNetSecurityOAuthVersion)" />
