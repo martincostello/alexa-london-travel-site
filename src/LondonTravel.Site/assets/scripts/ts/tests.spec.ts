@@ -19,7 +19,7 @@ describe("Google Analytics", () => {
         let analytics: any;
 
         beforeEach(() => {
-            analytics = ga;
+            analytics = "ga" in window ? ga : undefined;
             ga = null;
         });
 
