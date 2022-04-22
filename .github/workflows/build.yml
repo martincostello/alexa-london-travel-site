@@ -19,7 +19,9 @@ env:
   DOTNET_MULTILEVEL_LOOKUP: 0
   DOTNET_NOLOGO: true
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: 1
   NUGET_XMLDOC_MODE: skip
+  TERM: xterm
   WEBSITE_URL_DEV: https://londontravel-dev.martincostello.com
   WEBSITE_URL_PROD: https://londontravel.martincostello.com
 
