@@ -2,10 +2,17 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js" integrity="sha256-rXnOfjTRp4iAm7hTAxEz3irkXzwZrElV2uRsdJAYjC4=" crossorigin="anonymous" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous" defer></script>
-    @if (string.Equals(CultureInfo.CurrentUICulture.Name, "en-GB", StringComparison.Ordinal))
-    {
+@if (string.Equals(CultureInfo.CurrentUICulture.Name, "en-GB", StringComparison.Ordinal))
+{
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/en-gb.js" integrity="sha256-VWXSrU6D6hQJ7MEZ9062PvZDwmeRuZ8eE/ToQ2N3QjA=" crossorigin="anonymous" defer></script>
-    }
+}
+@{
+    var analyticsId = Options.Analytics?.Google;
+}
+@if (!string.IsNullOrWhiteSpace(analyticsId))
+{
+    <script src="https://www.googletagmanager.com/gtag/js?id=@(analyticsId)" async></script>
+}
 <environment names="Development">
     <script src="~/assets/js/site.js" asp-append-version="true" asp-add-sri="true" defer></script>
 </environment>
