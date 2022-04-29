@@ -17,19 +17,20 @@ namespace martinCostello.londonTravel {
          */
         public static track(category: string, action: string, label: string): boolean {
 
-            let tracked: boolean = false;
+            let tracked = false;
 
-            if ("ga" in window && ga) {
+            if ("gtag" in window) {
 
-                const command: string = "send";
-                const fields: any = {
-                    hitType: "event",
-                    eventCategory: category,
-                    eventAction: action,
-                    eventLabel: label
+                const command = "event";
+                const fields = {
+                    event_category: category,
+                    event_label: label
                 };
 
-                ga(command, fields);
+                const theWindow: any = window;
+                const gtag = theWindow.gtag || function () { };
+
+                gtag(command, action, fields);
 
                 tracked = true;
             }

@@ -12,6 +12,15 @@
 @if (!string.IsNullOrWhiteSpace(analyticsId))
 {
     <script src="https://www.googletagmanager.com/gtag/js?id=@(analyticsId)" async></script>
+    <script type="text/javascript" nonce="@Context.EnsureCspNonce()">
+        var trackingId = document.querySelector('meta[name="google-analytics"]').getAttribute('content');
+        if (trackingId) {
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '@(analyticsId)');
+        }
+    </script>
 }
 <environment names="Development">
     <script src="~/assets/js/site.js" asp-append-version="true" asp-add-sri="true" defer></script>
