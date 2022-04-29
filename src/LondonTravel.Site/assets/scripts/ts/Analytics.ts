@@ -4,9 +4,9 @@
 (() => {
     const trackingId: string = $("meta[name='google-analytics']").attr("content");
     if (trackingId !== "") {
-        const window: any = Window;
-        window.dataLayer = window.dataLayer || [];
-        const gtag = (...args: any[]) => window.dataLayer.push(args);
+        const theWindow: any = window;
+        theWindow.dataLayer = theWindow.dataLayer || [];
+        const gtag = (...args: any[]) => theWindow.dataLayer.push(args);
         gtag("js", new Date());
         gtag("config", trackingId);
     }
