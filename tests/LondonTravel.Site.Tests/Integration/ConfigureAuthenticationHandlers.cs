@@ -49,14 +49,14 @@ public sealed class ConfigureAuthenticationHandlers :
 
     public void PostConfigure(string? name, TwitterOptions options)
     {
-        options.Backchannel = HttpClientFactory.CreateClient(name);
+        options.Backchannel = HttpClientFactory.CreateClient(name ?? string.Empty);
         options.Events.OnRedirectToAuthorizationEndpoint = LoopbackHandlers.Configure;
     }
 
     private void Configure<TOptions>(string? name, TOptions options)
         where TOptions : OAuthOptions
     {
-        options.Backchannel = HttpClientFactory.CreateClient(name);
+        options.Backchannel = HttpClientFactory.CreateClient(name ?? string.Empty);
         options.Events.OnRedirectToAuthorizationEndpoint = LoopbackHandlers.Configure;
     }
 }
