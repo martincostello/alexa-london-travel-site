@@ -45,10 +45,16 @@ public sealed class PreferencesTests : BrowserIntegrationTest
 
                 // Act
                 LinePreference? district = await GetLineAsync(lines, "District");
+                LinePreference? dlr = await GetLineAsync(lines, "DLR");
+                LinePreference? elizabeth = await GetLineAsync(lines, "Elizabeth line");
                 LinePreference? northern = await GetLineAsync(lines, "Northern");
+                LinePreference? overground = await GetLineAsync(lines, "London Overground");
 
                 district.ShouldNotBeNull();
+                dlr.ShouldNotBeNull();
+                elizabeth.ShouldNotBeNull();
                 northern.ShouldNotBeNull();
+                overground.ShouldNotBeNull();
 
                 await district.ToggleAsync();
                 await northern.ToggleAsync();

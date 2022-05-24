@@ -5,7 +5,7 @@
   "comment": "HTTP bundles for testing the TfL API integration.",
   "items": [
     {
-      "uri": "https://api.tfl.gov.uk/Line/Mode/dlr%2Coverground%2Ctflrail%2Ctube?app_id=app-id&app_key=app-key",
+      "uri": "https://api.tfl.gov.uk/Line/Mode/dlr%2Celizabeth-line%2Coverground%2Ctube?app_id=app-id&app_key=app-key",
       "contentFormat": "json",
       "contentJson": [
         {
@@ -29,6 +29,10 @@
           "name": "DLR"
         },
         {
+          "id": "elizabeth",
+          "name": "Elizabeth line"
+        },
+        {
           "id": "hammersmith-city",
           "name": "Hammersmith & City"
         },
@@ -47,10 +51,6 @@
         {
           "id": "piccadilly",
           "name": "Piccadilly"
-        },
-        {
-          "id": "tfl-rail",
-          "name": "TfL Rail"
         },
         {
           "id": "victoria",

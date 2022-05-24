@@ -36,7 +36,7 @@ public sealed class TflServiceTests : IDisposable
         // Arrange
         var builder = CreateBuilder()
             .Requests()
-            .ForPath("Line/Mode/dlr%2Coverground%2Ctflrail%2Ctube")
+            .ForPath("Line/Mode/dlr%2Celizabeth-line%2Coverground%2Ctube")
             .Responds()
             .WithResponseHeader("Cache-Control", "max-age=3600")
             .WithJsonContent(new[] { new { id = "waterloo-city", name = "Waterloo & City" } });
@@ -71,7 +71,7 @@ public sealed class TflServiceTests : IDisposable
         // Arrange
         var builder = CreateBuilder()
             .Requests()
-            .ForPath("Line/Mode/dlr%2Coverground%2Ctflrail%2Ctube")
+            .ForPath("Line/Mode/dlr%2Celizabeth-line%2Coverground%2Ctube")
             .Responds()
             .WithJsonContent(new[] { new { id = "district", name = "District" } });
 
@@ -202,7 +202,7 @@ public sealed class TflServiceTests : IDisposable
             AppId = "My-App-Id",
             AppKey = "My-App-Key",
             BaseUri = new Uri("https://api.tfl.gov.uk/"),
-            SupportedModes = new[] { "dlr", "overground", "tflrail", "tube" },
+            SupportedModes = new[] { "dlr", "elizabeth-line", "overground", "tube" },
         };
     }
 }
