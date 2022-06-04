@@ -1,10 +1,7 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-#pragma warning disable SA1516
-
 using System.IO.Compression;
-using System.Net.Mime;
 using MartinCostello.LondonTravel.Site;
 using MartinCostello.LondonTravel.Site.Extensions;
 using MartinCostello.LondonTravel.Site.Options;
@@ -140,6 +137,39 @@ builder.Services.Configure<JsonOptions>((options) =>
     options.SerializerOptions.AddContext<ApplicationJsonSerializerContext>();
 });
 
+builder.Services.Configure<StaticFileOptions>((options) =>
+{
+    var provider = new FileExtensionContentTypeProvider();
+    provider.Mappings[".webmanifest"] = "application/manifest+json";
+
+    options.ContentTypeProvider = provider;
+    options.DefaultContentType = "application/json";
+    options.ServeUnknownFileTypes = true;
+
+    options.OnPrepareResponse = (context) =>
+    {
+        var maxAge = TimeSpan.FromDays(7);
+
+        if (context.File.Exists && builder.Environment.IsProduction())
+        {
+            string? extension = Path.GetExtension(context.File.PhysicalPath);
+
+            // These files are served with a content hash in the URL so can be cached for longer
+            bool isScriptOrStyle =
+                string.Equals(extension, ".css", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(extension, ".js", StringComparison.OrdinalIgnoreCase);
+
+            if (isScriptOrStyle)
+            {
+                maxAge = TimeSpan.FromDays(365);
+            }
+        }
+
+        var headers = context.Context.Response.GetTypedHeaders();
+        headers.CacheControl = new() { MaxAge = maxAge };
+    };
+});
+
 builder.Services.AddSingleton<IClock>((_) => SystemClock.Instance);
 builder.Services.AddSingleton<ISiteTelemetry, SiteTelemetry>();
 builder.Services.AddSingleton<ITelemetryInitializer, SiteTelemetryInitializer>();
@@ -184,16 +214,7 @@ app.UseHsts()
 
 app.UseResponseCompression();
 
-var provider = new FileExtensionContentTypeProvider();
-provider.Mappings[".webmanifest"] = "application/manifest+json";
-
-app.UseStaticFiles(new StaticFileOptions()
-{
-    ContentTypeProvider = provider,
-    DefaultContentType = MediaTypeNames.Application.Json,
-    OnPrepareResponse = (context) => SetCacheHeaders(context, app.Environment.IsDevelopment()),
-    ServeUnknownFileTypes = true,
-});
+app.UseStaticFiles();
 
 app.UseRouting();
 
@@ -215,26 +236,3 @@ app.UseCookiePolicy(new()
 });
 
 app.Run();
-
-static void SetCacheHeaders(StaticFileResponseContext context, bool isDevelopment)
-{
-    var maxAge = TimeSpan.FromDays(7);
-
-    if (context.File.Exists && !isDevelopment)
-    {
-        string? extension = Path.GetExtension(context.File.PhysicalPath);
-
-        // These files are served with a content hash in the URL so can be cached for longer
-        bool isScriptOrStyle =
-            string.Equals(extension, ".css", StringComparison.OrdinalIgnoreCase) ||
-            string.Equals(extension, ".js", StringComparison.OrdinalIgnoreCase);
-
-        if (isScriptOrStyle)
-        {
-            maxAge = TimeSpan.FromDays(365);
-        }
-    }
-
-    var headers = context.Context.Response.GetTypedHeaders();
-    headers.CacheControl = new() { MaxAge = maxAge };
-}

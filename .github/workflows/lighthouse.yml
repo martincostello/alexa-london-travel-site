@@ -1,0 +1,75 @@
+name: lighthouse
+
+on:
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_MULTILEVEL_LOOKUP: 0
+  DOTNET_NOLOGO: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: 1
+  NUGET_XMLDOC_MODE: skip
+  TERM: xterm
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v2
+
+    - name: Start website
+      shell: pwsh
+      env:
+        Site__Authentication__UserStore__AccessKey: C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==
+        Site__Authentication__UserStore__ServiceUri: https://localhost:8081
+      run: |
+        Push-Location (Join-Path "src" "LondonTravel.Site")
+        npm ci
+        npm run build
+        Pop-Location
+        Start-Process nohup 'dotnet run --project ./src/LondonTravel.Site/LondonTravel.Site.csproj --configuration Release'
+        $StatusCode = 0
+        $Attempts = 0
+        While ($Attempts -lt 10) {
+          $Response = Try {
+            Invoke-WebRequest "https://localhost:5001" -SkipCertificateCheck
+          } catch {
+            $_.Exception.Response
+          }
+          $StatusCode = $Response.StatusCode
+          If ($StatusCode -eq 200) {
+            break
+          }
+          $Attempts++
+          Start-Sleep -Seconds 5
+        }
+        If ($StatusCode -ne 200) {
+          throw "Failed to successfully connect to website after $Attempts attempts."
+        }
+        New-Item -Path ${{ github.workspace }}/artifacts -ItemType Directory | Out-Null
+
+    - name: Lighthouse
+      uses: foo-software/lighthouse-check-action@v8.0.1
+      with:
+        device: 'all'
+        gitHubAccessToken: ${{ secrets.GITHUB_TOKEN }}
+        outputDirectory: ${{ github.workspace }}/artifacts
+        prCommentEnabled: true
+        urls: 'https://localhost:5001'
+        wait: true
+
+    - name: Publish artifacts
+      uses: actions/upload-artifact@v3
+      if: ${{ always() }}
+      with:
+        name: lighthouse
+        path: ${{ github.workspace }}/artifacts
