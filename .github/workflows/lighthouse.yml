@@ -5,6 +5,9 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 env:
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_MULTILEVEL_LOOKUP: 0
@@ -59,13 +62,24 @@ jobs:
 
     - name: Lighthouse
       uses: foo-software/lighthouse-check-action@v8.0.2
+      id: lighthouse
       with:
         device: 'all'
-        gitHubAccessToken: ${{ secrets.GITHUB_TOKEN }}
+        gitHubAccessToken: ${{ secrets.LIGHTHOUSE_ACCESS_TOKEN }}
         outputDirectory: ${{ github.workspace }}/artifacts
         prCommentEnabled: true
         urls: 'https://localhost:5001'
         wait: true
+
+    - name: Check Lighthouse scores
+      uses: foo-software/lighthouse-check-status-action@v1.0.1
+      with:
+        lighthouseCheckResults: ${{ steps.lighthouse.outputs.lighthouseCheckResults }}
+        minAccessibilityScore: "90"
+        minBestPracticesScore: "90"
+        minPerformanceScore: "80"
+        minProgressiveWebAppScore: "85"
+        minSeoScore: "100"
 
     - name: Publish artifacts
       uses: actions/upload-artifact@v3
