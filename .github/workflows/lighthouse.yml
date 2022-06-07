@@ -62,6 +62,7 @@ jobs:
 
     - name: Lighthouse
       uses: foo-software/lighthouse-check-action@v8.0.2
+      id: lighthouse
       with:
         device: 'all'
         gitHubAccessToken: ${{ secrets.LIGHTHOUSE_ACCESS_TOKEN }}
@@ -69,6 +70,16 @@ jobs:
         prCommentEnabled: true
         urls: 'https://localhost:5001'
         wait: true
+
+    - name: Check Lighthouse scores
+      uses: foo-software/lighthouse-check-status-action@v1.0.1
+      with:
+        lighthouseCheckResults: ${{ steps.lighthouse.outputs.lighthouseCheckResults }}
+        minAccessibilityScore: "90"
+        minBestPracticesScore: "90"
+        minPerformanceScore: "80"
+        minProgressiveWebAppScore: "85"
+        minSeoScore: "100"
 
     - name: Publish artifacts
       uses: actions/upload-artifact@v3
