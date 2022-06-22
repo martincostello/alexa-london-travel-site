@@ -27,7 +27,7 @@ public static class ILoggingBuilderExtensions
             .Enrich.WithProperty("AzureEnvironment", context.Configuration.AzureEnvironment())
             .Enrich.WithProperty("Version", GitMetadata.Commit)
             .ReadFrom.Configuration(context.Configuration)
-            .WriteTo.ApplicationInsights(context.Configuration.ApplicationInsightsKey(), TelemetryConverter.Events);
+            .WriteTo.ApplicationInsights(context.Configuration.ApplicationInsightsConnectionString(), TelemetryConverter.Events);
 
         if (context.HostingEnvironment.IsDevelopment())
         {

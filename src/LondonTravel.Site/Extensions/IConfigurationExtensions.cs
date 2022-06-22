@@ -9,15 +9,15 @@ namespace MartinCostello.LondonTravel.Site.Extensions;
 public static class IConfigurationExtensions
 {
     /// <summary>
-    /// Gets the configured Application Insights instrumentation key.
+    /// Gets the configured Application Insights connection string.
     /// </summary>
     /// <param name="config">The <see cref="IConfiguration"/> to use.</param>
     /// <returns>
-    /// The configured Application Insights instrumentation key, if any.
+    /// The configured Application Insights connection string, if any.
     /// </returns>
-    public static string ApplicationInsightsKey(this IConfiguration config)
+    public static string ApplicationInsightsConnectionString(this IConfiguration config)
     {
-        return config?["ApplicationInsights:InstrumentationKey"] ?? string.Empty;
+        return config?["ApplicationInsights:ConnectionString"] ?? string.Empty;
     }
 
     /// <summary>
