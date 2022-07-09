@@ -25,7 +25,6 @@
     @await Html.PartialAsync("_Links", Tuple.Create(canonicalUri, Options))
     @await RenderSectionAsync("links", required: false)
     @await RenderSectionAsync("meta", required: false)
-    @await Html.PartialAsync("_StylesHead")
     @await RenderSectionAsync("stylesHead", required: false)
     <script type="text/javascript" nonce="@Context.EnsureCspNonce()">
         @Html.Raw(JavaScriptSnippet.ScriptBody)

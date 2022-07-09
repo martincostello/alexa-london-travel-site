@@ -22,7 +22,7 @@ public abstract class ModalBase
     protected async Task CloseSelfAsync()
     {
         IElementHandle? modal = await Navigator.Page.QuerySelectorAsync(DialogSelector);
-        IElementHandle? dismiss = await modal!.QuerySelectorAsync("[data-dismiss='modal']");
+        IElementHandle? dismiss = await modal!.QuerySelectorAsync("[data-bs-dismiss='modal']");
 
         await dismiss!.ClickAsync();
     }

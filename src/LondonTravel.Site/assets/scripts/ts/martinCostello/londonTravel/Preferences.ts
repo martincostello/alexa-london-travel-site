@@ -29,8 +29,8 @@ namespace martinCostello.londonTravel {
             this.resetButton = this.container.find(".js-preferences-reset");
             this.saveButton = this.container.find(".js-preferences-save");
 
-            this.favoritesCount = this.container.find(".js-favorites-count").removeClass("hide");
-            this.otherCount = this.container.find(".js-other-count").removeClass("hide");
+            this.favoritesCount = this.container.find(".js-favorites-count").removeClass("d-none");
+            this.otherCount = this.container.find(".js-other-count").removeClass("d-none");
 
             // Treat entire div as a button
             this.container
@@ -42,7 +42,7 @@ namespace martinCostello.londonTravel {
                 .on("click", this.resetFavoriteLines)
                 .addClass("disabled")
                 .prop("disabled", true)
-                .removeClass("hide");
+                .removeClass("d-none");
 
             // Disable the clear button if everything is currently deselected
             if (this.initialState === "") {
@@ -54,7 +54,7 @@ namespace martinCostello.londonTravel {
             // Add handler for clearing the selections and show the button
             this.clearButton
                 .on("click", this.clearFavoriteLines)
-                .removeClass("hide");
+                .removeClass("d-none");
 
             // Disable the save button the state is different
             this.saveButton
@@ -122,7 +122,7 @@ namespace martinCostello.londonTravel {
             const ids: string[] = [];
 
             this.getSelectedCheckboxes()
-                .each((index: number, elem: Element) => {
+                .each((_: number, elem: Element) => {
                     const element = $(elem);
                     ids.push(element.attr("data-line-id"));
                 });
@@ -161,7 +161,7 @@ namespace martinCostello.londonTravel {
             const ids: string[] = this.initialState.split(",");
 
             this.getAllCheckboxes()
-                .each((index: number, elem: Element) => {
+                .each((_: number, elem: Element) => {
                     const element = $(elem);
                     const id: string = element.attr("data-line-id");
                     element.prop("checked", ids.indexOf(id) > -1);
@@ -186,5 +186,5 @@ namespace martinCostello.londonTravel {
     }
 }
 (() => {
-    const preferences: martinCostello.londonTravel.Preferences = new martinCostello.londonTravel.Preferences();
+    const _ = new martinCostello.londonTravel.Preferences();
 })();

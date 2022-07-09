@@ -14,13 +14,15 @@
             .ToList();
     }
 }
-<form asp-route="@SiteRoutes.ExternalSignIn" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+<form asp-route="@SiteRoutes.ExternalSignIn" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
     <div>
         <p>
-            @foreach (var scheme in schemes)
-            {
-                @await Html.PartialAsync("_SocialButton", scheme)
-            }
+            <div class="vstack gap-2">
+                @foreach (var scheme in schemes)
+                {
+                    @await Html.PartialAsync("_SocialButton", scheme)
+                }
+            </div>
         </p>
     </div>
 </form>

@@ -1,21 +1,19 @@
 @model ManageViewModel
 <noscript>
-    <form asp-route="@SiteRoutes.RemoveAlexaLink" method="post" class="form-horizontal">
+    <form asp-route="@SiteRoutes.RemoveAlexaLink" method="post">
         <input type="hidden" name="@(nameof(ManageViewModel.ETag))" value="@Model!.ETag" />
         <input type="submit" class="btn btn-default btn-sm" value="@SR.ManageUnlinkAlexaButtonText" title="@SR.ManageUnlinkAlexaButtonAltText" />
     </form>
 </noscript>
-<button class="btn btn-default btn-sm hide js-hidden-control" title="@SR.ManageUnlinkAlexaButtonAltText" data-id="remove-alexa-link" data-ga-label="Unlink Alexa Skill" data-toggle="modal" data-target="#unlink-alexa-modal">
+<button class="btn btn-default btn-sm d-none js-hidden-control" title="@SR.ManageUnlinkAlexaButtonAltText" data-id="remove-alexa-link" data-ga-label="Unlink Alexa Skill" data-bs-toggle="modal" data-bs-target="#unlink-alexa-modal">
     @SR.ManageUnlinkAlexaButtonText
 </button>
 <div id="unlink-alexa-modal" class="modal js-modal" data-id="modal-remove-alexa"  tabindex="-1" role="dialog" aria-describedby="unlink-alexa-modal-description" aria-labelledby="unlink-alexa-modal-title">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close js-unlink-content" data-dismiss="modal" aria-label="@SR.CloseButtonText" data-ga-label="Unlink Alexa Skill Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
                 <h4 class="modal-title" id="unlink-alexa-modal-title">@SR.ManageUnlinkAlexaModalTitle</h4>
+                <button type="button" class="btn-close js-unlink-content" data-bs-dismiss="modal" aria-label="@SR.CloseButtonText" data-ga-label="Unlink Alexa Skill Close"></button>
             </div>
             <div class="modal-body">
                 <div id="unlink-alexa-modal-description" class="js-unlink-content">
@@ -26,19 +24,19 @@
                         @SR.ManageUnlinkAlexaModalContent2
                     </p>
                 </div>
-                <div class="js-unlink-loader hide">
-                    <p class="lead text-center">
+                <div class=" d-flex aligns-items-center justify-content-center js-unlink-loader d-none">
+                    <p class="lead">
                         @SR.ManageUnlinkAlexaModalLoading
                     </p>
                     <p>
-                        <div class="center-block loader" aria-hidden="true"></div>
+                        <div class="loader" aria-hidden="true"></div>
                     </p>
                 </div>
             </div>
             <div class="modal-footer">
-                <form asp-route="@SiteRoutes.RemoveAlexaLink" method="post" class="form-horizontal js-modal-form">
+                <form asp-route="@SiteRoutes.RemoveAlexaLink" method="post" class="js-modal-form">
                     <input type="hidden" name="@(nameof(ManageViewModel.ETag))" value="@Model!.ETag" />
-                    <button type="button" class="btn btn-default js-unlink-control" title="@SR.CancelButtonAltText" data-dismiss="modal" data-ga-label="Unlink Alexa Skill Cancel">@SR.CancelButtonText</button>
+                    <button type="button" class="btn btn-default js-unlink-control" title="@SR.CancelButtonAltText" data-bs-dismiss="modal" data-ga-label="Unlink Alexa Skill Cancel">@SR.CancelButtonText</button>
                     <input type="submit" class="btn btn-danger disabled js-unlink-control js-modal-confirm" data-id="remove-alexa-confirm" value="@SR.ManageUnlinkAlexaModalConfirmButtonText" title="@SR.ManageUnlinkAlexaModalConfirmButtonAltText" data-ga-label="Unlink Alexa Skill Confirm" disabled />
                 </form>
             </div>

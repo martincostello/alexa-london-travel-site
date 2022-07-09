@@ -4,11 +4,7 @@
 */
 
 body {
-    padding-top: 70px;
-}
-
-.btn-wrapper {
-    margin-bottom: 5px;
+    padding-top: 85px;
 }
 
 .btn-amazon {
@@ -18,11 +14,19 @@ body {
     color: #fff;
 }
 
+.btn-amazon:hover {
+    background-color: #E08802;
+}
+
 .btn-apple {
     background-color: black;
     border-color: rgb(0,0,0);
     border-color: rgba(0,0,0,0.2);
     color: #fff;
+}
+
+.btn-close {
+    float: right;
 }
 
 /* csslint ignore:start */

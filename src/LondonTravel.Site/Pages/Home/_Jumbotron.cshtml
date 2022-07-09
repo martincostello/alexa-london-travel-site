@@ -1,24 +1,30 @@
 @{
     bool authenticationEnabled = Options?.Authentication?.IsEnabled == true;
 }
-<div class="jumbotron">
-    <h1>@SR.BrandName</h1>
-    <p class="lead">
-        @SR.HomepageLead
-    </p>
-    <p>
-        <a class="btn btn-primary" href="@Options?.ExternalLinks?.Skill" rel="noopener noreferrer" target="_blank" title="@SR.InstallLinkAltText" data-ga-label="Install Skill CTA">@SR.InstallLinkText <i class="fa fa-external-link" aria-hidden="true"></i></a>
-        @if (authenticationEnabled)
-        {
-            <a class="btn btn-primary hidden-xs" asp-page="@SiteRoutes.Register" title="@SR.RegisterLinkAltText" data-ga-label="Register CTA" data-id="register">@SR.RegisterLinkText <i class="fa fa-user-plus" aria-hidden="true"></i></a>
-            <a class="btn btn-primary hidden-xs" asp-route="@SiteRoutes.SignIn" title="@SR.SignInLinkAltText" data-ga-label="Sign-in CTA" data-id="sign-in">@SR.SignInLinkText <i class="fa fa-sign-in" aria-hidden="true"></i></a>
-        }
-    </p>
-    @if (authenticationEnabled)
-    {
-        <p class="visible-xs">
-            <a class="btn btn-primary" asp-page="@SiteRoutes.Register" title="@SR.RegisterLinkAltText" data-ga-label="Register CTA" data-id="register">@SR.RegisterLinkText <i class="fa fa-user-plus" aria-hidden="true"></i></a>
-            <a class="btn btn-primary" asp-route="@SiteRoutes.SignIn" title="@SR.SignInLinkAltText" data-ga-label="Sign-in CTA" data-id="sign-in">@SR.SignInLinkText <i class="fa fa-sign-in" aria-hidden="true"></i></a>
+<div class="bg-light mb-4 p-5 rounded-3">
+    <div class="container-fluid pt-2">
+        <h1 class="display-5 fw-bold">@SR.BrandName</h1>
+        <p class="lead">
+            @SR.HomepageLead
         </p>
-    }
+        <p>
+            <div class="col-12 col-sm-2 gap-2 vstack">
+                <a class="btn btn-primary" href="@Options?.ExternalLinks?.Skill" rel="noopener noreferrer" target="_blank" title="@SR.InstallLinkAltText" data-ga-label="Install Skill CTA">
+                    @SR.InstallLinkText
+                    <span class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></span>
+                </a>
+                @if (authenticationEnabled)
+                {
+                    <a class="btn btn-primary" asp-page="@SiteRoutes.Register" title="@SR.RegisterLinkAltText" data-ga-label="Register CTA" data-id="register">
+                        @SR.RegisterLinkText
+                        <span class="fa-solid fa-user-plus" aria-hidden="true"></span>
+                    </a>
+                    <a class="btn btn-primary" asp-route="@SiteRoutes.SignIn" title="@SR.SignInLinkAltText" data-ga-label="Sign-in CTA" data-id="sign-in">
+                        @SR.SignInLinkText
+                        <span class="fa-solid fa-right-to-bracket" aria-hidden="true"></span>
+                    </a>
+                }
+            </div>
+        </p>
+    </div>
 </div>

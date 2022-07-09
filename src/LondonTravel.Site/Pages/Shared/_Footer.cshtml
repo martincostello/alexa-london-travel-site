@@ -1,41 +1,23 @@
 @model SiteOptions
 <hr />
 <footer>
-    <p class="hidden-sm hidden-xs">
+    <p>
         @SR.CopyrightText |
-        <a asp-page="@SiteRoutes.Help" title="@SR.HelpLinkAltText" data-ga-label="Help Footer">
+        <a class="text-nowrap" asp-page="@SiteRoutes.Help" title="@SR.HelpLinkAltText" data-ga-label="Help Footer">
             @SR.HelpLinkText
         </a>
         |
-        <a asp-page="@SiteRoutes.PrivacyPolicy" title="@SR.PrivacyPolicyLinkAltText" data-ga-label="Privacy Policy Footer">
+        <a class="text-nowrap" asp-page="@SiteRoutes.PrivacyPolicy" title="@SR.PrivacyPolicyLinkAltText" data-ga-label="Privacy Policy Footer">
             @SR.PrivacyPolicyLinkText
         </a>
         |
-        <a asp-page="@SiteRoutes.TermsOfService" title="@SR.TermsOfServiceLinkAltText" data-ga-label="Terms of Service Footer">
+        <a class="text-nowrap" asp-page="@SiteRoutes.TermsOfService" title="@SR.TermsOfServiceLinkAltText" data-ga-label="Terms of Service Footer">
             @SR.TermsOfServiceLinkText
         </a>
         |
-        <a asp-page="@SiteRoutes.Technology" title="@SR.TechnologyLinkAltText" data-ga-label="Technology Footer">
+        <a class="text-nowrap" asp-page="@SiteRoutes.Technology" title="@SR.TechnologyLinkAltText" data-ga-label="Technology Footer">
             @SR.TechnologyLinkText
         </a>
-        <span id="build-date" data-format="YYYY-MM-DD HH:mm Z" data-timestamp="@GitMetadata.Timestamp.ToString("u", CultureInfo.InvariantCulture)"></span>
+        <span id="build-date" class="d-none d-sm-inline" data-format="YYYY-MM-DD HH:mm Z" data-timestamp="@GitMetadata.Timestamp.ToString("u", CultureInfo.InvariantCulture)"></span>
     </p>
-    <div class="row hidden-md hidden-lg">
-        <div class="col-sm-12 col-xs-12">
-            @SR.CopyrightText
-        </div>
-        <div class="col-sm-12 col-xs-12">
-            <a asp-page="@SiteRoutes.Help" title="@SR.HelpLinkAltText" data-ga-label="Help Footer">
-                @SR.HelpLinkText
-            </a>
-            |
-            <a asp-page="@SiteRoutes.PrivacyPolicy" title="@SR.PrivacyPolicyLinkAltText" data-ga-label="Privacy Policy Footer">
-                @SR.PrivacyPolicyLinkText
-            </a>
-            |
-            <a asp-page="@SiteRoutes.TermsOfService" title="@SR.TermsOfServiceLinkAltText" data-ga-label="Terms of Service Footer">
-                @SR.TermsOfServiceLinkText
-            </a>
-        </div>
-    </div>
 </footer>
