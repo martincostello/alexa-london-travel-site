@@ -22,7 +22,7 @@ public sealed class LinkedAccount
 
     public async Task<string> NameAsync()
     {
-        IElementHandle? element = await RootElement.QuerySelectorAsync("span");
+        IElementHandle? element = await RootElement.QuerySelectorAsync("span[class='brand-name']");
         string text = await element!.InnerTextAsync();
         return text.Trim();
     }

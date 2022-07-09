@@ -138,7 +138,6 @@ public class ResourceTests : IntegrationTest
         {
             "content-security-policy",
             "content-security-policy-report-only",
-            "feature-policy",
             "NEL",
             "Permissions-Policy",
             "Referrer-Policy",

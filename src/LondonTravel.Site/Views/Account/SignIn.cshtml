@@ -13,7 +13,7 @@
             @await Html.PartialAsync("_SignInForm")
         </section>
     </div>
-    <hr class="hidden-md hidden-lg" />
+    <hr class="d-md-none" />
     <div class="col-md-8">
         <section>
             <h3>@SR.SignInRegisterSubtitle</h3>
@@ -23,7 +23,7 @@
             <p>
                 <a class="btn btn-primary btn-lg" asp-page="@SiteRoutes.Register" title="@SR.RegisterLinkAltText" data-ga-label="Register (Button)">
                     @SR.RegisterLinkText
-                    <i class="fa fa-user-plus" aria-hidden="true"></i>
+                    <span class="fa-solid fa-user-plus" aria-hidden="true"></span>
                 </a>
             </p>
         </section>

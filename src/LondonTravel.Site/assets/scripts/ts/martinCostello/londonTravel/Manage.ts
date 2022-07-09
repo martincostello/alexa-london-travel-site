@@ -24,7 +24,7 @@ namespace martinCostello.londonTravel {
         public initialize(): void {
             $(".js-hidden-control")
                 .fadeIn()
-                .removeClass("hide");
+                .removeClass("d-none");
             $(".js-modal-form").on("submit", this.onFormSubmit);
             $(".js-modal").on("show.bs.modal", this.onModalShown);
         }
@@ -36,8 +36,8 @@ namespace martinCostello.londonTravel {
         private onFormSubmit = (e: JQuery.TriggeredEvent): void => {
             const form = $(e.target);
             form.find(".js-delete-control").addClass("disabled");
-            form.find(".js-delete-content").addClass("hide");
-            form.find(".js-delete-loader").removeClass("hide");
+            form.find(".js-delete-content").addClass("d-none");
+            form.find(".js-delete-loader").removeClass("d-none");
         }
 
         /**

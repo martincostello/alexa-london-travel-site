@@ -1,13 +1,13 @@
 @model Microsoft.AspNetCore.Authentication.AuthenticationScheme
 <button type="submit"
-        class="btn btn-block btn-social @Html.GetSocialLoginButtonCss(Model!.Name)"
+        class="btn btn-lg btn-primary btn-social @Html.GetSocialLoginButtonCss(Model!.Name)"
         name="provider"
         value="@Model.Name"
         title="@SR.SignInButtonAltText(Model.DisplayName!)"
         data-id="sign-in-@Model.Name.ToLowerInvariant()"
         data-ga-label="Sign-In - @Model.DisplayName"
-        data-target=".sign-in-modal"
-        data-toggle="modal">
+        data-bs-target=".sign-in-modal"
+        data-bs-toggle="modal">
     @await Html.PartialAsync("_SocialIcon", Model.Name)
     @SR.SignInButtonText(Model.DisplayName!)
 </button>

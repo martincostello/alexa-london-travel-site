@@ -1,14 +1,14 @@
 <noscript>
     <hr />
-    <form asp-route="@SiteRoutes.DeleteAccount" method="post" class="form-horizontal">
+    <form asp-route="@SiteRoutes.DeleteAccount" method="post">
         <div>
             <input type="submit" class="btn btn-danger" value="@SR.DeleteAccountButtonText" title="@SR.DeleteAccountButtonAltText" />
         </div>
     </form>
 </noscript>
-<div class="hide js-hidden-control">
+<div class="d-none js-hidden-control">
     <hr />
-    <button class="btn btn-danger" title="@SR.DeleteAccountButtonAltText" data-id="delete-account" data-ga-label="Delete Account" data-toggle="modal" data-target="#delete-account-modal">
+    <button class="btn btn-danger" title="@SR.DeleteAccountButtonAltText" data-id="delete-account" data-ga-label="Delete Account" data-bs-toggle="modal" data-bs-target="#delete-account-modal">
         @SR.DeleteAccountButtonText
     </button>
 </div>
@@ -16,10 +16,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close js-delete-content" data-dismiss="modal" aria-label="@SR.CloseButtonText" data-ga-label="Delete Account Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
                 <h4 class="modal-title" id="delete-account-modal-title">@SR.DeleteAccountModalTitle</h4>
+                <button type="button" class="btn-close js-delete-content" data-bs-dismiss="modal" aria-label="@SR.CloseButtonText" data-ga-label="Delete Account Close"></button>
             </div>
             <div class="modal-body">
                 <div class="js-delete-content">
@@ -38,18 +36,18 @@
                         @SR.DeleteAccountParagraph3Html
                     </p>
                 </div>
-                <div class="js-delete-loader hide">
-                    <p class="lead text-center">
+                <div class="d-flex aligns-items-center justify-content-center js-delete-loader d-none">
+                    <p class="lead">
                         @SR.DeleteInProgressText
                     </p>
                     <p>
-                        <div class="center-block loader" aria-hidden="true"></div>
+                        <div class="loader" aria-hidden="true"></div>
                     </p>
                 </div>
             </div>
             <div class="modal-footer">
-                <form asp-route="@SiteRoutes.DeleteAccount" method="post" class="form-horizontal js-modal-form">
-                    <button type="button" class="btn btn-default js-delete-control" title="@SR.CancelButtonAltText" data-dismiss="modal" data-ga-label="Delete Account Cancel">@SR.CancelButtonText</button>
+                <form asp-route="@SiteRoutes.DeleteAccount" method="post" class="js-modal-form">
+                    <button type="button" class="btn btn-default js-delete-control" title="@SR.CancelButtonAltText" data-bs-dismiss="modal" data-ga-label="Delete Account Cancel">@SR.CancelButtonText</button>
                     <input type="submit" class="btn btn-danger disabled js-delete-control js-modal-confirm" value="@SR.DeleteAccountConfirmationButtonText" title="@SR.DeleteAccountConfirmationButtonAltText"  data-id="delete-account-confirm" data-ga-label="Delete Account Confirm" disabled />
                 </form>
             </div>

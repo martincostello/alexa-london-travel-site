@@ -1,72 +1,72 @@
-<nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
     <div class="container">
-        <div class="navbar-header">
-            <a asp-page="@SiteRoutes.Home" class="navbar-brand" title="@SR.HomepageLinkAltText" data-ga-label="Homepage Navbar">
-                <span>
-                    @SR.BrandName
-                    <lazyimg src="@Url.CdnContent("avatar.png", Options)" alt="@SR.BrandName" title="@SR.BrandName" aria-hidden="true" />
-                    <noscript>
-                        <img src="@Url.CdnContent("avatar.png", Options)" alt="@SR.BrandName" title="@SR.BrandName" aria-hidden="true" />
-                    </noscript>
-                </span>
-            </a>
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" data-ga-label="Navbar Collapse">
-                <span class="sr-only">@SR.NavbarCollapseAltText</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-        </div>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" data-ga-label="Navbar Menu">
-                        @SR.NavbarMenuText <span class="caret"></span>
+        <a asp-page="@SiteRoutes.Home" class="navbar-brand" title="@SR.HomepageLinkAltText" data-ga-label="Homepage Navbar">
+            <span>
+                @SR.BrandName
+                <lazyimg src="@Url.CdnContent("avatar.png", Options)" class="pb-1" alt="@SR.BrandName" title="@SR.BrandName" aria-hidden="true" />
+                <noscript>
+                    <img src="@Url.CdnContent("avatar.png", Options)" class="pb-1" alt="@SR.BrandName" title="@SR.BrandName" aria-hidden="true" />
+                </noscript>
+            </span>
+        </a>
+        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="@SR.NavbarCollapseAltText">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse" id="navbar-collapse">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbar-dropdown" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" data-ga-label="Navbar Menu">
+                        @SR.NavbarMenuText
                     </a>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu" aria-labelledby="navbar-dropdown">
                         <li>
-                            <a href="@Options?.ExternalLinks?.Skill" rel="noopener noreferrer" target="_blank" title="@SR.InstallLinkAltText" data-ga-label="Install Navbar">
+                            <a class="dropdown-item" href="@Options?.ExternalLinks?.Skill" rel="noopener noreferrer" target="_blank" title="@SR.InstallLinkAltText" data-ga-label="Install Navbar">
                                 @SR.InstallLinkText
-                                <i class="fa fa-external-link" aria-hidden="true"></i>
+                                <span class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></span>
                             </a>
                         </li>
                         @if (Options?.Authentication?.IsEnabled == true)
                         {
-                            <li role="separator" class="divider"></li>
+                            <li><hr class="dropdown-divider"></li>
                             @if (User?.Identity?.IsAuthenticated == true)
                             {
                                 <li>
-                                    <a asp-route="@SiteRoutes.Manage" title="@SR.ManageLinkAltText" data-ga-label="Manage Account Navbar">
-                                        @SR.ManageLinkText <i class="fa fa-user" aria-hidden="true"></i>
+                                    <a class="dropdown-item" asp-route="@SiteRoutes.Manage" title="@SR.ManageLinkAltText" data-ga-label="Manage Account Navbar">
+                                        @SR.ManageLinkText
+                                        <span class="fa-solid fa-user" aria-hidden="true"></span>
                                     </a>
                                 </li>
                             }
                             else
                             {
                                 <li>
-                                    <a asp-page="@SiteRoutes.Register" title="@SR.RegisterLinkAltText" data-ga-label="Register Navbar">@SR.RegisterLinkText <i class="fa fa-user-plus" aria-hidden="true"></i></a>
+                                    <a class="dropdown-item" asp-page="@SiteRoutes.Register" title="@SR.RegisterLinkAltText" data-ga-label="Register Navbar">
+                                        @SR.RegisterLinkText
+                                        <span class="fa-solid fa-user-plus" aria-hidden="true"></span>
+                                    </a>
                                 </li>
                             }
                         }
-                        <li role="separator" class="divider"></li>
+                        <li><hr class="dropdown-divider"></li>
                         <li>
-                            <a asp-page="@SiteRoutes.Help" title="@SR.HelpLinkAltText" data-ga-label="Help Navbar">
-                                @SR.HelpLinkText <i class="fa fa-question-circle" aria-hidden="true"></i>
+                            <a class="dropdown-item" asp-page="@SiteRoutes.Help" title="@SR.HelpLinkAltText" data-ga-label="Help Navbar">
+                                @SR.HelpLinkText
+                                <span class="fa-solid fa-circle-question" aria-hidden="true"></span>
                             </a>
                         </li>
                         <li>
-                            <a asp-page="@SiteRoutes.PrivacyPolicy" title="@SR.PrivacyPolicyLinkAltText" data-ga-label="Privacy Policy Navbar">
+                            <a class="dropdown-item" asp-page="@SiteRoutes.PrivacyPolicy" title="@SR.PrivacyPolicyLinkAltText" data-ga-label="Privacy Policy Navbar">
                                 @SR.PrivacyPolicyLinkText
                             </a>
                         </li>
                         <li>
-                            <a asp-page="@SiteRoutes.TermsOfService" title="@SR.TermsOfServiceLinkAltText" data-ga-label="Terms of Service Navbar">
+                            <a class="dropdown-item" asp-page="@SiteRoutes.TermsOfService" title="@SR.TermsOfServiceLinkAltText" data-ga-label="Terms of Service Navbar">
                                 @SR.TermsOfServiceLinkText
                             </a>
                         </li>
-                        <li role="separator" class="divider"></li>
+                        <li><hr class="dropdown-divider"></li>
                         <li>
-                            <a asp-page="@SiteRoutes.Technology" title="@SR.TechnologyLinkAltText" data-ga-label="Technology Navbar">
+                            <a class="dropdown-item" asp-page="@SiteRoutes.Technology" title="@SR.TechnologyLinkAltText" data-ga-label="Technology Navbar">
                                 @SR.TechnologyLinkText
                             </a>
                         </li>

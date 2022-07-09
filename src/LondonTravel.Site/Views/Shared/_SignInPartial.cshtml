@@ -5,10 +5,10 @@
 }
 @if (SignInManager.IsSignedIn(User))
 {
-    <form asp-route="@SiteRoutes.SignOut" method="post" class="navbar-right">
+    <form asp-route="@SiteRoutes.SignOut" method="post">
         <ul class="nav navbar-nav navbar-right">
             <li>
-                <a asp-route="@SiteRoutes.Manage" title="@SR.ManageLinkAltText" data-ga-label="Manage Account Navbar">
+                <a class="nav-link" asp-route="@SiteRoutes.Manage" title="@SR.ManageLinkAltText" data-ga-label="Manage Account Navbar">
                     <span data-id="user-name">@displayName</span>
                     <lazyimg alt="@displayName" title="@displayName" src="@avatarUrl" aria-hidden="true" />
                     <noscript>
@@ -17,9 +17,9 @@
                 </a>
             </li>
             <li>
-                <button type="submit" class="btn btn-link navbar-btn navbar-link" title="@SR.SignOutLinkText" data-id="sign-out" data-ga-label="Sign-Out Navbar">
+                <button type="submit" class="btn btn-link navbar-btn nav-link" title="@SR.SignOutLinkText" data-id="sign-out" data-ga-label="Sign-Out Navbar">
                     @SR.SignOutLinkText
-                    <i class="fa fa-sign-out" aria-hidden="true"></i>
+                    <span class="fa-solid fa-right-from-bracket" aria-hidden="true"></span>
                 </button>
             </li>
         </ul>
@@ -28,7 +28,15 @@
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li><a asp-route="@SiteRoutes.SignIn" rel="nofollow" title="@SR.SignInLinkAltText" data-ga-label="Sign-In Navbar">@SR.SignInLinkText</a></li>
-        <li><a asp-page="@SiteRoutes.Register" title="@SR.RegisterLinkAltText" data-ga-label="Register Navbar">@SR.RegisterLinkText</a></li>
+        <li>
+            <a class="nav-link" asp-route="@SiteRoutes.SignIn" rel="nofollow" title="@SR.SignInLinkAltText" data-ga-label="Sign-In Navbar">
+                @SR.SignInLinkText
+            </a>
+        </li>
+        <li>
+            <a class="nav-link" asp-page="@SiteRoutes.Register" title="@SR.RegisterLinkAltText" data-ga-label="Register Navbar">
+                @SR.RegisterLinkText
+            </a>
+        </li>
     </ul>
 }

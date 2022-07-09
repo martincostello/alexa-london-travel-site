@@ -4,7 +4,7 @@
     @if (Model!.HasFavorites)
     {
         <div class="row">
-            <h4 class="col-xs-offset-1">@SR.FavoriteLinesTitle("hide js-favorites-count", Model.FavoriteLines.Count())</h4>
+            <h4 class="col-xs-offset-1">@SR.FavoriteLinesTitle("d-none js-favorites-count", Model.FavoriteLines.Count())</h4>
             @await Html.PartialAsync("_Lines", Model.FavoriteLines)
         </div>
     }
@@ -12,7 +12,7 @@
     {
         <div class="row">
             @{
-                var classes = Model.HasFavorites ? "hide js-other-count" : string.Empty;
+                var classes = Model.HasFavorites ? "d-none js-other-count" : string.Empty;
                 var count = Model.OtherLines.Count();
                 var otherTitle = Model.HasFavorites ?
                     SR.OtherLinesTitle(classes, count) :
@@ -23,15 +23,9 @@
         </div>
     }
     <hr />
-    <div class="row">
-        <div class="col-xs-10 col-xs-offset-1 col-md-3 col-md-offset-1 btn-wrapper">
-            <button type="submit" class="btn btn-primary btn-block js-preferences-save" title="@SR.SavePreferencesButtonAltText" data-id="save-preferences" data-toggle="modal" data-target=".update-preferences-modal">@SR.SavePreferencesButtonText</button>
-        </div>
-        <div class="col-xs-10 col-xs-offset-1 col-md-3 col-md-offset-0 btn-wrapper">
-            <button type="button" class="btn btn-info hide btn-block js-preferences-clear" title="@SR.ClearPreferencesButtonAltText">@SR.ClearPreferencesButtonText</button>
-        </div>
-        <div class="col-xs-10 col-xs-offset-1 col-md-3 col-md-offset-0 btn-wrapper">
-            <button type="button" class="btn btn-info hide btn-block js-preferences-reset" title="@SR.ResetPreferencesButtonAltText">@SR.ResetPreferencesButtonText</button>
-        </div>
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary js-preferences-save flex-fill" title="@SR.SavePreferencesButtonAltText" data-id="save-preferences" data-bs-toggle="modal" data-bs-target=".update-preferences-modal">@SR.SavePreferencesButtonText</button>
+        <button type="button" class="btn btn-info js-preferences-clear flex-fill" title="@SR.ClearPreferencesButtonAltText">@SR.ClearPreferencesButtonText</button>
+        <button type="button" class="btn btn-info js-preferences-reset flex-fill" title="@SR.ResetPreferencesButtonAltText">@SR.ResetPreferencesButtonText</button>
     </div>
 </form>
