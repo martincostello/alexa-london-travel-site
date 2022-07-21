@@ -14,7 +14,14 @@ internal static class IHostBuilderExtensions
     {
         builder.ConfigureAppConfiguration((context, builder) =>
         {
-            builder.AddApplicationInsightsSettings(developerMode: context.HostingEnvironment.IsDevelopment());
+            string appInsightsConnectionString = context.Configuration.ApplicationInsightsConnectionString();
+
+            if (!string.IsNullOrWhiteSpace(appInsightsConnectionString))
+            {
+                builder.AddApplicationInsightsSettings(
+                    appInsightsConnectionString,
+                    developerMode: context.HostingEnvironment.IsDevelopment());
+            }
 
             // Build the configuration so far, this ensures things like user secrets are available
             IConfiguration config = builder.Build();

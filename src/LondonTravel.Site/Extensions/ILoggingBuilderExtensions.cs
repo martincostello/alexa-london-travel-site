@@ -26,8 +26,14 @@ public static class ILoggingBuilderExtensions
             .Enrich.WithProperty("AzureDatacenter", context.Configuration.AzureDatacenter())
             .Enrich.WithProperty("AzureEnvironment", context.Configuration.AzureEnvironment())
             .Enrich.WithProperty("Version", GitMetadata.Commit)
-            .ReadFrom.Configuration(context.Configuration)
-            .WriteTo.ApplicationInsights(context.Configuration.ApplicationInsightsConnectionString(), TelemetryConverter.Events);
+            .ReadFrom.Configuration(context.Configuration);
+
+        string appInsightsConnectionString = context.Configuration.ApplicationInsightsConnectionString();
+
+        if (!string.IsNullOrWhiteSpace(appInsightsConnectionString))
+        {
+            loggerConfig = loggerConfig.WriteTo.ApplicationInsights(appInsightsConnectionString, TelemetryConverter.Events);
+        }
 
         if (context.HostingEnvironment.IsDevelopment())
         {
