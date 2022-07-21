@@ -46,7 +46,6 @@
     <PackageReference Include="Serilog.Settings.Configuration" />
     <PackageReference Include="Serilog.Sinks.ApplicationInsights" />
     <PackageReference Include="Serilog.Sinks.Console" />
-    <PackageReference Include="Serilog.Sinks.UDP" />
     <PackageReference Include="Swashbuckle.AspNetCore" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" />
   </ItemGroup>
