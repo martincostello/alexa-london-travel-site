@@ -55,33 +55,4 @@ public static class IConfigurationExtensions
     {
         return config?["ConnectionStrings:AzureStorage"] ?? string.Empty;
     }
-
-    /// <summary>
-    /// Gets the hostname to use to log to Papertrail.
-    /// </summary>
-    /// <param name="config">The <see cref="IConfiguration"/> to use.</param>
-    /// <returns>
-    /// The hostname to use to log to Papertrail, if any.
-    /// </returns>
-    public static string PapertrailHostname(this IConfiguration config)
-    {
-        return config?["Papertrail:Hostname"] ?? string.Empty;
-    }
-
-    /// <summary>
-    /// Gets the UDP port to use to log to Papertrail.
-    /// </summary>
-    /// <param name="config">The <see cref="IConfiguration"/> to use.</param>
-    /// <returns>
-    /// The UDP port to use to log to Papertrail, if any.
-    /// </returns>
-    public static int PapertrailPort(this IConfiguration config)
-    {
-        if (!ushort.TryParse(config?["Papertrail:Port"], out ushort port))
-        {
-            port = 0;
-        }
-
-        return port;
-    }
 }

@@ -26,22 +26,21 @@ public static class ILoggingBuilderExtensions
             .Enrich.WithProperty("AzureDatacenter", context.Configuration.AzureDatacenter())
             .Enrich.WithProperty("AzureEnvironment", context.Configuration.AzureEnvironment())
             .Enrich.WithProperty("Version", GitMetadata.Commit)
-            .ReadFrom.Configuration(context.Configuration)
-            .WriteTo.ApplicationInsights(context.Configuration.ApplicationInsightsConnectionString(), TelemetryConverter.Events);
+            .ReadFrom.Configuration(context.Configuration);
+
+        string appInsightsConnectionString = context.Configuration.ApplicationInsightsConnectionString();
+
+        if (!string.IsNullOrWhiteSpace(appInsightsConnectionString))
+        {
+            loggerConfig = loggerConfig.WriteTo.ApplicationInsights(appInsightsConnectionString, TelemetryConverter.Events);
+        }
 
         if (context.HostingEnvironment.IsDevelopment())
         {
             loggerConfig = loggerConfig.WriteTo.Console();
         }
 
-        string papertrailHostname = context.Configuration.PapertrailHostname();
-
-        if (!string.IsNullOrWhiteSpace(papertrailHostname))
-        {
-            loggerConfig.WriteTo.Papertrail(papertrailHostname, context.Configuration.PapertrailPort());
-        }
-
-        Serilog.Log.Logger = loggerConfig.CreateLogger();
+        Log.Logger = loggerConfig.CreateLogger();
         return builder.AddSerilog(dispose: true);
     }
 }
