@@ -60,6 +60,7 @@ public class AccountTests : IntegrationTest
             // Assert
             Assert.NotNull(createResult);
             Assert.True(createResult.Succeeded);
+            Assert.NotNull(user.Id);
             Assert.NotEmpty(user.Id);
 
             // Arrange
@@ -75,6 +76,7 @@ public class AccountTests : IntegrationTest
             Assert.Equal(user.CreatedAt, actual.CreatedAt);
             Assert.Equal(user.Email, actual.Email);
             Assert.False(actual.EmailConfirmed);
+            Assert.NotNull(actual.ETag);
             Assert.NotEmpty(actual.ETag);
             Assert.Equal(Array.Empty<string>(), actual.FavoriteLines);
             Assert.Equal(user.GivenName, actual.GivenName);
