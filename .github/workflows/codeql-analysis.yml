@@ -9,9 +9,6 @@ on:
     - cron: '0 6 * * 1'
   workflow_dispatch:
 
-env:
-  DOTNET_ROLL_FORWARD: Major # HACK Remove once Playwright supports .NET 6
-
 jobs:
   code-ql:
 
