@@ -41,7 +41,7 @@
     <PackageVersion Include="Serilog.Settings.Configuration" Version="3.3.0" />
     <PackageVersion Include="Serilog.Sinks.ApplicationInsights" Version="4.0.0" />
     <PackageVersion Include="Serilog.Sinks.Console" Version="4.0.1" />
-    <PackageVersion Include="Shouldly" Version="4.0.3" />
+    <PackageVersion Include="Shouldly" Version="4.1.0" />
     <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.435" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="$(SwashbuckleAspNetCoreVersion)" />
     <PackageVersion Include="Swashbuckle.AspNetCore.Annotations" Version="$(SwashbuckleAspNetCoreVersion)" />
