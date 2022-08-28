@@ -12,6 +12,8 @@ on:
   workflow_dispatch:
 
 env:
+  APPLICATION_URL_DEV: https://londontravel-dev.martincostello.com
+  APPLICATION_URL_PROD: https://londontravel.martincostello.com
   AZURE_WEBAPP_NAME: londontravelmartincostello
   AZURE_WEBAPP_PACKAGE_PATH: ./artifacts/publish
   DOTNET_CLI_TELEMETRY_OPTOUT: true
@@ -22,8 +24,6 @@ env:
   DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: 1
   NUGET_XMLDOC_MODE: skip
   TERM: xterm
-  WEBSITE_URL_DEV: https://londontravel-dev.martincostello.com
-  WEBSITE_URL_PROD: https://londontravel.martincostello.com
 
 jobs:
   build:
@@ -99,7 +99,7 @@ jobs:
     concurrency: development_environment
     environment:
       name: dev
-      url: ${{ env.WEBSITE_URL_DEV }}
+      url: ${{ env.APPLICATION_URL_DEV }}
 
     steps:
 
@@ -133,7 +133,7 @@ jobs:
       shell: pwsh
       run: dotnet test ./tests/LondonTravel.Site.Tests --configuration Release --filter Category=EndToEnd /p:CollectCoverage=false
       env:
-        WEBSITE_URL: ${{ env.WEBSITE_URL_DEV }}
+        WEBSITE_URL: ${{ env.APPLICATION_URL_DEV }}
         WEBSITE_USER_GOOGLE_USERNAME: ${{ secrets.WEBSITE_USER_GOOGLE_USERNAME }}
         WEBSITE_USER_GOOGLE_PASSWORD: ${{ secrets.WEBSITE_USER_GOOGLE_PASSWORD }}
         WEBSITE_USER_MICROSOFT_USERNAME: ${{ secrets.WEBSITE_USER_MICROSOFT_USERNAME }}
@@ -172,7 +172,7 @@ jobs:
     concurrency: production_environment
     environment:
       name: production
-      url: ${{ env.WEBSITE_URL_PROD }}
+      url: ${{ env.APPLICATION_URL_PROD }}
 
     steps:
 
@@ -205,7 +205,7 @@ jobs:
       shell: pwsh
       run: dotnet test ./tests/LondonTravel.Site.Tests --configuration Release --filter Category=EndToEnd /p:CollectCoverage=false
       env:
-        WEBSITE_URL: ${{ env.WEBSITE_URL_PROD }}
+        WEBSITE_URL: ${{ env.APPLICATION_URL_PROD }}
         WEBSITE_USER_GOOGLE_USERNAME: ${{ secrets.WEBSITE_USER_GOOGLE_USERNAME }}
         WEBSITE_USER_GOOGLE_PASSWORD: ${{ secrets.WEBSITE_USER_GOOGLE_PASSWORD }}
         WEBSITE_USER_MICROSOFT_USERNAME: ${{ secrets.WEBSITE_USER_MICROSOFT_USERNAME }}
