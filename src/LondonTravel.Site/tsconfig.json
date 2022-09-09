@@ -14,7 +14,7 @@
     "noImplicitThis": true,
     "outDir": "./wwwroot/assets/js",
     "removeComments": true,
-    "sourceMap": false,
+    "sourceMap": true,
     "target": "es5"
   },
   "exclude": [
