@@ -2,6 +2,7 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.IO.Compression;
+using System.Text.Json.Serialization.Metadata;
 using MartinCostello.LondonTravel.Site;
 using MartinCostello.LondonTravel.Site.Extensions;
 using MartinCostello.LondonTravel.Site.Options;
@@ -128,12 +129,14 @@ builder.Services.AddResponseCompression((options) =>
     options.Providers.Add<GzipCompressionProvider>();
 });
 
-builder.Services.ConfigureRouteHandlerJsonOptions((options) =>
+builder.Services.ConfigureHttpJsonOptions((options) =>
 {
     options.SerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
     options.SerializerOptions.PropertyNameCaseInsensitive = false;
     options.SerializerOptions.WriteIndented = true;
-    options.SerializerOptions.AddContext<ApplicationJsonSerializerContext>();
+    options.SerializerOptions.TypeInfoResolver = JsonTypeInfoResolver.Combine(
+        ApplicationJsonSerializerContext.Default,
+        new DefaultJsonTypeInfoResolver());
 });
 
 builder.Services.Configure<StaticFileOptions>((options) =>
