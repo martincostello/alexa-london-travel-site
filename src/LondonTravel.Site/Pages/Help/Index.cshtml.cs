@@ -42,7 +42,7 @@ public class Index : PageModel
 
         if (IsSignedIn)
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await _userManager.GetUserAsync(User!);
 
             HasFavorites = user?.FavoriteLines?.Count > 0;
             IsLinkedToAlexa = !string.IsNullOrEmpty(user?.AlexaToken);

@@ -58,7 +58,7 @@ internal static class IHostBuilderExtensions
 
     private static bool TryGetVaultUri(IConfiguration configuration, [NotNullWhen(true)] out Uri? vaultUri)
     {
-        string vault = configuration["AzureKeyVault:Uri"];
+        string vault = configuration["AzureKeyVault:Uri"] ?? string.Empty;
 
         if (!string.IsNullOrEmpty(vault) && Uri.TryCreate(vault, UriKind.Absolute, out vaultUri))
         {
@@ -71,9 +71,9 @@ internal static class IHostBuilderExtensions
 
     private static TokenCredential CreateTokenCredential(IConfiguration configuration)
     {
-        string clientId = configuration["AzureKeyVault:ClientId"];
-        string clientSecret = configuration["AzureKeyVault:ClientSecret"];
-        string tenantId = configuration["AzureKeyVault:TenantId"];
+        string clientId = configuration["AzureKeyVault:ClientId"] ?? string.Empty;
+        string clientSecret = configuration["AzureKeyVault:ClientSecret"] ?? string.Empty;
+        string tenantId = configuration["AzureKeyVault:TenantId"] ?? string.Empty;
 
         if (!string.IsNullOrEmpty(clientId) &&
             !string.IsNullOrEmpty(clientSecret) &&

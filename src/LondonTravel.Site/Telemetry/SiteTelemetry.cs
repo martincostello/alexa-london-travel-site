@@ -25,7 +25,7 @@ internal sealed class SiteTelemetry : ISiteTelemetry
     }
 
     /// <inheritdoc />
-    public void TrackEvent(string eventName, IDictionary<string, string>? properties = null)
+    public void TrackEvent(string eventName, IDictionary<string, string?>? properties = null)
     {
         _client.TrackEvent(eventName, properties);
     }

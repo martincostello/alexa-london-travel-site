@@ -97,7 +97,7 @@ public partial class AccountController : Controller
             return NotFound();
         }
 
-        string userId = _userManager.GetUserId(User);
+        string? userId = _userManager.GetUserId(User);
 
         await _signInManager.SignOutAsync();
 
@@ -160,7 +160,7 @@ public partial class AccountController : Controller
 
         if (result.Succeeded)
         {
-            string userId = _userManager.GetUserId(info.Principal);
+            string? userId = _userManager.GetUserId(info.Principal);
 
             Log.UserSignedIn(_logger, userId, info.LoginProvider);
             _telemetry.TrackSignIn(userId, info.LoginProvider);
@@ -358,7 +358,7 @@ public partial class AccountController : Controller
             EventId = 1,
             Level = LogLevel.Information,
             Message = "User Id {UserId} signed out.")]
-        public static partial void UserSignedOut(ILogger logger, string userId);
+        public static partial void UserSignedOut(ILogger logger, string? userId);
 
         [LoggerMessage(
             EventId = 2,
@@ -370,7 +370,7 @@ public partial class AccountController : Controller
             EventId = 3,
             Level = LogLevel.Information,
             Message = "User Id {UserId} signed in with provider {LoginProvider}.")]
-        public static partial void UserSignedIn(ILogger logger, string userId, string loginProvider);
+        public static partial void UserSignedIn(ILogger logger, string? userId, string loginProvider);
 
         [LoggerMessage(
             EventId = 4,

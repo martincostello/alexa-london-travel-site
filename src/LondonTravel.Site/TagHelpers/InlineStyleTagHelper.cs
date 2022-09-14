@@ -77,9 +77,9 @@ public class InlineStyleTagHelper : LinkTagHelper
         }
 
         string? filePath = (context.AllAttributes["href"].Value as string)?.TrimStart('~');
-        IFileInfo fileInfo = HostingEnvironment.WebRootFileProvider.GetFileInfo(filePath);
+        IFileInfo fileInfo = HostingEnvironment.WebRootFileProvider.GetFileInfo(filePath!);
 
-        if (!fileInfo.Exists || filePath == null)
+        if (!fileInfo.Exists || filePath == null || fileInfo.PhysicalPath is null)
         {
             // Not a local file
             await base.ProcessAsync(context, output);
@@ -88,7 +88,7 @@ public class InlineStyleTagHelper : LinkTagHelper
 
         string cacheKey = $"inline-css-{fileInfo.PhysicalPath}-{MinifyInlined == true}";
 
-        if (!Cache.TryGetValue(cacheKey, out string css))
+        if (!Cache.TryGetValue(cacheKey, out string? css))
         {
             using (var stream = File.OpenRead(fileInfo.PhysicalPath))
             {

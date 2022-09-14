@@ -67,11 +67,11 @@ public class AccountTests : IntegrationTest
             userId = user.Id!;
 
             // Act
-            LondonTravelUser actual = await store.FindByIdAsync(userId, default);
+            LondonTravelUser? actual = await store.FindByIdAsync(userId, default);
 
             // Assert
             Assert.NotNull(actual);
-            Assert.Equal(userId, actual.Id);
+            Assert.Equal(userId, actual!.Id);
             Assert.Null(actual.AlexaToken);
             Assert.Equal(user.CreatedAt, actual.CreatedAt);
             Assert.Equal(user.Email, actual.Email);
@@ -102,7 +102,7 @@ public class AccountTests : IntegrationTest
 
             // Assert
             Assert.NotNull(actual);
-            Assert.Equal(userId, actual.Id);
+            Assert.Equal(userId, actual!.Id);
             Assert.Equal(emailAddress, actual.Email);
             Assert.NotEqual(etag, actual.ETag);
             Assert.Equal(accessToken, actual.AlexaToken);

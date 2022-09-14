@@ -122,7 +122,7 @@ public static class ISiteTelemetryExtensions
     /// <param name="telemetry">The <see cref="ISiteTelemetry"/> to use.</param>
     /// <param name="userId">The user Id.</param>
     /// <param name="provider">The external provider.</param>
-    public static void TrackLinkExternalAccountStart(this ISiteTelemetry telemetry, string userId, string provider)
+    public static void TrackLinkExternalAccountStart(this ISiteTelemetry telemetry, string? userId, string provider)
     {
         var properties = CreateProperties(userId, provider);
 
@@ -173,7 +173,7 @@ public static class ISiteTelemetryExtensions
     /// <param name="telemetry">The <see cref="ISiteTelemetry"/> to use.</param>
     /// <param name="userId">The user Id.</param>
     /// <param name="provider">The external provider.</param>
-    public static void TrackSignIn(this ISiteTelemetry telemetry, string userId, string provider)
+    public static void TrackSignIn(this ISiteTelemetry telemetry, string? userId, string provider)
     {
         var properties = CreateProperties(userId, provider);
 
@@ -185,7 +185,7 @@ public static class ISiteTelemetryExtensions
     /// </summary>
     /// <param name="telemetry">The <see cref="ISiteTelemetry"/> to use.</param>
     /// <param name="userId">The user Id.</param>
-    public static void TrackSignOut(this ISiteTelemetry telemetry, string userId)
+    public static void TrackSignOut(this ISiteTelemetry telemetry, string? userId)
     {
         var properties = CreatePropertiesForUser(userId);
 
@@ -208,9 +208,9 @@ public static class ISiteTelemetryExtensions
     /// <returns>
     /// An <see cref="IDictionary{TKey, TValue}"/> containing the specified user Id.
     /// </returns>
-    private static IDictionary<string, string> CreatePropertiesForUser(string userId)
+    private static IDictionary<string, string?> CreatePropertiesForUser(string? userId)
     {
-        return new Dictionary<string, string>()
+        return new Dictionary<string, string?>()
         {
             ["UserId"] = userId,
         };
@@ -224,7 +224,7 @@ public static class ISiteTelemetryExtensions
     /// <returns>
     /// An <see cref="IDictionary{TKey, TValue}"/> containing the specified user Id and provider.
     /// </returns>
-    private static IDictionary<string, string> CreateProperties(string userId, string provider)
+    private static IDictionary<string, string?> CreateProperties(string? userId, string provider)
     {
         var properties = CreatePropertiesForUser(userId);
 

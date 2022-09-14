@@ -90,7 +90,7 @@ public sealed class UserStore :
     }
 
     /// <inheritdoc />
-    public async Task<LondonTravelUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
+    public async Task<LondonTravelUser?> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(normalizedEmail);
 
@@ -100,7 +100,7 @@ public sealed class UserStore :
     }
 
     /// <inheritdoc />
-    public async Task<LondonTravelUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
+    public async Task<LondonTravelUser?> FindByIdAsync(string userId, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(userId);
 
@@ -109,7 +109,7 @@ public sealed class UserStore :
     }
 
     /// <inheritdoc />
-    public async Task<LondonTravelUser> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
+    public async Task<LondonTravelUser?> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(loginProvider);
         ArgumentNullException.ThrowIfNull(providerKey);
@@ -124,7 +124,7 @@ public sealed class UserStore :
     }
 
     /// <inheritdoc />
-    public async Task<LondonTravelUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
+    public async Task<LondonTravelUser?> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(normalizedUserName);
 
@@ -134,10 +134,10 @@ public sealed class UserStore :
     }
 
     /// <inheritdoc />
-    public Task<string> GetEmailAsync(LondonTravelUser user, CancellationToken cancellationToken)
+    public Task<string?> GetEmailAsync(LondonTravelUser user, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(user);
-        return Task.FromResult(user.Email!);
+        return Task.FromResult(user.Email);
     }
 
     /// <inheritdoc />
@@ -153,31 +153,31 @@ public sealed class UserStore :
         ArgumentNullException.ThrowIfNull(user);
 
         IList<UserLoginInfo> logins = user.Logins
-            .Select((p) => new UserLoginInfo(p.LoginProvider, p.ProviderKey, p.ProviderDisplayName))
+            .Select((p) => new UserLoginInfo(p.LoginProvider!, p.ProviderKey!, p.ProviderDisplayName))
             .ToList();
 
         return Task.FromResult(logins);
     }
 
     /// <inheritdoc />
-    public Task<string> GetNormalizedEmailAsync(LondonTravelUser user, CancellationToken cancellationToken)
+    public Task<string?> GetNormalizedEmailAsync(LondonTravelUser user, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(user);
-        return Task.FromResult(user.EmailNormalized!);
+        return Task.FromResult(user.EmailNormalized);
     }
 
     /// <inheritdoc />
-    public Task<string> GetNormalizedUserNameAsync(LondonTravelUser user, CancellationToken cancellationToken)
+    public Task<string?> GetNormalizedUserNameAsync(LondonTravelUser user, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(user);
-        return Task.FromResult(user.UserNameNormalized!);
+        return Task.FromResult(user.UserNameNormalized);
     }
 
     /// <inheritdoc />
-    public Task<string> GetSecurityStampAsync(LondonTravelUser user, CancellationToken cancellationToken)
+    public Task<string?> GetSecurityStampAsync(LondonTravelUser user, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(user);
-        return Task.FromResult(user.SecurityStamp!);
+        return Task.FromResult(user.SecurityStamp);
     }
 
     /// <inheritdoc />
@@ -188,10 +188,10 @@ public sealed class UserStore :
     }
 
     /// <inheritdoc />
-    public Task<string> GetUserNameAsync(LondonTravelUser user, CancellationToken cancellationToken)
+    public Task<string?> GetUserNameAsync(LondonTravelUser user, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(user);
-        return Task.FromResult(user.UserName!);
+        return Task.FromResult(user.UserName);
     }
 
     /// <inheritdoc />
@@ -221,7 +221,7 @@ public sealed class UserStore :
     }
 
     /// <inheritdoc />
-    public Task SetEmailAsync(LondonTravelUser user, string email, CancellationToken cancellationToken)
+    public Task SetEmailAsync(LondonTravelUser user, string? email, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(user);
 
@@ -241,7 +241,7 @@ public sealed class UserStore :
     }
 
     /// <inheritdoc />
-    public Task SetNormalizedEmailAsync(LondonTravelUser user, string normalizedEmail, CancellationToken cancellationToken)
+    public Task SetNormalizedEmailAsync(LondonTravelUser user, string? normalizedEmail, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(user);
 
@@ -251,7 +251,7 @@ public sealed class UserStore :
     }
 
     /// <inheritdoc />
-    public Task SetNormalizedUserNameAsync(LondonTravelUser user, string normalizedName, CancellationToken cancellationToken)
+    public Task SetNormalizedUserNameAsync(LondonTravelUser user, string? normalizedName, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(user);
 
@@ -261,7 +261,7 @@ public sealed class UserStore :
     }
 
     /// <inheritdoc />
-    public Task SetSecurityStampAsync(LondonTravelUser user, string stamp, CancellationToken cancellationToken)
+    public Task SetSecurityStampAsync(LondonTravelUser user, string? stamp, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(user);
 
@@ -271,7 +271,7 @@ public sealed class UserStore :
     }
 
     /// <inheritdoc />
-    public Task SetUserNameAsync(LondonTravelUser user, string userName, CancellationToken cancellationToken)
+    public Task SetUserNameAsync(LondonTravelUser user, string? userName, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(user);
 

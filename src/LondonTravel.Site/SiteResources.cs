@@ -326,7 +326,7 @@ public class SiteResources
 
     public string? RegisterParagraph4(long count) => _localizer[nameof(RegisterParagraph4), count];
 
-    public string? RemoveAccountButtonAltText(string provider) => _localizer[nameof(RemoveAccountButtonAltText), provider];
+    public string? RemoveAccountButtonAltText(string? provider) => _localizer[nameof(RemoveAccountButtonAltText), provider ?? string.Empty];
 
     public string? SignInButtonText(string diplayName) => _localizer[nameof(SignInButtonText), diplayName];
 

@@ -29,34 +29,34 @@ public sealed class ConfigureAuthenticationHandlers :
 
     private IHttpClientFactory HttpClientFactory { get; }
 
-    public void PostConfigure(string name, AmazonAuthenticationOptions options)
+    public void PostConfigure(string? name, AmazonAuthenticationOptions options)
         => Configure(name, options);
 
-    public void PostConfigure(string name, AppleAuthenticationOptions options)
+    public void PostConfigure(string? name, AppleAuthenticationOptions options)
         => Configure(name, options);
 
-    public void PostConfigure(string name, FacebookOptions options)
+    public void PostConfigure(string? name, FacebookOptions options)
         => Configure(name, options);
 
-    public void PostConfigure(string name, GitHubAuthenticationOptions options)
+    public void PostConfigure(string? name, GitHubAuthenticationOptions options)
         => Configure(name, options);
 
-    public void PostConfigure(string name, GoogleOptions options)
+    public void PostConfigure(string? name, GoogleOptions options)
         => Configure(name, options);
 
-    public void PostConfigure(string name, MicrosoftAccountOptions options)
+    public void PostConfigure(string? name, MicrosoftAccountOptions options)
         => Configure(name, options);
 
-    public void PostConfigure(string name, TwitterOptions options)
+    public void PostConfigure(string? name, TwitterOptions options)
     {
-        options.Backchannel = HttpClientFactory.CreateClient(name);
+        options.Backchannel = HttpClientFactory.CreateClient(name ?? string.Empty);
         options.Events.OnRedirectToAuthorizationEndpoint = LoopbackHandlers.Configure;
     }
 
-    private void Configure<TOptions>(string name, TOptions options)
+    private void Configure<TOptions>(string? name, TOptions options)
         where TOptions : OAuthOptions
     {
-        options.Backchannel = HttpClientFactory.CreateClient(name);
+        options.Backchannel = HttpClientFactory.CreateClient(name ?? string.Empty);
         options.Events.OnRedirectToAuthorizationEndpoint = LoopbackHandlers.Configure;
     }
 }
