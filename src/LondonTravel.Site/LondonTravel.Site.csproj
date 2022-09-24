@@ -59,7 +59,7 @@
     </ItemGroup>
   </Target>
   <ItemGroup>
-    <_PseudloLocacalizedFiles Include="$(MSBuildThisFileDirectory)xlf\*.qps-Ploc.xlf" />
+    <_PseudoLocalizedFiles Include="$(MSBuildThisFileDirectory)xlf\*.qps-Ploc.xlf" />
   </ItemGroup>
   <PropertyGroup>
     <_PseudoLocalizeInstalledCommand Condition=" '$(OS)' == 'Windows_NT' ">where pseudo-localize</_PseudoLocalizeInstalledCommand>
@@ -69,7 +69,7 @@
     <Exec Command="$(_PseudoLocalizeInstalledCommand)" ConsoleToMsBuild="true" IgnoreExitCode="true" StandardErrorImportance="Normal" StandardOutputImportance="Normal">
       <Output TaskParameter="ExitCode" PropertyName="_PseudoLocalizeInstalled" />
     </Exec>
-    <Warning Condition=" $(_PseudoLocalizeInstalled) != 0 " Text="The PseudoLocalize .NET Core Global Tool is not installed. To install this tool, run the following command: dotnet tool install --global PseudoLocalize" />
-    <Exec Condition=" $(_PseudoLocalizeInstalled) == 0 " Command="pseudo-localize %(_PseudloLocacalizedFiles.Identity) --overwrite --force" ConsoleToMsBuild="true" StandardOutputImportance="Normal" />
+    <Warning Condition=" $(_PseudoLocalizeInstalled) != 0 " Text="The PseudoLocalize .NET Global Tool is not installed. To install this tool, run the following command: dotnet tool install --global PseudoLocalize" />
+    <Exec Condition=" $(_PseudoLocalizeInstalled) == 0 " Command="pseudo-localize %(_PseudoLocalizedFiles.Identity) --overwrite --force" ConsoleToMsBuild="true" StandardOutputImportance="Normal" />
   </Target>
 </Project>
