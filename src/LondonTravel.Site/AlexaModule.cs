@@ -15,7 +15,7 @@ public static class AlexaModule
             [FromQuery(Name = "state")] string? state,
             [FromQuery(Name = "client_id")] string? clientId,
             [FromQuery(Name = "response_type")] string? responseType,
-            [FromQuery(Name = "redirect_uri")] BindableUri? redirectUri,
+            [FromQuery(Name = "redirect_uri")] Uri? redirectUri,
             ClaimsPrincipal user,
             AlexaService service) =>
         {
@@ -30,27 +30,5 @@ public static class AlexaModule
         .RequireAuthorization();
 
         return app;
-    }
-
-    //// TODO Remove workaround for https://github.com/dotnet/aspnetcore/issues/36649 if implemented
-
-    private sealed class BindableUri : Uri
-    {
-        private BindableUri(string uriString, UriKind uriKind)
-            : base(uriString, uriKind)
-        {
-        }
-
-        public static bool TryParse(string value, out BindableUri? result)
-        {
-            if (TryCreate(value, UriKind.RelativeOrAbsolute, out var uri))
-            {
-                result = new BindableUri(uri.OriginalString, uri.IsAbsoluteUri ? UriKind.Absolute : UriKind.Relative);
-                return true;
-            }
-
-            result = null;
-            return false;
-        }
     }
 }

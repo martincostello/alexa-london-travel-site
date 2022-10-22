@@ -2,7 +2,6 @@
   "compileOnSave": true,
   "compilerOptions": {
     "inlineSources": true,
-    "inlineSourceMap": true,
     "lib": [
       "dom",
       "es5",
