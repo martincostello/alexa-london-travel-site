@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
-    <AspNetSecurityOAuthVersion>7.0.0-rc.2.22552.63</AspNetSecurityOAuthVersion>
-    <MicrosoftAspNetCoreVersion>7.0.0-rc.2.22476.2</MicrosoftAspNetCoreVersion>
+    <AspNetSecurityOAuthVersion>7.0.0</AspNetSecurityOAuthVersion>
+    <MicrosoftAspNetCoreVersion>7.0.0</MicrosoftAspNetCoreVersion>
     <NodaTimeVersion>3.1.5</NodaTimeVersion>
     <SwashbuckleAspNetCoreVersion>6.4.0</SwashbuckleAspNetCoreVersion>
   </PropertyGroup>
