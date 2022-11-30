@@ -2,7 +2,7 @@
   <PropertyGroup>
     <AspNetSecurityOAuthVersion>7.0.0</AspNetSecurityOAuthVersion>
     <MicrosoftAspNetCoreVersion>7.0.0</MicrosoftAspNetCoreVersion>
-    <NodaTimeVersion>3.1.5</NodaTimeVersion>
+    <NodaTimeVersion>3.1.6</NodaTimeVersion>
     <SwashbuckleAspNetCoreVersion>6.4.0</SwashbuckleAspNetCoreVersion>
   </PropertyGroup>
   <ItemGroup>
