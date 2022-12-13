@@ -37,7 +37,7 @@ public static class ILoggingBuilderExtensions
 
         if (context.HostingEnvironment.IsDevelopment())
         {
-            loggerConfig = loggerConfig.WriteTo.Console();
+            loggerConfig = loggerConfig.WriteTo.Console(formatProvider: CultureInfo.InvariantCulture);
         }
 
         Log.Logger = loggerConfig.CreateLogger();
