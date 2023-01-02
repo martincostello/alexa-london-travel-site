@@ -4,7 +4,7 @@
   "version": "7.0.0",
   "devDependencies": {
     "@types/applicationinsights-js": "^1.0.9",
-    "@types/jquery": "^3.5.14",
+    "@types/jquery": "^3.5.16",
     "bootstrap": "^5.2.3",
     "clean-css": "^5.3.1",
     "colors": "1.4.0",
