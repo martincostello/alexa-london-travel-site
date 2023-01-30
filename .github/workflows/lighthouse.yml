@@ -61,7 +61,7 @@ jobs:
         New-Item -Path ${{ github.workspace }}/artifacts -ItemType Directory | Out-Null
 
     - name: Lighthouse
-      uses: foo-software/lighthouse-check-action@v9.1.0
+      uses: foo-software/lighthouse-check-action@v9.1.1
       id: lighthouse
       with:
         device: 'all'
