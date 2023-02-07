@@ -24,7 +24,7 @@
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.Twitter" Version="$(MicrosoftAspNetCoreVersion)" />
     <PackageVersion Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" Version="$(MicrosoftAspNetCoreVersion)" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="$(MicrosoftAspNetCoreVersion)" />
-    <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.31.2" />
+    <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.32.0" />
     <PackageVersion Include="Microsoft.DotNet.XliffTasks" Version="1.0.0-beta.21452.1" />
     <PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="$(MicrosoftAspNetCoreVersion)" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />
