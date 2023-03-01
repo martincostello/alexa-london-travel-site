@@ -14,7 +14,7 @@ namespace MartinCostello.LondonTravel.Site.Integration;
 /// </summary>
 internal sealed class InMemoryDocumentStore : IDocumentService, IDocumentCollectionInitializer
 {
-    private readonly IDictionary<string, DocumentCollection> _collections;
+    private readonly Dictionary<string, DocumentCollection> _collections;
 
     public InMemoryDocumentStore(UserStoreOptions options)
     {
@@ -138,12 +138,7 @@ internal sealed class InMemoryDocumentStore : IDocumentService, IDocumentCollect
 
     private sealed class DocumentCollection
     {
-        private readonly IDictionary<Type, IDictionary<string, DocumentEntry>> _documents;
-
-        internal DocumentCollection()
-        {
-            _documents = new Dictionary<Type, IDictionary<string, DocumentEntry>>();
-        }
+        private readonly Dictionary<Type, IDictionary<string, DocumentEntry>> _documents = new();
 
         internal void Clear()
         {

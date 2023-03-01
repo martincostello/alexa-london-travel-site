@@ -206,9 +206,9 @@ public static class ISiteTelemetryExtensions
     /// </summary>
     /// <param name="userId">The user Id.</param>
     /// <returns>
-    /// An <see cref="IDictionary{TKey, TValue}"/> containing the specified user Id.
+    /// A <see cref="Dictionary{TKey, TValue}"/> containing the specified user Id.
     /// </returns>
-    private static IDictionary<string, string?> CreatePropertiesForUser(string? userId)
+    private static Dictionary<string, string?> CreatePropertiesForUser(string? userId)
     {
         return new Dictionary<string, string?>()
         {
@@ -222,9 +222,9 @@ public static class ISiteTelemetryExtensions
     /// <param name="userId">The user Id.</param>
     /// <param name="provider">The provider.</param>
     /// <returns>
-    /// An <see cref="IDictionary{TKey, TValue}"/> containing the specified user Id and provider.
+    /// A <see cref="Dictionary{TKey, TValue}"/> containing the specified user Id and provider.
     /// </returns>
-    private static IDictionary<string, string?> CreateProperties(string? userId, string provider)
+    private static Dictionary<string, string?> CreateProperties(string? userId, string provider)
     {
         var properties = CreatePropertiesForUser(userId);
 

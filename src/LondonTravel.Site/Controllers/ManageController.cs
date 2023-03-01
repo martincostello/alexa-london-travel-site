@@ -364,7 +364,7 @@ public partial class ManageController : Controller
             ITflService service = _tflServiceFactory.CreateService();
             ICollection<LineInfo> lines = await service.GetLinesAsync(cancellationToken);
 
-            IList<string?> validLines = lines.Select((p) => p.Id).ToList();
+            var validLines = lines.Select((p) => p.Id).ToList();
 
             return model.FavoriteLines.All((p) => validLines.Contains(p));
         }

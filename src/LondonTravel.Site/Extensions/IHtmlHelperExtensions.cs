@@ -13,7 +13,7 @@ public static class IHtmlHelperExtensions
     /// <summary>
     /// A mapping of authentication schemes to icon classes. This field is read-only.
     /// </summary>
-    private static readonly IDictionary<string, string> _iconImageMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+    private static readonly Dictionary<string, string> _iconImageMap = new(StringComparer.OrdinalIgnoreCase)
     {
         ["Amazon"] = "amazon",
         ["Apple"] = "apple",
