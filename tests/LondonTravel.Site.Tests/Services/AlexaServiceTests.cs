@@ -373,7 +373,7 @@ public class AlexaServiceTests
         };
     }
 
-    private HttpContext CreateHttpContext()
+    private DefaultHttpContext CreateHttpContext()
     {
         var serviceProvider = new ServiceCollection()
             .AddLogging((p) => p.AddXUnit(OutputHelper))

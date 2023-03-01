@@ -5,6 +5,7 @@ using System.Text;
 using MartinCostello.LondonTravel.Site.Extensions;
 using MartinCostello.LondonTravel.Site.Options;
 using Microsoft.Extensions.Options;
+using Microsoft.Net.Http.Headers;
 
 namespace MartinCostello.LondonTravel.Site.Middleware;
 
@@ -77,23 +78,23 @@ public sealed class CustomHttpHeadersMiddleware
     {
         context.Response.OnStarting(() =>
             {
-                context.Response.Headers.Remove("Server");
-                context.Response.Headers.Remove("X-Powered-By");
+                context.Response.Headers.Remove(HeaderNames.Server);
+                context.Response.Headers.Remove(HeaderNames.XPoweredBy);
 
-                context.Response.Headers.Add("Permissions-Policy", "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()");
-                context.Response.Headers.Add("Referrer-Policy", "no-referrer-when-downgrade");
-                context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
-                context.Response.Headers.Add("X-Download-Options", "noopen");
-                context.Response.Headers.Add("X-XSS-Protection", "1; mode=block");
+                context.Response.Headers.Append("Permissions-Policy", "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()");
+                context.Response.Headers.Append("Referrer-Policy", "no-referrer-when-downgrade");
+                context.Response.Headers.XContentTypeOptions = "nosniff";
+                context.Response.Headers.Append("X-Download-Options", "noopen");
+                context.Response.Headers.XXSSProtection = "1; mode=block";
 
                 // Middleware (e.g. Identity) may have already set X-Frame-Options
-                context.Response.Headers["X-Frame-Options"] = "DENY";
+                context.Response.Headers.XFrameOptions = "DENY";
 
                 string? nonce = context.GetCspNonce();
 
                 if (nonce != null)
                 {
-                    context.Response.Headers.Add("x-csp-nonce", nonce);
+                    context.Response.Headers.Append("x-csp-nonce", nonce);
                 }
 
                 bool allowInlineStyles = context.InlineStylesAllowed();
@@ -101,36 +102,36 @@ public sealed class CustomHttpHeadersMiddleware
                 string csp = BuildContentSecurityPolicy(nonce, allowInlineStyles, isReport: false);
                 string cspReport = BuildContentSecurityPolicy(nonce, allowInlineStyles, isReport: true);
 
-                context.Response.Headers.Add("Content-Security-Policy", csp);
-                context.Response.Headers.Add("Content-Security-Policy-Report-Only", cspReport);
+                context.Response.Headers.ContentSecurityPolicy = csp;
+                context.Response.Headers.ContentSecurityPolicyReportOnly = cspReport;
 
                 if (context.Request.IsHttps)
                 {
-                    context.Response.Headers.Add("Expect-CT", _expectCTValue);
+                    context.Response.Headers.Append("Expect-CT", _expectCTValue);
                 }
 
-                context.Response.Headers.Add("Report-To", @"{""group"":""default"",""max_age"":31536000,""endpoints"":[{""url"":""https://martincostello.report-uri.com/a/d/g""}],""include_subdomains"":false}");
-                context.Response.Headers.Add("NEL", @"{""report_to"":""default"",""max_age"":31536000,""include_subdomains"":false}");
+                context.Response.Headers.Append("Report-To", @"{""group"":""default"",""max_age"":31536000,""endpoints"":[{""url"":""https://martincostello.report-uri.com/a/d/g""}],""include_subdomains"":false}");
+                context.Response.Headers.Append("NEL", @"{""report_to"":""default"",""max_age"":31536000,""include_subdomains"":false}");
 
-                context.Response.Headers.Add("X-Datacenter", _config.AzureDatacenter());
+                context.Response.Headers.Append("X-Datacenter", _config.AzureDatacenter());
 
 #if DEBUG
-                context.Response.Headers.Add("X-Debug", "true");
+                context.Response.Headers.Append("X-Debug", "true");
 #endif
 
                 if (_environmentName != null)
                 {
-                    context.Response.Headers.Add("X-Environment", _environmentName);
+                    context.Response.Headers.Append("X-Environment", _environmentName);
                 }
 
-                context.Response.Headers.Add("X-Instance", Environment.MachineName);
-                context.Response.Headers.Add("X-Request-Id", context.TraceIdentifier);
-                context.Response.Headers.Add("X-Revision", GitMetadata.Commit);
-                context.Response.Headers.Add("X-UA-Compatible", "IE=edge");
+                context.Response.Headers.Append("X-Instance", Environment.MachineName);
+                context.Response.Headers.Append("X-Request-Id", context.TraceIdentifier);
+                context.Response.Headers.Append("X-Revision", GitMetadata.Commit);
+                context.Response.Headers.XUACompatible = "IE=edge";
 
-                if (!context.Response.Headers.ContainsKey("Pragma"))
+                if (!context.Response.Headers.ContainsKey(HeaderNames.Pragma))
                 {
-                    context.Response.Headers.Add("Pragma", "no-cache");
+                    context.Response.Headers.Pragma = "no-cache";
                 }
 
                 return Task.CompletedTask;

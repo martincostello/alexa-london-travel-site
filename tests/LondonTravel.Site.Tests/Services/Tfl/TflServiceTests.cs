@@ -10,7 +10,7 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl;
 
 public sealed class TflServiceTests : IDisposable
 {
-    private readonly IMemoryCache _cache;
+    private readonly MemoryCache _cache;
     private readonly HttpClientInterceptorOptions _interceptor;
     private readonly TflOptions _options;
 
@@ -180,7 +180,7 @@ public sealed class TflServiceTests : IDisposable
             .ForQuery("app_id=My-App-Id&app_key=My-App-Key");
     }
 
-    private static IMemoryCache CreateCache()
+    private static MemoryCache CreateCache()
     {
         var cacheOptions = new MemoryCacheOptions();
         var options = Microsoft.Extensions.Options.Options.Create(cacheOptions);
