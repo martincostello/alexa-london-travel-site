@@ -10,6 +10,7 @@
     ],
     "noEmitOnError": true,
     "noImplicitAny": true,
+    "noImplicitOverride": true,
     "noImplicitThis": true,
     "outDir": "./wwwroot/assets/js",
     "removeComments": true,
