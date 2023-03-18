@@ -51,6 +51,40 @@ jobs:
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v3
 
+    - name: Setup Node
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Get npm cache directory
+      id: npm-cache-dir
+      shell: pwsh
+      run: echo "dir=$(npm config get cache)" >> ${env:GITHUB_OUTPUT}
+
+    - name: Setup npm cache
+      uses: actions/cache@v3
+      id: npm-cache
+      with:
+        path: ${{ steps.npm-cache-dir.outputs.dir }}
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-
+
+    - name: Setup NuGet cache
+      uses: actions/cache@v3
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/*.props') }}
+        restore-keys: ${{ runner.os }}-nuget-
+
+    - name: Setup Playwright cache
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/AppData/Local/ms-playwright
+          ~/.cache/ms-playwright
+          ~/Library/Caches/ms-playwright
+        key: ${{ runner.os }}-playwright-${{ hashFiles('Directory.Packages.props') }}
+
     - name: Build, test and publish
       shell: pwsh
       run: ./build.ps1 -Runtime win10-x64
@@ -130,6 +164,22 @@ jobs:
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v3
 
+    - name: Setup NuGet cache
+      uses: actions/cache@v3
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/*.props') }}
+        restore-keys: ${{ runner.os }}-nuget-
+
+    - name: Setup Playwright cache
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/AppData/Local/ms-playwright
+          ~/.cache/ms-playwright
+          ~/Library/Caches/ms-playwright
+        key: ${{ runner.os }}-playwright-${{ hashFiles('Directory.Packages.props') }}
+
     - name: Run end-to-end tests
       shell: pwsh
       run: dotnet test ./tests/LondonTravel.Site.Tests --configuration Release --filter Category=EndToEnd
@@ -201,6 +251,22 @@ jobs:
 
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v3
+
+    - name: Setup NuGet cache
+      uses: actions/cache@v3
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/*.props') }}
+        restore-keys: ${{ runner.os }}-nuget-
+
+    - name: Setup Playwright cache
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/AppData/Local/ms-playwright
+          ~/.cache/ms-playwright
+          ~/Library/Caches/ms-playwright
+        key: ${{ runner.os }}-playwright-${{ hashFiles('Directory.Packages.props') }}
 
     - name: Run end-to-end tests
       shell: pwsh
