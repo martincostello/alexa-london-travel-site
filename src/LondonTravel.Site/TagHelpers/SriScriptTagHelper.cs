@@ -71,11 +71,9 @@ public class SriScriptTagHelper : LinkTagHelper
 
         if (!Cache.TryGetValue(cacheKey, out string? hash))
         {
-            using (var algorithm = SHA384.Create())
-            {
-                using var stream = fileInfo.CreateReadStream();
-                hash = Convert.ToBase64String(algorithm.ComputeHash(stream));
-            }
+            using var stream = fileInfo.CreateReadStream();
+            var hashBytes = await SHA384.HashDataAsync(stream);
+            hash = Convert.ToBase64String(hashBytes);
 
             var options = new MemoryCacheEntryOptions()
             {

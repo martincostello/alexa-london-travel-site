@@ -95,11 +95,3 @@
         @await Html.PartialAsync("_SocialButtonsStyles")
     }
 }
-@section scripts {
-    <environment names="Development">
-        <script src="~/assets/js/site.manage.js" asp-append-version="true" defer></script>
-    </environment>
-    <environment names="Staging,Production">
-        <script src="~/assets/js/site.manage.min.js" asp-append-version="true" defer></script>
-    </environment>
-}

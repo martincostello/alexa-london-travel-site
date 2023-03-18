@@ -28,14 +28,3 @@ else if (Model.AllLines.Any())
 {
     @await Html.PartialAsync("_Preferences", Model)
 }
-@if (Model.IsAuthenticated)
-{
-    @section scripts {
-        <environment names="Development">
-            <script src="~/assets/js/site.preferences.js" asp-append-version="true" defer></script>
-        </environment>
-        <environment names="Staging,Production">
-            <script src="~/assets/js/site.preferences.min.js" asp-append-version="true" defer></script>
-        </environment>
-    }
-}
