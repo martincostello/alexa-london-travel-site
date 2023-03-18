@@ -10,6 +10,7 @@
     <SatelliteResourceLanguages>en,en-GB,en-US,qps-Ploc</SatelliteResourceLanguages>
     <Summary>Website for the London Travel Amazon Alexa skill.</Summary>
     <TargetFramework>net7.0</TargetFramework>
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <TypeScriptToolsVersion>latest</TypeScriptToolsVersion>
     <UserSecretsId>londontravel.martincostello.com</UserSecretsId>
     <XlfLanguages>en-GB;en-US;qps-Ploc</XlfLanguages>
@@ -38,6 +39,7 @@
     <PackageReference Include="Microsoft.Azure.Cosmos" />
     <PackageReference Include="Microsoft.DotNet.XliffTasks" PrivateAssets="All" />
     <PackageReference Include="Microsoft.Extensions.Http.Polly" />
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" />
     <PackageReference Include="NodaTime" />
     <PackageReference Include="Polly" />
     <PackageReference Include="Refit" />
@@ -48,6 +50,11 @@
     <PackageReference Include="Serilog.Sinks.Console" />
     <PackageReference Include="Swashbuckle.AspNetCore" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update=".prettierrc.json;.stylelintrc.json;package.json;package-lock.json;tsconfig.json" CopyToPublishDirectory="Never" />
+    <None Remove="assets\scripts\**\*.ts" />
+    <TypeScriptCompile Include="assets\scripts\**\*.ts" />
   </ItemGroup>
   <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">
     <Exec Command="npm ci" Condition=" '$(InstallWebPackages)' == 'true' or !Exists('$(MSBuildThisFileDirectory)\node_modules') " />

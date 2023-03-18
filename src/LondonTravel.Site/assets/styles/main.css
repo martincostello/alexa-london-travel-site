@@ -3,17 +3,72 @@
     Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 */
 
+body {
+    padding-top: 85px;
+}
+
+.btn-amazon {
+    background-color: #F90;
+    border-color: rgb(0 0 0);
+    border-color: rgb(0 0 0 / 20%);
+    color: #fff;
+}
+
+.btn-amazon:hover {
+    background-color: #E08802;
+}
+
+.btn-apple {
+    background-color: black;
+    border-color: rgb(0 0 0);
+    border-color: rgb(0 0 0 / 20%);
+    color: #fff;
+}
+
+.btn-close {
+    float: right;
+}
+
+.fa-apple {
+    border-right: 1px solid rgb(255 255 255 / 20%) !important;
+}
+
+.btn-social > :first-child {
+    line-height: 38px !important;
+}
+
+.loader {
+    animation: spin 2s linear infinite;
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #2c3e50;
+    height: 120px;
+    width: 120px;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.panel-heading {
+    font-weight: bold;
+}
+
+/* Travel rules */
+
 .travel-line {
-    border-left-color: #2070B0;
-    border-left-style: solid;
-    border-left-width: 10px;
+    border-left: 10px solid #2070B0;
     cursor: pointer;
 }
 
 .travel-line,
 .list-group-item:first-child,
-.list-group-item:first-child,
-.list-group-item:last-child,
 .list-group-item:last-child {
     border-radius: 5px 1px 1px 5px;
 }
@@ -154,16 +209,14 @@
     border-color: #76d0bd;
 }
 
-.checkbox label:after {
+.checkbox label::after {
     clear: both;
     content: "";
     display: table;
 }
 
 .checkbox .cr {
-    /* csslint ignore:start */
     border: 1px solid #a9a9a9;
-    /* csslint ignore:end */
     border-radius: .25em;
     float: left;
     height: 1.3em;
@@ -197,4 +250,36 @@
 
 .checkbox label input[type="checkbox"]:disabled + .cr {
     opacity: .5;
+}
+
+
+/* Swagger UI Overrides */
+
+/* stylelint-disable-next-line selector-class-pattern */
+.response-col_status {
+    width: unset;
+}
+
+.swagger-ui .btn.authorize {
+    border-color: #258359;
+    color: #258359;
+}
+
+.swagger-ui .btn:hover {
+    color: #3b4151;
+}
+
+.swagger-ui .opblock.opblock-get .opblock-summary-method {
+    background: #0170DF;
+}
+
+.swagger-ui-svg {
+    height: 0;
+    position: absolute;
+    width: 0;
+}
+
+.swagger-ui .info a,
+.url {
+    color: #0F7661;
 }
