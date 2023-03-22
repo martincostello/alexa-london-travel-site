@@ -29,7 +29,7 @@
     "eslint-config-prettier": "^8.8.0",
     "mini-css-extract-plugin": "^2.7.5",
     "moment": "^2.29.4",
-    "prettier": "^2.8.5",
+    "prettier": "^2.8.6",
     "style-loader": "^3.3.2",
     "stylelint": "^15.3.0",
     "stylelint-config-standard": "^31.0.0",
