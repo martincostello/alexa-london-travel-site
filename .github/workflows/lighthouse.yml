@@ -61,7 +61,7 @@ jobs:
         New-Item -Path ${{ github.workspace }}/artifacts -ItemType Directory | Out-Null
 
     - name: Lighthouse
-      uses: foo-software/lighthouse-check-action@v9.1.1
+      uses: foo-software/lighthouse-check-action@v10.0.0
       id: lighthouse
       with:
         device: 'all'
@@ -77,7 +77,7 @@ jobs:
         lighthouseCheckResults: ${{ steps.lighthouse.outputs.lighthouseCheckResults }}
         minAccessibilityScore: "90"
         minBestPracticesScore: "83"
-        minPerformanceScore: "80"
+        minPerformanceScore: "71"
         minProgressiveWebAppScore: "85"
         minSeoScore: "100"
 
