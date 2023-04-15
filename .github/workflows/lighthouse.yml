@@ -24,10 +24,10 @@ jobs:
     steps:
 
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
 
     - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@607fce577a46308457984d59e4954e075820f10a # v3.0.3
 
     - name: Start website
       shell: pwsh
@@ -61,7 +61,7 @@ jobs:
         New-Item -Path ${{ github.workspace }}/artifacts -ItemType Directory | Out-Null
 
     - name: Lighthouse
-      uses: foo-software/lighthouse-check-action@v10.0.0
+      uses: foo-software/lighthouse-check-action@f78f162ef0ecd48a18244c427959f0b79ef4d553 # v10.0.0
       id: lighthouse
       with:
         device: 'all'
@@ -72,7 +72,7 @@ jobs:
         wait: true
 
     - name: Check Lighthouse scores
-      uses: foo-software/lighthouse-check-status-action@v2.0.1
+      uses: foo-software/lighthouse-check-status-action@f22f8cdcaf593a986749d39fe21382526de3f501 # v2.0.1
       with:
         lighthouseCheckResults: ${{ steps.lighthouse.outputs.lighthouseCheckResults }}
         minAccessibilityScore: "90"
@@ -82,7 +82,7 @@ jobs:
         minSeoScore: "100"
 
     - name: Publish artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
       if: ${{ always() }}
       with:
         name: lighthouse
