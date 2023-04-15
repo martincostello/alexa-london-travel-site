@@ -5,6 +5,9 @@ on:
     - cron:  '0 5 * * *'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   update-static-assets:
     name: Update static assets
@@ -14,10 +17,10 @@ jobs:
     steps:
 
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
 
     - name: Update static assets
-      uses: martincostello/update-static-assets@v1
+      uses: martincostello/update-static-assets@7c2c3deb8ad19a1646b4f21cdbf2a3848f496982 # v1.1.1
       with:
         labels: "dependencies"
         repo-token: ${{ secrets.ACCESS_TOKEN }}
