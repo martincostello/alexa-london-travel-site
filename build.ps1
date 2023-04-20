@@ -1,7 +1,6 @@
 #! /usr/bin/env pwsh
 param(
     [Parameter(Mandatory = $false)][string] $Configuration = "Release",
-    [Parameter(Mandatory = $false)][string] $OutputPath = "",
     [Parameter(Mandatory = $false)][switch] $SkipTests,
     [Parameter(Mandatory = $false)][string] $Runtime = ""
 )
@@ -13,10 +12,6 @@ $solutionPath = $PSScriptRoot
 $sdkFile = Join-Path $solutionPath "global.json"
 
 $dotnetVersion = (Get-Content $sdkFile | Out-String | ConvertFrom-Json).sdk.version
-
-if ($OutputPath -eq "") {
-    $OutputPath = Join-Path $PSScriptRoot "artifacts"
-}
 
 $installDotNetSdk = $false;
 
@@ -82,7 +77,7 @@ function DotNetTest {
         $additionalArgs += "GitHubActions;report-warnings=false"
     }
 
-    & $dotnet test $Project --output $OutputPath --configuration $Configuration $additionalArgs
+    & $dotnet test $Project --configuration $Configuration $additionalArgs
 
     if ($LASTEXITCODE -ne 0) {
         throw "dotnet test failed with exit code $LASTEXITCODE"
@@ -92,8 +87,6 @@ function DotNetTest {
 function DotNetPublish {
     param([string]$Project)
 
-    $publishPath = (Join-Path $OutputPath "publish")
-
     $additionalArgs = @()
 
     if (![string]::IsNullOrEmpty($Runtime)) {
@@ -102,7 +95,7 @@ function DotNetPublish {
         $additionalArgs += $Runtime
     }
 
-    & $dotnet publish $Project --output $publishPath --configuration $Configuration $additionalArgs
+    & $dotnet publish $Project $additionalArgs
 
     if ($LASTEXITCODE -ne 0) {
         throw "dotnet publish failed with exit code $LASTEXITCODE"
@@ -119,7 +112,7 @@ $publishProjects = @(
 
 Write-Host "Publishing solution..." -ForegroundColor Green
 ForEach ($project in $publishProjects) {
-    DotNetPublish $project $Configuration $PrereleaseSuffix
+    DotNetPublish $project $PrereleaseSuffix
 }
 
 if ($SkipTests -eq $false) {
