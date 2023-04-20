@@ -103,7 +103,7 @@ jobs:
       if: ${{ runner.os == 'Windows' && success() }}
       with:
         name: webapp
-        path: ./.artifacts/publish
+        path: ./artifacts/publish
         if-no-files-found: error
 
     - name: Publish screenshots
