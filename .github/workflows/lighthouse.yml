@@ -61,7 +61,7 @@ jobs:
         If ($StatusCode -ne 200) {
           throw "Failed to successfully connect to website after $Attempts attempts."
         }
-        New-Item -Path ${{ github.workspace }}/artifacts -ItemType Directory | Out-Null
+        New-Item -Path ${{ github.workspace }}/.artifacts/lighthouse -ItemType Directory | Out-Null
 
     - name: Lighthouse
       uses: foo-software/lighthouse-check-action@f78f162ef0ecd48a18244c427959f0b79ef4d553 # v10.0.0
@@ -69,7 +69,7 @@ jobs:
       with:
         device: 'all'
         gitHubAccessToken: ${{ secrets.LIGHTHOUSE_ACCESS_TOKEN }}
-        outputDirectory: ${{ github.workspace }}/artifacts
+        outputDirectory: ${{ github.workspace }}/.artifacts/lighthouse
         prCommentEnabled: true
         urls: 'https://localhost:5001'
         wait: true
@@ -89,5 +89,5 @@ jobs:
       if: ${{ always() }}
       with:
         name: lighthouse
-        path: ${{ github.workspace }}/artifacts
+        path: ${{ github.workspace }}/.artifacts/lighthouse
         if-no-files-found: ignore
