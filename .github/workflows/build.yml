@@ -15,7 +15,6 @@ env:
   APPLICATION_URL_DEV: https://londontravel-dev.martincostello.com
   APPLICATION_URL_PROD: https://londontravel.martincostello.com
   AZURE_WEBAPP_NAME: londontravelmartincostello
-  AZURE_WEBAPP_PACKAGE_PATH: ./artifacts/publish
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_GENERATE_ASPNET_CERTIFICATE: false
   DOTNET_MULTILEVEL_LOOKUP: 0
@@ -24,6 +23,7 @@ env:
   DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: 1
   FORCE_COLOR: 1
   NUGET_XMLDOC_MODE: skip
+  PUBLISH_RUNTIME: win10-x64
   TERM: xterm
 
 permissions:
@@ -90,7 +90,7 @@ jobs:
 
     - name: Build, test and publish
       shell: pwsh
-      run: ./build.ps1 -Runtime win10-x64
+      run: ./build.ps1 -Runtime "${{ env.PUBLISH_RUNTIME }}"
 
     - uses: codecov/codecov-action@40a12dcee2df644d47232dde008099a3e9e4f865 # v3.1.2
       name: Upload coverage to Codecov
@@ -100,10 +100,11 @@ jobs:
 
     - name: Publish artifacts
       uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
-      if: ${{ runner.os == 'Windows' }}
+      if: ${{ runner.os == 'Windows' && success() }}
       with:
         name: webapp
-        path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+        path: ./.artifacts/publish
+        if-no-files-found: error
 
     - name: Publish screenshots
       uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
