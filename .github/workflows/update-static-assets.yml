@@ -20,7 +20,7 @@ jobs:
       uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
 
     - name: Update static assets
-      uses: martincostello/update-static-assets@7c2c3deb8ad19a1646b4f21cdbf2a3848f496982 # v1.1.1
+      uses: martincostello/update-static-assets@ebc2147f533048d771c5b7eea8aaa95a7743e95e # v1.1.2
       with:
         labels: "dependencies"
         repo-token: ${{ secrets.ACCESS_TOKEN }}
