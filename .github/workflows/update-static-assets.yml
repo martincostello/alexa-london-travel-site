@@ -22,7 +22,7 @@ jobs:
         token: ${{ secrets.ACCESS_TOKEN }}
 
     - name: Update static assets
-      uses: martincostello/update-static-assets@ebc2147f533048d771c5b7eea8aaa95a7743e95e # v1.1.2
+      uses: martincostello/update-static-assets@ae014beaea0eac859929a0d21ac5e64364ab1cee # v1.1.3
       with:
         labels: "dependencies"
         repo-token: ${{ secrets.ACCESS_TOKEN }}
