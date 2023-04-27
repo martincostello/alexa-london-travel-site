@@ -18,6 +18,8 @@ jobs:
 
     - name: Checkout code
       uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+      with:
+        token: ${{ secrets.ACCESS_TOKEN }}
 
     - name: Update static assets
       uses: martincostello/update-static-assets@ebc2147f533048d771c5b7eea8aaa95a7743e95e # v1.1.2
