@@ -2,7 +2,7 @@ name: lighthouse
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [ main, dotnet-vnext ]
   workflow_dispatch:
 
 permissions:
