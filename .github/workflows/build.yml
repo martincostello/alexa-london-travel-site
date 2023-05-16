@@ -106,7 +106,7 @@ jobs:
       if: ${{ runner.os == 'Windows' && success() }}
       with:
         name: webapp
-        path: ./.artifacts/publish/LondonTravel.Site/release_${{ env.PUBLISH_RUNTIME }}
+        path: ./artifacts/publish/LondonTravel.Site/release_${{ env.PUBLISH_RUNTIME }}
         if-no-files-found: error
 
     - name: Publish screenshots
@@ -114,7 +114,7 @@ jobs:
       if: ${{ always() }}
       with:
         name: screenshots
-        path: ./.artifacts/screenshots/*
+        path: ./artifacts/screenshots/*
         if-no-files-found: ignore
 
     - name: Publish traces
@@ -122,7 +122,7 @@ jobs:
       if: ${{ always() }}
       with:
         name: traces
-        path: ./.artifacts/traces/*
+        path: ./artifacts/traces/*
         if-no-files-found: ignore
 
     - name: Publish videos
@@ -130,7 +130,7 @@ jobs:
       if: ${{ always() }}
       with:
         name: videos
-        path: ./.artifacts/videos/*
+        path: ./artifacts/videos/*
         if-no-files-found: ignore
 
   deploy-dev:
@@ -214,7 +214,7 @@ jobs:
       if: ${{ always() }}
       with:
         name: screenshots
-        path: ./.artifacts/screenshots/*
+        path: ./artifacts/screenshots/*
         if-no-files-found: ignore
 
     - name: Publish traces
@@ -222,7 +222,7 @@ jobs:
       if: ${{ always() }}
       with:
         name: traces
-        path: ./.artifacts/traces/*
+        path: ./artifacts/traces/*
         if-no-files-found: ignore
 
     - name: Publish videos
@@ -230,7 +230,7 @@ jobs:
       if: ${{ always() }}
       with:
         name: videos
-        path: ./.artifacts/videos/*
+        path: ./artifacts/videos/*
         if-no-files-found: ignore
 
   deploy-prod:
@@ -312,7 +312,7 @@ jobs:
       if: ${{ always() }}
       with:
         name: screenshots
-        path: ./.artifacts/screenshots/*
+        path: ./artifacts/screenshots/*
         if-no-files-found: ignore
 
     - name: Publish traces
@@ -320,7 +320,7 @@ jobs:
       if: ${{ always() }}
       with:
         name: traces
-        path: ./.artifacts/traces/*
+        path: ./artifacts/traces/*
         if-no-files-found: ignore
 
     - name: Publish videos
@@ -328,5 +328,5 @@ jobs:
       if: ${{ always() }}
       with:
         name: videos
-        path: ./.artifacts/videos/*
+        path: ./artifacts/videos/*
         if-no-files-found: ignore
