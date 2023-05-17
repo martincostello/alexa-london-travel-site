@@ -40,7 +40,6 @@
     <PackageReference Include="Microsoft.DotNet.XliffTasks" PrivateAssets="All" />
     <PackageReference Include="Microsoft.Extensions.Http.Polly" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" />
-    <PackageReference Include="NodaTime" />
     <PackageReference Include="Polly" />
     <PackageReference Include="Refit" />
     <PackageReference Include="Serilog" />
