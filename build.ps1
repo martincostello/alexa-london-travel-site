@@ -119,7 +119,7 @@ $publishProjects = @(
 
 Write-Host "Publishing solution..." -ForegroundColor Green
 ForEach ($project in $publishProjects) {
-    DotNetPublish $project $Configuration $PrereleaseSuffix
+    DotNetPublish $project
 }
 
 if ($SkipTests -eq $false) {

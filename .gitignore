@@ -1,5 +1,4 @@
-﻿.artifacts
-.DS_Store
+﻿.DS_Store
 .dockershare
 .dotnetcli
 .metadata
