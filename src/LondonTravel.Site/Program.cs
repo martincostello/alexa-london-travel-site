@@ -19,7 +19,6 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
-using NodaTime;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -169,7 +168,7 @@ builder.Services.Configure<StaticFileOptions>((options) =>
     };
 });
 
-builder.Services.AddSingleton<IClock>((_) => SystemClock.Instance);
+builder.Services.AddSingleton<TimeProvider>((_) => TimeProvider.System);
 builder.Services.AddSingleton<ISiteTelemetry, SiteTelemetry>();
 builder.Services.AddSingleton<ITelemetryInitializer, SiteTelemetryInitializer>();
 builder.Services.AddSingleton<ITflServiceFactory, TflServiceFactory>();
