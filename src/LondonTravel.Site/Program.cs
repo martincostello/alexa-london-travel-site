@@ -168,7 +168,7 @@ builder.Services.Configure<StaticFileOptions>((options) =>
     };
 });
 
-builder.Services.AddSingleton<TimeProvider>((_) => TimeProvider.System);
+builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddSingleton<ISiteTelemetry, SiteTelemetry>();
 builder.Services.AddSingleton<ITelemetryInitializer, SiteTelemetryInitializer>();
 builder.Services.AddSingleton<ITflServiceFactory, TflServiceFactory>();
