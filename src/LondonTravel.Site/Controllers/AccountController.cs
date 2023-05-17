@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using NodaTime;
 
 namespace MartinCostello.LondonTravel.Site.Controllers;
 
@@ -26,7 +25,7 @@ public partial class AccountController : Controller
     private readonly UserManager<LondonTravelUser> _userManager;
     private readonly SignInManager<LondonTravelUser> _signInManager;
     private readonly ISiteTelemetry _telemetry;
-    private readonly IClock _clock;
+    private readonly TimeProvider _timeProvider;
     private readonly bool _isEnabled;
     private readonly ILogger _logger;
 
@@ -34,14 +33,14 @@ public partial class AccountController : Controller
         UserManager<LondonTravelUser> userManager,
         SignInManager<LondonTravelUser> signInManager,
         ISiteTelemetry telemetry,
-        IClock clock,
+        TimeProvider timeProvider,
         SiteOptions siteOptions,
         ILogger<AccountController> logger)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _telemetry = telemetry;
-        _clock = clock;
+        _timeProvider = timeProvider;
         _logger = logger;
 
         _isEnabled =
@@ -289,7 +288,7 @@ public partial class AccountController : Controller
 
         var user = new LondonTravelUser()
         {
-            CreatedAt = _clock.GetCurrentInstant().ToDateTimeUtc(),
+            CreatedAt = _timeProvider.GetUtcNow().UtcDateTime,
             Email = email,
             GivenName = givenName,
             Surname = surname,
