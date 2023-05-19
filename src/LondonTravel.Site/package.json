@@ -27,7 +27,7 @@
     "css-minimizer-webpack-plugin": "^5.0.0",
     "eslint": "^8.40.0",
     "eslint-config-prettier": "^8.8.0",
-    "mini-css-extract-plugin": "^2.7.5",
+    "mini-css-extract-plugin": "^2.7.6",
     "moment": "^2.29.4",
     "prettier": "^2.8.8",
     "style-loader": "^3.3.2",
