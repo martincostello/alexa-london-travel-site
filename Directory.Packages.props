@@ -27,7 +27,6 @@
     <PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="8.0.0-preview.5.23302.2" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.7.1" />
     <PackageVersion Include="Microsoft.Playwright" Version="1.37.1" />
-    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.1.1" />
     <PackageVersion Include="Microsoft.TypeScript.MSBuild" Version="5.1.5" />
     <PackageVersion Include="NSubstitute" Version="5.0.0" />
     <PackageVersion Include="Polly" Version="7.2.4" />
@@ -47,7 +46,6 @@
     <PackageVersion Include="Xunit.SkippableFact" Version="1.4.13" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
     <PackageReference Include="StyleCop.Analyzers" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup Condition=" '$(IsTestProject)' == 'true' ">
