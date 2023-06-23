@@ -18,7 +18,7 @@
     <PackageVersion Include="MartinCostello.Logging.XUnit" Version="0.3.0" />
     <PackageVersion Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.Facebook" Version="7.0.7" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="7.0.7" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="7.0.8" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="7.0.7" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.Twitter" Version="7.0.7" />
     <PackageVersion Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" Version="7.0.7" />
