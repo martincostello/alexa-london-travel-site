@@ -4,7 +4,7 @@
 
 [![Build status](https://github.com/martincostello/alexa-london-travel-site/workflows/build/badge.svg?branch=main&event=push)](https://github.com/martincostello/alexa-london-travel-site/actions?query=workflow%3Abuild+branch%3Amain+event%3Apush)
 [![codecov](https://codecov.io/gh/martincostello/alexa-london-travel-site/branch/main/graph/badge.svg)](https://codecov.io/gh/martincostello/alexa-london-travel-site)
-[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/martincostello/alexa-london-travel-site/badge)](https://api.securityscorecards.dev/projects/github.com/martincostello/alexa-london-travel-site)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/martincostello/alexa-london-travel-site/badge)](https://securityscorecards.dev/viewer/?uri=github.com/martincostello/alexa-london-travel-site)
 
 ## Overview
 
