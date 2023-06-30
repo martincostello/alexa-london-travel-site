@@ -34,7 +34,7 @@
     <PackageVersion Include="NodaTime" Version="$(NodaTimeVersion)" />
     <PackageVersion Include="NodaTime.Testing" Version="$(NodaTimeVersion)" />
     <PackageVersion Include="Polly" Version="7.2.4" />
-    <PackageVersion Include="Refit" Version="6.5.1" />
+    <PackageVersion Include="Refit" Version="7.0.0" />
     <PackageVersion Include="ReportGenerator" Version="5.1.22" />
     <PackageVersion Include="Serilog" Version="3.0.1" />
     <PackageVersion Include="Serilog.Extensions.Logging" Version="7.0.0" />
