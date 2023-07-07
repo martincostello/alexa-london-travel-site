@@ -19,10 +19,13 @@ updates:
   open-pull-requests-limit: 99
   ignore:
   - dependency-name: Microsoft.DotNet.XliffTasks
-    versions:
-    - "> 1.0.0-beta.19562.1"
 - package-ecosystem: npm
   directory: "/src/LondonTravel.Site"
+  groups:
+    dependencies:
+      patterns:
+        - "@babel/*"
+        - "@typescript-eslint/*"
   schedule:
     interval: daily
     time: "05:30"
