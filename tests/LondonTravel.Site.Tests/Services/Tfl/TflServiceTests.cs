@@ -55,7 +55,7 @@ public sealed class TflServiceTests : IDisposable
 
         // Assert
         Assert.NotNull(actual1);
-        Assert.Equal(1, actual1.Count);
+        Assert.Single(actual1);
 
         var item = actual1.First();
 
@@ -89,7 +89,7 @@ public sealed class TflServiceTests : IDisposable
 
         // Assert
         Assert.NotNull(actual1);
-        Assert.Equal(1, actual1.Count);
+        Assert.Single(actual1);
 
         var item = actual1.First();
 
@@ -124,7 +124,7 @@ public sealed class TflServiceTests : IDisposable
 
         // Assert
         Assert.NotNull(actual1);
-        Assert.Equal(1, actual1.Count);
+        Assert.Single(actual1);
 
         var item = actual1.First();
 
@@ -160,7 +160,7 @@ public sealed class TflServiceTests : IDisposable
 
         // Assert
         Assert.NotNull(actual1);
-        Assert.Equal(1, actual1.Count);
+        Assert.Single(actual1);
 
         var item = actual1.First();
 
