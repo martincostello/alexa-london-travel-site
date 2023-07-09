@@ -131,16 +131,27 @@ jobs:
         if-no-files-found: ignore
 
   deploy-dev:
-    if: ${{ github.event.repository.fork == false && github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
+    if: ${{ github.event.repository.fork == false && github.ref_name == github.event.repository.default_branch }}
     name: dev
     needs: build
     runs-on: windows-latest
     concurrency: development_environment
+
     environment:
       name: dev
       url: ${{ env.APPLICATION_URL_DEV }}
 
+    permissions:
+      id-token: write
+
     steps:
+
+    - name: Azure log in
+      uses: azure/login@92a5484dfaf04ca78a94597f4f19fea633851fa2 # v1.4.7
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
     - name: Download artifacts
       uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3.0.2
@@ -152,7 +163,6 @@ jobs:
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         slot-name: dev
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
 
   test-dev:
     name: test-dev
@@ -225,11 +235,22 @@ jobs:
     needs: test-dev
     runs-on: windows-latest
     concurrency: production_environment
+
     environment:
       name: production
       url: ${{ env.APPLICATION_URL_PROD }}
 
+    permissions:
+      id-token: write
+
     steps:
+
+    - name: Azure log in
+      uses: azure/login@92a5484dfaf04ca78a94597f4f19fea633851fa2 # v1.4.7
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
     - name: Download artifacts
       uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3.0.2
@@ -240,7 +261,6 @@ jobs:
       uses: azure/webapps-deploy@fb8292eb575db1bb18a90627e8959cd51dbb355c # v2.2.10
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
 
   test-prod:
     name: test-prod
