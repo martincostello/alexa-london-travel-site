@@ -58,6 +58,10 @@ jobs:
         key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/*.props') }}
         restore-keys: ${{ runner.os }}-nuget-
 
+    - name: Restore NuGet packages
+      shell: pwsh
+      run: dotnet restore
+
     - name: Initialize CodeQL
       uses: github/codeql-action/init@cdcdbb579706841c47f7063dda365e292e5cad7a # v2.13.4
       with:
