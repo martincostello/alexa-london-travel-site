@@ -88,9 +88,9 @@ internal sealed class ExampleFilter : IOperationFilter, ISchemaFilter
     /// <typeparam name="T">The type of the attribute(s) to find.</typeparam>
     /// <param name="apiDescription">The API description.</param>
     /// <returns>
-    /// An <see cref="IList{T}"/> containing any found attributes of type <typeparamref name="T"/>.
+    /// An array containing any found attributes of type <typeparamref name="T"/>.
     /// </returns>
-    private static IList<T> GetAttributes<T>(ApiDescription apiDescription)
+    private static T[] GetAttributes<T>(ApiDescription apiDescription)
         where T : Attribute
     {
         IEnumerable<T> attributes = Enumerable.Empty<T>();
