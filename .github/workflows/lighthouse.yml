@@ -42,7 +42,7 @@ jobs:
         npm ci
         npm run build
         Pop-Location
-        dotnet build --project ./src/LondonTravel.Site/LondonTravel.Site.csproj --configuration Release
+        dotnet build ./src/LondonTravel.Site/LondonTravel.Site.csproj --configuration Release
         Start-Process nohup 'dotnet run --project ./src/LondonTravel.Site/LondonTravel.Site.csproj --configuration Release'
         $StatusCode = 0
         $Attempts = 0
