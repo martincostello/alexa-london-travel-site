@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Moq;
 
 namespace MartinCostello.LondonTravel.Site.Services;
@@ -306,7 +307,7 @@ public class AlexaServiceTests
 
         var location = httpContext.Response.Headers["location"];
 
-        var url = location.ToString();
+        string url = location.ToString();
 
         url.ShouldNotBeNullOrWhiteSpace();
         url.ShouldStartWith("https://alexa.amazon.com/alexa-london-travel?foo=bar#state=Some%20State&access_token=");
@@ -320,34 +321,6 @@ public class AlexaServiceTests
 
         user.AlexaToken.ShouldNotBe(alexaToken);
         user.AlexaToken.Length.ShouldBeGreaterThanOrEqualTo(64);
-    }
-
-    private static UserManager<LondonTravelUser> CreateUserManager(LondonTravelUser? user = null, IdentityResult? result = null)
-    {
-        var mock = new Mock<UserManager<LondonTravelUser>>(
-            Mock.Of<IUserStore<LondonTravelUser>>(),
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null);
-
-        if (user != null)
-        {
-            mock.Setup((p) => p.GetUserAsync(It.IsNotNull<ClaimsPrincipal>()))
-                .ReturnsAsync(user);
-
-            if (result != null)
-            {
-                mock.Setup((p) => p.UpdateAsync(user))
-                    .ReturnsAsync(result);
-            }
-        }
-
-        return mock.Object;
     }
 
     /// <summary>
@@ -371,6 +344,34 @@ public class AlexaServiceTests
                 },
             },
         };
+    }
+
+    private UserManager<LondonTravelUser> CreateUserManager(LondonTravelUser? user = null, IdentityResult? result = null)
+    {
+        var mock = new Mock<UserManager<LondonTravelUser>>(
+            Mock.Of<IUserStore<LondonTravelUser>>(),
+            Mock.Of<IOptions<IdentityOptions>>(),
+            Mock.Of<IPasswordHasher<LondonTravelUser>>(),
+            new[] { Mock.Of<IUserValidator<LondonTravelUser>>() },
+            new[] { Mock.Of<IPasswordValidator<LondonTravelUser>>() },
+            Mock.Of<ILookupNormalizer>(),
+            Mock.Of<IdentityErrorDescriber>(),
+            Mock.Of<IServiceProvider>(),
+            OutputHelper.ToLogger<UserManager<LondonTravelUser>>());
+
+        if (user != null)
+        {
+            mock.Setup((p) => p.GetUserAsync(It.IsNotNull<ClaimsPrincipal>()))
+                .ReturnsAsync(user);
+
+            if (result != null)
+            {
+                mock.Setup((p) => p.UpdateAsync(user))
+                    .ReturnsAsync(result);
+            }
+        }
+
+        return mock.Object;
     }
 
     private DefaultHttpContext CreateHttpContext()
