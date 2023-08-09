@@ -6,7 +6,7 @@ using MartinCostello.LondonTravel.Site.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Routing;
-using Moq;
+using NSubstitute;
 
 namespace MartinCostello.LondonTravel.Site.Pages.Account;
 
@@ -18,15 +18,15 @@ public static class RegisterPageTests
     [InlineData(5999, 5000)]
     [InlineData(6000, 5000)]
     [InlineData(6001, 6000)]
-    public static async Task Register_Rounds_User_Count_Correctly(int userCount, long expected)
+    public static async Task Register_Rounds_User_Count_Correctly(long userCount, long expected)
     {
         // Arrange
-        var mock = new Mock<IAccountService>();
+        var service = Substitute.For<IAccountService>();
 
-        mock.Setup((p) => p.GetUserCountAsync(true))
-            .ReturnsAsync(userCount);
+        service.GetUserCountAsync(true)
+               .Returns(Task.FromResult(userCount));
 
-        Register page = CreatePage(service: mock.Object);
+        Register page = CreatePage(service: service);
 
         // Act
         await page.OnGet();
@@ -39,12 +39,12 @@ public static class RegisterPageTests
     public static async Task Register_Returns_Correct_Fallback_Value()
     {
         // Arrange
-        var mock = new Mock<IAccountService>();
+        var service = Substitute.For<IAccountService>();
 
-        mock.Setup((p) => p.GetUserCountAsync(true))
-            .ThrowsAsync(new InvalidOperationException());
+        service.When((p) => p.GetUserCountAsync(true))
+               .Throw(new InvalidOperationException());
 
-        Register page = CreatePage(service: mock.Object);
+        Register page = CreatePage(service: service);
 
         // Act
         await page.OnGet();
@@ -55,20 +55,19 @@ public static class RegisterPageTests
 
     private static Register CreatePage(IAccountService? service = null)
     {
-        var httpContext = new Mock<HttpContext>();
-
-        httpContext
-            .Setup((p) => p.User)
-            .Returns(new ClaimsPrincipal(new ClaimsIdentity()));
+        var httpContext = new DefaultHttpContext
+        {
+            User = new ClaimsPrincipal(new ClaimsIdentity()),
+        };
 
         var pageContext = new PageContext()
         {
             ActionDescriptor = new CompiledPageActionDescriptor(),
-            HttpContext = httpContext.Object,
+            HttpContext = httpContext,
             RouteData = new RouteData(),
         };
 
-        return new(service ?? Mock.Of<IAccountService>())
+        return new(service ?? Substitute.For<IAccountService>())
         {
             PageContext = pageContext,
         };

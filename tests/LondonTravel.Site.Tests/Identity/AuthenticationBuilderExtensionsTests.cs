@@ -5,7 +5,7 @@ using AspNet.Security.OAuth.Amazon;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Moq;
+using NSubstitute;
 
 namespace MartinCostello.LondonTravel.Site.Identity;
 
@@ -31,8 +31,8 @@ public static class AuthenticationBuilderExtensionsTests
 
         var context = new RemoteFailureContext(httpContext, scheme, options, failure);
         var provider = Guid.NewGuid().ToString();
-        var secureDataFormat = Mock.Of<ISecureDataFormat<object>>();
-        var logger = Mock.Of<ILogger>();
+        var secureDataFormat = Substitute.For<ISecureDataFormat<object>>();
+        var logger = Substitute.For<ILogger>();
 
         // Act
         await AuthenticationBuilderExtensions.HandleRemoteFailure(context, provider, secureDataFormat, logger, PropertiesProvider);

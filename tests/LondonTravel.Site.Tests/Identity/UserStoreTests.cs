@@ -4,7 +4,7 @@
 using System.Security.Claims;
 using MartinCostello.LondonTravel.Site.Services.Data;
 using Microsoft.AspNetCore.Identity;
-using Moq;
+using NSubstitute;
 
 namespace MartinCostello.LondonTravel.Site.Identity;
 
@@ -119,12 +119,12 @@ public static class UserStoreTests
         // Arrange
         var user = new LondonTravelUser();
 
-        var mock = new Mock<IDocumentService>();
+        var service = Substitute.For<IDocumentService>();
 
-        mock.Setup((p) => p.CreateAsync(user))
-            .ReturnsAsync("MyUserId");
+        service.CreateAsync(user)
+               .Returns(Task.FromResult("MyUserId"));
 
-        using UserStore target = CreateStore(mock.Object);
+        using UserStore target = CreateStore(service);
 
         // Act
         var actual = await target.CreateAsync(user, CancellationToken.None);
@@ -145,12 +145,12 @@ public static class UserStoreTests
             Id = "MyUserId",
         };
 
-        var mock = new Mock<IDocumentService>();
+        var service = Substitute.For<IDocumentService>();
 
-        mock.Setup((p) => p.DeleteAsync(user.Id))
-            .ReturnsAsync(true);
+        service.DeleteAsync(user.Id)
+               .Returns(Task.FromResult(true));
 
-        using UserStore target = CreateStore(mock.Object);
+        using UserStore target = CreateStore(service);
 
         // Act
         var actual = await target.DeleteAsync(user, CancellationToken.None);
@@ -168,12 +168,12 @@ public static class UserStoreTests
             Id = "MyUserId",
         };
 
-        var mock = new Mock<IDocumentService>();
+        var service = Substitute.For<IDocumentService>();
 
-        mock.Setup((p) => p.DeleteAsync(user.Id))
-            .ReturnsAsync(false);
+        service.DeleteAsync(user.Id)
+               .Returns(Task.FromResult(false));
 
-        using UserStore target = CreateStore(mock.Object);
+        using UserStore target = CreateStore(service);
 
         // Act
         var actual = await target.DeleteAsync(user, CancellationToken.None);
@@ -476,6 +476,6 @@ public static class UserStoreTests
 
     private static UserStore CreateStore(IDocumentService? service = null)
     {
-        return new UserStore(service ?? Mock.Of<IDocumentService>());
+        return new UserStore(service ?? Substitute.For<IDocumentService>());
     }
 }
