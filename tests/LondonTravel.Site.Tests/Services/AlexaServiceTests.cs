@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Moq;
+using NSubstitute;
 
 namespace MartinCostello.LondonTravel.Site.Services;
 
@@ -348,30 +348,30 @@ public class AlexaServiceTests
 
     private UserManager<LondonTravelUser> CreateUserManager(LondonTravelUser? user = null, IdentityResult? result = null)
     {
-        var mock = new Mock<UserManager<LondonTravelUser>>(
-            Mock.Of<IUserStore<LondonTravelUser>>(),
-            Mock.Of<IOptions<IdentityOptions>>(),
-            Mock.Of<IPasswordHasher<LondonTravelUser>>(),
-            new[] { Mock.Of<IUserValidator<LondonTravelUser>>() },
-            new[] { Mock.Of<IPasswordValidator<LondonTravelUser>>() },
-            Mock.Of<ILookupNormalizer>(),
-            Mock.Of<IdentityErrorDescriber>(),
-            Mock.Of<IServiceProvider>(),
+        var manager = Substitute.For<UserManager<LondonTravelUser>>(
+            Substitute.For<IUserStore<LondonTravelUser>>(),
+            Substitute.For<IOptions<IdentityOptions>>(),
+            Substitute.For<IPasswordHasher<LondonTravelUser>>(),
+            new[] { Substitute.For<IUserValidator<LondonTravelUser>>() },
+            new[] { Substitute.For<IPasswordValidator<LondonTravelUser>>() },
+            Substitute.For<ILookupNormalizer>(),
+            Substitute.For<IdentityErrorDescriber>(),
+            Substitute.For<IServiceProvider>(),
             OutputHelper.ToLogger<UserManager<LondonTravelUser>>());
 
         if (user != null)
         {
-            mock.Setup((p) => p.GetUserAsync(It.IsNotNull<ClaimsPrincipal>()))
-                .ReturnsAsync(user);
+            manager.GetUserAsync(Arg.Is<ClaimsPrincipal>((p) => p != null))
+                   .Returns(Task.FromResult<LondonTravelUser?>(user));
 
             if (result != null)
             {
-                mock.Setup((p) => p.UpdateAsync(user))
-                    .ReturnsAsync(result);
+                manager.UpdateAsync(user)
+                       .Returns(Task.FromResult(result));
             }
         }
 
-        return mock.Object;
+        return manager;
     }
 
     private DefaultHttpContext CreateHttpContext()
@@ -392,7 +392,7 @@ public class AlexaServiceTests
     {
         return new AlexaService(
             userManager ?? CreateUserManager(),
-            Mock.Of<ISiteTelemetry>(),
+            Substitute.For<ISiteTelemetry>(),
             Microsoft.Extensions.Options.Options.Create(options ?? CreateValidSiteOptions()),
             OutputHelper.ToLogger<AlexaService>());
     }

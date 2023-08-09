@@ -5,7 +5,7 @@ using MartinCostello.LondonTravel.Site.Options;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
+using NSubstitute;
 using Option = Microsoft.Extensions.Options.Options;
 
 namespace MartinCostello.LondonTravel.Site.Services.Data;
@@ -38,7 +38,7 @@ public static class DocumentHelpersTests
     {
         // Arrange
         UserStoreOptions? options = null;
-        var httpClientFactory = Mock.Of<IHttpClientFactory>();
+        var httpClientFactory = Substitute.For<IHttpClientFactory>();
 
         // Act and Assert
         Assert.Throws<ArgumentNullException>("options", () => DocumentHelpers.CreateClient(options!, httpClientFactory));
@@ -56,7 +56,7 @@ public static class DocumentHelpersTests
             CollectionName = "my-collection",
         };
 
-        var httpClientFactory = Mock.Of<IHttpClientFactory>();
+        var httpClientFactory = Substitute.For<IHttpClientFactory>();
 
         // Act and Assert
         Assert.Throws<ArgumentException>("options", () => DocumentHelpers.CreateClient(options, httpClientFactory));
@@ -74,7 +74,7 @@ public static class DocumentHelpersTests
             CollectionName = "my-collection",
         };
 
-        var httpClientFactory = Mock.Of<IHttpClientFactory>();
+        var httpClientFactory = Substitute.For<IHttpClientFactory>();
 
         // Act and Assert
         Assert.Throws<ArgumentException>("options", () => DocumentHelpers.CreateClient(options, httpClientFactory));
@@ -94,7 +94,7 @@ public static class DocumentHelpersTests
             CollectionName = "my-collection",
         };
 
-        var httpClientFactory = Mock.Of<IHttpClientFactory>();
+        var httpClientFactory = Substitute.For<IHttpClientFactory>();
 
         // Act and Assert
         Assert.Throws<ArgumentException>("options", () => DocumentHelpers.CreateClient(options, httpClientFactory));
@@ -114,7 +114,7 @@ public static class DocumentHelpersTests
             CollectionName = "my-collection",
         };
 
-        var httpClientFactory = Mock.Of<IHttpClientFactory>();
+        var httpClientFactory = Substitute.For<IHttpClientFactory>();
 
         // Act and Assert
         Assert.Throws<ArgumentException>("options", () => DocumentHelpers.CreateClient(options, httpClientFactory));
@@ -134,7 +134,7 @@ public static class DocumentHelpersTests
             CollectionName = collectionName,
         };
 
-        var httpClientFactory = Mock.Of<IHttpClientFactory>();
+        var httpClientFactory = Substitute.For<IHttpClientFactory>();
 
         // Act and Assert
         Assert.Throws<ArgumentException>("options", () => DocumentHelpers.CreateClient(options, httpClientFactory));
