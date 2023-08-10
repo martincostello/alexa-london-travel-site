@@ -199,7 +199,7 @@ public class InlineStyleTagHelper : LinkTagHelper
             {
                 startIndex += SourceMapPreamble.Length;
 
-                int endIndex = css.IndexOf("*", startIndex, StringComparison.OrdinalIgnoreCase);
+                int endIndex = css.IndexOf('*', startIndex);
 
                 if (endIndex > -1)
                 {
