@@ -22,9 +22,11 @@ updates:
 - package-ecosystem: npm
   directory: "/src/LondonTravel.Site"
   groups:
-    dependencies:
+    babel:
       patterns:
         - "@babel/*"
+    typescript-eslint:
+      patterns:
         - "@typescript-eslint/*"
   schedule:
     interval: daily
