@@ -75,7 +75,12 @@ public static partial class AuthenticationBuilderExtensions
 
         if (IsProviderEnabled(name, options))
         {
-            builder.AddFacebook()
+            builder.AddFacebook((p) =>
+                    {
+                        p.AuthorizationEndpoint = "https://www.facebook.com/v14.0/dialog/oauth";
+                        p.TokenEndpoint = "https://graph.facebook.com/v14.0/oauth/access_token";
+                        p.UserInformationEndpoint = "https://graph.facebook.com/v14.0/me";
+                    })
                    .Configure<FacebookOptions>(name);
         }
 
