@@ -72,9 +72,13 @@ jobs:
       shell: pwsh
       if: matrix.language == 'csharp'
       run: |
-        dotnet build --configuration Release --verbosity diagnostic /p:SkipCompileClientScripts=true /p:ErrorLog=./msbuild.log
-        Get-Content "./msbuild.log"
+        $errorLog = Join-Path $pwd.Path "csc.sarif"
+        $errorLog = [System.IO.Path]::GetFullPath($errorLog)
+        dotnet build --configuration Release --verbosity diagnostic /p:SkipCompileClientScripts=true "/p:ErrorLog=$errorLog"
         $result = $LASTEXITCODE
+        if (Test-Path $errorLog) {
+          Get-Content $errorLog
+        }
         return $result
 
     - name: Perform CodeQL Analysis
