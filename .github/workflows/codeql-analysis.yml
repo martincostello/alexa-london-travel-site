@@ -35,6 +35,7 @@ jobs:
 
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@3447fd6a9f9e57506b15f895c5b76d3b197dc7c2 # v3.2.0
+      if: matrix.language == 'csharp'
 
     - name: Setup Node
       uses: actions/setup-node@5e21ff4d9bc1a8cf6de233a3057d20ec6b3fb69d # v3.8.1
@@ -56,14 +57,16 @@ jobs:
 
     - name: Setup NuGet cache
       uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8 # v3.3.1
+      if: matrix.language == 'csharp'
       with:
         path: ~/.nuget/packages
         key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/*.props') }}
         restore-keys: ${{ runner.os }}-nuget-
 
-    - name: Restore NuGet packages
+    - name: Build solution
       shell: pwsh
-      run: dotnet restore
+      if: matrix.language == 'csharp'
+      run: dotnet build --configuration Release /p:SkipCompileClientScripts=true
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@cdcdbb579706841c47f7063dda365e292e5cad7a # v2.13.4
