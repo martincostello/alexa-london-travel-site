@@ -71,7 +71,11 @@ jobs:
     - name: Build solution
       shell: pwsh
       if: matrix.language == 'csharp'
-      run: dotnet build --configuration Release --verbosity diagnostic /p:SkipCompileClientScripts=true
+      run: |
+        dotnet build --configuration Release --verbosity diagnostic /p:SkipCompileClientScripts=true /p:ErrorLog=./msbuild.log
+        Get-Content "./msbuild.log"
+        $result = $LASTEXITCODE
+        return $result
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@cdcdbb579706841c47f7063dda365e292e5cad7a # v2.13.4
