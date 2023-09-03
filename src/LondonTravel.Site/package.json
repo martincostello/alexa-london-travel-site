@@ -39,5 +39,90 @@
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4",
     "webpack-remove-empty-scripts": "^1.0.4"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "es6": true,
+      "node": true
+    },
+    "extends": [
+      "prettier"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "project": "./tsconfig.json",
+      "sourceType": "module"
+    },
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "rules": {
+      "@typescript-eslint/indent": "error",
+      "@typescript-eslint/member-delimiter-style": "error",
+      "@typescript-eslint/naming-convention": "error",
+      "@typescript-eslint/prefer-namespace-keyword": "error",
+      "@typescript-eslint/quotes": [
+        "error",
+        "single"
+      ],
+      "@typescript-eslint/semi": [
+        "error",
+        "always"
+      ],
+      "@typescript-eslint/type-annotation-spacing": "error",
+      "brace-style": [
+        "error",
+        "1tbs"
+      ],
+      "eqeqeq": [
+        "error",
+        "smart"
+      ],
+      "id-blacklist": [
+        "error",
+        "any",
+        "Number",
+        "number",
+        "String",
+        "string",
+        "Boolean",
+        "boolean",
+        "Undefined",
+        "undefined"
+      ],
+      "id-match": "error",
+      "no-eval": "error",
+      "no-redeclare": "error",
+      "no-trailing-spaces": "error",
+      "no-underscore-dangle": "error",
+      "no-var": "error",
+      "spaced-comment": [
+        "error",
+        "always",
+        {
+          "markers": [
+            "/"
+          ]
+        }
+      ]
+    }
+  },
+  "prettier": {
+    "arrowParens": "always",
+    "bracketSpacing": true,
+    "endOfLine": "auto",
+    "printWidth": 140,
+    "quoteProps": "consistent",
+    "semi": true,
+    "singleQuote": true,
+    "tabWidth": 4,
+    "trailingComma": "es5",
+    "useTabs": false
+  },
+  "stylelint": {
+    "extends": [
+      "stylelint-config-standard"
+    ]
   }
 }
