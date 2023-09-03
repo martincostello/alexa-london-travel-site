@@ -16,7 +16,6 @@
     <XlfLanguages>en-GB;en-US;qps-Ploc</XlfLanguages>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="parameters.xml" CopyToOutputDirectory="PreserveNewest" />
     <Content Update="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
   <ItemGroup>
