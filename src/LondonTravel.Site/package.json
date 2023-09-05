@@ -108,6 +108,12 @@
       ]
     }
   },
+  "eslintIgnore": [
+    "bin/",
+    "node_modules/",
+    "obj/",
+    "wwwroot/"
+  ],
   "prettier": {
     "arrowParens": "always",
     "bracketSpacing": true,
