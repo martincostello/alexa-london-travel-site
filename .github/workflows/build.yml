@@ -84,15 +84,15 @@ jobs:
     - name: Setup Playwright cache
       uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84 # v3.3.2
       with:
+        key: ${{ runner.os }}-playwright-${{ hashFiles('Directory.Packages.props') }}
         path: |
           ~/AppData/Local/ms-playwright
           ~/.cache/ms-playwright
           ~/Library/Caches/ms-playwright
-        key: ${{ runner.os }}-playwright-${{ hashFiles('Directory.Packages.props') }}
 
     - name: Build, test and publish
       shell: pwsh
-      run: ./build.ps1 -Runtime "${{ env.PUBLISH_RUNTIME }}"
+      run: ./build.ps1 -Runtime "${env:PUBLISH_RUNTIME}"
 
     - uses: codecov/codecov-action@eaaf4bedf32dbdc6b720b63067d99c4d77d6047d # v3.1.4
       name: Upload coverage to Codecov
@@ -102,7 +102,7 @@ jobs:
 
     - name: Publish artifacts
       uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
-      if: ${{ runner.os == 'Windows' && success() }}
+      if: runner.os == 'Windows' && success()
       with:
         name: webapp
         path: ./artifacts/publish
@@ -110,7 +110,7 @@ jobs:
 
     - name: Publish screenshots
       uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
-      if: ${{ always() }}
+      if: ${{ !cancelled() }}
       with:
         name: screenshots
         path: ./artifacts/screenshots/*
@@ -118,7 +118,7 @@ jobs:
 
     - name: Publish traces
       uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
-      if: ${{ always() }}
+      if: ${{ !cancelled() }}
       with:
         name: traces
         path: ./artifacts/traces/*
@@ -126,14 +126,14 @@ jobs:
 
     - name: Publish videos
       uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
-      if: ${{ always() }}
+      if: ${{ !cancelled() }}
       with:
         name: videos
         path: ./artifacts/videos/*
         if-no-files-found: ignore
 
   deploy-dev:
-    if: ${{ github.event.repository.fork == false && github.ref_name == github.event.repository.default_branch }}
+    if: github.event.repository.fork == false && github.ref_name == github.event.repository.default_branch
     name: dev
     needs: build
     runs-on: windows-latest
@@ -190,11 +190,11 @@ jobs:
     - name: Setup Playwright cache
       uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84 # v3.3.2
       with:
+        key: ${{ runner.os }}-playwright-${{ hashFiles('Directory.Packages.props') }}
         path: |
           ~/AppData/Local/ms-playwright
           ~/.cache/ms-playwright
           ~/Library/Caches/ms-playwright
-        key: ${{ runner.os }}-playwright-${{ hashFiles('Directory.Packages.props') }}
 
     - name: Run end-to-end tests
       shell: pwsh
@@ -210,7 +210,7 @@ jobs:
 
     - name: Publish screenshots
       uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
-      if: ${{ always() }}
+      if: ${{ !cancelled() }}
       with:
         name: screenshots
         path: ./artifacts/screenshots/*
@@ -218,7 +218,7 @@ jobs:
 
     - name: Publish traces
       uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
-      if: ${{ always() }}
+      if: ${{ !cancelled() }}
       with:
         name: traces
         path: ./artifacts/traces/*
@@ -226,7 +226,7 @@ jobs:
 
     - name: Publish videos
       uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
-      if: ${{ always() }}
+      if: ${{ !cancelled() }}
       with:
         name: videos
         path: ./artifacts/videos/*
@@ -288,11 +288,11 @@ jobs:
     - name: Setup Playwright cache
       uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84 # v3.3.2
       with:
+        key: ${{ runner.os }}-playwright-${{ hashFiles('Directory.Packages.props') }}
         path: |
           ~/AppData/Local/ms-playwright
           ~/.cache/ms-playwright
           ~/Library/Caches/ms-playwright
-        key: ${{ runner.os }}-playwright-${{ hashFiles('Directory.Packages.props') }}
 
     - name: Run end-to-end tests
       shell: pwsh
@@ -308,7 +308,7 @@ jobs:
 
     - name: Publish screenshots
       uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
-      if: ${{ always() }}
+      if: ${{ !cancelled() }}
       with:
         name: screenshots
         path: ./artifacts/screenshots/*
@@ -316,7 +316,7 @@ jobs:
 
     - name: Publish traces
       uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
-      if: ${{ always() }}
+      if: ${{ !cancelled() }}
       with:
         name: traces
         path: ./artifacts/traces/*
@@ -324,7 +324,7 @@ jobs:
 
     - name: Publish videos
       uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
-      if: ${{ always() }}
+      if: ${{ !cancelled() }}
       with:
         name: videos
         path: ./artifacts/videos/*
