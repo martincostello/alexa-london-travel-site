@@ -75,12 +75,7 @@ public static partial class AuthenticationBuilderExtensions
 
         if (IsProviderEnabled(name, options))
         {
-            builder.AddFacebook((p) =>
-                    {
-                        p.AuthorizationEndpoint = "https://www.facebook.com/v14.0/dialog/oauth";
-                        p.TokenEndpoint = "https://graph.facebook.com/v14.0/oauth/access_token";
-                        p.UserInformationEndpoint = "https://graph.facebook.com/v14.0/me";
-                    })
+            builder.AddFacebook()
                    .Configure<FacebookOptions>(name);
         }
 
@@ -261,9 +256,9 @@ public static partial class AuthenticationBuilderExtensions
 
                 options.Events.OnTicketReceived = (context) =>
                 {
-                    var clock = context.HttpContext.RequestServices.GetRequiredService<ISystemClock>();
+                    var provider = context.HttpContext.RequestServices.GetRequiredService<TimeProvider>();
 
-                    context.Properties!.ExpiresUtc = clock.UtcNow.AddDays(150);
+                    context.Properties!.ExpiresUtc = provider.GetUtcNow().AddDays(150);
                     context.Properties.IsPersistent = true;
 
                     return Task.CompletedTask;

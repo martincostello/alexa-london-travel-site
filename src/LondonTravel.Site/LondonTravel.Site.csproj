@@ -2,6 +2,16 @@
   <PropertyGroup>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <Description>https://londontravel.martincostello.com/</Description>
+    <!--
+      HACK Disable configuration binding source generator due to issues in RC.1 that will be fixed in RC.2:
+      - https://github.com/dotnet/runtime/issues/90851
+      - https://github.com/dotnet/runtime/issues/90987
+      - https://github.com/dotnet/runtime/issues/91258
+    -->
+    <!--
+    <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
+    -->
+    <EnableRequestDelegateGenerator>true</EnableRequestDelegateGenerator>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);CA1716</NoWarn>
     <OutputType>Exe</OutputType>
@@ -9,7 +19,7 @@
     <RootNamespace>MartinCostello.LondonTravel.Site</RootNamespace>
     <SatelliteResourceLanguages>en,en-GB,en-US,qps-Ploc</SatelliteResourceLanguages>
     <Summary>Website for the London Travel Amazon Alexa skill.</Summary>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <TypeScriptToolsVersion>latest</TypeScriptToolsVersion>
     <UserSecretsId>londontravel.martincostello.com</UserSecretsId>
@@ -39,7 +49,6 @@
     <PackageReference Include="Microsoft.DotNet.XliffTasks" PrivateAssets="All" />
     <PackageReference Include="Microsoft.Extensions.Http.Polly" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" />
-    <PackageReference Include="NodaTime" />
     <PackageReference Include="Polly" />
     <PackageReference Include="Refit" />
     <PackageReference Include="Serilog" />
