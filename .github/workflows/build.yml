@@ -26,7 +26,7 @@ env:
   DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: 1
   FORCE_COLOR: 1
   NUGET_XMLDOC_MODE: skip
-  PUBLISH_RUNTIME: win10-x64
+  PUBLISH_RUNTIME: win-x64
   TERM: xterm
 
 permissions:
@@ -105,7 +105,7 @@ jobs:
       if: runner.os == 'Windows' && success()
       with:
         name: webapp
-        path: ./artifacts/publish
+        path: ./artifacts/publish/LondonTravel.Site/release_${{ env.PUBLISH_RUNTIME }}
         if-no-files-found: error
 
     - name: Publish screenshots

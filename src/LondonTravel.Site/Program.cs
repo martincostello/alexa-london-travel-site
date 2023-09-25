@@ -2,7 +2,6 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.IO.Compression;
-using System.Text.Json.Serialization.Metadata;
 using MartinCostello.LondonTravel.Site;
 using MartinCostello.LondonTravel.Site.Extensions;
 using MartinCostello.LondonTravel.Site.Options;
@@ -20,7 +19,6 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
-using NodaTime;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -134,9 +132,7 @@ builder.Services.ConfigureHttpJsonOptions((options) =>
     options.SerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
     options.SerializerOptions.PropertyNameCaseInsensitive = false;
     options.SerializerOptions.WriteIndented = true;
-    options.SerializerOptions.TypeInfoResolver = JsonTypeInfoResolver.Combine(
-        ApplicationJsonSerializerContext.Default,
-        new DefaultJsonTypeInfoResolver());
+    options.SerializerOptions.TypeInfoResolverChain.Add(ApplicationJsonSerializerContext.Default);
 });
 
 builder.Services.Configure<StaticFileOptions>((options) =>
@@ -172,7 +168,7 @@ builder.Services.Configure<StaticFileOptions>((options) =>
     };
 });
 
-builder.Services.AddSingleton<IClock>((_) => SystemClock.Instance);
+builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddSingleton<ISiteTelemetry, SiteTelemetry>();
 builder.Services.AddSingleton<ITelemetryInitializer, SiteTelemetryInitializer>();
 builder.Services.AddSingleton<ITflServiceFactory, TflServiceFactory>();

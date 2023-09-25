@@ -178,7 +178,7 @@
     },
     {
       "comment": "User information resource for Google login",
-      "uri": "https://www.googleapis.com/oauth2/v2/userinfo",
+      "uri": "https://www.googleapis.com/oauth2/v3/userinfo",
       "contentFormat": "json",
       "contentJson": {
         "id": "c91599d6-ab86-452c-96d3-6e8eb45585f2",
