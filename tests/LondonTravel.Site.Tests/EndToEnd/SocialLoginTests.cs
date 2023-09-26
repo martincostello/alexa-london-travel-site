@@ -114,7 +114,7 @@ public class SocialLoginTests : BrowserEndToEndTest
 
         IElementHandle? userName = await page.WaitForSelectorAsync(userNameSelector);
 
-        await userName!.TypeAsync(credentials.UserName);
+        await userName!.FillAsync(credentials.UserName);
 
         if (sendEnterAfterUserName)
         {
@@ -127,7 +127,7 @@ public class SocialLoginTests : BrowserEndToEndTest
 
         IElementHandle? password = await page.WaitForSelectorAsync(passwordSelector);
 
-        await password!.TypeAsync(credentials.Password);
+        await password!.FillAsync(credentials.Password);
         await page.Keyboard.PressAsync("Enter");
 
         await page.WaitForURLAsync((p) => p.StartsWith(ServerAddress.ToString(), StringComparison.OrdinalIgnoreCase));
