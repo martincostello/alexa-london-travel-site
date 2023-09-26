@@ -143,8 +143,6 @@ public sealed class HttpServerFixture : TestServerFixture
             root.Reload();
         }
 
-        testHost.Start();
-
         return testHost;
     }
 
