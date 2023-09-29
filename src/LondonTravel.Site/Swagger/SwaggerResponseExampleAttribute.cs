@@ -6,27 +6,21 @@ namespace MartinCostello.LondonTravel.Site.Swagger;
 /// <summary>
 /// Defines an example response for an API method. This class cannot be inherited.
 /// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="SwaggerResponseExampleAttribute"/> class.
+/// </remarks>
+/// <param name="responseType">The type of the response.</param>
+/// <param name="exampleType">The type of the example.</param>
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = false)]
-internal sealed class SwaggerResponseExampleAttribute : Attribute
+internal sealed class SwaggerResponseExampleAttribute(Type responseType, Type exampleType) : Attribute
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="SwaggerResponseExampleAttribute"/> class.
-    /// </summary>
-    /// <param name="responseType">The type of the response.</param>
-    /// <param name="exampleType">The type of the example.</param>
-    public SwaggerResponseExampleAttribute(Type responseType, Type exampleType)
-    {
-        ResponseType = responseType;
-        ExampleType = exampleType;
-    }
-
     /// <summary>
     /// Gets the type of the response.
     /// </summary>
-    public Type ResponseType { get; }
+    public Type ResponseType { get; } = responseType;
 
     /// <summary>
     /// Gets the type of the example.
     /// </summary>
-    public Type ExampleType { get; }
+    public Type ExampleType { get; } = exampleType;
 }

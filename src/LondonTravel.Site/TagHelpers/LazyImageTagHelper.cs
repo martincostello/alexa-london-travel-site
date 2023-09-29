@@ -14,7 +14,7 @@ namespace MartinCostello.LondonTravel.Site.TagHelpers;
 /// elements that supports file versioning and lazy loading of images.
 /// </summary>
 [HtmlTargetElement("lazyimg", TagStructure = TagStructure.WithoutEndTag)]
-public class LazyImageTagHelper : ImageTagHelper
+public class LazyImageTagHelper(IFileVersionProvider fileVersionProvider, HtmlEncoder htmlEncoder, IUrlHelperFactory urlHelperFactory) : ImageTagHelper(fileVersionProvider, htmlEncoder, urlHelperFactory)
 {
     /// <summary>
     /// The name of the <c>class</c> attribute.
@@ -31,19 +31,14 @@ public class LazyImageTagHelper : ImageTagHelper
     /// </summary>
     private const string SourceAttributeName = "src";
 
-    public LazyImageTagHelper(IFileVersionProvider fileVersionProvider, HtmlEncoder htmlEncoder, IUrlHelperFactory urlHelperFactory)
-        : base(fileVersionProvider, htmlEncoder, urlHelperFactory)
-    {
-    }
-
     /// <inheritdoc />
     public override void Process(TagHelperContext context, TagHelperOutput output)
     {
         base.Process(context, output);
 
         // Get the non-lazy image and the current CSS
-        var dataOriginal = output.Attributes[SourceAttributeName].Value.ToString();
-        var css = output.Attributes[ClassAttributeName]?.Value?.ToString();
+        string? dataOriginal = output.Attributes[SourceAttributeName].Value.ToString();
+        string? css = output.Attributes[ClassAttributeName]?.Value?.ToString();
 
         // Add a placeholder as the src, set the original to be the lazily-loaded
         // image and add the CSS class to get the JavaScript to do the lazy loading.

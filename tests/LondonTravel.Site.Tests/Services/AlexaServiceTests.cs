@@ -14,15 +14,8 @@ using NSubstitute;
 
 namespace MartinCostello.LondonTravel.Site.Services;
 
-public class AlexaServiceTests
+public class AlexaServiceTests(ITestOutputHelper outputHelper)
 {
-    public AlexaServiceTests(ITestOutputHelper outputHelper)
-    {
-        OutputHelper = outputHelper;
-    }
-
-    private ITestOutputHelper OutputHelper { get; }
-
     [Fact]
     public void Access_Tokens_Are_Randomly_Generated()
     {
@@ -305,7 +298,7 @@ public class AlexaServiceTests
 
         httpContext.Response.StatusCode.ShouldBe(StatusCodes.Status302Found);
 
-        var location = httpContext.Response.Headers["location"];
+        var location = httpContext.Response.Headers.Location;
 
         string url = location.ToString();
 
@@ -357,7 +350,7 @@ public class AlexaServiceTests
             Substitute.For<ILookupNormalizer>(),
             Substitute.For<IdentityErrorDescriber>(),
             Substitute.For<IServiceProvider>(),
-            OutputHelper.ToLogger<UserManager<LondonTravelUser>>());
+            outputHelper.ToLogger<UserManager<LondonTravelUser>>());
 
         if (user != null)
         {
@@ -377,7 +370,7 @@ public class AlexaServiceTests
     private DefaultHttpContext CreateHttpContext()
     {
         var serviceProvider = new ServiceCollection()
-            .AddLogging((p) => p.AddXUnit(OutputHelper))
+            .AddLogging((p) => p.AddXUnit(outputHelper))
             .BuildServiceProvider();
 
         return new DefaultHttpContext
@@ -394,7 +387,7 @@ public class AlexaServiceTests
             userManager ?? CreateUserManager(),
             Substitute.For<ISiteTelemetry>(),
             Microsoft.Extensions.Options.Options.Create(options ?? CreateValidSiteOptions()),
-            OutputHelper.ToLogger<AlexaService>());
+            outputHelper.ToLogger<AlexaService>());
     }
 
     private async Task<HttpContext> AssertRedirect(IResult actual, string? url = null)
@@ -409,7 +402,7 @@ public class AlexaServiceTests
 
         if (url != null)
         {
-            var location = httpContext.Response.Headers["location"];
+            var location = httpContext.Response.Headers.Location;
             location.ToString().ShouldBe(url);
         }
 

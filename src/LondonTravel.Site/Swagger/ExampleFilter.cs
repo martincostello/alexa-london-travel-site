@@ -15,21 +15,16 @@ namespace MartinCostello.LondonTravel.Site.Swagger;
 /// <summary>
 /// A class representing an operation filter that adds the example to use for display in Swagger documentation. This class cannot be inherited.
 /// </summary>
-internal sealed class ExampleFilter : IOperationFilter, ISchemaFilter
+/// <remarks>
+/// Initializes a new instance of the <see cref="ExampleFilter"/> class.
+/// </remarks>
+/// <param name="options">The <see cref="JsonOptions"/> to use.</param>
+internal sealed class ExampleFilter(IOptions<JsonOptions> options) : IOperationFilter, ISchemaFilter
 {
     /// <summary>
     /// The <see cref="JsonSerializerOptions"/> to use for formatting example responses. This field is read-only.
     /// </summary>
-    private readonly JsonSerializerOptions _options;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="ExampleFilter"/> class.
-    /// </summary>
-    /// <param name="options">The <see cref="JsonOptions"/> to use.</param>
-    public ExampleFilter(IOptions<JsonOptions> options)
-    {
-        _options = options.Value.SerializerOptions;
-    }
+    private readonly JsonSerializerOptions _options = options.Value.SerializerOptions;
 
     /// <inheritdoc />
     public void Apply(OpenApiOperation operation, OperationFilterContext context)

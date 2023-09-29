@@ -22,12 +22,12 @@ public static class PollyServiceCollectionExtensions
     {
         return services.AddPolicyRegistry((_, registry) =>
         {
-            var sleepDurations = new[]
-            {
+            TimeSpan[] sleepDurations =
+            [
                 TimeSpan.FromSeconds(1),
                 TimeSpan.FromSeconds(5),
                 TimeSpan.FromSeconds(10),
-            };
+            ];
 
             var readPolicy = HttpPolicyExtensions.HandleTransientHttpError()
                 .WaitAndRetryAsync(sleepDurations)
@@ -37,11 +37,11 @@ public static class PollyServiceCollectionExtensions
                 .AsAsyncPolicy<HttpResponseMessage>()
                 .WithPolicyKey("WritePolicy");
 
-            var policies = new[]
-            {
+            IAsyncPolicy<HttpResponseMessage>[] policies =
+            [
                 readPolicy,
                 writePolicy,
-            };
+            ];
 
             foreach (var policy in policies)
             {

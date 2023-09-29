@@ -7,19 +7,8 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace MartinCostello.LondonTravel.Site.Services;
 
-public sealed partial class AccountService : IAccountService
+public sealed partial class AccountService(IDocumentService service, IMemoryCache cache, ILogger<AccountService> logger) : IAccountService
 {
-    private readonly IDocumentService _service;
-    private readonly IMemoryCache _cache;
-    private readonly ILogger _logger;
-
-    public AccountService(IDocumentService service, IMemoryCache cache, ILogger<AccountService> logger)
-    {
-        _service = service;
-        _cache = cache;
-        _logger = logger;
-    }
-
     public async Task<LondonTravelUser?> GetUserByAccessTokenAsync(string accessToken, CancellationToken cancellationToken)
     {
         LondonTravelUser? user = null;
@@ -28,11 +17,11 @@ public sealed partial class AccountService : IAccountService
         {
             try
             {
-                user = (await _service.GetAsync((p) => p.AlexaToken == accessToken, cancellationToken)).FirstOrDefault();
+                user = (await service.GetAsync((p) => p.AlexaToken == accessToken, cancellationToken)).FirstOrDefault();
             }
             catch (Exception ex)
             {
-                Log.FailedToFindUserByAccessToken(_logger, ex);
+                Log.FailedToFindUserByAccessToken(logger, ex);
                 throw;
             }
         }
@@ -47,18 +36,18 @@ public sealed partial class AccountService : IAccountService
     {
         const string CacheKey = "DocumentStore.Count";
 
-        if (!_cache.TryGetValue(CacheKey, out long count))
+        if (!cache.TryGetValue(CacheKey, out long count))
         {
             count = await GetUserCountFromDocumentStoreAsync();
 
-            _cache.Set(CacheKey, count, TimeSpan.FromHours(12));
+            cache.Set(CacheKey, count, TimeSpan.FromHours(12));
         }
 
         return count;
     }
 
     private Task<long> GetUserCountFromDocumentStoreAsync()
-        => _service.GetDocumentCountAsync();
+        => service.GetDocumentCountAsync();
 
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     private static partial class Log

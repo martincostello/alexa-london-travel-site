@@ -3,13 +3,8 @@
 
 namespace MartinCostello.LondonTravel.Site.Pages;
 
-public sealed class DeleteModal : ModalBase
+public sealed class DeleteModal(ApplicationNavigator navigator) : ModalBase("delete-account", navigator)
 {
-    public DeleteModal(ApplicationNavigator navigator)
-        : base("delete-account", navigator)
-    {
-    }
-
     public async Task<ManagePage> CloseAsync()
     {
         await CloseSelfAsync();

@@ -8,15 +8,8 @@ namespace MartinCostello.LondonTravel.Site.EndToEnd;
 
 [Collection(WebsiteCollection.Name)]
 [Trait("Category", "EndToEnd")]
-public class ResourceTests
+public class ResourceTests(WebsiteFixture fixture)
 {
-    public ResourceTests(WebsiteFixture fixture)
-    {
-        Fixture = fixture;
-    }
-
-    private WebsiteFixture Fixture { get; }
-
     [SkippableTheory]
     [InlineData("/", MediaTypeNames.Text.Html)]
     [InlineData("/.well-known/apple-app-site-association", MediaTypeNames.Application.Json)]
@@ -51,7 +44,7 @@ public class ResourceTests
     public async Task Can_Load_Resource(string requestUri, string contentType)
     {
         // Arrange
-        using var client = Fixture.CreateClient();
+        using var client = fixture.CreateClient();
 
         // Act
         using var response = await client.GetAsync(requestUri);
@@ -67,8 +60,8 @@ public class ResourceTests
     public async Task Response_Headers_Contains_Expected_Headers()
     {
         // Arrange
-        string[] expectedHeaders = new[]
-        {
+        string[] expectedHeaders =
+        [
             "content-security-policy",
             "content-security-policy-report-only",
             "NEL",
@@ -84,10 +77,10 @@ public class ResourceTests
             "X-Request-Id",
             "X-Revision",
             "X-XSS-Protection",
-        };
+        ];
 
         // Act
-        using var client = Fixture.CreateClient();
+        using var client = fixture.CreateClient();
         var response = await client.GetAsync("/");
 
         // Assert

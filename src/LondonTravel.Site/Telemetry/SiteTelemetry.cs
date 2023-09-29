@@ -8,25 +8,15 @@ namespace MartinCostello.LondonTravel.Site.Telemetry;
 /// <summary>
 /// A class representing the default implementation of <see cref="ISiteTelemetry"/>. This class cannot be inherited.
 /// </summary>
-internal sealed class SiteTelemetry : ISiteTelemetry
+/// <remarks>
+/// Initializes a new instance of the <see cref="SiteTelemetry"/> class.
+/// </remarks>
+/// <param name="client">The <see cref="TelemetryClient"/> to use.</param>
+internal sealed class SiteTelemetry(TelemetryClient client) : ISiteTelemetry
 {
-    /// <summary>
-    /// The <see cref="TelemetryClient"/> to use. This field is read-only.
-    /// </summary>
-    private readonly TelemetryClient _client;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="SiteTelemetry"/> class.
-    /// </summary>
-    /// <param name="client">The <see cref="TelemetryClient"/> to use.</param>
-    public SiteTelemetry(TelemetryClient client)
-    {
-        _client = client;
-    }
-
     /// <inheritdoc />
     public void TrackEvent(string eventName, IDictionary<string, string?>? properties = null)
     {
-        _client.TrackEvent(eventName, properties);
+        client.TrackEvent(eventName, properties);
     }
 }

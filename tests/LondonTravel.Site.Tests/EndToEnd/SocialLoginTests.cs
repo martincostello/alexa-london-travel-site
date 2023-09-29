@@ -6,13 +6,8 @@ using Microsoft.Playwright;
 
 namespace MartinCostello.LondonTravel.Site.EndToEnd;
 
-public class SocialLoginTests : BrowserEndToEndTest
+public class SocialLoginTests(WebsiteFixture fixture, ITestOutputHelper outputHelper) : BrowserEndToEndTest(fixture, outputHelper)
 {
-    public SocialLoginTests(WebsiteFixture fixture, ITestOutputHelper outputHelper)
-        : base(fixture, outputHelper)
-    {
-    }
-
     [SkippableFact]
     public async Task Can_Sign_In_With_Google()
     {

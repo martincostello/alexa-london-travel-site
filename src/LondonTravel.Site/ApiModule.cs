@@ -100,13 +100,15 @@ public static partial class ApiModule
 
     private static ErrorResponse Unauthorized(HttpContext httpContext, string message, string? detail = null)
     {
+#pragma warning disable SA1010
         return new ErrorResponse()
         {
             Message = message ?? string.Empty,
             RequestId = httpContext.TraceIdentifier,
             StatusCode = StatusCodes.Status401Unauthorized,
-            Details = detail == null ? Array.Empty<string>() : new[] { detail },
+            Details = detail == null ? [] : [detail],
         };
+#pragma warning restore SA1010
     }
 
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
@@ -114,17 +116,17 @@ public static partial class ApiModule
     {
         public static void AccessAuthorized(ILogger logger, string? userId, HttpContext httpContext)
         {
-            AccessAuthorized(logger, userId, httpContext.Connection.RemoteIpAddress, httpContext.Request.Headers["User-Agent"]!);
+            AccessAuthorized(logger, userId, httpContext.Connection.RemoteIpAddress, httpContext.Request.Headers.UserAgent!);
         }
 
         public static void AccessDeniedNoAuthorization(ILogger logger, HttpContext httpContext)
         {
-            AccessDeniedNoAuthorization(logger, httpContext.Connection.RemoteIpAddress, httpContext.Request.Headers["User-Agent"]!);
+            AccessDeniedNoAuthorization(logger, httpContext.Connection.RemoteIpAddress, httpContext.Request.Headers.UserAgent!);
         }
 
         public static void AccessDeniedUnknownToken(ILogger logger, HttpContext httpContext)
         {
-            AccessDeniedUnknownToken(logger, httpContext.Connection.RemoteIpAddress, httpContext.Request.Headers["User-Agent"]!);
+            AccessDeniedUnknownToken(logger, httpContext.Connection.RemoteIpAddress, httpContext.Request.Headers.UserAgent!);
         }
 
         [LoggerMessage(

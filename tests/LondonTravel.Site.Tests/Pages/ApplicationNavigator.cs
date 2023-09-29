@@ -5,17 +5,11 @@ using Microsoft.Playwright;
 
 namespace MartinCostello.LondonTravel.Site.Pages;
 
-public class ApplicationNavigator
+public class ApplicationNavigator(Uri baseUri, IPage page)
 {
-    public ApplicationNavigator(Uri baseUri, IPage page)
-    {
-        BaseUri = baseUri;
-        Page = page;
-    }
+    protected internal Uri BaseUri { get; } = baseUri;
 
-    protected internal Uri BaseUri { get; }
-
-    protected internal IPage Page { get; }
+    protected internal IPage Page { get; } = page;
 
     public async Task<HomePage> GoToRootAsync() => await new HomePage(this).NavigateAsync();
 

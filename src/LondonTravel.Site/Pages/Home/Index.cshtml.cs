@@ -9,22 +9,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MartinCostello.LondonTravel.Site.Pages.Home;
 
-public partial class Index : PageModel
+public partial class Index(
+    UserManager<LondonTravelUser> userManager,
+    ITflServiceFactory tflFactory,
+    ILogger<Index> logger) : PageModel
 {
-    private readonly UserManager<LondonTravelUser> _userManager;
-    private readonly ITflServiceFactory _tflFactory;
-    private readonly ILogger _logger;
-
-    public Index(
-        UserManager<LondonTravelUser> userManager,
-        ITflServiceFactory tflFactory,
-        ILogger<Index> logger)
-    {
-        _userManager = userManager;
-        _tflFactory = tflFactory;
-        _logger = logger;
-    }
-
     /// <summary>
     /// Gets the ETag associated with the preferences.
     /// </summary>
@@ -77,11 +66,11 @@ public partial class Index : PageModel
             return;
         }
 
-        var user = await _userManager.GetUserAsync(User);
+        var user = await userManager.GetUserAsync(User);
 
         if (user == null)
         {
-            Log.FailedToGetUser(_logger);
+            Log.FailedToGetUser(logger);
             return;
         }
 
@@ -89,7 +78,7 @@ public partial class Index : PageModel
         IsAuthenticated = true;
         IsLinkedToAlexa = !string.IsNullOrWhiteSpace(user.AlexaToken);
 
-        ITflService service = _tflFactory.CreateService();
+        ITflService service = tflFactory.CreateService();
         ICollection<LineInfo> lines = await service.GetLinesAsync(HttpContext.RequestAborted);
 
         MapFavoriteLines(lines, user.FavoriteLines);
@@ -108,7 +97,7 @@ public partial class Index : PageModel
     {
         if (tflLines.Count == 0)
         {
-            Log.FailedToMapUserPreferences(_logger);
+            Log.FailedToMapUserPreferences(logger);
             return;
         }
 

@@ -10,18 +10,13 @@ namespace MartinCostello.LondonTravel.Site.Integration;
 /// <summary>
 /// A class containing tests for the site map.
 /// </summary>
-public class SiteMapTests : IntegrationTest
+/// <remarks>
+/// Initializes a new instance of the <see cref="SiteMapTests"/> class.
+/// </remarks>
+/// <param name="fixture">The fixture to use.</param>
+/// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+public class SiteMapTests(TestServerFixture fixture, ITestOutputHelper outputHelper) : IntegrationTest(fixture, outputHelper)
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="SiteMapTests"/> class.
-    /// </summary>
-    /// <param name="fixture">The fixture to use.</param>
-    /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
-    public SiteMapTests(TestServerFixture fixture, ITestOutputHelper outputHelper)
-        : base(fixture, outputHelper)
-    {
-    }
-
     [Fact]
     public async Task Site_Map_Locations_Are_Valid()
     {

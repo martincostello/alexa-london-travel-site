@@ -5,14 +5,9 @@ using Microsoft.Playwright;
 
 namespace MartinCostello.LondonTravel.Site.Pages;
 
-public sealed class LinePreference
+public sealed class LinePreference(IElementHandle element)
 {
-    internal LinePreference(IElementHandle element)
-    {
-        RootElement = element;
-    }
-
-    private IElementHandle RootElement { get; }
+    private IElementHandle RootElement { get; } = element;
 
     public async Task<string> IdAsync() => (await GetInputAttributeAsync("data-line-id"))!;
 

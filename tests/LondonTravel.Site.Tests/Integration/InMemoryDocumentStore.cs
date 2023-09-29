@@ -12,17 +12,11 @@ namespace MartinCostello.LondonTravel.Site.Integration;
 /// <summary>
 /// A class representing an in-memory document store. This class cannot be inherited.
 /// </summary>
-internal sealed class InMemoryDocumentStore : IDocumentService, IDocumentCollectionInitializer
+internal sealed class InMemoryDocumentStore(UserStoreOptions options) : IDocumentService, IDocumentCollectionInitializer
 {
-    private readonly Dictionary<string, DocumentCollection> _collections;
+    private readonly Dictionary<string, DocumentCollection> _collections = new();
 
-    public InMemoryDocumentStore(UserStoreOptions options)
-    {
-        _collections = new Dictionary<string, DocumentCollection>();
-        CollectionName = options.CollectionName!;
-    }
-
-    private string CollectionName { get; }
+    private string CollectionName { get; } = options.CollectionName!;
 
     /// <summary>
     /// Clears the document store.
@@ -61,7 +55,7 @@ internal sealed class InMemoryDocumentStore : IDocumentService, IDocumentCollect
         string collectionName,
         CancellationToken cancellationToken = default)
     {
-        bool exists = _collections.TryGetValue(collectionName, out var _);
+        bool exists = _collections.TryGetValue(collectionName, out _);
 
         if (!exists)
         {

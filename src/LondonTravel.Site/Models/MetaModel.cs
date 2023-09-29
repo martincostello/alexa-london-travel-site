@@ -119,10 +119,7 @@ public sealed class MetaModel
         string? robots = null,
         string? title = null)
     {
-        if (options == null)
-        {
-            options = new MetadataOptions();
-        }
+        options ??= new MetadataOptions();
 
         var model = new MetaModel();
 
@@ -158,8 +155,10 @@ public sealed class MetaModel
 
     private static ReviewMetadataModel BuildReviews()
     {
-        int[] scores = new[] { 2, 3, 3, 3, 4, 4, 5, 5, 5 };
+#pragma warning disable SA1010
+        int[] scores = [2, 3, 3, 3, 4, 4, 5, 5, 5];
         double average = Math.Round(scores.Average(), digits: 1);
+#pragma warning restore SA1010
 
         return new ReviewMetadataModel()
         {

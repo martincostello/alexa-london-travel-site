@@ -11,20 +11,15 @@ namespace MartinCostello.LondonTravel.Site.Integration;
 /// <summary>
 /// A class containing tests for the API.
 /// </summary>
-public class ApiTests : IntegrationTest
+/// <remarks>
+/// Initializes a new instance of the <see cref="ApiTests"/> class.
+/// </remarks>
+/// <param name="fixture">The fixture to use.</param>
+/// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+public class ApiTests(TestServerFixture fixture, ITestOutputHelper outputHelper) : IntegrationTest(fixture, outputHelper)
 {
     private const string Scheme = "bearer";
     private const string RequestUri = "/api/preferences";
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="ApiTests"/> class.
-    /// </summary>
-    /// <param name="fixture">The fixture to use.</param>
-    /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
-    public ApiTests(TestServerFixture fixture, ITestOutputHelper outputHelper)
-        : base(fixture, outputHelper)
-    {
-    }
 
     [Theory]
     [InlineData(null)]

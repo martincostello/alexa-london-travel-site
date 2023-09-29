@@ -50,14 +50,13 @@ public static class IdentityServiceCollectionExtensions
                 .TryAddMicrosoft(siteOptions.Authentication)
                 .TryAddTwitter(siteOptions.Authentication);
 
-            services.AddAuthorization((options) =>
-            {
-                options.AddPolicy("admin", (policy) =>
+            services
+                .AddAuthorizationBuilder()
+                .AddPolicy("admin", (policy) =>
                 {
                     policy.RequireAuthenticatedUser();
                     policy.RequireRole("ADMINISTRATOR");
                 });
-            });
         }
 
         return services;
