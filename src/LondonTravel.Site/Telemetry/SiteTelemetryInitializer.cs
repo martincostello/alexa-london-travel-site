@@ -36,11 +36,11 @@ internal sealed class SiteTelemetryInitializer(IConfiguration config, IHttpConte
 
         if (telemetry is DependencyTelemetry dependency)
         {
-            System.Diagnostics.Activity? activity = System.Diagnostics.Activity.Current;
+            var activity = System.Diagnostics.Activity.Current;
 
             if (activity != null)
             {
-                foreach (KeyValuePair<string, string?> item in activity.Tags)
+                foreach (var item in activity.Tags)
                 {
                     dependency.Properties[item.Key] = item.Value;
                 }
