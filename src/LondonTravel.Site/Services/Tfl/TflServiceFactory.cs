@@ -6,22 +6,12 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl;
 /// <summary>
 /// A class representing the default implementation of <see cref="ITflServiceFactory"/>. This class cannot be inherited.
 /// </summary>
-public sealed class TflServiceFactory : ITflServiceFactory
+/// <remarks>
+/// Initializes a new instance of the <see cref="TflServiceFactory"/> class.
+/// </remarks>
+/// <param name="serviceProvider">The <see cref="IServiceProvider"/> to use.</param>
+public sealed class TflServiceFactory(IServiceProvider serviceProvider) : ITflServiceFactory
 {
-    /// <summary>
-    /// The <see cref="IServiceProvider"/> to use. This field is read-only.
-    /// </summary>
-    private readonly IServiceProvider _serviceProvider;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="TflServiceFactory"/> class.
-    /// </summary>
-    /// <param name="serviceProvider">The <see cref="IServiceProvider"/> to use.</param>
-    public TflServiceFactory(IServiceProvider serviceProvider)
-    {
-        _serviceProvider = serviceProvider;
-    }
-
     /// <inheritdoc />
-    public ITflService CreateService() => _serviceProvider.GetRequiredService<ITflService>();
+    public ITflService CreateService() => serviceProvider.GetRequiredService<ITflService>();
 }

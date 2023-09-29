@@ -13,22 +13,15 @@ namespace MartinCostello.LondonTravel.Site.Integration;
 /// <remarks>
 /// See https://github.com/justeat/httpclient-interception/blob/4e52f0e269654bbcf4745aa307624d807e4f19e2/samples/SampleApp.Tests/HttpServerFixture.cs#L27-L30.
 /// </remarks>
-internal sealed class HttpRequestInterceptionFilter : IHttpMessageHandlerBuilderFilter
+internal sealed class HttpRequestInterceptionFilter(HttpClientInterceptorOptions options) : IHttpMessageHandlerBuilderFilter
 {
-    private readonly HttpClientInterceptorOptions _options;
-
-    internal HttpRequestInterceptionFilter(HttpClientInterceptorOptions options)
-    {
-        _options = options;
-    }
-
     /// <inheritdoc />
     public Action<HttpMessageHandlerBuilder> Configure(Action<HttpMessageHandlerBuilder> next)
     {
         return (builder) =>
         {
             next(builder);
-            builder.AdditionalHandlers.Add(_options.CreateHttpMessageHandler());
+            builder.AdditionalHandlers.Add(options.CreateHttpMessageHandler());
         };
     }
 }

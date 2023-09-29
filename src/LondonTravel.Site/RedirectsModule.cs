@@ -15,7 +15,7 @@ public static class RedirectsModule
     /// Inspired by <c>https://gist.github.com/NickCraver/c9458f2e007e9df2bdf03f8a02af1d13</c>.
     /// </remarks>
     private static readonly string[] Videos =
-    {
+    [
         "https://www.youtube.com/watch?v=wbby9coDRCk",
         "https://www.youtube.com/watch?v=nb2evY0kmpQ",
         "https://www.youtube.com/watch?v=eh7lp9umG2I",
@@ -39,7 +39,7 @@ public static class RedirectsModule
         "https://www.youtube.com/watch?v=hgwpZvTWLmE",
         "https://www.youtube.com/watch?v=CgBJ5irINqU",
         "https://www.youtube.com/watch?v=jAckVuEY_Rc",
-    };
+    ];
 
     public static IEndpointRouteBuilder MapRedirects(this IEndpointRouteBuilder app)
     {
@@ -57,7 +57,7 @@ public static class RedirectsModule
         }
 
         string[] crawlerPaths =
-        {
+        [
             ".env",
             ".git/{*catchall}",
             "admin.php",
@@ -98,9 +98,11 @@ public static class RedirectsModule
             "wp-links-opml.php",
             "wp-login.php",
             "xmlrpc.php",
-        };
+        ];
 
-        var httpMethods = new[] { "GET", "HEAD", "POST" };
+#pragma warning disable SA1010
+        string[] httpMethods = ["GET", "HEAD", "POST"];
+#pragma warning restore SA1010
 
         foreach (string path in crawlerPaths)
         {

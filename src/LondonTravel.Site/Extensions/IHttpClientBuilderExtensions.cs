@@ -127,28 +127,20 @@ public static class IHttpClientBuilderExtensions
 
             if (hash.Length > 7)
             {
-                productVersion = productVersion.Substring(0, indexOfPlus + 8);
+                productVersion = productVersion[..(indexOfPlus + 8)];
             }
         }
 
         return new ProductInfoHeaderValue("MartinCostello.LondonTravel", productVersion);
     }
 
-    private sealed class CorrelationIdHandler : DelegatingHandler
+    private sealed class CorrelationIdHandler(IHttpContextAccessor accessor) : DelegatingHandler()
     {
-        private readonly IHttpContextAccessor _accessor;
-
-        public CorrelationIdHandler(IHttpContextAccessor accessor)
-            : base()
-        {
-            _accessor = accessor;
-        }
-
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            if (_accessor.HttpContext != null)
+            if (accessor.HttpContext != null)
             {
-                request.Headers.TryAddWithoutValidation("x-correlation-id", _accessor.HttpContext.TraceIdentifier);
+                request.Headers.TryAddWithoutValidation("x-correlation-id", accessor.HttpContext.TraceIdentifier);
             }
 
             return base.SendAsync(request, cancellationToken);

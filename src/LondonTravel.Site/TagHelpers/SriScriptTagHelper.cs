@@ -17,17 +17,18 @@ namespace MartinCostello.LondonTravel.Site.TagHelpers;
 /// A <see cref="ITagHelper"/> implementation targeting &lt;script&gt; elements to add subresource integrity attributes.
 /// </summary>
 [HtmlTargetElement("script", Attributes = AddSriAttributeName, TagStructure = TagStructure.NormalOrSelfClosing)]
-public class SriScriptTagHelper : LinkTagHelper
+public class SriScriptTagHelper(
+    IWebHostEnvironment hostingEnvironment,
+    TagHelperMemoryCacheProvider cacheProvider,
+    IFileVersionProvider fileVersionProvider,
+    HtmlEncoder htmlEncoder,
+    JavaScriptEncoder javaScriptEncoder,
+    IUrlHelperFactory urlHelperFactory) : LinkTagHelper(hostingEnvironment, cacheProvider, fileVersionProvider, htmlEncoder, javaScriptEncoder, urlHelperFactory)
 {
     /// <summary>
     /// The name of the <c>asp-add-sri</c> attribute.
     /// </summary>
     private const string AddSriAttributeName = "asp-add-sri";
-
-    public SriScriptTagHelper(IWebHostEnvironment hostingEnvironment, TagHelperMemoryCacheProvider cacheProvider, IFileVersionProvider fileVersionProvider, HtmlEncoder htmlEncoder, JavaScriptEncoder javaScriptEncoder, IUrlHelperFactory urlHelperFactory)
-        : base(hostingEnvironment, cacheProvider, fileVersionProvider, htmlEncoder, javaScriptEncoder, urlHelperFactory)
-    {
-    }
 
     /// <summary>
     /// Gets or sets a value indicating whether Subresource Integrity attributes should be added.
@@ -72,7 +73,7 @@ public class SriScriptTagHelper : LinkTagHelper
         if (!Cache.TryGetValue(cacheKey, out string? hash))
         {
             using var stream = fileInfo.CreateReadStream();
-            var hashBytes = await SHA384.HashDataAsync(stream);
+            byte[] hashBytes = await SHA384.HashDataAsync(stream);
             hash = Convert.ToBase64String(hashBytes);
 
             var options = new MemoryCacheEntryOptions()

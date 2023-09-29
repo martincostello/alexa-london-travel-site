@@ -5,19 +5,13 @@ using Microsoft.Playwright;
 
 namespace MartinCostello.LondonTravel.Site.Pages;
 
-public abstract class ModalBase
+public abstract class ModalBase(string name, ApplicationNavigator navigator)
 {
-    protected ModalBase(string name, ApplicationNavigator navigator)
-    {
-        Name = name;
-        Navigator = navigator;
-    }
-
     protected string DialogSelector => $"[data-id='modal-{Name}']";
 
-    protected string Name { get; }
+    protected string Name { get; } = name;
 
-    protected ApplicationNavigator Navigator { get; }
+    protected ApplicationNavigator Navigator { get; } = navigator;
 
     protected async Task CloseSelfAsync()
     {

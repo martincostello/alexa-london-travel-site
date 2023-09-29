@@ -10,18 +10,13 @@ namespace MartinCostello.LondonTravel.Site.Integration;
 /// <summary>
 /// A class containing tests for loading resources in the website.
 /// </summary>
-public class ResourceTests : IntegrationTest
+/// <remarks>
+/// Initializes a new instance of the <see cref="ResourceTests"/> class.
+/// </remarks>
+/// <param name="fixture">The fixture to use.</param>
+/// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+public class ResourceTests(TestServerFixture fixture, ITestOutputHelper outputHelper) : IntegrationTest(fixture, outputHelper)
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="ResourceTests"/> class.
-    /// </summary>
-    /// <param name="fixture">The fixture to use.</param>
-    /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
-    public ResourceTests(TestServerFixture fixture, ITestOutputHelper outputHelper)
-        : base(fixture, outputHelper)
-    {
-    }
-
     [Theory]
     [InlineData("/", MediaTypeNames.Text.Html)]
     [InlineData("/.well-known/apple-app-site-association", MediaTypeNames.Application.Json)]
@@ -122,8 +117,8 @@ public class ResourceTests : IntegrationTest
     public async Task Response_Headers_Contains_Expected_Headers()
     {
         // Arrange
-        string[] expectedHeaders = new[]
-        {
+        string[] expectedHeaders =
+        [
             "content-security-policy",
             "content-security-policy-report-only",
             "NEL",
@@ -139,7 +134,7 @@ public class ResourceTests : IntegrationTest
             "X-Request-Id",
             "X-Revision",
             "X-XSS-Protection",
-        };
+        ];
 
         // Act
         using var client = Fixture.CreateClient();

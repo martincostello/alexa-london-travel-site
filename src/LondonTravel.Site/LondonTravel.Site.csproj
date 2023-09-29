@@ -26,12 +26,6 @@
     <XlfLanguages>en-GB;en-US;qps-Ploc</XlfLanguages>
   </PropertyGroup>
   <ItemGroup>
-    <Content Update="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Update="SiteResources.resx" Generator="" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="AspNet.Security.OAuth.Amazon" />
     <PackageReference Include="AspNet.Security.OAuth.Apple" />
     <PackageReference Include="AspNet.Security.OAuth.GitHub" />
@@ -61,6 +55,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Update="package.json;package-lock.json;tsconfig.json" CopyToPublishDirectory="Never" />
+    <EmbeddedResource Update="SiteResources.resx" Generator="" />
+    <InternalsVisibleTo Include="LondonTravel.Site.Tests" />
     <None Remove="assets\scripts\**\*.ts" />
     <TypeScriptCompile Include="assets\scripts\**\*.ts" />
   </ItemGroup>

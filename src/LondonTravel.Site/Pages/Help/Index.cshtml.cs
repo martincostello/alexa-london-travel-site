@@ -7,15 +7,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MartinCostello.LondonTravel.Site.Pages.Help;
 
-public class Index : PageModel
+public class Index(UserManager<LondonTravelUser> userManager) : PageModel
 {
-    private readonly UserManager<LondonTravelUser> _userManager;
-
-    public Index(UserManager<LondonTravelUser> userManager)
-    {
-        _userManager = userManager;
-    }
-
     /// <summary>
     /// Gets or sets a value indicating whether the user has at least one favorite line.
     /// </summary>
@@ -42,7 +35,7 @@ public class Index : PageModel
 
         if (IsSignedIn)
         {
-            var user = await _userManager.GetUserAsync(User!);
+            var user = await userManager.GetUserAsync(User!);
 
             HasFavorites = user?.FavoriteLines?.Count > 0;
             IsLinkedToAlexa = !string.IsNullOrEmpty(user?.AlexaToken);

@@ -14,28 +14,13 @@ namespace MartinCostello.LondonTravel.Site.Controllers;
 
 [Authorize]
 [Route("manage", Name = SiteRoutes.Manage)]
-public partial class ManageController : Controller
+public partial class ManageController(
+  UserManager<LondonTravelUser> userManager,
+  SignInManager<LondonTravelUser> signInManager,
+  ITflServiceFactory tflServiceFactory,
+  ISiteTelemetry telemetry,
+  ILogger<ManageController> logger) : Controller
 {
-    private readonly UserManager<LondonTravelUser> _userManager;
-    private readonly SignInManager<LondonTravelUser> _signInManager;
-    private readonly ITflServiceFactory _tflServiceFactory;
-    private readonly ISiteTelemetry _telemetry;
-    private readonly ILogger _logger;
-
-    public ManageController(
-      UserManager<LondonTravelUser> userManager,
-      SignInManager<LondonTravelUser> signInManager,
-      ITflServiceFactory tflServiceFactory,
-      ISiteTelemetry telemetry,
-      ILogger<ManageController> logger)
-    {
-        _userManager = userManager;
-        _signInManager = signInManager;
-        _tflServiceFactory = tflServiceFactory;
-        _telemetry = telemetry;
-        _logger = logger;
-    }
-
     [HttpGet]
     public async Task<IActionResult> Index()
     {
@@ -43,13 +28,13 @@ public partial class ManageController : Controller
 
         if (user == null)
         {
-            Log.FailedToGetUserToManageAccount(_logger);
+            Log.FailedToGetUserToManageAccount(logger);
             return View("Error");
         }
 
-        var userLogins = await _userManager.GetLoginsAsync(user);
+        var userLogins = await userManager.GetLoginsAsync(user);
 
-        var otherLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync())
+        var otherLogins = (await signInManager.GetExternalAuthenticationSchemesAsync())
             .Where((p) => userLogins.All((r) => p.Name != r.LoginProvider))
             .OrderBy((p) => p.DisplayName)
             .ThenBy((p) => p.Name)
@@ -92,15 +77,15 @@ public partial class ManageController : Controller
         await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
         string? redirectUrl = Url.RouteUrl(SiteRoutes.LinkAccountCallback);
-        string? userId = _userManager.GetUserId(User);
+        string? userId = userManager.GetUserId(User);
 
-        var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl, userId);
+        var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl, userId);
 
         SiteContext.SetErrorRedirect(properties, Url.RouteUrl(SiteRoutes.Manage)!);
 
-        Log.AttemptingToLinkUser(_logger, userId, provider);
+        Log.AttemptingToLinkUser(logger, userId, provider);
 
-        _telemetry.TrackLinkExternalAccountStart(userId, provider);
+        telemetry.TrackLinkExternalAccountStart(userId, provider);
 
         return Challenge(properties, provider);
     }
@@ -113,29 +98,29 @@ public partial class ManageController : Controller
 
         if (user == null)
         {
-            Log.FailedToGetUserToManageAccount(_logger);
+            Log.FailedToGetUserToManageAccount(logger);
             return View("Error");
         }
 
-        string? userId = await _userManager.GetUserIdAsync(user);
-        var info = await _signInManager.GetExternalLoginInfoAsync(userId);
+        string? userId = await userManager.GetUserIdAsync(user);
+        var info = await signInManager.GetExternalLoginInfoAsync(userId);
 
         if (info == null)
         {
-            Log.FailedToGetExternalLogin(_logger, userId);
+            Log.FailedToGetExternalLogin(logger, userId);
             return RedirectToRoute(SiteRoutes.Manage, new { Message = SiteMessage.Error });
         }
 
-        Log.AddingExternalLogin(_logger, info.LoginProvider, userId);
+        Log.AddingExternalLogin(logger, info.LoginProvider, userId);
 
-        var result = await _userManager.AddLoginAsync(user, info);
+        var result = await userManager.AddLoginAsync(user, info);
         var message = SiteMessage.Error;
 
         if (result.Succeeded)
         {
-            _telemetry.TrackLinkExternalAccountSuccess(userId, info.LoginProvider);
+            telemetry.TrackLinkExternalAccountSuccess(userId, info.LoginProvider);
 
-            Log.AddedExternalLogin(_logger, info.LoginProvider, userId);
+            Log.AddedExternalLogin(logger, info.LoginProvider, userId);
 
             message = SiteMessage.LinkSuccess;
 
@@ -143,12 +128,12 @@ public partial class ManageController : Controller
 
             if (result.Succeeded)
             {
-                Log.UpdatedUserClaims(_logger, userId, info.LoginProvider);
+                Log.UpdatedUserClaims(logger, userId, info.LoginProvider);
             }
             else
             {
                 Log.UpdatingUserClaimsFailed(
-                    _logger,
+                    logger,
                     userId,
                     info.LoginProvider,
                     FormatErrors(result));
@@ -158,10 +143,10 @@ public partial class ManageController : Controller
         }
         else
         {
-            _telemetry.TrackLinkExternalAccountFailed(userId, info.LoginProvider);
+            telemetry.TrackLinkExternalAccountFailed(userId, info.LoginProvider);
 
             Log.AddingExternalLoginFailed(
-                _logger,
+                logger,
                 userId,
                 FormatErrors(result));
         }
@@ -186,24 +171,24 @@ public partial class ManageController : Controller
 
         if (user != null)
         {
-            Log.RemovingExternalLogin(_logger, account.LoginProvider, user.Id);
+            Log.RemovingExternalLogin(logger, account.LoginProvider, user.Id);
 
-            var result = await _userManager.RemoveLoginAsync(user, account.LoginProvider, account.ProviderKey);
+            var result = await userManager.RemoveLoginAsync(user, account.LoginProvider, account.ProviderKey);
 
             if (result.Succeeded)
             {
-                Log.RemovedExternalLogin(_logger, account.LoginProvider, user.Id);
+                Log.RemovedExternalLogin(logger, account.LoginProvider, user.Id);
 
-                await _signInManager.SignInAsync(user, isPersistent: true);
+                await signInManager.SignInAsync(user, isPersistent: true);
 
-                _telemetry.TrackRemoveExternalAccountLink(user.Id!, account.LoginProvider);
+                telemetry.TrackRemoveExternalAccountLink(user.Id!, account.LoginProvider);
 
                 message = SiteMessage.RemoveAccountLinkSuccess;
             }
             else
             {
                 Log.RemovingExternalLoginFailed(
-                    _logger,
+                    logger,
                     user.Id,
                     account.LoginProvider,
                     FormatErrors(result));
@@ -228,24 +213,24 @@ public partial class ManageController : Controller
 
         if (user != null)
         {
-            Log.RemovingAlexaLink(_logger, user.Id);
+            Log.RemovingAlexaLink(logger, user.Id);
 
             user.AlexaToken = null;
             user.ETag = etag;
 
-            var result = await _userManager.UpdateAsync(user);
+            var result = await userManager.UpdateAsync(user);
 
             if (result.Succeeded)
             {
-                _telemetry.TrackRemoveAlexaLink(user.Id!);
+                telemetry.TrackRemoveAlexaLink(user.Id!);
 
-                Log.RemovedAlexaLink(_logger, user.Id);
+                Log.RemovedAlexaLink(logger, user.Id);
 
                 message = SiteMessage.RemoveAlexaLinkSuccess;
             }
             else
             {
-                Log.RemovingAlexaLinkFailed(_logger, user.Id, FormatErrors(result));
+                Log.RemovingAlexaLinkFailed(logger, user.Id, FormatErrors(result));
             }
         }
 
@@ -261,29 +246,29 @@ public partial class ManageController : Controller
 
         if (user is not null)
         {
-            Log.DeletingUser(_logger, user.Id);
+            Log.DeletingUser(logger, user.Id);
 
-            var result = await _userManager.DeleteAsync(user);
+            var result = await userManager.DeleteAsync(user);
 
             if (result.Succeeded)
             {
-                Log.DeletedUser(_logger, user.Id);
+                Log.DeletedUser(logger, user.Id);
 
                 await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
                 await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
 
-                _telemetry.TrackAccountDeleted(user.Id!, user.Email!);
+                telemetry.TrackAccountDeleted(user.Id!, user.Email!);
 
                 return RedirectToPage(SiteRoutes.Home, new { Message = SiteMessage.AccountDeleted });
             }
             else
             {
-                Log.DeletingUserFailed(_logger, user.Id, FormatErrors(result));
+                Log.DeletingUserFailed(logger, user.Id, FormatErrors(result));
             }
         }
         else
         {
-            Log.FailedToGetUserToDeleteAccount(_logger);
+            Log.FailedToGetUserToDeleteAccount(logger);
         }
 
         return RedirectToRoute(SiteRoutes.Manage, new { Message = SiteMessage.Error });
@@ -306,7 +291,7 @@ public partial class ManageController : Controller
 
         if (user == null)
         {
-            Log.FailedToGetUserToUpdateLinePreferences(_logger);
+            Log.FailedToGetUserToUpdateLinePreferences(logger);
             return View("Error");
         }
 
@@ -324,7 +309,7 @@ public partial class ManageController : Controller
                 return BadRequest();
             }
 
-            Log.UpdatingLinePreferences(_logger, user.Id);
+            Log.UpdatingLinePreferences(logger, user.Id);
 
             var existingLines = user.FavoriteLines;
             var newLines = user.FavoriteLines = (model.FavoriteLines ?? Array.Empty<string>())
@@ -334,16 +319,16 @@ public partial class ManageController : Controller
             // Override the ETag with the one in the model to ensure write consistency
             user.ETag = model.ETag;
 
-            var result = await _userManager.UpdateAsync(user);
+            var result = await userManager.UpdateAsync(user);
 
             if (result.Succeeded)
             {
-                _telemetry.TrackLinePreferencesUpdated(user.Id!, existingLines, newLines);
-                Log.UpdatedLinePreferences(_logger, user.Id);
+                telemetry.TrackLinePreferencesUpdated(user.Id!, existingLines, newLines);
+                Log.UpdatedLinePreferences(logger, user.Id);
             }
             else
             {
-                Log.UpdatingLinePreferencesFailed(_logger, user.Id, model.ETag);
+                Log.UpdatingLinePreferencesFailed(logger, user.Id, model.ETag);
             }
 
             updated = result.Succeeded;
@@ -361,7 +346,7 @@ public partial class ManageController : Controller
     {
         if (model.FavoriteLines != null)
         {
-            ITflService service = _tflServiceFactory.CreateService();
+            ITflService service = tflServiceFactory.CreateService();
             ICollection<LineInfo> lines = await service.GetLinesAsync(cancellationToken);
 
             var validLines = lines.Select((p) => p.Id).ToList();
@@ -374,7 +359,7 @@ public partial class ManageController : Controller
 
     private async Task<LondonTravelUser?> GetCurrentUserAsync()
     {
-        return await _userManager.GetUserAsync(HttpContext.User);
+        return await userManager.GetUserAsync(HttpContext.User);
     }
 
     private async Task<IdentityResult> UpdateClaimsAsync(LondonTravelUser user, ExternalLoginInfo info)
@@ -405,11 +390,11 @@ public partial class ManageController : Controller
 
         if (commitUpdate)
         {
-            var result = await _userManager.UpdateAsync(user);
+            var result = await userManager.UpdateAsync(user);
 
             if (result.Succeeded)
             {
-                _telemetry.TrackClaimsUpdated(user.Id!);
+                telemetry.TrackClaimsUpdated(user.Id!);
             }
 
             return result;

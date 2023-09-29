@@ -11,19 +11,14 @@ namespace MartinCostello.LondonTravel.Site.Identity;
 /// A custom implementation of <see cref="UserClaimsPrincipalFactory{LondonTravelUser, LondonTravelRole}"/>
 /// that adds additional claims to the principal when it is created by the application.
 /// </summary>
-public class UserClaimsPrincipalFactory : UserClaimsPrincipalFactory<LondonTravelUser, LondonTravelRole>
+/// <remarks>
+/// Initializes a new instance of the <see cref="UserClaimsPrincipalFactory"/> class.
+/// </remarks>
+/// <param name="userManager">The <see cref="UserManager{LondonTravelUser}"/> to use.</param>
+/// <param name="roleManager">The <see cref="RoleManager{LondonTravelRole}"/> to use.</param>
+/// <param name="optionsAccessor">The <see cref="IOptions{IdentityOptions}"/> to use.</param>
+public class UserClaimsPrincipalFactory(UserManager<LondonTravelUser> userManager, RoleManager<LondonTravelRole> roleManager, IOptions<IdentityOptions> optionsAccessor) : UserClaimsPrincipalFactory<LondonTravelUser, LondonTravelRole>(userManager, roleManager, optionsAccessor)
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="UserClaimsPrincipalFactory"/> class.
-    /// </summary>
-    /// <param name="userManager">The <see cref="UserManager{LondonTravelUser}"/> to use.</param>
-    /// <param name="roleManager">The <see cref="RoleManager{LondonTravelRole}"/> to use.</param>
-    /// <param name="optionsAccessor">The <see cref="IOptions{IdentityOptions}"/> to use.</param>
-    public UserClaimsPrincipalFactory(UserManager<LondonTravelUser> userManager, RoleManager<LondonTravelRole> roleManager, IOptions<IdentityOptions> optionsAccessor)
-        : base(userManager, roleManager, optionsAccessor)
-    {
-    }
-
     /// <inheritdoc />
     public async override Task<ClaimsPrincipal> CreateAsync(LondonTravelUser user)
     {

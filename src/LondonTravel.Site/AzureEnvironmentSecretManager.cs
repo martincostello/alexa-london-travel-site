@@ -10,21 +10,16 @@ namespace MartinCostello.LondonTravel.Site;
 /// A class representing an implementation of <see cref="KeyVaultSecretManager"/>
 /// that selects keys based on the Azure environment name. This class cannot be inherited.
 /// </summary>
-internal sealed class AzureEnvironmentSecretManager : KeyVaultSecretManager
+/// <remarks>
+/// Initializes a new instance of the <see cref="AzureEnvironmentSecretManager"/> class.
+/// </remarks>
+/// <param name="azureEnvironment">The name of the Azure environment.</param>
+internal sealed class AzureEnvironmentSecretManager(string azureEnvironment) : KeyVaultSecretManager
 {
     /// <summary>
     /// The secret prefix to use for the environment.
     /// </summary>
-    private readonly string _prefix;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="AzureEnvironmentSecretManager"/> class.
-    /// </summary>
-    /// <param name="azureEnvironment">The name of the Azure environment.</param>
-    public AzureEnvironmentSecretManager(string azureEnvironment)
-    {
-        _prefix = $"LondonTravel-{azureEnvironment}-";
-    }
+    private readonly string _prefix = $"LondonTravel-{azureEnvironment}-";
 
     /// <inheritdoc />
     public override string GetKey(KeyVaultSecret secret)

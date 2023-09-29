@@ -5,17 +5,11 @@ using Microsoft.Playwright;
 
 namespace MartinCostello.LondonTravel.Site.Pages;
 
-public sealed class LinkedAccount
+public sealed class LinkedAccount(ApplicationNavigator navigator, IElementHandle element)
 {
-    internal LinkedAccount(ApplicationNavigator navigator, IElementHandle element)
-    {
-        Navigator = navigator;
-        RootElement = element;
-    }
+    private ApplicationNavigator Navigator { get; } = navigator;
 
-    private ApplicationNavigator Navigator { get; }
-
-    private IElementHandle RootElement { get; }
+    private IElementHandle RootElement { get; } = element;
 
     public async Task<string?> IdAsync()
         => await RootElement.GetAttributeAsync("data-provider");

@@ -3,14 +3,9 @@
 
 namespace MartinCostello.LondonTravel.Site.Pages;
 
-public abstract class PageBase
+public abstract class PageBase(ApplicationNavigator navigator)
 {
-    protected PageBase(ApplicationNavigator navigator)
-    {
-        Navigator = navigator;
-    }
-
-    protected internal ApplicationNavigator Navigator { get; }
+    protected internal ApplicationNavigator Navigator { get; } = navigator;
 
     protected static string UserNameSelector { get; } = "[data-id='user-name']";
 

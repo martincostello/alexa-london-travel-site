@@ -13,7 +13,7 @@ using Microsoft.Extensions.Options;
 
 namespace MartinCostello.LondonTravel.Site.Integration;
 
-public sealed class ConfigureAuthenticationHandlers :
+public sealed class ConfigureAuthenticationHandlers(IHttpClientFactory httpClientFactory) :
     IPostConfigureOptions<AmazonAuthenticationOptions>,
     IPostConfigureOptions<AppleAuthenticationOptions>,
     IPostConfigureOptions<FacebookOptions>,
@@ -22,13 +22,6 @@ public sealed class ConfigureAuthenticationHandlers :
     IPostConfigureOptions<MicrosoftAccountOptions>,
     IPostConfigureOptions<TwitterOptions>
 {
-    public ConfigureAuthenticationHandlers(IHttpClientFactory httpClientFactory)
-    {
-        HttpClientFactory = httpClientFactory;
-    }
-
-    private IHttpClientFactory HttpClientFactory { get; }
-
     public void PostConfigure(string? name, AmazonAuthenticationOptions options)
         => Configure(name, options);
 
@@ -49,14 +42,14 @@ public sealed class ConfigureAuthenticationHandlers :
 
     public void PostConfigure(string? name, TwitterOptions options)
     {
-        options.Backchannel = HttpClientFactory.CreateClient(name ?? string.Empty);
+        options.Backchannel = httpClientFactory.CreateClient(name ?? string.Empty);
         options.Events.OnRedirectToAuthorizationEndpoint = LoopbackHandlers.Configure;
     }
 
     private void Configure<TOptions>(string? name, TOptions options)
         where TOptions : OAuthOptions
     {
-        options.Backchannel = HttpClientFactory.CreateClient(name ?? string.Empty);
+        options.Backchannel = httpClientFactory.CreateClient(name ?? string.Empty);
         options.Events.OnRedirectToAuthorizationEndpoint = LoopbackHandlers.Configure;
     }
 }

@@ -3,13 +3,8 @@
 
 namespace MartinCostello.LondonTravel.Site.Pages;
 
-public sealed class RemoveAlexaLinkModal : ModalBase
+public sealed class RemoveAlexaLinkModal(ApplicationNavigator navigator) : ModalBase("remove-alexa", navigator)
 {
-    public RemoveAlexaLinkModal(ApplicationNavigator navigator)
-        : base("remove-alexa", navigator)
-    {
-    }
-
     public async Task<ManagePage> CloseAsync()
     {
         await CloseSelfAsync();

@@ -89,7 +89,7 @@ public class AlexaTests : BrowserIntegrationTest
 
                 // Assert
                 firstResult.RootElement.GetString("userId").ShouldNotBeNullOrWhiteSpace();
-                firstResult.RootElement.GetStringArray("favoriteLines").ShouldBe(Array.Empty<string>());
+                firstResult.RootElement.GetStringArray("favoriteLines").ShouldBe([]);
 
                 // Arrange
                 HomePage homepage = await navigator.GoToRootAsync();

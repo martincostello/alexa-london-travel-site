@@ -6,15 +6,8 @@ using Microsoft.Azure.Cosmos;
 
 namespace MartinCostello.LondonTravel.Site.Services.Data;
 
-internal sealed class SystemTextJsonCosmosSerializer : CosmosSerializer
+internal sealed class SystemTextJsonCosmosSerializer(JsonSerializerOptions options) : CosmosSerializer
 {
-    private readonly JsonSerializerOptions _options;
-
-    internal SystemTextJsonCosmosSerializer(JsonSerializerOptions options)
-    {
-        _options = options;
-    }
-
     /// <inheritdoc />
     public override T FromStream<T>(Stream stream)
     {
@@ -30,7 +23,7 @@ internal sealed class SystemTextJsonCosmosSerializer : CosmosSerializer
 
             byte[] utf8Json = memory.ToArray();
 
-            var result = JsonSerializer.Deserialize<T>(utf8Json, _options);
+            var result = JsonSerializer.Deserialize<T>(utf8Json, options);
             return result!;
         }
     }
@@ -38,7 +31,7 @@ internal sealed class SystemTextJsonCosmosSerializer : CosmosSerializer
     /// <inheritdoc />
     public override Stream ToStream<T>(T input)
     {
-        byte[] utf8Json = JsonSerializer.SerializeToUtf8Bytes(input, _options);
+        byte[] utf8Json = JsonSerializer.SerializeToUtf8Bytes(input, options);
         return new MemoryStream(utf8Json);
     }
 }

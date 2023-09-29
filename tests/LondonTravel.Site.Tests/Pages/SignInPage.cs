@@ -3,13 +3,8 @@
 
 namespace MartinCostello.LondonTravel.Site.Pages;
 
-public sealed class SignInPage : PageBase
+public sealed class SignInPage(ApplicationNavigator navigator) : PageBase(navigator)
 {
-    public SignInPage(ApplicationNavigator navigator)
-        : base(navigator)
-    {
-    }
-
     protected override string RelativeUri => "/account/sign-in/";
 
     public async Task<HomePage> SignInWithAmazonAsync() => await SignInWithProviderAsync("amazon");

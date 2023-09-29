@@ -9,20 +9,13 @@ namespace MartinCostello.LondonTravel.Site.EndToEnd;
 
 [Collection(WebsiteCollection.Name)]
 [Trait("Category", "EndToEnd")]
-public class ApiTests
+public class ApiTests(WebsiteFixture fixture)
 {
-    public ApiTests(WebsiteFixture fixture)
-    {
-        Fixture = fixture;
-    }
-
-    private WebsiteFixture Fixture { get; }
-
     [SkippableFact]
     public async Task Cannot_Get_Preferences_Unauthenticated()
     {
         // Arrange
-        using var client = Fixture.CreateClient();
+        using var client = fixture.CreateClient();
 
         // Act
         using var response = await client.GetAsync("/api/preferences");
@@ -45,7 +38,7 @@ public class ApiTests
         // Arrange
         string accessToken = Guid.NewGuid().ToString();
 
-        using var client = Fixture.CreateClient();
+        using var client = fixture.CreateClient();
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", accessToken);
 
         // Act

@@ -10,15 +10,8 @@ namespace MartinCostello.LondonTravel.Site.Pages.Shared;
 
 [IgnoreAntiforgeryToken]
 [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-public class Error : PageModel
+public class Error(SiteResources resources) : PageModel
 {
-    private readonly SiteResources _resources;
-
-    public Error(SiteResources resources)
-    {
-        _resources = resources;
-    }
-
     public int ErrorStatusCode { get; private set; } = StatusCodes.Status500InternalServerError;
 
     public bool IsClientError { get; private set; }
@@ -44,42 +37,42 @@ public class Error : PageModel
             httpCode = StatusCodes.Status500InternalServerError;
         }
 
-        string? title = _resources.ErrorTitle;
-        string? subtitle = _resources.ErrorSubtitle(httpCode);
-        string? message = _resources.ErrorMessage;
+        string? title = resources.ErrorTitle;
+        string? subtitle = resources.ErrorSubtitle(httpCode);
+        string? message = resources.ErrorMessage;
         bool isUserError = false;
 
         switch (httpCode)
         {
             case StatusCodes.Status400BadRequest:
-                title = _resources.ErrorTitle400;
-                subtitle = _resources.ErrorSubtitle400;
-                message = _resources.ErrorMessage400;
+                title = resources.ErrorTitle400;
+                subtitle = resources.ErrorSubtitle400;
+                message = resources.ErrorMessage400;
                 break;
 
             case StatusCodes.Status403Forbidden:
-                title = _resources.ErrorTitle403;
-                subtitle = _resources.ErrorSubtitle403;
-                message = _resources.ErrorMessage403;
+                title = resources.ErrorTitle403;
+                subtitle = resources.ErrorSubtitle403;
+                message = resources.ErrorMessage403;
                 break;
 
             case StatusCodes.Status405MethodNotAllowed:
-                title = _resources.ErrorTitle405;
-                subtitle = _resources.ErrorSubtitle405;
-                message = _resources.ErrorMessage405;
+                title = resources.ErrorTitle405;
+                subtitle = resources.ErrorSubtitle405;
+                message = resources.ErrorMessage405;
                 break;
 
             case StatusCodes.Status404NotFound:
-                title = _resources.ErrorTitle404;
-                subtitle = _resources.ErrorSubtitle404;
-                message = _resources.ErrorMessage404;
+                title = resources.ErrorTitle404;
+                subtitle = resources.ErrorSubtitle404;
+                message = resources.ErrorMessage404;
                 isUserError = true;
                 break;
 
             case StatusCodes.Status408RequestTimeout:
-                title = _resources.ErrorTitle408;
-                subtitle = _resources.ErrorSubtitle408;
-                message = _resources.ErrorMessage408;
+                title = resources.ErrorTitle408;
+                subtitle = resources.ErrorSubtitle408;
+                message = resources.ErrorMessage408;
                 break;
 
             default:

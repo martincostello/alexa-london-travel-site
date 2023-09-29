@@ -14,39 +14,25 @@ namespace MartinCostello.LondonTravel.Site.Controllers;
 
 [Authorize]
 [Route("account", Name = SiteRoutes.Account)]
-public partial class AccountController : Controller
+public partial class AccountController(
+    UserManager<LondonTravelUser> userManager,
+    SignInManager<LondonTravelUser> signInManager,
+    ISiteTelemetry telemetry,
+    TimeProvider timeProvider,
+    SiteOptions siteOptions,
+    ILogger<AccountController> logger) : Controller
 {
+#pragma warning disable SA1010
     /// <summary>
     /// The names of the authentication schemes that are disallowed for
     /// sign-in to link Alexa to an account. This field is read-only.
     /// </summary>
-    private static readonly string[] AuthenticationSchemesDisabledForAlexa = { "apple", "github", "google" };
+    private static readonly string[] AuthenticationSchemesDisabledForAlexa = ["apple", "github", "google"];
+#pragma warning restore SA1010
 
-    private readonly UserManager<LondonTravelUser> _userManager;
-    private readonly SignInManager<LondonTravelUser> _signInManager;
-    private readonly ISiteTelemetry _telemetry;
-    private readonly TimeProvider _timeProvider;
-    private readonly bool _isEnabled;
-    private readonly ILogger _logger;
-
-    public AccountController(
-        UserManager<LondonTravelUser> userManager,
-        SignInManager<LondonTravelUser> signInManager,
-        ISiteTelemetry telemetry,
-        TimeProvider timeProvider,
-        SiteOptions siteOptions,
-        ILogger<AccountController> logger)
-    {
-        _userManager = userManager;
-        _signInManager = signInManager;
-        _telemetry = telemetry;
-        _timeProvider = timeProvider;
-        _logger = logger;
-
-        _isEnabled =
+    private readonly bool _isEnabled =
             siteOptions?.Authentication?.IsEnabled == true &&
             siteOptions?.Authentication.ExternalProviders?.Any((p) => p.Value?.IsEnabled == true) == true;
-    }
 
     [AllowAnonymous]
     [HttpGet]
@@ -96,13 +82,13 @@ public partial class AccountController : Controller
             return NotFound();
         }
 
-        string? userId = _userManager.GetUserId(User);
+        string? userId = userManager.GetUserId(User);
 
-        await _signInManager.SignOutAsync();
+        await signInManager.SignOutAsync();
 
-        Log.UserSignedOut(_logger, userId);
+        Log.UserSignedOut(logger, userId);
 
-        _telemetry.TrackSignOut(userId);
+        telemetry.TrackSignOut(userId);
 
         return RedirectToPage(SiteRoutes.Home);
     }
@@ -124,7 +110,7 @@ public partial class AccountController : Controller
         }
 
         string? redirectUrl = Url.RouteUrl(SiteRoutes.ExternalSignInCallback, new { ReturnUrl = returnUrl });
-        var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+        var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
 
         string errorRedirectUrl = GetErrorRedirectUrl();
         SiteContext.SetErrorRedirect(properties, errorRedirectUrl);
@@ -144,25 +130,25 @@ public partial class AccountController : Controller
 
         if (remoteError != null)
         {
-            Log.RemoteSignInError(_logger, remoteError);
+            Log.RemoteSignInError(logger, remoteError);
             return View(nameof(SignIn));
         }
 
-        var info = await _signInManager.GetExternalLoginInfoAsync();
+        var info = await signInManager.GetExternalLoginInfoAsync();
 
         if (info == null)
         {
             return RedirectToRoute(SiteRoutes.SignIn);
         }
 
-        var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: true);
+        var result = await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: true);
 
         if (result.Succeeded)
         {
-            string? userId = _userManager.GetUserId(info.Principal);
+            string? userId = userManager.GetUserId(info.Principal);
 
-            Log.UserSignedIn(_logger, userId, info.LoginProvider);
-            _telemetry.TrackSignIn(userId, info.LoginProvider);
+            Log.UserSignedIn(logger, userId, info.LoginProvider);
+            telemetry.TrackSignIn(userId, info.LoginProvider);
 
             return RedirectToLocal(returnUrl);
         }
@@ -188,15 +174,15 @@ public partial class AccountController : Controller
                 return View("SignIn");
             }
 
-            var identityResult = await _userManager.CreateAsync(user);
+            var identityResult = await userManager.CreateAsync(user);
 
             if (identityResult.Succeeded)
             {
-                await _signInManager.SignInAsync(user, isPersistent: true);
+                await signInManager.SignInAsync(user, isPersistent: true);
 
-                Log.UserCreated(_logger, user.Id, info.LoginProvider);
+                Log.UserCreated(logger, user.Id, info.LoginProvider);
 
-                _telemetry.TrackAccountCreated(user.Id!, user.Email, info.LoginProvider);
+                telemetry.TrackAccountCreated(user.Id!, user.Email, info.LoginProvider);
 
                 if (returnUri != null && IsRedirectAlexaAuthorization(returnUri.ToString()))
                 {
@@ -257,7 +243,7 @@ public partial class AccountController : Controller
     {
         foreach (var error in result.Errors)
         {
-            Log.IdentityError(_logger, error.Code, error.Description);
+            Log.IdentityError(logger, error.Code, error.Description);
             ModelState.AddModelError(string.Empty, error.Description);
         }
     }
@@ -288,7 +274,7 @@ public partial class AccountController : Controller
 
         var user = new LondonTravelUser()
         {
-            CreatedAt = _timeProvider.GetUtcNow().UtcDateTime,
+            CreatedAt = timeProvider.GetUtcNow().UtcDateTime,
             Email = email,
             GivenName = givenName,
             Surname = surname,
@@ -315,7 +301,7 @@ public partial class AccountController : Controller
 
     private bool IsReferrerPageOrRoute(string routeName)
     {
-        return IsUrlPageOrRoute(HttpContext.Request.Headers["referer"], routeName);
+        return IsUrlPageOrRoute(HttpContext.Request.Headers.Referer, routeName);
     }
 
     private bool IsUrlPageOrRoute(string? url, string pageOrRouteName)
@@ -328,10 +314,7 @@ public partial class AccountController : Controller
 
         string? targetUrl = Url.RouteUrl(pageOrRouteName);
 
-        if (targetUrl is null)
-        {
-            targetUrl = Url.Page(pageOrRouteName);
-        }
+        targetUrl ??= Url.Page(pageOrRouteName);
 
         if (uri.IsAbsoluteUri)
         {

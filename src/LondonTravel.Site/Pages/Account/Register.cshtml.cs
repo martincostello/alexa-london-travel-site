@@ -6,15 +6,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MartinCostello.LondonTravel.Site.Pages.Account;
 
-public class Register : PageModel
+public class Register(IAccountService service) : PageModel
 {
-    private readonly IAccountService _service;
-
-    public Register(IAccountService service)
-    {
-        _service = service;
-    }
-
     /// <summary>
     /// Gets or sets the approximate number of registered users.
     /// </summary>
@@ -37,7 +30,7 @@ public class Register : PageModel
     {
         try
         {
-            long count = await _service.GetUserCountAsync(useCache: true);
+            long count = await service.GetUserCountAsync(useCache: true);
 
             // Round down to the nearest thousand.
             // Deduct one for "over X,000 users".

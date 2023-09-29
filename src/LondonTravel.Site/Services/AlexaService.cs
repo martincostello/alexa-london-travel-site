@@ -11,24 +11,13 @@ using Microsoft.Extensions.Options;
 
 namespace MartinCostello.LondonTravel.Site.Services;
 
-public sealed partial class AlexaService
+public sealed partial class AlexaService(
+    UserManager<LondonTravelUser> userManager,
+    ISiteTelemetry telemetry,
+    IOptions<SiteOptions> options,
+    ILogger<AlexaService> logger)
 {
-    private readonly ILogger _logger;
-    private readonly AlexaOptions _options;
-    private readonly ISiteTelemetry _telemetry;
-    private readonly UserManager<LondonTravelUser> _userManager;
-
-    public AlexaService(
-        UserManager<LondonTravelUser> userManager,
-        ISiteTelemetry telemetry,
-        IOptions<SiteOptions> options,
-        ILogger<AlexaService> logger)
-    {
-        _userManager = userManager;
-        _telemetry = telemetry;
-        _options = options.Value.Alexa!;
-        _logger = logger;
-    }
+    private readonly AlexaOptions _options = options.Value.Alexa!;
 
     public static string GenerateAccessToken()
     {
@@ -68,11 +57,11 @@ public sealed partial class AlexaService
 
         try
         {
-            var travelUser = await _userManager.GetUserAsync(user);
+            var travelUser = await userManager.GetUserAsync(user);
 
             if (travelUser == null)
             {
-                Log.AlexaLinkFailedUserNotFound(_logger);
+                Log.AlexaLinkFailedUserNotFound(logger);
                 return RedirectForError(redirectUri, state);
             }
 
@@ -83,7 +72,7 @@ public sealed partial class AlexaService
                 return RedirectForError(redirectUri, state);
             }
 
-            _telemetry.TrackAlexaLink(travelUser.Id!);
+            telemetry.TrackAlexaLink(travelUser.Id!);
 
             string tokenRedirectUrl = BuildRedirectUrl(redirectUri!, state, accessToken);
             return Results.Redirect(tokenRedirectUrl);
@@ -92,7 +81,7 @@ public sealed partial class AlexaService
         catch (Exception ex)
 #pragma warning restore CA1031
         {
-            Log.AlexaLinkFailed(_logger, ex);
+            Log.AlexaLinkFailed(logger, ex);
             return RedirectForError(redirectUri, state);
         }
     }
@@ -142,32 +131,32 @@ public sealed partial class AlexaService
 
         if (hasExistingToken)
         {
-            Log.RegeneratingAccessToken(_logger, user.Id);
+            Log.RegeneratingAccessToken(logger, user.Id);
         }
         else
         {
-            Log.GeneratingAccessToken(_logger, user.Id);
+            Log.GeneratingAccessToken(logger, user.Id);
         }
 
         user.AlexaToken = accessToken;
 
-        var result = await _userManager.UpdateAsync(user);
+        var result = await userManager.UpdateAsync(user);
 
         if (result.Succeeded)
         {
             if (hasExistingToken)
             {
-                Log.RegeneratedAccessToken(_logger, user.Id);
+                Log.RegeneratedAccessToken(logger, user.Id);
             }
             else
             {
-                Log.GeneratedAccessToken(_logger, user.Id);
+                Log.GeneratedAccessToken(logger, user.Id);
             }
         }
         else
         {
             Log.AccessTokenGenerationFailed(
-                _logger,
+                logger,
                 user.Id,
                 string.Join(';', result.Errors.Select((p) => $"{p.Code}: {p.Description}")));
         }
@@ -187,7 +176,7 @@ public sealed partial class AlexaService
 
         if (!string.Equals(clientId, _options.ClientId, StringComparison.Ordinal))
         {
-            Log.InvalidClientId(_logger, clientId);
+            Log.InvalidClientId(logger, clientId);
 
             error = "unauthorized_client";
             return false;
@@ -197,7 +186,7 @@ public sealed partial class AlexaService
 
         if (!string.Equals(responseType, ImplicitFlowResponseType, StringComparison.Ordinal))
         {
-            Log.InvalidResponseType(_logger, responseType);
+            Log.InvalidResponseType(logger, responseType);
 
             error = "unsupported_response_type";
             return false;
@@ -210,19 +199,19 @@ public sealed partial class AlexaService
     {
         if (redirectUri == null)
         {
-            Log.NoRedirectUri(_logger);
+            Log.NoRedirectUri(logger);
             return false;
         }
 
         if (!redirectUri.IsAbsoluteUri)
         {
-            Log.RedirectUriIsNotAbolute(_logger, redirectUri);
+            Log.RedirectUriIsNotAbolute(logger, redirectUri);
             return false;
         }
 
         if (_options.RedirectUrls?.Contains(redirectUri.ToString(), StringComparer.OrdinalIgnoreCase) == false)
         {
-            Log.RedirectUriIsNotAuthorized(_logger, redirectUri);
+            Log.RedirectUriIsNotAuthorized(logger, redirectUri);
             return false;
         }
 

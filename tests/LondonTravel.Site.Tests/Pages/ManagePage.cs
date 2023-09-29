@@ -5,13 +5,8 @@ using Microsoft.Playwright;
 
 namespace MartinCostello.LondonTravel.Site.Pages;
 
-public sealed class ManagePage : PageBase
+public sealed class ManagePage(ApplicationNavigator navigator) : PageBase(navigator)
 {
-    public ManagePage(ApplicationNavigator navigator)
-        : base(navigator)
-    {
-    }
-
     protected override string RelativeUri => "/manage/";
 
     public async Task<DeleteModal> DeleteAccountAsync()

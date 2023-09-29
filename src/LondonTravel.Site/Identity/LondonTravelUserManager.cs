@@ -6,19 +6,15 @@ using Microsoft.Extensions.Options;
 
 namespace MartinCostello.LondonTravel.Site.Identity;
 
-public sealed class LondonTravelUserManager : AspNetUserManager<LondonTravelUser>
+public sealed class LondonTravelUserManager(
+    IUserStore<LondonTravelUser> store,
+    IOptions<IdentityOptions> optionsAccessor,
+    IPasswordHasher<LondonTravelUser> passwordHasher,
+    IEnumerable<IUserValidator<LondonTravelUser>> userValidators,
+    IEnumerable<IPasswordValidator<LondonTravelUser>> passwordValidators,
+    ILookupNormalizer keyNormalizer,
+    IdentityErrorDescriber errors,
+    IServiceProvider services,
+    ILogger<UserManager<LondonTravelUser>> logger) : AspNetUserManager<LondonTravelUser>(store, optionsAccessor, passwordHasher, userValidators, passwordValidators, keyNormalizer, errors, services, logger)
 {
-    public LondonTravelUserManager(
-        IUserStore<LondonTravelUser> store,
-        IOptions<IdentityOptions> optionsAccessor,
-        IPasswordHasher<LondonTravelUser> passwordHasher,
-        IEnumerable<IUserValidator<LondonTravelUser>> userValidators,
-        IEnumerable<IPasswordValidator<LondonTravelUser>> passwordValidators,
-        ILookupNormalizer keyNormalizer,
-        IdentityErrorDescriber errors,
-        IServiceProvider services,
-        ILogger<UserManager<LondonTravelUser>> logger)
-        : base(store, optionsAccessor, passwordHasher, userValidators, passwordValidators, keyNormalizer, errors, services, logger)
-    {
-    }
 }

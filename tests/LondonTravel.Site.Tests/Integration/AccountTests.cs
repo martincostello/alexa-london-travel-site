@@ -14,18 +14,13 @@ namespace MartinCostello.LondonTravel.Site.Integration;
 /// <summary>
 /// A class containing tests for user accounts.
 /// </summary>
-public class AccountTests : IntegrationTest
+/// <remarks>
+/// Initializes a new instance of the <see cref="AccountTests"/> class.
+/// </remarks>
+/// <param name="fixture">The fixture to use.</param>
+/// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+public class AccountTests(TestServerFixture fixture, ITestOutputHelper outputHelper) : IntegrationTest(fixture, outputHelper)
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="AccountTests"/> class.
-    /// </summary>
-    /// <param name="fixture">The fixture to use.</param>
-    /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
-    public AccountTests(TestServerFixture fixture, ITestOutputHelper outputHelper)
-        : base(fixture, outputHelper)
-    {
-    }
-
     [Fact]
     public async Task Can_Perform_Operations_On_Users_And_Get_Preferences_From_Api()
     {
@@ -43,9 +38,11 @@ public class AccountTests : IntegrationTest
             UserNameNormalized = emailAddress,
         };
 
+#pragma warning disable SA1010
         string accessToken = Services.AlexaService.GenerateAccessToken();
-        string[] favoriteLines = new[] { "district", "northern" };
+        string[] favoriteLines = ["district", "northern"];
         string userId;
+#pragma warning restore SA1010
 
         static IUserStore<LondonTravelUser> GetUserStore(IServiceProvider serviceProvider)
             => serviceProvider.GetRequiredService<IUserStore<LondonTravelUser>>();

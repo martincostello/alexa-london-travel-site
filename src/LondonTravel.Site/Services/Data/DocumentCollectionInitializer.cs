@@ -12,42 +12,30 @@ namespace MartinCostello.LondonTravel.Site.Services.Data;
 /// A class representing the default implementation of
 /// <see cref="IDocumentCollectionInitializer"/>. This class cannot be inherited.
 /// </summary>
-public sealed partial class DocumentCollectionInitializer : IDocumentCollectionInitializer
+/// <remarks>
+/// Initializes a new instance of the <see cref="DocumentCollectionInitializer"/> class.
+/// </remarks>
+/// <param name="options">The <see cref="UserStoreOptions"/> to use.</param>
+/// <param name="logger">The <see cref="ILogger{DocumentCollectionInitializer}"/> to use.</param>
+/// <exception cref="ArgumentNullException">
+/// <paramref name="options"/> is <see langword="null"/>.
+/// </exception>
+/// <exception cref="ArgumentException">
+/// <paramref name="options"/> is invalid.
+/// </exception>
+public sealed partial class DocumentCollectionInitializer(
+    UserStoreOptions options,
+    ILogger<DocumentCollectionInitializer> logger) : IDocumentCollectionInitializer
 {
-    /// <summary>
-    /// The logger to use. This field is read-only.
-    /// </summary>
-    private readonly ILogger _logger;
-
     /// <summary>
     /// The name of the Azure DocumentDB database. This field is read-only.
     /// </summary>
-    private readonly string? _databaseName;
+    private readonly string? _databaseName = options.DatabaseName;
 
     /// <summary>
     /// The containers that have been checked to exist. This field is read-only.
     /// </summary>
-    private readonly ConcurrentDictionary<string, bool> _existingContainers;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="DocumentCollectionInitializer"/> class.
-    /// </summary>
-    /// <param name="options">The <see cref="UserStoreOptions"/> to use.</param>
-    /// <param name="logger">The <see cref="ILogger{DocumentCollectionInitializer}"/> to use.</param>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="options"/> is <see langword="null"/>.
-    /// </exception>
-    /// <exception cref="ArgumentException">
-    /// <paramref name="options"/> is invalid.
-    /// </exception>
-    public DocumentCollectionInitializer(
-        UserStoreOptions options,
-        ILogger<DocumentCollectionInitializer> logger)
-    {
-        _existingContainers = new ConcurrentDictionary<string, bool>();
-        _logger = logger;
-        _databaseName = options.DatabaseName;
-    }
+    private readonly ConcurrentDictionary<string, bool> _existingContainers = new();
 
     /// <inheritdoc />
     public async Task<bool> EnsureCollectionExistsAsync(
@@ -86,7 +74,7 @@ public sealed partial class DocumentCollectionInitializer : IDocumentCollectionI
 
         if (created)
         {
-            Log.CreatedDatabase(_logger, _databaseName);
+            Log.CreatedDatabase(logger, _databaseName);
         }
 
         return response.Database;
@@ -117,7 +105,7 @@ public sealed partial class DocumentCollectionInitializer : IDocumentCollectionI
 
         if (created)
         {
-            Log.CreatedCollection(_logger, id, _databaseName);
+            Log.CreatedCollection(logger, id, _databaseName);
         }
 
         return created;

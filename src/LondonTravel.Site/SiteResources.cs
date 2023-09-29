@@ -10,325 +10,314 @@ namespace MartinCostello.LondonTravel.Site;
 /// <summary>
 /// A class representing the container for site resource strings.
 /// </summary>
-public class SiteResources
+public class SiteResources(
+    IHtmlLocalizer<SiteResources> htmlLocalizer,
+    IStringLocalizer<SiteResources> localizer,
+    SiteOptions options)
 {
-    private readonly IHtmlLocalizer<SiteResources> _htmlLocalizer;
-    private readonly IStringLocalizer<SiteResources> _localizer;
-    private readonly SiteOptions _options;
+    public string? AccountCreatedTitle => localizer[nameof(AccountCreatedTitle)];
 
-    public SiteResources(
-        IHtmlLocalizer<SiteResources> htmlLocalizer,
-        IStringLocalizer<SiteResources> localizer,
-        SiteOptions options)
-    {
-        _htmlLocalizer = htmlLocalizer;
-        _localizer = localizer;
-        _options = options;
-    }
+    public string? AccountDeletedTitle => localizer[nameof(AccountDeletedTitle)];
 
-    public string? AccountCreatedTitle => _localizer[nameof(AccountCreatedTitle)];
+    public string? AccountDeletedContent => localizer[nameof(AccountDeletedContent)];
 
-    public string? AccountDeletedTitle => _localizer[nameof(AccountDeletedTitle)];
+    public string? AccessDeniedTitle => localizer[nameof(AccessDeniedTitle)];
 
-    public string? AccountDeletedContent => _localizer[nameof(AccountDeletedContent)];
+    public string? AccessDeniedSubtitle => localizer[nameof(AccessDeniedSubtitle)];
 
-    public string? AccessDeniedTitle => _localizer[nameof(AccessDeniedTitle)];
+    public string? AccountLinkDeniedTitle => localizer[nameof(AccountLinkDeniedTitle)];
 
-    public string? AccessDeniedSubtitle => _localizer[nameof(AccessDeniedSubtitle)];
+    public string? AccountLinkDeniedContent => localizer[nameof(AccountLinkDeniedContent)];
 
-    public string? AccountLinkDeniedTitle => _localizer[nameof(AccountLinkDeniedTitle)];
+    public string? AccountLinkFailedTitle => localizer[nameof(AccountLinkFailedTitle)];
 
-    public string? AccountLinkDeniedContent => _localizer[nameof(AccountLinkDeniedContent)];
+    public string? AccountLinkFailedContent => localizer[nameof(AccountLinkFailedContent)];
 
-    public string? AccountLinkFailedTitle => _localizer[nameof(AccountLinkFailedTitle)];
+    public string? AccountLockedTitle => localizer[nameof(AccountLockedTitle)];
 
-    public string? AccountLinkFailedContent => _localizer[nameof(AccountLinkFailedContent)];
+    public string? AccountLockedSubtitle => localizer[nameof(AccountLockedSubtitle)];
 
-    public string? AccountLockedTitle => _localizer[nameof(AccountLockedTitle)];
+    public string? AlreadyRegisteredTitle => localizer[nameof(AlreadyRegisteredTitle)];
 
-    public string? AccountLockedSubtitle => _localizer[nameof(AccountLockedSubtitle)];
+    public string? AlreadyRegisteredContent1 => localizer[nameof(AlreadyRegisteredContent1)];
 
-    public string? AlreadyRegisteredTitle => _localizer[nameof(AlreadyRegisteredTitle)];
+    public string? AlreadyRegisteredContent2 => localizer[nameof(AlreadyRegisteredContent2)];
 
-    public string? AlreadyRegisteredContent1 => _localizer[nameof(AlreadyRegisteredContent1)];
+    public string? BrandName => localizer[nameof(BrandName)];
 
-    public string? AlreadyRegisteredContent2 => _localizer[nameof(AlreadyRegisteredContent2)];
+    public string? CancelButtonText => localizer[nameof(CancelButtonText)];
 
-    public string? BrandName => _localizer[nameof(BrandName)];
+    public string? CancelButtonAltText => localizer[nameof(CancelButtonAltText)];
 
-    public string? CancelButtonText => _localizer[nameof(CancelButtonText)];
+    public string? CloseButtonText => localizer[nameof(CloseButtonText)];
 
-    public string? CancelButtonAltText => _localizer[nameof(CancelButtonAltText)];
+    public string? CommuteSkillInvocation => localizer[nameof(CommuteSkillInvocation)];
 
-    public string? CloseButtonText => _localizer[nameof(CloseButtonText)];
+    public LocalizedHtmlString CopyrightText => htmlLocalizer[nameof(CopyrightText), options?.Metadata?.Author?.Name!, DateTimeOffset.UtcNow.Year];
 
-    public string? CommuteSkillInvocation => _localizer[nameof(CommuteSkillInvocation)];
+    public string? DeleteAccountButtonText => localizer[nameof(DeleteAccountButtonText)];
 
-    public LocalizedHtmlString CopyrightText => _htmlLocalizer[nameof(CopyrightText), _options?.Metadata?.Author?.Name!, DateTimeOffset.UtcNow.Year];
+    public string? DeleteAccountButtonAltText => localizer[nameof(DeleteAccountButtonAltText)];
 
-    public string? DeleteAccountButtonText => _localizer[nameof(DeleteAccountButtonText)];
+    public string? DeleteAccountConfirmationButtonText => localizer[nameof(DeleteAccountConfirmationButtonText)];
 
-    public string? DeleteAccountButtonAltText => _localizer[nameof(DeleteAccountButtonAltText)];
+    public string? DeleteAccountConfirmationButtonAltText => localizer[nameof(DeleteAccountConfirmationButtonAltText)];
 
-    public string? DeleteAccountConfirmationButtonText => _localizer[nameof(DeleteAccountConfirmationButtonText)];
+    public string? DeleteAccountModalTitle => localizer[nameof(DeleteAccountModalTitle)];
 
-    public string? DeleteAccountConfirmationButtonAltText => _localizer[nameof(DeleteAccountConfirmationButtonAltText)];
+    public string? DeleteAccountWarning => localizer[nameof(DeleteAccountWarning)];
 
-    public string? DeleteAccountModalTitle => _localizer[nameof(DeleteAccountModalTitle)];
+    public LocalizedHtmlString DeleteAccountParagraph1Html => htmlLocalizer[nameof(DeleteAccountParagraph1Html)];
 
-    public string? DeleteAccountWarning => _localizer[nameof(DeleteAccountWarning)];
+    public string? DeleteAccountParagraph2 => localizer[nameof(DeleteAccountParagraph2)];
 
-    public LocalizedHtmlString DeleteAccountParagraph1Html => _htmlLocalizer[nameof(DeleteAccountParagraph1Html)];
+    public LocalizedHtmlString DeleteAccountParagraph3Html => htmlLocalizer[nameof(DeleteAccountParagraph3Html)];
 
-    public string? DeleteAccountParagraph2 => _localizer[nameof(DeleteAccountParagraph2)];
+    public string? DeleteInProgressText => localizer[nameof(DeleteInProgressText)];
 
-    public LocalizedHtmlString DeleteAccountParagraph3Html => _htmlLocalizer[nameof(DeleteAccountParagraph3Html)];
+    public string? ErrorTitle => localizer[nameof(ErrorTitle)];
 
-    public string? DeleteInProgressText => _localizer[nameof(DeleteInProgressText)];
+    public string? ErrorMessage => localizer[nameof(ErrorMessage)];
 
-    public string? ErrorTitle => _localizer[nameof(ErrorTitle)];
+    public string? ErrorRequestId => localizer[nameof(ErrorRequestId)];
 
-    public string? ErrorMessage => _localizer[nameof(ErrorMessage)];
+    public string? HelpTitle => localizer[nameof(HelpTitle)];
 
-    public string? ErrorRequestId => _localizer[nameof(ErrorRequestId)];
+    public string? HelpMetaDescription => localizer[nameof(HelpMetaDescription)];
 
-    public string? HelpTitle => _localizer[nameof(HelpTitle)];
+    public string? HelpLinkText => localizer[nameof(HelpLinkText)];
 
-    public string? HelpMetaDescription => _localizer[nameof(HelpMetaDescription)];
+    public string? HelpLinkAltText => localizer[nameof(HelpLinkAltText)];
 
-    public string? HelpLinkText => _localizer[nameof(HelpLinkText)];
+    public string? HomepageTitle => localizer[nameof(HomepageTitle)];
 
-    public string? HelpLinkAltText => _localizer[nameof(HelpLinkAltText)];
+    public string? HomepageLinkText => localizer[nameof(HomepageLinkText)];
 
-    public string? HomepageTitle => _localizer[nameof(HomepageTitle)];
+    public string? HomepageLinkAltText => localizer[nameof(HomepageLinkAltText)];
 
-    public string? HomepageLinkText => _localizer[nameof(HomepageLinkText)];
+    public string? HomepageLead => localizer[nameof(HomepageLead)];
 
-    public string? HomepageLinkAltText => _localizer[nameof(HomepageLinkAltText)];
+    public string? InstallLinkText => localizer[nameof(InstallLinkText)];
 
-    public string? HomepageLead => _localizer[nameof(HomepageLead)];
+    public string? InstallLinkAltText => localizer[nameof(InstallLinkAltText)];
 
-    public string? InstallLinkText => _localizer[nameof(InstallLinkText)];
+    public string? ManageTitle => localizer[nameof(ManageTitle)];
 
-    public string? InstallLinkAltText => _localizer[nameof(InstallLinkAltText)];
+    public string? ManageLinkText => localizer[nameof(ManageLinkText)];
 
-    public string? ManageTitle => _localizer[nameof(ManageTitle)];
+    public string? ManageLinkAltText => localizer[nameof(ManageLinkAltText)];
 
-    public string? ManageLinkText => _localizer[nameof(ManageLinkText)];
+    public string? ManageMetaDescription => localizer[nameof(ManageMetaDescription)];
 
-    public string? ManageLinkAltText => _localizer[nameof(ManageLinkAltText)];
+    public string? ManageLinkedAccountsSubtitle => localizer[nameof(ManageLinkedAccountsSubtitle)];
 
-    public string? ManageMetaDescription => _localizer[nameof(ManageMetaDescription)];
+    public string? ManageLinkedAccountsContent => localizer[nameof(ManageLinkedAccountsContent)];
 
-    public string? ManageLinkedAccountsSubtitle => _localizer[nameof(ManageLinkedAccountsSubtitle)];
+    public string? ManageLinkOtherAccountsSubtitle => localizer[nameof(ManageLinkOtherAccountsSubtitle)];
 
-    public string? ManageLinkedAccountsContent => _localizer[nameof(ManageLinkedAccountsContent)];
+    public string? ManagePreferencesTitle => localizer[nameof(ManagePreferencesTitle)];
 
-    public string? ManageLinkOtherAccountsSubtitle => _localizer[nameof(ManageLinkOtherAccountsSubtitle)];
+    public string? ManageLinkedToAlexa => localizer[nameof(ManageLinkedToAlexa)];
 
-    public string? ManagePreferencesTitle => _localizer[nameof(ManagePreferencesTitle)];
+    public string? ManageNotLinkedToAlexa => localizer[nameof(ManageNotLinkedToAlexa)];
 
-    public string? ManageLinkedToAlexa => _localizer[nameof(ManageLinkedToAlexa)];
+    public string? ManageUnlinkAlexaButtonText => localizer[nameof(ManageUnlinkAlexaButtonText)];
 
-    public string? ManageNotLinkedToAlexa => _localizer[nameof(ManageNotLinkedToAlexa)];
+    public string? ManageUnlinkAlexaButtonAltText => localizer[nameof(ManageUnlinkAlexaButtonAltText)];
 
-    public string? ManageUnlinkAlexaButtonText => _localizer[nameof(ManageUnlinkAlexaButtonText)];
+    public string? ManageUnlinkAlexaModalTitle => localizer[nameof(ManageUnlinkAlexaModalTitle)];
 
-    public string? ManageUnlinkAlexaButtonAltText => _localizer[nameof(ManageUnlinkAlexaButtonAltText)];
+    public string? ManageUnlinkAlexaModalContent1 => localizer[nameof(ManageUnlinkAlexaModalContent1)];
 
-    public string? ManageUnlinkAlexaModalTitle => _localizer[nameof(ManageUnlinkAlexaModalTitle)];
+    public string? ManageUnlinkAlexaModalContent2 => localizer[nameof(ManageUnlinkAlexaModalContent2)];
 
-    public string? ManageUnlinkAlexaModalContent1 => _localizer[nameof(ManageUnlinkAlexaModalContent1)];
+    public string? ManageUnlinkAlexaModalLoading => localizer[nameof(ManageUnlinkAlexaModalLoading)];
 
-    public string? ManageUnlinkAlexaModalContent2 => _localizer[nameof(ManageUnlinkAlexaModalContent2)];
+    public string? ManageUnlinkAlexaModalConfirmButtonText => localizer[nameof(ManageUnlinkAlexaModalConfirmButtonText)];
 
-    public string? ManageUnlinkAlexaModalLoading => _localizer[nameof(ManageUnlinkAlexaModalLoading)];
+    public string? ManageUnlinkAlexaModalConfirmButtonAltText => localizer[nameof(ManageUnlinkAlexaModalConfirmButtonAltText)];
 
-    public string? ManageUnlinkAlexaModalConfirmButtonText => _localizer[nameof(ManageUnlinkAlexaModalConfirmButtonText)];
+    public string? NavbarCollapseAltText => localizer[nameof(NavbarCollapseAltText)];
 
-    public string? ManageUnlinkAlexaModalConfirmButtonAltText => _localizer[nameof(ManageUnlinkAlexaModalConfirmButtonAltText)];
+    public string? NavbarMenuText => localizer[nameof(NavbarMenuText)];
 
-    public string? NavbarCollapseAltText => _localizer[nameof(NavbarCollapseAltText)];
+    public string? PermissionDeniedTitle => localizer[nameof(PermissionDeniedTitle)];
 
-    public string? NavbarMenuText => _localizer[nameof(NavbarMenuText)];
+    public string? PermissionDeniedContent => localizer[nameof(PermissionDeniedContent)];
 
-    public string? PermissionDeniedTitle => _localizer[nameof(PermissionDeniedTitle)];
+    public string? PrivacyPolicyTitle => localizer[nameof(PrivacyPolicyTitle)];
 
-    public string? PermissionDeniedContent => _localizer[nameof(PermissionDeniedContent)];
+    public string? PrivacyPolicyMetaTitle => localizer[nameof(PrivacyPolicyMetaTitle)];
 
-    public string? PrivacyPolicyTitle => _localizer[nameof(PrivacyPolicyTitle)];
+    public string? PrivacyPolicyMetaDescription => localizer[nameof(PrivacyPolicyMetaDescription)];
 
-    public string? PrivacyPolicyMetaTitle => _localizer[nameof(PrivacyPolicyMetaTitle)];
+    public string? PrivacyPolicyLinkText => localizer[nameof(PrivacyPolicyLinkText)];
 
-    public string? PrivacyPolicyMetaDescription => _localizer[nameof(PrivacyPolicyMetaDescription)];
+    public string? PrivacyPolicyLinkAltText => localizer[nameof(PrivacyPolicyLinkAltText)];
 
-    public string? PrivacyPolicyLinkText => _localizer[nameof(PrivacyPolicyLinkText)];
+    public string? RegisterTitle => localizer[nameof(RegisterTitle)];
 
-    public string? PrivacyPolicyLinkAltText => _localizer[nameof(PrivacyPolicyLinkAltText)];
+    public string? RegisterSubtitle => localizer[nameof(RegisterSubtitle)];
 
-    public string? RegisterTitle => _localizer[nameof(RegisterTitle)];
+    public string? RegisterMetaDescription => localizer[nameof(RegisterMetaDescription)];
 
-    public string? RegisterSubtitle => _localizer[nameof(RegisterSubtitle)];
+    public string? RegisterLead => localizer[nameof(RegisterLead)];
 
-    public string? RegisterMetaDescription => _localizer[nameof(RegisterMetaDescription)];
+    public string? RegisterParagraph1 => localizer[nameof(RegisterParagraph1)];
 
-    public string? RegisterLead => _localizer[nameof(RegisterLead)];
+    public string? RegisterParagraph2 => localizer[nameof(RegisterParagraph2)];
 
-    public string? RegisterParagraph1 => _localizer[nameof(RegisterParagraph1)];
+    public string? RegisterParagraph3 => localizer[nameof(RegisterParagraph3)];
 
-    public string? RegisterParagraph2 => _localizer[nameof(RegisterParagraph2)];
+    public string? RegisterLinkText => localizer[nameof(RegisterLinkText)];
 
-    public string? RegisterParagraph3 => _localizer[nameof(RegisterParagraph3)];
+    public string? RegisterLinkAltText => localizer[nameof(RegisterLinkAltText)];
 
-    public string? RegisterLinkText => _localizer[nameof(RegisterLinkText)];
+    public string? RegisterSignInSubtitle => localizer[nameof(RegisterSignInSubtitle)];
 
-    public string? RegisterLinkAltText => _localizer[nameof(RegisterLinkAltText)];
+    public string? RemoveAccountButtonText => localizer[nameof(RemoveAccountButtonText)];
 
-    public string? RegisterSignInSubtitle => _localizer[nameof(RegisterSignInSubtitle)];
+    public string? RemoveAccountLinkModalTitle => localizer[nameof(RemoveAccountLinkModalTitle)];
 
-    public string? RemoveAccountButtonText => _localizer[nameof(RemoveAccountButtonText)];
+    public string? RemoveAccountLinkModalDescription => localizer[nameof(RemoveAccountLinkModalDescription)];
 
-    public string? RemoveAccountLinkModalTitle => _localizer[nameof(RemoveAccountLinkModalTitle)];
+    public string? SavePreferencesButtonText => localizer[nameof(SavePreferencesButtonText)];
 
-    public string? RemoveAccountLinkModalDescription => _localizer[nameof(RemoveAccountLinkModalDescription)];
+    public string? SavePreferencesButtonAltText => localizer[nameof(SavePreferencesButtonAltText)];
 
-    public string? SavePreferencesButtonText => _localizer[nameof(SavePreferencesButtonText)];
+    public string? SkillNotLinkedTitle => localizer[nameof(SkillNotLinkedTitle)];
 
-    public string? SavePreferencesButtonAltText => _localizer[nameof(SavePreferencesButtonAltText)];
+    public string? SkillNotLinkedDescription => localizer[nameof(SkillNotLinkedDescription)];
 
-    public string? SkillNotLinkedTitle => _localizer[nameof(SkillNotLinkedTitle)];
+    public string? ClearPreferencesButtonText => localizer[nameof(ClearPreferencesButtonText)];
 
-    public string? SkillNotLinkedDescription => _localizer[nameof(SkillNotLinkedDescription)];
+    public string? ClearPreferencesButtonAltText => localizer[nameof(ClearPreferencesButtonAltText)];
 
-    public string? ClearPreferencesButtonText => _localizer[nameof(ClearPreferencesButtonText)];
+    public string? ResetPreferencesButtonText => localizer[nameof(ResetPreferencesButtonText)];
 
-    public string? ClearPreferencesButtonAltText => _localizer[nameof(ClearPreferencesButtonAltText)];
+    public string? ResetPreferencesButtonAltText => localizer[nameof(ResetPreferencesButtonAltText)];
 
-    public string? ResetPreferencesButtonText => _localizer[nameof(ResetPreferencesButtonText)];
+    public string? SignInTitle => localizer[nameof(SignInTitle)];
 
-    public string? ResetPreferencesButtonAltText => _localizer[nameof(ResetPreferencesButtonAltText)];
+    public string? SignInMetaDescription => localizer[nameof(SignInMetaDescription)];
 
-    public string? SignInTitle => _localizer[nameof(SignInTitle)];
+    public string? SignInSubtitle => localizer[nameof(SignInSubtitle)];
 
-    public string? SignInMetaDescription => _localizer[nameof(SignInMetaDescription)];
+    public string? SignInRegisterSubtitle => localizer[nameof(SignInRegisterSubtitle)];
 
-    public string? SignInSubtitle => _localizer[nameof(SignInSubtitle)];
+    public string? SignInRegisterText => localizer[nameof(SignInRegisterText)];
 
-    public string? SignInRegisterSubtitle => _localizer[nameof(SignInRegisterSubtitle)];
+    public string? SignInLinkText => localizer[nameof(SignInLinkText)];
 
-    public string? SignInRegisterText => _localizer[nameof(SignInRegisterText)];
+    public string? SignInLinkAltText => localizer[nameof(SignInLinkAltText)];
 
-    public string? SignInLinkText => _localizer[nameof(SignInLinkText)];
+    public string? SignInErrorTitle => localizer[nameof(SignInErrorTitle)];
 
-    public string? SignInLinkAltText => _localizer[nameof(SignInLinkAltText)];
+    public string? SignInErrorSubtitle => localizer[nameof(SignInErrorSubtitle)];
 
-    public string? SignInErrorTitle => _localizer[nameof(SignInErrorTitle)];
+    public string? SigningInModalTitle => localizer[nameof(SigningInModalTitle)];
 
-    public string? SignInErrorSubtitle => _localizer[nameof(SignInErrorSubtitle)];
+    public string? SigningInModalDescription => localizer[nameof(SigningInModalDescription)];
 
-    public string? SigningInModalTitle => _localizer[nameof(SigningInModalTitle)];
+    public string? SignOutLinkText => localizer[nameof(SignOutLinkText)];
 
-    public string? SigningInModalDescription => _localizer[nameof(SigningInModalDescription)];
+    public string? TermsOfServiceTitle => localizer[nameof(TermsOfServiceTitle)];
 
-    public string? SignOutLinkText => _localizer[nameof(SignOutLinkText)];
+    public string? TermsOfServiceMetaDescription => localizer[nameof(TermsOfServiceMetaDescription)];
 
-    public string? TermsOfServiceTitle => _localizer[nameof(TermsOfServiceTitle)];
+    public string? TermsOfServiceMetaTitle => localizer[nameof(TermsOfServiceMetaTitle)];
 
-    public string? TermsOfServiceMetaDescription => _localizer[nameof(TermsOfServiceMetaDescription)];
+    public string? TermsOfServiceLinkText => localizer[nameof(TermsOfServiceLinkText)];
 
-    public string? TermsOfServiceMetaTitle => _localizer[nameof(TermsOfServiceMetaTitle)];
+    public string? TermsOfServiceLinkAltText => localizer[nameof(TermsOfServiceLinkAltText)];
 
-    public string? TermsOfServiceLinkText => _localizer[nameof(TermsOfServiceLinkText)];
+    public string? UpdateFailureModalTitle => localizer[nameof(UpdateFailureModalTitle)];
 
-    public string? TermsOfServiceLinkAltText => _localizer[nameof(TermsOfServiceLinkAltText)];
+    public string? UpdateFailureModalDescription => localizer[nameof(UpdateFailureModalDescription)];
 
-    public string? UpdateFailureModalTitle => _localizer[nameof(UpdateFailureModalTitle)];
+    public string? UpdateSuccessModalTitle => localizer[nameof(UpdateSuccessModalTitle)];
 
-    public string? UpdateFailureModalDescription => _localizer[nameof(UpdateFailureModalDescription)];
+    public string? UpdateProgressModalTitle => localizer[nameof(UpdateProgressModalTitle)];
 
-    public string? UpdateSuccessModalTitle => _localizer[nameof(UpdateSuccessModalTitle)];
+    public string? UpdateProgressModalDescription => localizer[nameof(UpdateProgressModalDescription)];
 
-    public string? UpdateProgressModalTitle => _localizer[nameof(UpdateProgressModalTitle)];
+    public string? LinePreferencesNoneLead => localizer[nameof(LinePreferencesNoneLead)];
 
-    public string? UpdateProgressModalDescription => _localizer[nameof(UpdateProgressModalDescription)];
+    public string? LinePreferencesNoneContent => localizer[nameof(LinePreferencesNoneContent), BrandName!];
 
-    public string? LinePreferencesNoneLead => _localizer[nameof(LinePreferencesNoneLead)];
+    public string? LinePreferencesSingular => localizer[nameof(LinePreferencesSingular)];
 
-    public string? LinePreferencesNoneContent => _localizer[nameof(LinePreferencesNoneContent), BrandName!];
+    public string? AlexaSignInTitle => localizer[nameof(AlexaSignInTitle)];
 
-    public string? LinePreferencesSingular => _localizer[nameof(LinePreferencesSingular)];
+    public string? AlexaSignInMetaDescription => localizer[nameof(AlexaSignInMetaDescription)];
 
-    public string? AlexaSignInTitle => _localizer[nameof(AlexaSignInTitle)];
+    public string? AlexaSignInParagraph1 => localizer[nameof(AlexaSignInParagraph1)];
 
-    public string? AlexaSignInMetaDescription => _localizer[nameof(AlexaSignInMetaDescription)];
+    public string? AlexaSignInParagraph2 => localizer[nameof(AlexaSignInParagraph2)];
 
-    public string? AlexaSignInParagraph1 => _localizer[nameof(AlexaSignInParagraph1)];
+    public string? AlexaSignInParagraph3 => localizer[nameof(AlexaSignInParagraph3)];
 
-    public string? AlexaSignInParagraph2 => _localizer[nameof(AlexaSignInParagraph2)];
+    public string? AlexaSignInFormTitle => localizer[nameof(AlexaSignInFormTitle)];
 
-    public string? AlexaSignInParagraph3 => _localizer[nameof(AlexaSignInParagraph3)];
+    public string? ErrorTitle400 => localizer[nameof(ErrorTitle400)];
 
-    public string? AlexaSignInFormTitle => _localizer[nameof(AlexaSignInFormTitle)];
+    public string? ErrorSubtitle400 => localizer[nameof(ErrorSubtitle400)];
 
-    public string? ErrorTitle400 => _localizer[nameof(ErrorTitle400)];
+    public string? ErrorMessage400 => localizer[nameof(ErrorMessage400)];
 
-    public string? ErrorSubtitle400 => _localizer[nameof(ErrorSubtitle400)];
+    public string? ErrorTitle403 => localizer[nameof(ErrorTitle403)];
 
-    public string? ErrorMessage400 => _localizer[nameof(ErrorMessage400)];
+    public string? ErrorSubtitle403 => localizer[nameof(ErrorSubtitle403)];
 
-    public string? ErrorTitle403 => _localizer[nameof(ErrorTitle403)];
+    public string? ErrorMessage403 => localizer[nameof(ErrorMessage403)];
 
-    public string? ErrorSubtitle403 => _localizer[nameof(ErrorSubtitle403)];
+    public string? ErrorTitle404 => localizer[nameof(ErrorTitle404)];
 
-    public string? ErrorMessage403 => _localizer[nameof(ErrorMessage403)];
+    public string? ErrorSubtitle404 => localizer[nameof(ErrorSubtitle404)];
 
-    public string? ErrorTitle404 => _localizer[nameof(ErrorTitle404)];
+    public string? ErrorMessage404 => localizer[nameof(ErrorMessage404)];
 
-    public string? ErrorSubtitle404 => _localizer[nameof(ErrorSubtitle404)];
+    public string? ErrorTitle405 => localizer[nameof(ErrorTitle405)];
 
-    public string? ErrorMessage404 => _localizer[nameof(ErrorMessage404)];
+    public string? ErrorSubtitle405 => localizer[nameof(ErrorSubtitle405)];
 
-    public string? ErrorTitle405 => _localizer[nameof(ErrorTitle405)];
+    public string? ErrorMessage405 => localizer[nameof(ErrorMessage405)];
 
-    public string? ErrorSubtitle405 => _localizer[nameof(ErrorSubtitle405)];
+    public string? ErrorTitle408 => localizer[nameof(ErrorTitle408)];
 
-    public string? ErrorMessage405 => _localizer[nameof(ErrorMessage405)];
+    public string? ErrorSubtitle408 => localizer[nameof(ErrorSubtitle408)];
 
-    public string? ErrorTitle408 => _localizer[nameof(ErrorTitle408)];
+    public string? ErrorMessage408 => localizer[nameof(ErrorMessage408)];
 
-    public string? ErrorSubtitle408 => _localizer[nameof(ErrorSubtitle408)];
+    public string? TechnologyTitle => localizer[nameof(TechnologyTitle)];
 
-    public string? ErrorMessage408 => _localizer[nameof(ErrorMessage408)];
+    public string? TechnologyMetaDescription => localizer[nameof(TechnologyMetaDescription)];
 
-    public string? TechnologyTitle => _localizer[nameof(TechnologyTitle)];
+    public string? TechnologyMetaTitle => localizer[nameof(TechnologyMetaTitle)];
 
-    public string? TechnologyMetaDescription => _localizer[nameof(TechnologyMetaDescription)];
+    public string? TechnologyLinkText => localizer[nameof(TechnologyLinkText)];
 
-    public string? TechnologyMetaTitle => _localizer[nameof(TechnologyMetaTitle)];
+    public string? TechnologyLinkAltText => localizer[nameof(TechnologyLinkAltText)];
 
-    public string? TechnologyLinkText => _localizer[nameof(TechnologyLinkText)];
+    public string? ApiDocumentationMetaTitle => localizer[nameof(ApiDocumentationMetaTitle)];
 
-    public string? TechnologyLinkAltText => _localizer[nameof(TechnologyLinkAltText)];
+    public string? ApiDocumentationMetaDescription => localizer[nameof(ApiDocumentationMetaDescription)];
 
-    public string? ApiDocumentationMetaTitle => _localizer[nameof(ApiDocumentationMetaTitle)];
+    public string? ErrorSubtitle(int? httpCode) => localizer[nameof(ErrorSubtitle), httpCode ?? 500];
 
-    public string? ApiDocumentationMetaDescription => _localizer[nameof(ApiDocumentationMetaDescription)];
+    public LocalizedHtmlString AvailableLinesTitle(string classes, int count) => htmlLocalizer[nameof(AvailableLinesTitle), classes, count];
 
-    public string? ErrorSubtitle(int? httpCode) => _localizer[nameof(ErrorSubtitle), httpCode ?? 500];
+    public LocalizedHtmlString FavoriteLinesTitle(string classes, int count) => htmlLocalizer[nameof(FavoriteLinesTitle), classes, count];
 
-    public LocalizedHtmlString AvailableLinesTitle(string classes, int count) => _htmlLocalizer[nameof(AvailableLinesTitle), classes, count];
+    public string? LinePreferencesPlural(int count) => localizer[nameof(LinePreferencesPlural), count];
 
-    public LocalizedHtmlString FavoriteLinesTitle(string classes, int count) => _htmlLocalizer[nameof(FavoriteLinesTitle), classes, count];
+    public LocalizedHtmlString OtherLinesTitle(string classes, int count) => htmlLocalizer[nameof(OtherLinesTitle), classes, count];
 
-    public string? LinePreferencesPlural(int count) => _localizer[nameof(LinePreferencesPlural), count];
+    public string? RegisterParagraph4(long count) => localizer[nameof(RegisterParagraph4), count];
 
-    public LocalizedHtmlString OtherLinesTitle(string classes, int count) => _htmlLocalizer[nameof(OtherLinesTitle), classes, count];
+    public string? RemoveAccountButtonAltText(string? provider) => localizer[nameof(RemoveAccountButtonAltText), provider ?? string.Empty];
 
-    public string? RegisterParagraph4(long count) => _localizer[nameof(RegisterParagraph4), count];
+    public string? SignInButtonText(string diplayName) => localizer[nameof(SignInButtonText), diplayName];
 
-    public string? RemoveAccountButtonAltText(string? provider) => _localizer[nameof(RemoveAccountButtonAltText), provider ?? string.Empty];
-
-    public string? SignInButtonText(string diplayName) => _localizer[nameof(SignInButtonText), diplayName];
-
-    public string? SignInButtonAltText(string diplayName) => _localizer[nameof(SignInButtonAltText), diplayName];
+    public string? SignInButtonAltText(string diplayName) => localizer[nameof(SignInButtonAltText), diplayName];
 }

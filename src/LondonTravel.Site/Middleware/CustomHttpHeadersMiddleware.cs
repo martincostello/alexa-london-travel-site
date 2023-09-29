@@ -12,60 +12,38 @@ namespace MartinCostello.LondonTravel.Site.Middleware;
 /// <summary>
 /// A class representing middleware for adding custom HTTP response headers. This class cannot be inherited.
 /// </summary>
-public sealed class CustomHttpHeadersMiddleware
+/// <remarks>
+/// Initializes a new instance of the <see cref="CustomHttpHeadersMiddleware"/> class.
+/// </remarks>
+/// <param name="next">The delegate for the next part of the pipeline.</param>
+/// <param name="environment">The current hosting environment.</param>
+/// <param name="config">The current configuration.</param>
+/// <param name="options">The current site configuration options.</param>
+public sealed class CustomHttpHeadersMiddleware(
+    RequestDelegate next,
+    IWebHostEnvironment environment,
+    IConfiguration config,
+    IOptionsMonitor<SiteOptions> options)
 {
-    /// <summary>
-    /// The delegate for the next part of the pipeline. This field is read-only.
-    /// </summary>
-    private readonly RequestDelegate _next;
-
-    /// <summary>
-    /// The <see cref="IConfiguration"/> to use. This field is read-only.
-    /// </summary>
-    private readonly IConfiguration _config;
-
     /// <summary>
     /// The options snapshot to use. This field is read-only.
     /// </summary>
-    private readonly IOptionsMonitor<SiteOptions> _options;
+    private readonly IOptionsMonitor<SiteOptions> _options = options;
 
     /// <summary>
     /// The current <c>Expect-CT</c> HTTP response header value. This field is read-only.
     /// </summary>
-    private readonly string _expectCTValue;
+    private readonly string _expectCTValue = BuildExpectCT(options.CurrentValue);
 
     /// <summary>
     /// The name of the current hosting environment. This field is read-only.
     /// </summary>
-    private readonly string _environmentName;
+    private readonly string _environmentName = config.AzureEnvironment();
 
     /// <summary>
     /// Whether the current hosting environment is production. This field is read-only.
     /// </summary>
-    private readonly bool _isProduction;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="CustomHttpHeadersMiddleware"/> class.
-    /// </summary>
-    /// <param name="next">The delegate for the next part of the pipeline.</param>
-    /// <param name="environment">The current hosting environment.</param>
-    /// <param name="config">The current configuration.</param>
-    /// <param name="options">The current site configuration options.</param>
-    public CustomHttpHeadersMiddleware(
-        RequestDelegate next,
-        IWebHostEnvironment environment,
-        IConfiguration config,
-        IOptionsMonitor<SiteOptions> options)
-    {
-        _next = next;
-        _config = config;
-        _options = options;
-
-        _isProduction = environment.IsProduction();
-        _environmentName = config.AzureEnvironment();
-
-        _expectCTValue = BuildExpectCT(options.CurrentValue);
-    }
+    private readonly bool _isProduction = environment.IsProduction();
 
     /// <summary>
     /// Invokes the middleware asynchronously.
@@ -113,7 +91,7 @@ public sealed class CustomHttpHeadersMiddleware
                 context.Response.Headers.Append("Report-To", @"{""group"":""default"",""max_age"":31536000,""endpoints"":[{""url"":""https://martincostello.report-uri.com/a/d/g""}],""include_subdomains"":false}");
                 context.Response.Headers.Append("NEL", @"{""report_to"":""default"",""max_age"":31536000,""include_subdomains"":false}");
 
-                context.Response.Headers.Append("X-Datacenter", _config.AzureDatacenter());
+                context.Response.Headers.Append("X-Datacenter", config.AzureDatacenter());
 
 #if DEBUG
                 context.Response.Headers.Append("X-Debug", "true");
@@ -137,7 +115,7 @@ public sealed class CustomHttpHeadersMiddleware
                 return Task.CompletedTask;
             });
 
-        await _next(context);
+        await next(context);
     }
 
     /// <summary>
