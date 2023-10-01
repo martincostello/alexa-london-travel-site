@@ -155,10 +155,8 @@ public sealed class MetaModel
 
     private static ReviewMetadataModel BuildReviews()
     {
-#pragma warning disable SA1010
         int[] scores = [2, 3, 3, 3, 4, 4, 5, 5, 5];
         double average = Math.Round(scores.Average(), digits: 1);
-#pragma warning restore SA1010
 
         return new ReviewMetadataModel()
         {

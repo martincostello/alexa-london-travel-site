@@ -67,9 +67,7 @@ public static class ClaimsPrincipalExtensions
     {
         ArgumentNullException.ThrowIfNull(value);
 
-#pragma warning disable SA1010
         string[] givenNameClaims = [ClaimTypes.GivenName];
-#pragma warning restore SA1010
 
         foreach (string claim in givenNameClaims)
         {
