@@ -100,7 +100,6 @@ public static partial class ApiModule
 
     private static ErrorResponse Unauthorized(HttpContext httpContext, string message, string? detail = null)
     {
-#pragma warning disable SA1010
         return new ErrorResponse()
         {
             Message = message ?? string.Empty,
@@ -108,7 +107,6 @@ public static partial class ApiModule
             StatusCode = StatusCodes.Status401Unauthorized,
             Details = detail == null ? [] : [detail],
         };
-#pragma warning restore SA1010
     }
 
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]

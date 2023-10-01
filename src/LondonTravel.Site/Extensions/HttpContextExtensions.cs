@@ -33,9 +33,7 @@ public static class HttpContextExtensions
 
         if (nonce == null)
         {
-#pragma warning disable SA1010
             byte[] data = [];
-#pragma warning restore SA1010
 
             try
             {

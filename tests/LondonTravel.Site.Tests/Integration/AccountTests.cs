@@ -38,11 +38,9 @@ public class AccountTests(TestServerFixture fixture, ITestOutputHelper outputHel
             UserNameNormalized = emailAddress,
         };
 
-#pragma warning disable SA1010
         string accessToken = Services.AlexaService.GenerateAccessToken();
         string[] favoriteLines = ["district", "northern"];
         string userId;
-#pragma warning restore SA1010
 
         static IUserStore<LondonTravelUser> GetUserStore(IServiceProvider serviceProvider)
             => serviceProvider.GetRequiredService<IUserStore<LondonTravelUser>>();

@@ -22,13 +22,11 @@ public partial class AccountController(
     SiteOptions siteOptions,
     ILogger<AccountController> logger) : Controller
 {
-#pragma warning disable SA1010
     /// <summary>
     /// The names of the authentication schemes that are disallowed for
     /// sign-in to link Alexa to an account. This field is read-only.
     /// </summary>
     private static readonly string[] AuthenticationSchemesDisabledForAlexa = ["apple", "github", "google"];
-#pragma warning restore SA1010
 
     private readonly bool _isEnabled =
             siteOptions?.Authentication?.IsEnabled == true &&

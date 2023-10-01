@@ -64,7 +64,6 @@ builder.Services.AddCors((corsOptions) =>
     var siteOptions = new SiteOptions();
     builder.Configuration.Bind("Site", siteOptions);
 
-#pragma warning disable SA1010
     corsOptions.AddPolicy(
         "DefaultCorsPolicy",
         (policy) =>
@@ -83,7 +82,6 @@ builder.Services.AddCors((corsOptions) =>
                 policy.WithOrigins(siteOptions?.Api?.Cors?.Origins ?? []);
             }
         });
-#pragma warning restore SA1010
 });
 
 builder.Services

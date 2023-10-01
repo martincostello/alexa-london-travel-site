@@ -100,9 +100,7 @@ public static class RedirectsModule
             "xmlrpc.php",
         ];
 
-#pragma warning disable SA1010
         string[] httpMethods = ["GET", "HEAD", "POST"];
-#pragma warning restore SA1010
 
         foreach (string path in crawlerPaths)
         {

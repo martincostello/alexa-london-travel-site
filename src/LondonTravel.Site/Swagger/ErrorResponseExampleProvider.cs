@@ -14,7 +14,6 @@ public sealed class ErrorResponseExampleProvider : IExampleProvider<ErrorRespons
     /// <inheritdoc />
     public object GetExample()
     {
-#pragma warning disable SA1010
         return new ErrorResponse()
         {
             Message = "Unauthorized.",
@@ -22,6 +21,5 @@ public sealed class ErrorResponseExampleProvider : IExampleProvider<ErrorRespons
             StatusCode = 401,
             Details = ["Only the Bearer authorization scheme is supported."],
         };
-#pragma warning restore SA1010
     }
 }
