@@ -9,13 +9,13 @@ namespace MartinCostello.LondonTravel.Site;
 public static class RedirectsModule
 {
     /// <summary>
-    /// A random set of annoying YouTube videos. This field is read-only.
+    /// Gets a random set of annoying YouTube videos.
     /// </summary>
     /// <remarks>
     /// Inspired by <c>https://gist.github.com/NickCraver/c9458f2e007e9df2bdf03f8a02af1d13</c>.
     /// </remarks>
-    private static readonly string[] Videos =
-    [
+    private static ReadOnlySpan<string> Videos => new[]
+    {
         "https://www.youtube.com/watch?v=wbby9coDRCk",
         "https://www.youtube.com/watch?v=nb2evY0kmpQ",
         "https://www.youtube.com/watch?v=eh7lp9umG2I",
@@ -39,17 +39,17 @@ public static class RedirectsModule
         "https://www.youtube.com/watch?v=hgwpZvTWLmE",
         "https://www.youtube.com/watch?v=CgBJ5irINqU",
         "https://www.youtube.com/watch?v=jAckVuEY_Rc",
-    ];
+    };
 
     public static IEndpointRouteBuilder MapRedirects(this IEndpointRouteBuilder app)
     {
-        var redirections = new (string OldPath, string NewPath)[]
-        {
+        (string OldPath, string NewPath)[] redirections =
+        [
             ("/register", "/account/register/"),
             ("/sign-out", "/"),
             ("/sign-up", "/account/register/"),
             ("/support", "/help/"),
-        };
+        ];
 
         foreach ((string originalPath, string newPath) in redirections)
         {

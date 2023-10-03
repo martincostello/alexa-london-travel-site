@@ -22,15 +22,9 @@ public partial class AccountController(
     SiteOptions siteOptions,
     ILogger<AccountController> logger) : Controller
 {
-    /// <summary>
-    /// The names of the authentication schemes that are disallowed for
-    /// sign-in to link Alexa to an account. This field is read-only.
-    /// </summary>
-    private static readonly string[] AuthenticationSchemesDisabledForAlexa = ["apple", "github", "google"];
-
     private readonly bool _isEnabled =
-            siteOptions?.Authentication?.IsEnabled == true &&
-            siteOptions?.Authentication.ExternalProviders?.Any((p) => p.Value?.IsEnabled == true) == true;
+        siteOptions?.Authentication?.IsEnabled == true &&
+        siteOptions?.Authentication.ExternalProviders?.Any((p) => p.Value?.IsEnabled == true) == true;
 
     [AllowAnonymous]
     [HttpGet]
@@ -64,7 +58,8 @@ public partial class AccountController(
         if (IsRedirectAlexaAuthorization(returnUri?.ToString()))
         {
             viewName += "Alexa";
-            ViewData["AuthenticationSchemesToHide"] = AuthenticationSchemesDisabledForAlexa;
+            string[] authenticationSchemesDisabledForAlexa = ["apple", "github", "google"];
+            ViewData["AuthenticationSchemesToHide"] = authenticationSchemesDisabledForAlexa;
         }
 
         return View(viewName);
