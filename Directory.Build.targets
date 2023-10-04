@@ -5,7 +5,7 @@
     <DeployId Condition=" '$(DeployId)' == '' ">$(GITHUB_RUN_ID)</DeployId>
   </PropertyGroup>
   <Target Name="AddGitMetadaAssemblyAttributes"
-          BeforeTargets="CoreGenerateAssemblyInfo"
+          BeforeTargets="GetAssemblyAttributes"
           Condition=" '$(GenerateGitMetadata)' == 'true' ">
     <Exec Command="git rev-parse HEAD" ConsoleToMSBuild="true" StandardOutputImportance="low" IgnoreExitCode="true" Condition=" '$(CommitHash)' == '' ">
       <Output TaskParameter="ConsoleOutput" PropertyName="CommitHash" />
@@ -14,22 +14,10 @@
       <Output TaskParameter="ConsoleOutput" PropertyName="CommitBranch" />
     </Exec>
     <ItemGroup>
-      <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
-        <_Parameter1>BuildTimestamp</_Parameter1>
-        <_Parameter2>$([System.DateTime]::UtcNow.ToString(yyyy-MM-ddTHH:mm:ssK))</_Parameter2>
-      </AssemblyAttribute>
-      <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute" Condition=" $(CommitHash) != '' ">
-        <_Parameter1>CommitHash</_Parameter1>
-        <_Parameter2>$(CommitHash)</_Parameter2>
-      </AssemblyAttribute>
-      <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute" Condition=" $(CommitBranch) != '' ">
-        <_Parameter1>CommitBranch</_Parameter1>
-        <_Parameter2>$(CommitBranch)</_Parameter2>
-      </AssemblyAttribute>
-      <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute" Condition=" $(DeployId) != '' ">
-        <_Parameter1>DeployId</_Parameter1>
-        <_Parameter2>$(DeployId)</_Parameter2>
-      </AssemblyAttribute>
+      <AssemblyMetadata Include="BuildTimestamp" Value="$([System.DateTime]::UtcNow.ToString(yyyy-MM-ddTHH:mm:ssK))" />
+      <AssemblyMetadata Include="CommitHash" Value="$(CommitHash)" Condition=" $(CommitHash) != '' " />
+      <AssemblyMetadata Include="CommitBranch" Value="$(CommitBranch)" Condition=" $(CommitBranch) != '' " />
+      <AssemblyMetadata Include="DeployId" Value="$(DeployId)" Condition=" $(DeployId) != ''" />
     </ItemGroup>
   </Target>
   <PropertyGroup Condition=" '$(CollectCoverage)' == 'true' ">
