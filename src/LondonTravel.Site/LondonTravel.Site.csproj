@@ -2,15 +2,7 @@
   <PropertyGroup>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <Description>https://londontravel.martincostello.com/</Description>
-    <!--
-      HACK Disable configuration binding source generator due to issues in RC.1 that will be fixed in RC.2:
-      - https://github.com/dotnet/runtime/issues/90851
-      - https://github.com/dotnet/runtime/issues/90987
-      - https://github.com/dotnet/runtime/issues/91258
-    -->
-    <!--
     <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
-    -->
     <EnableRequestDelegateGenerator>true</EnableRequestDelegateGenerator>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);CA1716</NoWarn>
