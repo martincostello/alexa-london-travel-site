@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
+#pragma warning disable SA1010
+
 namespace MartinCostello.LondonTravel.Site.Controllers;
 
 [Authorize]
@@ -383,29 +385,29 @@ public partial class ManageController : Controller
 
         if (user.RoleClaims == null)
         {
-            user.RoleClaims = new List<LondonTravelRole>();
+            user.RoleClaims = [];
             commitUpdate = true;
         }
 
         foreach (var claim in info.Principal.Claims)
         {
-            bool hasClaim = user?.RoleClaims
+            bool hasClaim = user.RoleClaims
                 .Where((p) => p.ClaimType == claim.Type)
                 .Where((p) => p.Issuer == claim.Issuer)
                 .Where((p) => p.Value == claim.Value)
                 .Where((p) => p.ValueType == claim.ValueType)
-                .Any() == true;
+                .Any();
 
             if (!hasClaim)
             {
-                user!.RoleClaims.Add(LondonTravelRole.FromClaim(claim));
+                user.RoleClaims.Add(LondonTravelRole.FromClaim(claim));
                 commitUpdate = true;
             }
         }
 
         if (commitUpdate)
         {
-            var result = (await _userManager.UpdateAsync(user)) ?? IdentityResult.Failed();
+            var result = await _userManager.UpdateAsync(user);
 
             if (result.Succeeded)
             {
