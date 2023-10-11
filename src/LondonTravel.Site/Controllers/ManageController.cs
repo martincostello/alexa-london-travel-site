@@ -407,7 +407,7 @@ public partial class ManageController : Controller
         {
             var result = await _userManager.UpdateAsync(user);
 
-            if (result.Succeeded)
+            if (result?.Succeeded == true)
             {
                 _telemetry.TrackClaimsUpdated(user.Id!);
             }
