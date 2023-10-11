@@ -405,9 +405,9 @@ public partial class ManageController : Controller
 
         if (commitUpdate)
         {
-            var result = await _userManager.UpdateAsync(user);
+            var result = (await _userManager.UpdateAsync(user)) ?? IdentityResult.Failed();
 
-            if (result?.Succeeded == true)
+            if (result.Succeeded)
             {
                 _telemetry.TrackClaimsUpdated(user.Id!);
             }
