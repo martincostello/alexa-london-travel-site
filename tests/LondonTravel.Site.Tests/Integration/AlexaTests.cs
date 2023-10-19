@@ -112,7 +112,7 @@ public class AlexaTests : BrowserIntegrationTest
 
                 // Assert
                 secondResult.RootElement.GetString("userId").ShouldNotBeNullOrWhiteSpace();
-                secondResult.RootElement.GetStringArray("favoriteLines").ShouldBe(new[] { "district" });
+                secondResult.RootElement.GetStringArray("favoriteLines").ShouldBe(["district"]);
 
                 // Arrange
                 page = await homepage.ManageAsync();

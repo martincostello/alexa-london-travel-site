@@ -70,7 +70,7 @@ public class ApiTests(TestServerFixture fixture, ITestOutputHelper outputHelper)
         result.RootElement.GetString("message").ShouldBe("Unauthorized.");
         result.RootElement.GetInt32("statusCode").ShouldBe(401);
         result.RootElement.GetStringArray("details").ShouldNotBeNull();
-        result.RootElement.GetStringArray("details").ShouldBe(new[] { "The provided authorization value is not valid." });
+        result.RootElement.GetStringArray("details").ShouldBe(["The provided authorization value is not valid."]);
     }
 
     [Theory]
@@ -94,7 +94,7 @@ public class ApiTests(TestServerFixture fixture, ITestOutputHelper outputHelper)
         result.RootElement.GetString("message").ShouldBe("Unauthorized.");
         result.RootElement.GetInt32("statusCode").ShouldBe(401);
         result.RootElement.GetStringArray("details").ShouldNotBeNull();
-        result.RootElement.GetStringArray("details").ShouldBe(new[] { "Only the bearer authorization scheme is supported." });
+        result.RootElement.GetStringArray("details").ShouldBe(["Only the bearer authorization scheme is supported."]);
     }
 
     [Theory]
