@@ -167,7 +167,7 @@ public abstract class BrowserTest : IAsyncLifetime, IDisposable
 
     private static void InstallPlaywright()
     {
-        int exitCode = Microsoft.Playwright.Program.Main(new[] { "install" });
+        int exitCode = Microsoft.Playwright.Program.Main(["install"]);
 
         if (exitCode != 0)
         {

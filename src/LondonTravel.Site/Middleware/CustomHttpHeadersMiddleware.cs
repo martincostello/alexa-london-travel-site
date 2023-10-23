@@ -212,33 +212,33 @@ public sealed class CustomHttpHeadersMiddleware(
         var options = _options.CurrentValue;
         string? cdn = GetCdnOriginForContentSecurityPolicy(options);
 
-        var scriptDirectives = new List<string>()
-        {
+        List<string> scriptDirectives =
+        [
             Csp.Self,
-        };
+        ];
 
-        var styleDirectives = new List<string>()
-        {
+        List<string> styleDirectives =
+        [
             Csp.Self,
-        };
+        ];
 
         var policies = new Dictionary<string, IList<string>>()
         {
-            ["default-src"] = new[] { Csp.Self, Csp.Data },
+            ["default-src"] = [Csp.Self, Csp.Data],
             ["script-src"] = scriptDirectives,
             ["style-src"] = styleDirectives,
-            ["img-src"] = new[] { Csp.Self, Csp.Data, cdn },
-            ["font-src"] = new[] { Csp.Self },
-            ["connect-src"] = new[] { Csp.Self },
-            ["media-src"] = new[] { Csp.None },
-            ["object-src"] = new[] { Csp.None },
-            ["child-src"] = new[] { Csp.Self },
-            ["frame-ancestors"] = new[] { Csp.None },
-            ["form-action"] = new[] { Csp.Self },
-            ["block-all-mixed-content"] = Array.Empty<string>(),
-            ["base-uri"] = new[] { Csp.Self },
-            ["manifest-src"] = new[] { Csp.Self },
-            ["worker-src"] = new[] { Csp.Self },
+            ["img-src"] = [Csp.Self, Csp.Data, cdn],
+            ["font-src"] = [Csp.Self],
+            ["connect-src"] = [Csp.Self],
+            ["media-src"] = [Csp.None],
+            ["object-src"] = [Csp.None],
+            ["child-src"] = [Csp.Self],
+            ["frame-ancestors"] = [Csp.None],
+            ["form-action"] = [Csp.Self],
+            ["block-all-mixed-content"] = [],
+            ["base-uri"] = [Csp.Self],
+            ["manifest-src"] = [Csp.Self],
+            ["worker-src"] = [Csp.Self],
         };
 
         if (allowInlineStyles)
