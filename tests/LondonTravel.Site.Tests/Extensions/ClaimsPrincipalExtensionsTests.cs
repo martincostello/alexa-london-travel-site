@@ -38,7 +38,7 @@ public static class ClaimsPrincipalExtensionsTests
     public static void GetAvatarUrl_Returns_Correct_Url(string email, string expected)
     {
         // Arrange
-        var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Email, email) });
+        var identity = new ClaimsIdentity([new Claim(ClaimTypes.Email, email)]);
         var principal = new ClaimsPrincipal(identity);
 
         // Act
@@ -52,7 +52,7 @@ public static class ClaimsPrincipalExtensionsTests
     public static void GetAvatarUrl_Returns_Correct_Url_With_Explicit_Size()
     {
         // Arrange
-        var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Email, "MyEmailAddress@example.com") });
+        var identity = new ClaimsIdentity([new Claim(ClaimTypes.Email, "MyEmailAddress@example.com")]);
         var principal = new ClaimsPrincipal(identity);
 
         // Act
@@ -87,7 +87,7 @@ public static class ClaimsPrincipalExtensionsTests
     public static void GetDisplayName_Returns_Correct_Value_If_No_GivenName_But_Name(string name, string expected)
     {
         // Arrange
-        var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, name) });
+        var identity = new ClaimsIdentity([new Claim(ClaimTypes.Name, name)]);
         var principal = new ClaimsPrincipal(identity);
 
         // Act
@@ -103,7 +103,7 @@ public static class ClaimsPrincipalExtensionsTests
     public static void GetDisplayName_Returns_Correct_Value_If_Blank_GivenName_But_Name(string name, string expected)
     {
         // Arrange
-        var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, name), new Claim(ClaimTypes.GivenName, string.Empty) });
+        var identity = new ClaimsIdentity([new Claim(ClaimTypes.Name, name), new Claim(ClaimTypes.GivenName, string.Empty)]);
         var principal = new ClaimsPrincipal(identity);
 
         // Act
@@ -119,7 +119,7 @@ public static class ClaimsPrincipalExtensionsTests
     public static void GetDisplayName_Returns_Correct_Value_If_GivenName(string givenName, string expected)
     {
         // Arrange
-        var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.GivenName, givenName) });
+        var identity = new ClaimsIdentity([new Claim(ClaimTypes.GivenName, givenName)]);
         var principal = new ClaimsPrincipal(identity);
 
         // Act

@@ -202,7 +202,7 @@ public sealed class TflServiceTests : IDisposable
             AppId = "My-App-Id",
             AppKey = "My-App-Key",
             BaseUri = new Uri("https://api.tfl.gov.uk/"),
-            SupportedModes = new[] { "dlr", "elizabeth-line", "overground", "tube" },
+            SupportedModes = ["dlr", "elizabeth-line", "overground", "tube"],
         };
     }
 }
