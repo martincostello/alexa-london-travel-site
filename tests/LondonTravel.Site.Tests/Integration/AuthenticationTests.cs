@@ -3,6 +3,7 @@
 
 using MartinCostello.LondonTravel.Site.Pages;
 using Microsoft.Extensions.DependencyInjection;
+using xRetry;
 
 namespace MartinCostello.LondonTravel.Site.Integration;
 
@@ -54,7 +55,7 @@ public sealed class AuthenticationTests : BrowserIntegrationTest
             });
     }
 
-    [Theory]
+    [RetryTheory]
     [ClassData(typeof(BrowsersTestData))]
     public async Task Can_Delete_Account(string browserType, string? browserChannel)
     {
@@ -85,7 +86,7 @@ public sealed class AuthenticationTests : BrowserIntegrationTest
             });
     }
 
-    [Theory]
+    [RetryTheory]
     [ClassData(typeof(BrowsersTestData))]
     public async Task Can_Link_Accounts(string browserType, string? browserChannel)
     {

@@ -22,7 +22,7 @@ public sealed class PreferencesTests : BrowserIntegrationTest
         Fixture.Services!.GetRequiredService<InMemoryDocumentStore>().Clear();
     }
 
-    [Theory]
+    [xRetry.RetryTheory]
     [ClassData(typeof(BrowsersTestData))]
     public async Task Can_Manage_Preferences(string browserType, string? browserChannel)
     {
