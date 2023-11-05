@@ -69,7 +69,7 @@ if ($installDotNetSdk -eq $true) {
 function DotNetTest {
     param([string]$Project)
 
-    $additionalArgs = @()
+    $additionalArgs = @("--tl")
 
     if (![string]::IsNullOrEmpty($env:GITHUB_SHA)) {
         $additionalArgs += "--logger"
@@ -86,7 +86,7 @@ function DotNetTest {
 function DotNetPublish {
     param([string]$Project)
 
-    $additionalArgs = @()
+    $additionalArgs = @("--tl")
 
     if (![string]::IsNullOrEmpty($Runtime)) {
         $additionalArgs += "--self-contained"
