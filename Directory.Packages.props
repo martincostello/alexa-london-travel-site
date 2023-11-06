@@ -1,6 +1,7 @@
 <Project>
   <PropertyGroup>
     <AspNetSecurityOAuthVersion>7.0.4</AspNetSecurityOAuthVersion>
+    <PollyVersion>8.1.0</PollyVersion>
     <SwashbuckleAspNetCoreVersion>6.5.0</SwashbuckleAspNetCoreVersion>
   </PropertyGroup>
   <ItemGroup>
@@ -24,12 +25,14 @@
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.0-rc.2.23480.2" />
     <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.36.0" />
     <PackageVersion Include="Microsoft.DotNet.XliffTasks" Version="1.0.0-beta.21452.1" />
-    <PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="8.0.0-rc.2.23480.2" />
+    <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="8.0.0-rc.2.23510.2" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
     <PackageVersion Include="Microsoft.Playwright" Version="1.39.0" />
     <PackageVersion Include="Microsoft.TypeScript.MSBuild" Version="5.2.2" />
     <PackageVersion Include="NSubstitute" Version="5.1.0" />
-    <PackageVersion Include="Polly" Version="8.1.0" />
+    <PackageVersion Include="Polly.Core" Version="$(PollyVersion)" />
+    <PackageVersion Include="Polly.Extensions" Version="$(PollyVersion)" />
+    <PackageVersion Include="Polly.RateLimiting" Version="$(PollyVersion)" />
     <PackageVersion Include="Refit" Version="7.0.0" />
     <PackageVersion Include="ReportGenerator" Version="5.1.26" />
     <PackageVersion Include="Serilog" Version="3.0.1" />

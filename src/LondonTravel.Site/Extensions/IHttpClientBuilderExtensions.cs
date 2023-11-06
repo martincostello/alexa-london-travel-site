@@ -5,8 +5,6 @@ using System.Diagnostics;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Reflection;
-using Polly;
-using Polly.Registry;
 
 namespace MartinCostello.LondonTravel.Site.Extensions;
 
@@ -34,8 +32,7 @@ public static class IHttpClientBuilderExtensions
         return builder
             .ConfigurePrimaryHttpMessageHandler(CreatePrimaryHttpHandler)
             .ConfigureHttpClient(ApplyDefaultConfiguration)
-            .AddHttpMessageHandler<CorrelationIdHandler>()
-            .AddPolicyHandlerFromRegistry(GetRequestPolicy);
+            .AddHttpMessageHandler<CorrelationIdHandler>();
     }
 
     /// <summary>
@@ -73,22 +70,6 @@ public static class IHttpClientBuilderExtensions
         client.DefaultRequestHeaders.Accept.ParseAdd("*/*");
         client.DefaultRequestHeaders.ExpectContinue = false;
         client.MaxResponseContentBufferSize = 1024 * 1024 * 10; // 10 MB
-    }
-
-    /// <summary>
-    /// Creates a policy to use for an HTTP request.
-    /// </summary>
-    /// <param name="registry">The policy registry to use.</param>
-    /// <param name="request">The HTTP request to get the policy for.</param>
-    /// <returns>
-    /// The policy to use for <paramref name="request"/>.
-    /// </returns>
-    private static IAsyncPolicy<HttpResponseMessage> GetRequestPolicy(
-        IReadOnlyPolicyRegistry<string> registry,
-        HttpRequestMessage request)
-    {
-        string policyName = request.Method == HttpMethod.Get ? "ReadPolicy" : "WritePolicy";
-        return registry.Get<IAsyncPolicy<HttpResponseMessage>>(policyName);
     }
 
     /// <summary>
