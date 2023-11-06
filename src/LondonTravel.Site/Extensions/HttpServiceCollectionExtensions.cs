@@ -4,6 +4,7 @@
 using MartinCostello.LondonTravel.Site.Options;
 using MartinCostello.LondonTravel.Site.Services.Tfl;
 using Microsoft.AspNetCore.Http.Json;
+using Microsoft.Extensions.Http.Resilience;
 using Microsoft.Extensions.Options;
 using Refit;
 
@@ -25,7 +26,8 @@ public static class HttpServiceCollectionExtensions
     {
         services
             .AddHttpClient(Microsoft.Extensions.Options.Options.DefaultName)
-            .ApplyDefaultConfiguration();
+            .ApplyDefaultConfiguration()
+            .AddStandardResilienceHandler();
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<SiteOptions>();
@@ -37,14 +39,16 @@ public static class HttpServiceCollectionExtensions
                 services
                     .AddHttpClient(providerName)
                     .ApplyDefaultConfiguration()
-                    .ApplyRemoteAuthenticationConfiguration();
+                    .ApplyRemoteAuthenticationConfiguration()
+                    .AddStandardResilienceHandler();
             }
         }
 
         services
             .AddHttpClient(nameof(ITflClient))
             .AddTypedClient(AddTfl)
-            .ApplyDefaultConfiguration();
+            .ApplyDefaultConfiguration()
+            .AddStandardResilienceHandler();
 
         services.AddSingleton<IHttpContentSerializer>((p) =>
         {

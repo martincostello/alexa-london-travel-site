@@ -186,7 +186,6 @@ builder.Services.AddTransient((p) => p.GetRequiredService<IOptionsMonitor<SiteOp
 builder.Services.AddTransient((p) => p.GetRequiredService<IOptionsMonitor<SiteOptions>>().CurrentValue.Authentication!.UserStore!);
 builder.Services.AddTransient((p) => p.GetRequiredService<IOptionsMonitor<SiteOptions>>().CurrentValue.Tfl!);
 
-builder.Services.AddPolly();
 builder.Services.AddHttpClients();
 
 builder.Services.AddApplicationAuthentication(builder.Configuration);

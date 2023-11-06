@@ -5,7 +5,7 @@
     <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
     <EnableRequestDelegateGenerator>true</EnableRequestDelegateGenerator>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);CA1716</NoWarn>
+    <NoWarn>$(NoWarn);CA1716;EXTEXP0003</NoWarn>
     <OutputType>Exe</OutputType>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <RootNamespace>MartinCostello.LondonTravel.Site</RootNamespace>
@@ -33,9 +33,11 @@
     <PackageReference Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" />
     <PackageReference Include="Microsoft.Azure.Cosmos" />
     <PackageReference Include="Microsoft.DotNet.XliffTasks" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.Extensions.Http.Polly" />
+    <PackageReference Include="Microsoft.Extensions.Http.Resilience" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" />
-    <PackageReference Include="Polly" />
+    <PackageReference Include="Polly.Core" />
+    <PackageReference Include="Polly.Extensions" />
+    <PackageReference Include="Polly.RateLimiting" />
     <PackageReference Include="Refit" />
     <PackageReference Include="Serilog" />
     <PackageReference Include="Serilog.Extensions.Logging" />
