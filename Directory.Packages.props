@@ -35,7 +35,7 @@
     <PackageVersion Include="Polly.RateLimiting" Version="$(PollyVersion)" />
     <PackageVersion Include="Refit" Version="7.0.0" />
     <PackageVersion Include="ReportGenerator" Version="5.1.26" />
-    <PackageVersion Include="Serilog" Version="3.1.0" />
+    <PackageVersion Include="Serilog" Version="3.1.1" />
     <PackageVersion Include="Serilog.Extensions.Logging" Version="7.0.0" />
     <PackageVersion Include="Serilog.Settings.Configuration" Version="7.0.1" />
     <PackageVersion Include="Serilog.Sinks.ApplicationInsights" Version="4.0.0" />
