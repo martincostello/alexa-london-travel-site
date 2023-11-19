@@ -83,7 +83,7 @@ public static class DocumentHelpersTests
     [Theory]
     [InlineData(null)]
     [InlineData("")]
-    public static void CreateClient_Throws_If_Options_Has_No_Access_Key(string accessKey)
+    public static void CreateClient_Throws_If_Options_Has_No_Access_Key(string? accessKey)
     {
         // Arrange
         var options = new UserStoreOptions()
@@ -103,7 +103,7 @@ public static class DocumentHelpersTests
     [Theory]
     [InlineData(null)]
     [InlineData("")]
-    public static void CreateClient_Throws_If_Options_Has_No_Database_Name(string databaseName)
+    public static void CreateClient_Throws_If_Options_Has_No_Database_Name(string? databaseName)
     {
         // Arrange
         var options = new UserStoreOptions()
@@ -123,7 +123,7 @@ public static class DocumentHelpersTests
     [Theory]
     [InlineData(null)]
     [InlineData("")]
-    public static void CreateClient_Throws_If_Options_Has_No_Collection_Name(string collectionName)
+    public static void CreateClient_Throws_If_Options_Has_No_Collection_Name(string? collectionName)
     {
         // Arrange
         var options = new UserStoreOptions()

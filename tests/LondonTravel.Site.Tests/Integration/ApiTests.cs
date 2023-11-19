@@ -25,7 +25,7 @@ public class ApiTests(TestServerFixture fixture, ITestOutputHelper outputHelper)
     [InlineData(null)]
     [InlineData("")]
     [InlineData(" ")]
-    public async Task Cannot_Get_Preferences_Unauthenticated(string value)
+    public async Task Cannot_Get_Preferences_Unauthenticated(string? value)
     {
         // Arrange
         using var client = Fixture.CreateClient();
