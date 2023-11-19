@@ -68,7 +68,7 @@ public class AlexaServiceTests(ITestOutputHelper outputHelper)
     [Theory]
     [InlineData(null)]
     [InlineData("")]
-    public async Task AuthorizeSkill_Returns_Correct_Location_If_Client_Id_Is_Invalid(string clientId)
+    public async Task AuthorizeSkill_Returns_Correct_Location_If_Client_Id_Is_Invalid(string? clientId)
     {
         // Arrange
         string state = "Some State";
@@ -120,7 +120,7 @@ public class AlexaServiceTests(ITestOutputHelper outputHelper)
     [Theory]
     [InlineData(null)]
     [InlineData("")]
-    public async Task AuthorizeSkill_Returns_Correct_Location_If_Response_Type_Is_Invalid(string responseType)
+    public async Task AuthorizeSkill_Returns_Correct_Location_If_Response_Type_Is_Invalid(string? responseType)
     {
         // Arrange
         string state = "Some State";
@@ -176,7 +176,7 @@ public class AlexaServiceTests(ITestOutputHelper outputHelper)
     [InlineData("http://alexa.amazon.com/alexa-london-travel/?foo=baz")]
     [InlineData("https://alexa.amazon.com/alexa-london-travel/unknown")]
     [InlineData("https://bbc.co.uk")]
-    public async Task AuthorizeSkill_Returns_Bad_Request_If_Redirect_Uri_Is_Invalid(string redirectUrl)
+    public async Task AuthorizeSkill_Returns_Bad_Request_If_Redirect_Uri_Is_Invalid(string? redirectUrl)
     {
         // Arrange
         string state = "Some State";
@@ -262,7 +262,7 @@ public class AlexaServiceTests(ITestOutputHelper outputHelper)
     [Theory]
     [InlineData(null)]
     [InlineData("My Existing Token")]
-    public async Task AuthorizeSkill_Returns_Correct_Redirect_Url_If_Token_Created_Or_Updated(string alexaToken)
+    public async Task AuthorizeSkill_Returns_Correct_Redirect_Url_If_Token_Created_Or_Updated(string? alexaToken)
     {
         // Arrange
         string state = "Some State";
@@ -312,6 +312,7 @@ public class AlexaServiceTests(ITestOutputHelper outputHelper)
             url.ShouldNotContain(Uri.EscapeDataString(alexaToken));
         }
 
+        user.AlexaToken.ShouldNotBeNull();
         user.AlexaToken.ShouldNotBe(alexaToken);
         user.AlexaToken.Length.ShouldBeGreaterThanOrEqualTo(64);
     }
