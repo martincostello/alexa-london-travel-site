@@ -13,6 +13,7 @@ namespace MartinCostello.LondonTravel.Site;
 [JsonSerializable(typeof(ICollection<LineInfo>))]
 [JsonSerializable(typeof(ICollection<StopPoint>))]
 [JsonSerializable(typeof(PreferencesResponse))]
+[JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
 internal sealed partial class ApplicationJsonSerializerContext : JsonSerializerContext
 {
 }

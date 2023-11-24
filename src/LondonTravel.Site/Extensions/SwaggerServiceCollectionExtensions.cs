@@ -100,19 +100,18 @@ public static class SwaggerServiceCollectionExtensions
     /// <param name="fileName">The XML comments file name to try to add.</param>
     private static void AddXmlCommentsIfExists(SwaggerGenOptions options, IWebHostEnvironment environment, string fileName)
     {
-        var modelType = typeof(SiteRoutes);
         string? applicationPath;
 
         if (environment.IsDevelopment())
         {
-            applicationPath = Path.GetDirectoryName(modelType.Assembly.Location);
+            applicationPath = Path.GetDirectoryName(AppContext.BaseDirectory);
         }
         else
         {
             applicationPath = environment.ContentRootPath;
         }
 
-        var path = Path.GetFullPath(Path.Combine(applicationPath ?? ".", fileName));
+        string path = Path.GetFullPath(Path.Combine(applicationPath ?? ".", fileName));
 
         if (File.Exists(path))
         {
