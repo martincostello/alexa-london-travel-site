@@ -41,7 +41,10 @@ public static partial class ApiModule
                 Log.AccessDeniedNoAuthorization(logger, httpContext);
                 telemetry.TrackApiPreferencesUnauthorized();
 
-                return Results.Json(Unauthorized(httpContext, "No access token specified."), statusCode: StatusCodes.Status401Unauthorized);
+                return Results.Json(
+                    Unauthorized(httpContext, "No access token specified."),
+                    ApplicationJsonSerializerContext.Default.ErrorResponse,
+                    statusCode: StatusCodes.Status401Unauthorized);
             }
 
             LondonTravelUser? user = null;
@@ -57,7 +60,10 @@ public static partial class ApiModule
                 Log.AccessDeniedUnknownToken(logger, httpContext);
                 telemetry.TrackApiPreferencesUnauthorized();
 
-                return Results.Json(Unauthorized(httpContext, "Unauthorized.", errorDetail), statusCode: StatusCodes.Status401Unauthorized);
+                return Results.Json(
+                    Unauthorized(httpContext, "Unauthorized.", errorDetail),
+                    ApplicationJsonSerializerContext.Default.ErrorResponse,
+                    statusCode: StatusCodes.Status401Unauthorized);
             }
 
             Log.AccessAuthorized(logger, user.Id, httpContext);
@@ -70,7 +76,7 @@ public static partial class ApiModule
 
             telemetry.TrackApiPreferencesSuccess(result.UserId);
 
-            return Results.Json(result);
+            return Results.Json(result, ApplicationJsonSerializerContext.Default.PreferencesResponse);
         })
         .Produces<PreferencesResponse, PreferencesResponseExampleProvider>("The preferences associated with the provided access token.")
         .Produces<ErrorResponse, ErrorResponseExampleProvider>("A valid access token was not provided.", StatusCodes.Status401Unauthorized)
