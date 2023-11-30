@@ -7,6 +7,10 @@ param(
 $ErrorActionPreference = "Stop"
 $ProgressPreference = "SilentlyContinue"
 
+if ($null -eq $env:MSBUILDTERMINALLOGGER) {
+    $env:MSBUILDTERMINALLOGGER = "auto"
+}
+
 $solutionPath = $PSScriptRoot
 $sdkFile = Join-Path $solutionPath "global.json"
 
@@ -69,7 +73,7 @@ if ($installDotNetSdk -eq $true) {
 function DotNetTest {
     param([string]$Project)
 
-    $additionalArgs = @("--tl")
+    $additionalArgs = @()
 
     if (![string]::IsNullOrEmpty($env:GITHUB_SHA)) {
         $additionalArgs += "--logger"
@@ -86,7 +90,7 @@ function DotNetTest {
 function DotNetPublish {
     param([string]$Project)
 
-    $additionalArgs = @("--tl")
+    $additionalArgs = @()
 
     if (![string]::IsNullOrEmpty($Runtime)) {
         $additionalArgs += "--self-contained"
