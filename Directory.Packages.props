@@ -28,7 +28,7 @@
     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="8.0.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageVersion Include="Microsoft.Playwright" Version="1.40.0" />
-    <PackageVersion Include="Microsoft.TypeScript.MSBuild" Version="5.3.2" />
+    <PackageVersion Include="Microsoft.TypeScript.MSBuild" Version="5.3.3" />
     <PackageVersion Include="NSubstitute" Version="5.1.0" />
     <PackageVersion Include="Polly.Core" Version="$(PollyVersion)" />
     <PackageVersion Include="Polly.Extensions" Version="$(PollyVersion)" />
