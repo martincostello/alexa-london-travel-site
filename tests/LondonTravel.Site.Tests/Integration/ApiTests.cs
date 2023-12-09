@@ -16,6 +16,7 @@ namespace MartinCostello.LondonTravel.Site.Integration;
 /// </remarks>
 /// <param name="fixture">The fixture to use.</param>
 /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
+[Collection(TestServerCollection.Name)]
 public class ApiTests(TestServerFixture fixture, ITestOutputHelper outputHelper) : IntegrationTest(fixture, outputHelper)
 {
     private const string Scheme = "bearer";

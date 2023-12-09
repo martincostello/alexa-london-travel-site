@@ -10,6 +10,7 @@ namespace MartinCostello.LondonTravel.Site.Integration;
 /// <summary>
 /// A class containing tests for authentication providers in the website.
 /// </summary>
+[Collection(HttpServerCollection.Name)]
 public sealed class AuthenticationTests : BrowserIntegrationTest
 {
     /// <summary>
