@@ -42,11 +42,11 @@ jobs:
       matrix:
         include:
           - os: macos-latest
-            codecov_os: macos
+            os-name: macos
           - os: ubuntu-latest
-            codecov_os: linux
+            os-name: linux
           - os: windows-latest
-            codecov_os: windows
+            os-name: windows
 
     steps:
 
@@ -98,7 +98,7 @@ jobs:
       name: Upload coverage to Codecov
       with:
         file: ./artifacts/coverage/coverage.cobertura.xml
-        flags: ${{ matrix.codecov_os }}
+        flags: ${{ matrix.os-name }}
 
     - name: Publish artifacts
       uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4.0.0
@@ -112,7 +112,7 @@ jobs:
       uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4.0.0
       if: ${{ !cancelled() }}
       with:
-        name: screenshots
+        name: screenshots-${{ matrix.os-name }}
         path: ./artifacts/screenshots/*
         if-no-files-found: ignore
 
@@ -120,7 +120,7 @@ jobs:
       uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4.0.0
       if: ${{ !cancelled() }}
       with:
-        name: traces
+        name: traces-${{ matrix.os-name }}
         path: ./artifacts/traces/*
         if-no-files-found: ignore
 
@@ -128,7 +128,7 @@ jobs:
       uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4.0.0
       if: ${{ !cancelled() }}
       with:
-        name: videos
+        name: videos-${{ matrix.os-name }}
         path: ./artifacts/videos/*
         if-no-files-found: ignore
 
@@ -212,7 +212,7 @@ jobs:
       uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4.0.0
       if: ${{ !cancelled() }}
       with:
-        name: screenshots
+        name: screenshots-e2e-dev
         path: ./artifacts/screenshots/*
         if-no-files-found: ignore
 
@@ -220,7 +220,7 @@ jobs:
       uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4.0.0
       if: ${{ !cancelled() }}
       with:
-        name: traces
+        name: traces-e2e-dev
         path: ./artifacts/traces/*
         if-no-files-found: ignore
 
@@ -228,7 +228,7 @@ jobs:
       uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4.0.0
       if: ${{ !cancelled() }}
       with:
-        name: videos
+        name: videos-e2e-dev
         path: ./artifacts/videos/*
         if-no-files-found: ignore
 
@@ -310,7 +310,7 @@ jobs:
       uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4.0.0
       if: ${{ !cancelled() }}
       with:
-        name: screenshots
+        name: screenshots-e2e-production
         path: ./artifacts/screenshots/*
         if-no-files-found: ignore
 
@@ -318,7 +318,7 @@ jobs:
       uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4.0.0
       if: ${{ !cancelled() }}
       with:
-        name: traces
+        name: traces-e2e-production
         path: ./artifacts/traces/*
         if-no-files-found: ignore
 
@@ -326,6 +326,6 @@ jobs:
       uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4.0.0
       if: ${{ !cancelled() }}
       with:
-        name: videos
+        name: videos-e2e-production
         path: ./artifacts/videos/*
         if-no-files-found: ignore
