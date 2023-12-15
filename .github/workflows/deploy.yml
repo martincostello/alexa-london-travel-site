@@ -1,0 +1,339 @@
+name: deploy
+
+on:
+  issue_comment:
+    types: [ created ]
+
+env:
+  TERM: xterm
+
+permissions:
+  contents: read
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    if: |
+      github.event.issue.pull_request != '' &&
+      github.event.repository.fork == false &&
+      github.triggering_actor == github.event.repository.owner.login &&
+      startsWith(github.event.comment.body, '/deploy')
+
+    outputs:
+      application-name: ${{ steps.set-outputs.outputs.application-name }}
+      application-slot: ${{ steps.set-outputs.outputs.application-slot }}
+      application-url: ${{ steps.set-outputs.outputs.application-url }}
+      comment-id: ${{ steps.post-comment.outputs.result }}
+      environment-name: ${{ steps.set-outputs.outputs.environment-name }}
+      environment-url: ${{ steps.set-outputs.outputs.environment-url }}
+      run-id: ${{ steps.set-outputs.outputs.run-id }}
+      workflow-url: ${{ steps.set-outputs.outputs.workflow-url }}
+
+    permissions:
+      actions: read
+      contents: read
+      pull-requests: write
+
+    steps:
+
+    - name: Get environment name
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      id: get-environment-name
+      with:
+        result-encoding: string
+        script: |
+          const owner = context.payload.repository.owner.login;
+          const repo = context.payload.repository.name;
+          const username = context.payload.comment.user.login;
+
+          try {
+            await github.rest.repos.checkCollaborator({
+              owner,
+              repo,
+              username,
+            });
+          } catch (err) {
+            throw new Error(`Error: @${username} is not a repository collaborator.`);
+          }
+
+          const regex = /\/deploy ([a-zA-Z\d\-\_]+)/;
+          const arguments = regex.exec(context.payload.comment.body);
+
+          if (arguments === null || arguments.length < 2) {
+            throw new Error('Invalid command');
+          }
+
+          const environment = arguments[1].trim();
+          return environment;
+
+    - name: 'Find run for #${{ github.event.issue.number }}'
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      id: get-run
+      env:
+        PULL_NUMBER: ${{ github.event.issue.number }}
+        WORKFLOW_NAME: 'build'
+      with:
+        script: |
+          const pull_number = process.env.PULL_NUMBER;
+          const workflowName = process.env.WORKFLOW_NAME;
+
+          const owner = context.repo.owner;
+          const repo = context.repo.repo;
+
+          core.debug(`Getting pull request ${owner}/${repo}#${pull_number}`);
+          const { data: pull } = await github.rest.pulls.get({
+            owner,
+            repo,
+            pull_number,
+          });
+
+          if (!pull) {
+            throw new Error(`Pull request ${owner}/${repo}#${pull_number} not found.`);
+          }
+
+          const head_sha = pull.head.sha;
+          core.debug(`Getting workflow runs for ${owner}/${repo}#${pull_number}@${head_sha}`);
+          const { data: workflows } = await github.rest.actions.listWorkflowRunsForRepo({
+            owner,
+            repo,
+            event: 'pull_request',
+            head_sha,
+            status: 'success',
+          });
+          const run = workflows.workflow_runs.find((run) => run.name === workflowName);
+
+          if (!run) {
+            throw new Error(`No successful workflow run found for ${owner}/${repo}@${head_sha.slice(0, 7)} with name ${workflowName}.`);
+          }
+
+          core.setOutput('run-id', run.id);
+
+    - name: Set outputs
+      id: set-outputs
+      env:
+        ARTIFACT_RUN_ID: ${{ steps.get-run.outputs.run-id }}
+        ENVIRONMENT_NAME: ${{ steps.get-environment-name.outputs.result }}
+      shell: bash
+      run: |
+        application_name="londontravelmartincostello"
+        environment_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/deployments/${ENVIRONMENT_NAME}"
+        workflow_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+
+        if [ "${ENVIRONMENT_NAME}" == "production" ]
+        then
+          application_slot=""
+          application_url="https://londontravel.martincostello.com"
+        else
+          application_slot="dev"
+          application_url="https://londontravel-dev.martincostello.com"
+        fi
+
+        {
+          echo "application-name=${application_name}"
+          echo "application-slot=${application_slot}"
+          echo "application-url=${application_url}"
+          echo "environment-name=${ENVIRONMENT_NAME}"
+          echo "environment-url=${environment_url}"
+          echo "run-id=${ARTIFACT_RUN_ID}"
+          echo "workflow-url=${workflow_url}"
+        } >> "$GITHUB_OUTPUT"
+
+    - name: Post comment
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      id: post-comment
+      env:
+        ENVIRONMENT_NAME: ${{ steps.set-outputs.outputs.environment-name }}
+        ENVIRONMENT_URL: ${{ steps.set-outputs.outputs.environment-url }}
+        WORKFLOW_URL: ${{ steps.set-outputs.outputs.workflow-url }}
+      with:
+        result-encoding: string
+        script: |
+          const owner = context.payload.repository.owner.login;
+          const repo = context.payload.repository.name;
+          const issue_number = context.issue.number;
+          const environment = process.env.ENVIRONMENT_NAME;
+          const environment_url = process.env.ENVIRONMENT_URL;
+          const workflow_url = process.env.WORKFLOW_URL;
+
+          const { data: comment } = await github.rest.issues.createComment({
+            owner,
+            repo,
+            issue_number,
+            body: `Starting [deployment](${workflow_url}) to [${environment}](${environment_url}) :rocket:`,
+          });
+
+          return comment.id;
+
+  deploy:
+    name: ${{ needs.setup.outputs.environment-name }}
+    needs: [ setup ]
+    concurrency: ${{ needs.setup.outputs.environment-name }}_environment
+    runs-on: windows-latest
+
+    environment:
+      name: ${{ needs.setup.outputs.environment-name }}
+      url: ${{ needs.setup.outputs.application-url }}
+
+    permissions:
+      id-token: write
+      pull-requests: write
+
+    steps:
+
+    - name: Download artifacts
+      uses: actions/download-artifact@7a1cd3216ca9260cd8022db641d960b1db4d1be4 # v4.0.0
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        name: webapp
+        run-id: ${{ needs.setup.outputs.run-id }}
+
+    - name: Azure log in
+      uses: azure/login@de95379fe4dadc2defb305917eaa7e5dde727294 # v1.5.1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+    - name: Deploy to Azure App Service
+      uses: azure/webapps-deploy@145a0687697df1d8a28909569f6e5d86213041f9 # v3.0.0
+      with:
+        app-name: ${{ needs.setup.outputs.application-name }}
+        slot-name: ${{ needs.setup.outputs.application-slot }}
+
+    - name: Post comment
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      if: ${{ !cancelled() }}
+      env:
+        COMMENT_ID: ${{ needs.setup.outputs.comment-id }}
+        ENVIRONMENT_NAME: ${{ needs.setup.outputs.environment-name }}
+        ENVIRONMENT_URL: ${{ needs.setup.outputs.environment-url }}
+        OUTCOME: ${{ job.status }}
+        WORKFLOW_URL: ${{ needs.setup.outputs.workflow-url }}
+      with:
+        script: |
+          const owner = context.payload.repository.owner.login;
+          const repo = context.payload.repository.name;
+          const comment_id = process.env.COMMENT_ID;
+          const environment = process.env.ENVIRONMENT_NAME;
+          const environment_url = process.env.ENVIRONMENT_URL;
+          const workflow_url = process.env.WORKFLOW_URL;
+
+          const succeeded = process.env.OUTCOME === 'success';
+          const outcome = succeeded ? 'successful' : 'failed';
+          const emoji = succeeded ? ':white_check_mark:' : ':x:';
+
+          await github.rest.issues.updateComment({
+            owner,
+            repo,
+            comment_id,
+            body: `[Deployment](${workflow_url}) to [${environment}](${environment_url}) ${outcome} ${emoji}`,
+          });
+
+  tests:
+    name: tests-${{ needs.setup.outputs.environment-name }}
+    needs: [ setup, deploy ]
+    runs-on: ubuntu-latest
+    concurrency: '${{ needs.setup.outputs.environment-name }}_environment'
+
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+      DOTNET_GENERATE_ASPNET_CERTIFICATE: false
+      DOTNET_MULTILEVEL_LOOKUP: 0
+      DOTNET_NOLOGO: true
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: 1
+      FORCE_COLOR: 1
+      NUGET_XMLDOC_MODE: skip
+
+    permissions:
+      id-token: write
+      pull-requests: write
+
+    steps:
+
+    - name: Checkout code
+      uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@4d6c8fcf3c8f7a60068d26b594648e99df24cee3 # v4.0.0
+
+    - name: Setup NuGet cache
+      uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84 # v3.3.2
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/*.props') }}
+        restore-keys: ${{ runner.os }}-nuget-
+
+    - name: Setup Playwright cache
+      uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84 # v3.3.2
+      with:
+        key: ${{ runner.os }}-playwright-${{ hashFiles('Directory.Packages.props') }}
+        path: |
+          ~/AppData/Local/ms-playwright
+          ~/.cache/ms-playwright
+          ~/Library/Caches/ms-playwright
+
+    - name: Run end-to-end tests
+      shell: pwsh
+      run: dotnet test ./tests/LondonTravel.Site.Tests --configuration Release --filter Category=EndToEnd --logger "GitHubActions;report-warnings=false"
+      env:
+        WEBSITE_URL: ${{ needs.setup.outputs.application-url }}
+        WEBSITE_USER_GOOGLE_USERNAME: ${{ secrets.WEBSITE_USER_GOOGLE_USERNAME }}
+        WEBSITE_USER_GOOGLE_PASSWORD: ${{ secrets.WEBSITE_USER_GOOGLE_PASSWORD }}
+        WEBSITE_USER_MICROSOFT_USERNAME: ${{ secrets.WEBSITE_USER_MICROSOFT_USERNAME }}
+        WEBSITE_USER_MICROSOFT_PASSWORD: ${{ secrets.WEBSITE_USER_MICROSOFT_PASSWORD }}
+        WEBSITE_USER_TWITTER_USERNAME: ${{ secrets.WEBSITE_USER_TWITTER_USERNAME }}
+        WEBSITE_USER_TWITTER_PASSWORD: ${{ secrets.WEBSITE_USER_TWITTER_PASSWORD }}
+
+    - name: Publish screenshots
+      uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4.0.0
+      if: ${{ !cancelled() }}
+      with:
+        name: screenshots
+        path: ./artifacts/screenshots/*
+        if-no-files-found: ignore
+
+    - name: Publish traces
+      uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4.0.0
+      if: ${{ !cancelled() }}
+      with:
+        name: traces
+        path: ./artifacts/traces/*
+        if-no-files-found: ignore
+
+    - name: Publish videos
+      uses: actions/upload-artifact@c7d193f32edcb7bfad88892161225aeda64e9392 # v4.0.0
+      if: ${{ !cancelled() }}
+      with:
+        name: videos
+        path: ./artifacts/videos/*
+        if-no-files-found: ignore
+
+    - name: Post comment
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      if: ${{ !cancelled() }}
+      env:
+        COMMENT_ID: ${{ needs.setup.outputs.comment-id }}
+        ENVIRONMENT_NAME: ${{ needs.setup.outputs.environment-name }}
+        ENVIRONMENT_URL: ${{ needs.setup.outputs.environment-url }}
+        OUTCOME: ${{ job.status }}
+        WORKFLOW_URL: ${{ needs.setup.outputs.workflow-url }}
+      with:
+        script: |
+          const owner = context.payload.repository.owner.login;
+          const repo = context.payload.repository.name;
+          const comment_id = process.env.COMMENT_ID;
+          const environment = process.env.ENVIRONMENT_NAME;
+          const environment_url = process.env.ENVIRONMENT_URL;
+          const workflow_url = process.env.WORKFLOW_URL;
+
+          const succeeded = process.env.OUTCOME === 'success';
+          const outcome = succeeded ? 'passed' : 'failed';
+          const emoji = succeeded ? ':white_check_mark:' : ':x:';
+
+          await github.rest.issues.updateComment({
+            owner,
+            repo,
+            comment_id,
+            body: `:test_tube: [Tests](${workflow_url}) for deployment to [${environment}](${environment_url}) ${outcome} ${emoji}`,
+          });
