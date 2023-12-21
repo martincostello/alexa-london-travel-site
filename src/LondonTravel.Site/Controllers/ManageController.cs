@@ -10,8 +10,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-#pragma warning disable SA1010
-
 namespace MartinCostello.LondonTravel.Site.Controllers;
 
 [Authorize]
