@@ -1,6 +1,7 @@
 ﻿{
   "compileOnSave": true,
   "compilerOptions": {
+    "esModuleInterop": true,
     "inlineSources": true,
     "lib": [
       "dom",

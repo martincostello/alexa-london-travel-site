@@ -1,6 +1,7 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+import moment from 'moment';
 import { Banner } from './Banner';
 import { Manage } from './Manage';
 import { Preferences } from './Preferences';
@@ -71,21 +72,18 @@ export class App {
     }
 
     private updateBanner() {
-        if ('moment' in window) {
-            const element = document.getElementById('build-date');
-            const locale = document.querySelector('meta[name="x-request-locale"]').getAttribute('content');
+        const element = document.getElementById('build-date');
+        const locale = document.querySelector('meta[name="x-request-locale"]').getAttribute('content');
 
-            const moment = window['moment'] as any;
-            moment.locale(locale);
+        moment.locale(locale);
 
-            if (element) {
-                const timestamp = element.getAttribute('data-timestamp');
-                const format = element.getAttribute('data-format');
-                const value: any = moment(timestamp, format);
-                if (value.isValid()) {
-                    const text: string = value.fromNow();
-                    element.textContent = `| Last updated ${text}`;
-                }
+        if (element) {
+            const timestamp = element.getAttribute('data-timestamp');
+            const format = element.getAttribute('data-format');
+            const value = moment(timestamp, format);
+            if (value.isValid()) {
+                const text: string = value.fromNow();
+                element.textContent = `| Last updated ${text}`;
             }
         }
     }
