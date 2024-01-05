@@ -1,30 +1,27 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System.Collections;
 using Microsoft.Playwright;
 
 namespace MartinCostello.LondonTravel.Site;
 
-public sealed class BrowsersTestData : IEnumerable<object?[]>
+public sealed class BrowsersTestData : TheoryData<string, string?>
 {
-    public IEnumerator<object?[]> GetEnumerator()
+    public BrowsersTestData()
     {
-        yield return [BrowserType.Chromium, null];
-        yield return [BrowserType.Chromium, "chrome"];
+        Add(BrowserType.Chromium, null);
+        Add(BrowserType.Chromium, "chrome");
 
         if (!OperatingSystem.IsLinux())
         {
-            yield return [BrowserType.Chromium, "msedge"];
+            Add(BrowserType.Chromium, "msedge");
         }
 
-        yield return [BrowserType.Firefox, null];
+        Add(BrowserType.Firefox, null);
 
         if (OperatingSystem.IsMacOS())
         {
-            yield return [BrowserType.Webkit, null];
+            Add(BrowserType.Webkit, null);
         }
     }
-
-    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
