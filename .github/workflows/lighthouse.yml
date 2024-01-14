@@ -48,7 +48,7 @@ jobs:
         $Attempts = 0
         While ($Attempts -lt 10) {
           $Response = Try {
-            Invoke-WebRequest "https://localhost:5001" -SkipCertificateCheck
+            Invoke-WebRequest "https://localhost:50001" -SkipCertificateCheck
           } catch {
             $_.Exception.Response
           }
@@ -72,7 +72,7 @@ jobs:
         gitHubAccessToken: ${{ secrets.LIGHTHOUSE_ACCESS_TOKEN }}
         outputDirectory: ${{ github.workspace }}/artifacts/lighthouse
         prCommentEnabled: true
-        urls: 'https://localhost:5001'
+        urls: 'https://localhost:50001'
         wait: true
 
     - name: Check Lighthouse scores

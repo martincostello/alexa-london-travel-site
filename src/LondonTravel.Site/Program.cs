@@ -4,11 +4,11 @@
 using System.IO.Compression;
 using MartinCostello.LondonTravel.Site;
 using MartinCostello.LondonTravel.Site.Extensions;
+using MartinCostello.LondonTravel.Site.OpenApi;
 using MartinCostello.LondonTravel.Site.Options;
 using MartinCostello.LondonTravel.Site.Services;
 using MartinCostello.LondonTravel.Site.Services.Data;
 using MartinCostello.LondonTravel.Site.Services.Tfl;
-using MartinCostello.LondonTravel.Site.Swagger;
 using MartinCostello.LondonTravel.Site.Telemetry;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.ApplicationInsights.Extensibility;
@@ -114,7 +114,7 @@ builder.Services.AddHsts((options) =>
 });
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwagger(builder.Environment);
+builder.Services.AddOpenApi();
 
 builder.Services.Configure<GzipCompressionProviderOptions>((p) => p.Level = CompressionLevel.Fastest);
 builder.Services.Configure<BrotliCompressionProviderOptions>((p) => p.Level = CompressionLevel.Fastest);
@@ -221,10 +221,10 @@ app.MapDefaultControllerRoute();
 app.MapRazorPages();
 
 app.MapAlexa();
-app.MapApi(app.Logger);
+app.MapApi();
 app.MapRedirects();
 
-app.UseSwagger();
+app.UseOpenApi();
 
 app.UseCookiePolicy(new()
 {

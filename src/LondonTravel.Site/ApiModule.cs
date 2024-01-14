@@ -1,22 +1,22 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.ComponentModel;
 using System.Net;
 using System.Net.Http.Headers;
-using MartinCostello.LondonTravel.Site.Extensions;
 using MartinCostello.LondonTravel.Site.Identity;
 using MartinCostello.LondonTravel.Site.Models;
+using MartinCostello.LondonTravel.Site.OpenApi;
 using MartinCostello.LondonTravel.Site.Services;
-using MartinCostello.LondonTravel.Site.Swagger;
 using MartinCostello.LondonTravel.Site.Telemetry;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
+using NSwag.Annotations;
 
 namespace MartinCostello.LondonTravel.Site;
 
 public static partial class ApiModule
 {
-    public static IEndpointRouteBuilder MapApi(this IEndpointRouteBuilder app, ILogger logger)
+    public static IEndpointRouteBuilder MapApi(this IEndpointRouteBuilder app)
     {
         app.MapGet("/api/_count", async (IAccountService service) =>
         {
@@ -26,63 +26,71 @@ public static partial class ApiModule
         .ExcludeFromDescription()
         .RequireAuthorization("admin");
 
-        app.MapGet("/api/preferences", async (
-            [FromHeader(Name = "Authorization")][SwaggerParameter("The authorization header.")] string? authorizationHeader,
-            HttpContext httpContext,
-            IAccountService service,
-            ISiteTelemetry telemetry,
-            CancellationToken cancellationToken) =>
-        {
-            Log.RequestForPreferences(logger);
-
-            // TODO Consider allowing implicit access if the user is signed-in (i.e. access from a browser)
-            if (string.IsNullOrWhiteSpace(authorizationHeader))
-            {
-                Log.AccessDeniedNoAuthorization(logger, httpContext);
-                telemetry.TrackApiPreferencesUnauthorized();
-
-                return Results.Json(
-                    Unauthorized(httpContext, "No access token specified."),
-                    ApplicationJsonSerializerContext.Default.ErrorResponse,
-                    statusCode: StatusCodes.Status401Unauthorized);
-            }
-
-            LondonTravelUser? user = null;
-            string? accessToken = GetAccessTokenFromAuthorizationHeader(authorizationHeader, out string? errorDetail);
-
-            if (accessToken != null)
-            {
-                user = await service.GetUserByAccessTokenAsync(accessToken, cancellationToken);
-            }
-
-            if (user == null || !string.Equals(user.AlexaToken, accessToken, StringComparison.Ordinal))
-            {
-                Log.AccessDeniedUnknownToken(logger, httpContext);
-                telemetry.TrackApiPreferencesUnauthorized();
-
-                return Results.Json(
-                    Unauthorized(httpContext, "Unauthorized.", errorDetail),
-                    ApplicationJsonSerializerContext.Default.ErrorResponse,
-                    statusCode: StatusCodes.Status401Unauthorized);
-            }
-
-            Log.AccessAuthorized(logger, user.Id, httpContext);
-
-            var result = new PreferencesResponse()
-            {
-                FavoriteLines = user.FavoriteLines,
-                UserId = user.Id!,
-            };
-
-            telemetry.TrackApiPreferencesSuccess(result.UserId);
-
-            return Results.Json(result, ApplicationJsonSerializerContext.Default.PreferencesResponse);
-        })
-        .Produces<PreferencesResponse, PreferencesResponseExampleProvider>("The preferences associated with the provided access token.")
-        .Produces<ErrorResponse, ErrorResponseExampleProvider>("A valid access token was not provided.", StatusCodes.Status401Unauthorized)
-        .WithOperationDescription("Gets the preferences for a user associated with an access token.");
+        app.MapGet("/api/preferences", GetPreferences);
 
         return app;
+    }
+
+    [OpenApiExample<ErrorResponse>]
+    [OpenApiExample<PreferencesResponse>]
+    [OpenApiOperation("Gets a user's preferences.", "Gets the preferences for a user associated with an access token.")]
+    [OpenApiTag("LondonTravel.Site")]
+    [SwaggerResponse(StatusCodes.Status200OK, typeof(PreferencesResponse), Description = "The preferences associated with the provided access token.")]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized, typeof(ErrorResponse), Description = "A valid access token was not provided.")]
+    private static async Task<IResult> GetPreferences(
+        [Description("The authorization header.")] [FromHeader(Name = "Authorization")] string? authorizationHeader,
+        HttpContext httpContext,
+        IAccountService service,
+        ISiteTelemetry telemetry,
+        ILoggerFactory loggerFactory,
+        CancellationToken cancellationToken)
+    {
+        var logger = loggerFactory.CreateLogger("MartinCostello.LondonTravel.Site.ApiModule");
+
+        Log.RequestForPreferences(logger);
+
+        // TODO Consider allowing implicit access if the user is signed-in (i.e. access from a browser)
+        if (string.IsNullOrWhiteSpace(authorizationHeader))
+        {
+            Log.AccessDeniedNoAuthorization(logger, httpContext);
+            telemetry.TrackApiPreferencesUnauthorized();
+
+            return Results.Json(
+                Unauthorized(httpContext, "No access token specified."),
+                ApplicationJsonSerializerContext.Default.ErrorResponse,
+                statusCode: StatusCodes.Status401Unauthorized);
+        }
+
+        LondonTravelUser? user = null;
+        string? accessToken = GetAccessTokenFromAuthorizationHeader(authorizationHeader, out string? errorDetail);
+
+        if (accessToken != null)
+        {
+            user = await service.GetUserByAccessTokenAsync(accessToken, cancellationToken);
+        }
+
+        if (user == null || !string.Equals(user.AlexaToken, accessToken, StringComparison.Ordinal))
+        {
+            Log.AccessDeniedUnknownToken(logger, httpContext);
+            telemetry.TrackApiPreferencesUnauthorized();
+
+            return Results.Json(
+                Unauthorized(httpContext, "Unauthorized.", errorDetail),
+                ApplicationJsonSerializerContext.Default.ErrorResponse,
+                statusCode: StatusCodes.Status401Unauthorized);
+        }
+
+        Log.AccessAuthorized(logger, user.Id, httpContext);
+
+        var result = new PreferencesResponse()
+        {
+            FavoriteLines = user.FavoriteLines,
+            UserId = user.Id!,
+        };
+
+        telemetry.TrackApiPreferencesSuccess(result.UserId);
+
+        return Results.Json(result, ApplicationJsonSerializerContext.Default.PreferencesResponse);
     }
 
     private static string? GetAccessTokenFromAuthorizationHeader(string authorizationHeader, out string? errorDetail)
