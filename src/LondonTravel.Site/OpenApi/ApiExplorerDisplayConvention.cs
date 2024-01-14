@@ -5,7 +5,7 @@ using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
-namespace MartinCostello.LondonTravel.Site.Swagger;
+namespace MartinCostello.LondonTravel.Site.OpenApi;
 
 /// <summary>
 /// A class representing the convention for displaying routes in API documentation. This class cannot be inherited.

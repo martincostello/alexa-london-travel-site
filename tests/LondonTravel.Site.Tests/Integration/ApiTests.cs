@@ -135,7 +135,7 @@ public class ApiTests(TestServerFixture fixture, ITestOutputHelper outputHelper)
 
         // Assert
         actual.ShouldNotBeNull();
-        actual.RootElement.GetString("openapi").ShouldBe("3.0.1");
+        actual.RootElement.GetString("openapi").ShouldBe("3.0.0");
         actual.RootElement.GetProperty("info").ValueKind.ShouldBe(JsonValueKind.Object);
         actual.RootElement.GetProperty("components").GetProperty("schemas").EnumerateObject().Count().ShouldBe(2);
         actual.RootElement.GetProperty("paths").EnumerateObject().Count().ShouldBe(1);

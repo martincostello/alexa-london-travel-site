@@ -3,19 +3,20 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using MartinCostello.LondonTravel.Site.Swagger;
+using MartinCostello.LondonTravel.Site.OpenApi;
+using Newtonsoft.Json;
 
 namespace MartinCostello.LondonTravel.Site.Models;
 
 /// <summary>
 /// Represents an error from an API resource.
 /// </summary>
-[SwaggerTypeExample(typeof(ErrorResponseExampleProvider))]
-public sealed class ErrorResponse
+public sealed class ErrorResponse : IExampleProvider<ErrorResponse>
 {
     /// <summary>
     /// Gets or sets the HTTP status code.
     /// </summary>
+    [JsonProperty("statusCode")]
     [JsonPropertyName("statusCode")]
     [Required]
     public int StatusCode { get; set; }
@@ -23,6 +24,7 @@ public sealed class ErrorResponse
     /// <summary>
     /// Gets or sets the error message.
     /// </summary>
+    [JsonProperty("message")]
     [JsonPropertyName("message")]
     [Required]
     public string Message { get; set; } = string.Empty;
@@ -30,6 +32,7 @@ public sealed class ErrorResponse
     /// <summary>
     /// Gets or sets the request Id.
     /// </summary>
+    [JsonProperty("requestId")]
     [JsonPropertyName("requestId")]
     [Required]
     public string RequestId { get; set; } = string.Empty;
@@ -37,7 +40,20 @@ public sealed class ErrorResponse
     /// <summary>
     /// Gets or sets the error details, if any.
     /// </summary>
+    [JsonProperty("details")]
     [JsonPropertyName("details")]
     [Required]
     public ICollection<string> Details { get; set; } = new List<string>();
+
+    /// <inheritdoc/>
+    public static object GenerateExample()
+    {
+        return new ErrorResponse()
+        {
+            Message = "Unauthorized.",
+            RequestId = "0HKT0TM6UJASI",
+            StatusCode = 401,
+            Details = ["Only the Bearer authorization scheme is supported."],
+        };
+    }
 }

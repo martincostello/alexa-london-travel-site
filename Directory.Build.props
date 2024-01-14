@@ -51,16 +51,4 @@
   <ItemGroup>
     <Using Include="System.Globalization" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(IsTestProject)' == 'true' ">
-    <Using Include="Shouldly" />
-    <Using Include="Xunit" />
-    <Using Include="Xunit.Abstractions" />
-  </ItemGroup>
-  <PropertyGroup Condition=" '$(BuildingInsideVisualStudio)' == '' ">
-    <CollectCoverage Condition=" '$(WEBSITE_URL)' == '' ">true</CollectCoverage>
-    <CoverletOutputFormat>cobertura,json</CoverletOutputFormat>
-    <Exclude>[AspNet.Security.OAuth*]*,[Refit*]*,[xunit.*]*</Exclude>
-    <ExcludeByAttribute>GeneratedCodeAttribute</ExcludeByAttribute>
-    <Threshold>69</Threshold>
-  </PropertyGroup>
 </Project>
