@@ -1,10 +1,12 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Reflection;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 using MartinCostello.LondonTravel.Site.Options;
 using MartinCostello.LondonTravel.Site.Services.Tfl;
-using Microsoft.AspNetCore.Http.Json;
-using Microsoft.Extensions.Options;
 using Refit;
 
 namespace MartinCostello.LondonTravel.Site.Extensions;
@@ -40,11 +42,8 @@ public static class HttpServiceCollectionExtensions
 
         services.AddHttpClient<ITflClient, ITflClient>(AddTfl);
 
-        services.AddSingleton<IHttpContentSerializer>((p) =>
-        {
-            var options = p.GetRequiredService<IOptions<JsonOptions>>().Value;
-            return new SystemTextJsonContentSerializer(options.SerializerOptions);
-        });
+        services.AddSingleton<IHttpContentSerializer>(
+            (p) => new SourceGeneratorHttpContentSerializer(ApplicationJsonSerializerContext.Default));
 
         return services;
     }
@@ -68,5 +67,29 @@ public static class HttpServiceCollectionExtensions
         };
 
         return RestService.For<ITflClient>(client, settings);
+    }
+
+    private sealed class SourceGeneratorHttpContentSerializer(JsonSerializerContext context) : IHttpContentSerializer
+    {
+        public async Task<T?> FromHttpContentAsync<T>(HttpContent content, CancellationToken cancellationToken = default)
+        {
+            using var stream = await content.ReadAsStreamAsync(cancellationToken);
+            var jsonTypeInfo = context.GetTypeInfo(typeof(T)) as JsonTypeInfo<T>;
+            return await JsonSerializer.DeserializeAsync(stream, jsonTypeInfo!, cancellationToken);
+        }
+
+        public string? GetFieldNameForProperty(PropertyInfo propertyInfo)
+        {
+            return propertyInfo
+                .GetCustomAttributes<JsonPropertyNameAttribute>(true)
+                .Select((p) => p.Name)
+                .FirstOrDefault();
+        }
+
+        public HttpContent ToHttpContent<T>(T item)
+        {
+            var jsonTypeInfo = context.GetTypeInfo(typeof(T));
+            return JsonContent.Create(item, jsonTypeInfo!);
+        }
     }
 }
