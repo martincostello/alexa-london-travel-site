@@ -16,7 +16,7 @@ public static class IHttpClientBuilderExtensions
     /// <summary>
     /// The lazily-initialized User Agent to use for all requests. This field is read-only.
     /// </summary>
-    private static readonly Lazy<ProductInfoHeaderValue> _userAgent = new(CreateUserAgent);
+    private static readonly ProductInfoHeaderValue _userAgent = CreateUserAgent();
 
     /// <summary>
     /// Applies the default configuration to the <see cref="IHttpClientBuilder"/>.
@@ -29,10 +29,14 @@ public static class IHttpClientBuilderExtensions
     {
         builder.Services.AddTransient<CorrelationIdHandler>();
 
-        return builder
+        var httpClientBuilder = builder
             .ConfigurePrimaryHttpMessageHandler(CreatePrimaryHttpHandler)
             .ConfigureHttpClient(ApplyDefaultConfiguration)
             .AddHttpMessageHandler<CorrelationIdHandler>();
+
+        httpClientBuilder.AddStandardResilienceHandler();
+
+        return httpClientBuilder;
     }
 
     /// <summary>
@@ -43,9 +47,7 @@ public static class IHttpClientBuilderExtensions
     /// The <see cref="IHttpClientBuilder"/> passed as the value of <paramref name="builder"/>.
     /// </returns>
     public static IHttpClientBuilder ApplyRemoteAuthenticationConfiguration(this IHttpClientBuilder builder)
-    {
-        return builder.ConfigureHttpClient(ApplyRemoteAuthenticationConfiguration);
-    }
+        => builder.ConfigureHttpClient(ApplyRemoteAuthenticationConfiguration);
 
     /// <summary>
     /// Applies the default configuration to <see cref="HttpClient"/> instances.
@@ -53,7 +55,7 @@ public static class IHttpClientBuilderExtensions
     /// <param name="client">The <see cref="HttpClient"/> to configure.</param>
     private static void ApplyDefaultConfiguration(HttpClient client)
     {
-        client.DefaultRequestHeaders.UserAgent.Add(_userAgent.Value);
+        client.DefaultRequestHeaders.UserAgent.Add(_userAgent);
         client.Timeout = Debugger.IsAttached ? TimeSpan.FromMinutes(1) : TimeSpan.FromSeconds(20);
     }
 

@@ -4,7 +4,6 @@
 using MartinCostello.LondonTravel.Site.Options;
 using MartinCostello.LondonTravel.Site.Services.Tfl;
 using Microsoft.AspNetCore.Http.Json;
-using Microsoft.Extensions.Http.Resilience;
 using Microsoft.Extensions.Options;
 using Refit;
 
@@ -24,31 +23,22 @@ public static class HttpServiceCollectionExtensions
     /// </returns>
     public static IServiceCollection AddHttpClients(this IServiceCollection services)
     {
-        services
-            .AddHttpClient(Microsoft.Extensions.Options.Options.DefaultName)
-            .ApplyDefaultConfiguration()
-            .AddStandardResilienceHandler();
+        services.AddHttpClient()
+                .ConfigureHttpClientDefaults((p) => p.ApplyDefaultConfiguration());
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<SiteOptions>();
 
-        if (options.Authentication?.ExternalProviders != null)
+        if (options.Authentication?.ExternalProviders is { } providers)
         {
-            foreach (string providerName in options.Authentication.ExternalProviders.Keys)
+            foreach (string name in providers.Keys)
             {
-                services
-                    .AddHttpClient(providerName)
-                    .ApplyDefaultConfiguration()
-                    .ApplyRemoteAuthenticationConfiguration()
-                    .AddStandardResilienceHandler();
+                services.AddHttpClient(name)
+                        .ApplyRemoteAuthenticationConfiguration();
             }
         }
 
-        services
-            .AddHttpClient(nameof(ITflClient))
-            .AddTypedClient(AddTfl)
-            .ApplyDefaultConfiguration()
-            .AddStandardResilienceHandler();
+        services.AddHttpClient<ITflClient, ITflClient>(AddTfl);
 
         services.AddSingleton<IHttpContentSerializer>((p) =>
         {
