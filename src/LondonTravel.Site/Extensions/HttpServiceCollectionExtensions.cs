@@ -21,6 +21,7 @@ public static class HttpServiceCollectionExtensions
     public static IServiceCollection AddHttpClients(this IServiceCollection services)
     {
         services.AddHttpClient()
+                .AddHttpClient(string.Empty)
                 .ApplyDefaultConfiguration();
 
         //// TODO Re-enable when fixed in .NET 8.0.2
