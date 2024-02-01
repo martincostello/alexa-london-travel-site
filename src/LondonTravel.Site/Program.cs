@@ -181,7 +181,6 @@ builder.Services.AddScoped<SiteResources>();
 
 builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddTransient<AlexaService>();
-builder.Services.AddTransient<ITflService, TflService>();
 builder.Services.AddTransient((p) => p.GetRequiredService<IOptionsMonitor<SiteOptions>>().CurrentValue);
 builder.Services.AddTransient((p) => p.GetRequiredService<IOptionsMonitor<SiteOptions>>().CurrentValue.Authentication!.UserStore!);
 builder.Services.AddTransient((p) => p.GetRequiredService<IOptionsMonitor<SiteOptions>>().CurrentValue.Tfl!);

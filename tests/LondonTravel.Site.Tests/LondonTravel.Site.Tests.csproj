@@ -40,7 +40,7 @@
   <PropertyGroup Condition=" '$(BuildingInsideVisualStudio)' == '' ">
     <CollectCoverage Condition=" '$(WEBSITE_URL)' == '' ">true</CollectCoverage>
     <CoverletOutputFormat>cobertura,json</CoverletOutputFormat>
-    <Exclude>[AspNet.Security.OAuth*]*,[Refit*]*,[xunit.*]*</Exclude>
+    <Exclude>[AspNet.Security.OAuth*]*,[xunit.*]*</Exclude>
     <ExcludeByAttribute>GeneratedCodeAttribute</ExcludeByAttribute>
     <Threshold>70</Threshold>
   </PropertyGroup>

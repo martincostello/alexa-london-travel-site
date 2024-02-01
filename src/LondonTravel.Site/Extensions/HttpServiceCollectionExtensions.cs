@@ -1,13 +1,8 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using System.Reflection;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Text.Json.Serialization.Metadata;
 using MartinCostello.LondonTravel.Site.Options;
 using MartinCostello.LondonTravel.Site.Services.Tfl;
-using Refit;
 
 namespace MartinCostello.LondonTravel.Site.Extensions;
 
@@ -40,56 +35,11 @@ public static class HttpServiceCollectionExtensions
             }
         }
 
-        services.AddHttpClient<ITflClient, ITflClient>(AddTfl);
-
-        services.AddSingleton<IHttpContentSerializer>(
-            (p) => new SourceGeneratorHttpContentSerializer(ApplicationJsonSerializerContext.Default));
+        services.AddHttpClient<ITflService, TflService>("TfL", (provider, client) =>
+        {
+            client.BaseAddress = provider.GetRequiredService<TflOptions>().BaseUri;
+        });
 
         return services;
-    }
-
-    /// <summary>
-    /// Adds a typed client for the TfL API.
-    /// </summary>
-    /// <param name="client">The <see cref="HttpClient"/> to configure the client with.</param>
-    /// <param name="provider">The <see cref="IServiceProvider"/> to use.</param>
-    /// <returns>
-    /// The <see cref="ITflClient"/> to use.
-    /// </returns>
-    private static ITflClient AddTfl(HttpClient client, IServiceProvider provider)
-    {
-        client.BaseAddress = provider.GetRequiredService<TflOptions>().BaseUri;
-
-        var settings = new RefitSettings()
-        {
-            ContentSerializer = provider.GetRequiredService<IHttpContentSerializer>(),
-            HttpMessageHandlerFactory = () => provider.GetRequiredService<IHttpMessageHandlerFactory>().CreateHandler(),
-        };
-
-        return RestService.For<ITflClient>(client, settings);
-    }
-
-    private sealed class SourceGeneratorHttpContentSerializer(JsonSerializerContext context) : IHttpContentSerializer
-    {
-        public async Task<T?> FromHttpContentAsync<T>(HttpContent content, CancellationToken cancellationToken = default)
-        {
-            using var stream = await content.ReadAsStreamAsync(cancellationToken);
-            var jsonTypeInfo = context.GetTypeInfo(typeof(T)) as JsonTypeInfo<T>;
-            return await JsonSerializer.DeserializeAsync(stream, jsonTypeInfo!, cancellationToken);
-        }
-
-        public string? GetFieldNameForProperty(PropertyInfo propertyInfo)
-        {
-            return propertyInfo
-                .GetCustomAttributes<JsonPropertyNameAttribute>(true)
-                .Select((p) => p.Name)
-                .FirstOrDefault();
-        }
-
-        public HttpContent ToHttpContent<T>(T item)
-        {
-            var jsonTypeInfo = context.GetTypeInfo(typeof(T));
-            return JsonContent.Create(item, jsonTypeInfo!);
-        }
     }
 }
