@@ -21,7 +21,10 @@ public static class HttpServiceCollectionExtensions
     public static IServiceCollection AddHttpClients(this IServiceCollection services)
     {
         services.AddHttpClient()
-                .ConfigureHttpClientDefaults((p) => p.ApplyDefaultConfiguration());
+                .ApplyDefaultConfiguration();
+
+        //// TODO Re-enable when fixed in .NET 8.0.2
+        ////.ConfigureHttpClientDefaults((p) => p.ApplyDefaultConfiguration());
 
         using var serviceProvider = services.BuildServiceProvider();
         var options = serviceProvider.GetRequiredService<SiteOptions>();
@@ -31,6 +34,7 @@ public static class HttpServiceCollectionExtensions
             foreach (string name in providers.Keys)
             {
                 services.AddHttpClient(name)
+                        .ApplyDefaultConfiguration()
                         .ApplyRemoteAuthenticationConfiguration();
             }
         }
@@ -38,7 +42,7 @@ public static class HttpServiceCollectionExtensions
         services.AddHttpClient<ITflService, TflService>("TfL", (provider, client) =>
         {
             client.BaseAddress = provider.GetRequiredService<TflOptions>().BaseUri;
-        });
+        }).ApplyDefaultConfiguration();
 
         return services;
     }
