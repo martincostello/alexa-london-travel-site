@@ -1,9 +1,10 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Text.Json.Serialization.Metadata;
 using MartinCostello.LondonTravel.Site.Options;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Caching.Memory;
-using Refit;
 
 namespace MartinCostello.LondonTravel.Site.Services.Tfl;
 
@@ -13,30 +14,34 @@ namespace MartinCostello.LondonTravel.Site.Services.Tfl;
 /// <remarks>
 /// Initializes a new instance of the <see cref="TflService"/> class.
 /// </remarks>
-/// <param name="client">The <see cref="ITflClient"/> to use.</param>
+/// <param name="client">The <see cref="HttpClient"/> to use.</param>
 /// <param name="cache">The <see cref="IMemoryCache"/> to use.</param>
 /// <param name="options">The <see cref="TflOptions"/> to use.</param>
-public sealed class TflService(ITflClient client, IMemoryCache cache, TflOptions options) : ITflService
+public sealed class TflService(HttpClient client, IMemoryCache cache, TflOptions options) : ITflService
 {
     /// <inheritdoc />
-    public Task<ICollection<LineInfo>> GetLinesAsync(CancellationToken cancellationToken = default)
+    public async Task<ICollection<LineInfo>> GetLinesAsync(CancellationToken cancellationToken = default)
     {
-        const string CacheKey = "TfL.AvailableLines";
-        string supportedModes = string.Join(',', options.SupportedModes ?? Array.Empty<string>());
+        string supportedModes = string.Join(',', options.SupportedModes ?? []);
+        supportedModes = Uri.EscapeDataString(supportedModes);
 
-        return GetWithCachingAsync(
-            CacheKey,
-            () => client.GetLinesAsync(supportedModes, options.AppId!, options.AppKey!, cancellationToken));
+        var requestUri = CreateUri($"Line/Mode/{supportedModes}");
+
+        return await GetWithCachingAsync(
+            "TfL.AvailableLines",
+            ApplicationJsonSerializerContext.Default.ICollectionLineInfo,
+            () => client.GetAsync(requestUri, cancellationToken));
     }
 
     /// <inheritdoc />
-    public Task<ICollection<StopPoint>> GetStopPointsByLineAsync(string lineId, CancellationToken cancellationToken = default)
+    public async Task<ICollection<StopPoint>> GetStopPointsByLineAsync(string lineId, CancellationToken cancellationToken = default)
     {
-        string cacheKey = $"TfL.{lineId}.StopPoints";
+        var requestUri = CreateUri($"/Line/{lineId}/StopPoints");
 
-        return GetWithCachingAsync(
-            cacheKey,
-            () => client.GetStopPointsAsync(lineId, options.AppId!, options.AppKey!, cancellationToken));
+        return await GetWithCachingAsync(
+            $"TfL.{lineId}.StopPoints",
+            ApplicationJsonSerializerContext.Default.ICollectionStopPoint,
+            () => client.GetAsync(requestUri, cancellationToken));
     }
 
     /// <summary>
@@ -45,19 +50,23 @@ public sealed class TflService(ITflClient client, IMemoryCache cache, TflOptions
     /// </summary>
     /// <typeparam name="T">The type of the resource to return.</typeparam>
     /// <param name="cacheKey">The cache key to use for the response.</param>
+    /// <param name="jsonTypeInfo">The <see cref="JsonTypeInfo{T}"/> to use the deserialize the response.</param>
     /// <param name="operation">A delegate to a method to use to get the API response.</param>
     /// <returns>
     /// A <see cref="Task{TResult}"/> representing the asynchronous operation to get the
     /// resource of <typeparamref name="T"/> from calling the specified delegate.
     /// </returns>
-    private async Task<T> GetWithCachingAsync<T>(string cacheKey, Func<Task<ApiResponse<T>>> operation)
+    private async Task<T> GetWithCachingAsync<T>(
+        string cacheKey,
+        JsonTypeInfo<T> jsonTypeInfo,
+        Func<Task<HttpResponseMessage>> operation)
     {
         if (!cache.TryGetValue(cacheKey, out T? result))
         {
             using var response = await operation();
-            await response.EnsureSuccessStatusCodeAsync();
+            response.EnsureSuccessStatusCode();
 
-            result = response.Content;
+            result = await response.Content.ReadFromJsonAsync(jsonTypeInfo);
 
             if (!string.IsNullOrEmpty(cacheKey) &&
                 response.Headers.CacheControl != null &&
@@ -68,5 +77,23 @@ public sealed class TflService(ITflClient client, IMemoryCache cache, TflOptions
         }
 
         return result!;
+    }
+
+    private Uri CreateUri(string path)
+    {
+        string query = QueryHelpers.AddQueryString(
+            string.Empty,
+            [
+                KeyValuePair.Create("app_id", options.AppId),
+                KeyValuePair.Create("app_key", options.AppKey),
+            ]);
+
+        var builder = new UriBuilder()
+        {
+            Path = path,
+            Query = query,
+        };
+
+        return new(client.BaseAddress!, builder.Uri.PathAndQuery);
     }
 }

@@ -351,7 +351,7 @@ public partial class ManageController(
 
             var validLines = lines.Select((p) => p.Id).ToList();
 
-            return model.FavoriteLines.All((p) => validLines.Contains(p));
+            return model.FavoriteLines.All(validLines.Contains);
         }
 
         return true;
