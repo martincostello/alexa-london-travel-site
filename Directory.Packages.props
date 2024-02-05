@@ -29,7 +29,7 @@
     <PackageVersion Include="Microsoft.Playwright" Version="1.41.2" />
     <PackageVersion Include="Microsoft.TypeScript.MSBuild" Version="5.3.3" />
     <PackageVersion Include="NSubstitute" Version="5.1.0" />
-    <PackageVersion Include="NSwag.AspNetCore" Version="14.0.2" />
+    <PackageVersion Include="NSwag.AspNetCore" Version="14.0.3" />
     <PackageVersion Include="Polly.Extensions" Version="$(PollyVersion)" />
     <PackageVersion Include="Polly.RateLimiting" Version="$(PollyVersion)" />
     <PackageVersion Include="ReportGenerator" Version="5.2.0" />
