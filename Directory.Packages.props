@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <AspNetSecurityOAuthVersion>8.0.0</AspNetSecurityOAuthVersion>
-    <PollyVersion>8.2.1</PollyVersion>
+    <PollyVersion>8.3.0</PollyVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="AspNet.Security.OAuth.Amazon" Version="$(AspNetSecurityOAuthVersion)" />
