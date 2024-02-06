@@ -13,7 +13,7 @@
     <PackageVersion Include="Azure.Identity" Version="1.10.4" />
     <PackageVersion Include="coverlet.msbuild" Version="6.0.0" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.3.3" />
-    <PackageVersion Include="JustEat.HttpClientInterception" Version="4.1.0" />
+    <PackageVersion Include="JustEat.HttpClientInterception" Version="4.2.0" />
     <PackageVersion Include="MartinCostello.Logging.XUnit" Version="0.3.0" />
     <PackageVersion Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.22.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.Facebook" Version="8.0.1" />
