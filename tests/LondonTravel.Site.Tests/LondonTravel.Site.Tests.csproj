@@ -6,7 +6,7 @@
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <RootNamespace>MartinCostello.LondonTravel.Site</RootNamespace>
     <Summary>Tests for the London Travel website</Summary>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="testsettings.json;xunit.runner.json;Integration\apple-test-cert.p8;Integration\*-http-bundle.json" CopyToOutputDirectory="PreserveNewest" />
