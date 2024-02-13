@@ -1,7 +1,7 @@
 {
   "name": "london-travel-site",
   "private": true,
-  "version": "8.0.0",
+  "version": "9.0.0",
   "description": "The companion site for the London Travel Amazon Alexa skill",
   "scripts": {
     "build": "npm run compile && npm run format && npm run lint",
