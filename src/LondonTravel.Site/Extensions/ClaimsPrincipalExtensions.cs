@@ -38,13 +38,13 @@ public static class ClaimsPrincipalExtensions
 #pragma warning disable CA1308
         string normalized = email.Trim().ToLowerInvariant();
         byte[] buffer = Encoding.UTF8.GetBytes(normalized);
+#pragma warning restore CA1308
 
 #pragma warning disable CA5351
         byte[] hash = System.Security.Cryptography.MD5.HashData(buffer);
 #pragma warning restore CA5351
 
-        string hashString = Convert.ToHexString(hash).ToLowerInvariant();
-#pragma warning restore CA1308
+        string hashString = Convert.ToHexStringLower(hash);
 
 #pragma warning disable SYSLIB0013
         string escapedFallback = Uri.EscapeUriString(fallbackImageUrl);
