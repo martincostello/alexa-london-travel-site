@@ -20,7 +20,7 @@ public static class IUrlHelperExtensions
     public static string AbsoluteContent(this IUrlHelper value, string contentPath)
     {
         var request = value.ActionContext.HttpContext.Request;
-        return value.ToAbsolute(request.Host.Value, contentPath);
+        return value.ToAbsolute(request.Host.Value ?? string.Empty, contentPath);
     }
 
     /// <summary>
