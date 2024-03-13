@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <AspNetSecurityOAuthVersion>9.0.0-preview.1.24129.76</AspNetSecurityOAuthVersion>
+    <AspNetSecurityOAuthVersion>9.0.0-preview.2.24162.89</AspNetSecurityOAuthVersion>
     <PollyVersion>8.3.1</PollyVersion>
   </PropertyGroup>
   <ItemGroup>
