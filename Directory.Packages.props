@@ -16,15 +16,15 @@
     <PackageVersion Include="JustEat.HttpClientInterception" Version="4.2.1" />
     <PackageVersion Include="MartinCostello.Logging.XUnit" Version="0.3.0" />
     <PackageVersion Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.22.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Facebook" Version="9.0.0-preview.3.24162.20" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="9.0.0-preview.3.24162.20" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="9.0.0-preview.3.24162.20" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Twitter" Version="9.0.0-preview.3.24162.20" />
-    <PackageVersion Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" Version="9.0.0-preview.3.24162.20" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.0-preview.3.24162.20" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Facebook" Version="9.0.0-preview.3.24163.1" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="9.0.0-preview.3.24163.1" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="9.0.0-preview.3.24163.1" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Twitter" Version="9.0.0-preview.3.24163.1" />
+    <PackageVersion Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" Version="9.0.0-preview.3.24163.1" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.0-preview.3.24163.1" />
     <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.38.1" />
     <PackageVersion Include="Microsoft.DotNet.XliffTasks" Version="1.0.0-beta.21452.1" />
-    <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="9.0.0-preview.3.24162.12" />
+    <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="9.0.0-preview.3.24163.5" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
     <PackageVersion Include="Microsoft.Playwright" Version="1.42.0" />
     <PackageVersion Include="Microsoft.TypeScript.MSBuild" Version="5.4.4" />
