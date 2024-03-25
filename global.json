@@ -1,6 +1,6 @@
 {
   "sdk": {
-    "version": "9.0.100-preview.4.24174.1",
+    "version": "9.0.100-preview.4.24175.2",
     "allowPrerelease": false,
     "rollForward": "latestMajor"
   }
