@@ -48,10 +48,7 @@ public partial class ManageController(
             }
         }
 
-        userLogins = userLogins
-            .OrderBy((p) => p.ProviderDisplayName)
-            .ThenBy((p) => p.LoginProvider)
-            .ToList();
+        userLogins = [.. userLogins.OrderBy((p) => p.ProviderDisplayName).ThenBy((p) => p.LoginProvider)];
 
         var model = new ManageViewModel()
         {
@@ -312,9 +309,7 @@ public partial class ManageController(
             Log.UpdatingLinePreferences(logger, user.Id);
 
             var existingLines = user.FavoriteLines;
-            var newLines = user.FavoriteLines = (model.FavoriteLines ?? Array.Empty<string>())
-                .OrderBy((p) => p, StringComparer.Ordinal)
-                .ToArray();
+            var newLines = user.FavoriteLines = [.. (model.FavoriteLines ?? []).OrderBy((p) => p, StringComparer.Ordinal)];
 
             // Override the ETag with the one in the model to ensure write consistency
             user.ETag = model.ETag;
@@ -338,16 +333,14 @@ public partial class ManageController(
     }
 
     private static string FormatErrors(IdentityResult result)
-    {
-        return string.Join(';', result.Errors.Select((p) => $"{p.Code}: {p.Description}"));
-    }
+        => string.Join(';', result.Errors.Select((p) => $"{p.Code}: {p.Description}"));
 
     private async Task<bool> AreLinesValidAsync(UpdateLinePreferencesViewModel model, CancellationToken cancellationToken)
     {
         if (model.FavoriteLines != null)
         {
-            ITflService service = tflServiceFactory.CreateService();
-            ICollection<LineInfo> lines = await service.GetLinesAsync(cancellationToken);
+            var service = tflServiceFactory.CreateService();
+            var lines = await service.GetLinesAsync(cancellationToken);
 
             var validLines = lines.Select((p) => p.Id).ToList();
 
@@ -358,9 +351,7 @@ public partial class ManageController(
     }
 
     private async Task<LondonTravelUser?> GetCurrentUserAsync()
-    {
-        return await userManager.GetUserAsync(HttpContext.User);
-    }
+        => await userManager.GetUserAsync(HttpContext.User);
 
     private async Task<IdentityResult> UpdateClaimsAsync(LondonTravelUser user, ExternalLoginInfo info)
     {
@@ -378,8 +369,7 @@ public partial class ManageController(
                 .Where((p) => p.ClaimType == claim.Type)
                 .Where((p) => p.Issuer == claim.Issuer)
                 .Where((p) => p.Value == claim.Value)
-                .Where((p) => p.ValueType == claim.ValueType)
-                .Any();
+                .Any((p) => p.ValueType == claim.ValueType);
 
             if (!hasClaim)
             {

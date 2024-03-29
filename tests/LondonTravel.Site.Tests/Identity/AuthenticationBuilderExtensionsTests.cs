@@ -42,5 +42,5 @@ public static class AuthenticationBuilderExtensionsTests
         httpContext.Response.GetTypedHeaders().Location!.OriginalString.ShouldBe(expected);
     }
 
-    private static Dictionary<string, string?> PropertiesProvider<T>(T value) => new();
+    private static Dictionary<string, string?> PropertiesProvider<T>(T value) => [];
 }

@@ -331,11 +331,11 @@ public class AlexaServiceTests(ITestOutputHelper outputHelper)
             {
                 ClientId = "my-client-id",
                 IsLinkingEnabled = true,
-                RedirectUrls = new[]
-                {
+                RedirectUrls =
+                [
                     "https://alexa.amazon.com/alexa-london-travel?foo=bar",
                     "https://alexa.amazon.com/alexa-london-travel/link",
-                },
+                ],
             },
         };
     }

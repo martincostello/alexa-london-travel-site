@@ -172,7 +172,7 @@ builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddSingleton<ISiteTelemetry, SiteTelemetry>();
 builder.Services.AddSingleton<ITelemetryInitializer, SiteTelemetryInitializer>();
 builder.Services.AddSingleton<ITflServiceFactory, TflServiceFactory>();
-builder.Services.AddSingleton((p) => DocumentHelpers.CreateClient(p));
+builder.Services.AddSingleton(DocumentHelpers.CreateClient);
 builder.Services.TryAddSingleton<IDocumentService, DocumentService>();
 builder.Services.TryAddSingleton<IDocumentCollectionInitializer, DocumentCollectionInitializer>();
 
@@ -191,7 +191,7 @@ builder.Services.AddApplicationAuthentication(builder.Configuration);
 
 var app = builder.Build();
 
-app.Lifetime.ApplicationStopped.Register(() => Serilog.Log.CloseAndFlush());
+app.Lifetime.ApplicationStopped.Register(Serilog.Log.CloseAndFlush);
 
 var options = app.Services.GetRequiredService<IOptionsMonitor<SiteOptions>>();
 

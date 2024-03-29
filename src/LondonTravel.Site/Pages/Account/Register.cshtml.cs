@@ -34,7 +34,7 @@ public class Register(IAccountService service) : PageModel
 
             // Round down to the nearest thousand.
             // Deduct one for "over X,000 users".
-            return ((count - 1) / 1000) * 1000;
+            return (count - 1) / 1000 * 1000;
         }
 #pragma warning disable CA1031
         catch (Exception)

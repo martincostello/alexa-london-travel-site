@@ -38,7 +38,7 @@ public static partial class ApiModule
     [SwaggerResponse(StatusCodes.Status200OK, typeof(PreferencesResponse), Description = "The preferences associated with the provided access token.")]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, typeof(ErrorResponse), Description = "A valid access token was not provided.")]
     private static async Task<IResult> GetPreferences(
-        [Description("The authorization header.")] [FromHeader(Name = "Authorization")] string? authorizationHeader,
+        [Description("The authorization header.")][FromHeader(Name = "Authorization")] string? authorizationHeader,
         HttpContext httpContext,
         IAccountService service,
         ISiteTelemetry telemetry,
@@ -97,7 +97,7 @@ public static partial class ApiModule
     {
         errorDetail = null;
 
-        if (!AuthenticationHeaderValue.TryParse(authorizationHeader, out AuthenticationHeaderValue? authorization))
+        if (!AuthenticationHeaderValue.TryParse(authorizationHeader, out var authorization))
         {
             errorDetail = "The provided authorization value is not valid.";
             return null;
