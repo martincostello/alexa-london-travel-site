@@ -88,8 +88,8 @@ public sealed class CustomHttpHeadersMiddleware(
                     context.Response.Headers.Append("Expect-CT", _expectCTValue);
                 }
 
-                context.Response.Headers.Append("Report-To", @"{""group"":""default"",""max_age"":31536000,""endpoints"":[{""url"":""https://martincostello.report-uri.com/a/d/g""}],""include_subdomains"":false}");
-                context.Response.Headers.Append("NEL", @"{""report_to"":""default"",""max_age"":31536000,""include_subdomains"":false}");
+                context.Response.Headers.Append("Report-To", /*lang=json,strict*/@"{""group"":""default"",""max_age"":31536000,""endpoints"":[{""url"":""https://martincostello.report-uri.com/a/d/g""}],""include_subdomains"":false}");
+                context.Response.Headers.Append("NEL", /*lang=json,strict*/@"{""report_to"":""default"",""max_age"":31536000,""include_subdomains"":false}");
 
                 context.Response.Headers.Append("X-Datacenter", config.AzureDatacenter());
 
@@ -276,12 +276,12 @@ public sealed class CustomHttpHeadersMiddleware(
         {
             builder.Append(pair.Key);
 
-            IList<string> origins = pair.Value;
+            var origins = pair.Value;
 
             if (options.ContentSecurityPolicyOrigins != null &&
-                options.ContentSecurityPolicyOrigins.TryGetValue(pair.Key, out IList<string>? configOrigins))
+                options.ContentSecurityPolicyOrigins.TryGetValue(pair.Key, out var configOrigins))
             {
-                origins = origins.Concat(configOrigins).ToList();
+                origins = [.. origins.Concat(configOrigins)];
             }
 
             origins = origins

@@ -43,7 +43,7 @@ public sealed class ErrorResponse : IExampleProvider<ErrorResponse>
     [JsonProperty("details")]
     [JsonPropertyName("details")]
     [Required]
-    public ICollection<string> Details { get; set; } = new List<string>();
+    public ICollection<string> Details { get; set; } = [];
 
     /// <inheritdoc/>
     public static object GenerateExample()

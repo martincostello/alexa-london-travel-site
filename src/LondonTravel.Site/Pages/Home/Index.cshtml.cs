@@ -42,7 +42,7 @@ public partial class Index(
     /// <summary>
     /// Gets all the line(s).
     /// </summary>
-    public IList<FavoriteLineItem> AllLines { get; private set; } = new List<FavoriteLineItem>();
+    public IList<FavoriteLineItem> AllLines { get; private set; } = [];
 
     /// <summary>
     /// Gets the user's favorite line(s).
@@ -78,8 +78,8 @@ public partial class Index(
         IsAuthenticated = true;
         IsLinkedToAlexa = !string.IsNullOrWhiteSpace(user.AlexaToken);
 
-        ITflService service = tflFactory.CreateService();
-        ICollection<LineInfo> lines = await service.GetLinesAsync(HttpContext.RequestAborted);
+        var service = tflFactory.CreateService();
+        var lines = await service.GetLinesAsync(HttpContext.RequestAborted);
 
         MapFavoriteLines(lines, user.FavoriteLines);
 
@@ -101,7 +101,7 @@ public partial class Index(
             return;
         }
 
-        foreach (LineInfo line in tflLines)
+        foreach (var line in tflLines)
         {
             var favorite = new FavoriteLineItem()
             {
@@ -112,9 +112,7 @@ public partial class Index(
             AllLines.Add(favorite);
         }
 
-        AllLines = AllLines
-            .OrderBy((p) => p.DisplayName, StringComparer.Ordinal)
-            .ToList();
+        AllLines = [.. AllLines.OrderBy((p) => p.DisplayName, StringComparer.Ordinal)];
 
         if (userFavorites?.Count > 0)
         {

@@ -63,7 +63,7 @@ public class InlineStyleTagHelper(
 
         bool shouldProcess =
             Inline == true &&
-            string.Equals(context.AllAttributes["rel"]?.Value?.ToString() as string, "stylesheet", StringComparison.OrdinalIgnoreCase);
+            string.Equals(context.AllAttributes["rel"]?.Value?.ToString(), "stylesheet", StringComparison.OrdinalIgnoreCase);
 
         if (!shouldProcess)
         {
@@ -73,7 +73,7 @@ public class InlineStyleTagHelper(
         }
 
         string? filePath = (context.AllAttributes["href"].Value as string)?.TrimStart('~');
-        IFileInfo fileInfo = HostingEnvironment.WebRootFileProvider.GetFileInfo(filePath!);
+        var fileInfo = HostingEnvironment.WebRootFileProvider.GetFileInfo(filePath!);
 
         if (!fileInfo.Exists || filePath == null || fileInfo.PhysicalPath is null)
         {
@@ -111,7 +111,7 @@ public class InlineStyleTagHelper(
 
         output.Attributes.Clear();
 
-        if (context.AllAttributes.TryGetAttribute(NonceAttributeName, out TagHelperAttribute nonceAttribute))
+        if (context.AllAttributes.TryGetAttribute(NonceAttributeName, out var nonceAttribute))
         {
             output.Attributes.Add("nonce", nonceAttribute.Value.ToString());
         }
@@ -151,7 +151,7 @@ public class InlineStyleTagHelper(
                     builder.Remove(previous, 1);
                 }
             }
-            else if (ch == ',' || ch == ':')
+            else if (ch is ',' or ':')
             {
                 int next = i + 1;
 
@@ -183,7 +183,7 @@ public class InlineStyleTagHelper(
     {
         // Is there a map file?
         string mapFilePath = $"{filePath}.map";
-        IFileInfo fileInfo = HostingEnvironment.WebRootFileProvider.GetFileInfo(mapFilePath);
+        var fileInfo = HostingEnvironment.WebRootFileProvider.GetFileInfo(mapFilePath);
 
         if (fileInfo.Exists)
         {

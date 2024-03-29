@@ -290,7 +290,7 @@ public sealed class UserStore :
             user.CreatedAt = DateTimeOffset.FromUnixTimeSeconds(user.Timestamp).UtcDateTime;
         }
 
-        LondonTravelUser? updated = await _service.ReplaceAsync(user, user.ETag);
+        var updated = await _service.ReplaceAsync(user, user.ETag);
 
         if (updated != null)
         {
@@ -314,7 +314,7 @@ public sealed class UserStore :
     {
         ArgumentNullException.ThrowIfNull(user);
 
-        IList<string> roles = Array.Empty<string>();
+        IList<string> roles = [];
 
         if (user.RoleClaims?.Count > 0)
         {
@@ -350,8 +350,7 @@ public sealed class UserStore :
                 .Where((p) => string.Equals(p.Issuer, RoleClaimIssuer, StringComparison.Ordinal))
                 .Where((p) => string.Equals(p.ClaimType, ClaimTypes.Role, StringComparison.Ordinal))
                 .Where((p) => string.Equals(p.ValueType, ClaimValueTypes.String, StringComparison.Ordinal))
-                .Where((p) => string.Equals(p.Value, roleName, StringComparison.Ordinal))
-                .Any();
+                .Any((p) => string.Equals(p.Value, roleName, StringComparison.Ordinal));
         }
 
         return Task.FromResult(isInRole);

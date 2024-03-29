@@ -97,8 +97,8 @@ public static class ISiteTelemetryExtensions
     {
         var properties = CreatePropertiesForUser(userId);
 
-        properties["OldLines"] = string.Join(',', oldLines ?? Array.Empty<string>());
-        properties["NewLines"] = string.Join(',', newLines ?? Array.Empty<string>());
+        properties["OldLines"] = string.Join(',', oldLines ?? []);
+        properties["NewLines"] = string.Join(',', newLines ?? []);
 
         telemetry.TrackEvent("LinePreferencesUpdated", properties);
     }

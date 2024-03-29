@@ -59,7 +59,7 @@ public static class OpenApiServiceCollectionExtensions
 
                 string schemeName = "Access Token";
 
-                document.Security.Add(new() { [schemeName] = Array.Empty<string>() });
+                document.Security.Add(new() { [schemeName] = [] });
                 document.SecurityDefinitions.Add(schemeName, new()
                 {
                     In = OpenApiSecurityApiKeyLocation.Header,

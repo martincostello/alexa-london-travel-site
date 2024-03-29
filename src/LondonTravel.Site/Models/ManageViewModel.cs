@@ -8,9 +8,9 @@ namespace MartinCostello.LondonTravel.Site.Models;
 
 public class ManageViewModel
 {
-    public IList<UserLoginInfo> CurrentLogins { get; set; } = Array.Empty<UserLoginInfo>();
+    public IList<UserLoginInfo> CurrentLogins { get; set; } = [];
 
-    public IList<AuthenticationScheme> OtherLogins { get; set; } = Array.Empty<AuthenticationScheme>();
+    public IList<AuthenticationScheme> OtherLogins { get; set; } = [];
 
     public bool CanAddMoreLogins => OtherLogins?.Count > 0;
 

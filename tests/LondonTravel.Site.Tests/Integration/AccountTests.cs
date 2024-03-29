@@ -74,9 +74,9 @@ public class AccountTests(TestServerFixture fixture, ITestOutputHelper outputHel
             Assert.False(actual.EmailConfirmed);
             Assert.NotNull(actual.ETag);
             Assert.NotEmpty(actual.ETag);
-            Assert.Equal(Array.Empty<string>(), actual.FavoriteLines);
+            Assert.Equal([], actual.FavoriteLines);
             Assert.Equal(user.GivenName, actual.GivenName);
-            Assert.Equal(Array.Empty<LondonTravelLoginInfo>(), actual.Logins);
+            Assert.Equal([], actual.Logins);
             Assert.Equal(user.Surname, actual.Surname);
             Assert.Equal(user.UserName, actual.UserName);
 

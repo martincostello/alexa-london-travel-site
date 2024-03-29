@@ -16,5 +16,5 @@ public class UpdateLinePreferencesViewModel
     /// <summary>
     /// Gets or sets the names of the user's favorite line(s).
     /// </summary>
-    public IList<string> FavoriteLines { get; set; } = new List<string>();
+    public IList<string> FavoriteLines { get; set; } = [];
 }

@@ -9,17 +9,8 @@ namespace MartinCostello.LondonTravel.Site;
 /// <summary>
 /// The base class for browser tests.
 /// </summary>
-public abstract class BrowserTest : IAsyncLifetime, IDisposable
+public abstract class BrowserTest(ITestOutputHelper outputHelper) : IAsyncLifetime, IDisposable
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="BrowserTest"/> class.
-    /// </summary>
-    /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
-    protected BrowserTest(ITestOutputHelper outputHelper)
-    {
-        Output = outputHelper;
-    }
-
     /// <summary>
     /// Finalizes an instance of the <see cref="BrowserTest"/> class.
     /// </summary>
@@ -35,7 +26,7 @@ public abstract class BrowserTest : IAsyncLifetime, IDisposable
     /// <summary>
     /// Gets the <see cref="ITestOutputHelper"/> to use.
     /// </summary>
-    protected ITestOutputHelper Output { get; }
+    protected ITestOutputHelper Output { get; } = outputHelper;
 
     /// <summary>
     /// Gets the URI of the website being tested.

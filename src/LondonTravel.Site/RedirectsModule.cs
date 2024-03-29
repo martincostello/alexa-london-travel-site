@@ -110,9 +110,7 @@ public static class RedirectsModule
         return app;
 
         void Redirect(string originalPath, string newPath)
-        {
-            app.MapGet(originalPath, () => Results.Redirect(newPath)).ExcludeFromDescription();
-        }
+            => app.MapGet(originalPath, () => Results.Redirect(newPath)).ExcludeFromDescription();
 
         void RedirectCrawler(string path)
         {

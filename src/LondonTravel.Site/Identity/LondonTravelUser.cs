@@ -12,16 +12,6 @@ namespace MartinCostello.LondonTravel.Site.Identity;
 public class LondonTravelUser
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="LondonTravelUser"/> class.
-    /// </summary>
-    public LondonTravelUser()
-    {
-        FavoriteLines = new List<string>();
-        Logins = new List<LondonTravelLoginInfo>();
-        RoleClaims = new List<LondonTravelRole>();
-    }
-
-    /// <summary>
     /// Gets or sets the user Id.
     /// </summary>
     [JsonProperty("id")]
@@ -89,21 +79,21 @@ public class LondonTravelUser
     /// </summary>
     [JsonProperty("logins")]
     [JsonPropertyName("logins")]
-    public IList<LondonTravelLoginInfo> Logins { get; set; }
+    public IList<LondonTravelLoginInfo> Logins { get; set; } = [];
 
     /// <summary>
     /// Gets or sets the user's role claims.
     /// </summary>
     [JsonProperty("roleClaims")]
     [JsonPropertyName("roleClaims")]
-    public IList<LondonTravelRole> RoleClaims { get; set; }
+    public IList<LondonTravelRole> RoleClaims { get; set; } = [];
 
     /// <summary>
     /// Gets or sets the user's favorite line Ids.
     /// </summary>
     [JsonProperty("favoriteLines")]
     [JsonPropertyName("favoriteLines")]
-    public IList<string> FavoriteLines { get; set; }
+    public IList<string> FavoriteLines { get; set; } = [];
 
     /// <summary>
     /// Gets or sets the user's Amazon Alexa access token.

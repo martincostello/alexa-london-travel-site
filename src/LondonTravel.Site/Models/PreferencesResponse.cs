@@ -14,21 +14,12 @@ namespace MartinCostello.LondonTravel.Site.Models;
 public sealed class PreferencesResponse : IExampleProvider<PreferencesResponse>
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="PreferencesResponse"/> class.
-    /// </summary>
-    public PreferencesResponse()
-    {
-        FavoriteLines = new List<string>();
-        UserId = string.Empty;
-    }
-
-    /// <summary>
     /// Gets or sets the Ids of the user's favorite lines, if any.
     /// </summary>
     [JsonProperty("favoriteLines")]
     [JsonPropertyName("favoriteLines")]
     [Required]
-    public ICollection<string> FavoriteLines { get; set; }
+    public ICollection<string> FavoriteLines { get; set; } = [];
 
     /// <summary>
     /// Gets or sets the user's Id.
@@ -36,7 +27,7 @@ public sealed class PreferencesResponse : IExampleProvider<PreferencesResponse>
     [JsonProperty("userId")]
     [JsonPropertyName("userId")]
     [Required]
-    public string UserId { get; set; }
+    public string UserId { get; set; } = string.Empty;
 
     /// <inheritdoc/>
     public static object GenerateExample()
