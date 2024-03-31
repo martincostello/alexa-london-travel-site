@@ -50,7 +50,7 @@
     <None Remove="assets\scripts\**\*.ts" />
     <TypeScriptCompile Include="assets\scripts\**\*.ts" />
   </ItemGroup>
-  <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish" Condition=" '$(SkipCompileClientScripts)' != 'true' ">
+  <Target Name="PrepublishScript" BeforeTargets="BeforeBuild" Condition=" '$(SkipCompileClientScripts)' != 'true' ">
     <Exec Command="npm ci" Condition=" '$(InstallWebPackages)' == 'true' or !Exists('$(MSBuildThisFileDirectory)\node_modules') " />
     <Exec Command="npm run build" Condition=" ('$(BuildingInsideVisualStudio)' != 'true' and '$(GITHUB_ACTIONS)' != 'true') or !Exists('$(MSBuildThisFileDirectory)\wwwroot\assets\js\site.min.js') " />
   </Target>
