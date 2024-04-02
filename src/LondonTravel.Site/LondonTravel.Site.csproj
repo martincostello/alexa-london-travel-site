@@ -70,7 +70,7 @@
     <Exec Command="$(_PseudoLocalizeInstalledCommand)" ConsoleToMsBuild="true" IgnoreExitCode="true" StandardErrorImportance="Normal" StandardOutputImportance="Normal">
       <Output TaskParameter="ExitCode" PropertyName="_PseudoLocalizeInstalled" />
     </Exec>
-    <Warning Condition=" $(_PseudoLocalizeInstalled) != 0 " Text="The PseudoLocalize .NET Global Tool is not installed. To install this tool, run the following command: dotnet tool install --global PseudoLocalize" />
+    <Warning Condition=" $(_PseudoLocalizeInstalled) != 0 " Text="The PseudoLocalize .NET Global Tool is not installed. To install this tool, run the following command: dotnet tool restore" />
     <Exec Condition=" $(_PseudoLocalizeInstalled) == 0 " Command="pseudo-localize %(_PseudoLocalizedFiles.Identity) --overwrite --force" ConsoleToMsBuild="true" StandardOutputImportance="Normal" />
   </Target>
 </Project>
