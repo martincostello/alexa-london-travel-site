@@ -197,6 +197,31 @@ jobs:
           ~/.cache/ms-playwright
           ~/Library/Caches/ms-playwright
 
+    - name: Check application health
+      shell: pwsh
+      env:
+        APPLICATION_URL: ${{ env.APPLICATION_URL_DEV }}
+      run: |
+        $delay = 10
+        $limit = 10
+        $success = $false
+        for ($i = 0; $i -lt $limit; $i++) {
+          $response = $null
+          try {
+            $response = Invoke-WebRequest -Uri $env:APPLICATION_URL -Method Get -UseBasicParsing
+          } catch {
+            $response = $_.Exception.Response
+          }
+          if (($null -ne $response) -And ($response.StatusCode -eq 200)) {
+            $success = $true
+            break
+          }
+          Start-Sleep -Seconds $delay
+        }
+        if (-Not $success) {
+          throw "$($env:APPLICATION_URL) did not return a successful status code within the time limit after $limit attempts."
+        }
+
     - name: Run end-to-end tests
       shell: pwsh
       run: dotnet test ./tests/LondonTravel.Site.Tests --configuration Release --filter Category=EndToEnd --logger "GitHubActions;report-warnings=false"
@@ -294,6 +319,31 @@ jobs:
           ~/AppData/Local/ms-playwright
           ~/.cache/ms-playwright
           ~/Library/Caches/ms-playwright
+
+    - name: Check application health
+      shell: pwsh
+      env:
+        APPLICATION_URL: ${{ env.APPLICATION_URL_PROD }}
+      run: |
+        $delay = 10
+        $limit = 10
+        $success = $false
+        for ($i = 0; $i -lt $limit; $i++) {
+          $response = $null
+          try {
+            $response = Invoke-WebRequest -Uri $env:APPLICATION_URL -Method Get -UseBasicParsing
+          } catch {
+            $response = $_.Exception.Response
+          }
+          if (($null -ne $response) -And ($response.StatusCode -eq 200)) {
+            $success = $true
+            break
+          }
+          Start-Sleep -Seconds $delay
+        }
+        if (-Not $success) {
+          throw "$($env:APPLICATION_URL) did not return a successful status code within the time limit after $limit attempts."
+        }
 
     - name: Run end-to-end tests
       shell: pwsh
