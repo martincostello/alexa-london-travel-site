@@ -56,7 +56,7 @@ jobs:
             break
           }
           $Attempts++
-          Start-Sleep -Seconds 5
+          Start-Sleep -Seconds 10
         }
         If ($StatusCode -ne 200) {
           throw "Failed to successfully connect to website after $Attempts attempts."
