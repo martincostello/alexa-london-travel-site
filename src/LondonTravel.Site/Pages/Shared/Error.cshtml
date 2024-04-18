@@ -7,7 +7,7 @@
     ViewBag.Subtitle = Model.Subtitle ?? SR.ErrorSubtitle(Model.ErrorStatusCode);
     ViewBag.Message = Model.Message ?? SR.ErrorMessage;
 
-    string modifier = (ViewBag.IsUserError ?? false) ? "primary" : "danger";
+    string modifier = ViewBag.IsUserError is false ? "primary" : "danger";
 }
 <h1 class="text-@modifier">@ViewBag.Subtitle</h1>
 <h2 class="text-@modifier">@ViewBag.Message</h2>

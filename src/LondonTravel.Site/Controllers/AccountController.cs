@@ -177,14 +177,9 @@ public partial class AccountController(
 
                 telemetry.TrackAccountCreated(user.Id!, user.Email, info.LoginProvider);
 
-                if (returnUri != null && IsRedirectAlexaAuthorization(returnUri.ToString()))
-                {
-                    return Redirect(returnUri.ToString());
-                }
-                else
-                {
-                    return RedirectToPage(SiteRoutes.Home, new { Message = SiteMessage.AccountCreated });
-                }
+                return returnUri != null && IsRedirectAlexaAuthorization(returnUri.ToString()) ?
+                    Redirect(returnUri.ToString()) :
+                    RedirectToPage(SiteRoutes.Home, new { Message = SiteMessage.AccountCreated });
             }
 
             bool isUserAlreadyRegistered = identityResult.Errors.Any((p) => p.Code.StartsWith("Duplicate", StringComparison.Ordinal));
@@ -243,14 +238,9 @@ public partial class AccountController(
 
     private IActionResult RedirectToLocal(string? returnUrl)
     {
-        if (returnUrl != null && Url.IsLocalUrl(returnUrl))
-        {
-            return Redirect(returnUrl);
-        }
-        else
-        {
-            return RedirectToPage(SiteRoutes.Home);
-        }
+        return returnUrl != null && Url.IsLocalUrl(returnUrl) ?
+            Redirect(returnUrl) :
+            RedirectToPage(SiteRoutes.Home);
     }
 
     private LondonTravelUser? CreateSystemUser(ExternalLoginInfo info)
