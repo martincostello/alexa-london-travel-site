@@ -34,7 +34,7 @@ public static class ClaimsPrincipalExtensionsTests
 
     [Theory]
     [InlineData("", FallbackImageUrl)]
-    [InlineData("MyEmailAddress@example.com ", "https://www.gravatar.com/avatar/0bc83cb571cd1c50ba6f3e8a78ef1346?s=24&d=https://www.mypicture.com/Hello%20World")]
+    [InlineData("MyEmailAddress@example.com ", "https://www.gravatar.com/avatar/0bc83cb571cd1c50ba6f3e8a78ef1346?s=24&d=https%3A%2F%2Fwww.mypicture.com%2FHello%20World")]
     public static void GetAvatarUrl_Returns_Correct_Url(string email, string expected)
     {
         // Arrange
@@ -59,7 +59,7 @@ public static class ClaimsPrincipalExtensionsTests
         string actual = principal.GetAvatarUrl(FallbackImageUrl, 42);
 
         // Assert
-        actual.ShouldBe("https://www.gravatar.com/avatar/0bc83cb571cd1c50ba6f3e8a78ef1346?s=42&d=https://www.mypicture.com/Hello%20World");
+        actual.ShouldBe("https://www.gravatar.com/avatar/0bc83cb571cd1c50ba6f3e8a78ef1346?s=42&d=https%3A%2F%2Fwww.mypicture.com%2FHello%20World");
     }
 
     [Fact]
