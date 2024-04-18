@@ -75,17 +75,16 @@ internal static class IHostBuilderExtensions
         string clientSecret = configuration["AzureKeyVault:ClientSecret"] ?? string.Empty;
         string tenantId = configuration["AzureKeyVault:TenantId"] ?? string.Empty;
 
-        if (!string.IsNullOrEmpty(clientId) &&
+        bool useClientSecret =
+            !string.IsNullOrEmpty(clientId) &&
             !string.IsNullOrEmpty(clientSecret) &&
-            !string.IsNullOrEmpty(tenantId))
-        {
-            // Use explicitly configured Azure Key Vault credentials
-            return new ClientSecretCredential(tenantId, clientId, clientSecret);
-        }
-        else
-        {
-            // Assume Managed Service Identity is configured and available
-            return new ManagedIdentityCredential();
-        }
+            !string.IsNullOrEmpty(tenantId);
+
+        // Use explicitly configured Azure Key Vault credentials, otherwise
+        // Assume Managed Service Identity is configured and available.
+        return
+            useClientSecret ?
+            new ClientSecretCredential(tenantId, clientId, clientSecret) :
+            new ManagedIdentityCredential();
     }
 }

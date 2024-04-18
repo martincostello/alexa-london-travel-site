@@ -42,10 +42,7 @@ public partial class ManageController(
 
         foreach (var login in userLogins)
         {
-            if (string.IsNullOrWhiteSpace(login.ProviderDisplayName))
-            {
-                login.ProviderDisplayName = login.LoginProvider;
-            }
+            login.ProviderDisplayName ??= login.LoginProvider;
         }
 
         userLogins = [.. userLogins.OrderBy((p) => p.ProviderDisplayName).ThenBy((p) => p.LoginProvider)];

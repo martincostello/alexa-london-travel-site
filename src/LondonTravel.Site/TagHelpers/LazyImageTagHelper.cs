@@ -14,7 +14,7 @@ namespace MartinCostello.LondonTravel.Site.TagHelpers;
 /// elements that supports file versioning and lazy loading of images.
 /// </summary>
 [HtmlTargetElement("lazyimg", TagStructure = TagStructure.WithoutEndTag)]
-public class LazyImageTagHelper(IFileVersionProvider fileVersionProvider, HtmlEncoder htmlEncoder, IUrlHelperFactory urlHelperFactory) : ImageTagHelper(fileVersionProvider, htmlEncoder, urlHelperFactory)
+public sealed class LazyImageTagHelper(IFileVersionProvider fileVersionProvider, HtmlEncoder htmlEncoder, IUrlHelperFactory urlHelperFactory) : ImageTagHelper(fileVersionProvider, htmlEncoder, urlHelperFactory)
 {
     /// <summary>
     /// The name of the <c>class</c> attribute.
@@ -38,11 +38,11 @@ public class LazyImageTagHelper(IFileVersionProvider fileVersionProvider, HtmlEn
 
         // Get the non-lazy image and the current CSS
         string? dataOriginal = output.Attributes[SourceAttributeName].Value.ToString();
-        string? css = output.Attributes[ClassAttributeName]?.Value?.ToString();
+        string? css = $"{output.Attributes[ClassAttributeName]?.Value} lazy";
 
         // Add a placeholder as the src, set the original to be the lazily-loaded
         // image and add the CSS class to get the JavaScript to do the lazy loading.
-        output.Attributes.SetAttribute(ClassAttributeName, css += " lazy");
+        output.Attributes.SetAttribute(ClassAttributeName, css);
         output.Attributes.SetAttribute(DataOriginalAttributeName, dataOriginal);
         output.Attributes.SetAttribute(SourceAttributeName, "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7");
 

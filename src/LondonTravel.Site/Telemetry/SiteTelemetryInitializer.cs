@@ -26,12 +26,11 @@ internal sealed class SiteTelemetryInitializer(IConfiguration config, IHttpConte
         telemetry.Context.GlobalProperties["AzureEnvironment"] = config.AzureEnvironment();
         telemetry.Context.GlobalProperties["GitCommit"] = GitMetadata.Commit;
 
-        if (contextAccessor.HttpContext != null && string.IsNullOrEmpty(telemetry.Context.User.AuthenticatedUserId))
+        if (contextAccessor.HttpContext != null &&
+            string.IsNullOrEmpty(telemetry.Context.User.AuthenticatedUserId) &&
+            contextAccessor.HttpContext.User?.Identity?.IsAuthenticated is true)
         {
-            if (contextAccessor.HttpContext.User?.Identity?.IsAuthenticated == true)
-            {
-                telemetry.Context.User.AuthenticatedUserId = contextAccessor.HttpContext.User.GetUserId();
-            }
+            telemetry.Context.User.AuthenticatedUserId = contextAccessor.HttpContext.User.GetUserId();
         }
 
         if (telemetry is DependencyTelemetry dependency)

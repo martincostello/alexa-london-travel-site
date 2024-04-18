@@ -12,14 +12,14 @@
         image = Url.Content(image)!;
     }
 
-    var model = MetaModel.Create(
+    MetaModel model = MetaModel.Create(
         Options.Metadata,
         canonicalUri: canonicalUri,
-        description: ViewBag.MetaDescription as string,
+        description: ViewBag.MetaDescription,
         imageUri: image,
-        imageAltText: ViewBag.MetaImageAltText as string,
-        robots: ViewBag.MetaRobots as string,
-        title: ViewBag.Title as string);
+        imageAltText: ViewBag.MetaImageAltText,
+        robots: ViewBag.MetaRobots,
+        title: ViewBag.Title);
 }
     @await Html.PartialAsync("_Meta", model)
     @await Html.PartialAsync("_Links", Tuple.Create(canonicalUri, Options))

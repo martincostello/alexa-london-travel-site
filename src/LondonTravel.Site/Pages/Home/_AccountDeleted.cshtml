@@ -1,4 +1,4 @@
-@if ((User == null || User.Identity == null || User.Identity.IsAuthenticated != true) &&
+@if (User?.Identity?.IsAuthenticated != true &&
      string.Equals(Context.Request.Query["Message"], nameof(SiteMessage.AccountDeleted), StringComparison.OrdinalIgnoreCase))
 {
     <div class="alert alert-success" role="alert">
