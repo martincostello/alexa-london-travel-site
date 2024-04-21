@@ -50,7 +50,7 @@ public static class RegisterPageTests
         await page.OnGet();
 
         // Assert
-        page.RegisteredUsers.ShouldBe(9_500);
+        page.RegisteredUsers.ShouldBe(9_750);
     }
 
     private static Register CreatePage(IAccountService? service = null)
