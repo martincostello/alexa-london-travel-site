@@ -40,8 +40,8 @@ public class Register(IAccountService service) : PageModel
         catch (Exception)
 #pragma warning restore CA1031
         {
-            // Over 9,500 users as of 22/08/2021
-            return 9_500;
+            // Over 9,750 users as of 21/04/2024
+            return 9_750;
         }
     }
 }
