@@ -12,7 +12,8 @@ public sealed class BrowsersTestData : TheoryData<string, string?>
         Add(BrowserType.Chromium, null);
         Add(BrowserType.Chromium, "chrome");
 
-        if (!OperatingSystem.IsLinux())
+        // HACK Skip on macOS. See https://github.com/microsoft/playwright-dotnet/issues/2920.
+        if (!OperatingSystem.IsLinux() && !OperatingSystem.IsMacOS())
         {
             Add(BrowserType.Chromium, "msedge");
         }
