@@ -291,8 +291,7 @@ public partial class ManageController(
 
             Log.UpdatingLinePreferences(logger, user.Id);
 
-            var existingLines = user.FavoriteLines;
-            var newLines = user.FavoriteLines = [.. (model.FavoriteLines ?? []).OrderBy((p) => p, StringComparer.Ordinal)];
+            user.FavoriteLines = [.. (model.FavoriteLines ?? []).OrderBy((p) => p, StringComparer.Ordinal)];
 
             // Override the ETag with the one in the model to ensure write consistency
             user.ETag = model.ETag;
@@ -360,14 +359,9 @@ public partial class ManageController(
             }
         }
 
-        if (commitUpdate)
-        {
-            return await userManager.UpdateAsync(user);
-        }
-        else
-        {
-            return IdentityResult.Success;
-        }
+        return commitUpdate ?
+            await userManager.UpdateAsync(user) :
+            IdentityResult.Success;
     }
 
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]

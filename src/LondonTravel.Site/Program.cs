@@ -20,13 +20,13 @@ using Microsoft.Extensions.Options;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.ConfigureApplication();
-builder.Logging.AddTelemetry();
 builder.WebHost.CaptureStartupErrors(true);
 builder.WebHost.ConfigureKestrel((p) => p.AddServerHeader = false);
 
 builder.Services.AddOptions();
 builder.Services.Configure<SiteOptions>(builder.Configuration.GetSection("Site"));
 
+builder.Logging.AddTelemetry();
 builder.Services.AddTelemetry(builder.Environment);
 
 #pragma warning disable CA1308
