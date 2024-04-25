@@ -25,6 +25,7 @@ public static class TelemetryExtensions
 {
     private static readonly ConcurrentDictionary<string, string> ServiceMap = new(StringComparer.OrdinalIgnoreCase)
     {
+        ["api.github.com"] = "GitHub",
     };
 
     public static void AddTelemetry(this IServiceCollection services, IWebHostEnvironment environment)
