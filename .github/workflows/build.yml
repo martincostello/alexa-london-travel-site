@@ -96,6 +96,10 @@ jobs:
           ~/.cache/ms-playwright
           ~/Library/Caches/ms-playwright
 
+    - name: Install .NET Workloads
+      shell: pwsh
+      run: dotnet workload restore
+
     - name: Build, test and publish
       shell: pwsh
       run: ./build.ps1

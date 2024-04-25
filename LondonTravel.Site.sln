@@ -64,6 +64,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\workflows\ossf-scorecard.yml = .github\workflows\ossf-scorecard.yml
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LondonTravel.Site.AppHost", "src\LondonTravel.Site.AppHost\LondonTravel.Site.AppHost.csproj", "{4C191691-65C5-4C8A-85AD-D8C55E6AD6C4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -78,6 +80,10 @@ Global
 		{0106CA34-73B0-4F30-8BDF-AF8D7AB22A4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0106CA34-73B0-4F30-8BDF-AF8D7AB22A4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0106CA34-73B0-4F30-8BDF-AF8D7AB22A4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C191691-65C5-4C8A-85AD-D8C55E6AD6C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C191691-65C5-4C8A-85AD-D8C55E6AD6C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C191691-65C5-4C8A-85AD-D8C55E6AD6C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C191691-65C5-4C8A-85AD-D8C55E6AD6C4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -89,6 +95,7 @@ Global
 		{4F53FEF1-66BC-45ED-B563-A619E9A193B7} = {DD7EA67A-4FE1-4D4F-825E-51FF842107AB}
 		{4AD9EC06-329C-47FB-8549-1A1EDE980130} = {DD7EA67A-4FE1-4D4F-825E-51FF842107AB}
 		{22736F26-BC95-4792-915C-B6E61FEB523A} = {4F53FEF1-66BC-45ED-B563-A619E9A193B7}
+		{4C191691-65C5-4C8A-85AD-D8C55E6AD6C4} = {0EED3EF2-37DE-4E6E-B766-3E641D163515}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {612E5D09-113B-4494-BEE6-0376224726FE}

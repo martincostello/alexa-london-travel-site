@@ -23,6 +23,7 @@
     <ContainerFamily>noble-chiseled-extra</ContainerFamily>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Aspire.Microsoft.Azure.Cosmos" />
     <PackageReference Include="AspNet.Security.OAuth.Amazon" />
     <PackageReference Include="AspNet.Security.OAuth.Apple" />
     <PackageReference Include="AspNet.Security.OAuth.GitHub" />

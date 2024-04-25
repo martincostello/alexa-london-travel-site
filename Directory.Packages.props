@@ -4,6 +4,9 @@
     <GlobalPackageReference Include="ReferenceTrimmer" Version="3.3.6" />
   </ItemGroup>
   <ItemGroup>
+    <PackageVersion Include="Aspire.Hosting.AppHost" Version="8.0.0-preview.6.24214.1" />
+    <PackageVersion Include="Aspire.Hosting.Azure.CosmosDB" Version="8.0.0-preview.6.24214.1" />
+    <PackageVersion Include="Aspire.Microsoft.Azure.Cosmos" Version="8.0.0-preview.6.24214.1" />
     <PackageVersion Include="AspNet.Security.OAuth.Amazon" Version="8.0.0" />
     <PackageVersion Include="AspNet.Security.OAuth.Apple" Version="8.0.0" />
     <PackageVersion Include="AspNet.Security.OAuth.GitHub" Version="8.0.0" />
