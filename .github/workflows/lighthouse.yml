@@ -35,8 +35,7 @@ jobs:
     - name: Start website
       shell: pwsh
       env:
-        Site__Authentication__UserStore__AccessKey: C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==
-        Site__Authentication__UserStore__ServiceUri: https://localhost:8081
+        ConnectionStrings__Cosmos: 'AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==;AccountEndpoint=https://localhost:8081;DisableServerCertificateValidation=True;'
       run: |
         Push-Location (Join-Path "src" "LondonTravel.Site")
         npm ci
@@ -78,11 +77,11 @@ jobs:
       uses: foo-software/lighthouse-check-status-action@f22f8cdcaf593a986749d39fe21382526de3f501 # v2.0.1
       with:
         lighthouseCheckResults: ${{ steps.lighthouse.outputs.lighthouseCheckResults }}
-        minAccessibilityScore: "90"
-        minBestPracticesScore: "83"
-        minPerformanceScore: "71"
-        minProgressiveWebAppScore: "85"
-        minSeoScore: "100"
+        minAccessibilityScore: '90'
+        minBestPracticesScore: '83'
+        minPerformanceScore: '71'
+        minProgressiveWebAppScore: '85'
+        minSeoScore: '100'
 
     - name: Publish artifacts
       uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
