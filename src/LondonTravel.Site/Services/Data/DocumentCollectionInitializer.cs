@@ -51,7 +51,7 @@ public sealed partial class DocumentCollectionInitializer(
             return true;
         }
 
-        Database database = await GetOrCreateDatabaseAsync(client, cancellationToken);
+        var database = await GetOrCreateDatabaseAsync(client, cancellationToken);
 
         return await CreateContainerAsync(collectionName, database, cancellationToken);
     }
