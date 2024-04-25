@@ -69,7 +69,7 @@ public static class TelemetryExtensions
         if (IsAzureMonitorConfigured())
         {
             resourceBuilder.AddDetector(new AppServiceResourceDetector());
-            telemetry.UseAzureMonitor((p) => p.Credential = new DefaultAzureCredential());
+            telemetry.UseAzureMonitor();
         }
 
         services.AddOptions<HttpClientTraceInstrumentationOptions>()
