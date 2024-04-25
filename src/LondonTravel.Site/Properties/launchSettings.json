@@ -5,7 +5,6 @@
       "launchBrowser": true,
       "applicationUrl": "https://localhost:50001;http://localhost:50000",
       "environmentVariables": {
-        "Azure:Datacenter": "Local",
         "Azure:Environment": "Local",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

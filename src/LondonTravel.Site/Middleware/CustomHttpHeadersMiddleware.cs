@@ -91,8 +91,6 @@ public sealed class CustomHttpHeadersMiddleware(
                 context.Response.Headers.Append("Report-To", /*lang=json,strict*/@"{""group"":""default"",""max_age"":31536000,""endpoints"":[{""url"":""https://martincostello.report-uri.com/a/d/g""}],""include_subdomains"":false}");
                 context.Response.Headers.Append("NEL", /*lang=json,strict*/@"{""report_to"":""default"",""max_age"":31536000,""include_subdomains"":false}");
 
-                context.Response.Headers.Append("X-Datacenter", config.AzureDatacenter());
-
 #if DEBUG
                 context.Response.Headers.Append("X-Debug", "true");
 #endif

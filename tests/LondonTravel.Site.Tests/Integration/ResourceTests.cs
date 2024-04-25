@@ -128,7 +128,6 @@ public class ResourceTests(TestServerFixture fixture, ITestOutputHelper outputHe
             "Report-To",
             "X-Content-Type-Options",
             "X-CSP-Nonce",
-            "X-Datacenter",
             "X-Download-Options",
             "X-Frame-Options",
             "X-Instance",

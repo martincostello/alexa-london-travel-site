@@ -1,4 +1,4 @@
 {
   "$schema": "https://raw.githubusercontent.com/martincostello/github-automation/main/.github/update-dotnet-sdk-schema.json",
-  "include-nuget-packages": "Microsoft.AspNetCore.,Microsoft.EntityFrameworkCore.,Microsoft.Extensions.,System.Text.Json,AspNet.Security.OAuth."
+  "include-nuget-packages": "Aspire.,AspNet.Security.OAuth.,Microsoft.AspNetCore.,Microsoft.EntityFrameworkCore,Microsoft.Extensions.,System.Text.Json"
 }

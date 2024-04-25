@@ -9,16 +9,6 @@ namespace MartinCostello.LondonTravel.Site.Options;
 public sealed class UserStoreOptions
 {
     /// <summary>
-    /// Gets or sets the Azure Cosmos DB service URI to use.
-    /// </summary>
-    public Uri? ServiceUri { get; set; }
-
-    /// <summary>
-    /// Gets or sets the Azure Cosmos DB access key to use.
-    /// </summary>
-    public string? AccessKey { get; set; }
-
-    /// <summary>
     /// Gets or sets the name of the Azure Cosmos DB database to use.
     /// </summary>
     public string? DatabaseName { get; set; }

@@ -9,9 +9,6 @@ using MartinCostello.LondonTravel.Site.Options;
 using MartinCostello.LondonTravel.Site.Services;
 using MartinCostello.LondonTravel.Site.Services.Data;
 using MartinCostello.LondonTravel.Site.Services.Tfl;
-using MartinCostello.LondonTravel.Site.Telemetry;
-using Microsoft.ApplicationInsights.AspNetCore.Extensions;
-using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc.Razor;
@@ -23,14 +20,14 @@ using Microsoft.Extensions.Options;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.ConfigureApplication();
+builder.Logging.AddTelemetry();
 builder.WebHost.CaptureStartupErrors(true);
 builder.WebHost.ConfigureKestrel((p) => p.AddServerHeader = false);
 
-builder.Services.AddApplicationInsightsTelemetry(builder.Configuration);
-
 builder.Services.AddOptions();
 builder.Services.Configure<SiteOptions>(builder.Configuration.GetSection("Site"));
-builder.Services.Configure<ApplicationInsightsServiceOptions>((p) => p.ApplicationVersion = GitMetadata.Commit);
+
+builder.Services.AddTelemetry(builder.Environment);
 
 #pragma warning disable CA1308
 string environment = builder.Configuration.AzureEnvironment().ToLowerInvariant();
@@ -169,8 +166,6 @@ builder.Services.Configure<StaticFileOptions>((options) =>
 });
 
 builder.Services.AddSingleton(TimeProvider.System);
-builder.Services.AddSingleton<ISiteTelemetry, SiteTelemetry>();
-builder.Services.AddSingleton<ITelemetryInitializer, SiteTelemetryInitializer>();
 builder.Services.AddSingleton<ITflServiceFactory, TflServiceFactory>();
 builder.Services.AddSingleton(DocumentHelpers.CreateClient);
 builder.Services.TryAddSingleton<IDocumentService, DocumentService>();
@@ -190,8 +185,6 @@ builder.Services.AddHttpClients();
 builder.Services.AddApplicationAuthentication(builder.Configuration);
 
 var app = builder.Build();
-
-app.Lifetime.ApplicationStopped.Register(Serilog.Log.CloseAndFlush);
 
 var options = app.Services.GetRequiredService<IOptionsMonitor<SiteOptions>>();
 

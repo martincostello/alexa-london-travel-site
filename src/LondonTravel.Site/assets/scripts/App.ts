@@ -6,7 +6,6 @@ import { Banner } from './Banner';
 import { Manage } from './Manage';
 import { Preferences } from './Preferences';
 import { SwaggerUI } from './SwaggerUI';
-import { Telemetry } from './Telemetry';
 import { Tracking } from './Tracking';
 
 export class App {
@@ -18,7 +17,6 @@ export class App {
         this.setupServiceWorker();
 
         this.configureAnalytics();
-        this.configureTelemetry();
 
         Manage.initialize();
 
@@ -42,11 +40,6 @@ export class App {
                 }
             });
         });
-    }
-
-    private configureTelemetry() {
-        const telemetry = new Telemetry();
-        telemetry.initialize();
     }
 
     private loadImages() {

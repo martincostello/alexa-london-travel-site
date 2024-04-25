@@ -1,5 +1,4 @@
 @inject IConfiguration Config
-@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
 <!DOCTYPE html>
 <html lang="en-gb">
 <head prefix="og: http://ogp.me/ns#">
@@ -27,9 +26,6 @@
     @await RenderSectionAsync("meta", required: false)
     @await RenderSectionAsync("stylesHead", required: false)
     <script type="text/javascript" nonce="@Context.EnsureCspNonce()">
-        @Html.Raw(JavaScriptSnippet.ScriptBody)
-    </script>
-    <script type="text/javascript" nonce="@Context.EnsureCspNonce()">
         if (self == top) {
             document.documentElement.className = document.documentElement.className.replace(/\bjs-flash\b/, '');
         }
@@ -52,7 +48,6 @@
 <!--
     Commit SHA:    @(GitMetadata.Commit)
     Commit branch: @(GitMetadata.Branch)
-    Datacenter:    @Config.AzureDatacenter()
     Deployment:    https://github.com/martincostello/alexa-london-travel-site/actions/runs/@(GitMetadata.DeployId)
     Environment:   @Config.AzureEnvironment()
     Instance:      @Environment.MachineName

@@ -15,8 +15,8 @@ on:
 # HACK Disable additional code analysis as a workaround for https://github.com/dotnet/roslyn/issues/70368.
 # See https://github.com/App-vNext/Polly/pull/1708 for inspiration.
 env:
-  AnalysisMode: "None"
-  EnableNETAnalyzers: "false"
+  AnalysisMode: 'None'
+  EnableNETAnalyzers: 'false'
 
 permissions:
   actions: read
@@ -81,4 +81,4 @@ jobs:
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@8f596b4ae3cb3c588a5c46780b86dd53fef16c52 # v3.25.2
       with:
-        category: "/language:${{ matrix.language }}"
+        category: '/language:${{ matrix.language }}'

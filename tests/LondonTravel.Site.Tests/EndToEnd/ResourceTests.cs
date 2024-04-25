@@ -70,7 +70,6 @@ public class ResourceTests(WebsiteFixture fixture)
             "Report-To",
             "X-Content-Type-Options",
             "X-CSP-Nonce",
-            "X-Datacenter",
             "X-Download-Options",
             "X-Frame-Options",
             "X-Instance",

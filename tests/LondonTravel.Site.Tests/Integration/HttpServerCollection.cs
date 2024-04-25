@@ -6,7 +6,7 @@ namespace MartinCostello.LondonTravel.Site.Integration;
 /// <summary>
 /// A class representing the collection fixture for an HTTP server. This class cannot be inherited.
 /// </summary>
-[CollectionDefinition(Name, DisableParallelization = true)] // Causes issues with ApplicationInsights if not disabled
+[CollectionDefinition(Name)]
 public sealed class HttpServerCollection : ICollectionFixture<HttpServerFixture>
 {
     /// <summary>
