@@ -4,7 +4,6 @@
 using MartinCostello.LondonTravel.Site.Identity;
 using MartinCostello.LondonTravel.Site.Models;
 using MartinCostello.LondonTravel.Site.Services.Tfl;
-using MartinCostello.LondonTravel.Site.Telemetry;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -18,7 +17,6 @@ public partial class ManageController(
   UserManager<LondonTravelUser> userManager,
   SignInManager<LondonTravelUser> signInManager,
   ITflServiceFactory tflServiceFactory,
-  ISiteTelemetry telemetry,
   ILogger<ManageController> logger) : Controller
 {
     [HttpGet]
@@ -79,8 +77,6 @@ public partial class ManageController(
 
         Log.AttemptingToLinkUser(logger, userId, provider);
 
-        telemetry.TrackLinkExternalAccountStart(userId, provider);
-
         return Challenge(properties, provider);
     }
 
@@ -112,8 +108,6 @@ public partial class ManageController(
 
         if (result.Succeeded)
         {
-            telemetry.TrackLinkExternalAccountSuccess(userId, info.LoginProvider);
-
             Log.AddedExternalLogin(logger, info.LoginProvider, userId);
 
             message = SiteMessage.LinkSuccess;
@@ -137,8 +131,6 @@ public partial class ManageController(
         }
         else
         {
-            telemetry.TrackLinkExternalAccountFailed(userId, info.LoginProvider);
-
             Log.AddingExternalLoginFailed(
                 logger,
                 userId,
@@ -174,8 +166,6 @@ public partial class ManageController(
                 Log.RemovedExternalLogin(logger, account.LoginProvider, user.Id);
 
                 await signInManager.SignInAsync(user, isPersistent: true);
-
-                telemetry.TrackRemoveExternalAccountLink(user.Id!, account.LoginProvider);
 
                 message = SiteMessage.RemoveAccountLinkSuccess;
             }
@@ -216,8 +206,6 @@ public partial class ManageController(
 
             if (result.Succeeded)
             {
-                telemetry.TrackRemoveAlexaLink(user.Id!);
-
                 Log.RemovedAlexaLink(logger, user.Id);
 
                 message = SiteMessage.RemoveAlexaLinkSuccess;
@@ -250,8 +238,6 @@ public partial class ManageController(
 
                 await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
                 await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
-
-                telemetry.TrackAccountDeleted(user.Id!, user.Email!);
 
                 return RedirectToPage(SiteRoutes.Home, new { Message = SiteMessage.AccountDeleted });
             }
@@ -315,7 +301,6 @@ public partial class ManageController(
 
             if (result.Succeeded)
             {
-                telemetry.TrackLinePreferencesUpdated(user.Id!, existingLines, newLines);
                 Log.UpdatedLinePreferences(logger, user.Id);
             }
             else
@@ -377,14 +362,7 @@ public partial class ManageController(
 
         if (commitUpdate)
         {
-            var result = await userManager.UpdateAsync(user);
-
-            if (result.Succeeded)
-            {
-                telemetry.TrackClaimsUpdated(user.Id!);
-            }
-
-            return result;
+            return await userManager.UpdateAsync(user);
         }
         else
         {

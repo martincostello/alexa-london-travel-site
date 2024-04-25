@@ -4,7 +4,6 @@
 using System.Security.Claims;
 using MartinCostello.LondonTravel.Site.Identity;
 using MartinCostello.LondonTravel.Site.Options;
-using MartinCostello.LondonTravel.Site.Telemetry;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
@@ -42,13 +41,13 @@ public class AlexaServiceTests(ITestOutputHelper outputHelper)
         string responseType = "token";
         var redirectUri = new Uri("https://alexa.amazon.com/alexa-london-travel?foo=bar");
 
-        SiteOptions options = CreateValidSiteOptions();
+        var options = CreateValidSiteOptions();
         options.Alexa!.IsLinkingEnabled = false;
 
         var target = CreateTarget(options: options);
 
         // Act
-        IResult actual = await target.AuthorizeSkillAsync(
+        var actual = await target.AuthorizeSkillAsync(
             state,
             clientId,
             responseType,
@@ -78,7 +77,7 @@ public class AlexaServiceTests(ITestOutputHelper outputHelper)
         var target = CreateTarget();
 
         // Act
-        IResult actual = await target.AuthorizeSkillAsync(
+        var actual = await target.AuthorizeSkillAsync(
             state,
             clientId,
             responseType,
@@ -104,7 +103,7 @@ public class AlexaServiceTests(ITestOutputHelper outputHelper)
         var target = CreateTarget();
 
         // Act
-        IResult actual = await target.AuthorizeSkillAsync(
+        var actual = await target.AuthorizeSkillAsync(
             state,
             clientId,
             responseType,
@@ -130,7 +129,7 @@ public class AlexaServiceTests(ITestOutputHelper outputHelper)
         var target = CreateTarget();
 
         // Act
-        IResult actual = await target.AuthorizeSkillAsync(
+        var actual = await target.AuthorizeSkillAsync(
             state,
             clientId,
             responseType,
@@ -156,7 +155,7 @@ public class AlexaServiceTests(ITestOutputHelper outputHelper)
         var target = CreateTarget();
 
         // Act
-        IResult actual = await target.AuthorizeSkillAsync(
+        var actual = await target.AuthorizeSkillAsync(
             state,
             clientId,
             responseType,
@@ -182,12 +181,12 @@ public class AlexaServiceTests(ITestOutputHelper outputHelper)
         string state = "Some State";
         string clientId = "my-client-id";
         string responseType = "token";
-        Uri? redirectUri = redirectUrl == null ? null : new Uri(redirectUrl, UriKind.RelativeOrAbsolute);
+        var redirectUri = redirectUrl == null ? null : new Uri(redirectUrl, UriKind.RelativeOrAbsolute);
 
         var target = CreateTarget();
 
         // Act
-        IResult actual = await target.AuthorizeSkillAsync(
+        var actual = await target.AuthorizeSkillAsync(
             state,
             clientId,
             responseType,
@@ -216,7 +215,7 @@ public class AlexaServiceTests(ITestOutputHelper outputHelper)
         var target = CreateTarget();
 
         // Act
-        IResult actual = await target.AuthorizeSkillAsync(
+        var actual = await target.AuthorizeSkillAsync(
             state,
             clientId,
             responseType,
@@ -246,7 +245,7 @@ public class AlexaServiceTests(ITestOutputHelper outputHelper)
         var target = CreateTarget(userManager);
 
         // Act
-        IResult actual = await target.AuthorizeSkillAsync(
+        var actual = await target.AuthorizeSkillAsync(
             state,
             clientId,
             responseType,
@@ -282,7 +281,7 @@ public class AlexaServiceTests(ITestOutputHelper outputHelper)
         var target = CreateTarget(userManager);
 
         // Act
-        IResult actual = await target.AuthorizeSkillAsync(
+        var actual = await target.AuthorizeSkillAsync(
             state,
             clientId,
             responseType,
@@ -386,7 +385,6 @@ public class AlexaServiceTests(ITestOutputHelper outputHelper)
     {
         return new AlexaService(
             userManager ?? CreateUserManager(),
-            Substitute.For<ISiteTelemetry>(),
             Microsoft.Extensions.Options.Options.Create(options ?? CreateValidSiteOptions()),
             outputHelper.ToLogger<AlexaService>());
     }

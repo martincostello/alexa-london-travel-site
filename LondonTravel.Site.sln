@@ -37,8 +37,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".vscode", ".vscode", "{DB85
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{4F53FEF1-66BC-45ED-B563-A619E9A193B7}"
 	ProjectSection(SolutionItems) = preProject
+		.github\actionlint-matcher.json = .github\actionlint-matcher.json
+		.github\CONTRIBUTING.md = .github\CONTRIBUTING.md
 		.github\dependabot.yml = .github\dependabot.yml
-		.github\stale.yml = .github\stale.yml
+		.github\FUNDING.yml = .github\FUNDING.yml
+		.github\ISSUE_TEMPLATE.md = .github\ISSUE_TEMPLATE.md
+		.github\PULL_REQUEST_TEMPLATE.md = .github\PULL_REQUEST_TEMPLATE.md
+		.github\update-dotnet-sdk.json = .github\update-dotnet-sdk.json
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{4AD9EC06-329C-47FB-8549-1A1EDE980130}"

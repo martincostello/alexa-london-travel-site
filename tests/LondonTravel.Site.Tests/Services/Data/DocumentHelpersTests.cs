@@ -3,7 +3,7 @@
 
 using MartinCostello.LondonTravel.Site.Options;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Cosmos;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using Option = Microsoft.Extensions.Options.Options;
@@ -23,81 +23,45 @@ public static class DocumentHelpersTests
     }
 
     [Fact]
+    public static void CreateClient_Throws_If_ConnectionString_Is_Null()
+    {
+        // Arrange
+        string connectionString = null!;
+        var options = new UserStoreOptions();
+        var httpClientFactory = Substitute.For<IHttpClientFactory>();
+
+        // Act and Assert
+        Assert.Throws<ArgumentNullException>(
+            "connectionString",
+            () => DocumentHelpers.CreateClient(connectionString, options, httpClientFactory!));
+    }
+
+    [Fact]
     public static void CreateClient_Throws_If_HttpClientFactory_Is_Null()
     {
         // Arrange
+        string connectionString = "AccessToken=bpfYUKmfV0arChaIPI3hU3+bn3w=;Endpoint=https://cosmosdb.azure.local";
         var options = new UserStoreOptions();
         IHttpClientFactory? httpClientFactory = null;
 
         // Act and Assert
-        Assert.Throws<ArgumentNullException>("httpClientFactory", () => DocumentHelpers.CreateClient(options, httpClientFactory!));
+        Assert.Throws<ArgumentNullException>(
+            "httpClientFactory",
+            () => DocumentHelpers.CreateClient(connectionString, options, httpClientFactory!));
     }
 
     [Fact]
     public static void CreateClient_Throws_If_Options_Is_Null()
     {
         // Arrange
+        string connectionString = "AccessToken=bpfYUKmfV0arChaIPI3hU3+bn3w=;Endpoint=https://cosmosdb.azure.local";
         UserStoreOptions? options = null;
         var httpClientFactory = Substitute.For<IHttpClientFactory>();
 
         // Act and Assert
-        Assert.Throws<ArgumentNullException>("options", () => DocumentHelpers.CreateClient(options!, httpClientFactory));
-    }
-
-    [Fact]
-    public static void CreateClient_Throws_If_Options_Has_No_Service_Endpoint()
-    {
-        // Arrange
-        var options = new UserStoreOptions()
-        {
-            ServiceUri = null,
-            AccessKey = "bpfYUKmfV0arChaIPI3hU3+bn3w=",
-            DatabaseName = "my-database",
-            CollectionName = "my-collection",
-        };
-
-        var httpClientFactory = Substitute.For<IHttpClientFactory>();
-
-        // Act and Assert
-        Assert.Throws<ArgumentException>("options", () => DocumentHelpers.CreateClient(options, httpClientFactory));
-    }
-
-    [Fact]
-    public static void CreateClient_Throws_If_Options_Has_Relative_Service_Endpoint()
-    {
-        // Arrange
-        var options = new UserStoreOptions()
-        {
-            ServiceUri = new Uri("/", UriKind.Relative),
-            AccessKey = "bpfYUKmfV0arChaIPI3hU3+bn3w=",
-            DatabaseName = "my-database",
-            CollectionName = "my-collection",
-        };
-
-        var httpClientFactory = Substitute.For<IHttpClientFactory>();
-
-        // Act and Assert
-        Assert.Throws<ArgumentException>("options", () => DocumentHelpers.CreateClient(options, httpClientFactory));
-    }
-
-    [Theory]
-    [InlineData(null)]
-    [InlineData("")]
-    public static void CreateClient_Throws_If_Options_Has_No_Access_Key(string? accessKey)
-    {
-        // Arrange
-        var options = new UserStoreOptions()
-        {
-            ServiceUri = new Uri("https://cosmosdb.azure.local"),
-            AccessKey = accessKey,
-            DatabaseName = "my-database",
-            CollectionName = "my-collection",
-        };
-
-        var httpClientFactory = Substitute.For<IHttpClientFactory>();
-
-        // Act and Assert
-        Assert.Throws<ArgumentException>("options", () => DocumentHelpers.CreateClient(options, httpClientFactory));
+        Assert.Throws<ArgumentNullException>(
+            "options",
+            () => DocumentHelpers.CreateClient(connectionString, options!, httpClientFactory));
     }
 
     [Theory]
@@ -106,10 +70,9 @@ public static class DocumentHelpersTests
     public static void CreateClient_Throws_If_Options_Has_No_Database_Name(string? databaseName)
     {
         // Arrange
+        string connectionString = "AccountKey=bpfYUKmfV0arChaIPI3hU3+bn3w=;AccountEndpoint=https://cosmosdb.azure.local";
         var options = new UserStoreOptions()
         {
-            ServiceUri = new Uri("https://cosmosdb.azure.local"),
-            AccessKey = "bpfYUKmfV0arChaIPI3hU3+bn3w=",
             DatabaseName = databaseName,
             CollectionName = "my-collection",
         };
@@ -117,7 +80,9 @@ public static class DocumentHelpersTests
         var httpClientFactory = Substitute.For<IHttpClientFactory>();
 
         // Act and Assert
-        Assert.Throws<ArgumentException>("options", () => DocumentHelpers.CreateClient(options, httpClientFactory));
+        Assert.Throws<ArgumentException>(
+            "options",
+            () => DocumentHelpers.CreateClient(connectionString, options, httpClientFactory));
     }
 
     [Theory]
@@ -126,10 +91,9 @@ public static class DocumentHelpersTests
     public static void CreateClient_Throws_If_Options_Has_No_Collection_Name(string? collectionName)
     {
         // Arrange
+        string connectionString = "AccountKey=bpfYUKmfV0arChaIPI3hU3+bn3w=;AccountEndpoint=https://cosmosdb.azure.local";
         var options = new UserStoreOptions()
         {
-            ServiceUri = new Uri("https://cosmosdb.azure.local"),
-            AccessKey = "bpfYUKmfV0arChaIPI3hU3+bn3w=",
             DatabaseName = "my-database",
             CollectionName = collectionName,
         };
@@ -137,23 +101,29 @@ public static class DocumentHelpersTests
         var httpClientFactory = Substitute.For<IHttpClientFactory>();
 
         // Act and Assert
-        Assert.Throws<ArgumentException>("options", () => DocumentHelpers.CreateClient(options, httpClientFactory));
+        Assert.Throws<ArgumentException>(
+            "options",
+            () => DocumentHelpers.CreateClient(connectionString, options, httpClientFactory));
     }
 
     [Fact]
     public static void CreateClient_Creates_Client_From_Service_Provider_With_Locations()
     {
         // Arrange
+        string connectionString = "AccountKey=bpfYUKmfV0arChaIPI3hU3+bn3w=;AccountEndpoint=https://cosmosdb.azure.local";
+        var configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection([KeyValuePair.Create<string, string?>("ConnectionStrings:Cosmos", connectionString)])
+            .Build();
+
         var options = new UserStoreOptions()
         {
-            ServiceUri = new Uri("https://cosmosdb.azure.local"),
-            AccessKey = "bpfYUKmfV0arChaIPI3hU3+bn3w=",
             DatabaseName = "my-database",
             CollectionName = "my-collection",
             CurrentLocation = "UK South",
         };
 
         var services = new ServiceCollection()
+            .AddSingleton<IConfiguration>(configuration)
             .AddHttpClient()
             .AddSingleton(Option.Create(new JsonOptions()))
             .AddSingleton(options);
@@ -161,7 +131,7 @@ public static class DocumentHelpersTests
         using var serviceProvider = services.BuildServiceProvider();
 
         // Act
-        using CosmosClient actual = DocumentHelpers.CreateClient(serviceProvider);
+        using var actual = DocumentHelpers.CreateClient(serviceProvider);
 
         // Assert
         actual.ShouldNotBeNull();
@@ -171,15 +141,19 @@ public static class DocumentHelpersTests
     public static void CreateClient_Creates_Client_From_Service_Provider_With_No_Locations()
     {
         // Arrange
+        string connectionString = "AccountKey=bpfYUKmfV0arChaIPI3hU3+bn3w=;AccountEndpoint=https://cosmosdb.azure.local";
+        var configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection([KeyValuePair.Create<string, string?>("ConnectionStrings:Cosmos", connectionString)])
+            .Build();
+
         var options = new UserStoreOptions()
         {
-            ServiceUri = new Uri("https://cosmosdb.azure.local"),
-            AccessKey = "bpfYUKmfV0arChaIPI3hU3+bn3w=",
             DatabaseName = "my-database",
             CollectionName = "my-collection",
         };
 
         var services = new ServiceCollection()
+            .AddSingleton<IConfiguration>(configuration)
             .AddHttpClient()
             .AddSingleton(Option.Create(new JsonOptions()))
             .AddSingleton(options);
@@ -187,7 +161,7 @@ public static class DocumentHelpersTests
         using var serviceProvider = services.BuildServiceProvider();
 
         // Act
-        using CosmosClient actual = DocumentHelpers.CreateClient(serviceProvider);
+        using var actual = DocumentHelpers.CreateClient(serviceProvider);
 
         // Assert
         actual.ShouldNotBeNull();

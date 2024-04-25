@@ -1,0 +1,6 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martincostello/dotnet-bumper/main/dotnet-bumper-schema.json",
+  "includeNuGetPackages": [
+    "Aspire."
+  ]
+}

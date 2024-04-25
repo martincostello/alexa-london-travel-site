@@ -5,7 +5,6 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using MartinCostello.LondonTravel.Site.Identity;
 using MartinCostello.LondonTravel.Site.Options;
-using MartinCostello.LondonTravel.Site.Telemetry;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 
@@ -13,7 +12,6 @@ namespace MartinCostello.LondonTravel.Site.Services;
 
 public sealed partial class AlexaService(
     UserManager<LondonTravelUser> userManager,
-    ISiteTelemetry telemetry,
     IOptions<SiteOptions> options,
     ILogger<AlexaService> logger)
 {
@@ -71,8 +69,6 @@ public sealed partial class AlexaService(
             {
                 return RedirectForError(redirectUri, state);
             }
-
-            telemetry.TrackAlexaLink(travelUser.Id!);
 
             string tokenRedirectUrl = BuildRedirectUrl(redirectUri!, state, accessToken);
             return Results.Redirect(tokenRedirectUrl);

@@ -1,7 +1,7 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using Serilog;
+using OpenTelemetry.Logs;
 
 namespace MartinCostello.LondonTravel.Site.Extensions;
 
@@ -11,36 +11,23 @@ namespace MartinCostello.LondonTravel.Site.Extensions;
 public static class ILoggingBuilderExtensions
 {
     /// <summary>
-    /// Configures logging for the application.
+    /// Adds OpenTelemetry logging.
     /// </summary>
-    /// <param name="builder">The <see cref="ILoggingBuilder"/> to configure.</param>
-    /// <param name="context">The <see cref="HostBuilderContext"/> to use.</param>
+    /// <param name="builder">The logging builder to configure.</param>
     /// <returns>
-    /// The <see cref="ILoggingBuilder"/> passed as the value of <paramref name="builder"/>.
+    /// The value specified by <paramref name="builder"/>.
     /// </returns>
-    public static ILoggingBuilder ConfigureLogging(this ILoggingBuilder builder, HostBuilderContext context)
+    public static ILoggingBuilder AddTelemetry(this ILoggingBuilder builder)
     {
-        var loggerConfig = new LoggerConfiguration()
-            .Enrich.FromLogContext()
-            .Enrich.WithProperty("AspNetCoreEnvironment", context.HostingEnvironment.EnvironmentName)
-            .Enrich.WithProperty("AzureDatacenter", context.Configuration.AzureDatacenter())
-            .Enrich.WithProperty("AzureEnvironment", context.Configuration.AzureEnvironment())
-            .Enrich.WithProperty("Version", GitMetadata.Commit)
-            .ReadFrom.Configuration(context.Configuration);
-
-        string appInsightsConnectionString = context.Configuration.ApplicationInsightsConnectionString();
-
-        if (!string.IsNullOrWhiteSpace(appInsightsConnectionString))
+        return builder.AddOpenTelemetry((p) =>
         {
-            loggerConfig = loggerConfig.WriteTo.ApplicationInsights(appInsightsConnectionString, TelemetryConverter.Events);
-        }
+            p.IncludeFormattedMessage = true;
+            p.IncludeScopes = true;
 
-        if (context.HostingEnvironment.IsDevelopment())
-        {
-            loggerConfig = loggerConfig.WriteTo.Console(formatProvider: CultureInfo.InvariantCulture);
-        }
-
-        Log.Logger = loggerConfig.CreateLogger();
-        return builder.AddSerilog(dispose: true);
+            if (TelemetryExtensions.IsOtlpCollectorConfigured())
+            {
+                p.AddOtlpExporter();
+            }
+        });
     }
 }

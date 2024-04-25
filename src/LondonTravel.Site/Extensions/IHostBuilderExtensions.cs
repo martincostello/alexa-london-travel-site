@@ -14,28 +14,17 @@ internal static class IHostBuilderExtensions
     {
         builder.ConfigureAppConfiguration((context, builder) =>
         {
-            string appInsightsConnectionString = context.Configuration.ApplicationInsightsConnectionString();
-
-            if (!string.IsNullOrWhiteSpace(appInsightsConnectionString))
-            {
-                builder.AddApplicationInsightsSettings(
-                    appInsightsConnectionString,
-                    developerMode: context.HostingEnvironment.IsDevelopment());
-            }
-
             // Build the configuration so far, this ensures things like user secrets are available
             IConfiguration config = builder.Build();
 
-            if (TryGetVaultUri(config, out Uri? vaultUri))
+            if (TryGetVaultUri(config, out var vaultUri))
             {
-                TokenCredential credential = CreateTokenCredential(config);
+                var credential = CreateTokenCredential(config);
                 var manager = new AzureEnvironmentSecretManager(config.AzureEnvironment());
 
                 builder.AddAzureKeyVault(vaultUri, credential, manager);
             }
         });
-
-        builder.ConfigureLogging((context, builder) => builder.ConfigureLogging(context));
 
         builder.ConfigureServices((services) =>
         {
@@ -43,12 +32,12 @@ internal static class IHostBuilderExtensions
             {
                 var config = provider.GetRequiredService<IConfiguration>();
 
-                if (!TryGetVaultUri(config, out Uri? vaultUri))
+                if (!TryGetVaultUri(config, out var vaultUri))
                 {
                     return null!;
                 }
 
-                TokenCredential credential = CreateTokenCredential(config);
+                var credential = CreateTokenCredential(config);
                 return new SecretClient(vaultUri, credential);
             });
         });

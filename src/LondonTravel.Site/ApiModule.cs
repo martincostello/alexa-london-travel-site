@@ -8,7 +8,6 @@ using MartinCostello.LondonTravel.Site.Identity;
 using MartinCostello.LondonTravel.Site.Models;
 using MartinCostello.LondonTravel.Site.OpenApi;
 using MartinCostello.LondonTravel.Site.Services;
-using MartinCostello.LondonTravel.Site.Telemetry;
 using Microsoft.AspNetCore.Mvc;
 using NSwag.Annotations;
 
@@ -41,7 +40,6 @@ public static partial class ApiModule
         [Description("The authorization header.")][FromHeader(Name = "Authorization")] string? authorizationHeader,
         HttpContext httpContext,
         IAccountService service,
-        ISiteTelemetry telemetry,
         ILoggerFactory loggerFactory,
         CancellationToken cancellationToken)
     {
@@ -53,7 +51,6 @@ public static partial class ApiModule
         if (string.IsNullOrWhiteSpace(authorizationHeader))
         {
             Log.AccessDeniedNoAuthorization(logger, httpContext);
-            telemetry.TrackApiPreferencesUnauthorized();
 
             return Results.Json(
                 Unauthorized(httpContext, "No access token specified."),
@@ -72,7 +69,6 @@ public static partial class ApiModule
         if (user == null || !string.Equals(user.AlexaToken, accessToken, StringComparison.Ordinal))
         {
             Log.AccessDeniedUnknownToken(logger, httpContext);
-            telemetry.TrackApiPreferencesUnauthorized();
 
             return Results.Json(
                 Unauthorized(httpContext, "Unauthorized.", errorDetail),
@@ -87,8 +83,6 @@ public static partial class ApiModule
             FavoriteLines = user.FavoriteLines,
             UserId = user.Id!,
         };
-
-        telemetry.TrackApiPreferencesSuccess(result.UserId);
 
         return Results.Json(result, ApplicationJsonSerializerContext.Default.PreferencesResponse);
     }

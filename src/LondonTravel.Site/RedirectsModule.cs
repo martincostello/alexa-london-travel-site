@@ -2,7 +2,6 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Security.Cryptography;
-using MartinCostello.LondonTravel.Site.Telemetry;
 
 namespace MartinCostello.LondonTravel.Site;
 
@@ -114,11 +113,11 @@ public static class RedirectsModule
 
         void RedirectCrawler(string path)
         {
-            app.MapMethods(path, httpMethods, (ISiteTelemetry telemetry) =>
-            {
-                telemetry.TrackSuspiciousCrawler();
-                return Results.Redirect(Videos[RandomNumberGenerator.GetInt32(0, Videos.Length)]);
-            }).ExcludeFromDescription();
+            app.MapMethods(
+                path,
+                httpMethods,
+                () => Results.Redirect(Videos[RandomNumberGenerator.GetInt32(0, Videos.Length)]))
+                .ExcludeFromDescription();
         }
     }
 }

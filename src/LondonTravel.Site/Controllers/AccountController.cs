@@ -4,7 +4,6 @@
 using System.Security.Claims;
 using MartinCostello.LondonTravel.Site.Identity;
 using MartinCostello.LondonTravel.Site.Options;
-using MartinCostello.LondonTravel.Site.Telemetry;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -17,7 +16,6 @@ namespace MartinCostello.LondonTravel.Site.Controllers;
 public partial class AccountController(
     UserManager<LondonTravelUser> userManager,
     SignInManager<LondonTravelUser> signInManager,
-    ISiteTelemetry telemetry,
     TimeProvider timeProvider,
     SiteOptions siteOptions,
     ILogger<AccountController> logger) : Controller
@@ -81,8 +79,6 @@ public partial class AccountController(
 
         Log.UserSignedOut(logger, userId);
 
-        telemetry.TrackSignOut(userId);
-
         return RedirectToPage(SiteRoutes.Home);
     }
 
@@ -141,7 +137,6 @@ public partial class AccountController(
             string? userId = userManager.GetUserId(info.Principal);
 
             Log.UserSignedIn(logger, userId, info.LoginProvider);
-            telemetry.TrackSignIn(userId, info.LoginProvider);
 
             return RedirectToLocal(returnUrl);
         }
@@ -152,9 +147,9 @@ public partial class AccountController(
         }
         else
         {
-            LondonTravelUser? user = CreateSystemUser(info);
+            var user = CreateSystemUser(info);
 
-            if (!Uri.TryCreate(returnUrl, UriKind.Relative, out Uri? returnUri))
+            if (!Uri.TryCreate(returnUrl, UriKind.Relative, out var returnUri))
             {
                 returnUri = null;
             }
@@ -174,8 +169,6 @@ public partial class AccountController(
                 await signInManager.SignInAsync(user, isPersistent: true);
 
                 Log.UserCreated(logger, user.Id, info.LoginProvider);
-
-                telemetry.TrackAccountCreated(user.Id!, user.Email, info.LoginProvider);
 
                 return returnUri != null && IsRedirectAlexaAuthorization(returnUri.ToString()) ?
                     Redirect(returnUri.ToString()) :
@@ -205,7 +198,7 @@ public partial class AccountController(
     private static bool IsUrlOtherUrl(string? url, string targetUrl)
     {
         if (string.IsNullOrWhiteSpace(url) ||
-            !Uri.TryCreate(url, UriKind.RelativeOrAbsolute, out Uri? uri))
+            !Uri.TryCreate(url, UriKind.RelativeOrAbsolute, out var uri))
         {
             return false;
         }
@@ -290,7 +283,7 @@ public partial class AccountController(
     private bool IsUrlPageOrRoute(string? url, string pageOrRouteName)
     {
         if (string.IsNullOrWhiteSpace(url) ||
-            !Uri.TryCreate(url, UriKind.RelativeOrAbsolute, out Uri? uri))
+            !Uri.TryCreate(url, UriKind.RelativeOrAbsolute, out var uri))
         {
             return false;
         }

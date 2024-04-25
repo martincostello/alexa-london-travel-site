@@ -26,15 +26,17 @@ internal static class DocumentHelpers
     {
         ArgumentNullException.ThrowIfNull(serviceProvider);
 
+        var configuration = serviceProvider.GetRequiredService<IConfiguration>();
         var options = serviceProvider.GetRequiredService<UserStoreOptions>();
         var httpClientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
 
-        return CreateClient(options, httpClientFactory);
+        return CreateClient(configuration["ConnectionStrings:Cosmos"]!, options, httpClientFactory);
     }
 
     /// <summary>
     /// Creates a new instance of an <see cref="IDocumentClient"/> implementation.
     /// </summary>
+    /// <param name="connectionString">The Azire Cosmos DB connection string to use.</param>
     /// <param name="options">The <see cref="UserStoreOptions"/> to use.</param>
     /// <param name="httpClientFactory">The <see cref="IHttpClientFactory"/> to use.</param>
     /// <param name="serializer">The optional <see cref="CosmosSerializer"/> to use.</param>
@@ -48,27 +50,14 @@ internal static class DocumentHelpers
     /// <paramref name="options"/> is invalid.
     /// </exception>
     internal static CosmosClient CreateClient(
+        string connectionString,
         UserStoreOptions options,
         IHttpClientFactory httpClientFactory,
         CosmosSerializer? serializer = null)
     {
         ArgumentNullException.ThrowIfNull(options);
         ArgumentNullException.ThrowIfNull(httpClientFactory);
-
-        if (options.ServiceUri == null)
-        {
-            throw new ArgumentException("No DocumentDB URI is configured.", nameof(options));
-        }
-
-        if (!options.ServiceUri.IsAbsoluteUri)
-        {
-            throw new ArgumentException("The configured DocumentDB URI is as it is not an absolute URI.", nameof(options));
-        }
-
-        if (string.IsNullOrEmpty(options.AccessKey))
-        {
-            throw new ArgumentException("No DocumentDB access key is configured.", nameof(options));
-        }
+        ArgumentException.ThrowIfNullOrWhiteSpace(connectionString);
 
         if (string.IsNullOrEmpty(options.DatabaseName))
         {
@@ -80,7 +69,7 @@ internal static class DocumentHelpers
             throw new ArgumentException("No DocumentDB collection name is configured.", nameof(options));
         }
 
-        var builder = new CosmosClientBuilder(options.ServiceUri.AbsoluteUri, options.AccessKey)
+        var builder = new CosmosClientBuilder(connectionString)
             .WithApplicationName("london-travel")
             .WithCustomSerializer(serializer)
             .WithHttpClientFactory(httpClientFactory.CreateClient)

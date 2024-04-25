@@ -172,7 +172,7 @@ public static partial class AuthenticationBuilderExtensions
         string? path = GetSiteErrorRedirect(context, secureDataFormat, propertiesProvider);
 
         if (string.IsNullOrEmpty(path) ||
-            !Uri.TryCreate(path, UriKind.Relative, out Uri? notUsed))
+            !Uri.TryCreate(path, UriKind.Relative, out var notUsed))
         {
             path = "/";
         }
@@ -218,7 +218,7 @@ public static partial class AuthenticationBuilderExtensions
 
     private static bool IsProviderEnabled(string name, Options.AuthenticationOptions options)
     {
-        if (options.ExternalProviders?.TryGetValue(name, out ExternalSignInOptions? provider) != true ||
+        if (options.ExternalProviders?.TryGetValue(name, out var provider) != true ||
             provider is null)
         {
             return false;

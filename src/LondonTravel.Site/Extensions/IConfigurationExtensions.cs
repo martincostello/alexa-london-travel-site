@@ -9,30 +9,6 @@ namespace MartinCostello.LondonTravel.Site.Extensions;
 public static class IConfigurationExtensions
 {
     /// <summary>
-    /// Gets the configured Application Insights connection string.
-    /// </summary>
-    /// <param name="config">The <see cref="IConfiguration"/> to use.</param>
-    /// <returns>
-    /// The configured Application Insights connection string, if any.
-    /// </returns>
-    public static string ApplicationInsightsConnectionString(this IConfiguration config)
-    {
-        return config?["ApplicationInsights:ConnectionString"] ?? string.Empty;
-    }
-
-    /// <summary>
-    /// Gets the name of the Azure datacenter the application is running in.
-    /// </summary>
-    /// <param name="config">The <see cref="IConfiguration"/> to use.</param>
-    /// <returns>
-    /// The name of the Azure datacenter the application is running in.
-    /// </returns>
-    public static string AzureDatacenter(this IConfiguration config)
-    {
-        return config?["Azure:Datacenter"] ?? "local";
-    }
-
-    /// <summary>
     /// Gets the name of the Azure environment the application is running in.
     /// </summary>
     /// <param name="config">The <see cref="IConfiguration"/> to use.</param>
