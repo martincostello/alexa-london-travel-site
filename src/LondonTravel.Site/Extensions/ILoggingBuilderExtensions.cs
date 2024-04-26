@@ -1,6 +1,7 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using Azure.Monitor.OpenTelemetry.Exporter;
 using OpenTelemetry.Logs;
 
 namespace MartinCostello.LondonTravel.Site.Extensions;
@@ -23,6 +24,11 @@ public static class ILoggingBuilderExtensions
         {
             p.IncludeFormattedMessage = true;
             p.IncludeScopes = true;
+
+            if (TelemetryExtensions.IsAzureMonitorConfigured())
+            {
+                p.AddAzureMonitorLogExporter();
+            }
 
             if (TelemetryExtensions.IsOtlpCollectorConfigured())
             {
