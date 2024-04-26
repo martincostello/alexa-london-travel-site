@@ -6,7 +6,6 @@ using System.Diagnostics;
 using AspNet.Security.OAuth.Amazon;
 using AspNet.Security.OAuth.Apple;
 using AspNet.Security.OAuth.GitHub;
-using Azure.Identity;
 using Azure.Monitor.OpenTelemetry.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.AspNetCore.Authentication.Google;
@@ -86,7 +85,7 @@ public static class TelemetryExtensions
     internal static bool IsOtlpCollectorConfigured()
         => !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("OTEL_EXPORTER_OTLP_ENDPOINT"));
 
-    private static bool IsAzureMonitorConfigured()
+    internal static bool IsAzureMonitorConfigured()
         => !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("APPLICATIONINSIGHTS_CONNECTION_STRING"));
 
     private static void EnrichHttpActivity(Activity activity, HttpRequestMessage request)

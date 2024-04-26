@@ -11,7 +11,10 @@ updates:
 - package-ecosystem: nuget
   directory: "/"
   groups:
-    polly:
+    OpenTelemetry:
+      patterns:
+        - OpenTelemetry*
+    Polly:
       patterns:
         - Polly*
     xunit:
