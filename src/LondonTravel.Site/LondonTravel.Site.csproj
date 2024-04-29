@@ -45,7 +45,7 @@
     <PackageReference Include="Polly.RateLimiting" />
   </ItemGroup>
   <ItemGroup>
-    <Content Update="package.json;package-lock.json;tsconfig.json" CopyToPublishDirectory="Never" />
+    <Content Update=".prettierignore;coverage\**;package.json;package-lock.json;tsconfig.json" CopyToPublishDirectory="Never" />
     <EmbeddedResource Update="SiteResources.resx" Generator="" />
     <InternalsVisibleTo Include="LondonTravel.Site.Tests" />
     <None Remove="assets\scripts\**\*.ts" />
