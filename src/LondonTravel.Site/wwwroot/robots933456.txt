@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://londontravel.martincostello.com/sitemap.xml
