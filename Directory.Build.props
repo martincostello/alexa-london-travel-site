@@ -21,6 +21,7 @@
     <Deterministic>true</Deterministic>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <EnableSdkContainerSupport>true</EnableSdkContainerSupport>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateGitMetadata Condition=" '$(CI)' != '' and '$(GenerateGitMetadata)' == '' ">true</GenerateGitMetadata>
@@ -53,5 +54,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Using Include="System.Globalization" />
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(CI)' == 'true' ">
+    <ContainerImageTags>github-$(GITHUB_RUN_NUMBER)</ContainerImageTags>
+    <ContainerImageTags Condition=" '$(GITHUB_HEAD_REF)' == '' ">$(ContainerImageTags);latest</ContainerImageTags>
+    <ContainerRepository>$(GITHUB_REPOSITORY)</ContainerRepository>
+    <ContainerTitle>$(GITHUB_REPOSITORY)</ContainerTitle>
+    <ContainerVendor>$(GITHUB_REPOSITORY_OWNER)</ContainerVendor>
+    <ContainerVersion>$(GITHUB_SHA)</ContainerVersion>
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(CI)' == 'true' ">
+    <ContainerLabel Include="com.docker.extension.changelog" Value="$(GITHUB_SERVER_URL)/$(GITHUB_REPOSITORY)/commit/$(GITHUB_SHA)" />
+    <ContainerLabel Include="com.docker.extension.publisher-url" Value="$(GITHUB_SERVER_URL)/$(GITHUB_REPOSITORY_OWNER)" />
   </ItemGroup>
 </Project>

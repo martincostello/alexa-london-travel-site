@@ -7,6 +7,7 @@
     <NoWarn>$(NoWarn);CA1716</NoWarn>
     <OutputType>Exe</OutputType>
     <PreserveCompilationContext>true</PreserveCompilationContext>
+    <PublishSelfContained>true</PublishSelfContained>
     <RootNamespace>MartinCostello.LondonTravel.Site</RootNamespace>
     <SatelliteResourceLanguages>en;en-GB;en-US;qps-Ploc</SatelliteResourceLanguages>
     <Summary>Website for the London Travel Amazon Alexa skill.</Summary>
@@ -20,24 +21,7 @@
     <!-- TODO Remove if https://github.com/dotnet/sdk/issues/40500 implemented or when no longer only in nightly -->
     <ContainerBaseImage>mcr.microsoft.com/dotnet/nightly/runtime-deps:8.0-noble-chiseled-extra</ContainerBaseImage>
     <ContainerFamily>noble-chiseled-extra</ContainerFamily>
-    <EnableSdkContainerSupport>true</EnableSdkContainerSupport>
-    <PublishSelfContained>true</PublishSelfContained>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(CI)' == 'true' ">
-    <ContainerImageTags>github-$(GITHUB_RUN_NUMBER)</ContainerImageTags>
-    <ContainerImageTags Condition=" '$(GITHUB_HEAD_REF)' == '' ">$(ContainerImageTags);latest</ContainerImageTags>
-    <ContainerRepository>$(GITHUB_REPOSITORY)</ContainerRepository>
-    <ContainerTitle>$(GITHUB_REPOSITORY)</ContainerTitle>
-    <ContainerVendor>$(GITHUB_REPOSITORY_OWNER)</ContainerVendor>
-    <ContainerVersion>$(GITHUB_SHA)</ContainerVersion>
-  </PropertyGroup>
-  <ItemGroup>
-    <ContainerPort Include="8080" Type="tcp" />
-  </ItemGroup>
-  <ItemGroup Condition=" '$(CI)' == 'true' ">
-    <ContainerLabel Include="com.docker.extension.changelog" Value="$(GITHUB_SERVER_URL)/$(GITHUB_REPOSITORY)/commit/$(GITHUB_SHA)" />
-    <ContainerLabel Include="com.docker.extension.publisher-url" Value="$(GITHUB_SERVER_URL)/$(GITHUB_REPOSITORY_OWNER)" />
-  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AspNet.Security.OAuth.Amazon" />
     <PackageReference Include="AspNet.Security.OAuth.Apple" />
@@ -67,6 +51,7 @@
     <PackageReference Include="Polly.RateLimiting" />
   </ItemGroup>
   <ItemGroup>
+    <ContainerPort Include="8080" Type="tcp" />
     <Content Update=".prettierignore;coverage\**;package.json;package-lock.json;tsconfig.json" CopyToPublishDirectory="Never" />
     <EmbeddedResource Update="SiteResources.resx" Generator="" />
     <InternalsVisibleTo Include="LondonTravel.Site.Tests" />
