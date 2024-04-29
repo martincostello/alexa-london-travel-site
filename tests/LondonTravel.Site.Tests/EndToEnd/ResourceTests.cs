@@ -35,6 +35,7 @@ public class ResourceTests(WebsiteFixture fixture)
     [InlineData("/pgp-key.txt", MediaTypeNames.Text.Plain)]
     [InlineData("/privacy-policy/", MediaTypeNames.Text.Html)]
     [InlineData("/robots.txt", MediaTypeNames.Text.Plain)]
+    [InlineData("/robots933456.txt", MediaTypeNames.Text.Plain)]
     [InlineData("/security.txt", MediaTypeNames.Text.Plain)]
     [InlineData("/service-worker.js", "text/javascript")]
     [InlineData("/sitemap.xml", MediaTypeNames.Text.Xml)]
