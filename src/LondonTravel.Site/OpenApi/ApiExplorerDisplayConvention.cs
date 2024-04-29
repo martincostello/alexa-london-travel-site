@@ -17,6 +17,7 @@ public sealed class ApiExplorerDisplayConvention : IActionModelConvention
     {
         action.ApiExplorer.IsVisible =
             action.Attributes.OfType<ProducesAttribute>().Any((p) => p.ContentTypes.Contains(MediaTypeNames.Application.Json)) &&
-            !action.Attributes.OfType<ApiExplorerSettingsAttribute>().Any((p) => p.IgnoreApi);
+            !action.Attributes.OfType<ApiExplorerSettingsAttribute>().Any((p) => p.IgnoreApi) &&
+            !action.Attributes.OfType<IExcludeFromDescriptionMetadata>().Any();
     }
 }
