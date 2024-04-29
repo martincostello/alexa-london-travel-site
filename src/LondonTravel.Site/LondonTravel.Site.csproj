@@ -1,6 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
-    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <Description>https://londontravel.martincostello.com/</Description>
     <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
     <EnableRequestDelegateGenerator>true</EnableRequestDelegateGenerator>

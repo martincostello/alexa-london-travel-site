@@ -24,9 +24,12 @@ jobs:
       application-slot: ${{ steps.set-outputs.outputs.application-slot }}
       application-url: ${{ steps.set-outputs.outputs.application-url }}
       comment-id: ${{ steps.post-comment.outputs.result }}
+      container-tag: ${{ steps.set-outputs.outputs.container-tag }}
       environment-name: ${{ steps.set-outputs.outputs.environment-name }}
       environment-url: ${{ steps.set-outputs.outputs.environment-url }}
       run-id: ${{ steps.set-outputs.outputs.run-id }}
+      run-number: ${{ steps.set-outputs.outputs.run-number }}
+      run-sha: ${{ steps.set-outputs.outputs.run-sha }}
       workflow-url: ${{ steps.set-outputs.outputs.workflow-url }}
 
     permissions:
@@ -107,15 +110,20 @@ jobs:
           }
 
           core.setOutput('run-id', run.id);
+          core.setOutput('run-number', run.run_number);
+          core.setOutput('run-sha', head_sha);
 
     - name: Set outputs
       id: set-outputs
       env:
         ARTIFACT_RUN_ID: ${{ steps.get-run.outputs.run-id }}
+        ARTIFACT_RUN_NUMBER: ${{ steps.get-run.outputs.run-number }}
+        ARTIFACT_RUN_SHA: ${{ steps.get-run.outputs.run-sha }}
         ENVIRONMENT_NAME: ${{ steps.get-environment-name.outputs.result }}
       shell: bash
       run: |
-        application_name="londontravelmartincostello"
+        application_name="londontravel-martincostello"
+        container_tag="${GITHUB_REPOSITORY_OWNER}.azurecr.io/${GITHUB_REPOSITORY}:github-${ARTIFACT_RUN_NUMBER}".ToLowerInvariant()
         environment_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/deployments/${ENVIRONMENT_NAME}"
         workflow_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
 
@@ -132,9 +140,12 @@ jobs:
           echo "application-name=${application_name}"
           echo "application-slot=${application_slot}"
           echo "application-url=${application_url}"
+          echo "container-tag=${container_tag}"
           echo "environment-name=${ENVIRONMENT_NAME}"
           echo "environment-url=${environment_url}"
           echo "run-id=${ARTIFACT_RUN_ID}"
+          echo "run-number=${ARTIFACT_RUN_NUMBER}"
+          echo "run-sha=${ARTIFACT_RUN_SHA}"
           echo "workflow-url=${workflow_url}"
         } >> "$GITHUB_OUTPUT"
 
@@ -168,7 +179,7 @@ jobs:
     name: ${{ needs.setup.outputs.environment-name }}
     needs: [ setup ]
     concurrency: ${{ needs.setup.outputs.environment-name }}_environment
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     environment:
       name: ${{ needs.setup.outputs.environment-name }}
@@ -180,13 +191,6 @@ jobs:
 
     steps:
 
-    - name: Download artifacts
-      uses: actions/download-artifact@65a9edc5881444af0b9093a5e628f2fe47ea3b2e # v4.1.7
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        name: webapp
-        run-id: ${{ needs.setup.outputs.run-id }}
-
     - name: Azure log in
       uses: azure/login@6b2456866fc08b011acb422a92a4aa20e2c4de32 # v2.1.0
       with:
@@ -194,11 +198,42 @@ jobs:
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-    - name: Deploy to Azure App Service
+    - name: Deploy container to Azure App Service
       uses: azure/webapps-deploy@de617f46172a906d0617bb0e50d81e9e3aec24c8 # v3.0.1
       with:
         app-name: ${{ needs.setup.outputs.application-name }}
+        images: ${{ needs.setup.outputs.container-tag }}
         slot-name: ${{ needs.setup.outputs.application-slot }}
+
+    - name: Check application health
+      shell: pwsh
+      env:
+        APPLICATION_SHA: ${{ needs.setup.outputs.run-sha }}
+        APPLICATION_URL: ${{ needs.setup.outputs.application-url }}
+      run: |
+        $delay = 10
+        $limit = 15
+        $success = $false
+        for ($i = 0; $i -lt $limit; $i++) {
+          $response = $null
+          try {
+            $response = Invoke-WebRequest -Uri "${env:APPLICATION_URL}/version" -Method Get -UseBasicParsing
+          } catch {
+            $response = $_.Exception.Response
+          }
+          if (($null -ne $response) -And ($response.StatusCode -eq 200)) {
+            $json = $response.Content | ConvertFrom-Json
+            $version = $json.applicationVersion
+            if ((-Not [string]::IsNullOrWhiteSpace($version)) -And $version.Contains(${env:APPLICATION_SHA})) {
+              $success = $true
+              break
+            }
+          }
+          Start-Sleep -Seconds $delay
+        }
+        if (-Not $success) {
+          throw "${env:APPLICATION_URL} did not return a successful status code and the expected version within the time limit after $limit attempts."
+        }
 
     - name: Post comment
       uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
