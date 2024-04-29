@@ -4,6 +4,7 @@
     <Description>https://londontravel.martincostello.com/</Description>
     <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
     <EnableRequestDelegateGenerator>true</EnableRequestDelegateGenerator>
+    <InvariantGlobalization>false</InvariantGlobalization>
     <NoWarn>$(NoWarn);CA1716</NoWarn>
     <OutputType>Exe</OutputType>
     <PreserveCompilationContext>true</PreserveCompilationContext>
