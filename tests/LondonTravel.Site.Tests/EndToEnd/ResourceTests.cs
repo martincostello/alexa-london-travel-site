@@ -42,6 +42,7 @@ public class ResourceTests(WebsiteFixture fixture)
     [InlineData("/swagger/api/swagger.json", MediaTypeNames.Application.Json)]
     [InlineData("/technology/", MediaTypeNames.Text.Html)]
     [InlineData("/terms-of-service/", MediaTypeNames.Text.Html)]
+    [InlineData("/version", MediaTypeNames.Application.Json)]
     public async Task Can_Load_Resource(string requestUri, string contentType)
     {
         // Arrange

@@ -4,6 +4,10 @@
 using System.ComponentModel;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Text.Json.Nodes;
 using MartinCostello.LondonTravel.Site.Identity;
 using MartinCostello.LondonTravel.Site.Models;
 using MartinCostello.LondonTravel.Site.OpenApi;
@@ -26,6 +30,39 @@ public static partial class ApiModule
         .RequireAuthorization("admin");
 
         app.MapGet("/api/preferences", GetPreferences);
+
+        app.MapGet("/version", static () =>
+        {
+            return new JsonObject()
+            {
+                ["applicationVersion"] = GitMetadata.Version,
+                ["frameworkDescription"] = RuntimeInformation.FrameworkDescription,
+                ["operatingSystem"] = new JsonObject()
+                {
+                    ["description"] = RuntimeInformation.OSDescription,
+                    ["architecture"] = RuntimeInformation.OSArchitecture.ToString(),
+                    ["version"] = Environment.OSVersion.VersionString,
+                    ["is64Bit"] = Environment.Is64BitOperatingSystem,
+                },
+                ["process"] = new JsonObject()
+                {
+                    ["architecture"] = RuntimeInformation.ProcessArchitecture.ToString(),
+                    ["is64BitProcess"] = Environment.Is64BitProcess,
+                    ["isNativeAoT"] = !RuntimeFeature.IsDynamicCodeSupported,
+                    ["isPrivilegedProcess"] = Environment.IsPrivilegedProcess,
+                },
+                ["dotnetVersions"] = new JsonObject()
+                {
+                    ["runtime"] = GetVersion<object>(),
+                    ["aspNetCore"] = GetVersion<HttpContext>(),
+                },
+            };
+
+            static string GetVersion<T>()
+                => typeof(T).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()!.InformationalVersion;
+        })
+        .AllowAnonymous()
+        .ExcludeFromDescription();
 
         return app;
     }
