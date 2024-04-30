@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
+    <ContainerBaseImage>mcr.microsoft.com/dotnet/nightly/runtime-deps:9.0-noble-chiseled-extra</ContainerBaseImage>
     <ContainerFamily>noble-chiseled-extra</ContainerFamily>
     <Description>https://londontravel.martincostello.com/</Description>
     <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
