@@ -25,6 +25,11 @@ To build and test the website run the following commands from your terminal of c
 ```powershell
 git clone https://github.com/martincostello/alexa-london-travel-site.git
 cd alexa-london-travel-site
+
+# Restore Aspire workload on first usage (requires elevation on Windows if not installed)
+dotnet workload restore
+
+# Build and test the application
 ./build.ps1
 ```
 

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "AppHost": {
+      "commandName": "Project",
+      "applicationUrl": "https://localhost:15292;http://localhost:15293",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DOTNET_ENVIRONMENT": "Development",
+        "DOTNET_DASHBOARD_OTLP_ENDPOINT_URL": "https://localhost:16099",
+        "DOTNET_RESOURCE_SERVICE_ENDPOINT_URL": "https://localhost:17037"
+      }
+    }
+  }
+}
