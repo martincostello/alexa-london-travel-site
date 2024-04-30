@@ -18,9 +18,8 @@
     <XlfLanguages>en-GB;en-US;qps-Ploc</XlfLanguages>
   </PropertyGroup>
   <PropertyGroup>
-    <!-- TODO Remove if https://github.com/dotnet/sdk/issues/40500 implemented or when no longer only in nightly -->
-    <ContainerBaseImage>mcr.microsoft.com/dotnet/nightly/runtime-deps:9.0-noble-chiseled-extra</ContainerBaseImage>
-    <ContainerFamily>noble-chiseled-extra</ContainerFamily>
+    <!-- TODO Switch to noble once available for .NET 9 -->
+    <ContainerFamily>jammy-chiseled-extra</ContainerFamily>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Aspire.Microsoft.Azure.Cosmos" />
