@@ -19,7 +19,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <!-- TODO Remove if https://github.com/dotnet/sdk/issues/40500 implemented or when no longer only in nightly -->
-    <ContainerBaseImage>mcr.microsoft.com/dotnet/nightly/runtime-deps:8.0-noble-chiseled-extra</ContainerBaseImage>
+    <ContainerBaseImage>mcr.microsoft.com/dotnet/nightly/runtime-deps:9.0-noble-chiseled-extra</ContainerBaseImage>
     <ContainerFamily>noble-chiseled-extra</ContainerFamily>
   </PropertyGroup>
   <ItemGroup>
