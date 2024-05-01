@@ -111,12 +111,12 @@ public static class TelemetryExtensions
 
     private static void AddServiceMappings(ConcurrentDictionary<string, string> mappings, IServiceProvider serviceProvider)
     {
-        AddMapping("Amazon", GetOAuthEndpoint<AmazonAuthenticationOptions>());
-        AddMapping("Apple", GetOAuthEndpoint<AppleAuthenticationOptions>());
-        AddMapping("Facebook", GetOAuthEndpoint<FacebookOptions>());
-        AddMapping("GitHub", GetOAuthEndpoint<GitHubAuthenticationOptions>());
-        AddMapping("Google", GetOAuthEndpoint<GoogleOptions>());
-        AddMapping("Microsoft", GetOAuthEndpoint<MicrosoftAccountOptions>());
+        AddMappings<AmazonAuthenticationOptions>("Amazon");
+        AddMappings<AppleAuthenticationOptions>("Apple");
+        AddMappings<FacebookOptions>("Facebook");
+        AddMappings<GitHubAuthenticationOptions>("GitHub");
+        AddMappings<GoogleOptions>("Google");
+        AddMappings<MicrosoftAccountOptions>("Microsoft");
         AddMapping("Twitter", "https://api.twitter.com");
 
         void AddMapping(string name, string? host)
@@ -129,8 +129,21 @@ public static class TelemetryExtensions
             }
         }
 
-        string? GetOAuthEndpoint<T>()
+        void AddMappings<T>(string name)
             where T : OAuthOptions
-            => serviceProvider.GetService<IOptions<T>>()?.Value.AuthorizationEndpoint;
+        {
+            var options = GetOAuthOptions<T>();
+
+            if (options is { })
+            {
+                AddMapping(name, options.AuthorizationEndpoint);
+                AddMapping(name, options.TokenEndpoint);
+                AddMapping(name, options.UserInformationEndpoint);
+            }
+        }
+
+        OAuthOptions? GetOAuthOptions<T>()
+            where T : OAuthOptions
+            => serviceProvider.GetService<IOptions<T>>()?.Value;
     }
 }
