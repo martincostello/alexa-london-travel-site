@@ -168,7 +168,7 @@ builder.Services.Configure<StaticFileOptions>((options) =>
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddSingleton<ITflServiceFactory, TflServiceFactory>();
 
-builder.AddAzureCosmosDBClient("Cosmos");
+builder.AddAzureCosmosClient("Cosmos");
 builder.Services.AddSingleton(DocumentHelpers.CreateClient);
 builder.Services.TryAddSingleton<IDocumentService, DocumentService>();
 builder.Services.TryAddSingleton<IDocumentCollectionInitializer, DocumentCollectionInitializer>();
