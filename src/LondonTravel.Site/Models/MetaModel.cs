@@ -31,7 +31,7 @@ public sealed class MetaModel
     public string? Description { get; set; }
 
     /// <summary>
-    /// Gets or sets the Facebook add Id.
+    /// Gets or sets the Facebook app Id.
     /// </summary>
     public string? FacebookApp { get; set; }
 

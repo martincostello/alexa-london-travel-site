@@ -7,7 +7,6 @@ using AspNet.Security.OAuth.Apple;
 using AspNet.Security.OAuth.GitHub;
 using JustEat.HttpClientInterception;
 using MartinCostello.LondonTravel.Site.Extensions;
-using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
 using Microsoft.AspNetCore.Authentication.Twitter;
@@ -104,7 +103,6 @@ public sealed class HttpServerFixture : TestServerFixture
             p.AddSingleton<ConfigureAuthenticationHandlers>();
             p.AddSingleton<IPostConfigureOptions<AmazonAuthenticationOptions>>(ResolvePostConfigureOptions);
             p.AddSingleton<IPostConfigureOptions<AppleAuthenticationOptions>>(ResolvePostConfigureOptions);
-            p.AddSingleton<IPostConfigureOptions<FacebookOptions>>(ResolvePostConfigureOptions);
             p.AddSingleton<IPostConfigureOptions<GitHubAuthenticationOptions>>(ResolvePostConfigureOptions);
             p.AddSingleton<IPostConfigureOptions<GoogleOptions>>(ResolvePostConfigureOptions);
             p.AddSingleton<IPostConfigureOptions<MicrosoftAccountOptions>>(ResolvePostConfigureOptions);

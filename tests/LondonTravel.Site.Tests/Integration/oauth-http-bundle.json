@@ -101,33 +101,6 @@
       }
     },
     {
-      "comment": "Token resource for Facebook login",
-      "uri": "https://graph.facebook.com/v14.0/oauth/access_token",
-      "method": "POST",
-      "contentFormat": "json",
-      "contentJson": {
-        "access_token": "dce7a657-1796-4ed0-b299-4dd382964ca1",
-        "token_type": "access",
-        "refresh_token": "35be8321-e5e0-49d8-9334-d16652ecdc51",
-        "expires_in": "300"
-      }
-    },
-    {
-      "comment": "User information resource for Facebook login",
-      "uri": "https://graph.facebook.com/v14.0/me",
-      "ignoreQuery": true,
-      "contentFormat": "json",
-      "contentJson": {
-        "id": "bc8abd75-3d24-49b2-8568-147f99fd4e35",
-        "name": "John Smith",
-        "first_name": "John",
-        "middle_name": "Jay",
-        "last_name": "Smith",
-        "link": "https://facebook.local/john.smith",
-        "email": "facebook@john-smith.local"
-      }
-    },
-    {
       "comment": "Token resource for GitHub login",
       "uri": "https://github.com/login/oauth/access_token",
       "method": "POST",
