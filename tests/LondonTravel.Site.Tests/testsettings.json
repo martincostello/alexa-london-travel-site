@@ -24,10 +24,6 @@
           "KeyId": "apple-key-id",
           "TeamId": "apple-team-id"
         },
-        "Facebook": {
-          "ClientId": "facebook-id",
-          "ClientSecret": "facebook-secret"
-        },
         "GitHub": {
           "ClientId": "github-id",
           "ClientSecret": "github-secret"

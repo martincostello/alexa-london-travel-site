@@ -7,7 +7,6 @@ using AspNet.Security.OAuth.GitHub;
 using Azure.Security.KeyVault.Secrets;
 using MartinCostello.LondonTravel.Site.Options;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
 using Microsoft.AspNetCore.Authentication.OAuth;
@@ -62,21 +61,6 @@ public static partial class AuthenticationBuilderExtensions
                            };
                        }
                    });
-        }
-
-        return builder;
-    }
-
-    public static AuthenticationBuilder TryAddFacebook(
-        this AuthenticationBuilder builder,
-        Options.AuthenticationOptions options)
-    {
-        string name = "Facebook";
-
-        if (IsProviderEnabled(name, options))
-        {
-            builder.AddFacebook()
-                   .Configure<FacebookOptions>(name);
         }
 
         return builder;

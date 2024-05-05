@@ -7,7 +7,6 @@ using AspNet.Security.OAuth.Amazon;
 using AspNet.Security.OAuth.Apple;
 using AspNet.Security.OAuth.GitHub;
 using Azure.Monitor.OpenTelemetry.AspNetCore;
-using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
 using Microsoft.AspNetCore.Authentication.OAuth;
@@ -113,7 +112,6 @@ public static class TelemetryExtensions
     {
         AddMappings<AmazonAuthenticationOptions>("Amazon");
         AddMappings<AppleAuthenticationOptions>("Apple");
-        AddMappings<FacebookOptions>("Facebook");
         AddMappings<GitHubAuthenticationOptions>("GitHub");
         AddMappings<GoogleOptions>("Google");
         AddMappings<MicrosoftAccountOptions>("Microsoft");

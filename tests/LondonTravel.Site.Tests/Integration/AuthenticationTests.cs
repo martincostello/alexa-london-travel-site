@@ -27,7 +27,6 @@ public sealed class AuthenticationTests : BrowserIntegrationTest
     [Theory]
     [InlineData("amazon", "John")]
     [InlineData("apple", "")]
-    [InlineData("facebook", "John")]
     [InlineData("github", "john-smith")]
     [InlineData("google", "John")]
     [InlineData("microsoft", "John")]
