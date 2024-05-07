@@ -74,7 +74,7 @@ jobs:
         wait: true
 
     - name: Check Lighthouse scores
-      uses: foo-software/lighthouse-check-status-action@f22f8cdcaf593a986749d39fe21382526de3f501 # v2.0.1
+      uses: foo-software/lighthouse-check-status-action@2b9d5101f7a0de86ddb153a0d77ad7046aac1052 # v3.0.1
       with:
         lighthouseCheckResults: ${{ steps.lighthouse.outputs.lighthouseCheckResults }}
         minAccessibilityScore: '90'
