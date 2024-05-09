@@ -6,14 +6,13 @@ using System.Diagnostics;
 using AspNet.Security.OAuth.Amazon;
 using AspNet.Security.OAuth.Apple;
 using AspNet.Security.OAuth.GitHub;
-using Azure.Monitor.OpenTelemetry.AspNetCore;
+using Azure.Monitor.OpenTelemetry.Exporter;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.Extensions.Options;
 using OpenTelemetry.Instrumentation.Http;
 using OpenTelemetry.Metrics;
-using OpenTelemetry.ResourceDetectors.Azure;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 
@@ -33,7 +32,13 @@ public static class TelemetryExtensions
         var resourceBuilder = ResourceBuilder.CreateDefault()
             .AddService(ApplicationTelemetry.ServiceName, serviceVersion: ApplicationTelemetry.ServiceVersion);
 
-        var telemetry = services
+        if (IsAzureMonitorConfigured())
+        {
+            services.Configure<AzureMonitorExporterOptions>(
+                (p) => p.ConnectionString = AzureMonitorConnectionString());
+        }
+
+        services
             .AddOpenTelemetry()
             .WithMetrics((builder) =>
             {
@@ -41,6 +46,11 @@ public static class TelemetryExtensions
                        .AddAspNetCoreInstrumentation()
                        .AddHttpClientInstrumentation()
                        .AddRuntimeInstrumentation();
+
+                if (IsAzureMonitorConfigured())
+                {
+                    builder.AddAzureMonitorMetricExporter();
+                }
 
                 if (IsOtlpCollectorConfigured())
                 {
@@ -59,17 +69,16 @@ public static class TelemetryExtensions
                     builder.SetSampler(new AlwaysOnSampler());
                 }
 
+                if (IsAzureMonitorConfigured())
+                {
+                    builder.AddAzureMonitorTraceExporter();
+                }
+
                 if (IsOtlpCollectorConfigured())
                 {
                     builder.AddOtlpExporter();
                 }
             });
-
-        if (IsAzureMonitorConfigured())
-        {
-            resourceBuilder.AddDetector(new AppServiceResourceDetector());
-            telemetry.UseAzureMonitor();
-        }
 
         services.AddOptions<HttpClientTraceInstrumentationOptions>()
                 .Configure<IServiceProvider>((options, provider) =>
@@ -82,10 +91,13 @@ public static class TelemetryExtensions
     }
 
     internal static bool IsOtlpCollectorConfigured()
-        => !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("OTEL_EXPORTER_OTLP_ENDPOINT"));
+        => !string.IsNullOrEmpty(AzureMonitorConnectionString());
 
     internal static bool IsAzureMonitorConfigured()
         => !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("APPLICATIONINSIGHTS_CONNECTION_STRING"));
+
+    private static string? AzureMonitorConnectionString()
+        => Environment.GetEnvironmentVariable("APPLICATIONINSIGHTS_CONNECTION_STRING");
 
     private static void EnrichHttpActivity(Activity activity, HttpRequestMessage request)
     {
