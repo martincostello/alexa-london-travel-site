@@ -38,8 +38,8 @@
     <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.8.1" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.8.0" />
     <PackageVersion Include="OpenTelemetry.ResourceDetectors.Azure" Version="1.0.0-beta.6" />
-    <PackageVersion Include="Polly.Extensions" Version="8.3.1" />
-    <PackageVersion Include="Polly.RateLimiting" Version="8.3.1" />
+    <PackageVersion Include="Polly.Extensions" Version="8.4.0" />
+    <PackageVersion Include="Polly.RateLimiting" Version="8.4.0" />
     <PackageVersion Include="ReportGenerator" Version="5.2.5" />
     <PackageVersion Include="Shouldly" Version="4.2.1" />
     <PackageVersion Include="xRetry" Version="1.9.0" />
