@@ -18,7 +18,7 @@ public static class UserStoreTests
         var login = new UserLoginInfo("loginProvider", "providerKey", "displayName");
         var cancellationToken = CancellationToken.None;
 
-        using UserStore target = CreateStore();
+        using var target = CreateStore();
 
         // Act and Assert
 #nullable disable
@@ -62,10 +62,10 @@ public static class UserStoreTests
     {
         // Arrange
         var user = new LondonTravelUser();
-        var roleName = "RoleName";
+        string roleName = "RoleName";
         var cancellationToken = CancellationToken.None;
 
-        using UserStore target = CreateStore();
+        using var target = CreateStore();
 
         // Act and Assert
         await Assert.ThrowsAsync<NotImplementedException>(() => target.AddToRoleAsync(user, roleName, cancellationToken));
@@ -82,7 +82,7 @@ public static class UserStoreTests
 
         var login = new UserLoginInfo("acme", "providerKey", "displayName");
 
-        using UserStore target = CreateStore();
+        using var target = CreateStore();
 
         // Act and Assert
         await Assert.ThrowsAsync<InvalidOperationException>(() => target.AddLoginAsync(user, login, CancellationToken.None));
@@ -95,7 +95,7 @@ public static class UserStoreTests
         var user = new LondonTravelUser();
         var login = new UserLoginInfo("acme", "providerKey", "displayName");
 
-        using UserStore target = CreateStore();
+        using var target = CreateStore();
 
         // Act
         await target.AddLoginAsync(user, login, CancellationToken.None);
@@ -124,7 +124,7 @@ public static class UserStoreTests
         service.CreateAsync(user)
                .Returns(Task.FromResult("MyUserId"));
 
-        using UserStore target = CreateStore(service);
+        using var target = CreateStore(service);
 
         // Act
         var actual = await target.CreateAsync(user, CancellationToken.None);
@@ -150,7 +150,7 @@ public static class UserStoreTests
         service.DeleteAsync(user.Id)
                .Returns(Task.FromResult(true));
 
-        using UserStore target = CreateStore(service);
+        using var target = CreateStore(service);
 
         // Act
         var actual = await target.DeleteAsync(user, CancellationToken.None);
@@ -173,7 +173,7 @@ public static class UserStoreTests
         service.DeleteAsync(user.Id)
                .Returns(Task.FromResult(false));
 
-        using UserStore target = CreateStore(service);
+        using var target = CreateStore(service);
 
         // Act
         var actual = await target.DeleteAsync(user, CancellationToken.None);
@@ -193,7 +193,7 @@ public static class UserStoreTests
             Id = string.Empty,
         };
 
-        using UserStore target = CreateStore();
+        using var target = CreateStore();
 
         // Act and Assert
         await Assert.ThrowsAsync<ArgumentException>("user", () => target.DeleteAsync(user, CancellationToken.None));
@@ -208,10 +208,10 @@ public static class UserStoreTests
             Email = "user@domain.com",
         };
 
-        using UserStore target = CreateStore();
+        using var target = CreateStore();
 
         // Act
-        var actual = await target.GetEmailAsync(user, CancellationToken.None);
+        string? actual = await target.GetEmailAsync(user, CancellationToken.None);
 
         // Assert
         actual.ShouldBe("user@domain.com");
@@ -226,10 +226,10 @@ public static class UserStoreTests
             EmailConfirmed = true,
         };
 
-        using UserStore target = CreateStore();
+        using var target = CreateStore();
 
         // Act
-        var actual = await target.GetEmailConfirmedAsync(user, CancellationToken.None);
+        bool actual = await target.GetEmailConfirmedAsync(user, CancellationToken.None);
 
         // Assert
         actual.ShouldBeTrue();
@@ -244,10 +244,10 @@ public static class UserStoreTests
             EmailNormalized = "user@domain.com",
         };
 
-        using UserStore target = CreateStore();
+        using var target = CreateStore();
 
         // Act
-        var actual = await target.GetNormalizedEmailAsync(user, CancellationToken.None);
+        string? actual = await target.GetNormalizedEmailAsync(user, CancellationToken.None);
 
         // Assert
         actual.ShouldBe("user@domain.com");
@@ -262,10 +262,10 @@ public static class UserStoreTests
             UserNameNormalized = "user.name",
         };
 
-        using UserStore target = CreateStore();
+        using var target = CreateStore();
 
         // Act
-        var actual = await target.GetNormalizedUserNameAsync(user, CancellationToken.None);
+        string? actual = await target.GetNormalizedUserNameAsync(user, CancellationToken.None);
 
         // Assert
         actual.ShouldBe("user.name");
@@ -280,10 +280,10 @@ public static class UserStoreTests
             SecurityStamp = "MySecurityStamp",
         };
 
-        using UserStore target = CreateStore();
+        using var target = CreateStore();
 
         // Act
-        var actual = await target.GetSecurityStampAsync(user, CancellationToken.None);
+        string? actual = await target.GetSecurityStampAsync(user, CancellationToken.None);
 
         // Assert
         actual.ShouldBe("MySecurityStamp");
@@ -298,10 +298,10 @@ public static class UserStoreTests
             Id = "123",
         };
 
-        using UserStore target = CreateStore();
+        using var target = CreateStore();
 
         // Act
-        var actual = await target.GetUserIdAsync(user, CancellationToken.None);
+        string? actual = await target.GetUserIdAsync(user, CancellationToken.None);
 
         // Assert
         actual.ShouldBe("123");
@@ -316,10 +316,10 @@ public static class UserStoreTests
             UserName = "user.name",
         };
 
-        using UserStore target = CreateStore();
+        using var target = CreateStore();
 
         // Act
-        var actual = await target.GetUserNameAsync(user, CancellationToken.None);
+        string? actual = await target.GetUserNameAsync(user, CancellationToken.None);
 
         // Assert
         actual.ShouldBe("user.name");
@@ -329,10 +329,10 @@ public static class UserStoreTests
     public static async Task SetEmailAsync_Sets_Correct_Property()
     {
         // Arrange
-        var expected = "user@domain.com";
+        string expected = "user@domain.com";
         var user = new LondonTravelUser();
 
-        using UserStore target = CreateStore();
+        using var target = CreateStore();
 
         // Act
         await target.SetEmailAsync(user, expected, CancellationToken.None);
@@ -345,10 +345,10 @@ public static class UserStoreTests
     public static async Task SetEmailConfirmedAsync_Sets_Correct_Property()
     {
         // Arrange
-        var expected = true;
+        bool expected = true;
         var user = new LondonTravelUser();
 
-        using UserStore target = CreateStore();
+        using var target = CreateStore();
 
         // Act
         await target.SetEmailConfirmedAsync(user, expected, CancellationToken.None);
@@ -361,10 +361,10 @@ public static class UserStoreTests
     public static async Task SetNormalizedEmailAsync_Sets_Correct_Property()
     {
         // Arrange
-        var expected = "user@domain.com";
+        string expected = "user@domain.com";
         var user = new LondonTravelUser();
 
-        using UserStore target = CreateStore();
+        using var target = CreateStore();
 
         // Act
         await target.SetNormalizedEmailAsync(user, expected, CancellationToken.None);
@@ -377,10 +377,10 @@ public static class UserStoreTests
     public static async Task SetNormalizedUserNameAsync_Sets_Correct_Property()
     {
         // Arrange
-        var expected = "user.name";
+        string expected = "user.name";
         var user = new LondonTravelUser();
 
-        using UserStore target = CreateStore();
+        using var target = CreateStore();
 
         // Act
         await target.SetNormalizedUserNameAsync(user, expected, CancellationToken.None);
@@ -393,10 +393,10 @@ public static class UserStoreTests
     public static async Task SetSecurityStampAsync_Sets_Correct_Property()
     {
         // Arrange
-        var expected = "MySecurityStamp";
+        string expected = "MySecurityStamp";
         var user = new LondonTravelUser();
 
-        using UserStore target = CreateStore();
+        using var target = CreateStore();
 
         // Act
         await target.SetSecurityStampAsync(user, expected, CancellationToken.None);
@@ -409,10 +409,10 @@ public static class UserStoreTests
     public static async Task SetUserNameAsync_Sets_Correct_Property()
     {
         // Arrange
-        var expected = "user.name";
+        string expected = "user.name";
         var user = new LondonTravelUser();
 
-        using UserStore target = CreateStore();
+        using var target = CreateStore();
 
         // Act
         await target.SetUserNameAsync(user, expected, CancellationToken.None);
@@ -432,12 +432,12 @@ public static class UserStoreTests
         user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, "wrong-issuer", ClaimValueTypes.String, "google")));
         user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, string.Empty, ClaimValueTypes.String, "https://londontravel.martincostello.com/")));
 
-        var expected = new[]
-        {
+        string[] expected =
+        [
             "admin",
-        };
+        ];
 
-        using UserStore target = CreateStore();
+        using var target = CreateStore();
 
         // Act
         var actual = await target.GetRolesAsync(user, CancellationToken.None);
@@ -458,7 +458,7 @@ public static class UserStoreTests
         user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, "not-a-string", ClaimValueTypes.Email, "https://londontravel.martincostello.com/")));
         user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, "wrong-issuer", ClaimValueTypes.String, "google")));
 
-        using UserStore target = CreateStore();
+        using var target = CreateStore();
 
         // Act and Assert
         (await target.IsInRoleAsync(user, "admin", cancellationToken)).ShouldBeTrue();
@@ -475,7 +475,5 @@ public static class UserStoreTests
     }
 
     private static UserStore CreateStore(IDocumentService? service = null)
-    {
-        return new UserStore(service ?? Substitute.For<IDocumentService>());
-    }
+        => new(service ?? Substitute.For<IDocumentService>());
 }

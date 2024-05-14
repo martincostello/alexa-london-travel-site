@@ -49,7 +49,7 @@ public class SiteMapTests(TestServerFixture fixture, ITestOutputHelper outputHel
             string url = location!.InnerText;
 
             url.ShouldNotBeNullOrWhiteSpace();
-            Uri.TryCreate(url, UriKind.Absolute, out Uri? uri).ShouldBeTrue();
+            Uri.TryCreate(url, UriKind.Absolute, out var uri).ShouldBeTrue();
 
             uri!.Scheme.ShouldBe("https");
             uri.Port.ShouldBe(443);
