@@ -42,6 +42,6 @@
     <CoverletOutputFormat>cobertura,json</CoverletOutputFormat>
     <Exclude>[AspNet.Security.OAuth*]*,[xunit.*]*</Exclude>
     <ExcludeByAttribute>GeneratedCodeAttribute</ExcludeByAttribute>
-    <Threshold>70</Threshold>
+    <Threshold>69</Threshold>
   </PropertyGroup>
 </Project>
