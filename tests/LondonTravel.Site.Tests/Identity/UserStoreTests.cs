@@ -229,7 +229,7 @@ public static class UserStoreTests
         using var target = CreateStore();
 
         // Act
-        string? actual = await target.GetEmailConfirmedAsync(user, CancellationToken.None);
+        bool actual = await target.GetEmailConfirmedAsync(user, CancellationToken.None);
 
         // Assert
         actual.ShouldBeTrue();
