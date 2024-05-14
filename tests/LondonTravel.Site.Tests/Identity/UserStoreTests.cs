@@ -211,7 +211,7 @@ public static class UserStoreTests
         using var target = CreateStore();
 
         // Act
-        var actual = await target.GetEmailAsync(user, CancellationToken.None);
+        string? actual = await target.GetEmailAsync(user, CancellationToken.None);
 
         // Assert
         actual.ShouldBe("user@domain.com");
@@ -229,7 +229,7 @@ public static class UserStoreTests
         using var target = CreateStore();
 
         // Act
-        var actual = await target.GetEmailConfirmedAsync(user, CancellationToken.None);
+        string? actual = await target.GetEmailConfirmedAsync(user, CancellationToken.None);
 
         // Assert
         actual.ShouldBeTrue();
@@ -247,7 +247,7 @@ public static class UserStoreTests
         using var target = CreateStore();
 
         // Act
-        var actual = await target.GetNormalizedEmailAsync(user, CancellationToken.None);
+        string? actual = await target.GetNormalizedEmailAsync(user, CancellationToken.None);
 
         // Assert
         actual.ShouldBe("user@domain.com");
@@ -265,7 +265,7 @@ public static class UserStoreTests
         using var target = CreateStore();
 
         // Act
-        var actual = await target.GetNormalizedUserNameAsync(user, CancellationToken.None);
+        string? actual = await target.GetNormalizedUserNameAsync(user, CancellationToken.None);
 
         // Assert
         actual.ShouldBe("user.name");
@@ -283,7 +283,7 @@ public static class UserStoreTests
         using var target = CreateStore();
 
         // Act
-        var actual = await target.GetSecurityStampAsync(user, CancellationToken.None);
+        string? actual = await target.GetSecurityStampAsync(user, CancellationToken.None);
 
         // Assert
         actual.ShouldBe("MySecurityStamp");
@@ -301,7 +301,7 @@ public static class UserStoreTests
         using var target = CreateStore();
 
         // Act
-        var actual = await target.GetUserIdAsync(user, CancellationToken.None);
+        string? actual = await target.GetUserIdAsync(user, CancellationToken.None);
 
         // Assert
         actual.ShouldBe("123");
@@ -319,7 +319,7 @@ public static class UserStoreTests
         using var target = CreateStore();
 
         // Act
-        string actual = await target.GetUserNameAsync(user, CancellationToken.None);
+        string? actual = await target.GetUserNameAsync(user, CancellationToken.None);
 
         // Assert
         actual.ShouldBe("user.name");
@@ -432,10 +432,10 @@ public static class UserStoreTests
         user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, "wrong-issuer", ClaimValueTypes.String, "google")));
         user.RoleClaims.Add(LondonTravelRole.FromClaim(new Claim(ClaimTypes.Role, string.Empty, ClaimValueTypes.String, "https://londontravel.martincostello.com/")));
 
-        var expected = new[]
-        {
+        string[] expected =
+        [
             "admin",
-        };
+        ];
 
         using var target = CreateStore();
 
