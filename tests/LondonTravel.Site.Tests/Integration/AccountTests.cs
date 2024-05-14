@@ -48,10 +48,10 @@ public class AccountTests(TestServerFixture fixture, ITestOutputHelper outputHel
 
         await using (var scope = Fixture.Services.CreateAsyncScope())
         {
-            using IUserStore<LondonTravelUser> store = GetUserStore(scope.ServiceProvider);
+            using var store = GetUserStore(scope.ServiceProvider);
 
             // Act
-            IdentityResult createResult = await store.CreateAsync(user, default);
+            var createResult = await store.CreateAsync(user, default);
 
             // Assert
             Assert.NotNull(createResult);
@@ -63,7 +63,7 @@ public class AccountTests(TestServerFixture fixture, ITestOutputHelper outputHel
             userId = user.Id!;
 
             // Act
-            LondonTravelUser? actual = await store.FindByIdAsync(userId, default);
+            var actual = await store.FindByIdAsync(userId, default);
 
             // Assert
             Assert.NotNull(actual);
@@ -87,7 +87,7 @@ public class AccountTests(TestServerFixture fixture, ITestOutputHelper outputHel
             actual.FavoriteLines = favoriteLines;
 
             // Act
-            IdentityResult updateResult = await store.UpdateAsync(actual, default);
+            var updateResult = await store.UpdateAsync(actual, default);
 
             // Assert
             Assert.NotNull(updateResult);
@@ -131,10 +131,10 @@ public class AccountTests(TestServerFixture fixture, ITestOutputHelper outputHel
         // Arrange
         await using (var scope = Fixture.Services.CreateAsyncScope())
         {
-            using IUserStore<LondonTravelUser> store = GetUserStore(scope.ServiceProvider);
+            using var store = GetUserStore(scope.ServiceProvider);
 
             // Act
-            IdentityResult updateResult = await store.DeleteAsync(new LondonTravelUser() { Id = userId }, default);
+            var updateResult = await store.DeleteAsync(new LondonTravelUser() { Id = userId }, default);
 
             // Assert
             Assert.NotNull(updateResult);

@@ -17,7 +17,7 @@ public sealed class ManagePage(ApplicationNavigator navigator) : PageBase(naviga
 
     public async Task<bool> IsLinkedToAlexaAsync()
     {
-        IElementHandle? linked = await Navigator.Page.QuerySelectorAsync("[data-id='alexa-link']");
+        var linked = await Navigator.Page.QuerySelectorAsync("[data-id='alexa-link']");
 
         string? value = await linked!.GetAttributeAsync("data-is-linked");
 

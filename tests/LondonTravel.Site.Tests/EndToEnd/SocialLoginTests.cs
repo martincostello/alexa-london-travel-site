@@ -107,7 +107,7 @@ public class SocialLoginTests(WebsiteFixture fixture, ITestOutputHelper outputHe
     {
         await page.WaitForURLAsync((p) => !p.StartsWith(Fixture.ServerAddress.ToString(), StringComparison.Ordinal));
 
-        IElementHandle? userName = await page.WaitForSelectorAsync(userNameSelector);
+        var userName = await page.WaitForSelectorAsync(userNameSelector);
 
         await userName!.FillAsync(credentials.UserName);
 
@@ -120,7 +120,7 @@ public class SocialLoginTests(WebsiteFixture fixture, ITestOutputHelper outputHe
         // makes Playwright type the password in too soon.
         await Task.Delay(TimeSpan.FromSeconds(2));
 
-        IElementHandle? password = await page.WaitForSelectorAsync(passwordSelector);
+        var password = await page.WaitForSelectorAsync(passwordSelector);
 
         await password!.FillAsync(credentials.Password);
         await page.Keyboard.PressAsync("Enter");

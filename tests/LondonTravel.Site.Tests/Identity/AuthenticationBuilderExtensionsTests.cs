@@ -30,7 +30,7 @@ public static class AuthenticationBuilderExtensionsTests
         var failure = new InvalidOperationException();
 
         var context = new RemoteFailureContext(httpContext, scheme, options, failure);
-        var provider = Guid.NewGuid().ToString();
+        string provider = Guid.NewGuid().ToString();
         var secureDataFormat = Substitute.For<ISecureDataFormat<object>>();
         var logger = Substitute.For<ILogger>();
 

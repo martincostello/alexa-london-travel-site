@@ -16,14 +16,14 @@ public sealed class LinkedAccount(ApplicationNavigator navigator, IElementHandle
 
     public async Task<string> NameAsync()
     {
-        IElementHandle? element = await RootElement.QuerySelectorAsync("span[class='brand-name']");
+        var element = await RootElement.QuerySelectorAsync("span[class='brand-name']");
         string text = await element!.InnerTextAsync();
         return text.Trim();
     }
 
     public async Task<ManagePage> RemoveAsync()
     {
-        IElementHandle? submit = await RootElement.QuerySelectorAsync("input[type='submit']");
+        var submit = await RootElement.QuerySelectorAsync("input[type='submit']");
 
         await submit!.ClickAsync();
 
