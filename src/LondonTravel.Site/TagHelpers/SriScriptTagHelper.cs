@@ -59,7 +59,7 @@ public class SriScriptTagHelper(
             return;
         }
 
-        IFileInfo fileInfo = HostingEnvironment.WebRootFileProvider.GetFileInfo(filePath);
+        var fileInfo = HostingEnvironment.WebRootFileProvider.GetFileInfo(filePath);
 
         if (!fileInfo.Exists)
         {

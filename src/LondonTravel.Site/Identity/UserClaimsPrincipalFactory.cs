@@ -26,7 +26,7 @@ public class UserClaimsPrincipalFactory(UserManager<LondonTravelUser> userManage
 
         if (principal.Identity is ClaimsIdentity identity && user?.RoleClaims != null)
         {
-            foreach (LondonTravelRole role in user.RoleClaims)
+            foreach (var role in user.RoleClaims)
             {
                 identity.AddClaim(role.ToClaim());
             }

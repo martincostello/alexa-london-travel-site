@@ -68,7 +68,7 @@ public sealed partial class DocumentService : IDocumentService
     {
         ArgumentNullException.ThrowIfNull(document);
 
-        Container container = await GetContainerAsync();
+        var container = await GetContainerAsync();
 
         Log.CreatingDocument(
             _logger,
@@ -93,7 +93,7 @@ public sealed partial class DocumentService : IDocumentService
     {
         ArgumentNullException.ThrowIfNull(id);
 
-        Container container = await GetContainerAsync();
+        var container = await GetContainerAsync();
 
         try
         {
@@ -112,7 +112,7 @@ public sealed partial class DocumentService : IDocumentService
     {
         ArgumentNullException.ThrowIfNull(id);
 
-        Container container = await GetContainerAsync();
+        var container = await GetContainerAsync();
 
         try
         {
@@ -129,7 +129,7 @@ public sealed partial class DocumentService : IDocumentService
         Expression<Func<LondonTravelUser, bool>> predicate,
         CancellationToken cancellationToken)
     {
-        Container container = await GetContainerAsync();
+        var container = await GetContainerAsync();
 
         Log.QueryingDocuments(
             _logger,
@@ -159,7 +159,7 @@ public sealed partial class DocumentService : IDocumentService
     /// <inheritdoc />
     public async Task<long> GetDocumentCountAsync()
     {
-        Container container = await GetContainerAsync();
+        var container = await GetContainerAsync();
 
         var iterator = container.GetItemQueryIterator<int>("SELECT VALUE COUNT(1) FROM c");
 
@@ -178,7 +178,7 @@ public sealed partial class DocumentService : IDocumentService
     {
         ArgumentNullException.ThrowIfNull(document);
 
-        Container container = await GetContainerAsync();
+        var container = await GetContainerAsync();
 
         string? id = document.Id;
 
@@ -188,7 +188,7 @@ public sealed partial class DocumentService : IDocumentService
             _options.CollectionName,
             _options.DatabaseName);
 
-        ItemRequestOptions? requestOptions = GetOptionsForETag(etag);
+        var requestOptions = GetOptionsForETag(etag);
 
         try
         {
