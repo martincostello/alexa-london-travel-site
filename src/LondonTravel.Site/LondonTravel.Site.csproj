@@ -43,6 +43,7 @@
     <PackageReference Include="OpenTelemetry.Instrumentation.Http" />
     <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" />
     <PackageReference Include="OpenTelemetry.ResourceDetectors.Azure" />
+    <PackageReference Include="OpenTelemetry.ResourceDetectors.Container" />
     <PackageReference Include="Polly.Extensions" />
     <PackageReference Include="Polly.RateLimiting" />
   </ItemGroup>
