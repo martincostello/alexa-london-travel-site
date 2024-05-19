@@ -20,6 +20,7 @@
   "devDependencies": {
     "@babel/core": "^7.24.5",
     "@babel/preset-env": "^7.24.5",
+    "@stylistic/eslint-plugin-js": "^2.1.0",
     "@typescript-eslint/eslint-plugin": "^7.9.0",
     "@typescript-eslint/parser": "^7.9.0",
     "css-loader": "^7.1.1",
@@ -54,17 +55,18 @@
       "sourceType": "module"
     },
     "plugins": [
+      "@stylistic/js",
       "@typescript-eslint"
     ],
     "rules": {
+      "@stylistic/js/quotes": [
+        "error",
+        "single"
+      ],
       "@typescript-eslint/indent": "error",
       "@typescript-eslint/member-delimiter-style": "error",
       "@typescript-eslint/naming-convention": "error",
       "@typescript-eslint/prefer-namespace-keyword": "error",
-      "@typescript-eslint/quotes": [
-        "error",
-        "single"
-      ],
       "@typescript-eslint/semi": [
         "error",
         "always"
