@@ -3,13 +3,12 @@
 
 var builder = DistributedApplication.CreateBuilder(args);
 
-// HACK Disabled until there are .NET 9 preview.4 packages available
-//var cosmos = builder.AddAzureCosmosDB("Cosmos")
-//                    .RunAsEmulator();
+//// HACK Disabled until there are .NET 9 preview.4 packages available
+////var cosmos = builder.AddAzureCosmosDB("Cosmos")
+////                   .RunAsEmulator();
 
-builder.AddProject<Projects.LondonTravel_Site>("LondonTravelSite")
-       //.WithReference(cosmos)
-       ;
+builder.AddProject<Projects.LondonTravel_Site>("LondonTravelSite");
+//// .WithReference(cosmos);
 
 var app = builder.Build();
 
