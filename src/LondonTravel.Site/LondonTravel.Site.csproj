@@ -19,10 +19,7 @@
     <XlfLanguages>en-GB;en-US;qps-Ploc</XlfLanguages>
   </PropertyGroup>
   <ItemGroup>
-    <!--
-    HACK Disabled until there are .NET 9 preview.4 packages available
     <PackageReference Include="Aspire.Microsoft.Azure.Cosmos" />
-    -->
     <PackageReference Include="AspNet.Security.OAuth.Amazon" />
     <PackageReference Include="AspNet.Security.OAuth.Apple" />
     <PackageReference Include="AspNet.Security.OAuth.GitHub" />
