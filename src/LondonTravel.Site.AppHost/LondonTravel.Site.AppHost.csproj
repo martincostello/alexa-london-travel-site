@@ -6,10 +6,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Aspire.Hosting.AppHost" />
-    <!--
-    HACK Disabled until there are .NET 9 preview.4 packages available
     <PackageReference Include="Aspire.Hosting.Azure.CosmosDB" />
-    -->
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LondonTravel.Site\LondonTravel.Site.csproj" />
