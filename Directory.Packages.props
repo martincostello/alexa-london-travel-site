@@ -4,12 +4,9 @@
     <GlobalPackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup>
-    <PackageVersion Include="Aspire.Hosting.AppHost" Version="9.0.0-preview.3.24210.17" />
-    <!--
-    HACK Disabled until there are .NET 9 preview.4 packages available
-    <PackageVersion Include="Aspire.Hosting.Azure.CosmosDB" Version="9.0.0-preview.4.24229.9" />
-    <PackageVersion Include="Aspire.Microsoft.Azure.Cosmos" Version="9.0.0-preview.4.24229.9" />
-    -->
+    <PackageVersion Include="Aspire.Hosting.AppHost" Version="8.0.1" />
+    <PackageVersion Include="Aspire.Hosting.Azure.CosmosDB" Version="8.0.1" />
+    <PackageVersion Include="Aspire.Microsoft.Azure.Cosmos" Version="8.0.1" />
     <PackageVersion Include="AspNet.Security.OAuth.Amazon" Version="9.0.0-preview.4.24271.72" />
     <PackageVersion Include="AspNet.Security.OAuth.Apple" Version="9.0.0-preview.4.24271.72" />
     <PackageVersion Include="AspNet.Security.OAuth.GitHub" Version="9.0.0-preview.4.24271.72" />
