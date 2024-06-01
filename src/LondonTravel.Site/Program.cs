@@ -211,25 +211,6 @@ app.UseResponseCompression();
 
 app.UseStaticFiles();
 
-// HACK Workaround for https://github.com/dotnet/sdk/issues/40511
-app.MapGet(".well-known/{fileName}", (string fileName, IWebHostEnvironment environment, IOptions<StaticFileOptions> options) =>
-{
-    var file = environment.WebRootFileProvider.GetFileInfo(Path.Combine("well-known", fileName));
-
-    if (file.Exists && file.PhysicalPath is { Length: > 0 })
-    {
-        if (!options.Value.ContentTypeProvider.TryGetContentType(file.Name, out string? contentType) &&
-            options.Value.ServeUnknownFileTypes)
-        {
-            contentType = options.Value.DefaultContentType;
-        }
-
-        return Results.File(file.PhysicalPath, contentType: contentType);
-    }
-
-    return Results.NotFound();
-}).AllowAnonymous().ExcludeFromDescription();
-
 app.UseRouting();
 
 app.UseIdentity(options.CurrentValue);
