@@ -106,6 +106,7 @@ jobs:
       run: dotnet workload restore
 
     - name: Build, test and publish
+      id: build
       shell: pwsh
       run: ./build.ps1
 
@@ -164,6 +165,45 @@ jobs:
         name: videos-${{ matrix.os-name }}
         path: ./artifacts/videos/*
         if-no-files-found: ignore
+
+    - name: Upload any crash dumps
+      shell: pwsh
+      if: |
+        !cancelled() &&
+        steps.build.outcome == 'failure' &&
+        github.event.repository.fork == false &&
+        github.event.sender.login != 'dependabot[bot]'
+      env:
+        AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.CRASH_DUMPS_STORAGE_CONNECTION_STRING }}
+        PSCOMPRESSION_VERSION: '2.0.6'
+      run: |
+        $dumps = Get-ChildItem -Path ${env:GITHUB_WORKSPACE} -Filter "*.dmp" -Recurse
+        if ($null -ne $dumps) {
+
+          $container = ${env:GITHUB_REPOSITORY}.Replace("/", "-")
+          az storage container create --name $container --public-access off | Out-Null
+
+          Install-Module PSCompression -RequiredVersion ${env:PSCOMPRESSION_VERSION} -AcceptLicense -Force -Scope CurrentUser
+
+          $dumps | ForEach-Object {
+            $zipPath = $_.FullName + ".zip"
+            $zipName = $_.Name + ".zip"
+
+            Write-Output "Compressing crash dump $($_.Name)..."
+            Compress-ZipArchive -Path $_.FullName -Destination $zipPath
+
+            az storage blob upload `
+              --container-name $container `
+              --file $zipPath `
+              --name $zipName `
+              --metadata "GITHUB_RUN_ATTEMPT=${env:GITHUB_RUN_ATTEMPT}" "GITHUB_WORKFLOW=${env:GITHUB_SERVER_URL}/${env:GITHUB_REPOSITORY}/actions/runs/${env:GITHUB_RUN_ID}" "RUNNER_OS=${env:RUNNER_OS}" `
+              --overwrite true
+
+            if ($LASTEXITCODE -eq 0) {
+              Write-Output "::notice::Uploaded crash dump $($_.Name) to Azure Storage."
+            }
+          }
+        }
 
   deploy-dev:
     if: github.event.repository.fork == false && github.ref_name == github.event.repository.default_branch
