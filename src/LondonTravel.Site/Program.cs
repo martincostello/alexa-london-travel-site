@@ -230,8 +230,6 @@ app.MapGet(".well-known/{fileName}", (string fileName, IWebHostEnvironment envir
     return Results.NotFound();
 }).AllowAnonymous().ExcludeFromDescription();
 
-app.UseRouting();
-
 app.UseIdentity(options.CurrentValue);
 
 app.MapDefaultControllerRoute();
