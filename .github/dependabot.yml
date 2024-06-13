@@ -14,6 +14,10 @@ updates:
     Aspire:
       patterns:
         - Aspire.*
+    IdentityModel:
+      patterns:
+        - Microsoft.IdentityModel.JsonWebTokens
+        - System.IdentityModel.Tokens.Jwt
     OpenTelemetry:
       patterns:
         - OpenTelemetry*
