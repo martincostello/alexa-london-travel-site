@@ -14,6 +14,9 @@ updates:
     Aspire:
       patterns:
         - Aspire.*
+    AspNet.Security.OAuth:
+      patterns:
+        - AspNet.Security.OAuth.*
     IdentityModel:
       patterns:
         - Microsoft.IdentityModel.JsonWebTokens
