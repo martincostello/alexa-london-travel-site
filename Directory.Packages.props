@@ -19,14 +19,14 @@
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.4.1" />
     <PackageVersion Include="JustEat.HttpClientInterception" Version="4.3.0" />
     <PackageVersion Include="MartinCostello.Logging.XUnit" Version="0.4.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="9.0.0-preview.6.24312.1" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="9.0.0-preview.6.24312.1" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Twitter" Version="9.0.0-preview.6.24312.1" />
-    <PackageVersion Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" Version="9.0.0-preview.6.24312.1" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.0-preview.6.24312.1" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="9.0.0-preview.6.24313.14" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="9.0.0-preview.6.24313.14" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Twitter" Version="9.0.0-preview.6.24313.14" />
+    <PackageVersion Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" Version="9.0.0-preview.6.24313.14" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.0-preview.6.24313.14" />
     <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.41.0" />
     <PackageVersion Include="Microsoft.DotNet.XliffTasks" Version="1.0.0-beta.21452.1" />
-    <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="9.0.0-preview.6.24313.1" />
+    <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="9.0.0-preview.6.24313.5" />
     <PackageVersion Include="Microsoft.IdentityModel.JsonWebTokens" Version="7.6.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
     <PackageVersion Include="Microsoft.Playwright" Version="1.44.0" />
