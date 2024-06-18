@@ -35,8 +35,8 @@
     <PackageVersion Include="NSwag.AspNetCore" Version="14.0.8" />
     <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.9.0" />
     <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.9.0" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.8.1" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.8.1" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.9.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.9.0" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.8.1" />
     <PackageVersion Include="OpenTelemetry.ResourceDetectors.Azure" Version="1.0.0-beta.6" />
     <PackageVersion Include="OpenTelemetry.ResourceDetectors.Container" Version="1.0.0-beta.7" />
