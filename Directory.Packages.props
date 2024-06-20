@@ -27,7 +27,7 @@
     <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.41.0" />
     <PackageVersion Include="Microsoft.DotNet.XliffTasks" Version="1.0.0-beta.21452.1" />
     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="8.6.0" />
-    <PackageVersion Include="Microsoft.IdentityModel.JsonWebTokens" Version="7.6.1" />
+    <PackageVersion Include="Microsoft.IdentityModel.JsonWebTokens" Version="7.6.2" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
     <PackageVersion Include="Microsoft.Playwright" Version="1.44.0" />
     <PackageVersion Include="Microsoft.TypeScript.MSBuild" Version="5.4.5" />
@@ -44,7 +44,7 @@
     <PackageVersion Include="Polly.RateLimiting" Version="8.4.0" />
     <PackageVersion Include="ReportGenerator" Version="5.3.6" />
     <PackageVersion Include="Shouldly" Version="4.2.1" />
-    <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="7.6.1" />
+    <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="7.6.2" />
     <PackageVersion Include="System.Private.Uri" Version="4.3.2" />
     <PackageVersion Include="xRetry" Version="1.9.0" />
     <PackageVersion Include="xunit" Version="2.8.1" />
