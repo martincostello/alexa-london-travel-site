@@ -27,7 +27,7 @@
     <GenerateGitMetadata Condition=" '$(CI)' != '' and '$(GenerateGitMetadata)' == '' ">true</GenerateGitMetadata>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <ImplicitUsings>enable</ImplicitUsings>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>preview</LangVersion>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <NeutralLanguage>en-US</NeutralLanguage>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
@@ -42,7 +42,7 @@
     <RepositoryUrl>$(PackageProjectUrl).git</RepositoryUrl>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <UseArtifactsOutput>true</UseArtifactsOutput>
-    <VersionPrefix>8.0.$([MSBuild]::ValueOrDefault('$(GITHUB_RUN_NUMBER)', '0'))</VersionPrefix>
+    <VersionPrefix>9.0.$([MSBuild]::ValueOrDefault('$(GITHUB_RUN_NUMBER)', '0'))</VersionPrefix>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(EnableReferenceTrimmer)' != 'false' and '$(GenerateDocumentationFile)' != 'true' ">
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
