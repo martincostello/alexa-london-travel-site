@@ -35,6 +35,7 @@
     <PackageReference Include="Microsoft.Azure.Cosmos" />
     <PackageReference Include="Microsoft.DotNet.XliffTasks" PrivateAssets="All" />
     <PackageReference Include="Microsoft.Extensions.Http.Resilience" />
+    <PackageReference Include="Microsoft.OpenApi" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" />
     <PackageReference Include="NSwag.AspNetCore" />
     <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" />
@@ -55,9 +56,10 @@
     <None Remove="assets\scripts\**\*.ts" />
     <TypeScriptCompile Include="assets\scripts\**\*.ts" />
   </ItemGroup>
-  <Target Name="PrepublishScript" BeforeTargets="BeforeBuild" Condition=" '$(SkipCompileClientScripts)' != 'true' ">
-    <Exec Command="npm ci" Condition=" '$(InstallWebPackages)' == 'true' or !Exists('$(MSBuildThisFileDirectory)\node_modules') " />
-    <Exec Command="npm run build" Condition=" ('$(BuildingInsideVisualStudio)' != 'true' and '$(GITHUB_ACTIONS)' != 'true') or !Exists('$(MSBuildThisFileDirectory)\wwwroot\assets\js\site.min.js') " />
+  <Target Name="BundleAssets" BeforeTargets="BeforeBuild">
+    <Exec Command="npm ci" Condition=" !Exists('$(MSBuildThisFileDirectory)\node_modules') AND '$(GITHUB_ACTIONS)' != '' " />
+    <Exec Command="npm install" Condition=" !Exists('$(MSBuildThisFileDirectory)\node_modules') AND '$(GITHUB_ACTIONS)' == '' " />
+    <Exec Command="npm run build" Condition=" !Exists('$(MSBuildThisFileDirectory)\wwwroot\assets\js\main.js') " />
   </Target>
   <Target Name="AddGeneratedContentItems" BeforeTargets="AssignTargetPaths" Condition="'$(CI)' != ''">
     <ItemGroup>

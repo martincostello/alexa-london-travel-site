@@ -6,20 +6,15 @@ using NSwag.Generation.Processors.Contexts;
 
 namespace MartinCostello.LondonTravel.Site.OpenApi;
 
-public sealed class OpenApiExampleProcessor<T> : IOperationProcessor
-    where T : IExampleProvider<T>
+public sealed class OpenApiExampleProcessor<TSchema, TProvider> : IOperationProcessor
+    where TProvider : IExampleProvider<TSchema>
 {
     /// <inheritdoc/>
     public bool Process(OperationProcessorContext context)
     {
-        if (context.Document.Components.Schemas.TryGetValue(typeof(T).Name, out var schema))
+        if (context.Document.Components.Schemas.TryGetValue(typeof(TSchema).Name, out var schema))
         {
-            schema.Example = T.GenerateExample();
-
-            foreach (var parameter in context.OperationDescription.Operation.Parameters.Where((p) => p.Schema?.Reference == schema))
-            {
-                parameter.Example = schema.Example;
-            }
+            schema.Example = TProvider.GenerateExample();
 
             foreach ((_, var response) in context.OperationDescription.Operation.Responses)
             {

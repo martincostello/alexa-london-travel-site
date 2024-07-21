@@ -8,7 +8,7 @@ using NSwag;
 namespace MartinCostello.LondonTravel.Site.Extensions;
 
 /// <summary>
-/// A class containing Swagger-related extension methods for the <see cref="IServiceCollection"/> interface. This class cannot be inherited.
+/// A class containing OpenAPI-related extension methods for the <see cref="IServiceCollection"/> interface. This class cannot be inherited.
 /// </summary>
 public static class OpenApiServiceCollectionExtensions
 {
@@ -19,7 +19,7 @@ public static class OpenApiServiceCollectionExtensions
     /// <returns>
     /// The value specified by <paramref name="value"/>.
     /// </returns>
-    public static IServiceCollection AddOpenApi(this IServiceCollection value)
+    public static IServiceCollection AddOpenApiDocumentation(this IServiceCollection value)
     {
         return value.AddOpenApiDocument((options, provider) =>
         {
@@ -57,15 +57,16 @@ public static class OpenApiServiceCollectionExtensions
                 document.Info.TermsOfService = terms.Uri.ToString();
                 document.Info.Version = string.Empty;
 
-                string schemeName = "Access Token";
+                string schemeName = "Bearer";
 
                 document.Security.Add(new() { [schemeName] = [] });
                 document.SecurityDefinitions.Add(schemeName, new()
                 {
-                    In = OpenApiSecurityApiKeyLocation.Header,
-                    Name = "Authorization",
-                    Type = OpenApiSecuritySchemeType.ApiKey,
+                    BearerFormat = "Opaque token",
                     Description = "Access token authentication using a bearer token.",
+                    In = OpenApiSecurityApiKeyLocation.Header,
+                    Type = OpenApiSecuritySchemeType.Http,
+                    Scheme = "bearer",
                 });
             };
 

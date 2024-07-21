@@ -29,7 +29,10 @@ public static partial class ApiModule
         .ExcludeFromDescription()
         .RequireAuthorization("admin");
 
-        app.MapGet("/api/preferences", GetPreferences);
+        app.MapGet("/api/preferences", GetPreferences)
+           .WithName("GetApiPreferences")
+           .WithSummary("Gets a user's preferences.")
+           .WithDescription("Gets the preferences for a user associated with an access token.");
 
         app.MapGet("/version", static () =>
         {
@@ -70,9 +73,14 @@ public static partial class ApiModule
     [OpenApiExample<ErrorResponse>]
     [OpenApiExample<PreferencesResponse>]
     [OpenApiOperation("Gets a user's preferences.", "Gets the preferences for a user associated with an access token.")]
+    [OpenApiResponse(StatusCodes.Status200OK, "The preferences associated with the provided access token.")]
+    [OpenApiResponse(StatusCodes.Status401Unauthorized, "A valid access token was not provided.")]
     [OpenApiTag("LondonTravel.Site")]
+    [ProducesResponseType<PreferencesResponse>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ErrorResponse>(StatusCodes.Status401Unauthorized)]
     [SwaggerResponse(StatusCodes.Status200OK, typeof(PreferencesResponse), Description = "The preferences associated with the provided access token.")]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, typeof(ErrorResponse), Description = "A valid access token was not provided.")]
+    [Tags("LondonTravel.Site")]
     private static async Task<IResult> GetPreferences(
         [Description("The authorization header.")][FromHeader(Name = "Authorization")] string? authorizationHeader,
         HttpContext httpContext,

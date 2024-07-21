@@ -1,21 +1,21 @@
 {
   "version": "1.0",
   "components": [
-    "Microsoft.VisualStudio.Component.CoreEditor",
-    "Microsoft.VisualStudio.Workload.CoreEditor",
+    "Component.GitHub.VisualStudio",
+    "Component.Microsoft.VisualStudio.RazorExtension",
     "Microsoft.NetCore.Component.Runtime.8.0",
     "Microsoft.NetCore.Component.SDK",
+    "Microsoft.VisualStudio.Component.CoreEditor",
+    "Microsoft.VisualStudio.Component.Git",
+    "Microsoft.VisualStudio.Component.IISExpress",
+    "Microsoft.VisualStudio.Component.JavaScript.Diagnostics",
+    "Microsoft.VisualStudio.Component.JavaScript.TypeScript",
+    "Microsoft.VisualStudio.Component.Node.Tools",
     "Microsoft.VisualStudio.Component.Roslyn.Compiler",
     "Microsoft.VisualStudio.Component.Roslyn.LanguageServices",
-    "Microsoft.VisualStudio.ComponentGroup.WebToolsExtensions",
-    "Microsoft.VisualStudio.Component.JavaScript.TypeScript",
-    "Microsoft.VisualStudio.Component.JavaScript.Diagnostics",
-    "Component.Microsoft.VisualStudio.RazorExtension",
-    "Microsoft.VisualStudio.Component.IISExpress",
     "Microsoft.VisualStudio.Component.WebDeploy",
-    "Microsoft.VisualStudio.Component.Node.Tools",
-    "Microsoft.VisualStudio.Workload.Node",
-    "Component.GitHub.VisualStudio",
-    "Microsoft.VisualStudio.Component.Git"
+    "Microsoft.VisualStudio.ComponentGroup.WebToolsExtensions",
+    "Microsoft.VisualStudio.Workload.CoreEditor",
+    "Microsoft.VisualStudio.Workload.Node"
   ]
 }
