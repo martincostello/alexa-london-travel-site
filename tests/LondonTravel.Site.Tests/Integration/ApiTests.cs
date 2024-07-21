@@ -5,6 +5,9 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
+using Microsoft.OpenApi.Extensions;
+using Microsoft.OpenApi.Readers;
+using Microsoft.OpenApi.Validations;
 
 namespace MartinCostello.LondonTravel.Site.Integration;
 
@@ -131,7 +134,7 @@ public class ApiTests(TestServerFixture fixture, ITestOutputHelper outputHelper)
         using var client = Fixture.CreateClient();
 
         // Act
-        using var actual = await client.GetFromJsonAsync<JsonDocument>("/swagger/api/swagger.json");
+        using var actual = await client.GetFromJsonAsync<JsonDocument>("/openapi/api.json");
 
         // Assert
         actual.ShouldNotBeNull();
@@ -140,5 +143,29 @@ public class ApiTests(TestServerFixture fixture, ITestOutputHelper outputHelper)
         actual.RootElement.GetProperty("components").GetProperty("schemas").EnumerateObject().Count().ShouldBe(2);
         actual.RootElement.GetProperty("paths").EnumerateObject().Count().ShouldBe(1);
         actual.RootElement.GetProperty("security").GetArrayLength().ShouldBe(1);
+    }
+
+    [Fact]
+    public async Task Schema_Has_No_Validation_Warnings()
+    {
+        // Arrange
+        var ruleSet = ValidationRuleSet.GetDefaultRuleSet();
+
+        // HACK Workaround for https://github.com/microsoft/OpenAPI.NET/issues/1738
+        ruleSet.Remove("MediaTypeMismatchedDataType");
+
+        using var client = Fixture.CreateClient();
+
+        // Act
+        using var schema = await client.GetStreamAsync("/openapi/api.json");
+
+        // Assert
+        var reader = new OpenApiStreamReader();
+        var actual = await reader.ReadAsync(schema);
+
+        actual.OpenApiDiagnostic.Errors.ShouldBeEmpty();
+
+        var errors = actual.OpenApiDocument.Validate(ruleSet);
+        errors.ShouldBeEmpty();
     }
 }

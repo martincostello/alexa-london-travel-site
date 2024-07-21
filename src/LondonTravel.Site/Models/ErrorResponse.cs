@@ -11,6 +11,7 @@ namespace MartinCostello.LondonTravel.Site.Models;
 /// <summary>
 /// Represents an error from an API resource.
 /// </summary>
+[OpenApiExample<ErrorResponse>]
 public sealed class ErrorResponse : IExampleProvider<ErrorResponse>
 {
     /// <summary>
@@ -46,9 +47,9 @@ public sealed class ErrorResponse : IExampleProvider<ErrorResponse>
     public ICollection<string> Details { get; set; } = [];
 
     /// <inheritdoc/>
-    public static object GenerateExample()
+    static ErrorResponse IExampleProvider<ErrorResponse>.GenerateExample()
     {
-        return new ErrorResponse()
+        return new()
         {
             Message = "Unauthorized.",
             RequestId = "0HKT0TM6UJASI",

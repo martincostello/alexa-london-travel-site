@@ -12,6 +12,9 @@ trim_trailing_whitespace = true
 [*.{config,csproj,graphviz,json,props,ruleset,targets,yml}]
 indent_size = 2
 
+[*.{cs,ts}]
+file_header_template = Copyright (c) Martin Costello, 2017. All rights reserved.\nLicensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
+
 [*.cs]
 
 dotnet_analyzer_diagnostic.category-Style.severity = warning

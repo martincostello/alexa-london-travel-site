@@ -111,7 +111,7 @@ builder.Services.AddHsts((options) =>
 });
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddOpenApi();
+builder.Services.AddOpenApiDocumentation();
 
 builder.Services.Configure<GzipCompressionProviderOptions>((p) => p.Level = CompressionLevel.Fastest);
 builder.Services.Configure<BrotliCompressionProviderOptions>((p) => p.Level = CompressionLevel.Fastest);
@@ -239,7 +239,11 @@ app.MapAlexa();
 app.MapApi();
 app.MapRedirects();
 
-app.UseOpenApi();
+app.UseOpenApi((p) =>
+{
+    p.DocumentName = "api";
+    p.Path = "/openapi/{documentName}.json";
+});
 
 app.UseCookiePolicy(new()
 {
