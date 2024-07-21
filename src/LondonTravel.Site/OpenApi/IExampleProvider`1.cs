@@ -3,8 +3,6 @@
 
 namespace MartinCostello.LondonTravel.Site.OpenApi;
 
-#pragma warning disable CA1000
-
 /// <summary>
 /// Defines a method for obtaining examples for OpenAPI documentation.
 /// </summary>
