@@ -142,7 +142,7 @@ public class ApiTests(TestServerFixture fixture, ITestOutputHelper outputHelper)
         actual.RootElement.GetProperty("info").ValueKind.ShouldBe(JsonValueKind.Object);
         actual.RootElement.GetProperty("components").GetProperty("schemas").TryGetProperty("ErrorResponse", out _).ShouldBeTrue();
         actual.RootElement.GetProperty("components").GetProperty("schemas").TryGetProperty("PreferencesResponse", out _).ShouldBeTrue();
-        //// HACK Disabled due to https://github.com/dotnet/aspnetcore/issues/TODO
+        //// HACK Disabled due to https://github.com/dotnet/aspnetcore/issues/56919
         ////actual.RootElement.GetProperty("components").GetProperty("schemas").EnumerateObject().Count().ShouldBe(2);
         actual.RootElement.GetProperty("paths").EnumerateObject().Count().ShouldBe(1);
         actual.RootElement.GetProperty("security").GetArrayLength().ShouldBe(1);
