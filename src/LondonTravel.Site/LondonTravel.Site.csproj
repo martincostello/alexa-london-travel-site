@@ -19,6 +19,8 @@
     <XlfLanguages>en-GB;en-US;qps-Ploc</XlfLanguages>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Aspire.Azure.Security.KeyVault" />
+    <PackageReference Include="Aspire.Azure.Storage.Blobs" />
     <PackageReference Include="Aspire.Microsoft.Azure.Cosmos" />
     <PackageReference Include="AspNet.Security.OAuth.Amazon" />
     <PackageReference Include="AspNet.Security.OAuth.Apple" />

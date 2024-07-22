@@ -2,6 +2,8 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.IO.Compression;
+using Azure.Identity;
+using Azure.Storage.Blobs;
 using MartinCostello.LondonTravel.Site;
 using MartinCostello.LondonTravel.Site.Extensions;
 using MartinCostello.LondonTravel.Site.OpenApi;
@@ -19,7 +21,38 @@ using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.ConfigureApplication();
+var credential = new DefaultAzureCredential(new DefaultAzureCredentialOptions()
+{
+    ExcludeVisualStudioCredential = true,
+});
+
+if (builder.Configuration["ConnectionStrings:AzureKeyVault"] is { Length: > 0 })
+{
+    builder.Configuration.AddAzureKeyVaultSecrets("AzureKeyVault", (p) => p.Credential = credential);
+}
+
+if (builder.Configuration["ConnectionStrings:AzureBlobStorage"] is { Length: > 0 })
+{
+    builder.AddAzureBlobClient("AzureBlobStorage", (p) => p.Credential = credential);
+}
+
+if (builder.Configuration["ConnectionStrings:AzureCosmos"] is { Length: > 0 })
+{
+    builder.AddAzureCosmosClient(
+        "AzureCosmos",
+        (settings) => settings.Credential = credential,
+        (options) =>
+        {
+            options.ApplicationName = "london-travel";
+            options.RequestTimeout = TimeSpan.FromSeconds(15);
+
+            if (builder.Configuration["Site:Authentication:UserStore:CurrentLocation"] is { Length: > 0 } region)
+            {
+                options.ApplicationRegion = region;
+            }
+        });
+}
+
 builder.WebHost.CaptureStartupErrors(true);
 builder.WebHost.ConfigureKestrel((p) => p.AddServerHeader = false);
 
@@ -37,15 +70,18 @@ var dataProtection = builder.Services
     .AddDataProtection()
     .SetApplicationName($"londontravel-{environment}");
 
-string connectionString = builder.Configuration.AzureStorageConnectionString();
-
-if (!string.IsNullOrWhiteSpace(connectionString))
+if (builder.Configuration["ConnectionStrings:AzureBlobStorage"] is { Length: > 0 })
 {
-    string relativePath = $"london-travel/{environment}/keys.xml";
-    dataProtection.PersistKeysToAzureBlobStorage(
-        connectionString,
-        "data-protection",
-        relativePath);
+    dataProtection.PersistKeysToAzureBlobStorage(static (provider) =>
+    {
+        var client = provider.GetRequiredService<BlobServiceClient>();
+        var environment = provider.GetRequiredService<IHostEnvironment>();
+
+        string containerName = "data-protection";
+        string blobName = $"{environment}/keys.xml";
+
+        return client.GetBlobContainerClient(containerName).GetBlobClient(blobName);
+    });
 }
 
 builder.Services.AddAntiforgery((options) =>
@@ -168,8 +204,6 @@ builder.Services.Configure<StaticFileOptions>((options) =>
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddSingleton<ITflServiceFactory, TflServiceFactory>();
 
-builder.AddAzureCosmosClient("Cosmos");
-builder.Services.AddSingleton(DocumentHelpers.CreateClient);
 builder.Services.TryAddSingleton<IDocumentService, DocumentService>();
 builder.Services.TryAddSingleton<IDocumentCollectionInitializer, DocumentCollectionInitializer>();
 

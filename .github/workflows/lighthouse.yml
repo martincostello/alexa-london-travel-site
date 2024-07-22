@@ -12,6 +12,7 @@ permissions:
   contents: read
 
 env:
+  APPLICATION_URL: 'https://localhost:50001'
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_MULTILEVEL_LOOKUP: 0
   DOTNET_NOLOGO: true
@@ -35,7 +36,9 @@ jobs:
     - name: Start website
       shell: pwsh
       env:
-        ConnectionStrings__Cosmos: 'AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==;AccountEndpoint=https://localhost:8081;DisableServerCertificateValidation=True;'
+        APPLICATION_URL: ${{ env.APPLICATION_URL }}
+        ConnectionStrings__AzureCosmos: 'AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==;AccountEndpoint=https://localhost:8081;DisableServerCertificateValidation=True;'
+        Logging__LogLevel__Azure: 'None'
       run: |
         Push-Location (Join-Path "src" "LondonTravel.Site")
         npm ci
@@ -46,7 +49,7 @@ jobs:
         $Attempts = 0
         While ($Attempts -lt 10) {
           $Response = Try {
-            Invoke-WebRequest "https://localhost:50001" -SkipCertificateCheck
+            Invoke-WebRequest ${env:APPLICATION_URL} -SkipCertificateCheck
           } catch {
             $_.Exception.Response
           }
@@ -70,7 +73,7 @@ jobs:
         gitHubAccessToken: ${{ secrets.LIGHTHOUSE_ACCESS_TOKEN }}
         outputDirectory: ${{ github.workspace }}/artifacts/lighthouse
         prCommentEnabled: true
-        urls: 'https://localhost:50001'
+        urls: ${{ env.APPLICATION_URL }}
         wait: true
 
     - name: Check Lighthouse scores
