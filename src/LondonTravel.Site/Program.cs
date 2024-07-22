@@ -38,7 +38,19 @@ if (builder.Configuration["ConnectionStrings:AzureBlobStorage"] is { Length: > 0
 
 if (builder.Configuration["ConnectionStrings:AzureCosmos"] is { Length: > 0 })
 {
-    builder.AddAzureBlobClient("AzureCosmos", (p) => p.Credential = credential);
+    builder.AddAzureCosmosClient(
+        "AzureCosmos",
+        (settings) => settings.Credential = credential,
+        (options) =>
+        {
+            options.ApplicationName = "london-travel";
+            options.RequestTimeout = TimeSpan.FromSeconds(15);
+
+            if (builder.Configuration["Site:Authentication:UserStore:CurrentLocation"] is { Length: > 0 } region)
+            {
+                options.ApplicationRegion = region;
+            }
+        });
 }
 
 builder.WebHost.CaptureStartupErrors(true);
@@ -192,7 +204,6 @@ builder.Services.Configure<StaticFileOptions>((options) =>
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddSingleton<ITflServiceFactory, TflServiceFactory>();
 
-builder.Services.AddSingleton(DocumentHelpers.CreateClient);
 builder.Services.TryAddSingleton<IDocumentService, DocumentService>();
 builder.Services.TryAddSingleton<IDocumentCollectionInitializer, DocumentCollectionInitializer>();
 

@@ -13,7 +13,8 @@ var blobStorage = builder.ExecutionContext.IsPublishMode
     : builder.AddConnectionString(BlobStorage);
 
 var cosmos = builder.AddAzureCosmosDB(Cosmos)
-                    .RunAsEmulator();
+                    .RunAsEmulator()
+                    .AddDatabase("LondonTravel");
 
 var secrets = builder.ExecutionContext.IsPublishMode
     ? builder.AddAzureKeyVault(KeyVault)
