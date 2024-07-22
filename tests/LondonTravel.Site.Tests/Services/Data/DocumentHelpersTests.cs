@@ -112,7 +112,7 @@ public static class DocumentHelpersTests
         // Arrange
         string connectionString = "AccountKey=bpfYUKmfV0arChaIPI3hU3+bn3w=;AccountEndpoint=https://cosmosdb.azure.local";
         var configuration = new ConfigurationBuilder()
-            .AddInMemoryCollection([KeyValuePair.Create<string, string?>("ConnectionStrings:Cosmos", connectionString)])
+            .AddInMemoryCollection([KeyValuePair.Create<string, string?>("ConnectionStrings:AzureCosmos", connectionString)])
             .Build();
 
         var options = new UserStoreOptions()
@@ -143,7 +143,7 @@ public static class DocumentHelpersTests
         // Arrange
         string connectionString = "AccountKey=bpfYUKmfV0arChaIPI3hU3+bn3w=;AccountEndpoint=https://cosmosdb.azure.local";
         var configuration = new ConfigurationBuilder()
-            .AddInMemoryCollection([KeyValuePair.Create<string, string?>("ConnectionStrings:Cosmos", connectionString)])
+            .AddInMemoryCollection([KeyValuePair.Create<string, string?>("ConnectionStrings:AzureCosmos", connectionString)])
             .Build();
 
         var options = new UserStoreOptions()

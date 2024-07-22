@@ -30,7 +30,7 @@ internal static class DocumentHelpers
         var options = serviceProvider.GetRequiredService<UserStoreOptions>();
         var httpClientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
 
-        return CreateClient(configuration["ConnectionStrings:Cosmos"]!, options, httpClientFactory);
+        return CreateClient(configuration["ConnectionStrings:AzureCosmos"]!, options, httpClientFactory);
     }
 
     /// <summary>
