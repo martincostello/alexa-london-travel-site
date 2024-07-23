@@ -235,7 +235,7 @@ public static partial class AuthenticationBuilderExtensions
                         context.Scheme.Name,
                         options.StateDataFormat,
                         context.HttpContext.RequestServices.GetRequiredService<ILogger<T>>(),
-                        (p) => p.Items);
+                        (p) => p?.Items);
                 };
 
                 options.Events.OnTicketReceived = (context) =>
