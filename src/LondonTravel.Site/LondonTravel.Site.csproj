@@ -45,8 +45,8 @@
     <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" />
     <PackageReference Include="OpenTelemetry.Instrumentation.Http" />
     <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" />
-    <PackageReference Include="OpenTelemetry.ResourceDetectors.Azure" />
-    <PackageReference Include="OpenTelemetry.ResourceDetectors.Container" />
+    <PackageReference Include="OpenTelemetry.Resources.Azure" />
+    <PackageReference Include="OpenTelemetry.Resources.Container" />
     <PackageReference Include="Polly.Extensions" />
     <PackageReference Include="Polly.RateLimiting" />
   </ItemGroup>
