@@ -2,8 +2,6 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using MartinCostello.LondonTravel.Site.OpenApi;
-using MartinCostello.LondonTravel.Site.Options;
-using NSwag;
 
 namespace MartinCostello.LondonTravel.Site.Extensions;
 
@@ -21,57 +19,24 @@ public static class OpenApiServiceCollectionExtensions
     /// </returns>
     public static IServiceCollection AddOpenApiDocumentation(this IServiceCollection value)
     {
-        return value.AddOpenApiDocument((options, provider) =>
+        value.AddScoped<AddExamplesTransformer>();
+
+        return value.AddOpenApi("api", (options) =>
         {
-            var siteOptions = provider.GetRequiredService<SiteOptions>();
+            options.AddDocumentTransformer<AddApiInfoTransformer>();
+            options.AddDocumentTransformer<AddSecurityTransformer>();
+            options.AddDocumentTransformer<AddServersTransformer>();
 
-            var terms = new UriBuilder()
-            {
-                Scheme = Uri.UriSchemeHttps,
-                Host = siteOptions.Metadata?.Domain!,
-                Path = "terms-of-service/",
-            };
+            options.AddOperationTransformer(new AddResponseDescriptionTransformer());
+            options.AddSchemaTransformer(new AddSchemaDescriptionsTransformer());
 
-            options.DocumentName = "api";
-            options.Title = siteOptions.Metadata?.Name;
-            options.Version = string.Empty;
+            var examples = new AddExamplesTransformer();
+            options.AddOperationTransformer(examples);
+            options.AddSchemaTransformer(examples);
 
-            options.PostProcess = (document) =>
-            {
-                document.Generator = null;
-
-                document.Info.Contact = new()
-                {
-                    Name = siteOptions.Metadata?.Author?.Name,
-                    Url = siteOptions.Metadata?.Repository,
-                };
-
-                document.Info.Description = siteOptions.Metadata?.Description;
-
-                document.Info.License = new()
-                {
-                    Name = "Apache 2.0",
-                    Url = "https://www.apache.org/licenses/LICENSE-2.0.html",
-                };
-
-                document.Info.TermsOfService = terms.Uri.ToString();
-                document.Info.Version = string.Empty;
-
-                string schemeName = "Bearer";
-
-                document.Security.Add(new() { [schemeName] = [] });
-                document.SecurityDefinitions.Add(schemeName, new()
-                {
-                    BearerFormat = "Opaque token",
-                    Description = "Access token authentication using a bearer token.",
-                    In = OpenApiSecurityApiKeyLocation.Header,
-                    Type = OpenApiSecuritySchemeType.Http,
-                    Scheme = "bearer",
-                });
-            };
-
-            options.OperationProcessors.Add(new RemoveParameterPositionProcessor());
-            options.SchemaSettings.SchemaProcessors.Add(new RemoveStyleCopPrefixesProcessor());
+            var prefixes = new RemoveStyleCopPrefixesTransformer();
+            options.AddOperationTransformer(prefixes);
+            options.AddSchemaTransformer(prefixes);
         });
     }
 }
