@@ -12,12 +12,6 @@ on:
     - cron: '0 6 * * 1'
   workflow_dispatch:
 
-# HACK Disable additional code analysis as a workaround for https://github.com/dotnet/roslyn/issues/70368.
-# See https://github.com/App-vNext/Polly/pull/1708 for inspiration.
-env:
-  AnalysisMode: 'None'
-  EnableNETAnalyzers: 'false'
-
 permissions:
   actions: read
   contents: read
