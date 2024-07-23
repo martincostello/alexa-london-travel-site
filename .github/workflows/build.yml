@@ -61,26 +61,20 @@ jobs:
 
     steps:
 
-    # HACK Workaround for https://github.com/dotnet/sdk/issues/42211
-    - name: Update .NET Aspire workload
-      if: runner.os == 'Windows'
-      shell: pwsh
-      run: |
-        $manifest = @'
-        {
-          "microsoft.net.sdk.aspire": "8.0.1/8.0.100"
-        }
-        '@
-        $manifestPath = Join-Path ${env:RUNNER_TEMP} "workload-manifest.json"
-        $manifest | Out-File -FilePath $manifestPath -Encoding utf8
-        dotnet workload update --advertising-manifests-only && `
-        dotnet workload update --from-rollback-file $manifestPath
-
     - name: Checkout code
       uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
 
+    # HACK Workaround for https://github.com/dotnet/sdk/issues/42211
+    - name: Set DOTNET_INSTALL_DIR
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: |
+        "DOTNET_INSTALL_DIR=${env:GITHUB_WORKSPACE}\.dotnet" >> ${env:GITHUB_ENV}
+
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@6bd8b7f7774af54e05809fcc5431931b3eb1ddee # v4.0.1
+      env:
+        DOTNET_INSTALL_DIR: ${{ env.DOTNET_INSTALL_DIR }}
 
     - name: Setup Node
       uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
