@@ -3,8 +3,6 @@
 
 using System.Net;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
-using System.Text.Json;
 using Microsoft.OpenApi.Extensions;
 using Microsoft.OpenApi.Readers;
 using Microsoft.OpenApi.Validations;
@@ -128,24 +126,6 @@ public class ApiTests(TestServerFixture fixture, ITestOutputHelper outputHelper)
     }
 
     [Fact]
-    public async Task OpenApi_Documentation_Only_Exposes_Expected_Operations()
-    {
-        // Arrange
-        using var client = Fixture.CreateClient();
-
-        // Act
-        using var actual = await client.GetFromJsonAsync<JsonDocument>("/openapi/api.json");
-
-        // Assert
-        actual.ShouldNotBeNull();
-        actual.RootElement.GetString("openapi").ShouldBe("3.0.0");
-        actual.RootElement.GetProperty("info").ValueKind.ShouldBe(JsonValueKind.Object);
-        actual.RootElement.GetProperty("components").GetProperty("schemas").EnumerateObject().Count().ShouldBe(2);
-        actual.RootElement.GetProperty("paths").EnumerateObject().Count().ShouldBe(1);
-        actual.RootElement.GetProperty("security").GetArrayLength().ShouldBe(1);
-    }
-
-    [Fact]
     public async Task Schema_Has_No_Validation_Warnings()
     {
         // Arrange
@@ -167,5 +147,18 @@ public class ApiTests(TestServerFixture fixture, ITestOutputHelper outputHelper)
 
         var errors = actual.OpenApiDocument.Validate(ruleSet);
         errors.ShouldBeEmpty();
+    }
+
+    [Fact]
+    public async Task Schema_Is_Correct()
+    {
+        // Arrange
+        using var client = Fixture.CreateClient();
+
+        // Act
+        string actual = await client.GetStringAsync("/openapi/api.json");
+
+        // Assert
+        await VerifyJson(actual);
     }
 }

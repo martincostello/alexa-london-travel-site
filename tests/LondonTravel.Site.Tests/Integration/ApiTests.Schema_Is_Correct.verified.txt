@@ -1,0 +1,171 @@
+﻿{
+  openapi: 3.0.0,
+  info: {
+    title: London Travel,
+    description: London Travel is an Amazon Alexa skill for checking the status for travel in London.,
+    termsOfService: https://londontravel.martincostello.com/terms-of-service/,
+    contact: {
+      name: Martin Costello,
+      url: https://github.com/martincostello/alexa-london-travel-site
+    },
+    license: {
+      name: Apache 2.0,
+      url: https://www.apache.org/licenses/LICENSE-2.0.html
+    },
+    version: 
+  },
+  servers: [
+    {
+      url: https://localhost
+    }
+  ],
+  paths: {
+    /api/preferences: {
+      get: {
+        tags: [
+          LondonTravel.Site
+        ],
+        summary: Gets a user's preferences.,
+        description: Gets the preferences for a user associated with an access token.,
+        operationId: GetApiPreferences,
+        parameters: [
+          {
+            name: Authorization,
+            in: header,
+            description: The authorization header.,
+            schema: {
+              type: string,
+              nullable: true
+            }
+          }
+        ],
+        responses: {
+          200: {
+            description: The preferences associated with the provided access token.,
+            content: {
+              application/json: {
+                schema: {
+                  $ref: #/components/schemas/PreferencesResponse
+                },
+                example: {
+                  favoriteLines: [
+                    northern,
+                    victoria
+                  ],
+                  userId: Guid_1
+                }
+              }
+            }
+          },
+          401: {
+            description: A valid access token was not provided.,
+            content: {
+              application/json: {
+                schema: {
+                  $ref: #/components/schemas/ErrorResponse
+                },
+                example: {
+                  statusCode: 401,
+                  message: Unauthorized.,
+                  requestId: 0HKT0TM6UJASI,
+                  details: [
+                    Only the Bearer authorization scheme is supported.
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  components: {
+    schemas: {
+      PreferencesResponse: {
+        type: object,
+        description: Represents the API response for a user's preferences.,
+        example: {
+          favoriteLines: [
+            northern,
+            victoria
+          ],
+          userId: Guid_1
+        },
+        additionalProperties: false,
+        required: [
+          favoriteLines,
+          userId
+        ],
+        properties: {
+          favoriteLines: {
+            type: array,
+            description: The Ids of the user's favorite lines, if any.,
+            items: {
+              type: string
+            }
+          },
+          userId: {
+            type: string,
+            description: The user's Id.,
+            minLength: 1
+          }
+        }
+      },
+      ErrorResponse: {
+        type: object,
+        description: Represents an error from an API resource.,
+        example: {
+          statusCode: 401,
+          message: Unauthorized.,
+          requestId: 0HKT0TM6UJASI,
+          details: [
+            Only the Bearer authorization scheme is supported.
+          ]
+        },
+        additionalProperties: false,
+        required: [
+          statusCode,
+          message,
+          requestId,
+          details
+        ],
+        properties: {
+          statusCode: {
+            type: integer,
+            description: The HTTP status code.,
+            format: int32
+          },
+          message: {
+            type: string,
+            description: The error message.,
+            minLength: 1
+          },
+          requestId: {
+            type: string,
+            description: The request Id.,
+            minLength: 1
+          },
+          details: {
+            type: array,
+            description: The error details, if any.,
+            items: {
+              type: string
+            }
+          }
+        }
+      }
+    },
+    securitySchemes: {
+      Bearer: {
+        type: http,
+        description: Access token authentication using a bearer token.,
+        in: header,
+        scheme: bearer,
+        bearerFormat: Opaque token
+      }
+    }
+  },
+  security: [
+    {}
+  ]
+}
