@@ -153,12 +153,15 @@ public class ApiTests(TestServerFixture fixture, ITestOutputHelper outputHelper)
     public async Task Schema_Is_Correct()
     {
         // Arrange
+        var settings = new VerifySettings();
+        settings.DontScrubGuids();
+
         using var client = Fixture.CreateClient();
 
         // Act
         string actual = await client.GetStringAsync("/openapi/api.json");
 
         // Assert
-        await VerifyJson(actual);
+        await VerifyJson(actual, settings);
     }
 }
