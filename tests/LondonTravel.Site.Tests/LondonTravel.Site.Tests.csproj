@@ -28,6 +28,7 @@
     <PackageReference Include="NSubstitute" />
     <PackageReference Include="ReportGenerator" />
     <PackageReference Include="Shouldly" />
+    <PackageReference Include="Verify.Xunit" />
     <PackageReference Include="xRetry" />
     <PackageReference Include="xunit" />
     <PackageReference Include="xunit.runner.visualstudio" />
