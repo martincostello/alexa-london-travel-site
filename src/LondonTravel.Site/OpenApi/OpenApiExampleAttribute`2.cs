@@ -3,7 +3,6 @@
 
 using System.Text.Json.Serialization;
 using Microsoft.OpenApi.Any;
-using NSwag.Annotations;
 
 namespace MartinCostello.LondonTravel.Site.OpenApi;
 
@@ -15,7 +14,7 @@ namespace MartinCostello.LondonTravel.Site.OpenApi;
 /// <typeparam name="TSchema">The type of the schema.</typeparam>
 /// <typeparam name="TProvider">The type of the example provider.</typeparam>
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method | AttributeTargets.Parameter, AllowMultiple = true)]
-public class OpenApiExampleAttribute<TSchema, TProvider>() : OpenApiOperationProcessorAttribute(typeof(OpenApiExampleProcessor<TSchema, TProvider>)), IOpenApiExampleMetadata
+public class OpenApiExampleAttribute<TSchema, TProvider> : Attribute, IOpenApiExampleMetadata
     where TProvider : IExampleProvider<TSchema>
 {
     /// <inheritdoc/>
