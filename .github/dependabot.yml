@@ -30,6 +30,9 @@ updates:
     Polly:
       patterns:
         - Polly*
+    Swashbuckle.AspNetCore:
+      patterns:
+        - Swashbuckle.AspNetCore*
     xunit:
       patterns:
         - Verify.Xunit

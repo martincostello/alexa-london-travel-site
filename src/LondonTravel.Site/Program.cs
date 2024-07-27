@@ -273,11 +273,7 @@ app.MapAlexa();
 app.MapApi();
 app.MapRedirects();
 
-app.UseOpenApi((p) =>
-{
-    p.DocumentName = "api";
-    p.Path = "/openapi/{documentName}.json";
-});
+app.UseSwagger((p) => p.RouteTemplate = "/openapi/{documentName}.json");
 
 app.UseCookiePolicy(new()
 {

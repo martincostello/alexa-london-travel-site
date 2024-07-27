@@ -7,36 +7,14 @@ using Microsoft.OpenApi.Any;
 
 namespace MartinCostello.LondonTravel.Site.OpenApi;
 
-/// <summary>
-/// A class containing methods to help format JSON examples for OpenAPI. This class cannot be inherited.
-/// </summary>
 internal static class ExampleFormatter
 {
-    /// <summary>
-    /// Formats the example for the specified type.
-    /// </summary>
-    /// <typeparam name="TSchema">The type of the schema.</typeparam>
-    /// <typeparam name="TProvider">The type of the example provider.</typeparam>
-    /// <param name="context">The JSON serializer context to use.</param>
-    /// <returns>
-    /// The <see cref="IOpenApiAny"/> to use as the example.
-    /// </returns>
     public static IOpenApiAny AsJson<TSchema, TProvider>(JsonSerializerContext context)
         where TProvider : IExampleProvider<TSchema>
         => AsJson(TProvider.GenerateExample(), context);
 
-    /// <summary>
-    /// Formats the specified value as JSON.
-    /// </summary>
-    /// <typeparam name="T">The type of the value.</typeparam>
-    /// <param name="example">The example value to format as JSON.</param>
-    /// <param name="context">The JSON serializer context to use.</param>
-    /// <returns>
-    /// The <see cref="IOpenApiAny"/> to use as the example.
-    /// </returns>
     public static IOpenApiAny AsJson<T>(T example, JsonSerializerContext context)
     {
-        // Apply any formatting rules configured for the API (e.g. camel casing)
         string? json = JsonSerializer.Serialize(example, typeof(T), context);
         using var document = JsonDocument.Parse(json);
 
@@ -47,7 +25,6 @@ internal static class ExampleFormatter
 
         var result = new OpenApiObject();
 
-        // Recursively build up the example from the properties of the object
         foreach (var token in document.RootElement.EnumerateObject())
         {
             if (TryParse(token.Value, out var any))
