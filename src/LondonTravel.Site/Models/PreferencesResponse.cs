@@ -31,7 +31,7 @@ public sealed class PreferencesResponse : IExampleProvider<PreferencesResponse>
     public string UserId { get; set; } = string.Empty;
 
     /// <inheritdoc/>
-    static PreferencesResponse IExampleProvider<PreferencesResponse>.GenerateExample()
+    public static PreferencesResponse GenerateExample()
     {
         return new()
         {

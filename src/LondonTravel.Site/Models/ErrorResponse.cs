@@ -47,7 +47,7 @@ public sealed class ErrorResponse : IExampleProvider<ErrorResponse>
     public ICollection<string> Details { get; set; } = [];
 
     /// <inheritdoc/>
-    static ErrorResponse IExampleProvider<ErrorResponse>.GenerateExample()
+    public static ErrorResponse GenerateExample()
     {
         return new()
         {

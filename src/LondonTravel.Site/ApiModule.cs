@@ -13,7 +13,6 @@ using MartinCostello.LondonTravel.Site.Models;
 using MartinCostello.LondonTravel.Site.OpenApi;
 using MartinCostello.LondonTravel.Site.Services;
 using Microsoft.AspNetCore.Mvc;
-using NSwag.Annotations;
 
 namespace MartinCostello.LondonTravel.Site;
 
@@ -32,7 +31,10 @@ public static partial class ApiModule
         app.MapGet("/api/preferences", GetPreferences)
            .WithName("GetApiPreferences")
            .WithSummary("Gets a user's preferences.")
-           .WithDescription("Gets the preferences for a user associated with an access token.");
+           .WithDescription("Gets the preferences for a user associated with an access token.")
+           .WithTags("LondonTravel.Site")
+           .Produces<PreferencesResponse>(StatusCodes.Status200OK)
+           .Produces<ErrorResponse>(StatusCodes.Status401Unauthorized);
 
         app.MapGet("/version", static () =>
         {
@@ -70,17 +72,8 @@ public static partial class ApiModule
         return app;
     }
 
-    [OpenApiExample<ErrorResponse>]
-    [OpenApiExample<PreferencesResponse>]
-    [OpenApiOperation("Gets a user's preferences.", "Gets the preferences for a user associated with an access token.")]
     [OpenApiResponse(StatusCodes.Status200OK, "The preferences associated with the provided access token.")]
     [OpenApiResponse(StatusCodes.Status401Unauthorized, "A valid access token was not provided.")]
-    [OpenApiTag("LondonTravel.Site")]
-    [ProducesResponseType<PreferencesResponse>(StatusCodes.Status200OK)]
-    [ProducesResponseType<ErrorResponse>(StatusCodes.Status401Unauthorized)]
-    [SwaggerResponse(StatusCodes.Status200OK, typeof(PreferencesResponse), Description = "The preferences associated with the provided access token.")]
-    [SwaggerResponse(StatusCodes.Status401Unauthorized, typeof(ErrorResponse), Description = "A valid access token was not provided.")]
-    [Tags("LondonTravel.Site")]
     private static async Task<IResult> GetPreferences(
         [Description("The authorization header.")][FromHeader(Name = "Authorization")] string? authorizationHeader,
         HttpContext httpContext,
@@ -92,7 +85,6 @@ public static partial class ApiModule
 
         Log.RequestForPreferences(logger);
 
-        // TODO Consider allowing implicit access if the user is signed-in (i.e. access from a browser)
         if (string.IsNullOrWhiteSpace(authorizationHeader))
         {
             Log.AccessDeniedNoAuthorization(logger, httpContext);

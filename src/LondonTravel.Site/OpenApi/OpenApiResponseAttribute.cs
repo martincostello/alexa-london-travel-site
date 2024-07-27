@@ -3,21 +3,10 @@
 
 namespace MartinCostello.LondonTravel.Site.OpenApi;
 
-/// <summary>
-/// Represents an OpenAPI operation response.
-/// </summary>
-/// <param name="httpStatusCode">The HTTP status code for the response.</param>
-/// <param name="description">The description of the response.</param>
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-public sealed class OpenApiResponseAttribute(int httpStatusCode, string description) : Attribute
+internal sealed class OpenApiResponseAttribute(int httpStatusCode, string description) : Attribute
 {
-    /// <summary>
-    /// Gets the HTTP status code for the response.
-    /// </summary>
     public int HttpStatusCode { get; } = httpStatusCode;
 
-    /// <summary>
-    /// Gets the description of the response.
-    /// </summary>
     public string Description { get; } = description;
 }
