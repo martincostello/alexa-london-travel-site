@@ -80,6 +80,11 @@ if (builder.Configuration["ConnectionStrings:AzureBlobStorage"] is { Length: > 0
         string containerName = "data-protection";
         string blobName = $"{environment}/keys.xml";
 
+        if (environment.IsDevelopment())
+        {
+            client.CreateBlobContainer(containerName);
+        }
+
         return client.GetBlobContainerClient(containerName).GetBlobClient(blobName);
     });
 }
