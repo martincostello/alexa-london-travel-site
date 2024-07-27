@@ -8,9 +8,9 @@ const string Cosmos = "AzureCosmos";
 const string KeyVault = "AzureKeyVault";
 const string Storage = "AzureStorage";
 
-var blobStorage = builder.ExecutionContext.IsPublishMode
-    ? builder.AddAzureStorage(Storage).AddBlobs(BlobStorage)
-    : builder.AddConnectionString(BlobStorage);
+var blobs = builder.AddAzureStorage(Storage)
+                   .RunAsEmulator((p) => p.WithImageTag("3.31.0")) // TODO Remove tag when https://github.com/dotnet/aspire/issues/5078 released
+                   .AddBlobs(BlobStorage);
 
 var cosmos = builder.AddAzureCosmosDB(Cosmos)
                     .RunAsEmulator()
@@ -21,7 +21,7 @@ var secrets = builder.ExecutionContext.IsPublishMode
     : builder.AddConnectionString(KeyVault);
 
 builder.AddProject<Projects.LondonTravel_Site>("LondonTravelSite")
-       .WithReference(blobStorage)
+       .WithReference(blobs)
        .WithReference(cosmos)
        .WithReference(secrets);
 
