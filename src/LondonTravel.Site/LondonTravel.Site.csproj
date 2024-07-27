@@ -12,7 +12,7 @@
     <RootNamespace>MartinCostello.LondonTravel.Site</RootNamespace>
     <SatelliteResourceLanguages>en;en-GB;en-US;qps-Ploc</SatelliteResourceLanguages>
     <Summary>Website for the London Travel Amazon Alexa skill.</Summary>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <TypeScriptToolsVersion>latest</TypeScriptToolsVersion>
     <UserSecretsId>londontravel.martincostello.com</UserSecretsId>
@@ -34,6 +34,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" />
     <PackageReference Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
     <PackageReference Include="Microsoft.Azure.Cosmos" />
     <PackageReference Include="Microsoft.DotNet.XliffTasks" PrivateAssets="All" />
     <PackageReference Include="Microsoft.Extensions.Http.Resilience" />
@@ -49,9 +50,6 @@
     <PackageReference Include="OpenTelemetry.Resources.Container" />
     <PackageReference Include="Polly.Extensions" />
     <PackageReference Include="Polly.RateLimiting" />
-    <PackageReference Include="Swashbuckle.AspNetCore" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
   </ItemGroup>
   <ItemGroup>
     <ContainerPort Include="8080" Type="tcp" />
