@@ -68,7 +68,6 @@ public static class OpenApiServiceCollectionExtensions
             options.AddSchemaFilterInstance(examples);
 
             var prefixes = new RemoveStyleCopPrefixes();
-            options.AddOperationFilterInstance(prefixes);
             options.AddSchemaFilterInstance(prefixes);
 
             var scheme = new OpenApiSecurityScheme()

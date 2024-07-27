@@ -3,7 +3,6 @@
 
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -29,16 +28,6 @@ internal sealed class AddExamples : IOperationFilter, ISchemaFilter
             .OfType<IOpenApiExampleMetadata>()
             .ToArray();
 
-        if (operation.Parameters is { Count: > 0 } parameters)
-        {
-            TryAddParameterExamples(parameters, description, examples);
-        }
-
-        if (operation.RequestBody is { } body)
-        {
-            TryAddRequestExamples(body, description, examples);
-        }
-
         TryAddResponseExamples(operation.Responses, description, examples);
     }
 
@@ -48,60 +37,6 @@ internal sealed class AddExamples : IOperationFilter, ISchemaFilter
             GetExampleMetadata(type).FirstOrDefault() is { } metadata)
         {
             schema.Example = metadata.GenerateExample(Context);
-        }
-    }
-
-    private static void TryAddParameterExamples(
-        IList<OpenApiParameter> parameters,
-        ApiDescription description,
-        IList<IOpenApiExampleMetadata> examples)
-    {
-        var arguments = description.ActionDescriptor.EndpointMetadata
-            .OfType<MethodInfo>()
-            .FirstOrDefault()?
-            .GetParameters()
-            .ToArray();
-
-        if (arguments is { Length: > 0 })
-        {
-            foreach (var argument in arguments)
-            {
-                var metadata =
-                    GetExampleMetadata(argument).FirstOrDefault((p) => p.SchemaType == argument.ParameterType) ??
-                    GetExampleMetadata(argument.ParameterType).FirstOrDefault((p) => p.SchemaType == argument.ParameterType) ??
-                    examples.FirstOrDefault((p) => p.SchemaType == argument.ParameterType);
-
-                if (metadata?.GenerateExample(Context) is { } value)
-                {
-                    var parameter = parameters.FirstOrDefault((p) => p.Name == argument.Name);
-                    if (parameter is not null)
-                    {
-                        parameter.Example ??= value;
-                    }
-                }
-            }
-        }
-    }
-
-    private static void TryAddRequestExamples(
-        OpenApiRequestBody body,
-        ApiDescription description,
-        IList<IOpenApiExampleMetadata> examples)
-    {
-        if (!body.Content.TryGetValue("application/json", out var mediaType) || mediaType.Example is not null)
-        {
-            return;
-        }
-
-        var bodyParameter = description.ParameterDescriptions.Single((p) => p.Source == BindingSource.Body);
-
-        var metadata =
-            GetExampleMetadata(bodyParameter.Type).FirstOrDefault() ??
-            examples.FirstOrDefault((p) => p.SchemaType == bodyParameter.Type);
-
-        if (metadata is not null)
-        {
-            mediaType.Example ??= metadata.GenerateExample(Context);
         }
     }
 
@@ -127,9 +62,6 @@ internal sealed class AddExamples : IOperationFilter, ISchemaFilter
             }
         }
     }
-
-    private static IEnumerable<IOpenApiExampleMetadata> GetExampleMetadata(ParameterInfo parameter)
-        => parameter.GetCustomAttributes().OfType<IOpenApiExampleMetadata>();
 
     private static IEnumerable<IOpenApiExampleMetadata> GetExampleMetadata(Type? type)
         => type?.GetCustomAttributes().OfType<IOpenApiExampleMetadata>() ?? [];
