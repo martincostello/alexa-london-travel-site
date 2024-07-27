@@ -6,23 +6,9 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace MartinCostello.LondonTravel.Site.OpenApi;
 
-internal sealed class RemoveStyleCopPrefixes : IOperationFilter, ISchemaFilter
+internal sealed class RemoveStyleCopPrefixes : ISchemaFilter
 {
     private const string Prefix = "Gets or sets ";
-
-    public void Apply(OpenApiOperation operation, OperationFilterContext context)
-    {
-        foreach (var response in operation.Responses.Values)
-        {
-            foreach (var model in response.Content.Values)
-            {
-                foreach (var property in model.Schema.Properties.Values)
-                {
-                    TryUpdateDescription(property);
-                }
-            }
-        }
-    }
 
     public void Apply(OpenApiSchema schema, SchemaFilterContext context)
     {
