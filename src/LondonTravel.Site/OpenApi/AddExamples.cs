@@ -27,14 +27,7 @@ internal sealed class AddExamples : IOpenApiOperationTransformer, IOpenApiSchema
         OpenApiSchemaTransformerContext context,
         CancellationToken cancellationToken)
     {
-        Type? type = null; // context.JsonTypeInfo.Type;
-
-#pragma warning disable CA1508
-        if (type is not null)
-#pragma warning restore CA1508
-        {
-            Process(schema, type);
-        }
+        Process(schema, context.JsonTypeInfo.Type);
 
         return Task.CompletedTask;
     }

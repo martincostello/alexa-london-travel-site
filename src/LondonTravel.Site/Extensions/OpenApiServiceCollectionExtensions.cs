@@ -23,20 +23,20 @@ public static class OpenApiServiceCollectionExtensions
 
         services.AddOpenApi("api", (options) =>
         {
-            options.UseTransformer<AddApiInfo>();
-            options.UseTransformer<AddSecurity>();
-            options.UseTransformer<AddServers>();
+            options.AddDocumentTransformer<AddApiInfo>();
+            options.AddDocumentTransformer<AddSecurity>();
+            options.AddDocumentTransformer<AddServers>();
 
             var descriptions = new AddDescriptions();
-            options.UseOperationTransformer(descriptions.TransformAsync);
-            options.UseSchemaTransformer(descriptions.TransformAsync);
+            options.AddOperationTransformer(descriptions);
+            options.AddSchemaTransformer(descriptions);
 
             var examples = new AddExamples();
-            options.UseOperationTransformer(examples.TransformAsync);
-            options.UseSchemaTransformer(examples.TransformAsync);
+            options.AddOperationTransformer(examples);
+            options.AddSchemaTransformer(examples);
 
             var prefixes = new RemoveStyleCopPrefixes();
-            options.UseSchemaTransformer(prefixes.TransformAsync);
+            options.AddSchemaTransformer(prefixes);
         });
 
         return services;
