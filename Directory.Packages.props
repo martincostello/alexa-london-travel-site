@@ -11,9 +11,9 @@
     <PackageVersion Include="Aspire.Hosting.Azure.KeyVault" Version="8.1.0" />
     <PackageVersion Include="Aspire.Hosting.Azure.Storage" Version="8.1.0" />
     <PackageVersion Include="Aspire.Microsoft.Azure.Cosmos" Version="8.1.0" />
-    <PackageVersion Include="AspNet.Security.OAuth.Amazon" Version="8.1.0" />
-    <PackageVersion Include="AspNet.Security.OAuth.Apple" Version="8.1.0" />
-    <PackageVersion Include="AspNet.Security.OAuth.GitHub" Version="8.1.0" />
+    <PackageVersion Include="AspNet.Security.OAuth.Amazon" Version="9.0.0-preview.6.24359.69" />
+    <PackageVersion Include="AspNet.Security.OAuth.Apple" Version="9.0.0-preview.6.24359.69" />
+    <PackageVersion Include="AspNet.Security.OAuth.GitHub" Version="9.0.0-preview.6.24359.69" />
     <PackageVersion Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.3.1" />
     <PackageVersion Include="Azure.Extensions.AspNetCore.DataProtection.Blobs" Version="1.3.4" />
     <PackageVersion Include="Azure.Extensions.AspNetCore.DataProtection.Keys" Version="1.2.3" />
@@ -23,14 +23,15 @@
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.4.1" />
     <PackageVersion Include="JustEat.HttpClientInterception" Version="4.3.0" />
     <PackageVersion Include="MartinCostello.Logging.XUnit" Version="0.4.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.7" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="8.0.7" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Twitter" Version="8.0.7" />
-    <PackageVersion Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" Version="8.0.7" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.7" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="9.0.0-preview.6.24328.4" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="9.0.0-preview.6.24328.4" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Twitter" Version="9.0.0-preview.6.24328.4" />
+    <PackageVersion Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" Version="9.0.0-preview.6.24328.4" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.0-preview.6.24328.4" />
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0-preview.6.24328.4" />
     <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.42.0" />
     <PackageVersion Include="Microsoft.DotNet.XliffTasks" Version="1.0.0-beta.21452.1" />
-    <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="8.7.0" />
+    <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="9.0.0-preview.6.24353.1" />
     <PackageVersion Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.0.1" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
     <PackageVersion Include="Microsoft.OpenApi" Version="1.6.17" />
@@ -49,11 +50,9 @@
     <PackageVersion Include="Polly.RateLimiting" Version="8.4.1" />
     <PackageVersion Include="ReportGenerator" Version="5.3.8" />
     <PackageVersion Include="Shouldly" Version="4.2.1" />
-    <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.7.0" />
-    <PackageVersion Include="Swashbuckle.AspNetCore.Annotations" Version="6.7.0" />
     <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.0.1" />
     <PackageVersion Include="System.Private.Uri" Version="4.3.2" />
-    <PackageVersion Include="System.Text.Json" Version="8.0.4" />
+    <PackageVersion Include="System.Text.Json" Version="9.0.0-preview.6.24327.7" />
     <PackageVersion Include="Verify.Xunit" Version="26.2.0" />
     <PackageVersion Include="xRetry" Version="1.9.0" />
     <PackageVersion Include="xunit" Version="2.9.0" />
