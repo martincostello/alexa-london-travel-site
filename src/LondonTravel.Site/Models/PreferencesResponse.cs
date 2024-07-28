@@ -4,7 +4,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using MartinCostello.LondonTravel.Site.OpenApi;
-using Newtonsoft.Json;
 
 namespace MartinCostello.LondonTravel.Site.Models;
 
@@ -17,7 +16,6 @@ public sealed class PreferencesResponse : IExampleProvider<PreferencesResponse>
     /// <summary>
     /// Gets or sets the Ids of the user's favorite lines, if any.
     /// </summary>
-    [JsonProperty("favoriteLines")]
     [JsonPropertyName("favoriteLines")]
     [Required]
     public ICollection<string> FavoriteLines { get; set; } = [];
@@ -25,7 +23,6 @@ public sealed class PreferencesResponse : IExampleProvider<PreferencesResponse>
     /// <summary>
     /// Gets or sets the user's Id.
     /// </summary>
-    [JsonProperty("userId")]
     [JsonPropertyName("userId")]
     [Required]
     public string UserId { get; set; } = string.Empty;
