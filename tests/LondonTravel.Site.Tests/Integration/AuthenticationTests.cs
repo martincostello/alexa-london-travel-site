@@ -27,7 +27,6 @@ public sealed class AuthenticationTests : BrowserIntegrationTest
     [Theory]
     [InlineData("amazon", "John")]
     [InlineData("apple", "")]
-    [InlineData("facebook", "John")]
     [InlineData("github", "john-smith")]
     [InlineData("google", "John")]
     [InlineData("microsoft", "John")]
@@ -66,7 +65,7 @@ public sealed class AuthenticationTests : BrowserIntegrationTest
             browserChannel,
             async (homepage) =>
             {
-                ManagePage page = await homepage
+                var page = await homepage
                     .SignInAsync()
                     .ThenAsync((p) => p.SignInWithAmazonAsync())
                     .ThenAsync((p) => p.ManageAsync());
@@ -97,13 +96,13 @@ public sealed class AuthenticationTests : BrowserIntegrationTest
             browserChannel,
             async (homepage) =>
             {
-                ManagePage page = await homepage
+                var page = await homepage
                     .SignInAsync()
                     .ThenAsync((p) => p.SignInWithAmazonAsync())
                     .ThenAsync((p) => p.ManageAsync());
 
                 // Assert
-                IReadOnlyList<LinkedAccount> accounts = await page.LinkedAccountsAsync();
+                var accounts = await page.LinkedAccountsAsync();
 
                 accounts.Count.ShouldBe(1);
                 await accounts[0].NameAsync().ShouldBe("Amazon");

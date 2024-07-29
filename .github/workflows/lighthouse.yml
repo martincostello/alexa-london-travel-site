@@ -12,6 +12,7 @@ permissions:
   contents: read
 
 env:
+  APPLICATION_URL: 'https://localhost:50001'
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_MULTILEVEL_LOOKUP: 0
   DOTNET_NOLOGO: true
@@ -27,15 +28,17 @@ jobs:
     steps:
 
     - name: Checkout code
-      uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
+      uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
 
     - name: Setup .NET SDK
-      uses: actions/setup-dotnet@4d6c8fcf3c8f7a60068d26b594648e99df24cee3 # v4.0.0
+      uses: actions/setup-dotnet@6bd8b7f7774af54e05809fcc5431931b3eb1ddee # v4.0.1
 
     - name: Start website
       shell: pwsh
       env:
-        ConnectionStrings__Cosmos: 'AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==;AccountEndpoint=https://localhost:8081;DisableServerCertificateValidation=True;'
+        APPLICATION_URL: ${{ env.APPLICATION_URL }}
+        ConnectionStrings__AzureCosmos: 'AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==;AccountEndpoint=https://localhost:8081;DisableServerCertificateValidation=True;'
+        Logging__LogLevel__Azure: 'None'
       run: |
         Push-Location (Join-Path "src" "LondonTravel.Site")
         npm ci
@@ -46,7 +49,7 @@ jobs:
         $Attempts = 0
         While ($Attempts -lt 10) {
           $Response = Try {
-            Invoke-WebRequest "https://localhost:50001" -SkipCertificateCheck
+            Invoke-WebRequest ${env:APPLICATION_URL} -SkipCertificateCheck
           } catch {
             $_.Exception.Response
           }
@@ -63,18 +66,18 @@ jobs:
         New-Item -Path "${env:GITHUB_WORKSPACE}/artifacts/lighthouse" -ItemType Directory | Out-Null
 
     - name: Lighthouse
-      uses: foo-software/lighthouse-check-action@f78f162ef0ecd48a18244c427959f0b79ef4d553 # v10.0.0
+      uses: foo-software/lighthouse-check-action@a80267da2e0244b8a2e457a8575fc47590615852 # v12.0.1
       id: lighthouse
       with:
         device: 'all'
         gitHubAccessToken: ${{ secrets.LIGHTHOUSE_ACCESS_TOKEN }}
         outputDirectory: ${{ github.workspace }}/artifacts/lighthouse
         prCommentEnabled: true
-        urls: 'https://localhost:50001'
+        urls: ${{ env.APPLICATION_URL }}
         wait: true
 
     - name: Check Lighthouse scores
-      uses: foo-software/lighthouse-check-status-action@f22f8cdcaf593a986749d39fe21382526de3f501 # v2.0.1
+      uses: foo-software/lighthouse-check-status-action@2b9d5101f7a0de86ddb153a0d77ad7046aac1052 # v3.0.1
       with:
         lighthouseCheckResults: ${{ steps.lighthouse.outputs.lighthouseCheckResults }}
         minAccessibilityScore: '90'
@@ -84,7 +87,7 @@ jobs:
         minSeoScore: '100'
 
     - name: Publish artifacts
-      uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
+      uses: actions/upload-artifact@0b2256b8c012f0828dc542b3febcab082c67f72b # v4.3.4
       if: ${{ !cancelled() }}
       with:
         name: lighthouse

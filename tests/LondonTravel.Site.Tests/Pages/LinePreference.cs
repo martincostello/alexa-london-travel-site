@@ -23,7 +23,7 @@ public sealed class LinePreference(IElementHandle element)
 
     private async Task<string?> GetInputAttributeAsync(string name)
     {
-        IElementHandle? element = await RootElement.QuerySelectorAsync("input");
+        var element = await RootElement.QuerySelectorAsync("input");
 
         if (element is null)
         {

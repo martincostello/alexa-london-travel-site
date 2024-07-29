@@ -44,7 +44,6 @@ public static class IdentityServiceCollectionExtensions
                 .AddAuthentication()
                 .TryAddAmazon(siteOptions.Authentication)
                 .TryAddApple(siteOptions.Authentication)
-                .TryAddFacebook(siteOptions.Authentication)
                 .TryAddGitHub(siteOptions.Authentication)
                 .TryAddGoogle(siteOptions.Authentication)
                 .TryAddMicrosoft(siteOptions.Authentication)

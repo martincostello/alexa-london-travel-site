@@ -17,7 +17,7 @@ public static class MetaModelTests
         var options = null as MetadataOptions;
 
         // Act
-        MetaModel actual = MetaModel.Create(options);
+        var actual = MetaModel.Create(options);
 
         // Assert
         actual.ShouldNotBeNull();
@@ -30,7 +30,7 @@ public static class MetaModelTests
         var options = new MetadataOptions();
 
         // Act
-        MetaModel actual = MetaModel.Create(options);
+        var actual = MetaModel.Create(options);
 
         // Assert
         actual.ShouldNotBeNull();

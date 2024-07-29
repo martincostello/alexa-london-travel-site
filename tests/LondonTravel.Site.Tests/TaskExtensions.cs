@@ -18,7 +18,7 @@ internal static class TaskExtensions
 
     public static async Task ShouldBe<T>(this Task<T> task, T expected)
     {
-        T actual = await task;
+        var actual = await task;
         actual.ShouldBe(expected);
     }
 

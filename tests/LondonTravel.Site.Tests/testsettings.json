@@ -1,10 +1,13 @@
 {
   "ConnectionStrings": {
-    "Cosmos": "AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==;AccountEndpoint=https://cosmos.local"
+    "AzureBlobStorage": "",
+    "AzureCosmos": "",
+    "AzureKeyVault": ""
   },
   "Logging": {
     "LogLevel": {
       "Default": "Information",
+      "Azure": "Warning",
       "Microsoft": "Warning",
       "System": "Warning"
     }
@@ -23,10 +26,6 @@
           "ClientId": "apple-id",
           "KeyId": "apple-key-id",
           "TeamId": "apple-team-id"
-        },
-        "Facebook": {
-          "ClientId": "facebook-id",
-          "ClientSecret": "facebook-secret"
         },
         "GitHub": {
           "ClientId": "github-id",

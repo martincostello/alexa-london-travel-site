@@ -14,14 +14,28 @@ updates:
     Aspire:
       patterns:
         - Aspire.*
+    AspNet.Security.OAuth:
+      patterns:
+        - AspNet.Security.OAuth.*
+    IdentityModel:
+      patterns:
+        - Microsoft.IdentityModel.JsonWebTokens
+        - System.IdentityModel.Tokens.Jwt
+    Microsoft.OpenApi:
+      patterns:
+        - Microsoft.OpenApi*
     OpenTelemetry:
       patterns:
         - OpenTelemetry*
     Polly:
       patterns:
         - Polly*
+    Swashbuckle.AspNetCore:
+      patterns:
+        - Swashbuckle.AspNetCore*
     xunit:
       patterns:
+        - Verify.Xunit
         - xunit*
   schedule:
     interval: daily

@@ -4,7 +4,6 @@
 using AspNet.Security.OAuth.Amazon;
 using AspNet.Security.OAuth.Apple;
 using AspNet.Security.OAuth.GitHub;
-using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
 using Microsoft.AspNetCore.Authentication.OAuth;
@@ -16,7 +15,6 @@ namespace MartinCostello.LondonTravel.Site.Integration;
 public sealed class ConfigureAuthenticationHandlers(IHttpClientFactory httpClientFactory) :
     IPostConfigureOptions<AmazonAuthenticationOptions>,
     IPostConfigureOptions<AppleAuthenticationOptions>,
-    IPostConfigureOptions<FacebookOptions>,
     IPostConfigureOptions<GitHubAuthenticationOptions>,
     IPostConfigureOptions<GoogleOptions>,
     IPostConfigureOptions<MicrosoftAccountOptions>,
@@ -26,9 +24,6 @@ public sealed class ConfigureAuthenticationHandlers(IHttpClientFactory httpClien
         => Configure(name, options);
 
     public void PostConfigure(string? name, AppleAuthenticationOptions options)
-        => Configure(name, options);
-
-    public void PostConfigure(string? name, FacebookOptions options)
         => Configure(name, options);
 
     public void PostConfigure(string? name, GitHubAuthenticationOptions options)

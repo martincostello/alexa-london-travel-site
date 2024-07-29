@@ -19,16 +19,4 @@ public static class IConfigurationExtensions
     {
         return config?["Azure:Environment"] ?? "local";
     }
-
-    /// <summary>
-    /// Gets the connection string for the Azure storage account.
-    /// </summary>
-    /// <param name="config">The <see cref="IConfiguration"/> to use.</param>
-    /// <returns>
-    /// The connection string for the Azure storage account, if any.
-    /// </returns>
-    public static string AzureStorageConnectionString(this IConfiguration config)
-    {
-        return config?["ConnectionStrings:AzureStorage"] ?? string.Empty;
-    }
 }

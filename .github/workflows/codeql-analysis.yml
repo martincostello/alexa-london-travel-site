@@ -12,12 +12,6 @@ on:
     - cron: '0 6 * * 1'
   workflow_dispatch:
 
-# HACK Disable additional code analysis as a workaround for https://github.com/dotnet/roslyn/issues/70368.
-# See https://github.com/App-vNext/Polly/pull/1708 for inspiration.
-env:
-  AnalysisMode: 'None'
-  EnableNETAnalyzers: 'false'
-
 permissions:
   actions: read
   contents: read
@@ -37,55 +31,16 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
-
-    - name: Setup .NET SDK
-      uses: actions/setup-dotnet@4d6c8fcf3c8f7a60068d26b594648e99df24cee3 # v4.0.0
-      if: matrix.language == 'csharp'
-
-    - name: Setup Node
-      uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
-      with:
-        node-version: '20'
-
-    - name: Get npm cache directory
-      id: npm-cache-dir
-      shell: pwsh
-      run: echo "dir=$(npm config get cache)" >> ${env:GITHUB_OUTPUT}
-
-    - name: Setup npm cache
-      uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
-      id: npm-cache
-      with:
-        path: ${{ steps.npm-cache-dir.outputs.dir }}
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-
-
-    - name: Setup NuGet cache
-      uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
-      if: matrix.language == 'csharp'
-      with:
-        path: ~/.nuget/packages
-        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/*.props') }}
-        restore-keys: ${{ runner.os }}-nuget-
+      uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
 
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@d39d31e687223d841ef683f52467bd88e9b21c14 # v3.25.3
+      uses: github/codeql-action/init@afb54ba388a7dca6ecae48f608c4ff05ff4cc77a # v3.25.15
       with:
+        build-mode: none
         languages: ${{ matrix.language }}
         queries: security-and-quality
 
-    - name: Autobuild
-      uses: github/codeql-action/autobuild@d39d31e687223d841ef683f52467bd88e9b21c14 # v3.25.3
-      if: matrix.language != 'csharp'
-
-    - name: Build .NET code
-      if: matrix.language == 'csharp'
-      run: |
-        dotnet workload restore
-        dotnet build --configuration Release
-
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@d39d31e687223d841ef683f52467bd88e9b21c14 # v3.25.3
+      uses: github/codeql-action/analyze@afb54ba388a7dca6ecae48f608c4ff05ff4cc77a # v3.25.15
       with:
         category: '/language:${{ matrix.language }}'

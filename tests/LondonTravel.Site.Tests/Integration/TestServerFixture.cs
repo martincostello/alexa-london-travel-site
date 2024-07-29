@@ -62,6 +62,10 @@ public class TestServerFixture : WebApplicationFactory<ApplicationCookie>, ITest
     /// <inheritdoc />
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+        builder.UseSetting(
+            "ConnectionStrings:AzureCosmos",
+            "AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==;AccountEndpoint=https://cosmos.local");
+
         builder.ConfigureServices(
             (services) => services.AddSingleton<IHttpMessageHandlerBuilderFilter, HttpRequestInterceptionFilter>(
                 (_) => new HttpRequestInterceptionFilter(Interceptor)));

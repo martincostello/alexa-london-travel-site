@@ -4,19 +4,18 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using MartinCostello.LondonTravel.Site.OpenApi;
-using Newtonsoft.Json;
 
 namespace MartinCostello.LondonTravel.Site.Models;
 
 /// <summary>
 /// Represents an error from an API resource.
 /// </summary>
+[OpenApiExample<ErrorResponse>]
 public sealed class ErrorResponse : IExampleProvider<ErrorResponse>
 {
     /// <summary>
     /// Gets or sets the HTTP status code.
     /// </summary>
-    [JsonProperty("statusCode")]
     [JsonPropertyName("statusCode")]
     [Required]
     public int StatusCode { get; set; }
@@ -24,7 +23,6 @@ public sealed class ErrorResponse : IExampleProvider<ErrorResponse>
     /// <summary>
     /// Gets or sets the error message.
     /// </summary>
-    [JsonProperty("message")]
     [JsonPropertyName("message")]
     [Required]
     public string Message { get; set; } = string.Empty;
@@ -32,7 +30,6 @@ public sealed class ErrorResponse : IExampleProvider<ErrorResponse>
     /// <summary>
     /// Gets or sets the request Id.
     /// </summary>
-    [JsonProperty("requestId")]
     [JsonPropertyName("requestId")]
     [Required]
     public string RequestId { get; set; } = string.Empty;
@@ -40,15 +37,14 @@ public sealed class ErrorResponse : IExampleProvider<ErrorResponse>
     /// <summary>
     /// Gets or sets the error details, if any.
     /// </summary>
-    [JsonProperty("details")]
     [JsonPropertyName("details")]
     [Required]
     public ICollection<string> Details { get; set; } = [];
 
     /// <inheritdoc/>
-    public static object GenerateExample()
+    public static ErrorResponse GenerateExample()
     {
-        return new ErrorResponse()
+        return new()
         {
             Message = "Unauthorized.",
             RequestId = "0HKT0TM6UJASI",

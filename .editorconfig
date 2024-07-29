@@ -12,6 +12,18 @@ trim_trailing_whitespace = true
 [*.{config,csproj,graphviz,json,props,ruleset,targets,yml}]
 indent_size = 2
 
+[*.{received,verified}.{txt,xml,json}]
+charset = utf-8-bom
+end_of_line = lf
+indent_size = unset
+indent_style = unset
+insert_final_newline = false
+tab_width = unset
+trim_trailing_whitespace = false
+
+[*.{cs,ts}]
+file_header_template = Copyright (c) Martin Costello, 2017. All rights reserved.\nLicensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
+
 [*.cs]
 
 dotnet_analyzer_diagnostic.category-Style.severity = warning

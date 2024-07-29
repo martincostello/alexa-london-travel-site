@@ -20,13 +20,13 @@ namespace MartinCostello.LondonTravel.Site.Identity;
 public class UserClaimsPrincipalFactory(UserManager<LondonTravelUser> userManager, RoleManager<LondonTravelRole> roleManager, IOptions<IdentityOptions> optionsAccessor) : UserClaimsPrincipalFactory<LondonTravelUser, LondonTravelRole>(userManager, roleManager, optionsAccessor)
 {
     /// <inheritdoc />
-    public async override Task<ClaimsPrincipal> CreateAsync(LondonTravelUser user)
+    public override async Task<ClaimsPrincipal> CreateAsync(LondonTravelUser user)
     {
         var principal = await base.CreateAsync(user);
 
         if (principal.Identity is ClaimsIdentity identity && user?.RoleClaims != null)
         {
-            foreach (LondonTravelRole role in user.RoleClaims)
+            foreach (var role in user.RoleClaims)
             {
                 identity.AddClaim(role.ToClaim());
             }

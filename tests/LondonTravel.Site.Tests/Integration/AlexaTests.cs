@@ -83,7 +83,7 @@ public class AlexaTests : BrowserIntegrationTest
                 await page.IsLinkedToAlexaAsync().ShouldBeTrue();
 
                 // Arrange
-                AuthenticationHeaderValue authorization = ParseAuthorization(navigator.Page.Url);
+                var authorization = ParseAuthorization(navigator.Page.Url);
 
                 // Act
                 using var firstResult = await GetPreferencesAsync(authorization, HttpStatusCode.OK);
@@ -93,7 +93,7 @@ public class AlexaTests : BrowserIntegrationTest
                 firstResult.RootElement.GetStringArray("favoriteLines").ShouldBe([]);
 
                 // Arrange
-                HomePage homepage = await navigator.GoToRootAsync();
+                var homepage = await navigator.GoToRootAsync();
 
                 var lines = await homepage.LinesAsync();
 
@@ -156,7 +156,7 @@ public class AlexaTests : BrowserIntegrationTest
     {
         string? hash = new UriBuilder(url).Fragment;
 
-        Dictionary<string, StringValues> values = QueryHelpers.ParseQuery(hash);
+        var values = QueryHelpers.ParseQuery(hash);
 
         string? scheme = values["token_type"];
         string? parameter = values["access_token"];

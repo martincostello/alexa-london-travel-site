@@ -17,7 +17,6 @@ public static class IHtmlHelperExtensions
     {
         ["Amazon"] = "amazon",
         ["Apple"] = "apple",
-        ["Facebook"] = "facebook",
         ["GitHub"] = "github",
         ["Google"] = "google",
         ["Microsoft"] = "windows",

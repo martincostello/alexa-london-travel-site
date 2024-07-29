@@ -26,7 +26,7 @@ public static class RegisterPageTests
         service.GetUserCountAsync(true)
                .Returns(Task.FromResult(userCount));
 
-        Register page = CreatePage(service: service);
+        var page = CreatePage(service: service);
 
         // Act
         await page.OnGet();
@@ -44,7 +44,7 @@ public static class RegisterPageTests
         service.When((p) => p.GetUserCountAsync(true))
                .Throw(new InvalidOperationException());
 
-        Register page = CreatePage(service: service);
+        var page = CreatePage(service: service);
 
         // Act
         await page.OnGet();

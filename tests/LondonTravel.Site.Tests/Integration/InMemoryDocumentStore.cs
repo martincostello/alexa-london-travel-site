@@ -34,7 +34,7 @@ internal sealed class InMemoryDocumentStore(UserStoreOptions options) : IDocumen
     /// <inheritdoc />
     public Task<string> CreateAsync(LondonTravelUser document)
     {
-        DocumentCollection collection = EnsureCollection();
+        var collection = EnsureCollection();
         string id = collection.Create(document);
 
         return Task.FromResult(id);
@@ -43,7 +43,7 @@ internal sealed class InMemoryDocumentStore(UserStoreOptions options) : IDocumen
     /// <inheritdoc />
     public Task<bool> DeleteAsync(string id)
     {
-        DocumentCollection collection = EnsureCollection();
+        var collection = EnsureCollection();
         bool deleted = collection.Delete(id);
 
         return Task.FromResult(deleted);
@@ -68,8 +68,8 @@ internal sealed class InMemoryDocumentStore(UserStoreOptions options) : IDocumen
     /// <inheritdoc />
     public Task<LondonTravelUser?> GetAsync(string id)
     {
-        DocumentCollection collection = EnsureCollection();
-        LondonTravelUser? item = collection.Get<LondonTravelUser?>(id);
+        var collection = EnsureCollection();
+        var item = collection.Get<LondonTravelUser?>(id);
 
         return Task.FromResult(item);
     }
@@ -77,7 +77,7 @@ internal sealed class InMemoryDocumentStore(UserStoreOptions options) : IDocumen
     /// <inheritdoc />
     public Task<IEnumerable<LondonTravelUser>> GetAsync(Expression<Func<LondonTravelUser, bool>> predicate, CancellationToken cancellationToken)
     {
-        DocumentCollection collection = EnsureCollection();
+        var collection = EnsureCollection();
 
         var results = collection.Get<LondonTravelUser>()
             .Where(predicate)
@@ -89,7 +89,7 @@ internal sealed class InMemoryDocumentStore(UserStoreOptions options) : IDocumen
     /// <inheritdoc />
     public Task<long> GetDocumentCountAsync()
     {
-        DocumentCollection collection = EnsureCollection();
+        var collection = EnsureCollection();
         long count = collection.Count();
 
         return Task.FromResult(count);
@@ -98,8 +98,8 @@ internal sealed class InMemoryDocumentStore(UserStoreOptions options) : IDocumen
     /// <inheritdoc />
     public Task<LondonTravelUser?> ReplaceAsync(LondonTravelUser document, string? etag)
     {
-        DocumentCollection collection = EnsureCollection();
-        LondonTravelUser? result = collection.Replace(document.Id!, document, etag);
+        var collection = EnsureCollection();
+        var result = collection.Replace(document.Id!, document, etag);
 
         return Task.FromResult(result);
     }
@@ -148,7 +148,7 @@ internal sealed class InMemoryDocumentStore(UserStoreOptions options) : IDocumen
 
         internal string Create(object document)
         {
-            Type type = document.GetType();
+            var type = document.GetType();
 
             if (!_documents.TryGetValue(type, out var subset))
             {

@@ -23,10 +23,12 @@
     <PackageReference Include="MartinCostello.Logging.XUnit" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Microsoft.OpenApi.Readers" />
     <PackageReference Include="Microsoft.Playwright" />
     <PackageReference Include="NSubstitute" />
     <PackageReference Include="ReportGenerator" />
     <PackageReference Include="Shouldly" />
+    <PackageReference Include="Verify.Xunit" />
     <PackageReference Include="xRetry" />
     <PackageReference Include="xunit" />
     <PackageReference Include="xunit.runner.visualstudio" />
@@ -42,6 +44,6 @@
     <CoverletOutputFormat>cobertura,json</CoverletOutputFormat>
     <Exclude>[AspNet.Security.OAuth*]*,[xunit.*]*</Exclude>
     <ExcludeByAttribute>GeneratedCodeAttribute</ExcludeByAttribute>
-    <Threshold>70</Threshold>
+    <Threshold>80,65,90</Threshold>
   </PropertyGroup>
 </Project>

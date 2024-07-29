@@ -37,18 +37,18 @@ public sealed class PreferencesTests : BrowserIntegrationTest
                     .ThenAsync((p) => p.SignInWithAmazonAsync());
 
                 // Act
-                IReadOnlyList<LinePreference> lines = await page.LinesAsync();
+                var lines = await page.LinesAsync();
 
                 // Assert
                 lines.Count.ShouldBeGreaterThan(2);
                 await CountSelectedLinesAsync(lines).ShouldBe(0);
 
                 // Act
-                LinePreference? district = await GetLineAsync(lines, "District");
-                LinePreference? dlr = await GetLineAsync(lines, "DLR");
-                LinePreference? elizabeth = await GetLineAsync(lines, "Elizabeth line");
-                LinePreference? northern = await GetLineAsync(lines, "Northern");
-                LinePreference? overground = await GetLineAsync(lines, "London Overground");
+                var district = await GetLineAsync(lines, "District");
+                var dlr = await GetLineAsync(lines, "DLR");
+                var elizabeth = await GetLineAsync(lines, "Elizabeth line");
+                var northern = await GetLineAsync(lines, "Northern");
+                var overground = await GetLineAsync(lines, "London Overground");
 
                 district.ShouldNotBeNull();
                 dlr.ShouldNotBeNull();
