@@ -26,8 +26,8 @@ public static class OpenApiServiceCollectionExtensions
 
         services.AddOpenApi(DocumentName, (options) =>
         {
-            options.UseTransformer<AddApiInfo>();
-            options.UseTransformer<AddSecurity>();
+            options.AddDocumentTransformer<AddApiInfo>();
+            options.AddDocumentTransformer<AddSecurity>();
         });
 
         services.AddOpenApiExtensions(DocumentName, (options) =>
