@@ -2,6 +2,7 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using MartinCostello.LondonTravel.Site.OpenApi;
+using MartinCostello.OpenApi;
 
 namespace MartinCostello.LondonTravel.Site.Extensions;
 
@@ -21,22 +22,22 @@ public static class OpenApiServiceCollectionExtensions
     {
         services.AddHttpContextAccessor();
 
-        services.AddOpenApi("api", (options) =>
+        const string DocumentName = "api";
+
+        services.AddOpenApi(DocumentName, (options) =>
         {
             options.UseTransformer<AddApiInfo>();
             options.UseTransformer<AddSecurity>();
-            options.UseTransformer<AddServers>();
+        });
 
-            var descriptions = new AddDescriptions();
-            options.UseOperationTransformer(descriptions.TransformAsync);
-            options.UseSchemaTransformer(descriptions.TransformAsync);
+        services.AddOpenApiExtensions(DocumentName, (options) =>
+        {
+            options.AddExamples = true;
+            options.AddServerUrls = true;
+            options.DefaultServerUrl = "https://londontravel.martincostello.com";
+            options.SerializationContext = ApplicationJsonSerializerContext.Default;
 
-            var examples = new AddExamples();
-            options.UseOperationTransformer(examples.TransformAsync);
-            options.UseSchemaTransformer(examples.TransformAsync);
-
-            var prefixes = new RemoveStyleCopPrefixes();
-            options.UseSchemaTransformer(prefixes.TransformAsync);
+            options.AddXmlComments<Program>();
         });
 
         return services;
