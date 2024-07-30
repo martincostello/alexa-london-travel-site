@@ -23,7 +23,7 @@
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.4.1" />
     <PackageVersion Include="JustEat.HttpClientInterception" Version="4.3.0" />
     <PackageVersion Include="MartinCostello.Logging.XUnit" Version="0.4.0" />
-    <PackageVersion Include="MartinCostello.OpenApi.Extensions" Version="1.0.0-beta.51" />
+    <PackageVersion Include="MartinCostello.OpenApi.Extensions" Version="1.0.0-beta.54" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="9.0.0-preview.7.24379.2" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="9.0.0-preview.7.24379.2" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.Twitter" Version="9.0.0-preview.7.24379.2" />
