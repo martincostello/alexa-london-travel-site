@@ -13,7 +13,13 @@ var blobs = builder.AddAzureStorage(Storage)
                    .AddBlobs(BlobStorage);
 
 var cosmos = builder.AddAzureCosmosDB(Cosmos)
-                    .RunAsEmulator()
+                    .RunAsEmulator((container) =>
+                    {
+                        // TODO Update persistence configuration when https://github.com/dotnet/aspire/issues/3295 released
+                        container.WithEnvironment("AZURE_COSMOS_EMULATOR_PARTITION_COUNT", "1")
+                                 .WithEnvironment("AZURE_COSMOS_EMULATOR_ENABLE_DATA_PERSISTENCE", "true")
+                                 .WithVolume("londontravel-cosmosdb", "/tmp/cosmos/appdata");
+                    })
                     .AddDatabase("LondonTravel");
 
 var secrets = builder.ExecutionContext.IsPublishMode
