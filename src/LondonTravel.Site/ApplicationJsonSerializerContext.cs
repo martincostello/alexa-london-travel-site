@@ -16,6 +16,4 @@ namespace MartinCostello.LondonTravel.Site;
 [JsonSerializable(typeof(JsonObject))]
 [JsonSerializable(typeof(PreferencesResponse))]
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase, WriteIndented = true)]
-internal sealed partial class ApplicationJsonSerializerContext : JsonSerializerContext
-{
-}
+internal sealed partial class ApplicationJsonSerializerContext : JsonSerializerContext;

@@ -1,6 +1,7 @@
 {
   "name": "london-travel-site",
   "private": true,
+  "type": "module",
   "version": "8.0.0",
   "description": "The companion site for the London Travel Amazon Alexa skill",
   "scripts": {
@@ -8,7 +9,7 @@
     "compile": "webpack",
     "format": "prettier --write assets/**/*.ts && stylelint --fix assets/*/*.css",
     "format-check": "prettier --check assets/**/*.ts && stylelint assets/*/*.css",
-    "lint": "eslint --ext .ts assets",
+    "lint": "eslint assets",
     "watch": "webpack --watch"
   },
   "repository": {
@@ -25,8 +26,9 @@
     "@typescript-eslint/parser": "^8.0.0",
     "css-loader": "^7.1.2",
     "css-minimizer-webpack-plugin": "^7.0.0",
-    "eslint": "^8.57.0",
+    "eslint": "^9.8.0",
     "eslint-config-prettier": "^9.1.0",
+    "globals": "^15.9.0",
     "mini-css-extract-plugin": "^2.9.0",
     "moment": "^2.30.1",
     "prettier": "^3.3.3",
@@ -40,81 +42,6 @@
     "webpack-cli": "^5.1.4",
     "webpack-remove-empty-scripts": "^1.0.4"
   },
-  "eslintConfig": {
-    "env": {
-      "browser": true,
-      "es6": true,
-      "node": true
-    },
-    "extends": [
-      "prettier"
-    ],
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-      "project": "./tsconfig.json",
-      "sourceType": "module"
-    },
-    "plugins": [
-      "@stylistic",
-      "@typescript-eslint"
-    ],
-    "rules": {
-      "@stylistic/indent": "error",
-      "@stylistic/member-delimiter-style": "error",
-      "@stylistic/quotes": [
-        "error",
-        "single"
-      ],
-      "@stylistic/semi": [
-        "error",
-        "always"
-      ],
-      "@stylistic/type-annotation-spacing": "error",
-      "@typescript-eslint/naming-convention": "error",
-      "@typescript-eslint/prefer-namespace-keyword": "error",
-      "brace-style": [
-        "error",
-        "1tbs"
-      ],
-      "eqeqeq": [
-        "error",
-        "smart"
-      ],
-      "id-blacklist": [
-        "error",
-        "any",
-        "Number",
-        "number",
-        "String",
-        "string",
-        "Boolean",
-        "boolean",
-        "Undefined",
-        "undefined"
-      ],
-      "id-match": "error",
-      "no-eval": "error",
-      "no-redeclare": "error",
-      "no-trailing-spaces": "error",
-      "no-underscore-dangle": "error",
-      "no-var": "error",
-      "spaced-comment": [
-        "error",
-        "always",
-        {
-          "markers": [
-            "/"
-          ]
-        }
-      ]
-    }
-  },
-  "eslintIgnore": [
-    "bin/",
-    "node_modules/",
-    "obj/",
-    "wwwroot/"
-  ],
   "prettier": {
     "arrowParens": "always",
     "bracketSpacing": true,
