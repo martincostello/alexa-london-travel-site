@@ -1,6 +1,7 @@
 {
   "name": "london-travel-site",
   "private": true,
+  "type": "module",
   "version": "9.0.0",
   "description": "The companion site for the London Travel Amazon Alexa skill",
   "scripts": {
