@@ -149,7 +149,7 @@ public class ApiTests(TestServerFixture fixture, ITestOutputHelper outputHelper)
         errors.ShouldBeEmpty();
     }
 
-    [Fact(Skip = "Disabled until .NET 9 preview 7.")]
+    [Fact]
     public async Task Schema_Is_Correct()
     {
         // Arrange
