@@ -10,8 +10,8 @@ using System.Runtime.InteropServices;
 using System.Text.Json.Nodes;
 using MartinCostello.LondonTravel.Site.Identity;
 using MartinCostello.LondonTravel.Site.Models;
-using MartinCostello.LondonTravel.Site.OpenApi;
 using MartinCostello.LondonTravel.Site.Services;
+using MartinCostello.OpenApi;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MartinCostello.LondonTravel.Site;
@@ -34,7 +34,9 @@ public static partial class ApiModule
            .WithDescription("Gets the preferences for a user associated with an access token.")
            .WithTags("LondonTravel.Site")
            .Produces<PreferencesResponse>(StatusCodes.Status200OK)
-           .Produces<ErrorResponse>(StatusCodes.Status401Unauthorized);
+           .Produces<ErrorResponse>(StatusCodes.Status401Unauthorized)
+           .ProducesOpenApiResponse(StatusCodes.Status200OK, "The preferences associated with the provided access token.")
+           .ProducesOpenApiResponse(StatusCodes.Status401Unauthorized, "A valid access token was not provided.");
 
         app.MapGet("/version", static () =>
         {
@@ -72,8 +74,6 @@ public static partial class ApiModule
         return app;
     }
 
-    [OpenApiResponse(StatusCodes.Status200OK, "The preferences associated with the provided access token.")]
-    [OpenApiResponse(StatusCodes.Status401Unauthorized, "A valid access token was not provided.")]
     private static async Task<IResult> GetPreferences(
         [Description("The authorization header.")][FromHeader(Name = "Authorization")] string? authorizationHeader,
         HttpContext httpContext,

@@ -38,8 +38,7 @@ public static class HttpContextExtensions
             try
             {
                 data = RandomNumberGenerator.GetBytes(32);
-
-                nonce = Convert.ToBase64String(data).Replace('+', '/'); // '+' causes encoding issues with TagHelpers
+                nonce = System.Buffers.Text.Base64Url.EncodeToString(data);
             }
             finally
             {

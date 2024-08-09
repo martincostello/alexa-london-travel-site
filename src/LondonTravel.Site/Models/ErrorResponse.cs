@@ -3,7 +3,7 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using MartinCostello.LondonTravel.Site.OpenApi;
+using MartinCostello.OpenApi;
 
 namespace MartinCostello.LondonTravel.Site.Models;
 
