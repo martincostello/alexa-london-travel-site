@@ -150,6 +150,7 @@ builder.Services.AddHsts((options) =>
 });
 
 builder.Services.AddOpenApiDocumentation();
+builder.Services.AddOutputCache();
 
 builder.Services.Configure<GzipCompressionProviderOptions>((p) => p.Level = CompressionLevel.Fastest);
 builder.Services.Configure<BrotliCompressionProviderOptions>((p) => p.Level = CompressionLevel.Fastest);
@@ -256,7 +257,8 @@ app.MapAlexa();
 app.MapApi();
 app.MapRedirects();
 
-app.MapOpenApi();
+app.UseOutputCache();
+app.MapOpenApi().CacheOutput();
 
 app.UseCookiePolicy(new()
 {
