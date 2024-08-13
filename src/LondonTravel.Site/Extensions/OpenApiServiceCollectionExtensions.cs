@@ -26,8 +26,8 @@ public static class OpenApiServiceCollectionExtensions
 
         services.AddOpenApi(DocumentName, (options) =>
         {
-            options.UseTransformer<AddApiInfo>();
-            options.UseTransformer<AddSecurity>();
+            options.AddDocumentTransformer<AddApiInfo>();
+            options.AddDocumentTransformer<AddSecurity>();
         });
 
         services.AddOpenApiExtensions(DocumentName, (options) =>
@@ -35,7 +35,7 @@ public static class OpenApiServiceCollectionExtensions
             options.AddExamples = true;
             options.AddServerUrls = true;
             options.DefaultServerUrl = "https://londontravel.martincostello.com";
-            options.SerializationContext = ApplicationJsonSerializerContext.Default;
+            options.SerializationContexts.Add(ApplicationJsonSerializerContext.Default);
 
             options.AddXmlComments<Program>();
         });
