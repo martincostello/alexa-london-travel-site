@@ -34,8 +34,7 @@
             in: header,
             description: The authorization header.,
             schema: {
-              type: string,
-              nullable: true
+              type: string
             }
           }
         ],
