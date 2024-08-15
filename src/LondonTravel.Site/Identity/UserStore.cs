@@ -46,7 +46,8 @@ public sealed class UserStore :
         ArgumentNullException.ThrowIfNull(user);
         ArgumentNullException.ThrowIfNull(login);
 
-        if (user.Logins.Any((p) => p.LoginProvider == login.LoginProvider))
+        user.Logins ??= [];
+        if (user.Logins.Any((p) => p?.LoginProvider == login.LoginProvider))
         {
             throw new InvalidOperationException($"Failed to add login for provider '{login.LoginProvider}' for user '{user.Id}' as a login for that provider already exists.");
         }
@@ -152,9 +153,9 @@ public sealed class UserStore :
     {
         ArgumentNullException.ThrowIfNull(user);
 
-        IList<UserLoginInfo> logins = user.Logins
+        IList<UserLoginInfo> logins = user.Logins?
             .Select((p) => new UserLoginInfo(p.LoginProvider!, p.ProviderKey!, p.ProviderDisplayName))
-            .ToList();
+            .ToArray() ?? [];
 
         return Task.FromResult(logins);
     }
