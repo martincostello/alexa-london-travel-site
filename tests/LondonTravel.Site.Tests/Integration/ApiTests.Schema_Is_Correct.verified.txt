@@ -28,17 +28,6 @@
         summary: Gets a user's preferences.,
         description: Gets the preferences for a user associated with an access token.,
         operationId: GetApiPreferences,
-        parameters: [
-          {
-            name: Authorization,
-            in: header,
-            description: The authorization header.,
-            schema: {
-              type: string,
-              nullable: true
-            }
-          }
-        ],
         responses: {
           200: {
             description: The preferences associated with the provided access token.,
