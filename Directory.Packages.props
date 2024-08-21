@@ -53,7 +53,7 @@
     <PackageVersion Include="Shouldly" Version="4.2.1" />
     <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.0.1" />
     <PackageVersion Include="System.Private.Uri" Version="4.3.2" />
-    <PackageVersion Include="System.Text.Json" Version="9.0.0-rc.1.24420.11" />
+    <PackageVersion Include="System.Text.Json" Version="9.0.0-rc.1.24421.1" />
     <PackageVersion Include="Verify.Xunit" Version="26.2.0" />
     <PackageVersion Include="xRetry" Version="1.9.0" />
     <PackageVersion Include="xunit" Version="2.9.0" />
