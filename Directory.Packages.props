@@ -49,8 +49,8 @@
     <PackageVersion Include="Polly.RateLimiting" Version="8.4.1" />
     <PackageVersion Include="ReportGenerator" Version="5.3.8" />
     <PackageVersion Include="Shouldly" Version="4.2.1" />
-    <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.7.2" />
-    <PackageVersion Include="Swashbuckle.AspNetCore.Annotations" Version="6.7.2" />
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.7.3" />
+    <PackageVersion Include="Swashbuckle.AspNetCore.Annotations" Version="6.7.3" />
     <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.0.2" />
     <PackageVersion Include="System.Private.Uri" Version="4.3.2" />
     <PackageVersion Include="System.Text.Json" Version="8.0.4" />
