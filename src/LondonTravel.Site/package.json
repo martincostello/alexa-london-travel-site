@@ -21,7 +21,7 @@
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@babel/preset-env": "^7.25.4",
-    "@stylistic/eslint-plugin": "^2.7.1",
+    "@stylistic/eslint-plugin": "^2.7.2",
     "@typescript-eslint/eslint-plugin": "^8.3.0",
     "@typescript-eslint/parser": "^8.3.0",
     "css-loader": "^7.1.2",
