@@ -45,6 +45,7 @@ if (builder.Configuration["ConnectionStrings:AzureCosmos"] is { Length: > 0 })
         {
             options.ApplicationName = "london-travel";
             options.RequestTimeout = TimeSpan.FromSeconds(15);
+            options.UseSystemTextJsonSerializerWithOptions = System.Text.Json.JsonSerializerOptions.Default;
 
             if (builder.Configuration["Site:Authentication:UserStore:CurrentLocation"] is { Length: > 0 } region)
             {
