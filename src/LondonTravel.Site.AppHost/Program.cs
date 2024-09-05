@@ -9,7 +9,7 @@ const string KeyVault = "AzureKeyVault";
 const string Storage = "AzureStorage";
 
 var blobs = builder.AddAzureStorage(Storage)
-                   .RunAsEmulator((p) => p.WithImageTag("3.31.0")) // TODO Remove tag when https://github.com/dotnet/aspire/issues/5078 released
+                   .RunAsEmulator()
                    .AddBlobs(BlobStorage);
 
 var cosmos = builder.AddAzureCosmosDB(Cosmos)
