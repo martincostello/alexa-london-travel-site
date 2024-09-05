@@ -30,6 +30,7 @@ internal sealed class AddSecurity : IOpenApiDocumentTransformer
         document.Components ??= new();
         document.Components.SecuritySchemes ??= new Dictionary<string, OpenApiSecurityScheme>();
         document.Components.SecuritySchemes[scheme.Reference.Id] = scheme;
+        document.SecurityRequirements ??= [];
         document.SecurityRequirements.Add(new() { [scheme] = [] });
 
         return Task.CompletedTask;
