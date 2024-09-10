@@ -11,9 +11,9 @@
     <PackageVersion Include="Aspire.Hosting.Azure.KeyVault" Version="8.2.0" />
     <PackageVersion Include="Aspire.Hosting.Azure.Storage" Version="8.2.0" />
     <PackageVersion Include="Aspire.Microsoft.Azure.Cosmos" Version="8.2.0" />
-    <PackageVersion Include="AspNet.Security.OAuth.Amazon" Version="9.0.0-preview.7.24413.60" />
-    <PackageVersion Include="AspNet.Security.OAuth.Apple" Version="9.0.0-preview.7.24413.60" />
-    <PackageVersion Include="AspNet.Security.OAuth.GitHub" Version="9.0.0-preview.7.24413.60" />
+    <PackageVersion Include="AspNet.Security.OAuth.Amazon" Version="9.0.0-preview.7.24459.55" />
+    <PackageVersion Include="AspNet.Security.OAuth.Apple" Version="9.0.0-preview.7.24459.55" />
+    <PackageVersion Include="AspNet.Security.OAuth.GitHub" Version="9.0.0-preview.7.24459.55" />
     <PackageVersion Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.3.2" />
     <PackageVersion Include="Azure.Extensions.AspNetCore.DataProtection.Blobs" Version="1.3.4" />
     <PackageVersion Include="Azure.Extensions.AspNetCore.DataProtection.Keys" Version="1.2.4" />
