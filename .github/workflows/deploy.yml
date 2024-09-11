@@ -30,6 +30,7 @@ jobs:
       run-id: ${{ steps.set-outputs.outputs.run-id }}
       run-number: ${{ steps.set-outputs.outputs.run-number }}
       run-sha: ${{ steps.set-outputs.outputs.run-sha }}
+      run-sha-merge: ${{ steps.set-outputs.outputs.run-sha-merge }}
       workflow-url: ${{ steps.set-outputs.outputs.workflow-url }}
 
     permissions:
@@ -59,15 +60,15 @@ jobs:
             throw new Error(`Error: @${username} is not a repository collaborator.`);
           }
 
-          const regex = /\/deploy ([a-zA-Z\d\-\_]+)/;
-          const arguments = regex.exec(context.payload.comment.body);
+          const comment = context.payload.comment.body;
+          const regex = /^\/deploy(\s+([a-zA-Z\d\-\_]+))?\s*$/;
+          const arguments = regex.exec(comment);
 
-          if (arguments === null || arguments.length < 2) {
-            throw new Error('Invalid command');
+          if (!arguments || arguments.length < 1) {
+            throw new Error(`Invalid command: ${comment}`);
           }
 
-          const environment = arguments[1].trim();
-          return environment;
+          return arguments[2] || 'dev';
 
     - name: 'Find run for #${{ github.event.issue.number }}'
       uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
@@ -112,6 +113,7 @@ jobs:
           core.setOutput('run-id', run.id);
           core.setOutput('run-number', run.run_number);
           core.setOutput('run-sha', head_sha);
+          core.setOutput('run-sha-merge', pull.merge_commit_sha);
 
     - name: Set outputs
       id: set-outputs
@@ -119,6 +121,7 @@ jobs:
         ARTIFACT_RUN_ID: ${{ steps.get-run.outputs.run-id }}
         ARTIFACT_RUN_NUMBER: ${{ steps.get-run.outputs.run-number }}
         ARTIFACT_RUN_SHA: ${{ steps.get-run.outputs.run-sha }}
+        ARTIFACT_RUN_SHA_MERGE: ${{ steps.get-run.outputs.run-sha-merge }}
         ENVIRONMENT_NAME: ${{ steps.get-environment-name.outputs.result }}
       shell: bash
       run: |
@@ -146,6 +149,7 @@ jobs:
           echo "run-id=${ARTIFACT_RUN_ID}"
           echo "run-number=${ARTIFACT_RUN_NUMBER}"
           echo "run-sha=${ARTIFACT_RUN_SHA}"
+          echo "run-sha-merge=${ARTIFACT_RUN_SHA_MERGE}"
           echo "workflow-url=${workflow_url}"
         } >> "$GITHUB_OUTPUT"
 
@@ -208,7 +212,7 @@ jobs:
     - name: Check application health
       shell: pwsh
       env:
-        APPLICATION_SHA: ${{ needs.setup.outputs.run-sha }}
+        APPLICATION_SHA: ${{ needs.setup.outputs.run-sha-merge }}
         APPLICATION_URL: ${{ needs.setup.outputs.application-url }}
       run: |
         $delay = 10
