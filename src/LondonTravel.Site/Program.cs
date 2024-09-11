@@ -6,7 +6,6 @@ using Azure.Identity;
 using Azure.Storage.Blobs;
 using MartinCostello.LondonTravel.Site;
 using MartinCostello.LondonTravel.Site.Extensions;
-using MartinCostello.LondonTravel.Site.OpenApi;
 using MartinCostello.LondonTravel.Site.Options;
 using MartinCostello.LondonTravel.Site.Services;
 using MartinCostello.LondonTravel.Site.Services.Data;
@@ -127,8 +126,6 @@ builder.Services
     .AddLocalization()
     .AddControllersWithViews((options) =>
     {
-        options.Conventions.Add(new ApiExplorerDisplayConvention());
-
         if (!builder.Environment.IsDevelopment())
         {
             options.Filters.Add(new Microsoft.AspNetCore.Mvc.RequireHttpsAttribute());
@@ -152,8 +149,8 @@ builder.Services.AddHsts((options) =>
     options.Preload = false;
 });
 
-builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApiDocumentation();
+builder.Services.AddOutputCache();
 
 builder.Services.Configure<GzipCompressionProviderOptions>((p) => p.Level = CompressionLevel.Fastest);
 builder.Services.Configure<BrotliCompressionProviderOptions>((p) => p.Level = CompressionLevel.Fastest);
@@ -260,7 +257,8 @@ app.MapAlexa();
 app.MapApi();
 app.MapRedirects();
 
-app.UseSwagger((p) => p.RouteTemplate = "/openapi/{documentName}.json");
+app.UseOutputCache();
+app.MapOpenApi().CacheOutput();
 
 app.UseCookiePolicy(new()
 {

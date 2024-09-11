@@ -72,10 +72,10 @@
     schemas: {
       ErrorResponse: {
         required: [
-          details,
+          statusCode,
           message,
           requestId,
-          statusCode
+          details
         ],
         type: object,
         properties: {
@@ -85,12 +85,10 @@
             format: int32
           },
           message: {
-            minLength: 1,
             type: string,
             description: The error message.
           },
           requestId: {
-            minLength: 1,
             type: string,
             description: The request Id.
           },
@@ -102,7 +100,6 @@
             description: The error details, if any.
           }
         },
-        additionalProperties: false,
         description: Represents an error from an API resource.,
         example: {
           statusCode: 401,
@@ -128,12 +125,10 @@
             description: The Ids of the user's favorite lines, if any.
           },
           userId: {
-            minLength: 1,
             type: string,
             description: The user's Id.
           }
         },
-        additionalProperties: false,
         description: Represents the API response for a user's preferences.,
         example: {
           favoriteLines: [
