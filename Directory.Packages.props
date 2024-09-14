@@ -24,12 +24,12 @@
     <PackageVersion Include="JustEat.HttpClientInterception" Version="4.3.0" />
     <PackageVersion Include="MartinCostello.Logging.XUnit" Version="0.4.0" />
     <PackageVersion Include="MartinCostello.OpenApi.Extensions" Version="1.0.0-beta.238" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="9.0.0-rc.2.24462.10" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="9.0.0-rc.2.24462.10" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Twitter" Version="9.0.0-rc.2.24462.10" />
-    <PackageVersion Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" Version="9.0.0-rc.2.24462.10" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.0-rc.2.24462.10" />
-    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0-rc.2.24462.10" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="9.0.0-rc.2.24463.6" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="9.0.0-rc.2.24463.6" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Twitter" Version="9.0.0-rc.2.24463.6" />
+    <PackageVersion Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" Version="9.0.0-rc.2.24463.6" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.0-rc.2.24463.6" />
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0-rc.2.24463.6" />
     <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.43.0" />
     <PackageVersion Include="Microsoft.DotNet.XliffTasks" Version="9.0.0-beta.24414.3" />
     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="9.0.0-preview.8.24460.1" />
@@ -53,7 +53,7 @@
     <PackageVersion Include="Shouldly" Version="4.2.1" />
     <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.0.2" />
     <PackageVersion Include="System.Private.Uri" Version="4.3.2" />
-    <PackageVersion Include="System.Text.Json" Version="9.0.0-rc.2.24462.5" />
+    <PackageVersion Include="System.Text.Json" Version="9.0.0-rc.2.24463.7" />
     <PackageVersion Include="Verify.Xunit" Version="26.4.4" />
     <PackageVersion Include="xRetry" Version="1.9.0" />
     <PackageVersion Include="xunit" Version="2.9.0" />
