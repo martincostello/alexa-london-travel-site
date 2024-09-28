@@ -4,6 +4,7 @@ about: Suggest an idea for a feature for this project
 labels: feature-request
 ---
 
+<!-- markdownlint-disable MD041 -->
 ### Is your feature request related to a problem? Please describe.
 
 <!--
