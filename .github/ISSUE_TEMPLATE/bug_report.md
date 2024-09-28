@@ -4,6 +4,7 @@ about: Create a bug report to help us improve this project
 labels: bug
 ---
 
+<!-- markdownlint-disable MD041 -->
 ### Describe the bug
 
 <!--
@@ -37,7 +38,7 @@ If applicable, add screenshots to help explain your problem.
 ### System information
 
 <!--
- - OS: [e.g. Windows 10]
+ - OS: [e.g. Windows 11]
  - Application Version [e.g. Git commit SHA]
  - .NET version (e.g. output from `dotnet --info`)
 -->
