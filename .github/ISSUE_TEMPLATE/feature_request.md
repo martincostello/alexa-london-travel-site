@@ -2,9 +2,9 @@
 name: Feature request
 about: Suggest an idea for a feature for this project
 labels: feature-request
+title: ''
 ---
 
-<!-- markdownlint-disable MD041 -->
 ### Is your feature request related to a problem?
 
 <!--

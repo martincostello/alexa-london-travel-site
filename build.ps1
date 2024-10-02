@@ -4,6 +4,7 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+$InformationPreference = "Continue"
 $ProgressPreference = "SilentlyContinue"
 
 $solutionPath = $PSScriptRoot
@@ -14,7 +15,7 @@ $dotnetVersion = (Get-Content $sdkFile | Out-String | ConvertFrom-Json).sdk.vers
 $installDotNetSdk = $false;
 
 if (($null -eq (Get-Command "dotnet" -ErrorAction SilentlyContinue)) -and ($null -eq (Get-Command "dotnet.exe" -ErrorAction SilentlyContinue))) {
-    Write-Host "The .NET SDK is not installed."
+    Write-Information "The .NET SDK is not installed."
     $installDotNetSdk = $true
 }
 else {
@@ -26,7 +27,7 @@ else {
     }
 
     if ($installedDotNetVersion -ne $dotnetVersion) {
-        Write-Host "The required version of the .NET SDK is not installed. Expected $dotnetVersion."
+        Write-Information "The required version of the .NET SDK is not installed. Expected $dotnetVersion."
         $installDotNetSdk = $true
     }
 }
@@ -100,13 +101,13 @@ $publishProjects = @(
     (Join-Path $solutionPath "src" "LondonTravel.Site" "LondonTravel.Site.csproj")
 )
 
-Write-Host "Publishing solution..." -ForegroundColor Green
+Write-Information "Publishing solution..."
 ForEach ($project in $publishProjects) {
     DotNetPublish $project
 }
 
 if ($SkipTests -eq $false) {
-    Write-Host "Testing $($testProjects.Count) project(s)..." -ForegroundColor Green
+    Write-Information "Testing $($testProjects.Count) project(s)..."
     ForEach ($project in $testProjects) {
         DotNetTest $project
     }
