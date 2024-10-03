@@ -51,7 +51,7 @@
     <PackageVersion Include="Polly.RateLimiting" Version="8.4.2" />
     <PackageVersion Include="ReportGenerator" Version="5.3.10" />
     <PackageVersion Include="Shouldly" Version="4.2.1" />
-    <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.0.2" />
+    <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.1.0" />
     <PackageVersion Include="System.Private.Uri" Version="4.3.2" />
     <PackageVersion Include="System.Text.Json" Version="9.0.0-rc.1.24431.7" />
     <PackageVersion Include="Verify.Xunit" Version="26.6.0" />
