@@ -19,7 +19,7 @@ internal sealed class AppServer : IAsyncDisposable
 
     public AppServer()
     {
-        var builder = WebApplication.CreateBuilder([$"--contentRoot={GetContentRoot()}"]);
+        var builder = WebApplication.CreateBuilder(["--applicationName=LondonTravel.Site", $"--contentRoot={GetContentRoot()}"]);
 
         ConfigureWebHost(builder);
 
@@ -95,6 +95,7 @@ internal sealed class AppServer : IAsyncDisposable
         {
             KeyValuePair.Create<string, string?>("ConnectionStrings:AzureBlobStorage", string.Empty),
             KeyValuePair.Create<string, string?>("ConnectionStrings:AzureKeyVault", string.Empty),
+            KeyValuePair.Create<string, string?>("Site:Authentication:UserStore:CurrentLocation", string.Empty),
         };
 
         builder.Configuration.AddInMemoryCollection(config);
