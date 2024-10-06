@@ -75,7 +75,7 @@ public sealed class HttpServerFixture : TestServerFixture
         };
 
         if (ClientOptions.BaseAddress.IsLoopback &&
-            string.Equals(ClientOptions.BaseAddress.Scheme, "https", StringComparison.OrdinalIgnoreCase))
+            string.Equals(ClientOptions.BaseAddress.Scheme, Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase))
         {
             handler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
         }
