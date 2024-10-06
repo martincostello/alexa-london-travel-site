@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Description>Benchmarks for LondonTravel.Site.</Description>
+    <NoWarn>$(NoWarn);CA2234</NoWarn>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>MartinCostello.LondonTravel.Site.Benchmarks</RootNamespace>
+    <Summary>$(Description)</Summary>
+    <TargetFramework>net9.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\LondonTravel.Site\LondonTravel.Site.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="BenchmarkDotNet" />
+  </ItemGroup>
+</Project>

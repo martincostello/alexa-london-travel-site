@@ -10,6 +10,7 @@ _reports
 _UpgradeReport_Files/
 artifacts/
 Backup*/
+BenchmarkDotNet.Artifacts*/
 bin
 Bin
 BuildOutput
