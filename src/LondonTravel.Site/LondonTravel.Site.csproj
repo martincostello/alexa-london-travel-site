@@ -17,8 +17,6 @@
     <TypeScriptToolsVersion>latest</TypeScriptToolsVersion>
     <UserSecretsId>londontravel.martincostello.com</UserSecretsId>
     <XlfLanguages>en-GB;en-US;qps-Ploc</XlfLanguages>
-    <!-- HACK Workaround for https://github.com/dotnet/runtime/issues/106566 -->
-    <UseSystemZlib>false</UseSystemZlib>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Aspire.Azure.Security.KeyVault" />
