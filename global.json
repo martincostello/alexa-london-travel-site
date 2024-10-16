@@ -3,5 +3,8 @@
     "version": "9.0.100-rtm.24514.22",
     "allowPrerelease": false,
     "rollForward": "latestMajor"
+  },
+  "msbuild-sdks": {
+    "Aspire.AppHost.Sdk": "9.0.0-rc.1.24511.1"
   }
 }
