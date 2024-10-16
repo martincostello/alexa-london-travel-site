@@ -16,6 +16,7 @@ var cosmos = builder.AddAzureCosmosDB(Cosmos)
                     .RunAsEmulator((container) =>
                     {
                         container.WithDataVolume("londontravel-cosmosdb")
+                                 .WithLifetime(ContainerLifetime.Persistent)
                                  .WithPartitionCount(1);
                     })
                     .AddDatabase("LondonTravel");
