@@ -1,4 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
+  <Sdk Name="Aspire.AppHost.Sdk" />
   <PropertyGroup>
     <IsAspireHost>true</IsAspireHost>
     <OutputType>Exe</OutputType>
