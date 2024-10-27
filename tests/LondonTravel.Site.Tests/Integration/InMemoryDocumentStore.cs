@@ -160,7 +160,7 @@ internal sealed class InMemoryDocumentStore(UserStoreOptions options) : IDocumen
 
             subset[id] = new DocumentEntry(id, document, etag);
 
-            if (document is Identity.LondonTravelUser user)
+            if (document is LondonTravelUser user)
             {
                 user.ETag = etag;
             }
@@ -220,7 +220,7 @@ internal sealed class InMemoryDocumentStore(UserStoreOptions options) : IDocumen
             document.ETag = Guid.NewGuid().ToString();
             document.Value = value;
 
-            if (value is Identity.LondonTravelUser user)
+            if (value is LondonTravelUser user)
             {
                 user.ETag = document.ETag;
             }
