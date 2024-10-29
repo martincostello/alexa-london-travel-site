@@ -88,7 +88,6 @@ public sealed class CustomHttpHeadersMiddleware(
                     context.Response.Headers.Append("Expect-CT", _expectCTValue);
                 }
 
-                context.Response.Headers.Append("Report-To", /*lang=json,strict*/@"{""group"":""default"",""max_age"":31536000,""endpoints"":[{""url"":""https://martincostello.report-uri.com/a/d/g""}],""include_subdomains"":false}");
                 context.Response.Headers.Append("NEL", /*lang=json,strict*/@"{""report_to"":""default"",""max_age"":31536000,""include_subdomains"":false}");
 
 #if DEBUG
@@ -139,21 +138,15 @@ public sealed class CustomHttpHeadersMiddleware(
             "max-age={0};",
             (int)(options?.CertificateTransparency?.MaxAge.TotalSeconds ?? default));
 
-        if (enforce)
+        if (enforce && options?.ExternalLinks?.Reports?.ExpectCTEnforce is { } enforceUri)
         {
-            if (options?.ExternalLinks?.Reports?.ExpectCTEnforce != null)
-            {
-                builder.Append(" report-uri ");
-                builder.Append(options.ExternalLinks.Reports.ExpectCTEnforce);
-            }
+            builder.Append(" report-uri ");
+            builder.Append(enforceUri);
         }
-        else
+        else if (options?.ExternalLinks?.Reports?.ExpectCTReportOnly is { } reportUri)
         {
-            if (options?.ExternalLinks?.Reports?.ExpectCTReportOnly != null)
-            {
-                builder.Append(" report-uri ");
-                builder.Append(options.ExternalLinks.Reports.ExpectCTReportOnly);
-            }
+            builder.Append(" report-uri ");
+            builder.Append(reportUri);
         }
 
         return builder.ToString();
@@ -301,9 +294,9 @@ public sealed class CustomHttpHeadersMiddleware(
             builder.Append("upgrade-insecure-requests;");
         }
 
-        if (options?.ExternalLinks?.Reports?.ContentSecurityPolicy != null)
+        if (options?.ExternalLinks?.Reports?.ContentSecurityPolicy is { } reportUri)
         {
-            builder.Append(CultureInfo.InvariantCulture, $"report-uri {options.ExternalLinks.Reports.ContentSecurityPolicy};");
+            builder.Append(CultureInfo.InvariantCulture, $"report-uri {reportUri};");
         }
 
         return builder.ToString();
