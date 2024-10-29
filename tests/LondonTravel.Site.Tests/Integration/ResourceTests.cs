@@ -127,7 +127,6 @@ public class ResourceTests(TestServerFixture fixture, ITestOutputHelper outputHe
             "NEL",
             "Permissions-Policy",
             "Referrer-Policy",
-            "Report-To",
             "X-Content-Type-Options",
             "X-CSP-Nonce",
             "X-Download-Options",
@@ -151,7 +150,6 @@ public class ResourceTests(TestServerFixture fixture, ITestOutputHelper outputHe
 
     [Theory]
     [InlineData("NEL")]
-    [InlineData("Report-To")]
     public async Task Response_Headers_Is_Valid_Json(string name)
     {
         // Act

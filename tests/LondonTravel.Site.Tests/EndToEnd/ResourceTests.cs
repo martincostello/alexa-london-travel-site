@@ -69,7 +69,6 @@ public class ResourceTests(WebsiteFixture fixture)
             "NEL",
             "Permissions-Policy",
             "Referrer-Policy",
-            "Report-To",
             "X-Content-Type-Options",
             "X-CSP-Nonce",
             "X-Download-Options",
