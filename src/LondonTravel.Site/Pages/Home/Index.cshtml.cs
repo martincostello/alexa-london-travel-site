@@ -101,25 +101,16 @@ public partial class Index(
             return;
         }
 
-        foreach (var line in tflLines)
+        foreach (var line in tflLines.OrderBy((p) => p.Name, StringComparer.OrdinalIgnoreCase))
         {
             var favorite = new FavoriteLineItem()
             {
                 DisplayName = line.Name!,
                 Id = line.Id!,
+                IsFavorite = userFavorites?.Contains(line.Id, StringComparer.Ordinal) is true,
             };
 
             AllLines.Add(favorite);
-        }
-
-        AllLines = [.. AllLines.OrderBy((p) => p.DisplayName, StringComparer.Ordinal)];
-
-        if (userFavorites?.Count > 0)
-        {
-            foreach (var favorite in AllLines)
-            {
-                favorite.IsFavorite = userFavorites.Contains(favorite.Id, StringComparer.Ordinal);
-            }
         }
     }
 
