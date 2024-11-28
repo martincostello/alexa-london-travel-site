@@ -3,26 +3,50 @@
     Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 */
 
+:root {
+    --color-bakerloo: #b26300;
+    --color-central: #dc241f;
+    --color-circle: #ffce00;
+    --color-district: #007d32;
+    --color-dlr: #00afad;
+    --color-elizabeth: #60399e;
+    --color-hammersmith-city: #f589a6;
+    --color-jubilee: #838d93;
+    --color-liberty: #61686b;
+    --color-lioness: #ffa600;
+    --color-metropolitan: #9b0058;
+    --color-mildmay: #006fe6;
+    --color-northern: #000;
+    --color-overground: #fa7b05;
+    --color-piccadilly: #0019a8;
+    --color-suffragette: #18a95d;
+    --color-tram: #5fb526;
+    --color-victoria: #039be5;
+    --color-waterloo-city: #76d0bd;
+    --color-weaver: #9b0058;
+    --color-windrush: #dc241f;
+}
+
 body {
     padding-top: 85px;
 }
 
 .btn-amazon {
-    background-color: #F90;
+    background-color: #f90;
     border-color: rgb(0 0 0);
     border-color: rgb(0 0 0 / 20%);
-    color: #fff;
+    color: white;
 }
 
 .btn-amazon:hover {
-    background-color: #E08802;
+    background-color: #e08802;
 }
 
 .btn-apple {
     background-color: black;
     border-color: rgb(0 0 0);
     border-color: rgb(0 0 0 / 20%);
-    color: #fff;
+    color: white;
 }
 
 .btn-close {
@@ -63,7 +87,7 @@ body {
 /* Travel rules */
 
 .travel-line {
-    border-left: 10px solid #2070B0;
+    border-left: 10px solid #2070b0;
     cursor: pointer;
 }
 
@@ -74,139 +98,183 @@ body {
 }
 
 .travel-line-bakerloo {
-    border-left-color: #894e24;
+    border-left-color: var(--color-bakerloo);
 }
 
 .travel-line-bakerloo > .form-check-input:checked {
-    background-color: #894e24;
-    border-color: #894e24;
+    background-color: var(--color-bakerloo);
+    border-color: var(--color-bakerloo);
 }
 
 .travel-line-central {
-    border-left-color: #dc241f;
+    border-left-color: var(--color-central);
 }
 
 .travel-line-central > .form-check-input:checked {
-    background-color: #dc241f;
-    border-color: #dc241f;
+    background-color: var(--color-central);
+    border-color: var(--color-central);
 }
 
 .travel-line-circle {
-    border-left-color: #ffce00;
+    border-left-color: var(--color-circle);
 }
 
 .travel-line-circle > .form-check-input:checked {
-    background-color: #ffce00;
-    border-color: #ffce00;
+    background-color: var(--color-circle);
+    border-color: var(--color-circle);
 }
 
 .travel-line-district {
-    border-left-color: #007229;
+    border-left-color: var(--color-district);
 }
 
 .travel-line-district > .form-check-input:checked {
-    background-color: #007229;
-    border-color: #007229;
+    background-color: var(--color-district);
+    border-color: var(--color-district);
 }
 
 .travel-line-dlr {
-    border-left-color: #00afad;
+    border-left-color: var(--color-dlr);
 }
 
 .travel-line-dlr > .form-check-input:checked {
-    background-color: #00afad;
-    border-color: #00afad;
+    background-color: var(--color-dlr);
+    border-color: var(--color-dlr);
 }
 
 .travel-line-elizabeth {
-    border-left-color: #6950a1;
+    border-left-color: var(--color-elizabeth);
 }
 
 .travel-line-elizabeth > .form-check-input:checked {
-    background-color: #6950a1;
-    border-color: #6950a1;
+    background-color: var(--color-elizabeth);
+    border-color: var(--color-elizabeth);
 }
 
 .travel-line-hammersmith-city {
-    border-left-color: #d799af;
+    border-left-color: var(--color-hammersmith-city);
 }
 
 .travel-line-hammersmith-city > .form-check-input:checked {
-    background-color: #d799af;
-    border-color: #d799af;
+    background-color: var(--color-hammersmith-city);
+    border-color: var(--color-hammersmith-city);
 }
 
 .travel-line-jubilee {
-    border-left-color: #6a7278;
+    border-left-color: var(--color-jubilee);
 }
 
 .travel-line-jubilee > .form-check-input:checked {
-    background-color: #6a7278;
-    border-color: #6a7278;
+    background-color: var(--color-jubilee);
+    border-color: var(--color-jubilee);
 }
 
-.travel-line-london-overground {
-    border-left-color: #e86a10;
+.travel-line-liberty {
+    border-left-color: var(--color-liberty);
 }
 
-.travel-line-london-overground > .form-check-input:checked {
-    background-color: #e86a10;
-    border-color: #e86a10;
+.travel-line-liberty > .form-check-input:checked {
+    background-color: var(--color-liberty);
+    border-color: var(--color-liberty);
+}
+
+.travel-line-lioness {
+    border-left-color: var(--color-lioness);
+}
+
+.travel-line-lioness > .form-check-input:checked {
+    background-color: var(--color-lioness);
+    border-color: var(--color-lioness);
 }
 
 .travel-line-metropolitan {
-    border-left-color: #751056;
+    border-left-color: var(--color-metropolitan);
 }
 
 .travel-line-metropolitan > .form-check-input:checked {
-    background-color: #751056;
-    border-color: #751056;
+    background-color: var(--color-metropolitan);
+    border-color: var(--color-metropolitan);
+}
+
+.travel-line-mildmay {
+    border-left-color: var(--color-mildmay);
+}
+
+.travel-line-mildmay > .form-check-input:checked {
+    background-color: var(--color-mildmay);
+    border-color: var(--color-mildmay);
 }
 
 .travel-line-northern {
-    border-left-color: #000;
+    border-left-color: var(--color-northern);
 }
 
 .travel-line-northern > .form-check-input:checked {
-    background-color: #000;
-    border-color: #000;
+    background-color: var(--color-northern);
+    border-color: var(--color-northern);
 }
 
-.travel-line-piccadilly, .travel-line-tfl-rail {
-    border-left-color: #0019a8;
+.travel-line-piccadilly {
+    border-left-color: var(--color-piccadilly);
 }
 
-.travel-line-piccadilly > .form-check-input:checked,
-.travel-line-tfl-rail > .form-check-input:checked {
-    background-color: #0019a8;
-    border-color: #0019a8;
+.travel-line-piccadilly > .form-check-input:checked {
+    background-color: var(--color-piccadilly);
+    border-color: var(--color-piccadilly);
+}
+
+.travel-line-suffragette {
+    border-left-color: var(--color-suffragette);
+}
+
+.travel-line-suffragette > .form-check-input:checked {
+    background-color: var(--color-suffragette);
+    border-color: var(--color-suffragette);
 }
 
 .travel-line-tram {
-    border-left-color: #6c0;
+    border-left-color: var(--color-tram);
 }
 
 .travel-line-tram > .form-check-input:checked {
-    background-color: #6c0;
-    border-color: #6c0;
+    background-color: var(--color-tram);
+    border-color: var(--color-tram);
 }
 
 .travel-line-victoria {
-    border-left-color: #00a0e2;
+    border-left-color: var(--color-victoria);
 }
 
 .travel-line-victoria > .form-check-input:checked {
-    background-color: #00a0e2;
-    border-color: #00a0e2;
+    background-color: var(--color-victoria);
+    border-color: var(--color-victoria);
 }
 
 .travel-line-waterloo-city {
-    border-left-color: #76d0bd;
+    border-left-color: var(--color-waterloo-city);
 }
 
 .travel-line-waterloo-city > .form-check-input:checked {
-    background-color: #76d0bd;
-    border-color: #76d0bd;
+    background-color: var(--color-waterloo-city);
+    border-color: var(--color-waterloo-city);
+}
+
+.travel-line-weaver {
+    border-left-color: var(--color-weaver);
+}
+
+.travel-line-weaver > .form-check-input:checked {
+    background-color: var(--color-weaver);
+    border-color: var(--color-weaver);
+}
+
+.travel-line-windrush {
+    border-left-color: var(--color-windrush);
+}
+
+.travel-line-windrush > .form-check-input:checked {
+    background-color: var(--color-windrush);
+    border-color: var(--color-windrush);
 }
 
 .checkbox label::after {
@@ -270,7 +338,7 @@ body {
 }
 
 .swagger-ui .opblock.opblock-get .opblock-summary-method {
-    background: #0170DF;
+    background: #0170df;
 }
 
 .swagger-ui-svg {
@@ -281,5 +349,5 @@ body {
 
 .swagger-ui .info a,
 .url {
-    color: #0F7661;
+    color: #0f7661;
 }

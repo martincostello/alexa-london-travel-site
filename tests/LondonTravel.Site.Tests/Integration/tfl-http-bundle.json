@@ -41,8 +41,16 @@
           "name": "Jubilee"
         },
         {
-          "id": "london-overground",
-          "name": "London Overground"
+          "id": "liberty",
+          "name": "Liberty"
+        },
+        {
+          "id": "lioness",
+          "name": "Lioness"
+        },
+        {
+          "id": "mildmay",
+          "name": "Mildmay"
         },
         {
           "id": "northern",
@@ -53,12 +61,24 @@
           "name": "Piccadilly"
         },
         {
+          "id": "suffragette",
+          "name": "Suffragette"
+        },
+        {
           "id": "victoria",
           "name": "Victoria"
         },
         {
           "id": "waterloo-city",
           "name": "Waterloo & City"
+        },
+        {
+          "id": "weaver",
+          "name": "Weaver"
+        },
+        {
+          "id": "windrush",
+          "name": "Windrush"
         }
       ]
     }

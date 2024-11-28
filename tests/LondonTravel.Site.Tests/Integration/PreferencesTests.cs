@@ -48,13 +48,13 @@ public sealed class PreferencesTests : BrowserIntegrationTest
                 var dlr = await GetLineAsync(lines, "DLR");
                 var elizabeth = await GetLineAsync(lines, "Elizabeth line");
                 var northern = await GetLineAsync(lines, "Northern");
-                var overground = await GetLineAsync(lines, "London Overground");
+                var windrush = await GetLineAsync(lines, "Windrush");
 
                 district.ShouldNotBeNull();
                 dlr.ShouldNotBeNull();
                 elizabeth.ShouldNotBeNull();
                 northern.ShouldNotBeNull();
-                overground.ShouldNotBeNull();
+                windrush.ShouldNotBeNull();
 
                 await district.ToggleAsync();
                 await northern.ToggleAsync();
