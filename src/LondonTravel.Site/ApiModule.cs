@@ -1,6 +1,7 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Collections.Frozen;
 using System.ComponentModel;
 using System.Net;
 using System.Net.Http.Headers;
@@ -18,6 +19,16 @@ namespace MartinCostello.LondonTravel.Site;
 
 public static partial class ApiModule
 {
+    private static readonly FrozenSet<string> OvergroundLines = new string[]
+    {
+        "liberty",
+        "lioness",
+        "mildmay",
+        "suffragette",
+        "weaver",
+        "windrush",
+    }.ToFrozenSet();
+
     public static IEndpointRouteBuilder MapApi(this IEndpointRouteBuilder app)
     {
         app.MapGet("/api/_count", async (IAccountService service) =>
@@ -115,9 +126,19 @@ public static partial class ApiModule
 
         Log.AccessAuthorized(logger, user.Id, httpContext);
 
+        HashSet<string> favoriteLines = [.. user.FavoriteLines];
+
+        // If someone still has the defunct London Overground line as a favorite,
+        // automatically add the new individual line names for them instead.
+        // See https://github.com/martincostello/alexa-london-travel/pull/1514.
+        if (favoriteLines.Remove("london-overground"))
+        {
+            favoriteLines.UnionWith(OvergroundLines);
+        }
+
         var result = new PreferencesResponse()
         {
-            FavoriteLines = user.FavoriteLines,
+            FavoriteLines = favoriteLines,
             UserId = user.Id!,
         };
 
