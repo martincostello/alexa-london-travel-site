@@ -128,7 +128,7 @@ jobs:
         dotnet publish ./src/LondonTravel.Site --arch x64 --os linux -p:PublishProfile=DefaultContainer
 
     - name: Attest container image
-      uses: actions/attest-build-provenance@c4fbc648846ca6f503a13a2281a5e7b98aa57202 # v2.0.1
+      uses: actions/attest-build-provenance@7668571508540a607bdfd90a87a560489fe372eb # v2.1.0
       if: steps.publish-container.outputs.container-digest != ''
       with:
         push-to-registry: true
