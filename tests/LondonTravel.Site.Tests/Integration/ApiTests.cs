@@ -17,7 +17,7 @@ namespace MartinCostello.LondonTravel.Site.Integration;
 /// </remarks>
 /// <param name="fixture">The fixture to use.</param>
 /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
-[Collection(TestServerCollection.Name)]
+[Collection<TestServerCollection>]
 public class ApiTests(TestServerFixture fixture, ITestOutputHelper outputHelper) : IntegrationTest(fixture, outputHelper)
 {
     private const string Scheme = "bearer";
@@ -38,7 +38,7 @@ public class ApiTests(TestServerFixture fixture, ITestOutputHelper outputHelper)
         }
 
         // Act
-        using var response = await client.GetAsync(RequestUri);
+        using var response = await client.GetAsync(RequestUri, CancellationToken);
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
@@ -61,7 +61,7 @@ public class ApiTests(TestServerFixture fixture, ITestOutputHelper outputHelper)
         client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", value);
 
         // Act
-        using var response = await client.GetAsync(RequestUri);
+        using var response = await client.GetAsync(RequestUri, CancellationToken);
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
@@ -85,7 +85,7 @@ public class ApiTests(TestServerFixture fixture, ITestOutputHelper outputHelper)
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(value, "token");
 
         // Act
-        using var response = await client.GetAsync(RequestUri);
+        using var response = await client.GetAsync(RequestUri, CancellationToken);
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
@@ -111,7 +111,7 @@ public class ApiTests(TestServerFixture fixture, ITestOutputHelper outputHelper)
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(Scheme, value);
 
         // Act
-        using var response = await client.GetAsync(RequestUri);
+        using var response = await client.GetAsync(RequestUri, CancellationToken);
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
@@ -137,11 +137,11 @@ public class ApiTests(TestServerFixture fixture, ITestOutputHelper outputHelper)
         using var client = Fixture.CreateClient();
 
         // Act
-        using var schema = await client.GetStreamAsync("/openapi/api.json");
+        using var schema = await client.GetStreamAsync("/openapi/api.json", CancellationToken);
 
         // Assert
         var reader = new OpenApiStreamReader();
-        var actual = await reader.ReadAsync(schema);
+        var actual = await reader.ReadAsync(schema, CancellationToken);
 
         actual.OpenApiDiagnostic.Errors.ShouldBeEmpty();
 
@@ -159,7 +159,7 @@ public class ApiTests(TestServerFixture fixture, ITestOutputHelper outputHelper)
         using var client = Fixture.CreateClient();
 
         // Act
-        string actual = await client.GetStringAsync("/openapi/api.json");
+        string actual = await client.GetStringAsync("/openapi/api.json", CancellationToken);
 
         // Assert
         await VerifyJson(actual, settings);

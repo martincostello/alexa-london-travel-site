@@ -15,7 +15,7 @@ namespace MartinCostello.LondonTravel.Site.Integration;
 /// </remarks>
 /// <param name="fixture">The fixture to use.</param>
 /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
-[Collection(TestServerCollection.Name)]
+[Collection<TestServerCollection>]
 public class SiteMapTests(TestServerFixture fixture, ITestOutputHelper outputHelper) : IntegrationTest(fixture, outputHelper)
 {
     [Fact]
@@ -27,12 +27,12 @@ public class SiteMapTests(TestServerFixture fixture, ITestOutputHelper outputHel
         using (var client = Fixture.CreateClient())
         {
             // Act
-            using var response = await client.GetAsync("sitemap.xml");
+            using var response = await client.GetAsync("sitemap.xml", CancellationToken);
 
             response.StatusCode.ShouldBe(HttpStatusCode.OK);
             response.Content!.Headers.ContentType?.MediaType.ShouldBe(MediaTypeNames.Text.Xml);
 
-            string xml = await response.Content.ReadAsStringAsync();
+            string xml = await response.Content.ReadAsStringAsync(CancellationToken);
 
             xml.ShouldNotBeNullOrWhiteSpace();
             locations = GetSitemapLocations(xml);
@@ -57,9 +57,9 @@ public class SiteMapTests(TestServerFixture fixture, ITestOutputHelper outputHel
             uri.AbsolutePath.ShouldEndWith("/");
 
             using var client = Fixture.CreateClient();
-            using var response = await client.GetAsync(uri.PathAndQuery);
+            using var response = await client.GetAsync(uri.PathAndQuery, CancellationToken);
 
-            response.StatusCode.ShouldBe(HttpStatusCode.OK, $"Failed to get {uri.PathAndQuery}. {await response.Content!.ReadAsStringAsync()}");
+            response.StatusCode.ShouldBe(HttpStatusCode.OK, $"Failed to get {uri.PathAndQuery}. {await response.Content!.ReadAsStringAsync(CancellationToken)}");
             response.Content.Headers.ContentType?.MediaType.ShouldBe(MediaTypeNames.Text.Html);
             response.Content.Headers.ContentLength.ShouldNotBeNull();
             response.Content.Headers.ContentLength!.Value.ShouldBeGreaterThan(0);

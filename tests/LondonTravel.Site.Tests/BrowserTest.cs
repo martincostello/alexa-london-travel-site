@@ -45,14 +45,18 @@ public abstract class BrowserTest(ITestOutputHelper outputHelper) : IAsyncLifeti
     }
 
     /// <inheritdoc/>
-    public Task InitializeAsync()
+    public ValueTask InitializeAsync()
     {
         InstallPlaywright();
-        return Task.CompletedTask;
+        return ValueTask.CompletedTask;
     }
 
     /// <inheritdoc/>
-    public Task DisposeAsync() => Task.CompletedTask;
+    public ValueTask DisposeAsync()
+    {
+        GC.SuppressFinalize(this);
+        return ValueTask.CompletedTask;
+    }
 
     /// <summary>
     /// Runs the specified test with a new instance of <see cref="ApplicationNavigator"/> as an asynchronous operation.

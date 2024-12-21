@@ -7,18 +7,18 @@ using Microsoft.AspNetCore.Http;
 
 namespace MartinCostello.LondonTravel.Site.EndToEnd;
 
-[Collection(WebsiteCollection.Name)]
+[Collection<WebsiteCollection>]
 [Trait("Category", "EndToEnd")]
 public class ApiTests(WebsiteFixture fixture)
 {
-    [SkippableFact]
+    [Fact]
     public async Task Cannot_Get_Preferences_Unauthenticated()
     {
         // Arrange
         using var client = fixture.CreateClient();
 
         // Act
-        using var response = await client.GetAsync("/api/preferences");
+        using var response = await client.GetAsync("/api/preferences", TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
@@ -32,7 +32,7 @@ public class ApiTests(WebsiteFixture fixture)
         result.RootElement.GetStringArray("details").ShouldBeEmpty();
     }
 
-    [SkippableFact]
+    [Fact]
     public async Task Cannot_Get_Preferences_With_Invalid_Token()
     {
         // Arrange
@@ -42,7 +42,7 @@ public class ApiTests(WebsiteFixture fixture)
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", accessToken);
 
         // Act
-        using var response = await client.GetAsync("/api/preferences");
+        using var response = await client.GetAsync("/api/preferences", TestContext.Current.CancellationToken);
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);

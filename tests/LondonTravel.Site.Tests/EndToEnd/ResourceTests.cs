@@ -6,11 +6,11 @@ using System.Net.Mime;
 
 namespace MartinCostello.LondonTravel.Site.EndToEnd;
 
-[Collection(WebsiteCollection.Name)]
+[Collection<WebsiteCollection>]
 [Trait("Category", "EndToEnd")]
 public class ResourceTests(WebsiteFixture fixture)
 {
-    [SkippableTheory]
+    [Theory]
     [InlineData("/", MediaTypeNames.Text.Html)]
     [InlineData("/.well-known/apple-app-site-association", MediaTypeNames.Application.Json)]
     [InlineData("/.well-known/assetlinks.json", MediaTypeNames.Application.Json)]
@@ -49,16 +49,16 @@ public class ResourceTests(WebsiteFixture fixture)
         using var client = fixture.CreateClient();
 
         // Act
-        using var response = await client.GetAsync(requestUri);
+        using var response = await client.GetAsync(requestUri, TestContext.Current.CancellationToken);
 
         // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.OK, $"Failed to get {requestUri}. {await response.Content!.ReadAsStringAsync()}");
+        response.StatusCode.ShouldBe(HttpStatusCode.OK, $"Failed to get {requestUri}. {await response.Content!.ReadAsStringAsync(TestContext.Current.CancellationToken)}");
         response.Content.Headers.ContentType?.MediaType.ShouldBe(contentType);
         response.Content.Headers.ContentLength.ShouldNotBeNull();
         response.Content.Headers.ContentLength.ShouldNotBe(0);
     }
 
-    [SkippableFact]
+    [Fact]
     public async Task Response_Headers_Contains_Expected_Headers()
     {
         // Arrange
@@ -81,7 +81,7 @@ public class ResourceTests(WebsiteFixture fixture)
 
         // Act
         using var client = fixture.CreateClient();
-        var response = await client.GetAsync("/");
+        var response = await client.GetAsync("/", TestContext.Current.CancellationToken);
 
         // Assert
         foreach (string expected in expectedHeaders)

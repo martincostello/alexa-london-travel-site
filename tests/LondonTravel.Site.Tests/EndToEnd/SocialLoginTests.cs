@@ -8,10 +8,10 @@ namespace MartinCostello.LondonTravel.Site.EndToEnd;
 
 public class SocialLoginTests(WebsiteFixture fixture, ITestOutputHelper outputHelper) : BrowserEndToEndTest(fixture, outputHelper)
 {
-    [SkippableFact]
+    [Fact]
     public async Task Can_Sign_In_With_Google()
     {
-        Skip.IfNot(
+        Assert.SkipUnless(
             string.IsNullOrEmpty(Environment.GetEnvironmentVariable("GITHUB_ACTIONS")),
             "Sign-in blocked when run in GitHub Actions.");
 
@@ -28,10 +28,10 @@ public class SocialLoginTests(WebsiteFixture fixture, ITestOutputHelper outputHe
             });
     }
 
-    [SkippableFact]
+    [Fact]
     public async Task Can_Sign_In_With_Microsoft_Account()
     {
-        Skip.IfNot(
+        Assert.SkipUnless(
             string.IsNullOrEmpty(Environment.GetEnvironmentVariable("GITHUB_ACTIONS")),
             "Sign-in is being flaky in GitHub Actions.");
 
@@ -48,10 +48,10 @@ public class SocialLoginTests(WebsiteFixture fixture, ITestOutputHelper outputHe
             });
     }
 
-    [SkippableFact]
+    [Fact]
     public async Task Can_Sign_In_With_Twitter()
     {
-        Skip.IfNot(
+        Assert.SkipUnless(
             string.IsNullOrEmpty(Environment.GetEnvironmentVariable("GITHUB_ACTIONS")),
             "Sign-in blocked when run in GitHub Actions.");
 
@@ -72,8 +72,8 @@ public class SocialLoginTests(WebsiteFixture fixture, ITestOutputHelper outputHe
         string? userName = Environment.GetEnvironmentVariable($"WEBSITE_USER_{providerName.ToUpperInvariant()}_USERNAME");
         string? password = Environment.GetEnvironmentVariable($"WEBSITE_USER_{providerName.ToUpperInvariant()}_PASSWORD");
 
-        Skip.If(string.IsNullOrWhiteSpace(userName), $"No {providerName} username is configured.");
-        Skip.If(string.IsNullOrWhiteSpace(password), $"No {providerName} password is configured.");
+        Assert.SkipWhen(string.IsNullOrWhiteSpace(userName), $"No {providerName} username is configured.");
+        Assert.SkipWhen(string.IsNullOrWhiteSpace(password), $"No {providerName} password is configured.");
 
         // Arrange
         await AtPageAsync<HomePage>(
