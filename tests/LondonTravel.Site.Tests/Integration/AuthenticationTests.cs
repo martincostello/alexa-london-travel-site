@@ -3,14 +3,13 @@
 
 using MartinCostello.LondonTravel.Site.Pages;
 using Microsoft.Extensions.DependencyInjection;
-using xRetry;
 
 namespace MartinCostello.LondonTravel.Site.Integration;
 
 /// <summary>
 /// A class containing tests for authentication providers in the website.
 /// </summary>
-[Collection(HttpServerCollection.Name)]
+[Collection<HttpServerCollection>]
 public sealed class AuthenticationTests : BrowserIntegrationTest
 {
     /// <summary>
@@ -55,7 +54,7 @@ public sealed class AuthenticationTests : BrowserIntegrationTest
             });
     }
 
-    [RetryTheory]
+    [Theory]
     [ClassData(typeof(BrowsersTestData))]
     public async Task Can_Delete_Account(string browserType, string? browserChannel)
     {
@@ -86,7 +85,7 @@ public sealed class AuthenticationTests : BrowserIntegrationTest
             });
     }
 
-    [RetryTheory]
+    [Theory]
     [ClassData(typeof(BrowsersTestData))]
     public async Task Can_Link_Accounts(string browserType, string? browserChannel)
     {
@@ -121,7 +120,7 @@ public sealed class AuthenticationTests : BrowserIntegrationTest
                 page = await accounts[0].RemoveAsync();
 
                 // Wait for the UI to update
-                await Task.Delay(TimeSpan.FromSeconds(1));
+                await Task.Delay(TimeSpan.FromSeconds(1), TestContext.Current.CancellationToken);
 
                 // Assert
                 accounts = await page.LinkedAccountsAsync();

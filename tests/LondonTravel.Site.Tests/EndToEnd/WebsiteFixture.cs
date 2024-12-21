@@ -24,7 +24,7 @@ public class WebsiteFixture
     {
         get
         {
-            Skip.If(_serverAddress is null, $"The {WebsiteUrl} environment variable is not set or is not a valid absolute URI.");
+            Assert.SkipWhen(_serverAddress is null, $"The {WebsiteUrl} environment variable is not set or is not a valid absolute URI.");
             return _serverAddress!;
         }
     }

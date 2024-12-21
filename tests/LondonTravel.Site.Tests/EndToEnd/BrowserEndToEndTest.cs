@@ -6,7 +6,7 @@ namespace MartinCostello.LondonTravel.Site.EndToEnd;
 /// <summary>
 /// The base class for end-to-end tests.
 /// </summary>
-[Collection(WebsiteCollection.Name)]
+[Collection<WebsiteCollection>]
 [Trait("Category", "EndToEnd")]
 public abstract class BrowserEndToEndTest : BrowserTest
 {

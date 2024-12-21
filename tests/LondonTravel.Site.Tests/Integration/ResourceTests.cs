@@ -15,7 +15,7 @@ namespace MartinCostello.LondonTravel.Site.Integration;
 /// </remarks>
 /// <param name="fixture">The fixture to use.</param>
 /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
-[Collection(TestServerCollection.Name)]
+[Collection<TestServerCollection>]
 public class ResourceTests(TestServerFixture fixture, ITestOutputHelper outputHelper) : IntegrationTest(fixture, outputHelper)
 {
     [Theory]
@@ -57,10 +57,10 @@ public class ResourceTests(TestServerFixture fixture, ITestOutputHelper outputHe
         using var client = Fixture.CreateClient();
 
         // Act
-        using var response = await client.GetAsync(requestUri);
+        using var response = await client.GetAsync(requestUri, CancellationToken);
 
         // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.OK, $"Failed to get {requestUri}. {await response.Content!.ReadAsStringAsync()}");
+        response.StatusCode.ShouldBe(HttpStatusCode.OK, $"Failed to get {requestUri}. {await response.Content!.ReadAsStringAsync(CancellationToken)}");
         response.Content.Headers.ContentType?.MediaType.ShouldBe(contentType);
         response.Content.Headers.ContentLength.ShouldNotBeNull();
         response.Content.Headers.ContentLength.ShouldNotBe(0);
@@ -76,7 +76,7 @@ public class ResourceTests(TestServerFixture fixture, ITestOutputHelper outputHe
         using var client = Fixture.CreateClient();
 
         // Act
-        using var response = await client.GetAsync(requestUri);
+        using var response = await client.GetAsync(requestUri, CancellationToken);
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
@@ -93,7 +93,7 @@ public class ResourceTests(TestServerFixture fixture, ITestOutputHelper outputHe
         using var client = Fixture.CreateClient();
 
         // Act
-        using var response = await client.GetAsync(requestUri);
+        using var response = await client.GetAsync(requestUri, CancellationToken);
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
@@ -105,12 +105,12 @@ public class ResourceTests(TestServerFixture fixture, ITestOutputHelper outputHe
     {
         // Arrange
         using var client = Fixture.CreateClient();
-        using var response = await client.GetAsync("/manifest.webmanifest");
+        using var response = await client.GetAsync("/manifest.webmanifest", CancellationToken);
 
         // Assert
         response.EnsureSuccessStatusCode();
 
-        string json = await response.Content!.ReadAsStringAsync();
+        string json = await response.Content!.ReadAsStringAsync(CancellationToken);
         var manifest = JsonDocument.Parse(json);
 
         manifest.RootElement.GetString("name").ShouldBe("London Travel");
@@ -139,7 +139,7 @@ public class ResourceTests(TestServerFixture fixture, ITestOutputHelper outputHe
 
         // Act
         using var client = Fixture.CreateClient();
-        var response = await client.GetAsync("/");
+        var response = await client.GetAsync("/", CancellationToken);
 
         // Assert
         foreach (string expected in expectedHeaders)
@@ -154,7 +154,7 @@ public class ResourceTests(TestServerFixture fixture, ITestOutputHelper outputHe
     {
         // Act
         using var client = Fixture.CreateClient();
-        using var response = await client.GetAsync("/");
+        using var response = await client.GetAsync("/", CancellationToken);
 
         // Assert
         response.Headers.Contains(name).ShouldBeTrue($"The '{name}' response header was not found.");
@@ -182,7 +182,7 @@ public class ResourceTests(TestServerFixture fixture, ITestOutputHelper outputHe
         using var client = Fixture.CreateClient();
 
         // Act
-        using var response = await client.GetAsync(requestUri);
+        using var response = await client.GetAsync(requestUri, CancellationToken);
 
         // Assert
         response.StatusCode.ShouldBe(expected);
@@ -218,7 +218,7 @@ public class ResourceTests(TestServerFixture fixture, ITestOutputHelper outputHe
         using var client = Fixture.CreateClient();
 
         // Act
-        using (var response = await client.GetAsync(requestUri))
+        using (var response = await client.GetAsync(requestUri, CancellationToken))
         {
             // Assert
             response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
@@ -229,7 +229,7 @@ public class ResourceTests(TestServerFixture fixture, ITestOutputHelper outputHe
         using (var message = new HttpRequestMessage(HttpMethod.Head, requestUri))
         {
             // Act
-            using var response = await client.SendAsync(message);
+            using var response = await client.SendAsync(message, CancellationToken);
 
             // Assert
             response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
@@ -240,7 +240,7 @@ public class ResourceTests(TestServerFixture fixture, ITestOutputHelper outputHe
         using (var content = new StringContent(string.Empty))
         {
             // Act
-            using var response = await client.PostAsync(requestUri, content);
+            using var response = await client.PostAsync(requestUri, content, CancellationToken);
 
             // Assert
             response.StatusCode.ShouldBe(HttpStatusCode.Redirect);

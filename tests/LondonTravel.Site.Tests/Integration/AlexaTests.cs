@@ -7,7 +7,6 @@ using System.Text.Json;
 using MartinCostello.LondonTravel.Site.Pages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.DependencyInjection;
-using xRetry;
 
 namespace MartinCostello.LondonTravel.Site.Integration;
 
@@ -27,7 +26,7 @@ public class AlexaTests : BrowserIntegrationTest
         Fixture.Services!.GetRequiredService<InMemoryDocumentStore>().Clear();
     }
 
-    [RetryTheory]
+    [Theory]
     [ClassData(typeof(BrowsersTestData))]
     public async Task Can_Authorize_Alexa(string browserType, string? browserChannel)
     {
@@ -52,7 +51,7 @@ public class AlexaTests : BrowserIntegrationTest
             });
     }
 
-    [RetryTheory]
+    [Theory]
     [ClassData(typeof(BrowsersTestData))]
     public async Task Can_Get_Preferences_From_Api(string browserType, string? browserChannel)
     {

@@ -22,7 +22,7 @@ public sealed class PreferencesTests : BrowserIntegrationTest
         Fixture.Services!.GetRequiredService<InMemoryDocumentStore>().Clear();
     }
 
-    [xRetry.RetryTheory]
+    [Theory]
     [ClassData(typeof(BrowsersTestData))]
     public async Task Can_Manage_Preferences(string browserType, string? browserChannel)
     {
@@ -62,7 +62,7 @@ public sealed class PreferencesTests : BrowserIntegrationTest
                 page = await page.UpdatePreferencesAsync();
 
                 // Give the UI time to update
-                await Task.Delay(TimeSpan.FromSeconds(1));
+                await Task.Delay(TimeSpan.FromSeconds(1), TestContext.Current.CancellationToken);
 
                 // Assert
                 lines = await page.LinesAsync();
@@ -87,7 +87,7 @@ public sealed class PreferencesTests : BrowserIntegrationTest
                 page = await page.UpdatePreferencesAsync();
 
                 // Give the UI time to update
-                await Task.Delay(TimeSpan.FromSeconds(1));
+                await Task.Delay(TimeSpan.FromSeconds(1), TestContext.Current.CancellationToken);
 
                 // Assert
                 lines = await page.LinesAsync();

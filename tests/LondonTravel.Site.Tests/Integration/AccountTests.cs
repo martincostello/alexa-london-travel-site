@@ -19,7 +19,7 @@ namespace MartinCostello.LondonTravel.Site.Integration;
 /// </remarks>
 /// <param name="fixture">The fixture to use.</param>
 /// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
-[Collection(TestServerCollection.Name)]
+[Collection<TestServerCollection>]
 public class AccountTests(TestServerFixture fixture, ITestOutputHelper outputHelper) : IntegrationTest(fixture, outputHelper)
 {
     [Fact]
@@ -51,7 +51,7 @@ public class AccountTests(TestServerFixture fixture, ITestOutputHelper outputHel
             using var store = GetUserStore(scope.ServiceProvider);
 
             // Act
-            var createResult = await store.CreateAsync(user, default);
+            var createResult = await store.CreateAsync(user, CancellationToken);
 
             // Assert
             Assert.NotNull(createResult);
@@ -63,7 +63,7 @@ public class AccountTests(TestServerFixture fixture, ITestOutputHelper outputHel
             userId = user.Id!;
 
             // Act
-            var actual = await store.FindByIdAsync(userId, default);
+            var actual = await store.FindByIdAsync(userId, CancellationToken);
 
             // Assert
             Assert.NotNull(actual);
@@ -87,14 +87,14 @@ public class AccountTests(TestServerFixture fixture, ITestOutputHelper outputHel
             actual.FavoriteLines = favoriteLines;
 
             // Act
-            var updateResult = await store.UpdateAsync(actual, default);
+            var updateResult = await store.UpdateAsync(actual, CancellationToken);
 
             // Assert
             Assert.NotNull(updateResult);
             Assert.True(updateResult.Succeeded);
 
             // Act
-            actual = await store.FindByNameAsync(emailAddress, default);
+            actual = await store.FindByNameAsync(emailAddress, CancellationToken);
 
             // Assert
             Assert.NotNull(actual);
@@ -112,7 +112,7 @@ public class AccountTests(TestServerFixture fixture, ITestOutputHelper outputHel
 
             // Act
             using var client = Fixture.CreateClient();
-            using var response = await client.SendAsync(message);
+            using var response = await client.SendAsync(message, CancellationToken);
 
             // Assert
             response.StatusCode.ShouldBe(HttpStatusCode.OK);
@@ -121,7 +121,7 @@ public class AccountTests(TestServerFixture fixture, ITestOutputHelper outputHel
             response.Content!.Headers!.ContentType.ShouldNotBeNull();
             response.Content.Headers.ContentType!.MediaType.ShouldBe(MediaTypeNames.Application.Json);
 
-            string json = await response.Content.ReadAsStringAsync();
+            string json = await response.Content.ReadAsStringAsync(CancellationToken);
             using var preferences = JsonDocument.Parse(json);
 
             Assert.Equal(userId, preferences.RootElement.GetString("userId"));
@@ -134,7 +134,7 @@ public class AccountTests(TestServerFixture fixture, ITestOutputHelper outputHel
             using var store = GetUserStore(scope.ServiceProvider);
 
             // Act
-            var updateResult = await store.DeleteAsync(new LondonTravelUser() { Id = userId }, default);
+            var updateResult = await store.DeleteAsync(new LondonTravelUser() { Id = userId }, CancellationToken);
 
             // Assert
             Assert.NotNull(updateResult);
@@ -148,7 +148,7 @@ public class AccountTests(TestServerFixture fixture, ITestOutputHelper outputHel
 
             // Act
             using var client = Fixture.CreateClient();
-            using var response = await client.SendAsync(message);
+            using var response = await client.SendAsync(message, CancellationToken);
 
             // Assert
             response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);

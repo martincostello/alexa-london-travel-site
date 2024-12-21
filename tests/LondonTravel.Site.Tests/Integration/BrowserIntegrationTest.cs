@@ -9,7 +9,7 @@ namespace MartinCostello.LondonTravel.Site.Integration;
 /// <summary>
 /// The base class for browser tests.
 /// </summary>
-[Collection(HttpServerCollection.Name)]
+[Collection<HttpServerCollection>]
 public abstract class BrowserIntegrationTest : BrowserTest
 {
     private bool _disposed;

@@ -6,7 +6,7 @@ namespace MartinCostello.LondonTravel.Site.Integration;
 /// <summary>
 /// The base class for integration tests.
 /// </summary>
-[Collection(TestServerCollection.Name)]
+[Collection<TestServerCollection>]
 public abstract class IntegrationTest : IDisposable
 {
     private bool _disposed;
@@ -29,6 +29,11 @@ public abstract class IntegrationTest : IDisposable
     {
         Dispose(false);
     }
+
+    /// <summary>
+    /// Gets the <see cref="CancellationToken"/> to use.
+    /// </summary>
+    protected virtual CancellationToken CancellationToken => TestContext.Current.CancellationToken;
 
     /// <summary>
     /// Gets the <see cref="TestServerFixture"/> to use.

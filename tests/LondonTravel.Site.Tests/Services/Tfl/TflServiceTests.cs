@@ -34,8 +34,8 @@ public sealed class TflServiceTests : IDisposable
         var target = new TflService(httpClient, _cache, _options);
 
         // Act
-        var actual1 = await target.GetLinesAsync();
-        var actual2 = await target.GetLinesAsync();
+        var actual1 = await target.GetLinesAsync(TestContext.Current.CancellationToken);
+        var actual2 = await target.GetLinesAsync(TestContext.Current.CancellationToken);
 
         // Assert
         Assert.NotNull(actual1);
@@ -67,8 +67,8 @@ public sealed class TflServiceTests : IDisposable
         var target = new TflService(httpClient, _cache, _options);
 
         // Act
-        var actual1 = await target.GetLinesAsync();
-        var actual2 = await target.GetLinesAsync();
+        var actual1 = await target.GetLinesAsync(TestContext.Current.CancellationToken);
+        var actual2 = await target.GetLinesAsync(TestContext.Current.CancellationToken);
 
         // Assert
         Assert.NotNull(actual1);
@@ -101,8 +101,8 @@ public sealed class TflServiceTests : IDisposable
         var target = new TflService(httpClient, _cache, _options);
 
         // Act
-        var actual1 = await target.GetStopPointsByLineAsync("victoria");
-        var actual2 = await target.GetStopPointsByLineAsync("victoria");
+        var actual1 = await target.GetStopPointsByLineAsync("victoria", TestContext.Current.CancellationToken);
+        var actual2 = await target.GetStopPointsByLineAsync("victoria", TestContext.Current.CancellationToken);
 
         // Assert
         Assert.NotNull(actual1);
@@ -136,8 +136,8 @@ public sealed class TflServiceTests : IDisposable
         var target = new TflService(httpClient, _cache, _options);
 
         // Act
-        var actual1 = await target.GetStopPointsByLineAsync("victoria");
-        var actual2 = await target.GetStopPointsByLineAsync("victoria");
+        var actual1 = await target.GetStopPointsByLineAsync("victoria", TestContext.Current.CancellationToken);
+        var actual2 = await target.GetStopPointsByLineAsync("victoria", TestContext.Current.CancellationToken);
 
         // Assert
         Assert.NotNull(actual1);
