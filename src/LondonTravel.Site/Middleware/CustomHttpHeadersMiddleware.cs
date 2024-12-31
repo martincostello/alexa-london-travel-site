@@ -59,6 +59,9 @@ public sealed class CustomHttpHeadersMiddleware(
                 context.Response.Headers.Remove(HeaderNames.Server);
                 context.Response.Headers.Remove(HeaderNames.XPoweredBy);
 
+                context.Response.Headers.Append("Cross-Origin-Embedder-Policy", "unsafe-none");
+                context.Response.Headers.Append("Cross-Origin-Opener-Policy", "same-origin");
+                context.Response.Headers.Append("Cross-Origin-Resource-Policy", "same-origin");
                 context.Response.Headers.Append("Permissions-Policy", "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()");
                 context.Response.Headers.Append("Referrer-Policy", "no-referrer-when-downgrade");
                 context.Response.Headers.XContentTypeOptions = "nosniff";

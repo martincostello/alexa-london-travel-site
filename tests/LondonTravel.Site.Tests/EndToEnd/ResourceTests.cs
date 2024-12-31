@@ -66,6 +66,9 @@ public class ResourceTests(WebsiteFixture fixture)
         [
             "content-security-policy",
             "content-security-policy-report-only",
+            "Cross-Origin-Embedder-Policy",
+            "Cross-Origin-Opener-Policy",
+            "Cross-Origin-Resource-Policy",
             "NEL",
             "Permissions-Policy",
             "Referrer-Policy",
