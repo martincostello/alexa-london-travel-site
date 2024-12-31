@@ -42,6 +42,9 @@ export class SwaggerUI {
                 responseInterceptor: (response: any): any => {
                     delete response.headers['content-security-policy'];
                     delete response.headers['content-security-policy-report-only'];
+                    delete response.headers['cross-origin-embedder-policy'];
+                    delete response.headers['cross-origin-opener-policy'];
+                    delete response.headers['cross-origin-resource-policy'];
                     delete response.headers['permissions-policy'];
                 },
             });
