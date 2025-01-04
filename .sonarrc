@@ -16,7 +16,6 @@
         "fonts.gstatic.com": [ "no-disallowed-headers", "no-html-only-headers", "strict-transport-security" ],
         "localhost": [ "no-disallowed-headers", "no-html-only-headers", "strict-transport-security" ],
         "londontravel.martincostello.com": [ "no-html-only-headers" ],
-        "martincostello.azureedge.net": [ "no-disallowed-headers", "strict-transport-security", "x-content-type-options" ],
         "stackpath.bootstrapcdn.com": [ "content-type", "no-disallowed-headers", "strict-transport-security", "x-content-type-options" ],
         "stats.g.doubleclick.net": [ "no-disallowed-headers" ],
         "www.googletagmanager.com": [ "content-type", "no-disallowed-headers" ]
