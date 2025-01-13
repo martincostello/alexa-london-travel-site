@@ -7,7 +7,7 @@
   "scripts": {
     "build": "npm run compile && npm run format && npm run lint",
     "compile": "webpack",
-    "format": "prettier --write assets/**/*.ts && stylelint --fix assets/*/*.css",
+    "format": "prettier --write assets/**/*.ts && stylelint --fix lax assets/*/*.css",
     "format-check": "prettier --check assets/**/*.ts && stylelint assets/*/*.css",
     "lint": "eslint assets",
     "watch": "webpack --watch"
