@@ -2,7 +2,7 @@
 
 [![London Travel](https://cdn.martincostello.com/london-travel-108x108.png "London Travel")](https://www.amazon.co.uk/dp/B01NB0T86R)
 
-[![Build status](https://github.com/martincostello/alexa-london-travel-site/workflows/build/badge.svg?branch=main&event=push)](https://github.com/martincostello/alexa-london-travel-site/actions?query=workflow%3Abuild+branch%3Amain+event%3Apush)
+[![Build status](https://github.com/martincostello/alexa-london-travel-site/actions/workflows/build.yml/badge.svg?branch=main&event=push)](https://github.com/martincostello/alexa-london-travel-site/actions/workflows/build.yml?query=branch%3Amain+event%3Apush)
 [![codecov](https://codecov.io/gh/martincostello/alexa-london-travel-site/branch/main/graph/badge.svg)](https://codecov.io/gh/martincostello/alexa-london-travel-site)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/martincostello/alexa-london-travel-site/badge)](https://securityscorecards.dev/viewer/?uri=github.com/martincostello/alexa-london-travel-site)
 
