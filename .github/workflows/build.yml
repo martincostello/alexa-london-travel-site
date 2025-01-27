@@ -32,11 +32,12 @@ permissions:
 
 jobs:
   build:
-    name: ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
+    name: ${{ matrix.os-name }}
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 20
 
     env:
-      PUBLISH_CONTAINER: ${{ github.event.repository.fork == false && ((github.ref_name == github.event.repository.default_branch) || (github.actor == github.repository_owner)) && matrix.os == 'ubuntu-latest' }}
+      PUBLISH_CONTAINER: ${{ github.event.repository.fork == false && ((github.ref_name == github.event.repository.default_branch) || (github.actor == github.repository_owner)) && matrix.os-name == 'linux' }}
 
     outputs:
       container-tag: ${{ steps.publish-container.outputs.container-tag }}
@@ -50,12 +51,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: macos-latest
-            os-name: macos
-          - os: ubuntu-latest
-            os-name: linux
-          - os: windows-latest
-            os-name: windows
+          - os-name: macos
+            runner: macos-latest
+          - os-name: linux
+            runner: ubuntu-latest
+          - os-name: windows
+            runner: windows-latest
 
     steps:
 
