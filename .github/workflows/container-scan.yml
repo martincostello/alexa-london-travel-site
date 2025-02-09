@@ -47,18 +47,18 @@ jobs:
           TRIVY_USERNAME: ${{ secrets.TRIVY_USERNAME }}
           TRIVY_PASSWORD: ${{ secrets.TRIVY_PASSWORD }}
         with:
-          image-ref: ${{ steps.configure.outputs.container-image }}
-          format: 'sarif'
+          format: sarif
           ignore-unfixed: true
+          image-ref: ${{ steps.configure.outputs.container-image }}
           limit-severities-for-sarif: true
-          output: 'trivy.sarif'
-          severity: 'CRITICAL,HIGH'
+          output: trivy.sarif
+          severity: CRITICAL,HIGH
 
       - name: Upload Trivy scan results
         uses: github/codeql-action/upload-sarif@9e8d0789d4a0fa9ceb6b1738f7e269594bdd67f0 # v3.28.9
         if: ${{ !cancelled() }}
         with:
-          sarif_file: 'trivy.sarif'
+          sarif_file: trivy.sarif
 
       - name: Run Trivy (JSON)
         uses: aquasecurity/trivy-action@18f2510ee396bbf400402947b394f2dd8c87dbb0 # 0.29.0
@@ -67,11 +67,11 @@ jobs:
           TRIVY_USERNAME: ${{ secrets.TRIVY_USERNAME }}
           TRIVY_PASSWORD: ${{ secrets.TRIVY_PASSWORD }}
         with:
-          image-ref: ${{ steps.configure.outputs.container-image }}
-          format: 'json'
+          format: json
           ignore-unfixed: true
-          output: 'trivy.json'
-          severity: 'CRITICAL,HIGH'
+          image-ref: ${{ steps.configure.outputs.container-image }}
+          output: trivy.json
+          severity: CRITICAL,HIGH
 
       - name: Check for vulnerabilities
         id: check-for-vulnerabilities
