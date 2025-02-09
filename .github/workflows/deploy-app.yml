@@ -76,20 +76,12 @@ jobs:
       with:
         result-encoding: string
         script: |
-          const owner = context.payload.repository.owner.login;
-          const repo = context.payload.repository.name;
-          const issue_number = context.issue.number;
-          const environment = process.env.ENVIRONMENT_NAME;
-          const environment_url = process.env.ENVIRONMENT_URL;
-          const workflow_url = process.env.WORKFLOW_URL;
-
           const { data: comment } = await github.rest.issues.createComment({
-            owner,
-            repo,
-            issue_number,
-            body: `Starting [deployment](${workflow_url}) to [${environment}](${environment_url}) :rocket:`,
+            owner: context.payload.repository.owner.login,
+            repo: context.payload.repository.name,
+            issue_number: context.issue.number,
+            body: `Starting [deployment](${process.env.WORKFLOW_URL}) to [${process.env.ENVIRONMENT_NAME}](${process.env.ENVIRONMENT_URL}) :rocket:`,
           });
-
           return comment.id;
 
     - name: Azure log in
@@ -147,22 +139,15 @@ jobs:
         WORKFLOW_URL: ${{ inputs.workflow-url }}
       with:
         script: |
-          const owner = context.payload.repository.owner.login;
-          const repo = context.payload.repository.name;
-          const comment_id = process.env.COMMENT_ID;
-          const environment = process.env.ENVIRONMENT_NAME;
-          const environment_url = process.env.ENVIRONMENT_URL;
-          const workflow_url = process.env.WORKFLOW_URL;
-
           const succeeded = process.env.OUTCOME === 'success';
           const outcome = succeeded ? 'successful' : 'failed';
           const emoji = succeeded ? ':white_check_mark:' : ':x:';
 
           await github.rest.issues.updateComment({
-            owner,
-            repo,
-            comment_id,
-            body: `[Deployment](${workflow_url}) to [${environment}](${environment_url}) ${outcome} ${emoji}`,
+            owner: context.payload.repository.owner.login,
+            repo: context.payload.repository.name,
+            comment_id: process.env.COMMENT_ID,
+            body: `[Deployment](${process.env.WORKFLOW_URL}) to [${process.env.ENVIRONMENT_NAME}](${process.env.ENVIRONMENT_URL}) ${outcome} ${emoji}`,
           });
 
   test:
@@ -257,20 +242,13 @@ jobs:
         WORKFLOW_URL: ${{ inputs.workflow-url }}
       with:
         script: |
-          const owner = context.payload.repository.owner.login;
-          const repo = context.payload.repository.name;
-          const comment_id = process.env.COMMENT_ID;
-          const environment = process.env.ENVIRONMENT_NAME;
-          const environment_url = process.env.ENVIRONMENT_URL;
-          const workflow_url = process.env.WORKFLOW_URL;
-
           const succeeded = process.env.OUTCOME === 'success';
           const outcome = succeeded ? 'passed' : 'failed';
           const emoji = succeeded ? ':white_check_mark:' : ':x:';
 
           await github.rest.issues.updateComment({
-            owner,
-            repo,
-            comment_id,
-            body: `:test_tube: [Tests](${workflow_url}) for deployment to [${environment}](${environment_url}) ${outcome} ${emoji}`,
+            owner: context.payload.repository.owner.login,
+            repo: context.payload.repository.name,
+            comment_id: process.env.COMMENT_ID,
+            body: `:test_tube: [Tests](${process.env.WORKFLOW_URL}) for deployment to [${process.env.ENVIRONMENT_NAME}](${process.env.ENVIRONMENT_URL}) ${outcome} ${emoji}`,
           });
