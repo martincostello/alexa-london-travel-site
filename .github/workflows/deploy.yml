@@ -7,8 +7,7 @@ on:
 env:
   TERM: xterm
 
-permissions:
-  contents: read
+permissions: {}
 
 jobs:
   setup:
@@ -23,20 +22,16 @@ jobs:
       application-name: ${{ steps.set-outputs.outputs.application-name }}
       application-slot: ${{ steps.set-outputs.outputs.application-slot }}
       application-url: ${{ steps.set-outputs.outputs.application-url }}
-      comment-id: ${{ steps.post-comment.outputs.result }}
       container-tag: ${{ steps.set-outputs.outputs.container-tag }}
       environment-name: ${{ steps.set-outputs.outputs.environment-name }}
       environment-url: ${{ steps.set-outputs.outputs.environment-url }}
-      run-id: ${{ steps.set-outputs.outputs.run-id }}
-      run-number: ${{ steps.set-outputs.outputs.run-number }}
+      issue-number: ${{ github.event.issue.number }}
       run-sha: ${{ steps.set-outputs.outputs.run-sha }}
-      run-sha-merge: ${{ steps.set-outputs.outputs.run-sha-merge }}
       workflow-url: ${{ steps.set-outputs.outputs.workflow-url }}
 
     permissions:
       actions: read
       contents: read
-      pull-requests: write
 
     steps:
 
@@ -110,18 +105,14 @@ jobs:
             throw new Error(`No successful workflow run found for ${owner}/${repo}@${head_sha.slice(0, 7)} with name ${workflowName}.`);
           }
 
-          core.setOutput('run-id', run.id);
           core.setOutput('run-number', run.run_number);
-          core.setOutput('run-sha', head_sha);
-          core.setOutput('run-sha-merge', pull.merge_commit_sha);
+          core.setOutput('run-sha', pull.merge_commit_sha);
 
     - name: Set outputs
       id: set-outputs
       env:
-        ARTIFACT_RUN_ID: ${{ steps.get-run.outputs.run-id }}
         ARTIFACT_RUN_NUMBER: ${{ steps.get-run.outputs.run-number }}
         ARTIFACT_RUN_SHA: ${{ steps.get-run.outputs.run-sha }}
-        ARTIFACT_RUN_SHA_MERGE: ${{ steps.get-run.outputs.run-sha-merge }}
         ENVIRONMENT_NAME: ${{ steps.get-environment-name.outputs.result }}
       shell: bash
       run: |
@@ -146,259 +137,25 @@ jobs:
           echo "container-tag=${container_tag}"
           echo "environment-name=${ENVIRONMENT_NAME}"
           echo "environment-url=${environment_url}"
-          echo "run-id=${ARTIFACT_RUN_ID}"
-          echo "run-number=${ARTIFACT_RUN_NUMBER}"
           echo "run-sha=${ARTIFACT_RUN_SHA}"
-          echo "run-sha-merge=${ARTIFACT_RUN_SHA_MERGE}"
           echo "workflow-url=${workflow_url}"
-        } >> "$GITHUB_OUTPUT"
-
-    - name: Post comment
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
-      id: post-comment
-      env:
-        ENVIRONMENT_NAME: ${{ steps.set-outputs.outputs.environment-name }}
-        ENVIRONMENT_URL: ${{ steps.set-outputs.outputs.environment-url }}
-        WORKFLOW_URL: ${{ steps.set-outputs.outputs.workflow-url }}
-      with:
-        result-encoding: string
-        script: |
-          const owner = context.payload.repository.owner.login;
-          const repo = context.payload.repository.name;
-          const issue_number = context.issue.number;
-          const environment = process.env.ENVIRONMENT_NAME;
-          const environment_url = process.env.ENVIRONMENT_URL;
-          const workflow_url = process.env.WORKFLOW_URL;
-
-          const { data: comment } = await github.rest.issues.createComment({
-            owner,
-            repo,
-            issue_number,
-            body: `Starting [deployment](${workflow_url}) to [${environment}](${environment_url}) :rocket:`,
-          });
-
-          return comment.id;
+        } >> "${GITHUB_OUTPUT}"
 
   deploy:
-    name: ${{ needs.setup.outputs.environment-name }}
+    name: '${{ needs.setup.outputs.environment-name }}#${{ needs.setup.outputs.issue-number }}'
     needs: [ setup ]
-    concurrency: ${{ needs.setup.outputs.environment-name }}_environment
-    runs-on: ubuntu-latest
-
-    environment:
-      name: ${{ needs.setup.outputs.environment-name }}
-      url: ${{ needs.setup.outputs.application-url }}
-
+    uses: ./.github/workflows/deploy-app.yml
     permissions:
+      contents: read
       id-token: write
       pull-requests: write
-
-    steps:
-
-    - name: Azure log in
-      uses: azure/login@a65d910e8af852a8061c627c456678983e180302 # v2.2.0
-      with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-    - name: Deploy container to Azure App Service
-      uses: azure/webapps-deploy@2fdd5c3ebb4e540834e86ecc1f6fdcd5539023ee # v3.0.2
-      with:
-        app-name: ${{ needs.setup.outputs.application-name }}
-        images: ${{ needs.setup.outputs.container-tag }}
-        slot-name: ${{ needs.setup.outputs.application-slot }}
-
-    - name: Check application health
-      shell: pwsh
-      env:
-        APPLICATION_SHA: ${{ needs.setup.outputs.run-sha-merge }}
-        APPLICATION_URL: ${{ needs.setup.outputs.application-url }}
-      run: |
-        $delay = 10
-        $limit = 15
-        $success = $false
-        for ($i = 0; $i -lt $limit; $i++) {
-          $response = $null
-          try {
-            $response = Invoke-WebRequest -Uri "${env:APPLICATION_URL}/version" -Method Get -UseBasicParsing
-          } catch {
-            $response = $_.Exception.Response
-          }
-          if (($null -ne $response) -And ($response.StatusCode -eq 200)) {
-            $json = $response.Content | ConvertFrom-Json
-            $version = $json.applicationVersion
-            if ((-Not [string]::IsNullOrWhiteSpace($version)) -And $version.Contains(${env:APPLICATION_SHA})) {
-              $success = $true
-              break
-            }
-          }
-          Start-Sleep -Seconds $delay
-        }
-        if (-Not $success) {
-          throw "${env:APPLICATION_URL} did not return a successful status code and the expected version within the time limit after $limit attempts."
-        }
-
-    - name: Post comment
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
-      if: ${{ !cancelled() }}
-      env:
-        COMMENT_ID: ${{ needs.setup.outputs.comment-id }}
-        ENVIRONMENT_NAME: ${{ needs.setup.outputs.environment-name }}
-        ENVIRONMENT_URL: ${{ needs.setup.outputs.environment-url }}
-        OUTCOME: ${{ job.status }}
-        WORKFLOW_URL: ${{ needs.setup.outputs.workflow-url }}
-      with:
-        script: |
-          const owner = context.payload.repository.owner.login;
-          const repo = context.payload.repository.name;
-          const comment_id = process.env.COMMENT_ID;
-          const environment = process.env.ENVIRONMENT_NAME;
-          const environment_url = process.env.ENVIRONMENT_URL;
-          const workflow_url = process.env.WORKFLOW_URL;
-
-          const succeeded = process.env.OUTCOME === 'success';
-          const outcome = succeeded ? 'successful' : 'failed';
-          const emoji = succeeded ? ':white_check_mark:' : ':x:';
-
-          await github.rest.issues.updateComment({
-            owner,
-            repo,
-            comment_id,
-            body: `[Deployment](${workflow_url}) to [${environment}](${environment_url}) ${outcome} ${emoji}`,
-          });
-
-  tests:
-    name: tests-${{ needs.setup.outputs.environment-name }}
-    needs: [ setup, deploy ]
-    runs-on: ubuntu-latest
-    concurrency: '${{ needs.setup.outputs.environment-name }}_environment'
-
-    env:
-      DOTNET_CLI_TELEMETRY_OPTOUT: true
-      DOTNET_GENERATE_ASPNET_CERTIFICATE: false
-      DOTNET_NOLOGO: true
-      DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: 1
-      FORCE_COLOR: 1
-      NUGET_XMLDOC_MODE: skip
-
-    permissions:
-      id-token: write
-      pull-requests: write
-
-    steps:
-
-    - name: Checkout code
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      with:
-        filter: 'tree:0'
-        show-progress: false
-
-    - name: Setup .NET SDK
-      uses: actions/setup-dotnet@3951f0dfe7a07e2313ec93c75700083e2005cbab # v4.3.0
-
-    - name: Setup NuGet cache
-      uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
-      with:
-        path: ~/.nuget/packages
-        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/*.props') }}
-        restore-keys: ${{ runner.os }}-nuget-
-
-    - name: Setup Playwright cache
-      uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
-      with:
-        key: ${{ runner.os }}-playwright-${{ hashFiles('Directory.Packages.props') }}
-        path: |
-          ~/AppData/Local/ms-playwright
-          ~/.cache/ms-playwright
-          ~/Library/Caches/ms-playwright
-
-    - name: Check application health
-      shell: pwsh
-      env:
-        APPLICATION_URL: ${{ needs.setup.outputs.application-url }}
-      run: |
-        $delay = 10
-        $limit = 10
-        $success = $false
-        for ($i = 0; $i -lt $limit; $i++) {
-          $response = $null
-          try {
-            $response = Invoke-WebRequest -Uri $env:APPLICATION_URL -Method Get -UseBasicParsing
-          } catch {
-            $response = $_.Exception.Response
-          }
-          if (($null -ne $response) -And ($response.StatusCode -eq 200)) {
-            $success = $true
-            break
-          }
-          Start-Sleep -Seconds $delay
-        }
-        if (-Not $success) {
-          throw "$($env:APPLICATION_URL) did not return a successful status code within the time limit after $limit attempts."
-        }
-
-    - name: Run end-to-end tests
-      shell: pwsh
-      run: dotnet test ./tests/LondonTravel.Site.Tests --configuration Release --filter Category=EndToEnd --logger "GitHubActions;report-warnings=false"
-      env:
-        WEBSITE_URL: ${{ needs.setup.outputs.application-url }}
-        WEBSITE_USER_GOOGLE_USERNAME: ${{ secrets.WEBSITE_USER_GOOGLE_USERNAME }}
-        WEBSITE_USER_GOOGLE_PASSWORD: ${{ secrets.WEBSITE_USER_GOOGLE_PASSWORD }}
-        WEBSITE_USER_MICROSOFT_USERNAME: ${{ secrets.WEBSITE_USER_MICROSOFT_USERNAME }}
-        WEBSITE_USER_MICROSOFT_PASSWORD: ${{ secrets.WEBSITE_USER_MICROSOFT_PASSWORD }}
-        WEBSITE_USER_TWITTER_USERNAME: ${{ secrets.WEBSITE_USER_TWITTER_USERNAME }}
-        WEBSITE_USER_TWITTER_PASSWORD: ${{ secrets.WEBSITE_USER_TWITTER_PASSWORD }}
-
-    - name: Publish screenshots
-      uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
-      if: ${{ !cancelled() }}
-      with:
-        name: screenshots
-        path: ./artifacts/screenshots/*
-        if-no-files-found: ignore
-
-    - name: Publish traces
-      uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
-      if: ${{ !cancelled() }}
-      with:
-        name: traces
-        path: ./artifacts/traces/*
-        if-no-files-found: ignore
-
-    - name: Publish videos
-      uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
-      if: ${{ !cancelled() }}
-      with:
-        name: videos
-        path: ./artifacts/videos/*
-        if-no-files-found: ignore
-
-    - name: Post comment
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
-      if: ${{ !cancelled() }}
-      env:
-        COMMENT_ID: ${{ needs.setup.outputs.comment-id }}
-        ENVIRONMENT_NAME: ${{ needs.setup.outputs.environment-name }}
-        ENVIRONMENT_URL: ${{ needs.setup.outputs.environment-url }}
-        OUTCOME: ${{ job.status }}
-        WORKFLOW_URL: ${{ needs.setup.outputs.workflow-url }}
-      with:
-        script: |
-          const owner = context.payload.repository.owner.login;
-          const repo = context.payload.repository.name;
-          const comment_id = process.env.COMMENT_ID;
-          const environment = process.env.ENVIRONMENT_NAME;
-          const environment_url = process.env.ENVIRONMENT_URL;
-          const workflow_url = process.env.WORKFLOW_URL;
-
-          const succeeded = process.env.OUTCOME === 'success';
-          const outcome = succeeded ? 'passed' : 'failed';
-          const emoji = succeeded ? ':white_check_mark:' : ':x:';
-
-          await github.rest.issues.updateComment({
-            owner,
-            repo,
-            comment_id,
-            body: `:test_tube: [Tests](${workflow_url}) for deployment to [${environment}](${environment_url}) ${outcome} ${emoji}`,
-          });
+    secrets: inherit
+    with:
+      application-name: ${{ needs.setup.outputs.application-name }}
+      container-image: ${{ needs.setup.outputs.container-tag }}
+      environment-name: ${{ needs.setup.outputs.environment-name }}
+      environment-url: ${{ needs.setup.outputs.application-url }}
+      issue-number: ${{ needs.setup.outputs.issue-number }}
+      ref: ${{ needs.setup.outputs.run-sha }}
+      slot-name: ${{ needs.setup.outputs.application-slot }}
+      workflow-url: ${{ needs.setup.outputs.workflow-url }}

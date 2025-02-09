@@ -15,10 +15,6 @@ on:
   workflow_dispatch:
 
 env:
-  APPLICATION_URL_DEV: https://londontravel-dev.martincostello.com
-  APPLICATION_URL_PROD: https://londontravel.martincostello.com
-  AZURE_WEBAPP_NAME: londontravel-martincostello
-  CONTAINER_REGISTRY: '${{ github.repository_owner }}.azurecr.io'
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_GENERATE_ASPNET_CERTIFICATE: false
   DOTNET_NOLOGO: true
@@ -27,8 +23,7 @@ env:
   NUGET_XMLDOC_MODE: skip
   TERM: xterm
 
-permissions:
-  contents: read
+permissions: {}
 
 jobs:
   build:
@@ -37,9 +32,13 @@ jobs:
     timeout-minutes: 20
 
     env:
+      AZURE_WEBAPP_NAME: londontravel-martincostello
+      CONTAINER_REGISTRY: ${{ github.repository_owner }}.azurecr.io
       PUBLISH_CONTAINER: ${{ github.event.repository.fork == false && ((github.ref_name == github.event.repository.default_branch) || (github.actor == github.repository_owner)) && matrix.os-name == 'linux' }}
 
     outputs:
+      application-name: ${{ env.AZURE_WEBAPP_NAME }}
+      container-registry: ${{ env.CONTAINER_REGISTRY }}
       container-tag: ${{ steps.publish-container.outputs.container-tag }}
 
     permissions:
@@ -206,253 +205,32 @@ jobs:
   deploy-dev:
     if: github.event.repository.fork == false && github.ref_name == github.event.repository.default_branch
     name: dev
-    needs: build
-    runs-on: ubuntu-latest
-    concurrency: development_environment
-
-    environment:
-      name: dev
-      url: ${{ env.APPLICATION_URL_DEV }}
-
+    needs: [ build ]
+    uses: ./.github/workflows/deploy-app.yml
     permissions:
+      contents: read
       id-token: write
-
-    steps:
-
-    - name: Azure log in
-      uses: azure/login@a65d910e8af852a8061c627c456678983e180302 # v2.2.0
-      with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-    - name: Deploy container to Azure App Service
-      uses: azure/webapps-deploy@2fdd5c3ebb4e540834e86ecc1f6fdcd5539023ee # v3.0.2
-      with:
-        app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        images: ${{ needs.build.outputs.container-tag }}
-        slot-name: dev
-
-    - name: Check application health
-      shell: pwsh
-      env:
-        APPLICATION_URL: ${{ env.APPLICATION_URL_DEV }}
-      run: |
-        $delay = 10
-        $limit = 15
-        $success = $false
-        for ($i = 0; $i -lt $limit; $i++) {
-          $response = $null
-          try {
-            $response = Invoke-WebRequest -Uri "${env:APPLICATION_URL}/version" -Method Get -UseBasicParsing
-          } catch {
-            $response = $_.Exception.Response
-          }
-          if (($null -ne $response) -And ($response.StatusCode -eq 200)) {
-            $json = $response.Content | ConvertFrom-Json
-            $version = $json.applicationVersion
-            if ((-Not [string]::IsNullOrWhiteSpace($version)) -And $version.Contains(${env:GITHUB_SHA})) {
-              $success = $true
-              break
-            }
-          }
-          Start-Sleep -Seconds $delay
-        }
-        if (-Not $success) {
-          throw "${env:APPLICATION_URL} did not return a successful status code and the expected version within the time limit after $limit attempts."
-        }
-
-  test-dev:
-    name: test-dev
-    needs: deploy-dev
-    runs-on: ubuntu-latest
-    concurrency: development_environment
-
-    steps:
-
-    - name: Checkout code
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      with:
-        filter: 'tree:0'
-        show-progress: false
-
-    - name: Setup .NET SDK
-      uses: actions/setup-dotnet@3951f0dfe7a07e2313ec93c75700083e2005cbab # v4.3.0
-
-    - name: Setup NuGet cache
-      uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
-      with:
-        path: ~/.nuget/packages
-        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/*.props') }}
-        restore-keys: ${{ runner.os }}-nuget-
-
-    - name: Setup Playwright cache
-      uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
-      with:
-        key: ${{ runner.os }}-playwright-${{ hashFiles('Directory.Packages.props') }}
-        path: |
-          ~/AppData/Local/ms-playwright
-          ~/.cache/ms-playwright
-          ~/Library/Caches/ms-playwright
-
-    - name: Run end-to-end tests
-      shell: pwsh
-      run: dotnet test ./tests/LondonTravel.Site.Tests --configuration Release --filter Category=EndToEnd --logger "GitHubActions;report-warnings=false"
-      env:
-        WEBSITE_URL: ${{ env.APPLICATION_URL_DEV }}
-        WEBSITE_USER_GOOGLE_USERNAME: ${{ secrets.WEBSITE_USER_GOOGLE_USERNAME }}
-        WEBSITE_USER_GOOGLE_PASSWORD: ${{ secrets.WEBSITE_USER_GOOGLE_PASSWORD }}
-        WEBSITE_USER_MICROSOFT_USERNAME: ${{ secrets.WEBSITE_USER_MICROSOFT_USERNAME }}
-        WEBSITE_USER_MICROSOFT_PASSWORD: ${{ secrets.WEBSITE_USER_MICROSOFT_PASSWORD }}
-        WEBSITE_USER_TWITTER_USERNAME: ${{ secrets.WEBSITE_USER_TWITTER_USERNAME }}
-        WEBSITE_USER_TWITTER_PASSWORD: ${{ secrets.WEBSITE_USER_TWITTER_PASSWORD }}
-
-    - name: Publish screenshots
-      uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
-      if: ${{ !cancelled() }}
-      with:
-        name: screenshots-e2e-dev
-        path: ./artifacts/screenshots/*
-        if-no-files-found: ignore
-
-    - name: Publish traces
-      uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
-      if: ${{ !cancelled() }}
-      with:
-        name: traces-e2e-dev
-        path: ./artifacts/traces/*
-        if-no-files-found: ignore
-
-    - name: Publish videos
-      uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
-      if: ${{ !cancelled() }}
-      with:
-        name: videos-e2e-dev
-        path: ./artifacts/videos/*
-        if-no-files-found: ignore
+      pull-requests: write
+    secrets: inherit
+    with:
+      application-name: ${{ needs.build.outputs.application-name }}
+      container-image: ${{ needs.build.outputs.container-tag }}
+      environment-name: dev
+      environment-url: https://londontravel-dev.martincostello.com
+      slot-name: dev
 
   deploy-prod:
     name: production
-    needs: [ build, test-dev ]
-    runs-on: ubuntu-latest
-    concurrency: production_environment
-
-    environment:
-      name: production
-      url: ${{ env.APPLICATION_URL_PROD }}
-
+    needs: [ build, deploy-dev ]
+    uses: ./.github/workflows/deploy-app.yml
     permissions:
+      contents: read
       id-token: write
-
-    steps:
-
-    - name: Azure log in
-      uses: azure/login@a65d910e8af852a8061c627c456678983e180302 # v2.2.0
-      with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-    - name: Deploy container to Azure App Service
-      uses: azure/webapps-deploy@2fdd5c3ebb4e540834e86ecc1f6fdcd5539023ee # v3.0.2
-      with:
-        app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        images: ${{ needs.build.outputs.container-tag }}
-
-    - name: Check application health
-      shell: pwsh
-      env:
-        APPLICATION_URL: ${{ env.APPLICATION_URL_PROD }}
-      run: |
-        $delay = 10
-        $limit = 15
-        $success = $false
-        for ($i = 0; $i -lt $limit; $i++) {
-          $response = $null
-          try {
-            $response = Invoke-WebRequest -Uri "${env:APPLICATION_URL}/version" -Method Get -UseBasicParsing
-          } catch {
-            $response = $_.Exception.Response
-          }
-          if (($null -ne $response) -And ($response.StatusCode -eq 200)) {
-            $json = $response.Content | ConvertFrom-Json
-            $version = $json.applicationVersion
-            if ((-Not [string]::IsNullOrWhiteSpace($version)) -And $version.Contains(${env:GITHUB_SHA})) {
-              $success = $true
-              break
-            }
-          }
-          Start-Sleep -Seconds $delay
-        }
-        if (-Not $success) {
-          throw "${env:APPLICATION_URL} did not return a successful status code and the expected version within the time limit after $limit attempts."
-        }
-
-  test-prod:
-    name: test-prod
-    needs: deploy-prod
-    runs-on: ubuntu-latest
-    concurrency: production_environment
-
-    steps:
-
-    - name: Checkout code
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      with:
-        filter: 'tree:0'
-        show-progress: false
-
-    - name: Setup .NET SDK
-      uses: actions/setup-dotnet@3951f0dfe7a07e2313ec93c75700083e2005cbab # v4.3.0
-
-    - name: Setup NuGet cache
-      uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
-      with:
-        path: ~/.nuget/packages
-        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/*.props') }}
-        restore-keys: ${{ runner.os }}-nuget-
-
-    - name: Setup Playwright cache
-      uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
-      with:
-        key: ${{ runner.os }}-playwright-${{ hashFiles('Directory.Packages.props') }}
-        path: |
-          ~/AppData/Local/ms-playwright
-          ~/.cache/ms-playwright
-          ~/Library/Caches/ms-playwright
-
-    - name: Run end-to-end tests
-      shell: pwsh
-      run: dotnet test ./tests/LondonTravel.Site.Tests --configuration Release --filter Category=EndToEnd --logger "GitHubActions;report-warnings=false"
-      env:
-        WEBSITE_URL: ${{ env.APPLICATION_URL_PROD }}
-        WEBSITE_USER_GOOGLE_USERNAME: ${{ secrets.WEBSITE_USER_GOOGLE_USERNAME }}
-        WEBSITE_USER_GOOGLE_PASSWORD: ${{ secrets.WEBSITE_USER_GOOGLE_PASSWORD }}
-        WEBSITE_USER_MICROSOFT_USERNAME: ${{ secrets.WEBSITE_USER_MICROSOFT_USERNAME }}
-        WEBSITE_USER_MICROSOFT_PASSWORD: ${{ secrets.WEBSITE_USER_MICROSOFT_PASSWORD }}
-        WEBSITE_USER_TWITTER_USERNAME: ${{ secrets.WEBSITE_USER_TWITTER_USERNAME }}
-        WEBSITE_USER_TWITTER_PASSWORD: ${{ secrets.WEBSITE_USER_TWITTER_PASSWORD }}
-
-    - name: Publish screenshots
-      uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
-      if: ${{ !cancelled() }}
-      with:
-        name: screenshots-e2e-production
-        path: ./artifacts/screenshots/*
-        if-no-files-found: ignore
-
-    - name: Publish traces
-      uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
-      if: ${{ !cancelled() }}
-      with:
-        name: traces-e2e-production
-        path: ./artifacts/traces/*
-        if-no-files-found: ignore
-
-    - name: Publish videos
-      uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
-      if: ${{ !cancelled() }}
-      with:
-        name: videos-e2e-production
-        path: ./artifacts/videos/*
-        if-no-files-found: ignore
+      pull-requests: write
+    secrets: inherit
+    with:
+      application-name: ${{ needs.build.outputs.application-name }}
+      container-image: ${{ needs.build.outputs.container-tag }}
+      environment-name: production
+      environment-url: https://londontravel.martincostello.com
+      slot-name: ''
