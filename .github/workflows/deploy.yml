@@ -139,7 +139,7 @@ jobs:
         } >> "${GITHUB_OUTPUT}"
 
   deploy:
-    name: '${{ needs.setup.outputs.environment-name }}#${{ needs.setup.outputs.issue-number }}'
+    name: ${{ needs.setup.outputs.environment-name }}
     needs: [ setup ]
     uses: ./.github/workflows/deploy-app.yml
     permissions:
