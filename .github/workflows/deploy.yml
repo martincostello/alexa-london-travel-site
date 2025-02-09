@@ -18,15 +18,18 @@ jobs:
       github.triggering_actor == github.event.repository.owner.login &&
       startsWith(github.event.comment.body, '/deploy')
 
+    env:
+      ISSUE_NUMBER: ${{ github.event.issue.number }}
+
     outputs:
       application-name: ${{ steps.set-outputs.outputs.application-name }}
       application-slot: ${{ steps.set-outputs.outputs.application-slot }}
       application-url: ${{ steps.set-outputs.outputs.application-url }}
       container-tag: ${{ steps.set-outputs.outputs.container-tag }}
-      environment-name: ${{ steps.set-outputs.outputs.environment-name }}
+      environment-name: ${{ steps.get-environment-name.outputs.result }}
       environment-url: ${{ steps.set-outputs.outputs.environment-url }}
-      issue-number: ${{ github.event.issue.number }}
-      run-sha: ${{ steps.set-outputs.outputs.run-sha }}
+      issue-number: ${{ env.ISSUE_NUMBER }}
+      run-sha: ${{ steps.get-run.outputs.run-sha }}
       workflow-url: ${{ steps.set-outputs.outputs.workflow-url }}
 
     permissions:
@@ -41,14 +44,12 @@ jobs:
       with:
         result-encoding: string
         script: |
-          const owner = context.payload.repository.owner.login;
-          const repo = context.payload.repository.name;
           const username = context.payload.comment.user.login;
 
           try {
             await github.rest.repos.checkCollaborator({
-              owner,
-              repo,
+              owner: context.payload.repository.owner.login,
+              repo: context.payload.repository.name,
               username,
             });
           } catch (err) {
@@ -65,15 +66,14 @@ jobs:
 
           return arguments[2] || 'dev';
 
-    - name: 'Find run for #${{ github.event.issue.number }}'
+    - name: 'Find run for #${{ env.ISSUE_NUMBER }}'
       uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
       id: get-run
       env:
-        PULL_NUMBER: ${{ github.event.issue.number }}
         WORKFLOW_NAME: 'build'
       with:
         script: |
-          const pull_number = process.env.PULL_NUMBER;
+          const pull_number = process.env.ISSUE_NUMBER;
           const workflowName = process.env.WORKFLOW_NAME;
 
           const owner = context.repo.owner;
@@ -112,7 +112,6 @@ jobs:
       id: set-outputs
       env:
         ARTIFACT_RUN_NUMBER: ${{ steps.get-run.outputs.run-number }}
-        ARTIFACT_RUN_SHA: ${{ steps.get-run.outputs.run-sha }}
         ENVIRONMENT_NAME: ${{ steps.get-environment-name.outputs.result }}
       shell: bash
       run: |
@@ -135,9 +134,7 @@ jobs:
           echo "application-slot=${application_slot}"
           echo "application-url=${application_url}"
           echo "container-tag=${container_tag}"
-          echo "environment-name=${ENVIRONMENT_NAME}"
           echo "environment-url=${environment_url}"
-          echo "run-sha=${ARTIFACT_RUN_SHA}"
           echo "workflow-url=${workflow_url}"
         } >> "${GITHUB_OUTPUT}"
 
