@@ -47,7 +47,6 @@ permissions: {}
 jobs:
 
   deploy:
-    name: deploy-${{ inputs.environment-name }}
     runs-on: [ ubuntu-latest ]
     concurrency: ${{ inputs.environment-name }}_environment
 
@@ -151,7 +150,6 @@ jobs:
           });
 
   test:
-    name: test-${{ inputs.environment-name }}
     needs: [ deploy ]
     runs-on: [ ubuntu-latest ]
     concurrency: ${{ inputs.environment-name }}_environment
