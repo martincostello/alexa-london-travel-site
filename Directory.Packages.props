@@ -50,7 +50,7 @@
     <PackageVersion Include="OpenTelemetry.Resources.Container" Version="1.10.0-beta.1" />
     <PackageVersion Include="Polly.Extensions" Version="8.5.2" />
     <PackageVersion Include="Polly.RateLimiting" Version="8.5.2" />
-    <PackageVersion Include="ReportGenerator" Version="5.4.3" />
+    <PackageVersion Include="ReportGenerator" Version="5.4.4" />
     <PackageVersion Include="Shouldly" Version="4.3.0" />
     <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.2.0" />
     <PackageVersion Include="System.Private.Uri" Version="4.3.2" />
