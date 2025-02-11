@@ -11,9 +11,7 @@ public sealed class HomePage(ApplicationNavigator navigator) : PageBase(navigato
     {
         var elements = await Navigator.Page.QuerySelectorAllAsync("[data-line-preference]");
 
-        return elements
-            .Select((p) => new LinePreference(p))
-            .ToList();
+        return [.. elements.Select((p) => new LinePreference(p))];
     }
 
     public async Task<ManagePage> ManageAsync()
