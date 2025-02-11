@@ -278,10 +278,7 @@ public sealed class CustomHttpHeadersMiddleware(
                 origins = [.. origins.Concat(configOrigins)];
             }
 
-            origins = origins
-                .Where((p) => !string.IsNullOrWhiteSpace(p))
-                .Distinct()
-                .ToList();
+            origins = [.. origins.Where((p) => !string.IsNullOrWhiteSpace(p)).Distinct()];
 
             if (origins.Count > 0)
             {

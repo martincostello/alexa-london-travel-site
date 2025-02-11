@@ -26,9 +26,7 @@ public sealed class ManagePage(ApplicationNavigator navigator) : PageBase(naviga
     {
         var elements = await Navigator.Page.QuerySelectorAllAsync("[data-linked-account]");
 
-        return elements
-            .Select((p) => new LinkedAccount(Navigator, p))
-            .ToList();
+        return [.. elements.Select((p) => new LinkedAccount(Navigator, p))];
     }
 
     public async Task<ManagePage> SignInWithGoogleAsync()

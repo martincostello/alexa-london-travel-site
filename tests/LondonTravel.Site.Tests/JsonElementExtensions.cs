@@ -14,5 +14,5 @@ internal static class JsonElementExtensions
         => element.GetProperty(propertyName).GetString();
 
     internal static string?[] GetStringArray(this JsonElement element, string propertyName)
-        => element.GetProperty(propertyName).EnumerateArray().Select((p) => p.GetString()).ToArray();
+        => [.. element.GetProperty(propertyName).EnumerateArray().Select((p) => p.GetString())];
 }

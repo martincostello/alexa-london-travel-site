@@ -319,13 +319,12 @@ public sealed class UserStore :
 
         if (user.RoleClaims?.Count > 0)
         {
-            roles = user.RoleClaims
+            roles = [.. user.RoleClaims
                 .Where((p) => string.Equals(p.Issuer, RoleClaimIssuer, StringComparison.Ordinal))
                 .Where((p) => string.Equals(p.ClaimType, ClaimTypes.Role, StringComparison.Ordinal))
                 .Where((p) => string.Equals(p.ValueType, ClaimValueTypes.String, StringComparison.Ordinal))
                 .Where((p) => !string.IsNullOrEmpty(p.Value))
-                .Select((p) => p.Value!)
-                .ToArray();
+                .Select((p) => p.Value!)];
         }
 
         return Task.FromResult(roles);
