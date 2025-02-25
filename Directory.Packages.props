@@ -1,6 +1,6 @@
 <Project>
   <ItemGroup>
-    <GlobalPackageReference Include="ReferenceTrimmer" Version="3.3.10" />
+    <GlobalPackageReference Include="ReferenceTrimmer" Version="3.3.11" />
     <GlobalPackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup>
