@@ -4,13 +4,13 @@
     <GlobalPackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup>
-    <PackageVersion Include="Aspire.Azure.Security.KeyVault" Version="9.0.0" />
-    <PackageVersion Include="Aspire.Azure.Storage.Blobs" Version="9.0.0" />
-    <PackageVersion Include="Aspire.Hosting.AppHost" Version="9.0.0" />
-    <PackageVersion Include="Aspire.Hosting.Azure.CosmosDB" Version="9.0.0" />
-    <PackageVersion Include="Aspire.Hosting.Azure.KeyVault" Version="9.0.0" />
-    <PackageVersion Include="Aspire.Hosting.Azure.Storage" Version="9.0.0" />
-    <PackageVersion Include="Aspire.Microsoft.Azure.Cosmos" Version="9.0.0" />
+    <PackageVersion Include="Aspire.Azure.Security.KeyVault" Version="9.1.0" />
+    <PackageVersion Include="Aspire.Azure.Storage.Blobs" Version="9.1.0" />
+    <PackageVersion Include="Aspire.Hosting.AppHost" Version="9.1.0" />
+    <PackageVersion Include="Aspire.Hosting.Azure.CosmosDB" Version="9.1.0" />
+    <PackageVersion Include="Aspire.Hosting.Azure.KeyVault" Version="9.1.0" />
+    <PackageVersion Include="Aspire.Hosting.Azure.Storage" Version="9.1.0" />
+    <PackageVersion Include="Aspire.Microsoft.Azure.Cosmos" Version="9.1.0" />
     <PackageVersion Include="AspNet.Security.OAuth.Amazon" Version="9.0.0" />
     <PackageVersion Include="AspNet.Security.OAuth.Apple" Version="9.0.0" />
     <PackageVersion Include="AspNet.Security.OAuth.GitHub" Version="9.0.0" />
