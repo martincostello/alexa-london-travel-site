@@ -34,7 +34,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" />
-    <PackageReference Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" />
+    <PackageReference Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" NoWarn="RT0003" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
     <PackageReference Include="Microsoft.Azure.Cosmos" />
     <PackageReference Include="Microsoft.DotNet.XliffTasks" PrivateAssets="All" />
