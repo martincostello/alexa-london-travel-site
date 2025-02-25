@@ -6,7 +6,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
-      "program": "${workspaceFolder}/src/LondonTravel.Site/bin/Debug/net9.0/LondonTravel.Site.dll",
+      "program": "${workspaceFolder}/src/LondonTravel.Site/bin/Debug/net10.0/LondonTravel.Site.dll",
       "args": [],
       "cwd": "${workspaceFolder}/src/LondonTravel.Site",
       "stopAtEntry": false,
