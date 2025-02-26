@@ -25,6 +25,8 @@ public static class ILoggingBuilderExtensions
             options.IncludeFormattedMessage = true;
             options.IncludeScopes = true;
 
+            options.SetResourceBuilder(TelemetryExtensions.ResourceBuilder);
+
             if (TelemetryExtensions.IsAzureMonitorConfigured())
             {
                 options.AddAzureMonitorLogExporter();

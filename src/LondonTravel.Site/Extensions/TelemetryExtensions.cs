@@ -25,14 +25,14 @@ public static class TelemetryExtensions
         ["api.github.com"] = "GitHub",
     };
 
+    public static ResourceBuilder ResourceBuilder { get; } = ResourceBuilder.CreateDefault()
+        .AddService(ApplicationTelemetry.ServiceName, serviceVersion: ApplicationTelemetry.ServiceVersion)
+        .AddAzureAppServiceDetector()
+        .AddContainerDetector();
+
     public static void AddTelemetry(this IServiceCollection services, IWebHostEnvironment environment)
     {
         ArgumentNullException.ThrowIfNull(services);
-
-        var resourceBuilder = ResourceBuilder.CreateDefault()
-            .AddService(ApplicationTelemetry.ServiceName, serviceVersion: ApplicationTelemetry.ServiceVersion)
-            .AddAzureAppServiceDetector()
-            .AddContainerDetector();
 
         if (IsAzureMonitorConfigured())
         {
@@ -44,7 +44,7 @@ public static class TelemetryExtensions
             .AddOpenTelemetry()
             .WithMetrics((builder) =>
             {
-                builder.SetResourceBuilder(resourceBuilder)
+                builder.SetResourceBuilder(ResourceBuilder)
                        .AddAspNetCoreInstrumentation()
                        .AddHttpClientInstrumentation()
                        .AddRuntimeInstrumentation();
@@ -64,7 +64,7 @@ public static class TelemetryExtensions
                 // See https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/Diagnostics.md
                 AppContext.SetSwitch("Azure.Experimental.EnableActivitySource", true);
 
-                builder.SetResourceBuilder(resourceBuilder)
+                builder.SetResourceBuilder(ResourceBuilder)
                        .AddAspNetCoreInstrumentation()
                        .AddHttpClientInstrumentation()
                        .AddSource(ApplicationTelemetry.ServiceName)
