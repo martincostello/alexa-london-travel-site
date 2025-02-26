@@ -19,7 +19,7 @@ var cosmos = builder.AddAzureCosmosDB(Cosmos)
                                  .WithLifetime(ContainerLifetime.Persistent)
                                  .WithPartitionCount(1);
                     })
-                    .AddDatabase("LondonTravel");
+                    .AddCosmosDatabase("LondonTravel");
 
 var secrets = builder.ExecutionContext.IsPublishMode
     ? builder.AddAzureKeyVault(KeyVault)
