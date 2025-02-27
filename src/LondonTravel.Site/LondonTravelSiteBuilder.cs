@@ -85,7 +85,10 @@ public static class LondonTravelSiteBuilder
 
                 if (environment.IsDevelopment())
                 {
-                    client.CreateBlobContainer(containerName);
+                    if (!client.GetBlobContainers().Any((p) => p.Name == containerName))
+                    {
+                        client.CreateBlobContainer(containerName);
+                    }
                 }
 
                 return client.GetBlobContainerClient(containerName).GetBlobClient(blobName);

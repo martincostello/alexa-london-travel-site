@@ -9,7 +9,11 @@ const string KeyVault = "AzureKeyVault";
 const string Storage = "AzureStorage";
 
 var blobs = builder.AddAzureStorage(Storage)
-                   .RunAsEmulator()
+                   .RunAsEmulator((container) =>
+                   {
+                       container.WithDataVolume()
+                                .WithLifetime(ContainerLifetime.Persistent);
+                   })
                    .AddBlobs(BlobStorage);
 
 var cosmos = builder.AddAzureCosmosDB(Cosmos)
@@ -18,8 +22,9 @@ var cosmos = builder.AddAzureCosmosDB(Cosmos)
                         container.WithDataVolume("londontravel-cosmosdb")
                                  .WithLifetime(ContainerLifetime.Persistent)
                                  .WithPartitionCount(1);
-                    })
-                    .AddCosmosDatabase("LondonTravel");
+                    });
+
+var database = cosmos.AddCosmosDatabase("LondonTravel");
 
 var secrets = builder.ExecutionContext.IsPublishMode
     ? builder.AddAzureKeyVault(KeyVault)
@@ -30,7 +35,8 @@ builder.AddProject<Projects.LondonTravel_Site>("LondonTravelSite")
        .WithReference(cosmos)
        .WithReference(secrets)
        .WaitFor(blobs)
-       .WaitFor(cosmos);
+       .WaitFor(cosmos)
+       .WaitFor(database);
 
 var app = builder.Build();
 
