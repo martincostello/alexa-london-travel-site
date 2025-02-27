@@ -83,12 +83,9 @@ public static class LondonTravelSiteBuilder
                 string containerName = "data-protection";
                 string blobName = $"{environment}/keys.xml";
 
-                if (environment.IsDevelopment())
+                if (environment.IsDevelopment() && !client.GetBlobContainers().Any((p) => p.Name == containerName))
                 {
-                    if (!client.GetBlobContainers().Any((p) => p.Name == containerName))
-                    {
-                        client.CreateBlobContainer(containerName);
-                    }
+                    client.CreateBlobContainer(containerName);
                 }
 
                 return client.GetBlobContainerClient(containerName).GetBlobClient(blobName);
