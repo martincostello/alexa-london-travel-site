@@ -12,7 +12,7 @@ namespace MartinCostello.LondonTravel.Site.Services;
 
 public sealed partial class AlexaService(
     UserManager<LondonTravelUser> userManager,
-    IOptions<SiteOptions> options,
+    IOptionsSnapshot<SiteOptions> options,
     ILogger<AlexaService> logger)
 {
     private readonly AlexaOptions _options = options.Value.Alexa!;
