@@ -383,9 +383,14 @@ public class AlexaServiceTests(ITestOutputHelper outputHelper)
         UserManager<LondonTravelUser>? userManager = null,
         SiteOptions? options = null)
     {
+        options ??= CreateValidSiteOptions();
+
+        var snapshot = Substitute.For<IOptionsSnapshot<SiteOptions>>();
+        snapshot.Value.Returns(options);
+
         return new AlexaService(
             userManager ?? CreateUserManager(),
-            Microsoft.Extensions.Options.Options.Create(options ?? CreateValidSiteOptions()),
+            snapshot,
             outputHelper.ToLogger<AlexaService>());
     }
 
