@@ -39,6 +39,11 @@ public sealed class SiteOptions
     public IDictionary<string, IList<string>>? ContentSecurityPolicyOrigins { get; set; }
 
     /// <summary>
+    /// Gets or sets the paths to redirect crawlers from.
+    /// </summary>
+    public IList<string> CrawlerPaths { get; set; } = [];
+
+    /// <summary>
     /// Gets or setsht the external link options for the site.
     /// </summary>
     public ExternalLinksOptions? ExternalLinks { get; set; }
