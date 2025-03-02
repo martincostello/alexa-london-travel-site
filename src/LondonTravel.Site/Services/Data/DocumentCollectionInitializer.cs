@@ -108,6 +108,8 @@ public sealed partial class DocumentCollectionInitializer(
             Log.CreatedCollection(logger, id, _databaseName);
         }
 
+        _existingContainers.AddOrUpdate(id, true, static (_, _) => true);
+
         return created;
     }
 
