@@ -72,6 +72,7 @@ jobs:
         device: all
         gitHubAccessToken: ${{ secrets.LIGHTHOUSE_ACCESS_TOKEN }}
         outputDirectory: ${{ github.workspace }}/artifacts/lighthouse
+        overridesJsonFile: ./.github/lighthouse.config.json
         prCommentEnabled: true
         urls: ${{ env.APPLICATION_URL }}
         wait: true
