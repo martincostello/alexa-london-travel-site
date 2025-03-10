@@ -4,7 +4,6 @@
     <NoWarn>$(NoWarn);CA2234</NoWarn>
     <OutputType>Exe</OutputType>
     <RootNamespace>MartinCostello.LondonTravel.Site.Benchmarks</RootNamespace>
-    <Summary>$(Description)</Summary>
     <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>

@@ -17,6 +17,7 @@ BuildOutput
 cdp.pid
 coverage
 coverage.*
+MSBuild_Logs/
 node_modules
 obj
 packages
