@@ -23,7 +23,7 @@ public static class GitMetadata
     /// <summary>
     /// Gets the Id for the GitHub Actions run the assembly was compiled and deployed from.
     /// </summary>
-    public static string DeployId { get; } = GetMetadataValue("DeployId", "Unknown");
+    public static string DeployId { get; } = GetMetadataValue("BuildId", "Unknown");
 
     /// <summary>
     /// Gets the timestamp the assembly was compiled at.

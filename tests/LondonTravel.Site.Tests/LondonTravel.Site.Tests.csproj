@@ -1,12 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Description>Tests for https://londontravel.martincostello.com/</Description>
+    <Description>Tests for the London Travel website.</Description>
     <IsTestProject>true</IsTestProject>
-    <NoWarn>$(NoWarn);CA1031;CA1308;CA1707;CA1711;CA1861;CA2000;CA2234</NoWarn>
+    <NoWarn>$(NoWarn);CA1031;CA2000;CA2234</NoWarn>
     <OutputType>Exe</OutputType>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <RootNamespace>MartinCostello.LondonTravel.Site</RootNamespace>
-    <Summary>Tests for the London Travel website</Summary>
     <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
@@ -33,15 +32,11 @@
     <PackageReference Include="xunit.runner.visualstudio" />
     <PackageReference Include="xunit.v3" />
   </ItemGroup>
-  <ItemGroup>
-    <Using Include="Shouldly" />
-    <Using Include="Xunit" />
-  </ItemGroup>
-  <PropertyGroup Condition=" '$(BuildingInsideVisualStudio)' == '' ">
+  <PropertyGroup>
     <CollectCoverage Condition=" '$(WEBSITE_URL)' == '' ">true</CollectCoverage>
-    <CoverletOutputFormat>cobertura,json</CoverletOutputFormat>
-    <Exclude>[AspNet.Security.OAuth*]*,[xunit.*]*</Exclude>
-    <ExcludeByAttribute>GeneratedCodeAttribute</ExcludeByAttribute>
     <Threshold>80,65,90</Threshold>
   </PropertyGroup>
+  <ItemGroup>
+    <CoverletExclude Include="$([MSBuild]::Escape('[AspNet.Security.OAuth*]*'))" />
+  </ItemGroup>
 </Project>
