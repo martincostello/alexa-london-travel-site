@@ -1,6 +1,5 @@
 <Project>
   <ItemGroup>
-    <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" Link="stylecop.json" />
     <AssemblyAttribute Include="System.Reflection.AssemblyProduct">
       <_Parameter1>London Travel</_Parameter1>
     </AssemblyAttribute>
@@ -10,37 +9,12 @@
     </AssemblyAttribute>
   </ItemGroup>
   <PropertyGroup>
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-    <AnalysisMode>All</AnalysisMode>
-    <Authors>martin_costello</Authors>
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
-    <ChecksumAlgorithm>SHA256</ChecksumAlgorithm>
     <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)LondonTravel.Site.ruleset</CodeAnalysisRuleSet>
-    <Company>https://github.com/martincostello/alexa-london-travel-site</Company>
-    <ContinuousIntegrationBuild Condition=" '$(CI)' != '' ">true</ContinuousIntegrationBuild>
-    <Copyright>Martin Costello (c) $([System.DateTime]::UtcNow.ToString(yyyy))</Copyright>
-    <Deterministic>true</Deterministic>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <EnableNETAnalyzers>true</EnableNETAnalyzers>
-    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <GenerateGitMetadata Condition=" '$(CI)' != '' and '$(GenerateGitMetadata)' == '' ">true</GenerateGitMetadata>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <LangVersion>latest</LangVersion>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-    <NeutralLanguage>en-US</NeutralLanguage>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
-    <Nullable>enable</Nullable>
-    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/martincostello/alexa-london-travel-site</PackageProjectUrl>
-    <PackageReleaseNotes>$(PackageProjectUrl)/releases</PackageReleaseNotes>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageTags></PackageTags>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>$(PackageProjectUrl).git</RepositoryUrl>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <UseArtifactsOutput>true</UseArtifactsOutput>
     <VersionPrefix>9.0.$([MSBuild]::ValueOrDefault('$(GITHUB_RUN_NUMBER)', '0'))</VersionPrefix>
   </PropertyGroup>
@@ -48,22 +22,4 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);419;1570;1573;1574;1584;1591;SA0001;SA1602</NoWarn>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(CI)' != '' or !Exists('$(MSBuildThisFileDirectory)\src\LondonTravel.Site\node_modules') ">
-    <InstallWebPackages>true</InstallWebPackages>
-  </PropertyGroup>
-  <ItemGroup>
-    <Using Include="System.Globalization" />
-  </ItemGroup>
-  <PropertyGroup Condition=" '$(CI)' == 'true' ">
-    <ContainerImageTags>github-$(GITHUB_RUN_NUMBER)</ContainerImageTags>
-    <ContainerImageTags Condition=" '$(GITHUB_HEAD_REF)' == '' ">$(ContainerImageTags);latest</ContainerImageTags>
-    <ContainerRepository>$(GITHUB_REPOSITORY)</ContainerRepository>
-    <ContainerTitle>$(GITHUB_REPOSITORY)</ContainerTitle>
-    <ContainerVendor>$(GITHUB_REPOSITORY_OWNER)</ContainerVendor>
-    <ContainerVersion>$(GITHUB_SHA)</ContainerVersion>
-  </PropertyGroup>
-  <ItemGroup Condition=" '$(CI)' == 'true' ">
-    <ContainerLabel Include="com.docker.extension.changelog" Value="$(GITHUB_SERVER_URL)/$(GITHUB_REPOSITORY)/commit/$(GITHUB_SHA)" />
-    <ContainerLabel Include="com.docker.extension.publisher-url" Value="$(GITHUB_SERVER_URL)/$(GITHUB_REPOSITORY_OWNER)" />
-  </ItemGroup>
 </Project>

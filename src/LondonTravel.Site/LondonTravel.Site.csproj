@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <ContainerFamily>noble-chiseled-extra</ContainerFamily>
-    <Description>https://londontravel.martincostello.com/</Description>
+    <Description>Website for the London Travel Amazon Alexa skill.</Description>
     <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
     <EnableRequestDelegateGenerator>true</EnableRequestDelegateGenerator>
     <InvariantGlobalization>false</InvariantGlobalization>
@@ -11,7 +11,6 @@
     <PublishSelfContained>true</PublishSelfContained>
     <RootNamespace>MartinCostello.LondonTravel.Site</RootNamespace>
     <SatelliteResourceLanguages>en;en-GB;en-US;qps-Ploc</SatelliteResourceLanguages>
-    <Summary>Website for the London Travel Amazon Alexa skill.</Summary>
     <TargetFramework>net9.0</TargetFramework>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <TypeScriptToolsVersion>latest</TypeScriptToolsVersion>
@@ -63,9 +62,7 @@
     <None Remove="assets\scripts\**\*.ts" />
     <TypeScriptCompile Include="assets\scripts\**\*.ts" />
   </ItemGroup>
-  <Target Name="BundleAssets" BeforeTargets="BeforeBuild">
-    <Exec Command="npm ci" Condition=" !Exists('$(MSBuildThisFileDirectory)\node_modules') AND '$(GITHUB_ACTIONS)' != '' " />
-    <Exec Command="npm install" Condition=" !Exists('$(MSBuildThisFileDirectory)\node_modules') AND '$(GITHUB_ACTIONS)' == '' " />
+  <Target Name="BundleAssets" BeforeTargets="BeforeBuild" DependsOnTargets="RestoreNpmPackages">
     <Exec Command="npm run build" Condition=" !Exists('$(MSBuildThisFileDirectory)\wwwroot\assets\js\main.js') " />
   </Target>
   <Target Name="AddGeneratedContentItems" BeforeTargets="AssignTargetPaths" Condition="'$(CI)' != ''">
@@ -86,15 +83,5 @@
     </Exec>
     <Warning Condition=" $(_PseudoLocalizeInstalled) != 0 " Text="The PseudoLocalize .NET Global Tool is not installed. To install this tool, run the following command: dotnet tool restore" />
     <Exec Condition=" $(_PseudoLocalizeInstalled) == 0 " Command="pseudo-localize %(_PseudoLocalizedFiles.Identity) --overwrite --force" ConsoleToMsBuild="true" StandardOutputImportance="Normal" />
-  </Target>
-  <Target Name="SetGitHubContainerOutputs" AfterTargets="PublishContainer" Condition=" '$(GITHUB_OUTPUT)' != '' AND '$(ContainerRegistry)' != '' ">
-    <PropertyGroup>
-      <_ContainerImage>$(ContainerRegistry)/$(ContainerRepository)</_ContainerImage>
-      <_ContainerImage>$(_ContainerImage.ToLowerInvariant())</_ContainerImage>
-      <_ContainerTag>$(_ContainerImage):github-$(GITHUB_RUN_NUMBER)</_ContainerTag>
-    </PropertyGroup>
-    <WriteLinesToFile File="$(GITHUB_OUTPUT)" Lines="container-digest=$(GeneratedContainerDigest)" />
-    <WriteLinesToFile File="$(GITHUB_OUTPUT)" Lines="container-image=$(_ContainerImage)" />
-    <WriteLinesToFile File="$(GITHUB_OUTPUT)" Lines="container-tag=$(_ContainerTag)" />
   </Target>
 </Project>
