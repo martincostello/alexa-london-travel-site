@@ -82,7 +82,7 @@ public sealed class AuthenticationTests : BrowserIntegrationTest
                     .ThenAsync((p) => p.ConfirmAsync());
 
                 // Assert
-                await manage.IsAuthenticatedAsync().ShouldBeFalse();
+                await home.IsAuthenticatedAsync().ShouldBeFalse();
             });
     }
 
