@@ -3,12 +3,9 @@
     <AssemblyAttribute Include="System.Reflection.AssemblyProduct">
       <_Parameter1>London Travel</_Parameter1>
     </AssemblyAttribute>
-    <AssemblyAttribute Include="System.CLSCompliant">
-      <_Parameter1>false</_Parameter1>
-      <_Parameter1_IsLiteral>true</_Parameter1_IsLiteral>
-    </AssemblyAttribute>
   </ItemGroup>
   <PropertyGroup>
+    <AssemblyIsCLSCompliant>false</AssemblyIsCLSCompliant>
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
     <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)LondonTravel.Site.ruleset</CodeAnalysisRuleSet>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>

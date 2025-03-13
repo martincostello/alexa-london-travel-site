@@ -28,7 +28,15 @@ public sealed class HomePage(ApplicationNavigator navigator) : PageBase(navigato
 
     public async Task<SignInPage> SignInAsync()
     {
-        await Navigator.Page.ClickAsync("[data-id='sign-in']");
+        await Navigator.Page.ClickAsync(Selectors.SignIn);
         return new SignInPage(Navigator);
+    }
+
+    public async Task WaitForSignInAsync()
+        => await Navigator.Page.WaitForSelectorAsync(Selectors.SignIn);
+
+    private sealed class Selectors
+    {
+        public const string SignIn = "[data-id='sign-in']";
     }
 }
