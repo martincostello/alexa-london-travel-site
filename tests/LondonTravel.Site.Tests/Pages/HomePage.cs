@@ -32,7 +32,7 @@ public sealed class HomePage(ApplicationNavigator navigator) : PageBase(navigato
         return new SignInPage(Navigator);
     }
 
-    public async Task WaitForSignInAsync()
+    public async Task WaitForSignedOutAsync()
         => await Navigator.Page.WaitForSelectorAsync(Selectors.SignIn);
 
     private sealed class Selectors

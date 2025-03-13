@@ -36,12 +36,20 @@ public abstract class PageBase(ApplicationNavigator navigator)
 
     public async Task<HomePage> SignOutAsync()
     {
-        await Navigator.Page.ClickAsync("[data-id='sign-out']");
+        await Navigator.Page.ClickAsync(Selectors.SignOut);
         return new HomePage(Navigator);
     }
+
+    public async Task WaitForSignedInAsync()
+        => await Navigator.Page.WaitForSelectorAsync(Selectors.SignOut);
 
     internal async Task NavigateToSelfAsync()
     {
         await Navigator.NavigateToAsync(RelativeUri);
+    }
+
+    private sealed class Selectors
+    {
+        public const string SignOut = "[data-id='sign-out']";
     }
 }
