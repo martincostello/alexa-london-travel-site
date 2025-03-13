@@ -14,6 +14,10 @@ public sealed class RemoveAlexaLinkModal(ApplicationNavigator navigator) : Modal
     public async Task<ManagePage> ConfirmAsync()
     {
         await Navigator.Page.ClickAsync("[data-id='remove-alexa-confirm']");
-        return new ManagePage(Navigator);
+        var page = new ManagePage(Navigator);
+
+        await page.WaitForUnlinkedAsync();
+
+        return page;
     }
 }

@@ -64,24 +64,25 @@ public sealed class AuthenticationTests : BrowserIntegrationTest
             browserChannel,
             async (homepage) =>
             {
-                var page = await homepage
+                var manage = await homepage
                     .SignInAsync()
                     .ThenAsync((p) => p.SignInWithAmazonAsync())
                     .ThenAsync((p) => p.ManageAsync());
 
                 // Act
-                await page.DeleteAccountAsync()
+                await manage.DeleteAccountAsync()
                           .ThenAsync((p) => p.CloseAsync());
 
                 // Assert
-                await page.IsAuthenticatedAsync().ShouldBeTrue();
+                await manage.IsAuthenticatedAsync().ShouldBeTrue();
 
                 // Act
-                await page.DeleteAccountAsync()
-                          .ThenAsync((p) => p.ConfirmAsync());
+                var home = await manage
+                    .DeleteAccountAsync()
+                    .ThenAsync((p) => p.ConfirmAsync());
 
                 // Assert
-                await page.IsAuthenticatedAsync().ShouldBeFalse();
+                await manage.IsAuthenticatedAsync().ShouldBeFalse();
             });
     }
 
@@ -101,6 +102,8 @@ public sealed class AuthenticationTests : BrowserIntegrationTest
                     .ThenAsync((p) => p.ManageAsync());
 
                 // Assert
+                await page.WaitForLinkedAccountCountAsync(1);
+
                 var accounts = await page.LinkedAccountsAsync();
 
                 accounts.Count.ShouldBe(1);
@@ -110,6 +113,8 @@ public sealed class AuthenticationTests : BrowserIntegrationTest
                 page = await page.SignInWithGoogleAsync();
 
                 // Assert
+                await page.WaitForLinkedAccountCountAsync(2);
+
                 accounts = await page.LinkedAccountsAsync();
 
                 accounts.Count.ShouldBe(2);
@@ -119,8 +124,7 @@ public sealed class AuthenticationTests : BrowserIntegrationTest
                 // Act
                 page = await accounts[0].RemoveAsync();
 
-                // Wait for the UI to update
-                await Task.Delay(TimeSpan.FromSeconds(1), TestContext.Current.CancellationToken);
+                await page.WaitForLinkedAccountCountAsync(1);
 
                 // Assert
                 accounts = await page.LinkedAccountsAsync();

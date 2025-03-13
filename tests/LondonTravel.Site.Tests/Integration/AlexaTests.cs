@@ -117,16 +117,18 @@ public class AlexaTests : BrowserIntegrationTest
                 page = await homepage.ManageAsync();
 
                 // Act
-                await page.UnlinkAlexaAsync()
-                          .ThenAsync((p) => p.CloseAsync());
+                page = await page
+                    .UnlinkAlexaAsync()
+                    .ThenAsync((p) => p.CloseAsync());
 
                 // Assert
                 await page.IsAuthenticatedAsync().ShouldBeTrue();
                 await page.IsLinkedToAlexaAsync().ShouldBeTrue();
 
                 // Act
-                await page.UnlinkAlexaAsync()
-                          .ThenAsync((p) => p.ConfirmAsync());
+                page = await page
+                    .UnlinkAlexaAsync()
+                    .ThenAsync((p) => p.ConfirmAsync());
 
                 // Assert
                 await page.IsAuthenticatedAsync().ShouldBeTrue();
