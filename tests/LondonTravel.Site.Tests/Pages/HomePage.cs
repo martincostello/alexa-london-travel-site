@@ -9,7 +9,7 @@ public sealed class HomePage(ApplicationNavigator navigator) : PageBase(navigato
 
     public async Task<IReadOnlyList<LinePreference>> LinesAsync()
     {
-        var elements = await Navigator.Page.QuerySelectorAllAsync("[data-line-preference]");
+        var elements = await Navigator.Page.QuerySelectorAllAsync(Selectors.Lines);
 
         return [.. elements.Select((p) => new LinePreference(p))];
     }
@@ -23,7 +23,11 @@ public sealed class HomePage(ApplicationNavigator navigator) : PageBase(navigato
     public async Task<HomePage> UpdatePreferencesAsync()
     {
         await Navigator.Page.ClickAsync("[data-id='save-preferences']");
-        return new HomePage(Navigator);
+        var page = new HomePage(Navigator);
+
+        await page.WaitForSignedInAsync();
+
+        return page;
     }
 
     public async Task<SignInPage> SignInAsync()
@@ -32,11 +36,15 @@ public sealed class HomePage(ApplicationNavigator navigator) : PageBase(navigato
         return new SignInPage(Navigator);
     }
 
+    public async Task WaitForLinesAsync()
+        => await Navigator.Page.WaitForSelectorAsync(Selectors.Lines);
+
     public async Task WaitForSignedOutAsync()
         => await Navigator.Page.WaitForSelectorAsync(Selectors.SignIn);
 
     private sealed class Selectors
     {
+        public const string Lines = "[data-line-preference]";
         public const string SignIn = "[data-id='sign-in']";
     }
 }

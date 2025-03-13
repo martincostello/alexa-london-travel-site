@@ -92,6 +92,7 @@ public class AlexaTests : BrowserIntegrationTest
 
                 // Arrange
                 var homepage = await navigator.GoToRootAsync();
+                await homepage.WaitForLinesAsync();
 
                 var lines = await homepage.LinesAsync();
 
@@ -104,7 +105,8 @@ public class AlexaTests : BrowserIntegrationTest
                     }
                 }
 
-                await homepage.UpdatePreferencesAsync();
+                homepage = await homepage.UpdatePreferencesAsync();
+                await homepage.WaitForLinesAsync();
 
                 // Act
                 using var secondResult = await GetPreferencesAsync(authorization, HttpStatusCode.OK);
