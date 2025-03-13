@@ -16,7 +16,7 @@ public sealed class DeleteModal(ApplicationNavigator navigator) : ModalBase("del
         await Navigator.Page.ClickAsync("[data-id='delete-account-confirm']");
         var page = new HomePage(Navigator);
 
-        await page.WaitForSignInAsync();
+        await page.WaitForSignedOutAsync();
 
         return page;
     }
