@@ -4,113 +4,114 @@
 @inject IWebHostEnvironment Hosting
 @{
     bool renderAnalytics = string.Equals(Config.AzureEnvironment(), "production", StringComparison.OrdinalIgnoreCase);
+    var request = Context.Request;
 }
-    <meta charset="utf-8" />
-    <title>@Model!.Title</title>
-    <meta name="author" content="@Model.Author" />
-    <meta name="bitcoin" content="@Model.Bitcoin" />
-    <meta name="copyright" content="@SR.CopyrightText" />
-    <meta name="description" content="@Model.Description" />
-    <meta name="language" content="en" />
-    <meta name="keywords" content="@Model.Keywords" />
-    <meta name="referrer" content="no-referrer-when-downgrade" />
-    <meta name="robots" content="@Model.Robots" />
-    <meta name="theme-color" content="#ffffff" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta property="fb:app_id" content="@Model.FacebookApp" />
-    <meta property="fb:profile_id" content="@Model.FacebookProfile" />
-    <meta property="og:description" content="@Model.Description" />
-    @if (!string.IsNullOrEmpty(Model.ImageUri))
-    {
+<meta charset="utf-8" />
+<title>@Model!.Title</title>
+<meta name="author" content="@Model.Author" />
+<meta name="bitcoin" content="@Model.Bitcoin" />
+<meta name="copyright" content="@SR.CopyrightText" />
+<meta name="description" content="@Model.Description" />
+<meta name="language" content="en" />
+<meta name="keywords" content="@Model.Keywords" />
+<meta name="referrer" content="no-referrer-when-downgrade" />
+<meta name="robots" content="@Model.Robots" />
+<meta name="theme-color" content="#ffffff" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta property="fb:app_id" content="@Model.FacebookApp" />
+<meta property="fb:profile_id" content="@Model.FacebookProfile" />
+<meta property="og:description" content="@Model.Description" />
+@if (!string.IsNullOrEmpty(Model.ImageUri))
+{
     <meta property="og:image" content="@Model.ImageUri" />
     <meta name="twitter:image" content="@Model.ImageUri" />
     <meta name="twitter:image:alt" content="@Model.ImageAltText" />
-    }
-    else
-    {
-    <meta property="og:image" content="@Url.CdnContent("london-travel-216x216.png", Options)" />
-    <meta property="og:image:secure_url" content="@Url.CdnContent("london-travel-216x216.png", Options)" />
+}
+else
+{
+    <meta property="og:image" content="@request.CdnContent("london-travel-216x216.png", Options)" />
+    <meta property="og:image:secure_url" content="@request.CdnContent("london-travel-216x216.png", Options)" />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="216" />
     <meta property="og:image:height" content="216" />
-    <meta name="twitter:image" content="@Url.CdnContent("london-travel-108x108.png", Options)" />
+    <meta name="twitter:image" content="@request.CdnContent("london-travel-108x108.png", Options)" />
     <meta name="twitter:image:alt" content="@Model.SiteName" />
-    }
-    <meta property="og:locale" content="en_GB" />
-    <meta property="og:site_name" content="@Model.SiteName" />
-    <meta property="og:title" content="@Model.Title" />
-    <meta property="og:type" content="@Model.SiteType" />
-    <meta property="og:url" content="@Model.CanonicalUri" />
-    <meta name="twitter:card" content="@Model.TwitterCard" />
-    <meta name="twitter:creator" content="@Model.TwitterHandle" />
-    <meta name="twitter:description" content="@Model.Description" />
-    <meta name="twitter:domain" content="@Model.HostName" />
-    <meta name="twitter:site" content="@Model.TwitterHandle" />
-    <meta name="twitter:title" content="@Model.Title" />
-    <meta name="twitter:url" content="@Model.CanonicalUri" />
-    <meta name="application-name" content="@Model.SiteName" />
-    <meta name="google-analytics" content="@(renderAnalytics ? Options.Analytics?.Google : string.Empty)" />
-    <meta name="google-site-verification" content="ji6SNsPQEbNQmF252sQgQFswh-b6cDnNOa3AHvgo4J0" />
-    <meta name="msapplication-config" content="@Url.Content("~/browserconfig.xml")" />
-    <meta name="msapplication-navbutton-color" content="#2b5797" />
-    <meta name="msapplication-starturl" content="/" />
-    <meta name="msapplication-TileColor" content="#2b5797" />
-    <meta name="msapplication-TileImage" content="@Url.CdnContent("mstile-144x144.png", Options)" />
-    <meta name="x-request-locale" content="@CultureInfo.CurrentUICulture.Name" />
-    <meta name="x-site-branch" content="@GitMetadata.Branch" />
-    <meta name="x-site-revision" content="@GitMetadata.Commit" />
-    @if (User?.Identity?.IsAuthenticated == true)
-    {
+}
+<meta property="og:locale" content="en_GB" />
+<meta property="og:site_name" content="@Model.SiteName" />
+<meta property="og:title" content="@Model.Title" />
+<meta property="og:type" content="@Model.SiteType" />
+<meta property="og:url" content="@Model.CanonicalUri" />
+<meta name="twitter:card" content="@Model.TwitterCard" />
+<meta name="twitter:creator" content="@Model.TwitterHandle" />
+<meta name="twitter:description" content="@Model.Description" />
+<meta name="twitter:domain" content="@Model.HostName" />
+<meta name="twitter:site" content="@Model.TwitterHandle" />
+<meta name="twitter:title" content="@Model.Title" />
+<meta name="twitter:url" content="@Model.CanonicalUri" />
+<meta name="application-name" content="@Model.SiteName" />
+<meta name="google-analytics" content="@(renderAnalytics ? Options.Analytics?.Google : string.Empty)" />
+<meta name="google-site-verification" content="ji6SNsPQEbNQmF252sQgQFswh-b6cDnNOa3AHvgo4J0" />
+<meta name="msapplication-config" content="@Url.Content("~/browserconfig.xml")" />
+<meta name="msapplication-navbutton-color" content="#2b5797" />
+<meta name="msapplication-starturl" content="/" />
+<meta name="msapplication-TileColor" content="#2b5797" />
+<meta name="msapplication-TileImage" content="@request.CdnContent("mstile-144x144.png", Options)" />
+<meta name="x-request-locale" content="@CultureInfo.CurrentUICulture.Name" />
+<meta name="x-site-branch" content="@GitMetadata.Branch" />
+<meta name="x-site-revision" content="@GitMetadata.Commit" />
+@if (User?.Identity?.IsAuthenticated == true)
+{
     <meta name="x-site-user-id" content="@User.GetUserId()" />
-    }
-    <script type="application/ld+json">
-    {
+}
+<script type="application/ld+json">
+{
+    "@@context": "http://schema.org",
+    "@@type": "WebSite",
+    "name": "@Model.SiteName",
+    "alternateName": "@Model.Description",
+    "author" : {
+        "@@type" : "Person",
+        "name" : "@Options.Metadata?.Author?.Name"
+    },
+    "description": "@Model.Description",
+    "image": "@Options.Metadata?.Image",
+    "url": "@Context.Request.Canonical("/")"
+}
+</script>
+<script type="application/ld+json">
+{
+    "@@context" : "http://schema.org",
+    "@@type" : "SoftwareApplication",
+    "name" : "@Model.SiteName",
+    "aggregateRating": {
         "@@context": "http://schema.org",
-        "@@type": "WebSite",
-        "name": "@Model.SiteName",
-        "alternateName": "@Model.Description",
-        "author" : {
-            "@@type" : "Person",
-            "name" : "@Options.Metadata?.Author?.Name"
-        },
-        "description": "@Model.Description",
-        "image": "@Options.Metadata?.Image",
-        "url": "@Context.Request.Canonical("/")"
-    }
-    </script>
-    <script type="application/ld+json">
-    {
-        "@@context" : "http://schema.org",
-        "@@type" : "SoftwareApplication",
-        "name" : "@Model.SiteName",
-        "aggregateRating": {
-            "@@context": "http://schema.org",
-            "@@type": "AggregateRating",
-            "bestRating": @Model.Reviews?.BestRating,
-            "worstRating": @Model.Reviews?.WorstRating,
-            "ratingValue": @Model.Reviews?.AverageRating,
-            "reviewCount": @Model.Reviews?.ReviewCount
-        },
-        "applicationCategory": "Travel & Transportation",
-        "applicationSubCategory": "Public Transportation",
-        "author" : {
-            "@@type" : "Person",
-            "name" : "@Options.Metadata?.Author?.Name"
-        },
-        "countriesSupported": "gb",
-        "dateCreated": "2017-02-04",
-        "description": "The London Travel Alexa skill allows you to ask Alexa for information about disruption on public transport in London.",
-        "installUrl": "@Options.ExternalLinks?.Skill",
-        "inLanguage": "en-GB",
-        "license": "https://github.com/martincostello/alexa-london-travel/blob/main/LICENSE",
-        "offers": {
-            "@@context": "http://schema.org",
-            "@@type": "Offer",
-            "price": "0.00",
-            "priceCurrency": "GBP"
-        },
-        "operatingSystem": "Amazon Echo",
-        "releaseNotes": "https://github.com/martincostello/alexa-london-travel/releases/latest",
-        "url": "https://github.com/martincostello/alexa-london-travel"
-    }
-    </script>
+        "@@type": "AggregateRating",
+        "bestRating": @Model.Reviews?.BestRating,
+        "worstRating": @Model.Reviews?.WorstRating,
+        "ratingValue": @Model.Reviews?.AverageRating,
+        "reviewCount": @Model.Reviews?.ReviewCount
+    },
+    "applicationCategory": "Travel & Transportation",
+    "applicationSubCategory": "Public Transportation",
+    "author" : {
+        "@@type" : "Person",
+        "name" : "@Options.Metadata?.Author?.Name"
+    },
+    "countriesSupported": "gb",
+    "dateCreated": "2017-02-04",
+    "description": "The London Travel Alexa skill allows you to ask Alexa for information about disruption on public transport in London.",
+    "installUrl": "@Options.ExternalLinks?.Skill",
+    "inLanguage": "en-GB",
+    "license": "https://github.com/martincostello/alexa-london-travel/blob/main/LICENSE",
+    "offers": {
+        "@@context": "http://schema.org",
+        "@@type": "Offer",
+        "price": "0.00",
+        "priceCurrency": "GBP"
+    },
+    "operatingSystem": "Amazon Echo",
+    "releaseNotes": "https://github.com/martincostello/alexa-london-travel/releases/latest",
+    "url": "https://github.com/martincostello/alexa-london-travel"
+}
+</script>

@@ -1,7 +1,7 @@
 @inject Microsoft.AspNetCore.Identity.SignInManager<LondonTravelUser> SignInManager
 @{
     string displayName = User.GetDisplayName();
-    string avatarUrl = User.GetAvatarUrl(Url.CdnContent("avatar.png", Options));
+    string avatarUrl = User.GetAvatarUrl(Context.Request.CdnContent("avatar.png", Options));
 }
 @if (SignInManager.IsSignedIn(User))
 {
