@@ -1,11 +1,14 @@
+@{
+    var request = Context.Request;
+}
 <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
     <div class="container">
         <a asp-page="@SiteRoutes.Home" class="navbar-brand" title="@SR.HomepageLinkAltText" data-ga-label="Homepage Navbar">
             <span>
                 @SR.BrandName
-                <lazyimg src="@Url.CdnContent("avatar.png", Options)" class="pb-1" alt="@SR.BrandName" title="@SR.BrandName" aria-hidden="true" />
+                <lazyimg src="@request.CdnContent("avatar.png", Options)" class="pb-1" alt="@SR.BrandName" title="@SR.BrandName" aria-hidden="true" />
                 <noscript>
-                    <img src="@Url.CdnContent("avatar.png", Options)" class="pb-1" alt="@SR.BrandName" title="@SR.BrandName" aria-hidden="true" />
+                    <img src="@request.CdnContent("avatar.png", Options)" class="pb-1" alt="@SR.BrandName" title="@SR.BrandName" aria-hidden="true" />
                 </noscript>
             </span>
         </a>
