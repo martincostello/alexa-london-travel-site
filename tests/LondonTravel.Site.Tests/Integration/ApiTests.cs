@@ -4,7 +4,8 @@
 using System.Net;
 using System.Net.Http.Headers;
 using Microsoft.OpenApi.Extensions;
-using Microsoft.OpenApi.Readers;
+using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi.Reader;
 using Microsoft.OpenApi.Validations;
 
 namespace MartinCostello.LondonTravel.Site.Integration;
@@ -140,12 +141,12 @@ public class ApiTests(TestServerFixture fixture, ITestOutputHelper outputHelper)
         using var schema = await client.GetStreamAsync("/openapi/api.json", CancellationToken);
 
         // Assert
-        var reader = new OpenApiStreamReader();
-        var actual = await reader.ReadAsync(schema, CancellationToken);
+        var settings = new OpenApiReaderSettings();
+        var actual = await OpenApiDocument.LoadAsync(schema, "json", settings, CancellationToken);
 
-        actual.OpenApiDiagnostic.Errors.ShouldBeEmpty();
+        actual.Diagnostic.Errors.ShouldBeEmpty();
 
-        var errors = actual.OpenApiDocument.Validate(ruleSet);
+        var errors = actual.Document.Validate(ruleSet);
         errors.ShouldBeEmpty();
     }
 
