@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.Extensions.Options;
 using OpenTelemetry.Instrumentation.Http;
 using OpenTelemetry.Metrics;
-using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 
 namespace MartinCostello.LondonTravel.Site.Extensions;
@@ -24,13 +23,6 @@ public static class TelemetryExtensions
         ["api.github.com"] = "GitHub",
     };
 
-    public static ResourceBuilder ResourceBuilder { get; } = ResourceBuilder.CreateDefault()
-        .AddService(ApplicationTelemetry.ServiceName, serviceVersion: ApplicationTelemetry.ServiceVersion)
-        .AddAzureAppServiceDetector()
-        .AddContainerDetector()
-        .AddOperatingSystemDetector()
-        .AddProcessRuntimeDetector();
-
     public static void AddTelemetry(this IServiceCollection services, IWebHostEnvironment environment)
     {
         ArgumentNullException.ThrowIfNull(services);
@@ -39,7 +31,7 @@ public static class TelemetryExtensions
             .AddOpenTelemetry()
             .WithMetrics((builder) =>
             {
-                builder.SetResourceBuilder(ResourceBuilder)
+                builder.SetResourceBuilder(ApplicationTelemetry.ResourceBuilder)
                        .AddAspNetCoreInstrumentation()
                        .AddHttpClientInstrumentation()
                        .AddProcessInstrumentation()
@@ -55,7 +47,7 @@ public static class TelemetryExtensions
                 // See https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/Diagnostics.md
                 AppContext.SetSwitch("Azure.Experimental.EnableActivitySource", true);
 
-                builder.SetResourceBuilder(ResourceBuilder)
+                builder.SetResourceBuilder(ApplicationTelemetry.ResourceBuilder)
                        .AddAspNetCoreInstrumentation()
                        .AddHttpClientInstrumentation()
                        .AddSource(ApplicationTelemetry.ServiceName)

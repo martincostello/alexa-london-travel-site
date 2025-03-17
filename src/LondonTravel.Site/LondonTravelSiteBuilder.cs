@@ -231,6 +231,11 @@ public static class LondonTravelSiteBuilder
 
     public static WebApplication UseLondonTravelSite(this WebApplication app)
     {
+        if (ApplicationTelemetry.IsPyroscopeConfigured())
+        {
+            app.UseMiddleware<Middleware.PyroscopeK6Middleware>();
+        }
+
         var options = app.Services.GetRequiredService<IOptionsMonitor<SiteOptions>>();
 
         app.UseCustomHttpHeaders(app.Environment, app.Configuration, options);
