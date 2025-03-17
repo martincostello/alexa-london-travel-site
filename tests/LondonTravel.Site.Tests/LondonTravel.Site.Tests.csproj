@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Description>Tests for the London Travel website.</Description>
     <IsTestProject>true</IsTestProject>
-    <NoWarn>$(NoWarn);CA1031;CA2000</NoWarn>
+    <NoWarn>$(NoWarn);CA2000</NoWarn>
     <OutputType>Exe</OutputType>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <RootNamespace>MartinCostello.LondonTravel.Site</RootNamespace>
