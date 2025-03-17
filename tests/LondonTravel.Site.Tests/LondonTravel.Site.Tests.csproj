@@ -2,11 +2,12 @@
   <PropertyGroup>
     <Description>Tests for the London Travel website.</Description>
     <IsTestProject>true</IsTestProject>
-    <NoWarn>$(NoWarn);CA1031;CA2000;CA2234</NoWarn>
+    <NoWarn>$(NoWarn);CA1031;CA2000</NoWarn>
     <OutputType>Exe</OutputType>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <RootNamespace>MartinCostello.LondonTravel.Site</RootNamespace>
     <TargetFramework>net9.0</TargetFramework>
+    <UseDefaultCodeAnalysisRuleSet>true</UseDefaultCodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="testsettings.json;xunit.runner.json;Integration\apple-test-cert.p8;Integration\*-http-bundle.json" CopyToOutputDirectory="PreserveNewest" />

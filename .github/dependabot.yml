@@ -30,6 +30,9 @@ updates:
     Polly:
       patterns:
         - Polly*
+    Pyroscope:
+      patterns:
+        - Pyroscope.*
     xunit:
       patterns:
         - Verify.Xunit*
