@@ -10,4 +10,7 @@ public static class ApplicationTelemetry
     public static readonly string ServiceName = "LondonTravel.Site";
     public static readonly string ServiceVersion = GitMetadata.Version.Split('+')[0];
     public static readonly ActivitySource ActivitySource = new(ServiceName, ServiceVersion);
+
+    internal static bool IsOtlpCollectorConfigured()
+        => !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("OTEL_EXPORTER_OTLP_ENDPOINT"));
 }
