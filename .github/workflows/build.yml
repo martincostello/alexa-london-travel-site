@@ -123,6 +123,7 @@ jobs:
     - name: Publish container
       id: publish-container
       if: runner.os == 'Linux'
+      shell: pwsh
       env:
         ContainerRegistry: ${{ env.PUBLISH_CONTAINER == 'true' && env.CONTAINER_REGISTRY || '' }}
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
