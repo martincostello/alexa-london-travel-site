@@ -9,6 +9,7 @@
     <OutputType>Exe</OutputType>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <PublishSelfContained>true</PublishSelfContained>
+    <PyroscopeApplicationName>londontravel.site</PyroscopeApplicationName>
     <RootNamespace>MartinCostello.LondonTravel.Site</RootNamespace>
     <SatelliteResourceLanguages>en;en-GB;en-US;qps-Ploc</SatelliteResourceLanguages>
     <TargetFramework>net10.0</TargetFramework>
@@ -52,6 +53,8 @@
     <PackageReference Include="OpenTelemetry.Resources.ProcessRuntime" />
     <PackageReference Include="Polly.Extensions" />
     <PackageReference Include="Polly.RateLimiting" />
+    <PackageReference Include="Pyroscope" />
+    <PackageReference Include="Pyroscope.OpenTelemetry" />
   </ItemGroup>
   <ItemGroup>
     <ContainerPort Include="8080" Type="tcp" />
@@ -59,6 +62,7 @@
     <EmbeddedResource Update="SiteResources.resx" Generator="" />
     <InternalsVisibleTo Include="LondonTravel.Site.Tests" />
     <None Remove="assets\scripts\**\*.ts" />
+    <PyroscopeLabels Include="londontravel.site" />
     <TypeScriptCompile Include="assets\scripts\**\*.ts" />
   </ItemGroup>
   <Target Name="BundleAssets" BeforeTargets="BeforeBuild" DependsOnTargets="RestoreNpmPackages">
