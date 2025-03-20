@@ -206,7 +206,7 @@ jobs:
         WEBSITE_USER_TWITTER_PASSWORD: ${{ secrets.WEBSITE_USER_TWITTER_PASSWORD }}
 
     - name: Publish screenshots
-      uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       if: ${{ !cancelled() }}
       with:
         name: screenshots-e2e-${{ inputs.environment-name }}
@@ -214,7 +214,7 @@ jobs:
         if-no-files-found: ignore
 
     - name: Publish traces
-      uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       if: ${{ !cancelled() }}
       with:
         name: traces-e2e-${{ inputs.environment-name }}
@@ -222,7 +222,7 @@ jobs:
         if-no-files-found: ignore
 
     - name: Publish videos
-      uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       if: ${{ !cancelled() }}
       with:
         name: videos-e2e-${{ inputs.environment-name }}
