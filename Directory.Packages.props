@@ -55,7 +55,7 @@
     <PackageVersion Include="Polly.RateLimiting" Version="8.5.2" />
     <PackageVersion Include="Pyroscope" Version="0.9.4" />
     <PackageVersion Include="Pyroscope.OpenTelemetry" Version="0.2.0" />
-    <PackageVersion Include="ReportGenerator" Version="5.4.4" />
+    <PackageVersion Include="ReportGenerator" Version="5.4.5" />
     <PackageVersion Include="Shouldly" Version="4.3.0" />
     <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.2.0" />
     <PackageVersion Include="Verify.XunitV3" Version="28.16.0" />
