@@ -15,5 +15,10 @@ namespace MartinCostello.LondonTravel.Site;
 [JsonSerializable(typeof(ICollection<StopPoint>))]
 [JsonSerializable(typeof(JsonObject))]
 [JsonSerializable(typeof(PreferencesResponse))]
-[JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase, WriteIndented = true)]
+[JsonSourceGenerationOptions(
+    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+    NumberHandling = JsonNumberHandling.Strict,
+    PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,
+    PropertyNameCaseInsensitive = false,
+    WriteIndented = true)]
 internal sealed partial class ApplicationJsonSerializerContext : JsonSerializerContext;
