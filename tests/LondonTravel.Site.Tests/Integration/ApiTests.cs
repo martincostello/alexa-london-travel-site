@@ -150,7 +150,7 @@ public class ApiTests(TestServerFixture fixture, ITestOutputHelper outputHelper)
         errors.ShouldBeEmpty();
     }
 
-    [Fact(Skip = "https://github.com/dotnet/aspnetcore/issues/61038")]
+    [Fact]
     public async Task Schema_Is_Correct()
     {
         // Arrange
