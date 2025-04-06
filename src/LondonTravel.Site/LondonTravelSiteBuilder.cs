@@ -2,6 +2,7 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.IO.Compression;
+using System.Text.Json.Serialization;
 using Azure.Identity;
 using Azure.Storage.Blobs;
 using MartinCostello.LondonTravel.Site.Extensions;
@@ -168,7 +169,8 @@ public static class LondonTravelSiteBuilder
 
         builder.Services.ConfigureHttpJsonOptions((options) =>
         {
-            options.SerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+            options.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+            options.SerializerOptions.NumberHandling = JsonNumberHandling.Strict;
             options.SerializerOptions.PropertyNameCaseInsensitive = false;
             options.SerializerOptions.WriteIndented = true;
             options.SerializerOptions.TypeInfoResolverChain.Add(ApplicationJsonSerializerContext.Default);
