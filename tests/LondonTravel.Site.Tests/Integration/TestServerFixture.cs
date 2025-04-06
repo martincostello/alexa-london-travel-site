@@ -97,7 +97,7 @@ public class TestServerFixture : WebApplicationFactory<Program>, ITestOutputHelp
 
         builder.ConfigureAppConfiguration(ConfigureTests)
                .ConfigureLogging((loggingBuilder) => loggingBuilder.ClearProviders().AddXUnit(this))
-               .UseSolutionRelativeContentRoot(Path.Combine("src", "LondonTravel.Site"));
+               .UseSolutionRelativeContentRoot(Path.Combine("src", "LondonTravel.Site"), "*.slnx");
     }
 
     /// <inheritdoc />
