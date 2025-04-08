@@ -3,11 +3,15 @@
   "build": {
     "dockerfile": "Dockerfile"
   },
-  "extensions": [
-    "editorconfig.editorconfig",
-    "ms-dotnettools.csharp",
-    "ms-vscode.PowerShell"
-  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "editorconfig.editorconfig",
+        "ms-dotnettools.csharp",
+        "ms-vscode.PowerShell"
+      ]
+    }
+  },
   "forwardPorts": [ 5000 ],
   "portsAttributes":{
     "5000": {
@@ -18,6 +22,6 @@
   },
   "postCreateCommand": "./build.ps1 -SkipTests",
   "remoteEnv": {
-    "PATH": "/root/.dotnet/tools:${containerWorkspaceFolder}/.dotnetcli:${containerEnv:PATH}"
+    "PATH": "/root/.dotnet/tools:${containerWorkspaceFolder}/.dotnet:${containerEnv:PATH}"
   }
 }

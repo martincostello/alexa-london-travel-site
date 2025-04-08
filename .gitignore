@@ -1,6 +1,6 @@
 ﻿.DS_Store
 .dockershare
-.dotnetcli
+.dotnet
 .metadata
 .pyroscope
 .settings
