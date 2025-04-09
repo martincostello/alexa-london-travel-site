@@ -23,9 +23,7 @@
     <PackageReference Include="JustEat.HttpClientInterception" />
     <PackageReference Include="MartinCostello.Logging.XUnit.v3" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" GeneratePathProperty="true" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
-    <PackageReference Include="Microsoft.OpenApi.Readers" />
     <PackageReference Include="Microsoft.Playwright" />
     <PackageReference Include="NSubstitute" />
     <PackageReference Include="ReportGenerator" />
@@ -41,12 +39,4 @@
   <ItemGroup>
     <CoverletExclude Include="$([MSBuild]::Escape('[AspNet.Security.OAuth*]*'))" />
   </ItemGroup>
-  <!--
-    HACK Workaround for https://github.com/dotnet/aspnetcore/issues/61019 and https://github.com/dotnet/aspnetcore/issues/61035
-  -->
-  <Target Name="DisableCompileTimeOpenApiXmlGenerator" BeforeTargets="CoreCompile">
-    <ItemGroup>
-      <Analyzer Remove="$(PkgMicrosoft_AspNetCore_OpenApi)\analyzers\dotnet\cs\Microsoft.AspNetCore.OpenApi.SourceGenerators.dll" />
-    </ItemGroup>
-  </Target>
 </Project>
