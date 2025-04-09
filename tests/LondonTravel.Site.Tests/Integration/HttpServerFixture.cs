@@ -153,15 +153,7 @@ public sealed class HttpServerFixture : TestServerFixture
         {
             if (disposing)
             {
-                try
-                {
-                    _host?.Dispose();
-                }
-                catch (ObjectDisposedException)
-                {
-                    // HACK Workaround double dispose issue.
-                    // See https://github.com/dotnet/aspnetcore/pull/37631.
-                }
+                _host?.Dispose();
             }
 
             _disposed = true;

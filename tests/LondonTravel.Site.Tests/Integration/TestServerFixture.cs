@@ -100,20 +100,6 @@ public class TestServerFixture : WebApplicationFactory<Program>, ITestOutputHelp
                .UseSolutionRelativeContentRoot(Path.Combine("src", "LondonTravel.Site"), "*.slnx");
     }
 
-    /// <inheritdoc />
-    protected override void Dispose(bool disposing)
-    {
-        try
-        {
-            base.Dispose(disposing);
-        }
-        catch (ObjectDisposedException)
-        {
-            // HACK Workaround double dispose issue.
-            // See https://github.com/dotnet/aspnetcore/pull/37631.
-        }
-    }
-
     private void ConfigureTests(IConfigurationBuilder builder)
     {
         string? directory = Path.GetDirectoryName(typeof(TestServerFixture).Assembly.Location);
