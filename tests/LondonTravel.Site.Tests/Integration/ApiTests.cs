@@ -131,10 +131,6 @@ public class ApiTests(TestServerFixture fixture, ITestOutputHelper outputHelper)
     {
         // Arrange
         var ruleSet = ValidationRuleSet.GetDefaultRuleSet();
-
-        // HACK Workaround for https://github.com/microsoft/OpenAPI.NET/issues/1738
-        ruleSet.Remove("MediaTypeMismatchedDataType");
-
         using var client = Fixture.CreateClient();
 
         // Act
