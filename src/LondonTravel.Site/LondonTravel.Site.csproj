@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <ContainerFamily>noble-chiseled-extra</ContainerFamily>
-    <ContainerBaseImage>mcr.microsoft.com/dotnet/nightly/runtime-deps:10.0-preview-$(ContainerFamily)</ContainerBaseImage>
     <Description>Website for the London Travel Amazon Alexa skill.</Description>
     <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
     <EnableRequestDelegateGenerator>true</EnableRequestDelegateGenerator>
