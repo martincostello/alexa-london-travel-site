@@ -137,8 +137,7 @@ public class ApiTests(TestServerFixture fixture, ITestOutputHelper outputHelper)
         using var schema = await client.GetStreamAsync("/openapi/api.json", CancellationToken);
 
         // Assert
-        var settings = new OpenApiReaderSettings();
-        var actual = await OpenApiDocument.LoadAsync(schema, "json", settings, CancellationToken);
+        var actual = await OpenApiDocument.LoadAsync(schema, "json", cancellationToken: CancellationToken);
 
         actual.Diagnostic.Errors.ShouldBeEmpty();
 
