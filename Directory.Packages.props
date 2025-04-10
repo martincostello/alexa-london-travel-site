@@ -5,13 +5,13 @@
     <GlobalPackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup>
-    <PackageVersion Include="Aspire.Azure.Security.KeyVault" Version="9.1.0" />
-    <PackageVersion Include="Aspire.Azure.Storage.Blobs" Version="9.1.0" />
-    <PackageVersion Include="Aspire.Hosting.AppHost" Version="9.1.0" />
-    <PackageVersion Include="Aspire.Hosting.Azure.CosmosDB" Version="9.1.0" />
-    <PackageVersion Include="Aspire.Hosting.Azure.KeyVault" Version="9.1.0" />
-    <PackageVersion Include="Aspire.Hosting.Azure.Storage" Version="9.1.0" />
-    <PackageVersion Include="Aspire.Microsoft.Azure.Cosmos" Version="9.1.0" />
+    <PackageVersion Include="Aspire.Azure.Security.KeyVault" Version="9.2.0" />
+    <PackageVersion Include="Aspire.Azure.Storage.Blobs" Version="9.2.0" />
+    <PackageVersion Include="Aspire.Hosting.AppHost" Version="9.2.0" />
+    <PackageVersion Include="Aspire.Hosting.Azure.CosmosDB" Version="9.2.0" />
+    <PackageVersion Include="Aspire.Hosting.Azure.KeyVault" Version="9.2.0" />
+    <PackageVersion Include="Aspire.Hosting.Azure.Storage" Version="9.2.0" />
+    <PackageVersion Include="Aspire.Microsoft.Azure.Cosmos" Version="9.2.0" />
     <PackageVersion Include="AspNet.Security.OAuth.Amazon" Version="9.2.0" />
     <PackageVersion Include="AspNet.Security.OAuth.Apple" Version="9.2.0" />
     <PackageVersion Include="AspNet.Security.OAuth.GitHub" Version="9.2.0" />
@@ -57,7 +57,7 @@
     <PackageVersion Include="Pyroscope.OpenTelemetry" Version="0.2.0" />
     <PackageVersion Include="ReportGenerator" Version="5.4.5" />
     <PackageVersion Include="Shouldly" Version="4.3.0" />
-    <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.2.0" />
+    <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.3.0" />
     <PackageVersion Include="Verify.XunitV3" Version="29.2.0" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.0.2" />
     <PackageVersion Include="xunit.v3" Version="2.0.1" />
