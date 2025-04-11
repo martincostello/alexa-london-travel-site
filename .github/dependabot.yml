@@ -21,9 +21,6 @@ updates:
       patterns:
         - Microsoft.IdentityModel.JsonWebTokens
         - System.IdentityModel.Tokens.Jwt
-    Microsoft.OpenApi:
-      patterns:
-        - Microsoft.OpenApi*
     OpenTelemetry:
       patterns:
         - OpenTelemetry*
