@@ -146,6 +146,7 @@ jobs:
         PYROSCOPE_ARCH: 'x86_64'
         PYROSCOPE_VARIANT: 'glibc'
         PYROSCOPE_VERSION: '0.9.4'
+        SentryAuthToken: ${{ secrets.SENTRY_TOKEN }}
         UsePyroscope: 'true'
       run: |
         if (${env:UsePyroscope} -eq "true") {
