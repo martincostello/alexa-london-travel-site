@@ -1,6 +1,6 @@
 <Project>
   <ItemGroup>
-    <GlobalPackageReference Include="MartinCostello.BuildKit" Version="0.5.4" />
+    <GlobalPackageReference Include="MartinCostello.BuildKit" Version="0.6.0" />
     <GlobalPackageReference Include="ReferenceTrimmer" Version="3.3.11" />
     <GlobalPackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556" PrivateAssets="All" />
   </ItemGroup>
@@ -56,6 +56,7 @@
     <PackageVersion Include="Pyroscope" Version="0.9.4" />
     <PackageVersion Include="Pyroscope.OpenTelemetry" Version="0.2.0" />
     <PackageVersion Include="ReportGenerator" Version="5.4.5" />
+    <PackageVersion Include="Sentry.AspNetCore" Version="5.5.1" />
     <PackageVersion Include="Shouldly" Version="4.3.0" />
     <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.3.0" />
     <PackageVersion Include="Verify.XunitV3" Version="29.2.0" />
