@@ -55,6 +55,7 @@
     <PackageReference Include="Polly.RateLimiting" />
     <PackageReference Include="Pyroscope" />
     <PackageReference Include="Pyroscope.OpenTelemetry" />
+    <PackageReference Include="Sentry.AspNetCore" />
   </ItemGroup>
   <ItemGroup>
     <ContainerPort Include="8080" Type="tcp" />
@@ -86,5 +87,13 @@
     </Exec>
     <Warning Condition=" $(_PseudoLocalizeInstalled) != 0 " Text="The PseudoLocalize .NET Global Tool is not installed. To install this tool, run the following command: dotnet tool restore" />
     <Exec Condition=" $(_PseudoLocalizeInstalled) == 0 " Command="pseudo-localize %(_PseudoLocalizedFiles.Identity) --overwrite --force" ConsoleToMsBuild="true" StandardOutputImportance="Normal" />
+  </Target>
+  <!--
+    HACK Workaround for https://github.com/dotnet/aspnetcore/issues/61019 and https://github.com/dotnet/aspnetcore/issues/61035
+  -->
+  <Target Name="DisableCompileTimeOpenApiXmlGenerator" BeforeTargets="CoreCompile">
+    <ItemGroup>
+      <Analyzer Remove="$(PkgMicrosoft_AspNetCore_OpenApi)\analyzers\dotnet\cs\Microsoft.AspNetCore.OpenApi.SourceGenerators.dll" />
+    </ItemGroup>
   </Target>
 </Project>

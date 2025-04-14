@@ -60,6 +60,11 @@ public static class LondonTravelSiteBuilder
         builder.WebHost.CaptureStartupErrors(true);
         builder.WebHost.ConfigureKestrel((p) => p.AddServerHeader = false);
 
+        if (builder.Configuration["Sentry:Dsn"] is { Length: > 0 } dsn)
+        {
+            builder.WebHost.UseSentry(dsn);
+        }
+
         builder.Services.AddOptions();
         builder.Services.Configure<SiteOptions>(builder.Configuration.GetSection("Site"));
 
