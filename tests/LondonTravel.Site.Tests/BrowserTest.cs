@@ -9,6 +9,7 @@ namespace MartinCostello.LondonTravel.Site;
 /// <summary>
 /// The base class for browser tests.
 /// </summary>
+[Category("UI")]
 public abstract class BrowserTest(ITestOutputHelper outputHelper) : IAsyncLifetime, IDisposable
 {
     /// <summary>

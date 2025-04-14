@@ -6,8 +6,8 @@ using System.Net.Mime;
 
 namespace MartinCostello.LondonTravel.Site.EndToEnd;
 
+[Category("EndToEnd")]
 [Collection<WebsiteCollection>]
-[Trait("Category", "EndToEnd")]
 public class ResourceTests(WebsiteFixture fixture)
 {
     [Theory]
