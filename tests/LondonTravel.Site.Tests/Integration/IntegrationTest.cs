@@ -6,6 +6,7 @@ namespace MartinCostello.LondonTravel.Site.Integration;
 /// <summary>
 /// The base class for integration tests.
 /// </summary>
+[Category("Integration")]
 [Collection<TestServerCollection>]
 public abstract class IntegrationTest : IDisposable
 {

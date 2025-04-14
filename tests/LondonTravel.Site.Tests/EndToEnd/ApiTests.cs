@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Http;
 
 namespace MartinCostello.LondonTravel.Site.EndToEnd;
 
+[Category("EndToEnd")]
 [Collection<WebsiteCollection>]
-[Trait("Category", "EndToEnd")]
 public class ApiTests(WebsiteFixture fixture)
 {
     [Fact]
