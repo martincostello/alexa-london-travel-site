@@ -40,12 +40,4 @@
   <ItemGroup>
     <CoverletExclude Include="$([MSBuild]::Escape('[AspNet.Security.OAuth*]*'))" />
   </ItemGroup>
-  <!--
-    HACK Workaround for https://github.com/dotnet/aspnetcore/issues/61019 and https://github.com/dotnet/aspnetcore/issues/61035
-  -->
-  <Target Name="DisableCompileTimeOpenApiXmlGenerator" BeforeTargets="CoreCompile">
-    <ItemGroup>
-      <Analyzer Remove="$(PkgMicrosoft_AspNetCore_OpenApi)\analyzers\dotnet\cs\Microsoft.AspNetCore.OpenApi.SourceGenerators.dll" />
-    </ItemGroup>
-  </Target>
 </Project>
