@@ -34,10 +34,13 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" />
     <PackageReference Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" NoWarn="RT0003" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" GeneratePathProperty="true" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
     <PackageReference Include="Microsoft.Azure.Cosmos" />
     <PackageReference Include="Microsoft.DotNet.XliffTasks" PrivateAssets="All" />
+    <!--
+    HACK Workaround for https://github.com/dotnet/extensions/issues/6297
     <PackageReference Include="Microsoft.Extensions.Http.Resilience" />
+    -->
     <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" />
     <PackageReference Include="Microsoft.OpenApi" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" />
@@ -51,8 +54,11 @@
     <PackageReference Include="OpenTelemetry.Resources.Container" />
     <PackageReference Include="OpenTelemetry.Resources.OperatingSystem" />
     <PackageReference Include="OpenTelemetry.Resources.ProcessRuntime" />
+    <!--
+    HACK Workaround for https://github.com/dotnet/extensions/issues/6297
     <PackageReference Include="Polly.Extensions" />
     <PackageReference Include="Polly.RateLimiting" />
+    -->
     <PackageReference Include="Pyroscope" />
     <PackageReference Include="Pyroscope.OpenTelemetry" />
     <PackageReference Include="Sentry.AspNetCore" />
@@ -87,13 +93,5 @@
     </Exec>
     <Warning Condition=" $(_PseudoLocalizeInstalled) != 0 " Text="The PseudoLocalize .NET Global Tool is not installed. To install this tool, run the following command: dotnet tool restore" />
     <Exec Condition=" $(_PseudoLocalizeInstalled) == 0 " Command="pseudo-localize %(_PseudoLocalizedFiles.Identity) --overwrite --force" ConsoleToMsBuild="true" StandardOutputImportance="Normal" />
-  </Target>
-  <!--
-    HACK Workaround for https://github.com/dotnet/aspnetcore/issues/61019 and https://github.com/dotnet/aspnetcore/issues/61035
-  -->
-  <Target Name="DisableCompileTimeOpenApiXmlGenerator" BeforeTargets="CoreCompile">
-    <ItemGroup>
-      <Analyzer Remove="$(PkgMicrosoft_AspNetCore_OpenApi)\analyzers\dotnet\cs\Microsoft.AspNetCore.OpenApi.SourceGenerators.dll" />
-    </ItemGroup>
   </Target>
 </Project>
