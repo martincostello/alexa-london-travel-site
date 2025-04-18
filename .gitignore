@@ -18,6 +18,7 @@ BuildOutput
 cdp.pid
 coverage
 coverage.*
+junit.xml
 MSBuild_Logs/
 node_modules
 obj
