@@ -69,20 +69,24 @@ public sealed class AuthenticationTests : BrowserIntegrationTest
                     .ThenAsync((p) => p.SignInWithAmazonAsync())
                     .ThenAsync((p) => p.ManageAsync());
 
+                await manage.WaitForLinkedAccountCountAsync(1);
+
                 // Act
-                await manage.DeleteAccountAsync()
-                          .ThenAsync((p) => p.CloseAsync());
+                manage = await manage
+                    .DeleteAccountAsync()
+                    .ThenAsync((p) => p.CloseAsync());
 
                 // Assert
                 await manage.IsAuthenticatedAsync().ShouldBeTrue();
 
                 // Act
-                var home = await manage
+                homepage = await manage
                     .DeleteAccountAsync()
                     .ThenAsync((p) => p.ConfirmAsync());
 
                 // Assert
-                await home.IsAuthenticatedAsync().ShouldBeFalse();
+                await homepage.WaitForSignedOutAsync();
+                await homepage.IsAuthenticatedAsync().ShouldBeFalse();
             });
     }
 
