@@ -36,8 +36,6 @@ public static class OpenApiServiceCollectionExtensions
             options.AddServerUrls = true;
             options.DefaultServerUrl = "https://londontravel.martincostello.com";
             options.SerializationContexts.Add(ApplicationJsonSerializerContext.Default);
-
-            options.AddXmlComments<Program>();
         });
 
         return services;
