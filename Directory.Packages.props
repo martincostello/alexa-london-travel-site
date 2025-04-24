@@ -57,7 +57,7 @@
     <PackageVersion Include="Pyroscope" Version="0.9.4" />
     <PackageVersion Include="Pyroscope.OpenTelemetry" Version="0.2.0" />
     <PackageVersion Include="ReportGenerator" Version="5.4.5" />
-    <PackageVersion Include="Sentry.AspNetCore" Version="5.5.1" />
+    <PackageVersion Include="Sentry.AspNetCore" Version="5.6.0" />
     <PackageVersion Include="Shouldly" Version="4.3.0" />
     <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.3.0" />
     <PackageVersion Include="Verify.XunitV3" Version="29.3.0" />
