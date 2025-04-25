@@ -10,6 +10,6 @@
     "errorMessage": "The required version of the .NET SDK could not be found. Please run ./build.ps1 to bootstrap the .NET SDK."
   },
   "msbuild-sdks": {
-    "Aspire.AppHost.Sdk": "9.2.0"
+    "Aspire.AppHost.Sdk": "9.2.1"
   }
 }
