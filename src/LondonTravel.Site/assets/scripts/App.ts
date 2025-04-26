@@ -43,14 +43,15 @@ export class App {
     }
 
     private loadImages() {
-        if ('$' in window) {
-            const jq = window['$'] as any;
-            document.querySelectorAll('img.lazy').forEach((image) => {
-                setTimeout(() => {
-                    jq(image).lazyload();
-                }, 500);
+        setTimeout(() => {
+            const images = document.querySelectorAll('img.lazy');
+            images.forEach((image) => {
+                let url = image.getAttribute('data-original');
+                url = encodeURI(url);
+                image.setAttribute('src', url);
+                image.removeAttribute('data-original');
             });
-        }
+        }, 500);
     }
 
     private setupServiceWorker() {
