@@ -61,6 +61,15 @@ body {
     line-height: 38px !important;
 }
 
+img.lazy[data-original] {
+    opacity: 0;
+}
+
+img.lazy:not([data-original]) {
+    opacity: 1;
+    transition: opacity 1s ease-in-out 0.2s;
+}
+
 .loader {
     animation: spin 2s linear infinite;
     border: 16px solid #f3f3f3;
