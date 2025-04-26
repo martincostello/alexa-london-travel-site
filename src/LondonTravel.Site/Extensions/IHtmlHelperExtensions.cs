@@ -19,7 +19,7 @@ public static class IHtmlHelperExtensions
         ["Apple"] = "apple",
         ["GitHub"] = "github",
         ["Google"] = "google",
-        ["Microsoft"] = "windows",
+        ["Microsoft"] = "microsoft",
         ["Twitter"] = "twitter",
     };
 

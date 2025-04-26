@@ -7,7 +7,6 @@
     <File Path=".gitattributes" />
     <File Path=".gitignore" />
     <File Path=".markdownlint.json" />
-    <File Path=".sonarrc" />
     <File Path=".vsconfig" />
     <File Path="benchmark.ps1" />
     <File Path="build.ps1" />
