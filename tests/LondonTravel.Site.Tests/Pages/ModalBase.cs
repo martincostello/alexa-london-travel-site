@@ -11,6 +11,9 @@ public abstract class ModalBase(string name, ApplicationNavigator navigator)
 
     protected ApplicationNavigator Navigator { get; } = navigator;
 
+    public async Task WaitForLoadedAsync()
+        => await Navigator.Page.WaitForSelectorAsync(DialogSelector);
+
     protected async Task CloseSelfAsync()
     {
         var modal = await Navigator.Page.QuerySelectorAsync(DialogSelector);

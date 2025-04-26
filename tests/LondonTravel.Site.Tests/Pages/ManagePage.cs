@@ -12,7 +12,11 @@ public sealed class ManagePage(ApplicationNavigator navigator) : PageBase(naviga
     public async Task<DeleteModal> DeleteAccountAsync()
     {
         await Navigator.Page.ClickAsync("[data-id='delete-account']");
-        return new DeleteModal(Navigator);
+
+        var modal = new DeleteModal(Navigator);
+        await modal.WaitForLoadedAsync();
+
+        return modal;
     }
 
     public async Task<bool> IsLinkedToAlexaAsync()
@@ -43,7 +47,11 @@ public sealed class ManagePage(ApplicationNavigator navigator) : PageBase(naviga
     public async Task<RemoveAlexaLinkModal> UnlinkAlexaAsync()
     {
         await Navigator.Page.ClickAsync(Selectors.Unlink);
-        return new RemoveAlexaLinkModal(Navigator);
+
+        var modal = new RemoveAlexaLinkModal(Navigator);
+        await modal.WaitForLoadedAsync();
+
+        return modal;
     }
 
     public async Task WaitForLinkedAccountCountAsync(int count)
