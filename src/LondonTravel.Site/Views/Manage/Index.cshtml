@@ -89,9 +89,3 @@
 @await Html.PartialAsync("_DeleteAccount")
 @await Html.PartialAsync("_SignInModal")
 @await Html.PartialAsync("_RemoveAccountLinkModal")
-@if (Model.OtherLogins.Any())
-{
-    @section stylesBody {
-        @await Html.PartialAsync("_SocialButtonsStyles")
-    }
-}
