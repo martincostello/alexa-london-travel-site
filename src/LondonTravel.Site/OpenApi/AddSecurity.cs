@@ -24,11 +24,12 @@ internal sealed class AddSecurity : IOpenApiDocumentTransformer
             Type = SecuritySchemeType.Http,
         };
 
-        var reference = new OpenApiSecuritySchemeReference("Bearer", document);
+        string referenceId = "Bearer";
+        var reference = new OpenApiSecuritySchemeReference(referenceId, document);
 
         document.Components ??= new();
-        document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
-        document.Components.SecuritySchemes[reference.Reference.Id] = scheme;
+        document.Components.SecuritySchemes ??= [];
+        document.Components.SecuritySchemes[referenceId] = scheme;
         document.Security ??= [];
         document.Security.Add(new() { [reference] = [] });
 
