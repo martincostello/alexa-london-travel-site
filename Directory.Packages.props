@@ -17,7 +17,7 @@
     <PackageVersion Include="AspNet.Security.OAuth.GitHub" Version="9.3.0" />
     <PackageVersion Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.4.0" />
     <PackageVersion Include="Azure.Extensions.AspNetCore.DataProtection.Blobs" Version="1.5.0" />
-    <PackageVersion Include="Azure.Extensions.AspNetCore.DataProtection.Keys" Version="1.4.0" />
+    <PackageVersion Include="Azure.Extensions.AspNetCore.DataProtection.Keys" Version="1.5.0" />
     <PackageVersion Include="Azure.Identity" Version="1.13.2" />
     <PackageVersion Include="BenchmarkDotNet" Version="0.14.0" />
     <PackageVersion Include="coverlet.msbuild" Version="6.0.4" />
