@@ -18,7 +18,7 @@
     <PackageVersion Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.4.0" />
     <PackageVersion Include="Azure.Extensions.AspNetCore.DataProtection.Blobs" Version="1.5.0" />
     <PackageVersion Include="Azure.Extensions.AspNetCore.DataProtection.Keys" Version="1.5.0" />
-    <PackageVersion Include="Azure.Identity" Version="1.13.2" />
+    <PackageVersion Include="Azure.Identity" Version="1.14.0" />
     <PackageVersion Include="BenchmarkDotNet" Version="0.14.0" />
     <PackageVersion Include="coverlet.msbuild" Version="6.0.4" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.4.1" />
@@ -34,7 +34,7 @@
     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.5" />
     <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.50.0" />
     <PackageVersion Include="Microsoft.DotNet.XliffTasks" Version="9.0.0-beta.24414.3" />
-    <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="9.4.0" />
+    <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="9.5.0" />
     <PackageVersion Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.9.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
     <PackageVersion Include="Microsoft.OpenApi" Version="1.6.24" />
@@ -57,7 +57,7 @@
     <PackageVersion Include="Pyroscope" Version="0.9.4" />
     <PackageVersion Include="Pyroscope.OpenTelemetry" Version="0.2.0" />
     <PackageVersion Include="ReportGenerator" Version="5.4.7" />
-    <PackageVersion Include="Sentry.AspNetCore" Version="5.6.0" />
+    <PackageVersion Include="Sentry.AspNetCore" Version="5.7.0" />
     <PackageVersion Include="Shouldly" Version="4.3.0" />
     <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.3.0" />
     <PackageVersion Include="Verify.XunitV3" Version="30.1.0" />
