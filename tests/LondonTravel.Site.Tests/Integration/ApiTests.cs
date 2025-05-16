@@ -139,6 +139,9 @@ public class ApiTests(TestServerFixture fixture, ITestOutputHelper outputHelper)
         // Assert
         var actual = await OpenApiDocument.LoadAsync(schema, "json", cancellationToken: CancellationToken);
 
+        actual.ShouldNotBeNull();
+        actual.Document.ShouldNotBeNull();
+        actual.Diagnostic.ShouldNotBeNull();
         actual.Diagnostic.Errors.ShouldBeEmpty();
 
         var errors = actual.Document.Validate(ruleSet);
