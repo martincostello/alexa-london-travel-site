@@ -3,6 +3,8 @@
 
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi.Models.Interfaces;
+using Microsoft.OpenApi.Models.References;
 
 namespace MartinCostello.LondonTravel.Site.OpenApi;
 
@@ -20,18 +22,16 @@ internal sealed class AddSecurity : IOpenApiDocumentTransformer
             Description = "Access token authentication using a bearer token.",
             Scheme = "bearer",
             Type = SecuritySchemeType.Http,
-            Reference = new()
-            {
-                Id = "Bearer",
-                Type = ReferenceType.SecurityScheme,
-            },
         };
 
+        string referenceId = "Bearer";
+        var reference = new OpenApiSecuritySchemeReference(referenceId, document);
+
         document.Components ??= new();
-        document.Components.SecuritySchemes ??= new Dictionary<string, OpenApiSecurityScheme>();
-        document.Components.SecuritySchemes[scheme.Reference.Id] = scheme;
-        document.SecurityRequirements ??= [];
-        document.SecurityRequirements.Add(new() { [scheme] = [] });
+        document.Components.SecuritySchemes ??= [];
+        document.Components.SecuritySchemes[referenceId] = scheme;
+        document.Security ??= [];
+        document.Security.Add(new() { [reference] = [] });
 
         return Task.CompletedTask;
     }
