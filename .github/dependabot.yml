@@ -6,8 +6,6 @@ updates:
     interval: daily
     time: "05:30"
     timezone: Europe/London
-  reviewers:
-    - "martincostello"
 - package-ecosystem: nuget
   directory: "/"
   groups:
@@ -38,8 +36,6 @@ updates:
     interval: daily
     time: "05:30"
     timezone: Europe/London
-  reviewers:
-    - "martincostello"
   open-pull-requests-limit: 99
   ignore:
   - dependency-name: Microsoft.DotNet.XliffTasks
@@ -56,6 +52,4 @@ updates:
     interval: daily
     time: "05:30"
     timezone: Europe/London
-  reviewers:
-    - "martincostello"
   open-pull-requests-limit: 99
