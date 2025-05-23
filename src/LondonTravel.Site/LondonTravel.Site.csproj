@@ -37,7 +37,10 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
     <PackageReference Include="Microsoft.Azure.Cosmos" />
     <PackageReference Include="Microsoft.DotNet.XliffTasks" PrivateAssets="All" />
+    <!--
+    HACK Workaround for https://github.com/dotnet/extensions/issues/6297
     <PackageReference Include="Microsoft.Extensions.Http.Resilience" />
+    -->
     <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" />
     <PackageReference Include="Microsoft.OpenApi" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" />
@@ -51,8 +54,11 @@
     <PackageReference Include="OpenTelemetry.Resources.Container" />
     <PackageReference Include="OpenTelemetry.Resources.OperatingSystem" />
     <PackageReference Include="OpenTelemetry.Resources.ProcessRuntime" />
+    <!--
+    HACK Workaround for https://github.com/dotnet/extensions/issues/6297
     <PackageReference Include="Polly.Extensions" />
     <PackageReference Include="Polly.RateLimiting" />
+    -->
     <PackageReference Include="Pyroscope" />
     <PackageReference Include="Pyroscope.OpenTelemetry" />
     <PackageReference Include="Sentry.AspNetCore" />
