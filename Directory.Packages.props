@@ -1,30 +1,30 @@
 <Project>
   <ItemGroup>
-    <GlobalPackageReference Include="MartinCostello.BuildKit" Version="0.6.2" />
+    <GlobalPackageReference Include="MartinCostello.BuildKit" Version="0.6.4" />
     <GlobalPackageReference Include="ReferenceTrimmer" Version="3.3.11" />
     <GlobalPackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup>
-    <PackageVersion Include="Aspire.Azure.Security.KeyVault" Version="9.2.1" />
-    <PackageVersion Include="Aspire.Azure.Storage.Blobs" Version="9.2.1" />
-    <PackageVersion Include="Aspire.Hosting.AppHost" Version="9.2.1" />
-    <PackageVersion Include="Aspire.Hosting.Azure.CosmosDB" Version="9.2.1" />
-    <PackageVersion Include="Aspire.Hosting.Azure.KeyVault" Version="9.2.1" />
-    <PackageVersion Include="Aspire.Hosting.Azure.Storage" Version="9.2.1" />
-    <PackageVersion Include="Aspire.Microsoft.Azure.Cosmos" Version="9.2.1" />
-    <PackageVersion Include="AspNet.Security.OAuth.Amazon" Version="9.3.0" />
-    <PackageVersion Include="AspNet.Security.OAuth.Apple" Version="9.3.0" />
-    <PackageVersion Include="AspNet.Security.OAuth.GitHub" Version="9.3.0" />
+    <PackageVersion Include="Aspire.Azure.Security.KeyVault" Version="9.3.0" />
+    <PackageVersion Include="Aspire.Azure.Storage.Blobs" Version="9.3.0" />
+    <PackageVersion Include="Aspire.Hosting.AppHost" Version="9.3.0" />
+    <PackageVersion Include="Aspire.Hosting.Azure.CosmosDB" Version="9.3.0" />
+    <PackageVersion Include="Aspire.Hosting.Azure.KeyVault" Version="9.3.0" />
+    <PackageVersion Include="Aspire.Hosting.Azure.Storage" Version="9.3.0" />
+    <PackageVersion Include="Aspire.Microsoft.Azure.Cosmos" Version="9.3.0" />
+    <PackageVersion Include="AspNet.Security.OAuth.Amazon" Version="9.4.0" />
+    <PackageVersion Include="AspNet.Security.OAuth.Apple" Version="9.4.0" />
+    <PackageVersion Include="AspNet.Security.OAuth.GitHub" Version="9.4.0" />
     <PackageVersion Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.4.0" />
     <PackageVersion Include="Azure.Extensions.AspNetCore.DataProtection.Blobs" Version="1.5.0" />
-    <PackageVersion Include="Azure.Extensions.AspNetCore.DataProtection.Keys" Version="1.5.0" />
+    <PackageVersion Include="Azure.Extensions.AspNetCore.DataProtection.Keys" Version="1.6.0" />
     <PackageVersion Include="Azure.Identity" Version="1.14.0" />
-    <PackageVersion Include="BenchmarkDotNet" Version="0.14.0" />
+    <PackageVersion Include="BenchmarkDotNet" Version="0.15.0" />
     <PackageVersion Include="coverlet.msbuild" Version="6.0.4" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.4.1" />
     <PackageVersion Include="JunitXml.TestLogger" Version="6.1.0" />
     <PackageVersion Include="JustEat.HttpClientInterception" Version="5.1.1" />
-    <PackageVersion Include="MartinCostello.Logging.XUnit.v3" Version="0.5.1" />
+    <PackageVersion Include="MartinCostello.Logging.XUnit.v3" Version="0.6.0" />
     <PackageVersion Include="MartinCostello.OpenApi.Extensions" Version="1.1.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="9.0.5" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="9.0.5" />
@@ -32,11 +32,11 @@
     <PackageVersion Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" Version="9.0.5" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.5" />
     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.5" />
-    <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.50.0" />
+    <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.51.0" />
     <PackageVersion Include="Microsoft.DotNet.XliffTasks" Version="9.0.0-beta.24414.3" />
     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="9.5.0" />
     <PackageVersion Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.10.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.0" />
     <PackageVersion Include="Microsoft.OpenApi" Version="1.6.24" />
     <PackageVersion Include="Microsoft.OpenApi.Readers" Version="1.6.24" />
     <PackageVersion Include="Microsoft.Playwright" Version="1.52.0" />
@@ -46,18 +46,18 @@
     <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.12.0" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.12.0" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.12.0" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.Process" Version="1.11.0-beta.2" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Process" Version="1.12.0-beta.1" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.12.0" />
-    <PackageVersion Include="OpenTelemetry.Resources.Azure" Version="1.11.0-beta.2" />
-    <PackageVersion Include="OpenTelemetry.Resources.Container" Version="1.11.0-beta.2" />
-    <PackageVersion Include="OpenTelemetry.Resources.OperatingSystem" Version="1.11.0-beta.2" />
-    <PackageVersion Include="OpenTelemetry.Resources.ProcessRuntime" Version="1.11.0-beta.2" />
+    <PackageVersion Include="OpenTelemetry.Resources.Azure" Version="1.12.0-beta.1" />
+    <PackageVersion Include="OpenTelemetry.Resources.Container" Version="1.12.0-beta.1" />
+    <PackageVersion Include="OpenTelemetry.Resources.OperatingSystem" Version="1.12.0-beta.1" />
+    <PackageVersion Include="OpenTelemetry.Resources.ProcessRuntime" Version="1.12.0-beta.1" />
     <PackageVersion Include="Polly.Extensions" Version="8.5.2" />
     <PackageVersion Include="Polly.RateLimiting" Version="8.5.2" />
-    <PackageVersion Include="Pyroscope" Version="0.9.4" />
-    <PackageVersion Include="Pyroscope.OpenTelemetry" Version="0.2.0" />
+    <PackageVersion Include="Pyroscope" Version="0.10.0" />
+    <PackageVersion Include="Pyroscope.OpenTelemetry" Version="0.3.0" />
     <PackageVersion Include="ReportGenerator" Version="5.4.7" />
-    <PackageVersion Include="Sentry.AspNetCore" Version="5.7.0" />
+    <PackageVersion Include="Sentry.AspNetCore" Version="5.8.0" />
     <PackageVersion Include="Shouldly" Version="4.3.0" />
     <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.3.0" />
     <PackageVersion Include="Verify.XunitV3" Version="30.1.0" />
