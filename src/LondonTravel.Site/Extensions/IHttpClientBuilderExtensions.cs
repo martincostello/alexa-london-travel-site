@@ -34,8 +34,7 @@ public static class IHttpClientBuilderExtensions
             .ConfigureHttpClient(ApplyDefaultConfiguration)
             .AddHttpMessageHandler<CorrelationIdHandler>();
 
-        //// HACK Workaround for https://github.com/dotnet/extensions/issues/6297
-        ////httpClientBuilder.AddStandardResilienceHandler();
+        httpClientBuilder.AddStandardResilienceHandler();
 
         return httpClientBuilder;
     }
