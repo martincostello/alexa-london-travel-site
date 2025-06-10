@@ -18,7 +18,6 @@ updates:
     IdentityModel:
       patterns:
         - Microsoft.IdentityModel.JsonWebTokens
-        - System.IdentityModel.Tokens.Jwt
     Microsoft.OpenApi:
       patterns:
         - Microsoft.OpenApi*
