@@ -178,20 +178,31 @@ public static partial class ApiModule
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     private static partial class Log
     {
+#pragma warning disable CA1873
         public static void AccessAuthorized(ILogger logger, string? userId, HttpContext httpContext)
         {
-            AccessAuthorized(logger, userId, httpContext.Connection.RemoteIpAddress, httpContext.Request.Headers.UserAgent!);
+            if (logger.IsEnabled(LogLevel.Information))
+            {
+                AccessAuthorized(logger, userId, httpContext.Connection.RemoteIpAddress, httpContext.Request.Headers.UserAgent!);
+            }
         }
 
         public static void AccessDeniedNoAuthorization(ILogger logger, HttpContext httpContext)
         {
-            AccessDeniedNoAuthorization(logger, httpContext.Connection.RemoteIpAddress, httpContext.Request.Headers.UserAgent!);
+            if (logger.IsEnabled(LogLevel.Information))
+            {
+                AccessDeniedNoAuthorization(logger, httpContext.Connection.RemoteIpAddress, httpContext.Request.Headers.UserAgent!);
+            }
         }
 
         public static void AccessDeniedUnknownToken(ILogger logger, HttpContext httpContext)
         {
-            AccessDeniedUnknownToken(logger, httpContext.Connection.RemoteIpAddress, httpContext.Request.Headers.UserAgent!);
+            if (logger.IsEnabled(LogLevel.Information))
+            {
+                AccessDeniedUnknownToken(logger, httpContext.Connection.RemoteIpAddress, httpContext.Request.Headers.UserAgent!);
+            }
         }
+#pragma warning restore CA1873
 
         [LoggerMessage(
             EventId = 1,
@@ -202,18 +213,21 @@ public static partial class ApiModule
         [LoggerMessage(
             EventId = 2,
             Level = LogLevel.Information,
+            SkipEnabledCheck = true,
             Message = "Successfully authorized API request for preferences for user Id {UserId}. IP: {RemoteIP}; User Agent: {UserAgent}.")]
         private static partial void AccessAuthorized(ILogger logger, string? userId, IPAddress? remoteIP, string userAgent);
 
         [LoggerMessage(
             EventId = 3,
             Level = LogLevel.Information,
+            SkipEnabledCheck = true,
             Message = "API request for preferences denied as no Authorization header/value was specified. IP: {RemoteIP}; User Agent: {UserAgent}.")]
         private static partial void AccessDeniedNoAuthorization(ILogger logger, IPAddress? remoteIP, string userAgent);
 
         [LoggerMessage(
             EventId = 4,
             Level = LogLevel.Information,
+            SkipEnabledCheck = true,
             Message = "API request for preferences denied as the specified access token is unknown. IP: {RemoteIP}; User Agent: {UserAgent}.")]
         private static partial void AccessDeniedUnknownToken(ILogger logger, IPAddress? remoteIP, string userAgent);
     }
