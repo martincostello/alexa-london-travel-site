@@ -149,12 +149,14 @@ public sealed partial class AlexaService(
                 Log.GeneratedAccessToken(logger, user.Id);
             }
         }
-        else
+        else if (logger.IsEnabled(LogLevel.Error))
         {
+#pragma warning disable CA1873
             Log.AccessTokenGenerationFailed(
                 logger,
                 user.Id,
                 string.Join(';', result.Errors.Select((p) => $"{p.Code}: {p.Description}")));
+#pragma warning restore CA1873
         }
 
         return result.Succeeded;
@@ -256,6 +258,7 @@ public sealed partial class AlexaService(
         [LoggerMessage(
            EventId = 7,
            Level = LogLevel.Error,
+           SkipEnabledCheck = true,
            Message = "Failed to generate Alexa access token for user Id {UserId}: {Errors}.")]
         public static partial void AccessTokenGenerationFailed(ILogger logger, string? userId, string errors);
 
