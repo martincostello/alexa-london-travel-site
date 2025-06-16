@@ -32,7 +32,7 @@
     <PackageVersion Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" Version="9.0.6" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.6" />
     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.6" />
-    <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.51.0" />
+    <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.52.0" />
     <PackageVersion Include="Microsoft.DotNet.XliffTasks" Version="9.0.0-beta.24414.3" />
     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="9.6.0" />
     <PackageVersion Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.12.0" />
@@ -55,7 +55,7 @@
     <PackageVersion Include="Polly.RateLimiting" Version="8.6.0" />
     <PackageVersion Include="Pyroscope" Version="0.10.0" />
     <PackageVersion Include="Pyroscope.OpenTelemetry" Version="0.3.0" />
-    <PackageVersion Include="ReportGenerator" Version="5.4.7" />
+    <PackageVersion Include="ReportGenerator" Version="5.4.8" />
     <PackageVersion Include="Sentry.AspNetCore" Version="5.10.0" />
     <PackageVersion Include="Shouldly" Version="4.3.0" />
     <PackageVersion Include="Verify.XunitV3" Version="30.4.0" />
