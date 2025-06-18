@@ -18,7 +18,9 @@ permissions: {}
 
 env:
   FORCE_COLOR: 3
+  # renovate: datasource=github-releases depName=powershell-yaml packageName=cloudbase/powershell-yaml
   POWERSHELL_YAML_VERSION: '0.4.12'
+  # renovate: datasource=github-releases depName=PSScriptAnalyzer packageName=PowerShell/PSScriptAnalyzer
   PSSCRIPTANALYZER_VERSION: '1.24.0'
   TERM: xterm
 
@@ -41,7 +43,7 @@ jobs:
       run: echo "::add-matcher::.github/actionlint-matcher.json"
 
     - name: Lint workflows
-      uses: docker://rhysd/actionlint@sha256:887a259a5a534f3c4f36cb02dca341673c6089431057242cdc931e9f133147e9 # v1.7.7
+      uses: docker://rhysd/actionlint:1.7.7@sha256:887a259a5a534f3c4f36cb02dca341673c6089431057242cdc931e9f133147e9
       with:
         args: -color
 
