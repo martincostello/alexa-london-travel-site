@@ -152,6 +152,7 @@ jobs:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         PYROSCOPE_ARCH: 'x86_64'
         PYROSCOPE_VARIANT: 'glibc'
+        # renovate: datasource=github-releases depName=pyroscope-dotnet packageName=grafana/pyroscope-dotnet
         PYROSCOPE_VERSION: '0.10.0'
         SentryAuthToken: ${{ secrets.SENTRY_TOKEN }}
         UsePyroscope: 'true'
@@ -220,6 +221,7 @@ jobs:
         github.event.sender.login != 'dependabot[bot]'
       env:
         AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.CRASH_DUMPS_STORAGE_CONNECTION_STRING }}
+        # renovate: datasource=github-releases depName=PSCompression packageName=santisq/PSCompression
         PSCOMPRESSION_VERSION: '2.1.0'
       run: |
         $dumps = Get-ChildItem -Path ${env:GITHUB_WORKSPACE} -Filter "*.dmp" -Recurse
