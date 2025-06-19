@@ -48,6 +48,7 @@
     <PackageReference Include="OpenTelemetry.Instrumentation.Process" />
     <PackageReference Include="OpenTelemetry.Resources.Azure" />
     <PackageReference Include="OpenTelemetry.Resources.Container" />
+    <PackageReference Include="OpenTelemetry.Resources.Host" />
     <PackageReference Include="OpenTelemetry.Resources.OperatingSystem" />
     <PackageReference Include="OpenTelemetry.Resources.ProcessRuntime" />
     <PackageReference Include="Polly.Extensions" />

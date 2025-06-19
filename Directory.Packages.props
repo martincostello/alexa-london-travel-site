@@ -49,6 +49,7 @@
     <PackageVersion Include="OpenTelemetry.Instrumentation.Process" Version="1.12.0-beta.1" />
     <PackageVersion Include="OpenTelemetry.Resources.Azure" Version="1.12.0-beta.1" />
     <PackageVersion Include="OpenTelemetry.Resources.Container" Version="1.12.0-beta.1" />
+    <PackageVersion Include="OpenTelemetry.Resources.Host" Version="1.12.0-beta.1" />
     <PackageVersion Include="OpenTelemetry.Resources.OperatingSystem" Version="1.12.0-beta.1" />
     <PackageVersion Include="OpenTelemetry.Resources.ProcessRuntime" Version="1.12.0-beta.1" />
     <PackageVersion Include="Polly.Extensions" Version="8.6.1" />
