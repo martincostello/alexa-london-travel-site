@@ -155,7 +155,7 @@ jobs:
         # renovate: datasource=github-releases depName=pyroscope-dotnet packageName=grafana/pyroscope-dotnet
         PYROSCOPE_VERSION: '0.10.0'
         SentryAuthToken: ${{ secrets.SENTRY_TOKEN }}
-        UsePyroscope: 'true'
+        UsePyroscope: 'false'
       run: |
         if (${env:UsePyroscope} -eq "true") {
           Write-Output "Downloading Pyroscope..."
