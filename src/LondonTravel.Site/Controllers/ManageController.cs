@@ -118,23 +118,27 @@ public partial class ManageController(
             {
                 Log.UpdatedUserClaims(logger, userId, info.LoginProvider);
             }
-            else
+            else if (logger.IsEnabled(LogLevel.Error))
             {
+#pragma warning disable CA1873
                 Log.UpdatingUserClaimsFailed(
                     logger,
                     userId,
                     info.LoginProvider,
                     FormatErrors(result));
+#pragma warning restore CA1873
             }
 
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
         }
-        else
+        else if (logger.IsEnabled(LogLevel.Error))
         {
+#pragma warning disable CA1873
             Log.AddingExternalLoginFailed(
                 logger,
                 userId,
                 FormatErrors(result));
+#pragma warning restore CA1873
         }
 
         return RedirectToRoute(SiteRoutes.Manage, new { Message = message });
@@ -169,13 +173,15 @@ public partial class ManageController(
 
                 message = SiteMessage.RemoveAccountLinkSuccess;
             }
-            else
+            else if (logger.IsEnabled(LogLevel.Error))
             {
+#pragma warning disable CA1873
                 Log.RemovingExternalLoginFailed(
                     logger,
                     user.Id,
                     account.LoginProvider,
                     FormatErrors(result));
+#pragma warning restore CA1873
             }
         }
 
@@ -210,9 +216,11 @@ public partial class ManageController(
 
                 message = SiteMessage.RemoveAlexaLinkSuccess;
             }
-            else
+            else if (logger.IsEnabled(LogLevel.Error))
             {
+#pragma warning disable CA1873
                 Log.RemovingAlexaLinkFailed(logger, user.Id, FormatErrors(result));
+#pragma warning restore CA1873
             }
         }
 
@@ -241,9 +249,11 @@ public partial class ManageController(
 
                 return RedirectToPage(SiteRoutes.Home, new { Message = SiteMessage.AccountDeleted });
             }
-            else
+            else if (logger.IsEnabled(LogLevel.Error))
             {
+#pragma warning disable CA1873
                 Log.DeletingUserFailed(logger, user.Id, FormatErrors(result));
+#pragma warning restore CA1873
             }
         }
         else
@@ -368,135 +378,141 @@ public partial class ManageController(
     private static partial class Log
     {
         [LoggerMessage(
-           EventId = 1,
-           Level = LogLevel.Error,
-           Message = "Failed to get user to manage account.")]
+            EventId = 1,
+            Level = LogLevel.Error,
+            Message = "Failed to get user to manage account.")]
         public static partial void FailedToGetUserToManageAccount(ILogger logger);
 
         [LoggerMessage(
-           EventId = 2,
-           Level = LogLevel.Information,
-           Message = "Attempting to link user Id {UserId} to provider {ProviderName}.")]
+            EventId = 2,
+            Level = LogLevel.Information,
+            Message = "Attempting to link user Id {UserId} to provider {ProviderName}.")]
         public static partial void AttemptingToLinkUser(ILogger logger, string? userId, string providerName);
 
         [LoggerMessage(
-           EventId = 3,
-           Level = LogLevel.Error,
-           Message = "Failed to get external login info for user Id {UserId} to link account.")]
+            EventId = 3,
+            Level = LogLevel.Error,
+            Message = "Failed to get external login info for user Id {UserId} to link account.")]
         public static partial void FailedToGetExternalLogin(ILogger logger, string userId);
 
         [LoggerMessage(
-           EventId = 4,
-           Level = LogLevel.Trace,
-           Message = "Adding login for provider {ProviderName} to user Id {UserId}.")]
+            EventId = 4,
+            Level = LogLevel.Trace,
+            Message = "Adding login for provider {ProviderName} to user Id {UserId}.")]
         public static partial void AddingExternalLogin(ILogger logger, string providerName, string userId);
 
         [LoggerMessage(
-           EventId = 5,
-           Level = LogLevel.Information,
-           Message = "Added login for provider {ProviderName} to user Id {UserId}.")]
+            EventId = 5,
+            Level = LogLevel.Information,
+            Message = "Added login for provider {ProviderName} to user Id {UserId}.")]
         public static partial void AddedExternalLogin(ILogger logger, string providerName, string userId);
 
         [LoggerMessage(
-           EventId = 6,
-           Level = LogLevel.Information,
-           Message = "Updated claims for user Id {UserId} for provider {ProviderName}.")]
+            EventId = 6,
+            Level = LogLevel.Information,
+            Message = "Updated claims for user Id {UserId} for provider {ProviderName}.")]
         public static partial void UpdatedUserClaims(ILogger logger, string userId, string providerName);
 
         [LoggerMessage(
-           EventId = 7,
-           Level = LogLevel.Error,
-           Message = "Failed to update user Id {UserId} with additional role claims for provider {ProviderName}: {Errors}.")]
+            EventId = 7,
+            Level = LogLevel.Error,
+            SkipEnabledCheck = true,
+            Message = "Failed to update user Id {UserId} with additional role claims for provider {ProviderName}: {Errors}.")]
         public static partial void UpdatingUserClaimsFailed(ILogger logger, string userId, string providerName, string errors);
 
         [LoggerMessage(
-           EventId = 8,
-           Level = LogLevel.Error,
-           Message = "Failed to add external login info for user Id {UserId}: {Errors}.")]
+            EventId = 8,
+            Level = LogLevel.Error,
+            SkipEnabledCheck = true,
+            Message = "Failed to add external login info for user Id {UserId}: {Errors}.")]
         public static partial void AddingExternalLoginFailed(ILogger logger, string userId, string errors);
 
         [LoggerMessage(
-           EventId = 9,
-           Level = LogLevel.Trace,
-           Message = "Removing login for provider {ProviderName} from user Id {UserId}.")]
+            EventId = 9,
+            Level = LogLevel.Trace,
+            Message = "Removing login for provider {ProviderName} from user Id {UserId}.")]
         public static partial void RemovingExternalLogin(ILogger logger, string providerName, string? userId);
 
         [LoggerMessage(
-           EventId = 10,
-           Level = LogLevel.Information,
-           Message = "Removed login for {ProviderName} from user Id {UserId}.")]
+            EventId = 10,
+            Level = LogLevel.Information,
+            Message = "Removed login for {ProviderName} from user Id {UserId}.")]
         public static partial void RemovedExternalLogin(ILogger logger, string providerName, string? userId);
 
         [LoggerMessage(
-           EventId = 11,
-           Level = LogLevel.Error,
-           Message = "Failed to remove external login info from user Id {UserId} for provider {ProviderName}: {Errors}.")]
+            EventId = 11,
+            Level = LogLevel.Error,
+            SkipEnabledCheck = true,
+            Message = "Failed to remove external login info from user Id {UserId} for provider {ProviderName}: {Errors}.")]
         public static partial void RemovingExternalLoginFailed(ILogger logger, string? userId, string providerName, string errors);
 
         [LoggerMessage(
-           EventId = 12,
-           Level = LogLevel.Trace,
-           Message = "Removing Alexa link from user Id {UserId}.")]
+            EventId = 12,
+            Level = LogLevel.Trace,
+            Message = "Removing Alexa link from user Id {UserId}.")]
         public static partial void RemovingAlexaLink(ILogger logger, string? userId);
 
         [LoggerMessage(
-           EventId = 13,
-           Level = LogLevel.Information,
-           Message = "Removed Alexa link from user Id {UserId}.")]
+            EventId = 13,
+            Level = LogLevel.Information,
+            Message = "Removed Alexa link from user Id {UserId}.")]
         public static partial void RemovedAlexaLink(ILogger logger, string? userId);
 
         [LoggerMessage(
-           EventId = 14,
-           Level = LogLevel.Error,
-           Message = "Failed to remove Alexa link from user Id {UserId}: {Errors}.")]
+            EventId = 14,
+            Level = LogLevel.Error,
+            SkipEnabledCheck = true,
+            Message = "Failed to remove Alexa link from user Id {UserId}: {Errors}.")]
         public static partial void RemovingAlexaLinkFailed(ILogger logger, string? userId, string errors);
 
         [LoggerMessage(
-           EventId = 15,
-           Level = LogLevel.Trace,
-           Message = "Deleting user Id {UserId}.")]
+            EventId = 15,
+            Level = LogLevel.Trace,
+            Message = "Deleting user Id {UserId}.")]
         public static partial void DeletingUser(ILogger logger, string? userId);
 
         [LoggerMessage(
-           EventId = 16,
-           Level = LogLevel.Information,
-           Message = "Deleted user Id {UserId}.")]
+            EventId = 16,
+            Level = LogLevel.Information,
+            Message = "Deleted user Id {UserId}.")]
         public static partial void DeletedUser(ILogger logger, string? userId);
 
         [LoggerMessage(
-           EventId = 17,
-           Level = LogLevel.Error,
-           Message = "Failed to delete user Id {UserId}: {Errors}.")]
+            EventId = 17,
+            Level = LogLevel.Error,
+            SkipEnabledCheck = true,
+            Message = "Failed to delete user Id {UserId}: {Errors}.")]
         public static partial void DeletingUserFailed(ILogger logger, string? userId, string errors);
 
         [LoggerMessage(
-           EventId = 18,
-           Level = LogLevel.Error,
-           Message = "Failed to get user to delete account.")]
+            EventId = 18,
+            Level = LogLevel.Error,
+            SkipEnabledCheck = true,
+            Message = "Failed to get user to delete account.")]
         public static partial void FailedToGetUserToDeleteAccount(ILogger logger);
 
         [LoggerMessage(
-           EventId = 19,
-           Level = LogLevel.Error,
-           Message = "Failed to get user to update line preferences.")]
+            EventId = 19,
+            Level = LogLevel.Error,
+            Message = "Failed to get user to update line preferences.")]
         public static partial void FailedToGetUserToUpdateLinePreferences(ILogger logger);
 
         [LoggerMessage(
-           EventId = 20,
-           Level = LogLevel.Trace,
-           Message = "Updating line preferences for user Id {UserId}.")]
+            EventId = 20,
+            Level = LogLevel.Trace,
+            Message = "Updating line preferences for user Id {UserId}.")]
         public static partial void UpdatingLinePreferences(ILogger logger, string? userId);
 
         [LoggerMessage(
-           EventId = 21,
-           Level = LogLevel.Information,
-           Message = "Updated line preferences for user Id {UserId}.")]
+            EventId = 21,
+            Level = LogLevel.Information,
+            Message = "Updated line preferences for user Id {UserId}.")]
         public static partial void UpdatedLinePreferences(ILogger logger, string? userId);
 
         [LoggerMessage(
-           EventId = 22,
-           Level = LogLevel.Warning,
-           Message = "Failed to update line preferences for user '{UserId}' as it would cause a write conflict. ETag: {ETag}.")]
+            EventId = 22,
+            Level = LogLevel.Warning,
+            Message = "Failed to update line preferences for user '{UserId}' as it would cause a write conflict. ETag: {ETag}.")]
         public static partial void UpdatingLinePreferencesFailed(ILogger logger, string? userId, string etag);
     }
 }
