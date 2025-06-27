@@ -6,7 +6,7 @@
     <OutputType>Exe</OutputType>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <RootNamespace>MartinCostello.LondonTravel.Site</RootNamespace>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <UseDefaultCodeAnalysisRuleSet>true</UseDefaultCodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
@@ -25,7 +25,6 @@
     <PackageReference Include="MartinCostello.Logging.XUnit.v3" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
-    <PackageReference Include="Microsoft.OpenApi.Readers" />
     <PackageReference Include="Microsoft.Playwright" />
     <PackageReference Include="NSubstitute" />
     <PackageReference Include="ReportGenerator" />
