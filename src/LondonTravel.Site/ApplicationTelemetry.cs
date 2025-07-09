@@ -11,11 +11,12 @@ namespace MartinCostello.LondonTravel.Site;
 public static class ApplicationTelemetry
 {
     public static readonly string ServiceName = "LondonTravel.Site";
+    public static readonly string ServiceNamespace = "LondonTravel";
     public static readonly string ServiceVersion = GitMetadata.Version.Split('+')[0];
     public static readonly ActivitySource ActivitySource = new(ServiceName, ServiceVersion);
 
     public static ResourceBuilder ResourceBuilder { get; } = ResourceBuilder.CreateDefault()
-        .AddService(ServiceName, serviceVersion: ServiceVersion)
+        .AddService(ServiceName, ServiceNamespace, ServiceVersion)
         .AddAzureAppServiceDetector()
         .AddContainerDetector()
         .AddHostDetector()
