@@ -2,6 +2,7 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Diagnostics;
+using OpenTelemetry;
 using OpenTelemetry.Resources;
 using Pyroscope;
 
@@ -16,7 +17,7 @@ public static class ApplicationTelemetry
 
     public static ResourceBuilder ResourceBuilder { get; } = ResourceBuilder.CreateDefault()
         .AddService(ServiceName, ServiceNamespace, ServiceVersion)
-        .AddAttributes([new KeyValuePair<string, object>("deployment.environment.name", Environment.GetEnvironmentVariable("Azure__Environment") ?? string.Empty)])
+        .AddAttributes([new KeyValuePair<string, object>("deployment.environment.name", Environment.GetEnvironmentVariable("Azure__Environment") ?? "production")])
         .AddAzureAppServiceDetector()
         .AddContainerDetector()
         .AddHostDetector()
