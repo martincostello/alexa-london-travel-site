@@ -9,7 +9,7 @@
     <OutputType>Exe</OutputType>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <PublishSelfContained>true</PublishSelfContained>
-    <PyroscopeApplicationName>londontravel.site</PyroscopeApplicationName>
+    <PyroscopeApplicationName>londontravel-martincostello</PyroscopeApplicationName>
     <RootNamespace>MartinCostello.LondonTravel.Site</RootNamespace>
     <SatelliteResourceLanguages>en;en-GB;en-US;qps-Ploc</SatelliteResourceLanguages>
     <TargetFramework>net9.0</TargetFramework>
