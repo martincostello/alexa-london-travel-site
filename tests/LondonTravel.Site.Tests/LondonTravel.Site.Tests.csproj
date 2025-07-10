@@ -8,10 +8,12 @@
     <RootNamespace>MartinCostello.LondonTravel.Site</RootNamespace>
     <TargetFramework>net9.0</TargetFramework>
     <UseDefaultCodeAnalysisRuleSet>true</UseDefaultCodeAnalysisRuleSet>
+    <UseLocalDevelopmentCertificate>true</UseLocalDevelopmentCertificate>
   </PropertyGroup>
   <ItemGroup>
+    <AssemblyMetadata Include="DevCertificateFileName" Value="$([System.IO.Path]::GetFileName('$(LocalDevelopmentCertificatePath)'))" />
+    <AssemblyMetadata Include="DevCertificatePassword" Value="$(LocalDevelopmentCertificatePassword)" />
     <Content Include="testsettings.json;Integration\apple-test-cert.p8;Integration\*-http-bundle.json" CopyToOutputDirectory="PreserveNewest" />
-    <None Update="localhost-dev.pfx" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\LondonTravel.Site\LondonTravel.Site.csproj" />
