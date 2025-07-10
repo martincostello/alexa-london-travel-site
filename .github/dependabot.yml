@@ -1,9 +1,7 @@
 version: 2
 updates:
-- package-ecosystem: nuget
+- package-ecosystem: github-actions
   directory: "/"
   schedule:
     interval: yearly
     timezone: Europe/London
-  ignore:
-  - dependency-name: Microsoft.DotNet.XliffTasks
