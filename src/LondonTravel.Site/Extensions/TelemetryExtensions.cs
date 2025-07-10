@@ -49,11 +49,23 @@ public static class TelemetryExtensions
             });
 
         services.AddOptions<HttpClientTraceInstrumentationOptions>()
-                .Configure<IServiceProvider>((options, provider) =>
+                .Configure((options) =>
                 {
+                    options.EnrichWithHttpRequestMessage = EnrichHttpActivity;
                     options.EnrichWithHttpResponseMessage = EnrichHttpActivity;
                     options.RecordException = true;
                 });
+    }
+
+    private static void EnrichHttpActivity(Activity activity, HttpRequestMessage request)
+    {
+        if (GetTag("server.address", activity.Tags) is { Length: > 0 } hostName)
+        {
+            activity.AddTag("peer.service", hostName);
+        }
+
+        static string? GetTag(string name, IEnumerable<KeyValuePair<string, string?>> tags)
+            => tags.FirstOrDefault((p) => p.Key == name).Value;
     }
 
     private static void EnrichHttpActivity(Activity activity, HttpResponseMessage response)
