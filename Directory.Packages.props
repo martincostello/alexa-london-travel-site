@@ -37,7 +37,7 @@
     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="9.7.0" />
     <PackageVersion Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.12.1" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
-    <PackageVersion Include="Microsoft.OpenApi" Version="1.6.24" />
+    <PackageVersion Include="Microsoft.OpenApi" Version="2.0.0" />
     <PackageVersion Include="Microsoft.OpenApi.Readers" Version="1.6.24" />
     <PackageVersion Include="Microsoft.Playwright" Version="1.53.0" />
     <PackageVersion Include="Microsoft.TypeScript.MSBuild" Version="5.8.3" />
