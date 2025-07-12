@@ -63,6 +63,48 @@ jobs:
 
     steps:
 
+    - name: Create deployment annotation
+      id: annotate-deployment
+      if: ${{ vars.TELEMETRY_URL && vars.TELEMETRY_URL != '' }}
+      shell: pwsh
+      env:
+        APPLICATION_NAME: ${{ inputs.application-name }}
+        ENVIRONMENT_NAME: ${{ inputs.environment-name }}
+        TELEMETRY_TOKEN: ${{ secrets.TELEMETRY_TOKEN }}
+        TELEMETRY_URL: ${{ vars.TELEMETRY_URL }}
+      run: |
+        $commitSha = ${env:GITHUB_SHA}.Substring(0, 7)
+        $commitUrl = "${env:GITHUB_SERVER_URL}/${env:GITHUB_REPOSITORY}/commit/${env:GITHUB_SHA}"
+        $workflowUrl = "${env:GITHUB_SERVER_URL}/${env:GITHUB_REPOSITORY}/actions/runs/${env:GITHUB_RUN_ID}"
+
+        $body = @{
+          tags = @(
+            "deployment",
+            "environment:${env:ENVIRONMENT_NAME}",
+            "service:${env:APPLICATION_NAME}"
+          );
+          text = "Deployed <a href='${workflowUrl}'>#${env:GITHUB_RUN_NUMBER}:${env:GITHUB_RUN_ATTEMPT}</a> with commit <a href='${commitUrl}'>${commitSha}</a>";
+          time = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds();
+        } | ConvertTo-Json
+
+        try {
+          $annotation = Invoke-RestMethod -Uri "${env:TELEMETRY_URL}/api/annotations" `
+            -Method Post `
+            -Headers @{
+              "Accept" = "application/json";
+              "Authorization" = "Bearer ${env:TELEMETRY_TOKEN}";
+              "Content-Type" = "application/json";
+            } `
+            -Body $body
+
+          $id = $annotation.id
+
+          Write-Output "Created deployment annotation ${id}"
+          "id=${id}" >> ${env:GITHUB_OUTPUT}
+        } catch {
+          Write-Output "::warning::Failed to create deployment annotation"
+        }
+
     - name: Post deployment starting comment
       uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
       id: post-start-comment
@@ -125,6 +167,33 @@ jobs:
         }
         if (-Not $success) {
           throw "${env:APPLICATION_URL} did not return a successful status code and the expected version within the time limit after $limit attempts."
+        }
+
+    - name: Update deployment annotation
+      if: ${{ !cancelled() && steps.annotate-deployment.outputs.id != '' }}
+      shell: pwsh
+      env:
+        ANNOTATION_ID: ${{ steps.annotate-deployment.outputs.id }}
+        TELEMETRY_TOKEN: ${{ secrets.TELEMETRY_TOKEN }}
+        TELEMETRY_URL: ${{ vars.TELEMETRY_URL }}
+      run: |
+        $body = @{
+          timeEnd = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds();
+        } | ConvertTo-Json
+
+        try {
+          Invoke-RestMethod -Uri "${env:TELEMETRY_URL}/api/annotations/${env:ANNOTATION_ID}" `
+            -Method Patch `
+            -Headers @{
+              "Accept" = "application/json";
+              "Authorization" = "Bearer ${env:TELEMETRY_TOKEN}";
+              "Content-Type" = "application/json";
+            } `
+            -Body $body | Out-Null
+
+          Write-Output "Updated deployment annotation ${env:ANNOTATION_ID}"
+        } catch {
+          Write-Output "::warning::Failed to update deployment annotation ${env:ANNOTATION_ID}"
         }
 
     - name: Post deployment finished comment
