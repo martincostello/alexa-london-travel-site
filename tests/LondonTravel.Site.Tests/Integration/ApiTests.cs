@@ -4,7 +4,8 @@
 using System.Net;
 using System.Net.Http.Headers;
 using Microsoft.OpenApi.Extensions;
-using Microsoft.OpenApi.Readers;
+using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi.Reader;
 using Microsoft.OpenApi.Validations;
 
 namespace MartinCostello.LondonTravel.Site.Integration;
@@ -130,22 +131,21 @@ public class ApiTests(TestServerFixture fixture, ITestOutputHelper outputHelper)
     {
         // Arrange
         var ruleSet = ValidationRuleSet.GetDefaultRuleSet();
-
-        // HACK Workaround for https://github.com/microsoft/OpenAPI.NET/issues/1738
-        ruleSet.Remove("MediaTypeMismatchedDataType");
-
         using var client = Fixture.CreateClient();
 
         // Act
         using var schema = await client.GetStreamAsync("/openapi/api.json", CancellationToken);
 
         // Assert
-        var reader = new OpenApiStreamReader();
-        var actual = await reader.ReadAsync(schema, CancellationToken);
+        var actual = await OpenApiDocument.LoadAsync(schema, "json", cancellationToken: CancellationToken);
 
-        actual.OpenApiDiagnostic.Errors.ShouldBeEmpty();
+        actual.ShouldNotBeNull();
+        actual.Document.ShouldNotBeNull();
+        actual.Diagnostic.ShouldNotBeNull();
+        actual.Diagnostic.Errors.ShouldNotBeNull();
+        actual.Diagnostic.Errors.ShouldBeEmpty();
 
-        var errors = actual.OpenApiDocument.Validate(ruleSet);
+        var errors = actual.Document.Validate(ruleSet);
         errors.ShouldBeEmpty();
     }
 
