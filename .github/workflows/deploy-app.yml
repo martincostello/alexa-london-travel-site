@@ -68,6 +68,7 @@ jobs:
       uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
       env:
         APPLICATION_NAME: ${{ inputs.application-name }}
+        APPLICATION_NAMESPACE: LondonTravel
         ENVIRONMENT_NAME: ${{ inputs.environment-name }}
       with:
         script: |
@@ -79,6 +80,7 @@ jobs:
             client_payload: {
               application: process.env.APPLICATION_NAME,
               environment: process.env.ENVIRONMENT_NAME,
+              namespace: process.env.APPLICATION_NAMESPACE,
               repository: process.env.GITHUB_REPOSITORY,
               runAttempt: process.env.GITHUB_RUN_ATTEMPT,
               runId: process.env.GITHUB_RUN_ID,
