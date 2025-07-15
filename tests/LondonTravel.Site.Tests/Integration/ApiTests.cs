@@ -3,10 +3,7 @@
 
 using System.Net;
 using System.Net.Http.Headers;
-using Microsoft.OpenApi.Extensions;
-using Microsoft.OpenApi.Models;
-using Microsoft.OpenApi.Reader;
-using Microsoft.OpenApi.Validations;
+using Microsoft.OpenApi;
 
 namespace MartinCostello.LondonTravel.Site.Integration;
 
