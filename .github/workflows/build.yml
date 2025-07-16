@@ -48,9 +48,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # HACK Workaround for https://github.com/dotnet/sdk/issues/49785
-          #- os-name: macos
-          #  runner: macos-latest
+          - os-name: macos
+            runner: macos-latest
           - os-name: linux
             runner: ubuntu-latest
           - os-name: windows
@@ -73,6 +72,13 @@ jobs:
           $nugetHome = Resolve-Path $nugetHome
           "NUGET_PACKAGES=$nugetHome" >> ${env:GITHUB_ENV}
         }
+
+    # HACK Workaround https://github.com/dotnet/sdk/issues/49785
+    - name: Disable HttpClient certificate revocation check
+      if: runner.os == 'macOS'
+      shell: pwsh
+      run: |
+        "DOTNET_SYSTEM_NET_SECURITY_NOREVOCATIONCHECKBYDEFAULT=true" >> ${env:GITHUB_ENV}
 
     - name: Checkout code
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
