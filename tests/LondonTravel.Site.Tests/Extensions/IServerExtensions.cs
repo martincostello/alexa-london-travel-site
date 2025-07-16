@@ -3,19 +3,15 @@
 
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace MartinCostello.LondonTravel.Site.Extensions;
 
-internal static class IHostExtensions
+internal static class IServerExtensions
 {
-    public static Uri GetAddress(this IHost host)
+    public static Uri? GetAddress(this IServer server)
     {
-        var server = host.Services.GetRequiredService<IServer>();
-
         return server.Features.Get<IServerAddressesFeature>()!.Addresses
             .Select((p) => new Uri(p))
-            .First();
+            .FirstOrDefault();
     }
 }

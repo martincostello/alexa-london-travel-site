@@ -4,22 +4,41 @@
 using AspNet.Security.OAuth.Amazon;
 using AspNet.Security.OAuth.Apple;
 using AspNet.Security.OAuth.GitHub;
+using MartinCostello.LondonTravel.Site.Extensions;
+using MartinCostello.LondonTravel.Site.Options;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authentication.Twitter;
+using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.Extensions.Options;
 
 namespace MartinCostello.LondonTravel.Site.Integration;
 
-public sealed class ConfigureAuthenticationHandlers(IHttpClientFactory httpClientFactory) :
+public sealed class ConfigureAuthenticationHandlers(IHttpClientFactory httpClientFactory, IServer server) :
     IPostConfigureOptions<AmazonAuthenticationOptions>,
     IPostConfigureOptions<AppleAuthenticationOptions>,
     IPostConfigureOptions<GitHubAuthenticationOptions>,
     IPostConfigureOptions<GoogleOptions>,
     IPostConfigureOptions<MicrosoftAccountOptions>,
+    IPostConfigureOptions<SiteOptions>,
     IPostConfigureOptions<TwitterOptions>
 {
+    private string? _redirectUrl;
+
+    public void PostConfigure(string? name, SiteOptions options)
+    {
+        // Allow the tests on the self-hosted server to link accounts via "Amazon"
+        if (_redirectUrl is null && server.GetAddress() is { } uri)
+        {
+            _redirectUrl = new Uri(uri, "manage/").ToString();
+
+            options.Alexa ??= new();
+            options.Alexa.RedirectUrls ??= [];
+            options.Alexa.RedirectUrls.Add(_redirectUrl);
+        }
+    }
+
     public void PostConfigure(string? name, AmazonAuthenticationOptions options)
         => Configure(name, options);
 
