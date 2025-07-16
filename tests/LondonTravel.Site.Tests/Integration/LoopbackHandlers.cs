@@ -7,8 +7,8 @@ using MartinCostello.LondonTravel.Site.Extensions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authentication.Twitter;
+using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace MartinCostello.LondonTravel.Site.Integration;
 
@@ -53,9 +53,9 @@ internal static class LoopbackHandlers
         queryString.Add("oauth_token", oauthToken);
         queryString.Add("oauth_verifier", verifier);
 
-        var host = context.HttpContext.RequestServices.GetRequiredService<IHost>();
+        var host = context.HttpContext.RequestServices.GetRequiredService<IServer>();
 
-        var builder = new UriBuilder(host.GetAddress())
+        var builder = new UriBuilder(host.GetAddress()!)
         {
             Path = context.Options.CallbackPath,
             Query = queryString.ToString() ?? string.Empty,

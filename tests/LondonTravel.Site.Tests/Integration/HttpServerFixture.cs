@@ -8,11 +8,12 @@ using AspNet.Security.OAuth.Apple;
 using AspNet.Security.OAuth.GitHub;
 using JustEat.HttpClientInterception;
 using MartinCostello.LondonTravel.Site.Extensions;
+using MartinCostello.LondonTravel.Site.Options;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
 using Microsoft.AspNetCore.Authentication.Twitter;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
@@ -44,7 +45,7 @@ public sealed class HttpServerFixture : TestServerFixture
     {
         get
         {
-            EnsureServer();
+            StartServer();
             return ClientOptions.BaseAddress;
         }
     }
@@ -54,7 +55,7 @@ public sealed class HttpServerFixture : TestServerFixture
     {
         get
         {
-            EnsureServer();
+            StartServer();
             return _host!.Services!;
         }
     }
@@ -107,6 +108,7 @@ public sealed class HttpServerFixture : TestServerFixture
             p.AddSingleton<IPostConfigureOptions<GitHubAuthenticationOptions>>(ResolvePostConfigureOptions);
             p.AddSingleton<IPostConfigureOptions<GoogleOptions>>(ResolvePostConfigureOptions);
             p.AddSingleton<IPostConfigureOptions<MicrosoftAccountOptions>>(ResolvePostConfigureOptions);
+            p.AddSingleton<IPostConfigureOptions<SiteOptions>>(ResolvePostConfigureOptions);
             p.AddSingleton<IPostConfigureOptions<TwitterOptions>>(ResolvePostConfigureOptions);
         });
 
@@ -117,9 +119,6 @@ public sealed class HttpServerFixture : TestServerFixture
         // Configure the server address for the server to
         // listen on for HTTPS requests on a dynamic port.
         builder.UseUrls("https://127.0.0.1:0");
-
-        // Allow the tests on the self-hosted server to link accounts via "Amazon"
-        builder.ConfigureAppConfiguration((p) => p.Add(new HttpServerFixtureConfigurationSource(this)));
     }
 
     /// <inheritdoc />
@@ -132,15 +131,7 @@ public sealed class HttpServerFixture : TestServerFixture
         _host = builder.Build();
         _host.Start();
 
-        ClientOptions.BaseAddress = _host.GetAddress();
-
-        // Force the configuration to reload now the server address is assigned
-        var config = _host.Services.GetRequiredService<IConfiguration>();
-
-        if (config is IConfigurationRoot root)
-        {
-            root.Reload();
-        }
+        ClientOptions.BaseAddress = _host.Services.GetRequiredService<IServer>().GetAddress()!;
 
         return testHost;
     }
@@ -173,46 +164,13 @@ public sealed class HttpServerFixture : TestServerFixture
         return X509CertificateLoader.LoadPkcs12(File.ReadAllBytes(fileName), password);
     }
 
-    private void EnsureServer()
+    private void StartServer()
     {
         if (_host is null)
         {
             using (CreateDefaultClient())
             {
             }
-        }
-    }
-
-    private sealed class HttpServerFixtureConfigurationSource : IConfigurationSource
-    {
-        internal HttpServerFixtureConfigurationSource(HttpServerFixture fixture)
-        {
-            Fixture = fixture;
-        }
-
-        private HttpServerFixture Fixture { get; }
-
-        public IConfigurationProvider Build(IConfigurationBuilder builder)
-        {
-            return new HttpServerFixtureConfigurationProvider(Fixture);
-        }
-    }
-
-    private sealed class HttpServerFixtureConfigurationProvider : ConfigurationProvider
-    {
-        internal HttpServerFixtureConfigurationProvider(HttpServerFixture fixture)
-        {
-            Fixture = fixture;
-        }
-
-        private HttpServerFixture Fixture { get; }
-
-        public override void Load()
-        {
-            Data = new Dictionary<string, string?>()
-            {
-                ["Site:Alexa:RedirectUrls:3"] = $"{Fixture.ClientOptions.BaseAddress}manage/",
-            };
         }
     }
 }
