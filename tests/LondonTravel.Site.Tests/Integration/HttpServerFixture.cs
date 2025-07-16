@@ -1,21 +1,19 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using System.Net;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using AspNet.Security.OAuth.Amazon;
 using AspNet.Security.OAuth.Apple;
 using AspNet.Security.OAuth.GitHub;
 using JustEat.HttpClientInterception;
-using MartinCostello.LondonTravel.Site.Extensions;
 using MartinCostello.LondonTravel.Site.Options;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
 using Microsoft.AspNetCore.Authentication.Twitter;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
 namespace MartinCostello.LondonTravel.Site.Integration;
@@ -25,9 +23,6 @@ namespace MartinCostello.LondonTravel.Site.Integration;
 /// </summary>
 public sealed class HttpServerFixture : TestServerFixture
 {
-    private IHost? _host;
-    private bool _disposed;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="HttpServerFixture"/> class.
     /// </summary>
@@ -36,6 +31,11 @@ public sealed class HttpServerFixture : TestServerFixture
     {
         Interceptor.RegisterBundle(Path.Combine("Integration", "oauth-http-bundle.json"));
         Interceptor.RegisterBundle(Path.Combine("Integration", "tfl-http-bundle.json"));
+
+        UseKestrel(
+            (server) => server.Listen(
+                IPAddress.Loopback, 0, (listener) => listener.UseHttps(
+                    (https) => https.ServerCertificate = LoadDevelopmentCertificate())));
     }
 
     /// <summary>
@@ -47,16 +47,6 @@ public sealed class HttpServerFixture : TestServerFixture
         {
             StartServer();
             return ClientOptions.BaseAddress;
-        }
-    }
-
-    /// <inheritdoc />
-    public override IServiceProvider Services
-    {
-        get
-        {
-            StartServer();
-            return _host!.Services!;
         }
     }
 
@@ -111,45 +101,6 @@ public sealed class HttpServerFixture : TestServerFixture
             p.AddSingleton<IPostConfigureOptions<SiteOptions>>(ResolvePostConfigureOptions);
             p.AddSingleton<IPostConfigureOptions<TwitterOptions>>(ResolvePostConfigureOptions);
         });
-
-        builder.ConfigureKestrel(
-            (p) => p.ConfigureHttpsDefaults(
-                (r) => r.ServerCertificate = LoadDevelopmentCertificate()));
-
-        // Configure the server address for the server to
-        // listen on for HTTPS requests on a dynamic port.
-        builder.UseUrls("https://127.0.0.1:0");
-    }
-
-    /// <inheritdoc />
-    protected override IHost CreateHost(IHostBuilder builder)
-    {
-        var testHost = builder.Build();
-
-        builder.ConfigureWebHost(webHostBuilder => webHostBuilder.UseKestrel());
-
-        _host = builder.Build();
-        _host.Start();
-
-        ClientOptions.BaseAddress = _host.Services.GetRequiredService<IServer>().GetAddress()!;
-
-        return testHost;
-    }
-
-    /// <inheritdoc />
-    protected override void Dispose(bool disposing)
-    {
-        base.Dispose(disposing);
-
-        if (!_disposed)
-        {
-            if (disposing)
-            {
-                _host?.Dispose();
-            }
-
-            _disposed = true;
-        }
     }
 
     private static X509Certificate2 LoadDevelopmentCertificate()
@@ -162,15 +113,5 @@ public sealed class HttpServerFixture : TestServerFixture
         string? password = metadata.First((p) => p.Key is "DevCertificatePassword").Value;
 
         return X509CertificateLoader.LoadPkcs12(File.ReadAllBytes(fileName), password);
-    }
-
-    private void StartServer()
-    {
-        if (_host is null)
-        {
-            using (CreateDefaultClient())
-            {
-            }
-        }
     }
 }
