@@ -75,7 +75,13 @@ public static partial class AuthenticationBuilderExtensions
         if (IsProviderEnabled(name, options))
         {
             builder.AddGitHub()
-                   .Configure<GitHubAuthenticationOptions>(name, (p, _) => p.Scope.Add("user:email"));
+                   .Configure<GitHubAuthenticationOptions>(
+                       name,
+                       (p, _) =>
+                       {
+                           p.Scope.Add("user:email");
+                           p.UsePkce = true;
+                       });
         }
 
         return builder;
