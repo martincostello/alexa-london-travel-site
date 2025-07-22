@@ -1,8 +1,6 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
-using OpenTelemetry.Logs;
-
 namespace MartinCostello.LondonTravel.Site.Extensions;
 
 /// <summary>
@@ -25,11 +23,6 @@ public static class ILoggingBuilderExtensions
             options.IncludeScopes = true;
 
             options.SetResourceBuilder(ApplicationTelemetry.ResourceBuilder);
-
-            if (ApplicationTelemetry.IsOtlpCollectorConfigured())
-            {
-                options.AddOtlpExporter();
-            }
         });
     }
 }
