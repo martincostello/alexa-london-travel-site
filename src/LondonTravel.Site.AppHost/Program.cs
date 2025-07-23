@@ -31,6 +31,7 @@ var secrets = builder.ExecutionContext.IsPublishMode
     : builder.AddConnectionString(KeyVault);
 
 builder.AddProject<Projects.LondonTravel_Site>("LondonTravelSite")
+       .WithHttpHealthCheck("/version")
        .WithReference(blobs)
        .WithReference(cosmos)
        .WithReference(secrets)
