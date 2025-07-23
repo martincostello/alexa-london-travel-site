@@ -1,7 +1,7 @@
 @model MartinCostello.LondonTravel.Site.Pages.Home.Index
 @if (Model?.UpdateResult == false)
 {
-    <div class="sr-only">@SR.UpdateFailureModalDescription</div>
+    <div class="visually-hidden">@SR.UpdateFailureModalDescription</div>
     <div class="alert alert-warning" role="alert" aria-hidden="true">
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="@SR.CloseButtonText" data-ga-label="Save Preferences Failure Dismissed"></button>
         <p class="lead">
