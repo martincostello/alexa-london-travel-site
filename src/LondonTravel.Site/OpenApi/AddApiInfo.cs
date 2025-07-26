@@ -4,7 +4,7 @@
 using MartinCostello.LondonTravel.Site.Options;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 namespace MartinCostello.LondonTravel.Site.OpenApi;
 
