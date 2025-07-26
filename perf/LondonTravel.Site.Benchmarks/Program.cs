@@ -18,8 +18,11 @@ if (args.SequenceEqual(["--test"]))
     {
         await benchmark.StopServer();
     }
+
+    return 0;
 }
 else
 {
-    BenchmarkRunner.Run<AppBenchmarks>(args: args);
+    var summary = BenchmarkRunner.Run<AppBenchmarks>(args: args);
+    return summary.Reports.Any((p) => !p.Success) ? 1 : 0;
 }
