@@ -36,7 +36,7 @@ public static class LondonTravelSiteBuilder
 
         if (builder.Configuration["ConnectionStrings:AzureBlobStorage"] is { Length: > 0 })
         {
-            builder.AddAzureBlobClient("AzureBlobStorage", (p) => p.Credential = credential);
+            builder.AddAzureBlobServiceClient("AzureBlobStorage", (p) => p.Credential = credential);
         }
 
         if (builder.Configuration["ConnectionStrings:AzureCosmos"] is { Length: > 0 })
