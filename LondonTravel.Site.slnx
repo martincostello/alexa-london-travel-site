@@ -38,7 +38,6 @@
     <File Path=".github/workflows/codeql.yml" />
     <File Path=".github/workflows/dependency-review.yml" />
     <File Path=".github/workflows/deploy.yml" />
-    <File Path=".github/workflows/lighthouse.yml" />
     <File Path=".github/workflows/linter.yml" />
     <File Path=".github/workflows/ossf-scorecard.yml" />
   </Folder>
