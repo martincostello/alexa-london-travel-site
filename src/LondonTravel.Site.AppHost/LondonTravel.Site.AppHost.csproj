@@ -3,7 +3,7 @@
   <PropertyGroup>
     <IsAspireHost>true</IsAspireHost>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <UserSecretsId>londontravel.martincostello.com.AppHost</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>

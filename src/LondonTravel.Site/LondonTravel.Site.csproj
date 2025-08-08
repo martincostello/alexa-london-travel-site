@@ -12,7 +12,7 @@
     <PyroscopeApplicationName>londontravel-martincostello</PyroscopeApplicationName>
     <RootNamespace>MartinCostello.LondonTravel.Site</RootNamespace>
     <SatelliteResourceLanguages>en;en-GB;en-US;qps-Ploc</SatelliteResourceLanguages>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <TypeScriptToolsVersion>latest</TypeScriptToolsVersion>
     <UserSecretsId>londontravel.martincostello.com</UserSecretsId>
