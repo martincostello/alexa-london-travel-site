@@ -63,7 +63,7 @@ jobs:
 
           git checkout -b $branchName
           git add .
-          git commit -m "Run npm audit fix`n`nRun ``npm audit fix`` to pick up latest fixes."
+          git commit -m "Run npm audit fix`n`nRun ``npm audit fix`` to pick up latest fixes." -s
 
           if ($LASTEXITCODE -ne 0) {
             Write-Output "No changes to commit."
