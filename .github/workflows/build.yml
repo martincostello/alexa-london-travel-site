@@ -77,6 +77,7 @@ jobs:
       uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       with:
         filter: 'tree:0'
+        persist-credentials: false
         show-progress: false
 
     - name: Setup .NET SDK
@@ -218,7 +219,7 @@ jobs:
         !cancelled() &&
         steps.build.outcome == 'failure' &&
         github.event.repository.fork == false &&
-        !contains('["dependabot[bot]", "github-actions[bot]", "renovate[bot]"]', github.event.sender.login)
+        !contains(fromJSON('["dependabot[bot]", "github-actions[bot]", "renovate[bot]"]'), github.event.pull_request.user.login)
       env:
         AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.CRASH_DUMPS_STORAGE_CONNECTION_STRING }}
         # renovate: datasource=github-releases depName=PSCompression packageName=santisq/PSCompression
@@ -261,7 +262,7 @@ jobs:
       contents: write
       id-token: write
       pull-requests: write
-    secrets: inherit
+    secrets: inherit # zizmor: ignore[secrets-inherit] Needed due to environment-scoped secrets
     with:
       application-name: ${{ needs.build.outputs.application-name }}
       container-image: ${{ needs.build.outputs.container-tag }}
@@ -277,7 +278,7 @@ jobs:
       contents: write
       id-token: write
       pull-requests: write
-    secrets: inherit
+    secrets: inherit # zizmor: ignore[secrets-inherit] Needed due to environment-scoped secrets
     with:
       application-name: ${{ needs.build.outputs.application-name }}
       container-image: ${{ needs.build.outputs.container-tag }}
