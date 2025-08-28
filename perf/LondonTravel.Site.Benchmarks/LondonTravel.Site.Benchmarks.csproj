@@ -4,7 +4,7 @@
     <NoWarn>$(NoWarn);CA2234</NoWarn>
     <OutputType>Exe</OutputType>
     <RootNamespace>MartinCostello.LondonTravel.Site.Benchmarks</RootNamespace>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\LondonTravel.Site\LondonTravel.Site.csproj" />
