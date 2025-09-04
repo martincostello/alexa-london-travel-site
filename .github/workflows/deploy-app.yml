@@ -65,7 +65,7 @@ jobs:
     steps:
 
     - name: Create deployment annotation
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
       env:
         APPLICATION_NAME: ${{ inputs.application-name }}
         APPLICATION_NAMESPACE: LondonTravel
@@ -92,7 +92,7 @@ jobs:
           });
 
     - name: Post deployment starting comment
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
       id: post-start-comment
       if: inputs.issue-number && inputs.workflow-url
       env:
@@ -156,7 +156,7 @@ jobs:
         }
 
     - name: Update deployment annotation
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
       if: ${{ !cancelled() }}
       with:
         script: |
@@ -174,7 +174,7 @@ jobs:
           });
 
     - name: Post deployment finished comment
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
       if: ${{ !cancelled() && steps.post-start-comment.outputs.result && inputs.workflow-url }}
       env:
         COMMENT_ID: ${{ steps.post-start-comment.outputs.result }}
@@ -277,7 +277,7 @@ jobs:
         if-no-files-found: ignore
 
     - name: Post tests finished comment
-      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
       if: ${{ !cancelled() && needs.deploy.outputs.comment-id }}
       env:
         COMMENT_ID: ${{ needs.deploy.outputs.comment-id }}
