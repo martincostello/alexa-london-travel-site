@@ -58,7 +58,7 @@
     <PackageVersion Include="Polly.RateLimiting" Version="8.6.3" />
     <PackageVersion Include="Pyroscope" Version="0.12.0" />
     <PackageVersion Include="Pyroscope.OpenTelemetry" Version="0.3.0" />
-    <PackageVersion Include="ReportGenerator" Version="5.4.15" />
+    <PackageVersion Include="ReportGenerator" Version="5.4.16" />
     <PackageVersion Include="Sentry.AspNetCore" Version="5.15.1" />
     <PackageVersion Include="Shouldly" Version="4.3.0" />
     <PackageVersion Include="Verify.XunitV3" Version="30.18.0" />
