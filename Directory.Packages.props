@@ -24,8 +24,6 @@
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.4.1" />
     <PackageVersion Include="JunitXml.TestLogger" Version="6.1.0" />
     <PackageVersion Include="JustEat.HttpClientInterception" Version="5.1.2" />
-    <!-- HACK Resolves GHSA-w7r3-mgwf-4mqq -->
-    <PackageVersion Include="KubernetesClient" Version="17.0.14" />
     <PackageVersion Include="MartinCostello.Logging.XUnit.v3" Version="0.6.0" />
     <PackageVersion Include="MartinCostello.OpenApi.Extensions" Version="1.1.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="9.0.9" />
