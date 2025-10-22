@@ -59,7 +59,7 @@
     <PackageVersion Include="ReportGenerator" Version="5.4.17" />
     <PackageVersion Include="Sentry.AspNetCore" Version="5.16.1" />
     <PackageVersion Include="Shouldly" Version="4.3.0" />
-    <PackageVersion Include="Verify.XunitV3" Version="31.0.3" />
+    <PackageVersion Include="Verify.XunitV3" Version="31.0.4" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
     <PackageVersion Include="xunit.v3" Version="3.1.0" />
   </ItemGroup>
