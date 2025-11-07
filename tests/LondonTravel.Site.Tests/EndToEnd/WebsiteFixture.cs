@@ -8,7 +8,6 @@ namespace MartinCostello.LondonTravel.Site.EndToEnd;
 public class WebsiteFixture
 {
     private const string WebsiteUrl = "WEBSITE_URL";
-    private readonly Uri? _serverAddress;
 
     public WebsiteFixture()
     {
@@ -16,7 +15,7 @@ public class WebsiteFixture
 
         if (Uri.TryCreate(url, UriKind.Absolute, out var address))
         {
-            _serverAddress = address;
+            ServerAddress = address;
         }
     }
 
@@ -24,9 +23,10 @@ public class WebsiteFixture
     {
         get
         {
-            Assert.SkipWhen(_serverAddress is null, $"The {WebsiteUrl} environment variable is not set or is not a valid absolute URI.");
-            return _serverAddress!;
+            Assert.SkipWhen(field is null, $"The {WebsiteUrl} environment variable is not set or is not a valid absolute URI.");
+            return field!;
         }
+        set;
     }
 
     public HttpClient CreateClient()

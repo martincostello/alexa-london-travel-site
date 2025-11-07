@@ -2,7 +2,7 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using Microsoft.AspNetCore.OpenApi;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 namespace MartinCostello.LondonTravel.Site.OpenApi;
 
@@ -20,18 +20,16 @@ internal sealed class AddSecurity : IOpenApiDocumentTransformer
             Description = "Access token authentication using a bearer token.",
             Scheme = "bearer",
             Type = SecuritySchemeType.Http,
-            Reference = new()
-            {
-                Id = "Bearer",
-                Type = ReferenceType.SecurityScheme,
-            },
         };
 
+        string referenceId = "Bearer";
+        var reference = new OpenApiSecuritySchemeReference(referenceId, document);
+
         document.Components ??= new();
-        document.Components.SecuritySchemes ??= new Dictionary<string, OpenApiSecurityScheme>();
-        document.Components.SecuritySchemes[scheme.Reference.Id] = scheme;
-        document.SecurityRequirements ??= [];
-        document.SecurityRequirements.Add(new() { [scheme] = [] });
+        document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
+        document.Components.SecuritySchemes[referenceId] = scheme;
+        document.Security ??= [];
+        document.Security.Add(new() { [reference] = [] });
 
         return Task.CompletedTask;
     }
