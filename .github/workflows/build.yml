@@ -189,6 +189,23 @@ jobs:
         subject-digest: ${{ steps.publish-container.outputs.container-digest }}
         subject-name: ${{ steps.publish-container.outputs.container-image }}
 
+    - name: Install cosign
+      uses: sigstore/cosign-installer@faadad0cce49287aee09b3a48701e75088a2c6ad # v4.0.0
+      if: steps.publish-container.outputs.container-digest != '' && steps.publish-container.outputs.container-tag != ''
+      env:
+        # renovate: datasource=github-releases depName=cosign packageName=sigstore/cosign
+        COSIGN_VERSION: v3.0.2
+      with:
+        cosign-release: ${{ env.COSIGN_VERSION }}
+
+    - name: Sign container image
+      if: steps.publish-container.outputs.container-digest != '' && steps.publish-container.outputs.container-tag != ''
+      shell: bash
+      env:
+        DIGEST: ${{ steps.publish-container.outputs.container-digest }}
+        TAGS: ${{ steps.publish-container.outputs.container-tag }}
+      run: echo "${TAGS}" | xargs -I {} cosign sign --yes "{}@${DIGEST}" --annotations "ref=${GITHUB_SHA}" --annotations "repo=${GITHUB_REPOSITORY}" --annotations "workflow=${GITHUB_WORKFLOW}"
+
     - name: Publish screenshots
       uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
       if: ${{ !cancelled() }}
