@@ -24,7 +24,12 @@ on:
         required: false
         type: string
       ref:
-        description: 'The Git reference to check out when running tests.'
+        description: 'The Git reference associated with the deployment.'
+        required: false
+        type: string
+        default: ${{ github.ref }}
+      sha:
+        description: 'The Git SHA to check out when running tests.'
         required: false
         type: string
         default: ${{ github.sha }}
@@ -111,12 +116,31 @@ jobs:
           });
           return comment.id;
 
+    - name: Install cosign
+      uses: sigstore/cosign-installer@faadad0cce49287aee09b3a48701e75088a2c6ad # v4.0.0
+      env:
+        # renovate: datasource=github-releases depName=cosign packageName=sigstore/cosign
+        COSIGN_VERSION: v3.0.2
+      with:
+        cosign-release: ${{ env.COSIGN_VERSION }}
+
     - name: Azure log in
       uses: azure/login@a457da9ea143d694b1b9c7c869ebb04ebe844ef5 # v2.3.0
       with:
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+    - name: Log in to Azure Container Registry
+      shell: bash
+      run: az acr login --name "${GITHUB_REPOSITORY_OWNER}"
+
+    - name: Verify container image
+      shell: bash
+      env:
+        CERTIFICATE_IDENTITY: ${{ format('{0}/{1}/.github/workflows/build.yml@{2}', github.server_url, github.repository, inputs.ref) }}
+        CONTAINER_IMAGE: ${{ inputs.container-image }}
+      run: cosign verify "${CONTAINER_IMAGE}" --certificate-identity "${CERTIFICATE_IDENTITY}" --certificate-oidc-issuer "https://token.actions.githubusercontent.com"
 
     - name: Deploy container to Azure App Service
       uses: azure/webapps-deploy@657f0700ea5214d56a0400d8ac5e8023c963d25d # v3.0.6
@@ -128,7 +152,7 @@ jobs:
     - name: Check application health
       shell: pwsh
       env:
-        APPLICATION_SHA: ${{ inputs.ref }}
+        APPLICATION_SHA: ${{ inputs.sha }}
         APPLICATION_URL: ${{ inputs.environment-url }}
       run: |
         $delay = 10
@@ -218,7 +242,7 @@ jobs:
       with:
         filter: 'tree:0'
         persist-credentials: false
-        ref: ${{ inputs.ref }}
+        ref: ${{ inputs.sha }}
         show-progress: false
 
     - name: Setup .NET SDK

@@ -29,6 +29,7 @@ jobs:
       environment-name: ${{ steps.get-environment-name.outputs.result }}
       environment-url: ${{ steps.set-outputs.outputs.environment-url }}
       issue-number: ${{ env.ISSUE_NUMBER }}
+      run-ref: ${{ steps.get-run.outputs.run-ref }}
       run-sha: ${{ steps.get-run.outputs.run-sha }}
       workflow-url: ${{ steps.set-outputs.outputs.workflow-url }}
 
@@ -106,6 +107,7 @@ jobs:
           }
 
           core.setOutput('run-number', run.run_number);
+          core.setOutput('run-ref', `refs/pull/${pull_number}/merge`);
           core.setOutput('run-sha', pull.merge_commit_sha);
 
     - name: Set outputs
@@ -153,6 +155,7 @@ jobs:
       environment-name: ${{ needs.setup.outputs.environment-name }}
       environment-url: ${{ needs.setup.outputs.application-url }}
       issue-number: ${{ needs.setup.outputs.issue-number }}
-      ref: ${{ needs.setup.outputs.run-sha }}
+      ref: ${{ needs.setup.outputs.run-ref }}
+      sha: ${{ needs.setup.outputs.run-sha }}
       slot-name: ${{ needs.setup.outputs.application-slot }}
       workflow-url: ${{ needs.setup.outputs.workflow-url }}
