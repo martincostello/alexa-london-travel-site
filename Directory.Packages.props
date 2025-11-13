@@ -33,7 +33,7 @@
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.0" />
     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0" />
     <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.54.1" />
-    <PackageVersion Include="Microsoft.DotNet.XliffTasks" Version="11.0.0-beta.25562.109" />
+    <PackageVersion Include="Microsoft.DotNet.XliffTasks" Version="10.0.0-beta.25556.109" />
     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="10.0.0" />
     <PackageVersion Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.14.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
