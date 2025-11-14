@@ -128,7 +128,7 @@ public sealed class CustomHttpHeadersMiddleware(
     {
         var builder = new StringBuilder();
 
-        bool enforce = options?.CertificateTransparency?.Enforce is true;
+        bool enforce = options.CertificateTransparency?.Enforce is true;
 
         if (enforce)
         {
@@ -138,9 +138,9 @@ public sealed class CustomHttpHeadersMiddleware(
         builder.AppendFormat(
             CultureInfo.InvariantCulture,
             "max-age={0};",
-            (int)(options?.CertificateTransparency?.MaxAge.TotalSeconds ?? default));
+            (int)(options.CertificateTransparency?.MaxAge.TotalSeconds ?? default));
 
-        if (enforce && options?.ExternalLinks?.Reports?.ExpectCTEnforce is { } enforceUri)
+        if (enforce && options.ExternalLinks?.Reports?.ExpectCTEnforce is { } enforceUri)
         {
             builder.Append(" report-uri ");
             builder.Append(enforceUri);
