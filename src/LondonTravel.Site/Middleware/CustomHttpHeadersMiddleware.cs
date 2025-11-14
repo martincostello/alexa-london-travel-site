@@ -130,7 +130,7 @@ public sealed class CustomHttpHeadersMiddleware(
         {
             return string.Empty;
         }
-        
+
         var builder = new StringBuilder();
 
         bool enforce = options.CertificateTransparency?.Enforce is true;
@@ -150,7 +150,7 @@ public sealed class CustomHttpHeadersMiddleware(
             builder.Append(" report-uri ");
             builder.Append(enforceUri);
         }
-        else if (options?.ExternalLinks?.Reports?.ExpectCTReportOnly is { } reportUri)
+        else if (options.ExternalLinks?.Reports?.ExpectCTReportOnly is { } reportUri)
         {
             builder.Append(" report-uri ");
             builder.Append(reportUri);
