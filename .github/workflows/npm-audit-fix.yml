@@ -34,6 +34,7 @@ jobs:
 
       - name: Apply audit fixes
         run: npm audit fix
+        continue-on-error: true
         working-directory: ./src/LondonTravel.Site
 
       - name: Push changes to GitHub
