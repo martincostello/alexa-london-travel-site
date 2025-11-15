@@ -6,7 +6,6 @@ import { Tracking } from './Tracking';
 
 describe('Tracking', () => {
     beforeEach(() => {
-        // Clean up window.gtag before each test
         delete (window as any).gtag;
     });
 
