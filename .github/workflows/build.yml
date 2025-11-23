@@ -88,36 +88,6 @@ jobs:
       with:
         node-version: '24.x'
 
-    - name: Get npm cache directory
-      id: npm-cache-dir
-      shell: pwsh
-      run: |
-        "dir=$(npm config get cache)" >> ${env:GITHUB_OUTPUT}
-
-    - name: Setup npm cache
-      uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
-      id: npm-cache
-      with:
-        path: ${{ steps.npm-cache-dir.outputs.dir }}
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-
-
-    - name: Setup NuGet cache
-      uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
-      with:
-        path: ${{ env.NUGET_PACKAGES }}
-        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/*.props') }}
-        restore-keys: ${{ runner.os }}-nuget-
-
-    - name: Setup Playwright cache
-      uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
-      with:
-        key: ${{ runner.os }}-playwright-${{ hashFiles('Directory.Packages.props') }}
-        path: |
-          ~/AppData/Local/ms-playwright
-          ~/.cache/ms-playwright
-          ~/Library/Caches/ms-playwright
-
     - name: Build, test and publish
       id: build
       shell: pwsh
