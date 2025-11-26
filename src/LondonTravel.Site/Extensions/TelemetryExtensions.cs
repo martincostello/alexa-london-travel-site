@@ -28,7 +28,8 @@ public static class TelemetryExtensions
                           .AddAspNetCoreInstrumentation()
                           .AddHttpClientInstrumentation()
                           .AddProcessInstrumentation()
-                          .AddMeter("System.Runtime");
+                          .AddMeter("System.Runtime")
+                          .SetExemplarFilter(ExemplarFilterType.TraceBased);
                })
                .WithTracing((builder) =>
                {
