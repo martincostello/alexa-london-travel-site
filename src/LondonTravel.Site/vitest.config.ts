@@ -12,5 +12,6 @@ export default defineConfig({
             reporter: ['html', 'lcov', 'text'],
             exclude: ['node_modules/', 'wwwroot/', '*.config.{js,ts,cjs,mjs}'],
         },
+        reporters: ['default', 'github-actions'],
     },
 });
