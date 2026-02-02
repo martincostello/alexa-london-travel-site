@@ -88,6 +88,12 @@ jobs:
       with:
         node-version: '24.x'
 
+    - name: Install Playwright browsers
+      shell: pwsh
+      run: |
+        dotnet build ./tests/LondonTravel.Site.Tests/LondonTravel.Site.Tests.csproj --configuration Release
+        pwsh ./tests/LondonTravel.Site.Tests/bin/Release/net10.0/playwright.ps1 install --with-deps
+
     - name: Build, test and publish
       id: build
       shell: pwsh
