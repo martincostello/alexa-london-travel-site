@@ -61,9 +61,15 @@ public class BrowserFixture(
                 string traceName = GenerateFileName(activeTestName, ".zip");
                 string path = Path.Combine(AssetsDirectory, "traces", traceName);
 
-                await context.Tracing.StopAsync(new() { Path = path });
-
-                outputHelper.WriteLine($"Trace saved to {path}.");
+                try
+                {
+                    await context.Tracing.StopAsync(new() { Path = path });
+                    outputHelper.WriteLine($"Trace saved to {path}.");
+                }
+                catch (Exception ex)
+                {
+                    outputHelper.WriteLine("Failed to stop tracing: " + ex);
+                }
             }
 
             await TryCaptureVideoAsync(page, activeTestName);
