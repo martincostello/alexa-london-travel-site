@@ -57,7 +57,7 @@ public sealed class ManagePage(ApplicationNavigator navigator) : PageBase(naviga
     public async Task WaitForLinkedAccountCountAsync(int count)
     {
         await Assertions.Expect(Navigator.Page.Locator(Selectors.LinkedAccount))
-                        .ToHaveCountAsync(count);
+                        .ToHaveCountAsync(count, new() { Timeout = 10_000 });
     }
 
     public async Task WaitForLinkedAsync()

@@ -41,13 +41,14 @@ public class AlexaTests : BrowserIntegrationTest
                 // Act
                 await navigator.NavigateToAsync(relativeUri);
 
-                var page = await new SignInPage(navigator)
-                    .SignInWithAmazonAsync()
-                    .ThenAsync((p) => p.ManageAsync());
+                var homepage = await new SignInPage(navigator)
+                    .SignInWithAmazonAsync();
+
+                var manage = await homepage.ManageAsync();
 
                 // Assert
-                await page.IsAuthenticatedAsync().ShouldBeTrue();
-                await page.IsLinkedToAlexaAsync().ShouldBeTrue();
+                await manage.IsAuthenticatedAsync().ShouldBeTrue();
+                await manage.IsLinkedToAlexaAsync().ShouldBeTrue();
             });
     }
 
