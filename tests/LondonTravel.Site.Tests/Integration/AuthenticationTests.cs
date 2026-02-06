@@ -36,21 +36,20 @@ public sealed class AuthenticationTests : BrowserIntegrationTest
         await AtPageAsync<HomePage>(
             Microsoft.Playwright.BrowserType.Chromium,
             null,
-            async (page) =>
+            async (homepage) =>
             {
-                page = await page
-                    .SignInAsync()
-                    .ThenAsync((p) => p.SignInWithProviderAsync(provider));
+                var signIn = await homepage.SignInAsync();
+                homepage = await signIn.SignInWithProviderAsync(provider);
 
                 // Assert
-                await page.IsAuthenticatedAsync().ShouldBeTrue();
-                await page.UserNameAsync().ShouldBe(expected);
+                await homepage.IsAuthenticatedAsync().ShouldBeTrue();
+                await homepage.UserNameAsync().ShouldBe(expected);
 
                 // Act
-                page = await page.SignOutAsync();
+                homepage = await homepage.SignOutAsync();
 
                 // Assert
-                await page.IsAuthenticatedAsync().ShouldBeFalse();
+                await homepage.IsAuthenticatedAsync().ShouldBeFalse();
             });
     }
 
