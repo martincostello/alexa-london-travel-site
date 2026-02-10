@@ -120,15 +120,15 @@ jobs:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         PYROSCOPE_ARCH: 'x86_64'
         PYROSCOPE_VARIANT: 'glibc'
-        # renovate: datasource=github-releases depName=pyroscope-dotnet packageName=grafana/pyroscope-dotnet
-        PYROSCOPE_VERSION: '0.10.0'
+        # renovate: datasource=nuget depName=Pyroscope packageName=Pyroscope
+        PYROSCOPE_VERSION: '0.14.1'
         SentryAuthToken: ${{ secrets.SENTRY_TOKEN }}
         UsePyroscope: 'false'
       run: |
         if (${env:UsePyroscope} -eq "true") {
           Write-Output "Downloading Pyroscope..."
 
-          $pyroscope = (gh api "/repos/grafana/pyroscope-dotnet/releases/tags/v${env:PYROSCOPE_VERSION}" | ConvertFrom-Json)
+          $pyroscope = (gh api "/repos/grafana/pyroscope-dotnet/releases/tags/v${env:PYROSCOPE_VERSION}-pyroscope" | ConvertFrom-Json)
           $pyroscopeAsset = $pyroscope.assets | Where-Object { $_.name -eq "pyroscope.${env:PYROSCOPE_VERSION}-${env:PYROSCOPE_VARIANT}-${env:PYROSCOPE_ARCH}.tar.gz" }
           $pyroscopeUrl = $pyroscopeAsset.browser_download_url
 
