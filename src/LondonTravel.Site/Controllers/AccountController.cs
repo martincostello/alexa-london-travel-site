@@ -216,7 +216,7 @@ public partial class AccountController(
                 url = url[..indexOfQuery];
             }
 
-            return string.Equals(url.TrimEnd('/'), targetUrl!.TrimEnd('/'), StringComparison.OrdinalIgnoreCase);
+            return string.Equals(url.TrimEnd('/'), targetUrl.TrimEnd('/'), StringComparison.OrdinalIgnoreCase);
         }
     }
 
