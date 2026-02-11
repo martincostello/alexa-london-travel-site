@@ -72,7 +72,7 @@ public static class ApplicationTelemetry
                 string label = key.Replace('.', '_');
 
                 // See https://grafana.com/docs/k6/latest/javascript-api/jslib/http-instrumentation-pyroscope/#about-baggage-header
-                labels ??= new(3);
+                labels ??= [with(3)];
                 labels[label] = value;
             }
         }
