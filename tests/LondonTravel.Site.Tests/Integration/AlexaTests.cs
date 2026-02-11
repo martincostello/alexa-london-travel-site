@@ -23,7 +23,7 @@ public class AlexaTests : BrowserIntegrationTest
     public AlexaTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
         : base(fixture, outputHelper)
     {
-        Fixture.Services!.GetRequiredService<InMemoryDocumentStore>().Clear();
+        Fixture.Services.GetRequiredService<InMemoryDocumentStore>().Clear();
     }
 
     [Theory]

@@ -19,7 +19,7 @@ public sealed class PreferencesTests : BrowserIntegrationTest
     public PreferencesTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
         : base(fixture, outputHelper)
     {
-        Fixture.Services!.GetRequiredService<InMemoryDocumentStore>().Clear();
+        Fixture.Services.GetRequiredService<InMemoryDocumentStore>().Clear();
     }
 
     [Theory]
