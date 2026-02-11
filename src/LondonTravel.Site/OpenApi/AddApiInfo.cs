@@ -48,7 +48,7 @@ internal sealed class AddApiInfo(IOptions<SiteOptions> options) : IOpenApiDocume
         info.TermsOfService = new UriBuilder()
         {
             Scheme = Uri.UriSchemeHttps,
-            Host = siteOptions.Metadata?.Domain!,
+            Host = siteOptions.Metadata?.Domain,
             Path = "terms-of-service/",
         }.Uri;
     }

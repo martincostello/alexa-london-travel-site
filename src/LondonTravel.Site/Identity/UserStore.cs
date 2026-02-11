@@ -97,7 +97,7 @@ public sealed class UserStore :
 
         var results = await _service.GetAsync((p) => p.EmailNormalized == normalizedEmail, cancellationToken);
         var result = results.FirstOrDefault();
-        return result!;
+        return result;
     }
 
     /// <inheritdoc />
@@ -106,7 +106,7 @@ public sealed class UserStore :
         ArgumentNullException.ThrowIfNull(userId);
 
         var user = await _service.GetAsync(userId);
-        return user!;
+        return user;
     }
 
     /// <inheritdoc />
@@ -121,7 +121,7 @@ public sealed class UserStore :
             cancellationToken);
 
         var result = results.FirstOrDefault();
-        return result!;
+        return result;
     }
 
     /// <inheritdoc />
@@ -131,7 +131,7 @@ public sealed class UserStore :
 
         var results = await _service.GetAsync((p) => p.UserNameNormalized == normalizedUserName, cancellationToken);
         var result = results.FirstOrDefault();
-        return result!;
+        return result;
     }
 
     /// <inheritdoc />
