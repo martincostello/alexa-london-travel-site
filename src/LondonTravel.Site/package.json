@@ -22,6 +22,8 @@
   "devDependencies": {
     "@babel/core": "7.29.0",
     "@babel/preset-env": "7.29.0",
+    "@eslint/eslintrc": "3.3.3",
+    "@eslint/js": "10.0.1",
     "@stylistic/eslint-plugin": "5.8.0",
     "@types/jsdom": "27.0.0",
     "@typescript-eslint/eslint-plugin": "8.56.0",
