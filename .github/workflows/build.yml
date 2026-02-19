@@ -162,7 +162,7 @@ jobs:
       if: steps.publish-container.outputs.container-digest != '' && steps.publish-container.outputs.container-tag != ''
       env:
         # renovate: datasource=github-releases depName=cosign packageName=sigstore/cosign
-        COSIGN_VERSION: v3.0.4
+        COSIGN_VERSION: v3.0.5
       with:
         cosign-release: ${{ env.COSIGN_VERSION }}
 
