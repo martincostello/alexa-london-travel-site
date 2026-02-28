@@ -32,7 +32,7 @@
     "@vitest/ui": "4.0.18",
     "css-loader": "7.1.4",
     "css-minimizer-webpack-plugin": "7.0.4",
-    "eslint": "10.0.1",
+    "eslint": "10.0.2",
     "eslint-config-prettier": "10.1.8",
     "globals": "17.3.0",
     "jsdom": "28.1.0",
