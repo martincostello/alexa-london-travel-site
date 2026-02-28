@@ -20,7 +20,7 @@ public sealed class AuthenticationTests : BrowserIntegrationTest
     public AuthenticationTests(HttpServerFixture fixture, ITestOutputHelper outputHelper)
         : base(fixture, outputHelper)
     {
-        Fixture.Services!.GetRequiredService<InMemoryDocumentStore>().Clear();
+        Fixture.Services.GetRequiredService<InMemoryDocumentStore>().Clear();
     }
 
     [Theory]
