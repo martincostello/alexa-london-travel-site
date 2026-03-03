@@ -37,10 +37,10 @@ public sealed class HomePage(ApplicationNavigator navigator) : PageBase(navigato
     }
 
     public async Task WaitForLinesAsync()
-        => await Navigator.Page.WaitForSelectorAsync(Selectors.Lines);
+        => await Navigator.Page.Locator(Selectors.Lines).WaitForAsync();
 
     public async Task WaitForSignedOutAsync()
-        => await Navigator.Page.WaitForSelectorAsync(Selectors.SignIn);
+        => await Navigator.Page.Locator(Selectors.SignIn).WaitForAsync();
 
     private sealed class Selectors
     {

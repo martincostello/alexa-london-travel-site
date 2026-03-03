@@ -12,7 +12,7 @@ public abstract class ModalBase(string name, ApplicationNavigator navigator)
     protected ApplicationNavigator Navigator { get; } = navigator;
 
     public async Task WaitForLoadedAsync()
-        => await Navigator.Page.WaitForSelectorAsync(DialogSelector);
+        => await Navigator.Page.Locator(DialogSelector).WaitForAsync();
 
     protected async Task CloseSelfAsync()
     {
