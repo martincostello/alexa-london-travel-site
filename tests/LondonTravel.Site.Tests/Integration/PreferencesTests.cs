@@ -61,8 +61,7 @@ public sealed class PreferencesTests : BrowserIntegrationTest
 
                 page = await page.UpdatePreferencesAsync();
 
-                // Give the UI time to update
-                await Task.Delay(TimeSpan.FromSeconds(1), TestContext.Current.CancellationToken);
+                await page.WaitForLinesAsync();
 
                 // Assert
                 lines = await page.LinesAsync();
@@ -86,8 +85,7 @@ public sealed class PreferencesTests : BrowserIntegrationTest
                 // Act
                 page = await page.UpdatePreferencesAsync();
 
-                // Give the UI time to update
-                await Task.Delay(TimeSpan.FromSeconds(1), TestContext.Current.CancellationToken);
+                await page.WaitForLinesAsync();
 
                 // Assert
                 lines = await page.LinesAsync();
