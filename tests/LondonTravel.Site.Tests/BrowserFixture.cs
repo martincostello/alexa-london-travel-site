@@ -82,6 +82,7 @@ public class BrowserFixture(
         {
             IgnoreHTTPSErrors = true,
             Locale = "en-GB",
+            ServiceWorkers = ServiceWorkerPolicy.Block,
             TimezoneId = "Europe/London",
         };
 

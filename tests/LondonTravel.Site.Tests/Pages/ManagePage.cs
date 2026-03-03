@@ -61,10 +61,10 @@ public sealed class ManagePage(ApplicationNavigator navigator) : PageBase(naviga
     }
 
     public async Task WaitForLinkedAsync()
-        => await Navigator.Page.Locator(Selectors.Unlink).WaitForAsync();
+        => await Navigator.Page.WaitForSelectorAsync(Selectors.Unlink);
 
     public async Task WaitForUnlinkedAsync()
-        => await Navigator.Page.Locator(Selectors.Link).WaitForAsync();
+        => await Navigator.Page.WaitForSelectorAsync(Selectors.Link);
 
     private sealed class Selectors
     {

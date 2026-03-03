@@ -37,11 +37,7 @@ public abstract class PageBase(ApplicationNavigator navigator)
     public async Task<HomePage> SignOutAsync()
     {
         await Navigator.Page.ClickAsync(Selectors.SignOut);
-
-        var page = new HomePage(Navigator);
-        await page.WaitForSignedOutAsync();
-
-        return page;
+        return new HomePage(Navigator);
     }
 
     public async Task WaitForSignedInAsync()
