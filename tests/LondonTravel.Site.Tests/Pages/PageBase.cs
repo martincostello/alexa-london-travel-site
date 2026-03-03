@@ -45,7 +45,7 @@ public abstract class PageBase(ApplicationNavigator navigator)
     }
 
     public async Task WaitForSignedInAsync()
-        => await Navigator.Page.Locator(Selectors.SignOut).WaitForAsync();
+        => await Navigator.Page.WaitForSelectorAsync(Selectors.SignOut);
 
     internal async Task NavigateToSelfAsync()
     {
