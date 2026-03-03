@@ -106,6 +106,16 @@ public class BrowserFixture(
             options.Headless = false;
             options.SlowMo = 100;
         }
+        else if (OperatingSystem.IsLinux() && Options.BrowserType is BrowserType.Chromium && IsRunningInGitHubActions)
+        {
+            // HACK Workaround for Chromium-based browser crashes on Linux in CI environments.
+            // GitHub Actions Ubuntu runners have a limited /dev/shm (shared memory) size,
+            // which can cause Chromium renderer processes to crash during tests.
+            // --disable-dev-shm-usage: Use /tmp instead of /dev/shm to avoid size limitations.
+            // --no-sandbox: Required for the Playwright-bundled Chromium in the GitHub Actions
+            // container environment, where the renderer process would otherwise be killed.
+            options.Args = ["--disable-dev-shm-usage", "--no-sandbox"];
+        }
 
         return await playwright[Options.BrowserType].LaunchAsync(options);
     }

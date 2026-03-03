@@ -10,7 +10,12 @@ public sealed class BrowsersTestData : TheoryData<string, string?>
     public BrowsersTestData()
     {
         Add(BrowserType.Chromium, null);
-        Add(BrowserType.Chromium, "chrome");
+
+        // HACK Skip on Linux - system Chrome is unreliable on GitHub Actions Ubuntu runners.
+        if (!OperatingSystem.IsLinux())
+        {
+            Add(BrowserType.Chromium, "chrome");
+        }
 
         // HACK Skip on macOS. See https://github.com/microsoft/playwright-dotnet/issues/2920.
         if (!OperatingSystem.IsLinux() && !OperatingSystem.IsMacOS())
