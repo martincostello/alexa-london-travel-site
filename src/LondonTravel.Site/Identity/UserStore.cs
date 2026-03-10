@@ -96,8 +96,7 @@ public sealed class UserStore :
         ArgumentNullException.ThrowIfNull(normalizedEmail);
 
         var results = await _service.GetAsync((p) => p.EmailNormalized == normalizedEmail, cancellationToken);
-        var result = results.FirstOrDefault();
-        return result!;
+        return results.FirstOrDefault();
     }
 
     /// <inheritdoc />
@@ -105,8 +104,7 @@ public sealed class UserStore :
     {
         ArgumentNullException.ThrowIfNull(userId);
 
-        var user = await _service.GetAsync(userId);
-        return user!;
+        return await _service.GetAsync(userId);
     }
 
     /// <inheritdoc />
@@ -120,8 +118,7 @@ public sealed class UserStore :
                    p.Logins.Contains(new LondonTravelLoginInfo() { LoginProvider = loginProvider, ProviderKey = providerKey, ProviderDisplayName = loginProvider }),
             cancellationToken);
 
-        var result = results.FirstOrDefault();
-        return result!;
+        return results.FirstOrDefault();
     }
 
     /// <inheritdoc />
@@ -130,8 +127,7 @@ public sealed class UserStore :
         ArgumentNullException.ThrowIfNull(normalizedUserName);
 
         var results = await _service.GetAsync((p) => p.UserNameNormalized == normalizedUserName, cancellationToken);
-        var result = results.FirstOrDefault();
-        return result!;
+        return results.FirstOrDefault();
     }
 
     /// <inheritdoc />
