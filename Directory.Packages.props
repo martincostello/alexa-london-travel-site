@@ -25,19 +25,19 @@
     <PackageVersion Include="JunitXml.TestLogger" Version="8.0.0" />
     <PackageVersion Include="JustEat.HttpClientInterception" Version="5.1.2" />
     <PackageVersion Include="MartinCostello.Logging.XUnit.v3" Version="0.7.1" />
-    <PackageVersion Include="MartinCostello.OpenApi.Extensions" Version="2.0.1" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="11.0.0-preview.1.26104.118" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="11.0.0-preview.1.26104.118" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Twitter" Version="11.0.0-preview.1.26104.118" />
-    <PackageVersion Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" Version="11.0.0-preview.1.26104.118" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="11.0.0-preview.1.26104.118" />
-    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="11.0.0-preview.1.26104.118" />
+    <PackageVersion Include="MartinCostello.OpenApi.Extensions" Version="3.0.0-pr.729.1711" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="11.0.0-preview.2.26159.112" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="11.0.0-preview.2.26159.112" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Twitter" Version="11.0.0-preview.2.26159.112" />
+    <PackageVersion Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" Version="11.0.0-preview.2.26159.112" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="11.0.0-preview.2.26159.112" />
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="11.0.0-preview.2.26159.112" />
     <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.57.1" />
     <PackageVersion Include="Microsoft.DotNet.XliffTasks" Version="11.0.0-beta.26110.125" />
     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="10.4.0" />
     <PackageVersion Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.16.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
-    <PackageVersion Include="Microsoft.OpenApi" Version="2.7.0" />
+    <PackageVersion Include="Microsoft.OpenApi" Version="3.4.0" />
     <PackageVersion Include="Microsoft.Playwright" Version="1.58.0" />
     <PackageVersion Include="Microsoft.TypeScript.MSBuild" Version="5.9.3" />
     <PackageVersion Include="NSubstitute" Version="5.3.0" />
