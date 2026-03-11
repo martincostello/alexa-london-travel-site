@@ -193,7 +193,7 @@ public class InlineStyleTagHelper(
             {
                 startIndex += SourceMapPreamble.Length;
 
-                int endIndex = css.IndexOf('*', startIndex);
+                int endIndex = css.IndexOf('*', startIndex, StringComparison.Ordinal);
 
                 if (endIndex > -1)
                 {
