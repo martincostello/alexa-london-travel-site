@@ -22,8 +22,12 @@ public sealed class HomePage(ApplicationNavigator navigator) : PageBase(navigato
 
     public async Task<HomePage> UpdatePreferencesAsync()
     {
-        await Navigator.Page.ClickAsync("[data-id='save-preferences']");
-        await Navigator.Page.WaitForURLAsync((url) => new Uri(url).AbsolutePath == "/");
+        await Navigator.Page.RunAndWaitForResponseAsync(
+            async () => await Navigator.Page.ClickAsync("[data-id='save-preferences']"),
+            (r) => r.Url.Contains("update-line-preferences", StringComparison.Ordinal));
+
+        await Navigator.Page.WaitForURLAsync(
+            (url) => url.Contains("UpdateSuccess", StringComparison.Ordinal));
 
         var page = new HomePage(Navigator);
 
