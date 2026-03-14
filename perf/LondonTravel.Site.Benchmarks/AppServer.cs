@@ -19,7 +19,12 @@ internal sealed class AppServer : IAsyncDisposable
 
     public AppServer()
     {
-        var builder = WebApplication.CreateBuilder(["--applicationName=LondonTravel.Site", $"--contentRoot={GetContentRoot()}"]);
+        var builder = WebApplication.CreateBuilder(
+            [
+                "--AllowedHosts=127.0.0.1",
+                "--applicationName=LondonTravel.Site",
+                $"--contentRoot={GetContentRoot()}",
+            ]);
 
         ConfigureWebHost(builder);
 
