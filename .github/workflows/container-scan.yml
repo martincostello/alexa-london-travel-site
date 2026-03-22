@@ -73,7 +73,6 @@ jobs:
           image-ref: ${{ steps.configure.outputs.container-image }}
           output: trivy.json
           severity: CRITICAL,HIGH
-          version: ${{ env.TRIVY_VERSION }}
 
       - name: Check for vulnerabilities
         id: check-for-vulnerabilities
