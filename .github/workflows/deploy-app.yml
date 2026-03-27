@@ -143,7 +143,7 @@ jobs:
       run: cosign verify "${CONTAINER_IMAGE}" --certificate-identity "${CERTIFICATE_IDENTITY}" --certificate-oidc-issuer "https://token.actions.githubusercontent.com"
 
     - name: Deploy container to Azure App Service
-      uses: azure/webapps-deploy@45c7df8f6a4fe841b67ff88920b33f4f8328f8d9 # v3.0.8
+      uses: azure/webapps-deploy@02a81bead70021f5284939794bcec79c271ab383 # v3.0.8
       with:
         app-name: ${{ inputs.application-name }}
         images: ${{ inputs.container-image }}
