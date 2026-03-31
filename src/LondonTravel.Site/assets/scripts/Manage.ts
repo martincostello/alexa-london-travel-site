@@ -21,9 +21,9 @@ export class Manage {
 
         if (form) {
             form.addEventListener('submit', () => {
-                form.querySelector('.js-delete-control').classList.add('disabled');
-                form.querySelector('.js-delete-content').classList.add('d-none');
-                form.querySelector('.js-delete-loader').classList.remove('d-none');
+                form.querySelector('.js-delete-control')?.classList.add('disabled');
+                form.querySelector('.js-delete-content')?.classList.add('d-none');
+                form.querySelector('.js-delete-loader')?.classList.remove('d-none');
             });
         }
 
@@ -31,8 +31,10 @@ export class Manage {
             modal.addEventListener('show.bs.modal', () => {
                 setTimeout(() => {
                     const confirmation = modal.querySelector<HTMLInputElement>('.js-modal-confirm');
-                    confirmation.disabled = false;
-                    confirmation.classList.remove('disabled');
+                    if (confirmation) {
+                        confirmation.disabled = false;
+                        confirmation.classList.remove('disabled');
+                    }
                 }, 3000);
             });
         }

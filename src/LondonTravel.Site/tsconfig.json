@@ -5,8 +5,7 @@
     "inlineSources": true,
     "lib": [
       "dom",
-      "es5",
-      "es2015.iterable",
+      "es2015",
       "scripthost"
     ],
     "noEmitOnError": true,
@@ -16,7 +15,7 @@
     "outDir": "./wwwroot/assets/js",
     "removeComments": true,
     "sourceMap": true,
-    "target": "es5"
+    "target": "es2015"
   },
   "exclude": [
     "node_modules",

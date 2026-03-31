@@ -12,7 +12,7 @@ export class SwaggerUI {
                 return;
             }
 
-            const url: string = element.getAttribute('href');
+            const url: string = element.getAttribute('href') ?? '';
             const ui: any = swaggerUIBundle({
                 url: url,
                 /* eslint-disable @typescript-eslint/naming-convention */

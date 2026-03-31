@@ -2,18 +2,18 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 export class Preferences {
-    private clearButton: HTMLInputElement;
-    private container: HTMLElement;
-    private favoritesCount: HTMLElement;
-    private initialState: string;
-    private otherCount: HTMLElement;
-    private resetButton: HTMLInputElement;
-    private saveButton: HTMLInputElement;
+    private clearButton!: HTMLInputElement;
+    private container: HTMLElement | null = null;
+    private favoritesCount: HTMLElement | null = null;
+    private initialState!: string;
+    private otherCount: HTMLElement | null = null;
+    private resetButton!: HTMLInputElement;
+    private saveButton!: HTMLInputElement;
 
     public constructor() {}
 
     initialize() {
-        this.container = document.querySelector('.js-preferences-container');
+        this.container = document.querySelector<HTMLElement>('.js-preferences-container');
 
         if (!this.container) {
             return;
@@ -21,17 +21,17 @@ export class Preferences {
 
         this.initialState = this.getCurrentState();
 
-        this.clearButton = this.container.querySelector('.js-preferences-clear');
-        this.resetButton = this.container.querySelector('.js-preferences-reset');
-        this.saveButton = this.container.querySelector('.js-preferences-save');
+        this.clearButton = this.container.querySelector<HTMLInputElement>('.js-preferences-clear')!;
+        this.resetButton = this.container.querySelector<HTMLInputElement>('.js-preferences-reset')!;
+        this.saveButton = this.container.querySelector<HTMLInputElement>('.js-preferences-save')!;
 
-        this.favoritesCount = this.container.querySelector('.js-favorites-count');
+        this.favoritesCount = this.container.querySelector<HTMLElement>('.js-favorites-count');
 
         if (this.favoritesCount) {
             this.favoritesCount.classList.remove('d-none');
         }
 
-        this.otherCount = this.container.querySelector('.js-other-count');
+        this.otherCount = this.container.querySelector<HTMLElement>('.js-other-count');
 
         if (this.otherCount) {
             this.otherCount.classList.remove('d-none');
@@ -45,10 +45,10 @@ export class Preferences {
                 const selector = 'input[type="checkbox"]';
                 let checkbox = element.querySelector<HTMLInputElement>(selector);
                 if (!checkbox) {
-                    checkbox = element.parentElement.querySelector<HTMLInputElement>(selector);
+                    checkbox = element.parentElement?.querySelector<HTMLInputElement>(selector) ?? null;
                 }
 
-                if (element.tagName.toUpperCase() === 'LI') {
+                if (element.tagName.toUpperCase() === 'LI' && checkbox) {
                     checkbox.checked = !checkbox.checked;
                 }
 
@@ -121,14 +121,17 @@ export class Preferences {
     }
 
     private getAllCheckboxes() {
-        return this.container.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
+        return this.container!.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
     }
 
     private getCurrentState() {
         const ids: string[] = [];
 
         this.getSelectedCheckboxes().forEach((element) => {
-            ids.push(element.getAttribute('data-line-id'));
+            const id = element.getAttribute('data-line-id');
+            if (id) {
+                ids.push(id);
+            }
         });
 
         ids.sort();
@@ -137,15 +140,15 @@ export class Preferences {
     }
 
     private getSelectedCheckboxes() {
-        return this.container.querySelectorAll<HTMLInputElement>('input[type="checkbox"]:checked');
+        return this.container!.querySelectorAll<HTMLInputElement>('input[type="checkbox"]:checked');
     }
 
     private resetFavoriteLines() {
         const ids: string[] = this.initialState.split(',');
 
         this.getAllCheckboxes().forEach((element) => {
-            const id: string = element.getAttribute('data-line-id');
-            element.checked = ids.indexOf(id) > -1;
+            const id = element.getAttribute('data-line-id');
+            element.checked = id !== null && ids.indexOf(id) > -1;
         });
 
         this.checkCurrentState();
