@@ -23,6 +23,6 @@ if (args.SequenceEqual(["--test"]))
 }
 else
 {
-    var summary = BenchmarkRunner.Run<AppBenchmarks>(args: args);
+    var summary = await BenchmarkRunner.RunAsync<AppBenchmarks>(args: args);
     return summary.Reports.Any((p) => !p.Success) ? 1 : 0;
 }
