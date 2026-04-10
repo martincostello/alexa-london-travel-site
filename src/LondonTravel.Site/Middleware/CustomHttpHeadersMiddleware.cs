@@ -45,7 +45,7 @@ public sealed class CustomHttpHeadersMiddleware(
     private readonly bool _isProduction = environment.IsProduction();
 
     /// <summary>
-    /// The base content security policy that does not contain an request-specific content.
+    /// The base content security policy that does not contain any request-specific content.
     /// </summary>
     private volatile string? _baseContentSecurityPolicy;
 
