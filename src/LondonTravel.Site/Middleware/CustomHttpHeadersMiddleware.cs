@@ -45,6 +45,11 @@ public sealed class CustomHttpHeadersMiddleware(
     private readonly bool _isProduction = environment.IsProduction();
 
     /// <summary>
+    /// The base content security policy that does not contain any request-specific content.
+    /// </summary>
+    private volatile string? _baseContentSecurityPolicy;
+
+    /// <summary>
     /// Invokes the middleware asynchronously.
     /// </summary>
     /// <param name="context">The current HTTP context.</param>
@@ -79,8 +84,13 @@ public sealed class CustomHttpHeadersMiddleware(
 
                 bool allowInlineStyles = context.InlineStylesAllowed();
 
-                string csp = BuildContentSecurityPolicy(nonce, allowInlineStyles, isReport: false);
-                string cspReport = BuildContentSecurityPolicy(nonce, allowInlineStyles, isReport: true);
+                string csp = BuildContentSecurityPolicy(nonce, allowInlineStyles);
+                string cspReport = csp;
+
+                if (_isProduction)
+                {
+                    csp += "upgrade-insecure-requests";
+                }
 
                 context.Response.Headers.ContentSecurityPolicy = csp;
                 context.Response.Headers.ContentSecurityPolicyReportOnly = cspReport;
@@ -197,46 +207,88 @@ public sealed class CustomHttpHeadersMiddleware(
     }
 
     /// <summary>
+    /// Builds the static Content Security Policy to use for the website.
+    /// </summary>
+    /// <returns>
+    /// A <see cref="string"/> containing the static Content Security Policy to use.
+    /// </returns>
+    private string BuildStaticContentSecurityPolicy()
+    {
+        if (_baseContentSecurityPolicy is null)
+        {
+            var options = _options.CurrentValue;
+            string? cdn = GetCdnOriginForContentSecurityPolicy(options);
+
+            var policies = new Dictionary<string, IList<string>>()
+            {
+                ["default-src"] = [Csp.Self, Csp.Data],
+                ["img-src"] = [Csp.Self, Csp.Data, cdn],
+                ["font-src"] = [Csp.Self],
+                ["connect-src"] = [Csp.Self],
+                ["media-src"] = [Csp.None],
+                ["object-src"] = [Csp.None],
+                ["child-src"] = [Csp.Self],
+                ["frame-ancestors"] = [Csp.None],
+                ["form-action"] = [Csp.Self],
+                ["block-all-mixed-content"] = [],
+                ["base-uri"] = [Csp.Self],
+                ["manifest-src"] = [Csp.Self],
+                ["worker-src"] = [Csp.Self],
+            };
+
+            var builder = new StringBuilder();
+
+            foreach (var pair in policies)
+            {
+                builder.Append(pair.Key);
+
+                var origins = pair.Value;
+
+                if (options.ContentSecurityPolicyOrigins != null &&
+                    options.ContentSecurityPolicyOrigins.TryGetValue(pair.Key, out var configOrigins))
+                {
+                    origins = [.. origins.Concat(configOrigins)];
+                }
+
+                origins = [.. origins.Where((p) => !string.IsNullOrWhiteSpace(p)).Distinct()];
+
+                if (origins.Count > 0)
+                {
+                    builder.Append(' ');
+                    builder.Append(string.Join(' ', origins));
+                }
+
+                builder.Append(';');
+            }
+
+            if (options?.ExternalLinks?.Reports?.ContentSecurityPolicy is { } reportUri)
+            {
+                builder.Append(CultureInfo.InvariantCulture, $"report-uri {reportUri};");
+            }
+
+            _baseContentSecurityPolicy = builder.ToString();
+        }
+
+        return _baseContentSecurityPolicy;
+    }
+
+    /// <summary>
     /// Builds the Content Security Policy to use for the website.
     /// </summary>
     /// <param name="nonce">The nonce value to use, if any.</param>
     /// <param name="allowInlineStyles">Whether to allow the use of inline styles.</param>
-    /// <param name="isReport">Whether the policy is being generated for the report.</param>
     /// <returns>
     /// A <see cref="string"/> containing the Content Security Policy to use.
     /// </returns>
-    private string BuildContentSecurityPolicy(string? nonce, bool allowInlineStyles, bool isReport)
+    private string BuildContentSecurityPolicy(string? nonce, bool allowInlineStyles)
     {
-        var options = _options.CurrentValue;
-        string? cdn = GetCdnOriginForContentSecurityPolicy(options);
-
-        List<string> scriptDirectives =
-        [
-            Csp.Self,
-        ];
-
-        List<string> styleDirectives =
-        [
-            Csp.Self,
-        ];
+        List<string> scriptDirectives = [Csp.Self];
+        List<string> styleDirectives = [Csp.Self];
 
         var policies = new Dictionary<string, IList<string>>()
         {
-            ["default-src"] = [Csp.Self, Csp.Data],
             ["script-src"] = scriptDirectives,
             ["style-src"] = styleDirectives,
-            ["img-src"] = [Csp.Self, Csp.Data, cdn],
-            ["font-src"] = [Csp.Self],
-            ["connect-src"] = [Csp.Self],
-            ["media-src"] = [Csp.None],
-            ["object-src"] = [Csp.None],
-            ["child-src"] = [Csp.Self],
-            ["frame-ancestors"] = [Csp.None],
-            ["form-action"] = [Csp.Self],
-            ["block-all-mixed-content"] = [],
-            ["base-uri"] = [Csp.Self],
-            ["manifest-src"] = [Csp.Self],
-            ["worker-src"] = [Csp.Self],
         };
 
         if (allowInlineStyles)
@@ -268,7 +320,8 @@ public sealed class CustomHttpHeadersMiddleware(
             }
         }
 
-        var builder = new StringBuilder();
+        var options = _options.CurrentValue;
+        var builder = new StringBuilder(BuildStaticContentSecurityPolicy());
 
         foreach (var pair in policies)
         {
@@ -291,16 +344,6 @@ public sealed class CustomHttpHeadersMiddleware(
             }
 
             builder.Append(';');
-        }
-
-        if (!isReport && _isProduction)
-        {
-            builder.Append("upgrade-insecure-requests;");
-        }
-
-        if (options?.ExternalLinks?.Reports?.ContentSecurityPolicy is { } reportUri)
-        {
-            builder.Append(CultureInfo.InvariantCulture, $"report-uri {reportUri};");
         }
 
         return builder.ToString();
