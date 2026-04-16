@@ -22,7 +22,7 @@ public partial class AccountController(
 {
     private readonly bool _isEnabled =
         siteOptions?.Authentication?.IsEnabled == true &&
-        siteOptions.Authentication.ExternalProviders?.Any((p) => p.Value?.IsEnabled == true);
+        siteOptions.Authentication.ExternalProviders?.Any((p) => p.Value?.IsEnabled == true) == true;
 
     [AllowAnonymous]
     [HttpGet]
