@@ -251,7 +251,7 @@ public static class LondonTravelSiteBuilder
                 }
 
                 return Results.File(file.CreateReadStream(), contentType: "application/json");
-            });
+            }).ExcludeFromDescription();
         }
 
         app.UseIdentity(options.CurrentValue);
