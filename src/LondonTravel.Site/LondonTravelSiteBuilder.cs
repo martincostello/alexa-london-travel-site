@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 
@@ -185,39 +184,6 @@ public static class LondonTravelSiteBuilder
             options.SerializerOptions.TypeInfoResolverChain.Add(ApplicationJsonSerializerContext.Default);
         });
 
-        builder.Services.Configure<StaticFileOptions>((options) =>
-        {
-            var provider = new FileExtensionContentTypeProvider();
-            provider.Mappings[".webmanifest"] = "application/manifest+json";
-
-            options.ContentTypeProvider = provider;
-            options.DefaultContentType = "application/json";
-            options.ServeUnknownFileTypes = true;
-
-            options.OnPrepareResponse = (context) =>
-            {
-                var maxAge = TimeSpan.FromDays(7);
-
-                if (context.File.Exists && builder.Environment.IsProduction())
-                {
-                    string? extension = Path.GetExtension(context.File.PhysicalPath);
-
-                    // These files are served with a content hash in the URL so can be cached for longer
-                    bool isScriptOrStyle =
-                        string.Equals(extension, ".css", StringComparison.OrdinalIgnoreCase) ||
-                        string.Equals(extension, ".js", StringComparison.OrdinalIgnoreCase);
-
-                    if (isScriptOrStyle)
-                    {
-                        maxAge = TimeSpan.FromDays(365);
-                    }
-                }
-
-                var headers = context.Context.Response.GetTypedHeaders();
-                headers.CacheControl = new() { MaxAge = maxAge };
-            };
-        });
-
         builder.Services.AddSingleton(TimeProvider.System);
         builder.Services.AddSingleton<ITflServiceFactory, TflServiceFactory>();
 
@@ -268,7 +234,25 @@ public static class LondonTravelSiteBuilder
 
         app.UseResponseCompression();
 
-        app.UseStaticFiles();
+        app.MapStaticAssets("LondonTravel.Site.staticwebassets.endpoints.json")
+           .ShortCircuit();
+
+        string[] appSiteAssociationPaths = ["/.well-known/apple-app-site-association", "apple-app-site-association"];
+
+        foreach (string path in appSiteAssociationPaths)
+        {
+            app.MapGet(path, static (IWebHostEnvironment environment) =>
+            {
+                var file = environment.WebRootFileProvider.GetFileInfo("apple-app-site-association.json");
+
+                if (!file.Exists)
+                {
+                    return Results.NotFound();
+                }
+
+                return Results.File(file.CreateReadStream(), contentType: "application/json");
+            }).ExcludeFromDescription();
+        }
 
         app.UseIdentity(options.CurrentValue);
 
