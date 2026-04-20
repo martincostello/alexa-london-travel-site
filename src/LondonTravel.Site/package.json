@@ -42,7 +42,7 @@
     "stylelint-config-standard": "40.0.0",
     "ts-loader": "9.5.7",
     "tsify": "5.0.4",
-    "typescript": "6.0.2",
+    "typescript": "6.0.3",
     "vitest": "4.1.4",
     "webpack": "5.106.1",
     "webpack-cli": "7.0.2",
