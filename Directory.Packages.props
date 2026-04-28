@@ -36,7 +36,7 @@
     <PackageVersion Include="Microsoft.DotNet.XliffTasks" Version="10.0.0-beta.26225.103" />
     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="10.5.0" />
     <PackageVersion Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.17.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.5.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.5.1" />
     <PackageVersion Include="Microsoft.OpenApi" Version="2.7.4" />
     <PackageVersion Include="Microsoft.Playwright" Version="1.59.0" />
     <PackageVersion Include="Microsoft.TypeScript.MSBuild" Version="6.0.3" />
