@@ -33,7 +33,7 @@
     "css-minimizer-webpack-plugin": "8.0.0",
     "eslint": "10.3.0",
     "eslint-config-prettier": "10.1.8",
-    "globals": "17.5.0",
+    "globals": "17.6.0",
     "jsdom": "29.1.1",
     "mini-css-extract-plugin": "2.10.2",
     "moment": "2.30.1",
