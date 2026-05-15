@@ -28,6 +28,7 @@ public static class TelemetryExtensions
                           .AddAspNetCoreInstrumentation()
                           .AddHttpClientInstrumentation()
                           .AddProcessInstrumentation()
+                          .AddMeter("Microsoft.Extensions.Caching.Memory.MemoryCache")
                           .AddMeter("System.Runtime")
                           .SetExemplarFilter(ExemplarFilterType.TraceBased);
                })
