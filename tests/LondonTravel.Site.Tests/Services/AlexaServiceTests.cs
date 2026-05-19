@@ -385,12 +385,12 @@ public class AlexaServiceTests(ITestOutputHelper outputHelper)
     {
         options ??= CreateValidSiteOptions();
 
-        var snapshot = Substitute.For<IOptionsSnapshot<SiteOptions>>();
-        snapshot.Value.Returns(options);
+        var monitor = Substitute.For<IOptionsMonitor<SiteOptions>>();
+        monitor.CurrentValue.Returns(options);
 
         return new AlexaService(
             userManager ?? CreateUserManager(),
-            snapshot,
+            monitor,
             outputHelper.ToLogger<AlexaService>());
     }
 
