@@ -8,12 +8,24 @@ permissions: {}
 jobs:
   regenerate:
     runs-on: [ ubuntu-24.04 ]
+    if: github.event.repository.fork == false
 
     concurrency:
       group: ${{ github.workflow }}
       cancel-in-progress: false
 
+    permissions:
+      id-token: write
+
     steps:
+
+      - name: Get GitHub token
+        id: get-github-token
+        if: github.event.repository.fork == false
+        # zizmor: ignore[ref-version-mismatch] False positive
+        uses: martincostello/github-automation/actions/get-github-token@16711f5c6f94e59ee14b83697acb675be1528856 # get-github-token/v4.1.0
+        with:
+          profile-name: write
 
       - name: Checkout code
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -21,7 +33,7 @@ jobs:
           filter: 'tree:0'
           persist-credentials: true # zizmor: ignore[artipacked] Needed to push commits
           show-progress: false
-          token: ${{ secrets.COSTELLOBOT_TOKEN }}
+          token: ${{ steps.get-github-token.outputs.token }}
 
       - name: Setup Node
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
@@ -84,7 +96,7 @@ jobs:
           BASE_BRANCH: ${{ github.event.repository.default_branch }}
           HEAD_BRANCH: ${{ steps.push-changes.outputs.branch-name }}
         with:
-          github-token: ${{ secrets.COSTELLOBOT_TOKEN }}
+          github-token: ${{ steps.get-github-token.outputs.token }}
           script: |
             const { repo, owner } = context.repo;
             const workflowUrl = `${process.env.GITHUB_SERVER_URL}/${owner}/${repo}/actions/runs/${process.env.GITHUB_RUN_ID}`;
