@@ -24,8 +24,10 @@ jobs:
       name: container-scan
       deployment: false
 
+    outputs:
+      has-vulnerabilities: ${{ steps.check-for-vulnerabilities.outputs.has-vulnerabilities }}
+
     permissions:
-      actions: write
       contents: read
       id-token: write
       security-events: write
@@ -39,14 +41,6 @@ jobs:
           persist-credentials: false
           show-progress: false
 
-      - name: Configure Trivy
-        id: configure
-        shell: pwsh
-        run: |
-          $registry = "${env:GITHUB_REPOSITORY_OWNER}.azurecr.io"
-          $image = "${registry}/${env:GITHUB_REPOSITORY}:latest".ToLowerInvariant()
-          "container-image=${image}" >> ${env:GITHUB_OUTPUT}
-
       - name: Azure log in
         uses: azure/login@532459ea530d8321f2fb9bb10d1e0bcf23869a43 # v3.0.0
         with:
@@ -57,6 +51,14 @@ jobs:
       - name: Log in to Azure Container Registry
         shell: pwsh
         run: az acr login --name ${env:GITHUB_REPOSITORY_OWNER}
+
+      - name: Configure Trivy
+        id: configure
+        shell: pwsh
+        run: |
+          $registry = "${env:GITHUB_REPOSITORY_OWNER}.azurecr.io"
+          $image = "${registry}/${env:GITHUB_REPOSITORY}:latest".ToLowerInvariant()
+          "container-image=${image}" >> ${env:GITHUB_OUTPUT}
 
       - name: Run Trivy (SARIF)
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
@@ -139,10 +141,24 @@ jobs:
 
           ($report -Join "`n") >> ${env:GITHUB_STEP_SUMMARY}
 
-      - name: Rebuild if any vulnerabilities found
-        if: |
-          github.event_name == 'schedule' &&
-          steps.check-for-vulnerabilities.outputs.has-vulnerabilities == 'true'
+  rebuild:
+    needs: scan-image
+    runs-on: ubuntu-24.04
+    if: |
+      github.event_name == 'schedule' &&
+      needs.scan-image.outputs.has-vulnerabilities == 'true'
+
+    concurrency:
+      group: ${{ github.workflow }}
+      cancel-in-progress: false
+
+    permissions:
+      actions: write
+
+    steps:
+
+      - name: Rebuild container image
+        shell: pwsh
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh workflow run build.yml
+        run: gh workflow run build.yml --repo ${env:GITHUB_REPOSITORY}
