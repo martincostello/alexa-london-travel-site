@@ -8,6 +8,7 @@ permissions: {}
 jobs:
   regenerate:
     runs-on: ubuntu-24.04
+    timeout-minutes: 5
     if: github.event.repository.fork == false
 
     concurrency:
@@ -46,14 +47,29 @@ jobs:
         continue-on-error: true
         working-directory: ./src/LondonTravel.Site
 
+      - name: Check for changes
+        id: check-for-changes
+        shell: pwsh
+        run: |
+          $GitStatus = (git status --porcelain)
+
+          if ([string]::IsNullOrEmpty($GitStatus)) {
+            Write-Output "No changes to commit."
+            "has-changes=false" >> ${env:GITHUB_OUTPUT}
+          } else {
+            "has-changes=true" >> ${env:GITHUB_OUTPUT}
+          }
+
       - name: Get GitHub token
         id: get-github-token
+        if: steps.check-for-changes.outputs.has-changes == 'true'
         uses: martincostello/github-automation/actions/get-github-token@567bf2ea7958064af7863e6004a545a799f57982 # get-github-token/v4.2.0
         with:
           profile-name: write
 
       - name: Push changes to GitHub
         id: push-changes
+        if: steps.check-for-changes.outputs.has-changes == 'true'
         shell: pwsh
         env:
           APP_SLUG: ${{ steps.get-github-token.outputs.app-slug }}
@@ -61,14 +77,6 @@ jobs:
           GH_TOKEN: ${{ steps.get-github-token.outputs.token }}
           TOKEN_TYPE: ${{ steps.get-github-token.outputs.token-type }}
         run: |
-          $gitStatus = (git status --porcelain)
-
-          if ([string]::IsNullOrEmpty($gitStatus)) {
-            Write-Output "No changes to commit."
-            "regenerated=false" >> ${env:GITHUB_OUTPUT}
-            exit 0
-          }
-
           $branchName = "npm-audit-fix"
           $branchProbe = gh api "repos/${env:GITHUB_REPOSITORY}/git/ref/heads/${branchName}" 2>&1
 
