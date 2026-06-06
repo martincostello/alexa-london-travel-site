@@ -106,7 +106,7 @@ jobs:
             $editedFiles += $_
           }
 
-          if ($LASTEXITCODE -ne 0 || $editedFiles.Count -lt 1) {
+          if (($LASTEXITCODE -ne 0) -or ($editedFiles.Count -lt 1)) {
             Write-Output "No changes to commit."
             "regenerated=false" >> ${env:GITHUB_OUTPUT}
             exit 0
