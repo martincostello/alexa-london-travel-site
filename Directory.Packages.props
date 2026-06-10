@@ -35,7 +35,7 @@
     <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.60.0" />
     <PackageVersion Include="Microsoft.DotNet.XliffTasks" Version="10.0.0-beta.26273.107" />
     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="10.6.0" />
-    <PackageVersion Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.19.0" />
+    <PackageVersion Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.19.1" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.6.0" />
     <PackageVersion Include="Microsoft.OpenApi" Version="2.8.0" />
     <PackageVersion Include="Microsoft.Playwright" Version="1.60.0" />
