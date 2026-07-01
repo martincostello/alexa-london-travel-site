@@ -141,7 +141,9 @@ jobs:
           $archive = Join-Path ${env:RUNNER_TEMP} "pyroscope.tar.gz"
           $pyroscopeTag = "pyroscope-${env:PYROSCOPE_VERSION}"
           $pyroscopeAsset = "pyroscope.${env:PYROSCOPE_VERSION}-${env:PYROSCOPE_VARIANT}-${env:PYROSCOPE_ARCH}.tar.gz"
+
           gh release download $pyroscopeTag --pattern $pyroscopeAsset --output $archive --repo "grafana/pyroscope-dotnet"
+
           if ($LASTEXITCODE -ne 0) {
             Write-Error "Failed to download Pyroscope ${env:PYROSCOPE_VERSION}."
             exit 1
