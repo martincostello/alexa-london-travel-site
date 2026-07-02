@@ -19,25 +19,25 @@
     <PackageVersion Include="Azure.Extensions.AspNetCore.DataProtection.Blobs" Version="1.5.3" />
     <PackageVersion Include="Azure.Extensions.AspNetCore.DataProtection.Keys" Version="1.6.3" />
     <PackageVersion Include="Azure.Identity" Version="1.21.0" />
-    <PackageVersion Include="BenchmarkDotNet" Version="0.15.8" />
+    <PackageVersion Include="BenchmarkDotNet" Version="0.16.0-nightly.20260623.568" />
     <PackageVersion Include="coverlet.msbuild" Version="10.0.1" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="3.0.4" />
     <PackageVersion Include="JunitXml.TestLogger" Version="8.0.0" />
     <PackageVersion Include="JustEat.HttpClientInterception" Version="5.1.2" />
     <PackageVersion Include="MartinCostello.Logging.XUnit.v3" Version="0.7.1" />
-    <PackageVersion Include="MartinCostello.OpenApi.Extensions" Version="2.0.2" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="10.0.9" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="10.0.9" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Twitter" Version="10.0.9" />
-    <PackageVersion Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" Version="10.0.9" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.9" />
-    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.9" />
+    <PackageVersion Include="MartinCostello.OpenApi.Extensions" Version="3.0.0-pr.729.1984" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="11.0.0-preview.5.26302.115" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="11.0.0-preview.5.26302.115" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Twitter" Version="11.0.0-preview.5.26302.115" />
+    <PackageVersion Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" Version="11.0.0-preview.5.26302.115" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="11.0.0-preview.5.26302.115" />
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="11.0.0-preview.5.26302.115" />
     <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.61.0" />
-    <PackageVersion Include="Microsoft.DotNet.XliffTasks" Version="10.0.0-beta.26319.104" />
+    <PackageVersion Include="Microsoft.DotNet.XliffTasks" Version="11.0.0-beta.26110.125" />
     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="10.7.0" />
     <PackageVersion Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.19.1" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.7.0" />
-    <PackageVersion Include="Microsoft.OpenApi" Version="2.9.0" />
+    <PackageVersion Include="Microsoft.OpenApi" Version="3.7.0" />
     <PackageVersion Include="Microsoft.Playwright" Version="1.61.0" />
     <PackageVersion Include="Microsoft.TypeScript.MSBuild" Version="6.0.3" />
     <PackageVersion Include="NSubstitute" Version="5.3.0" />
