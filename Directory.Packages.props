@@ -46,11 +46,11 @@
     <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.16.0" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.16.0" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Process" Version="1.16.0-rc.1" />
-    <PackageVersion Include="OpenTelemetry.Resources.Azure" Version="1.15.1-beta.1" />
-    <PackageVersion Include="OpenTelemetry.Resources.Container" Version="1.15.1-beta.1" />
-    <PackageVersion Include="OpenTelemetry.Resources.Host" Version="1.15.1-beta.1" />
-    <PackageVersion Include="OpenTelemetry.Resources.OperatingSystem" Version="1.15.1-beta.1" />
-    <PackageVersion Include="OpenTelemetry.Resources.ProcessRuntime" Version="1.15.1-beta.1" />
+    <PackageVersion Include="OpenTelemetry.Resources.Azure" Version="1.16.0-beta.1" />
+    <PackageVersion Include="OpenTelemetry.Resources.Container" Version="1.16.0-beta.1" />
+    <PackageVersion Include="OpenTelemetry.Resources.Host" Version="1.16.0-beta.1" />
+    <PackageVersion Include="OpenTelemetry.Resources.OperatingSystem" Version="1.16.0-beta.1" />
+    <PackageVersion Include="OpenTelemetry.Resources.ProcessRuntime" Version="1.16.0-beta.1" />
     <PackageVersion Include="Polly.Extensions" Version="8.7.0" />
     <PackageVersion Include="Polly.RateLimiting" Version="8.7.0" />
     <PackageVersion Include="Pyroscope" Version="1.4.0" />
