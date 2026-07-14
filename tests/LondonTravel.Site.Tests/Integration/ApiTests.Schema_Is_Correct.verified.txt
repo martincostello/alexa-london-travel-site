@@ -1,5 +1,5 @@
 ﻿{
-  openapi: 3.1.2,
+  openapi: 3.2.0,
   info: {
     title: London Travel,
     description: London Travel is an Amazon Alexa skill for checking the status for travel in London.,
