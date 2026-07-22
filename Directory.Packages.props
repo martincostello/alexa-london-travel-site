@@ -36,6 +36,8 @@
     <PackageVersion Include="Microsoft.DotNet.XliffTasks" Version="10.0.0-beta.26367.110" />
     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="10.8.0" />
     <PackageVersion Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.20.0" />
+    <PackageVersion Include="Microsoft.IdentityModel.Protocols" Version="8.20.0" />
+    <PackageVersion Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="8.20.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.8.1" />
     <PackageVersion Include="Microsoft.OpenApi" Version="2.11.0" />
     <PackageVersion Include="Microsoft.Playwright" Version="1.61.0" />
@@ -58,6 +60,7 @@
     <PackageVersion Include="ReportGenerator" Version="5.5.10" />
     <PackageVersion Include="Sentry.AspNetCore" Version="6.7.0" />
     <PackageVersion Include="Shouldly" Version="4.3.0" />
+    <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.20.0" />
     <PackageVersion Include="System.Security.Cryptography.Xml" Version="10.0.10" />
     <PackageVersion Include="Verify.XunitV3" Version="31.27.0" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
