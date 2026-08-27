@@ -167,6 +167,12 @@ public static class LondonTravelSiteBuilder
         builder.Services.Configure<GzipCompressionProviderOptions>((p) => p.Level = CompressionLevel.Fastest);
         builder.Services.Configure<BrotliCompressionProviderOptions>((p) => p.Level = CompressionLevel.Fastest);
 
+        // Workaround for https://github.com/dotnet/extensions/issues/5962
+        if (OperatingSystem.IsLinux() || OperatingSystem.IsWindows())
+        {
+            builder.Services.AddResourceMonitoring();
+        }
+
         builder.Services.AddResponseCaching();
         builder.Services.AddResponseCompression((options) =>
         {
