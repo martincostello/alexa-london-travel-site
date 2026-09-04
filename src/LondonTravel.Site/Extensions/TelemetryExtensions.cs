@@ -28,6 +28,7 @@ public static class TelemetryExtensions
                           .AddAspNetCoreInstrumentation()
                           .AddHttpClientInstrumentation()
                           .AddProcessInstrumentation()
+                          .AddMeter("Microsoft.Extensions.Caching.Memory.MemoryCache")
                           .AddMeter("Microsoft.Extensions.Diagnostics.ResourceMonitoring")
                           .AddMeter("Polly")
                           .AddMeter("System.Runtime")
