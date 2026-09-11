@@ -8,6 +8,7 @@
     <AssemblyIsCLSCompliant>false</AssemblyIsCLSCompliant>
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
     <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)LondonTravel.Site.ruleset</CodeAnalysisRuleSet>
+    <Features>$(Features);runtime-async=on</Features>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
