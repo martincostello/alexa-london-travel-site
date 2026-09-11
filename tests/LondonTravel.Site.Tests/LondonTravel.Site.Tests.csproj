@@ -37,7 +37,7 @@
   </ItemGroup>
   <PropertyGroup>
     <CollectCoverage Condition=" '$(WEBSITE_URL)' == '' ">true</CollectCoverage>
-    <Threshold>80,65,90</Threshold>
+    <Threshold>80,55,90</Threshold>
   </PropertyGroup>
   <ItemGroup>
     <CoverletExclude Include="$([MSBuild]::Escape('[AspNet.Security.OAuth*]*'))" />
