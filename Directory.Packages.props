@@ -32,7 +32,7 @@
     <PackageVersion Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" Version="11.0.0-rc.1.26425.128" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="11.0.0-rc.1.26425.128" />
     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="11.0.0-rc.1.26425.128" />
-    <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.63.0" />
+    <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.63.1" />
     <PackageVersion Include="Microsoft.DotNet.XliffTasks" Version="11.0.0-beta.26462.109" />
     <PackageVersion Include="Microsoft.Extensions.Diagnostics.ResourceMonitoring" Version="10.10.0" />
     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="10.10.0" />
