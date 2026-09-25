@@ -33,7 +33,7 @@
     "eslint": "10.11.0",
     "eslint-config-prettier": "10.1.8",
     "globals": "17.12.0",
-    "jsdom": "30.1.0",
+    "jsdom": "30.1.1",
     "moment": "2.31.0",
     "prettier": "3.9.8",
     "stylelint-config-standard": "40.0.0",
