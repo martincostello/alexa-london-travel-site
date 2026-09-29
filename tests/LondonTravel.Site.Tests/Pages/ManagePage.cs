@@ -40,7 +40,7 @@ public sealed class ManagePage(ApplicationNavigator navigator) : PageBase(naviga
 
     public async Task<ManagePage> SignInWithProviderAsync(string name)
     {
-        await Navigator.Page.ClickAsync($"[data-id='sign-in-{name}']");
+        await ClickAndWaitForNavigationAsync($"[data-id='sign-in-{name}']");
         return new ManagePage(Navigator);
     }
 

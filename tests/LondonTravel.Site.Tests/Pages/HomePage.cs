@@ -24,14 +24,12 @@ public sealed class HomePage(ApplicationNavigator navigator) : PageBase(navigato
     {
         await Navigator.Page.RunAndWaitForResponseAsync(
             async () => await Navigator.Page.ClickAsync("[data-id='save-preferences']"),
-            (r) => r.Url.Contains("update-line-preferences", StringComparison.Ordinal));
-
-        await Navigator.Page.WaitForURLAsync(
-            (url) => url.Contains("UpdateSuccess", StringComparison.Ordinal));
+            (r) => r.Request.IsNavigationRequest && r.Url.Contains("UpdateSuccess", StringComparison.Ordinal));
 
         var page = new HomePage(Navigator);
 
         await page.WaitForSignedInAsync();
+        await page.WaitForReadyAsync();
 
         return page;
     }
