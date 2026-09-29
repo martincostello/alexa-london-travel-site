@@ -42,6 +42,11 @@ public class BrowserFixture(
 
         var page = await context.NewPageAsync();
 
+        if (IsRunningInGitHubActions)
+        {
+            page.SetDefaultNavigationTimeout(60_000);
+        }
+
         page.Console += (_, e) => outputHelper.WriteLine(e.Text);
         page.PageError += (_, e) => outputHelper.WriteLine(e);
 

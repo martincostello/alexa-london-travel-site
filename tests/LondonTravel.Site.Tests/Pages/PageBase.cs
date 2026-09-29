@@ -1,6 +1,8 @@
 // Copyright (c) Martin Costello, 2017. All rights reserved.
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
+using Microsoft.Playwright;
+
 namespace MartinCostello.LondonTravel.Site.Pages;
 
 public abstract class PageBase(ApplicationNavigator navigator)
@@ -43,9 +45,60 @@ public abstract class PageBase(ApplicationNavigator navigator)
     public async Task WaitForSignedInAsync()
         => await Navigator.Page.WaitForSelectorAsync(Selectors.SignOut);
 
+    public async Task WaitForReadyAsync()
+    {
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+
+        while (true)
+        {
+            try
+            {
+                if (await Navigator.Page.EvaluateAsync<string>("() => document.readyState") is "complete")
+                {
+                    return;
+                }
+            }
+            catch (PlaywrightException)
+            {
+                // The execution context was destroyed by a navigation, so try again
+            }
+
+            try
+            {
+                await Task.Delay(TimeSpan.FromMilliseconds(100), cts.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                throw new TimeoutException($"Timed out waiting for {Navigator.Page.Url} to load.");
+            }
+        }
+    }
+
     internal async Task NavigateToSelfAsync()
     {
         await Navigator.NavigateToAsync(RelativeUri);
+    }
+
+    protected async Task ClickAndWaitForNavigationAsync(string selector)
+    {
+        const int MaxAttempts = 3;
+
+        for (int attempt = 1; ; attempt++)
+        {
+            try
+            {
+                await Navigator.Page.RunAndWaitForRequestAsync(
+                    async () => await Navigator.Page.ClickAsync(selector),
+                    (request) => request.IsNavigationRequest,
+                    new() { Timeout = 10_000 });
+
+                return;
+            }
+            catch (TimeoutException) when (attempt < MaxAttempts)
+            {
+                // Try again
+            }
+        }
     }
 
     private sealed class Selectors

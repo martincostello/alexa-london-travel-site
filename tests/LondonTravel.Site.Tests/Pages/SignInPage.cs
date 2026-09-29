@@ -11,11 +11,12 @@ public sealed class SignInPage(ApplicationNavigator navigator) : PageBase(naviga
 
     public async Task<HomePage> SignInWithProviderAsync(string name)
     {
-        await Navigator.Page.ClickAsync($"[data-id='sign-in-{name}']");
+        await ClickAndWaitForNavigationAsync($"[data-id='sign-in-{name}']");
 
         var page = new HomePage(Navigator);
 
         await page.WaitForSignedInAsync();
+        await page.WaitForReadyAsync();
 
         return page;
     }
