@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configuration>
+  <CodeCoverage>
+    <Attributes>
+      <Exclude>
+        <Attribute>^System\.CodeDom\.Compiler\.GeneratedCodeAttribute$</Attribute>
+        <Attribute>^System\.Diagnostics\.CodeAnalysis\.ExcludeFromCodeCoverageAttribute$</Attribute>
+        <Attribute>^System\.Diagnostics\.DebuggerNonUserCodeAttribute$</Attribute>
+      </Exclude>
+    </Attributes>
+    <ModulePaths>
+      <Exclude>
+        <ModulePath>.*\\obj\\.*</ModulePath>
+        <ModulePath>.*\/obj\/.*</ModulePath>
+        <ModulePath>.*AspNet\.Security\.OAuth.*\.dll</ModulePath>
+      </Exclude>
+    </ModulePaths>
+    <Sources>
+      <Exclude>
+        <Source>.*\\obj\\.*</Source>
+        <Source>.*\/obj\/.*</Source>
+      </Exclude>
+    </Sources>
+  </CodeCoverage>
+</Configuration>

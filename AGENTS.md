@@ -6,9 +6,11 @@ This file provides guidance to agents when working with code in this repository.
 
 - Use `./build.ps1` from the repository root for the full CI-style path. It bootstraps the exact .NET SDK from `global.json`, publishes `src/LondonTravel.Site`, and runs the test suite.
 - Use `./build.ps1 -SkipTests` when you only need the publish/build step.
-- Use `dotnet test ./tests/LondonTravel.Site.Tests/LondonTravel.Site.Tests.csproj -p:CollectCoverage=false` for normal local test runs. The test project enables coverlet thresholds by default, so focused runs should disable coverage.
-- Run a single .NET test with `dotnet test ./tests/LondonTravel.Site.Tests/LondonTravel.Site.Tests.csproj --filter "FullyQualifiedName~MartinCostello.LondonTravel.Site.Integration.ApiTests.Schema_Is_Correct" -p:CollectCoverage=false`.
-- Test categories are exposed as xUnit traits through `CategoryAttribute`; useful filters include `--filter "Category=Integration"` and `--filter "Category=EndToEnd"`.
+- Tests run on Microsoft Testing Platform (configured via the `test` section of `global.json`), so `dotnet test` takes the project via `--project` and uses MTP/xUnit options rather than VSTest `--logger`/`--filter` syntax.
+- Use `dotnet test ./tests/LondonTravel.Site.Tests/LondonTravel.Site.Tests.csproj -p:CollectCoverage=false` for normal local test runs. The test project collects code coverage with `Microsoft.Testing.Extensions.CodeCoverage` and enforces thresholds by default, so focused runs should disable coverage.
+- Run a single .NET test with `dotnet test ./tests/LondonTravel.Site.Tests/LondonTravel.Site.Tests.csproj --filter-method "MartinCostello.LondonTravel.Site.Integration.ApiTests.Schema_Is_Correct" -p:CollectCoverage=false`.
+- Test categories are exposed as xUnit traits through `CategoryAttribute`; useful filters include `--filter-trait "Category=Integration"` and `--filter-trait "Category=EndToEnd"`.
+- Coverage is written to `artifacts/coverage/<project>`; `./build.ps1` generates HTML/Markdown reports from it with the `reportgenerator` .NET tool, so run `dotnet tool restore` first.
 - Frontend tooling lives in `src/LondonTravel.Site`. Run `npm run lint` for ESLint and `npm run test` for Vitest.
 - Run a single frontend test file with `npm run test -- assets/scripts/Tracking.test.ts`.
 - Use `npm run format-check` to verify frontend formatting without rewriting files. `npm run build` runs compile + format + lint, and the format step uses `--write`/`--fix`.
