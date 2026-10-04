@@ -250,7 +250,7 @@ jobs:
 
     - name: Run end-to-end tests
       shell: pwsh
-      run: dotnet test ./tests/LondonTravel.Site.Tests --configuration Release --filter Category=EndToEnd --logger "GitHubActions;report-warnings=false"
+      run: dotnet test ./tests/LondonTravel.Site.Tests --configuration Release --filter-trait "Category=EndToEnd"
       env:
         WEBSITE_URL: ${{ inputs.environment-url }}
         WEBSITE_USER_GOOGLE_USERNAME: ${{ secrets.WEBSITE_USER_GOOGLE_USERNAME }}
