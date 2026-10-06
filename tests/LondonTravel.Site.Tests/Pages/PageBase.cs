@@ -83,21 +83,39 @@ public abstract class PageBase(ApplicationNavigator navigator)
     {
         const int MaxAttempts = 3;
 
-        for (int attempt = 1; ; attempt++)
-        {
-            try
-            {
-                await Navigator.Page.RunAndWaitForRequestAsync(
-                    async () => await Navigator.Page.ClickAsync(selector),
-                    (request) => request.IsNavigationRequest,
-                    new() { Timeout = 10_000 });
+        var page = Navigator.Page;
+        var navigated = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
 
-                return;
-            }
-            catch (TimeoutException) when (attempt < MaxAttempts)
+        void OnRequest(object? sender, IRequest request)
+        {
+            if (request.IsNavigationRequest)
             {
-                // Try again
+                navigated.TrySetResult();
             }
+        }
+
+        page.Request += OnRequest;
+
+        try
+        {
+            for (int attempt = 1; ; attempt++)
+            {
+                await page.ClickAsync(selector);
+
+                try
+                {
+                    await navigated.Task.WaitAsync(TimeSpan.FromSeconds(5));
+                    return;
+                }
+                catch (TimeoutException) when (attempt < MaxAttempts)
+                {
+                    // Try again
+                }
+            }
+        }
+        finally
+        {
+            page.Request -= OnRequest;
         }
     }
 
