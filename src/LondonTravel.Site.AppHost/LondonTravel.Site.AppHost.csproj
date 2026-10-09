@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Sdk Name="Aspire.AppHost.Sdk" />
   <PropertyGroup>
+    <AspireUseCliBundle>true</AspireUseCliBundle>
     <IsAspireHost>true</IsAspireHost>
     <OutputType>Exe</OutputType>
     <TargetFramework>net11.0</TargetFramework>
