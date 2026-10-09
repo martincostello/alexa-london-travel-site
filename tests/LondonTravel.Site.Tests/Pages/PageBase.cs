@@ -46,33 +46,7 @@ public abstract class PageBase(ApplicationNavigator navigator)
         => await Navigator.Page.WaitForSelectorAsync(Selectors.SignOut);
 
     public async Task WaitForReadyAsync()
-    {
-        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
-
-        while (true)
-        {
-            try
-            {
-                if (await Navigator.Page.EvaluateAsync<string>("() => document.readyState") is "complete")
-                {
-                    return;
-                }
-            }
-            catch (PlaywrightException)
-            {
-                // The execution context was destroyed by a navigation, so try again
-            }
-
-            try
-            {
-                await Task.Delay(TimeSpan.FromMilliseconds(100), cts.Token);
-            }
-            catch (OperationCanceledException)
-            {
-                throw new TimeoutException($"Timed out waiting for {Navigator.Page.Url} to load.");
-            }
-        }
-    }
+        => await Navigator.WaitForLoadAsync();
 
     internal async Task NavigateToSelfAsync()
     {

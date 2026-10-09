@@ -4,6 +4,7 @@
     <IsAspireHost>true</IsAspireHost>
     <OutputType>Exe</OutputType>
     <TargetFramework>net11.0</TargetFramework>
+    <AspireUseCliBundle>true</AspireUseCliBundle>
     <UserSecretsId>londontravel.martincostello.com.AppHost</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
