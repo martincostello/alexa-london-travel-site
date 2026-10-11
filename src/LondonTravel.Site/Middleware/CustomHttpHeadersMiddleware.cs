@@ -63,13 +63,13 @@ public sealed class CustomHttpHeadersMiddleware(
                 context.Response.Headers.Remove(HeaderNames.Server);
                 context.Response.Headers.Remove(HeaderNames.XPoweredBy);
 
-                context.Response.Headers.Append("Cross-Origin-Embedder-Policy", "unsafe-none");
-                context.Response.Headers.Append("Cross-Origin-Opener-Policy", "same-origin");
-                context.Response.Headers.Append("Cross-Origin-Resource-Policy", "same-origin");
-                context.Response.Headers.Append("Permissions-Policy", "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()");
-                context.Response.Headers.Append("Referrer-Policy", "no-referrer-when-downgrade");
+                context.Response.Headers["Cross-Origin-Embedder-Policy"] = "unsafe-none";
+                context.Response.Headers["Cross-Origin-Opener-Policy"] = "same-origin";
+                context.Response.Headers["Cross-Origin-Resource-Policy"] = "same-origin";
+                context.Response.Headers["Permissions-Policy"] = "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()";
+                context.Response.Headers["Referrer-Policy"] = "no-referrer-when-downgrade";
                 context.Response.Headers.XContentTypeOptions = "nosniff";
-                context.Response.Headers.Append("X-Download-Options", "noopen");
+                context.Response.Headers["X-Download-Options"] = "noopen";
                 context.Response.Headers.XXSSProtection = "1; mode=block";
 
                 // Middleware (e.g. Identity) may have already set X-Frame-Options
@@ -79,7 +79,7 @@ public sealed class CustomHttpHeadersMiddleware(
 
                 if (nonce != null)
                 {
-                    context.Response.Headers.Append("x-csp-nonce", nonce);
+                    context.Response.Headers["x-csp-nonce"] = nonce;
                 }
 
                 bool allowInlineStyles = context.InlineStylesAllowed();
@@ -97,23 +97,23 @@ public sealed class CustomHttpHeadersMiddleware(
 
                 if (context.Request.IsHttps)
                 {
-                    context.Response.Headers.Append("Expect-CT", _expectCTValue);
+                    context.Response.Headers["Expect-CT"] = _expectCTValue;
                 }
 
-                context.Response.Headers.Append("NEL", /*lang=json,strict*/@"{""report_to"":""default"",""max_age"":31536000,""include_subdomains"":false}");
+                context.Response.Headers["NEL"] = /*lang=json,strict*/@"{""report_to"":""default"",""max_age"":31536000,""include_subdomains"":false}";
 
 #if DEBUG
-                context.Response.Headers.Append("X-Debug", "true");
+                context.Response.Headers["X-Debug"] = "true";
 #endif
 
                 if (_environmentName != null)
                 {
-                    context.Response.Headers.Append("X-Environment", _environmentName);
+                    context.Response.Headers["X-Environment"] = _environmentName;
                 }
 
-                context.Response.Headers.Append("X-Instance", Environment.MachineName);
-                context.Response.Headers.Append("X-Request-Id", context.TraceIdentifier);
-                context.Response.Headers.Append("X-Revision", GitMetadata.Commit);
+                context.Response.Headers["X-Instance"] = Environment.MachineName;
+                context.Response.Headers["X-Request-Id"] = context.TraceIdentifier;
+                context.Response.Headers["X-Revision"] = GitMetadata.Commit;
                 context.Response.Headers.XUACompatible = "IE=edge";
 
                 if (!context.Response.Headers.ContainsKey(HeaderNames.Pragma))
