@@ -55,7 +55,7 @@ public abstract class PageBase(ApplicationNavigator navigator)
 
     protected async Task ClickAndWaitForNavigationAsync(string selector)
     {
-        const int MaxAttempts = 3;
+        const int MaxAttempts = 2;
 
         var page = Navigator.Page;
         var navigated = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -74,7 +74,14 @@ public abstract class PageBase(ApplicationNavigator navigator)
         {
             for (int attempt = 1; ; attempt++)
             {
-                await page.ClickAsync(selector);
+                if (attempt == 1)
+                {
+                    await page.ClickAsync(selector);
+                }
+                else
+                {
+                    await page.Locator(selector).DispatchEventAsync("click");
+                }
 
                 try
                 {
