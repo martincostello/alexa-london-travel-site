@@ -24,13 +24,11 @@
     <PackageReference Include="JustEat.HttpClientInterception" />
     <PackageReference Include="MartinCostello.Logging.XUnit.v3" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="Microsoft.Playwright" />
     <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
     <PackageReference Include="NSubstitute" />
     <PackageReference Include="Shouldly" />
     <PackageReference Include="Verify.XunitV3" />
-    <PackageReference Include="xunit.runner.visualstudio" />
     <PackageReference Include="xunit.v3.mtp-v2" />
   </ItemGroup>
   <PropertyGroup>
