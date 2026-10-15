@@ -24,7 +24,7 @@
     <PackageVersion Include="JustEat.HttpClientInterception" Version="5.1.4" />
     <PackageVersion Include="MartinCostello.Logging.XUnit.v3" Version="0.7.1" />
     <PackageVersion Include="MartinCostello.OpenApi.Extensions" Version="3.0.0-preview.2" />
-    <PackageVersion Include="MessagePack" Version="2.5.303" />
+    <PackageVersion Include="MessagePack" Version="2.5.307" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="11.0.0-rc.2.26504.105" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="11.0.0-rc.2.26504.105" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.Twitter" Version="11.0.0-rc.2.26504.105" />
