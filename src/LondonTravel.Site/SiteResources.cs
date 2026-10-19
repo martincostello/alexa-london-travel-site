@@ -10,6 +10,12 @@ namespace MartinCostello.LondonTravel.Site;
 /// <summary>
 /// A class representing the container for site resource strings.
 /// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="SiteResources"/> class.
+/// </remarks>
+/// <param name="htmlLocalizer">The <see cref="IHtmlLocalizer{SiteResources}"/> to use.</param>
+/// <param name="localizer">The <see cref="IStringLocalizer{SiteResources}"/> to use.</param>
+/// <param name="options">The current site configuration options.</param>
 public class SiteResources(
     IHtmlLocalizer<SiteResources> htmlLocalizer,
     IStringLocalizer<SiteResources> localizer,

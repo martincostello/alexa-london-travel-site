@@ -13,6 +13,12 @@ namespace MartinCostello.LondonTravel.Site.TagHelpers;
 /// A <see cref="ITagHelper"/> implementation targeting &lt;lazyimg&gt;
 /// elements that supports file versioning and lazy loading of images.
 /// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="LazyImageTagHelper"/> class.
+/// </remarks>
+/// <param name="fileVersionProvider">The <see cref="IFileVersionProvider"/> to use.</param>
+/// <param name="htmlEncoder">The <see cref="HtmlEncoder"/> to use.</param>
+/// <param name="urlHelperFactory">The <see cref="IUrlHelperFactory"/> to use.</param>
 [HtmlTargetElement("lazyimg", TagStructure = TagStructure.WithoutEndTag)]
 public sealed class LazyImageTagHelper(IFileVersionProvider fileVersionProvider, HtmlEncoder htmlEncoder, IUrlHelperFactory urlHelperFactory) : ImageTagHelper(fileVersionProvider, htmlEncoder, urlHelperFactory)
 {

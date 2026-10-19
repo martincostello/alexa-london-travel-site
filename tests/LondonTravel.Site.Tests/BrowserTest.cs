@@ -9,6 +9,10 @@ namespace MartinCostello.LondonTravel.Site;
 /// <summary>
 /// The base class for browser tests.
 /// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="BrowserTest"/> class.
+/// </remarks>
+/// <param name="outputHelper">The <see cref="ITestOutputHelper"/> to use.</param>
 [Category("UI")]
 public abstract class BrowserTest(ITestOutputHelper outputHelper) : IAsyncLifetime, IDisposable
 {

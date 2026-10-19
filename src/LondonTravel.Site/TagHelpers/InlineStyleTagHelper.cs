@@ -15,6 +15,15 @@ namespace MartinCostello.LondonTravel.Site.TagHelpers;
 /// A <see cref="ITagHelper"/> implementation targeting &lt;link&gt;
 /// elements that supports inlining styles for local CSS files.
 /// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="InlineStyleTagHelper"/> class.
+/// </remarks>
+/// <param name="hostingEnvironment">The <see cref="IWebHostEnvironment"/> to use.</param>
+/// <param name="cacheProvider">The <see cref="TagHelperMemoryCacheProvider"/> to use.</param>
+/// <param name="fileVersionProvider">The <see cref="IFileVersionProvider"/> to use.</param>
+/// <param name="htmlEncoder">The <see cref="HtmlEncoder"/> to use.</param>
+/// <param name="javaScriptEncoder">The <see cref="JavaScriptEncoder"/> to use.</param>
+/// <param name="urlHelperFactory">The <see cref="IUrlHelperFactory"/> to use.</param>
 [HtmlTargetElement("link", Attributes = InlineAttributeName, TagStructure = TagStructure.WithoutEndTag)]
 [HtmlTargetElement("link", Attributes = MinifyInlinedAttributeName, TagStructure = TagStructure.WithoutEndTag)]
 [HtmlTargetElement("link", Attributes = NonceAttributeName, TagStructure = TagStructure.WithoutEndTag)]
