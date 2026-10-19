@@ -369,9 +369,9 @@ public partial class ManageController(
             }
         }
 
-        return commitUpdate ?
-            await userManager.UpdateAsync(user) :
-            IdentityResult.Success;
+        return commitUpdate
+            ? await userManager.UpdateAsync(user)
+            : IdentityResult.Success;
     }
 
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]

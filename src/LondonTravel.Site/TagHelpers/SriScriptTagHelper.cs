@@ -15,6 +15,15 @@ namespace MartinCostello.LondonTravel.Site.TagHelpers;
 /// <summary>
 /// A <see cref="ITagHelper"/> implementation targeting &lt;script&gt; elements to add subresource integrity attributes.
 /// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="SriScriptTagHelper"/> class.
+/// </remarks>
+/// <param name="hostingEnvironment">The <see cref="IWebHostEnvironment"/> to use.</param>
+/// <param name="cacheProvider">The <see cref="TagHelperMemoryCacheProvider"/> to use.</param>
+/// <param name="fileVersionProvider">The <see cref="IFileVersionProvider"/> to use.</param>
+/// <param name="htmlEncoder">The <see cref="HtmlEncoder"/> to use.</param>
+/// <param name="javaScriptEncoder">The <see cref="JavaScriptEncoder"/> to use.</param>
+/// <param name="urlHelperFactory">The <see cref="IUrlHelperFactory"/> to use.</param>
 [HtmlTargetElement("script", Attributes = AddSriAttributeName, TagStructure = TagStructure.NormalOrSelfClosing)]
 public class SriScriptTagHelper(
     IWebHostEnvironment hostingEnvironment,

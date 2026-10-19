@@ -79,9 +79,9 @@ public sealed class UserStore :
 
         bool deleted = await _service.DeleteAsync(user.Id);
 
-        return deleted ?
-            IdentityResult.Success :
-            ResultForError("UserNotFound", $"User with Id '{user.Id}' does not exist.");
+        return deleted
+            ? IdentityResult.Success
+            : ResultForError("UserNotFound", $"User with Id '{user.Id}' does not exist.");
     }
 
     /// <inheritdoc />
@@ -315,12 +315,15 @@ public sealed class UserStore :
 
         if (user.RoleClaims?.Count > 0)
         {
-            roles = [.. user.RoleClaims
-                .Where((p) => string.Equals(p.Issuer, RoleClaimIssuer, StringComparison.Ordinal))
-                .Where((p) => string.Equals(p.ClaimType, ClaimTypes.Role, StringComparison.Ordinal))
-                .Where((p) => string.Equals(p.ValueType, ClaimValueTypes.String, StringComparison.Ordinal))
-                .Where((p) => !string.IsNullOrEmpty(p.Value))
-                .Select((p) => p.Value!)];
+            roles =
+            [
+                .. user.RoleClaims
+                    .Where((p) => string.Equals(p.Issuer, RoleClaimIssuer, StringComparison.Ordinal))
+                    .Where((p) => string.Equals(p.ClaimType, ClaimTypes.Role, StringComparison.Ordinal))
+                    .Where((p) => string.Equals(p.ValueType, ClaimValueTypes.String, StringComparison.Ordinal))
+                    .Where((p) => !string.IsNullOrEmpty(p.Value))
+                    .Select((p) => p.Value!),
+            ];
         }
 
         return Task.FromResult(roles);

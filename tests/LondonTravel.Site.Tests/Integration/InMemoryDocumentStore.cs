@@ -12,6 +12,10 @@ namespace MartinCostello.LondonTravel.Site.Integration;
 /// <summary>
 /// A class representing an in-memory document store. This class cannot be inherited.
 /// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="InMemoryDocumentStore"/> class.
+/// </remarks>
+/// <param name="options">The <see cref="UserStoreOptions"/> to use.</param>
 internal sealed class InMemoryDocumentStore(UserStoreOptions options) : IDocumentService, IDocumentCollectionInitializer
 {
     private readonly Dictionary<string, DocumentCollection> _collections = [];
