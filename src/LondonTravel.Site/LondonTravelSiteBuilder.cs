@@ -164,8 +164,9 @@ public static class LondonTravelSiteBuilder
         builder.Services.AddOpenApiDocumentation();
         builder.Services.AddOutputCache();
 
-        builder.Services.Configure<GzipCompressionProviderOptions>((p) => p.Level = CompressionLevel.Fastest);
         builder.Services.Configure<BrotliCompressionProviderOptions>((p) => p.Level = CompressionLevel.Fastest);
+        builder.Services.Configure<GzipCompressionProviderOptions>((p) => p.Level = CompressionLevel.Fastest);
+        builder.Services.Configure<ZstandardCompressionOptions>((p) => p.Quality = 1);
 
         // Workaround for https://github.com/dotnet/extensions/issues/5962
         if (OperatingSystem.IsLinux() || OperatingSystem.IsWindows())
@@ -176,10 +177,9 @@ public static class LondonTravelSiteBuilder
         builder.Services.AddResponseCaching();
         builder.Services.AddResponseCompression((options) =>
         {
-            options.EnableForHttps = true;
+            options.Providers.Add<ZstandardCompressionProvider>();
             options.Providers.Add<BrotliCompressionProvider>();
             options.Providers.Add<GzipCompressionProvider>();
-            options.Providers.Add<ZstandardCompressionProvider>();
         });
 
         builder.Services.ConfigureHttpJsonOptions((options) =>
