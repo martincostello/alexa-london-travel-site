@@ -224,7 +224,7 @@ public sealed class CustomHttpHeadersMiddleware(
                 ["default-src"] = [Csp.Self, Csp.Data],
                 ["img-src"] = [Csp.Self, Csp.Data, cdn],
                 ["font-src"] = [Csp.Self],
-                ["connect-src"] = [Csp.Self],
+                ["connect-src"] = [Csp.Self, cdn],
                 ["media-src"] = [Csp.None],
                 ["object-src"] = [Csp.None],
                 ["child-src"] = [Csp.Self],
