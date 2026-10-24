@@ -179,6 +179,7 @@ public static class LondonTravelSiteBuilder
             options.EnableForHttps = true;
             options.Providers.Add<BrotliCompressionProvider>();
             options.Providers.Add<GzipCompressionProvider>();
+            options.Providers.Add<ZstandardCompressionProvider>();
         });
 
         builder.Services.ConfigureHttpJsonOptions((options) =>
