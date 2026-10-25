@@ -80,13 +80,8 @@ public static class IHttpClientBuilderExtensions
     /// <returns>
     /// The <see cref="HttpMessageHandler"/> to use as the primary message handler.
     /// </returns>
-    private static HttpMessageHandler CreatePrimaryHttpHandler()
-    {
-        return new HttpClientHandler()
-        {
-            AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip,
-        };
-    }
+    private static HttpMessageHandler CreatePrimaryHttpHandler() =>
+        new HttpClientHandler() { AutomaticDecompression = DecompressionMethods.All };
 
     /// <summary>
     /// Creates the User Agent HTTP request header to use for all requests.
