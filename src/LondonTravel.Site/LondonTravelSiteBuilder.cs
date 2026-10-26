@@ -74,9 +74,7 @@ public static class LondonTravelSiteBuilder
         builder.Logging.AddTelemetry();
         builder.Services.AddTelemetry(builder.Environment);
 
-#pragma warning disable CA1308
-        string environment = builder.Configuration.AzureEnvironment().ToLowerInvariant();
-#pragma warning restore CA1308
+        string environment = builder.Configuration.AzureEnvironment().ToLowerOrdinal();
 
         var dataProtection = builder.Services
             .AddDataProtection()

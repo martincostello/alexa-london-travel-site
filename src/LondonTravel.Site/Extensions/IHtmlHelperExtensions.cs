@@ -35,9 +35,7 @@ public static class IHtmlHelperExtensions
     {
         ArgumentNullException.ThrowIfNull(html);
 
-#pragma warning disable CA1308
-        return $"btn-{authenticationScheme?.ToLowerInvariant()}";
-#pragma warning restore CA1308
+        return $"btn-{authenticationScheme?.ToLowerOrdinal()}";
     }
 
     /// <summary>
