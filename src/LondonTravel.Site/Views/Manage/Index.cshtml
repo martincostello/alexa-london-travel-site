@@ -11,7 +11,7 @@
     <div class="col-md-@(Model!.CanAddMoreLogins ? "8" : "12")">
         <h3>@SR.ManageLinkedAccountsSubtitle</h3>
         <hr />
-        <p data-id="alexa-link" data-is-linked="@Model.IsLinkedToAlexa.ToString().ToLowerInvariant()">
+        <p data-id="alexa-link" data-is-linked="@Model.IsLinkedToAlexa.ToString().ToLowerOrdinal()">
             @if (Model.IsLinkedToAlexa)
             {
                 @SR.ManageLinkedToAlexa
@@ -48,7 +48,7 @@
                                                class="btn btn-outline-danger"
                                                value="@SR.RemoveAccountButtonText"
                                                title="@SR.RemoveAccountButtonAltText(provider.ProviderDisplayName)"
-                                               data-id="remove-@provider.LoginProvider.ToLowerInvariant()-link"
+                                               data-id="remove-@provider.LoginProvider.ToLowerOrdinal()-link"
                                                data-ga-label="Remove Account Link - @provider.ProviderDisplayName"
                                                data-bs-toggle="modal"
                                                data-bs-target=".remove-link-modal"

@@ -69,8 +69,8 @@ public class SocialLoginTests(WebsiteFixture fixture, ITestOutputHelper outputHe
 
     private async Task SignInWithSocialProviderAsync(string providerName, Func<IPage, string, string, Task> signIn)
     {
-        string? userName = Environment.GetEnvironmentVariable($"WEBSITE_USER_{providerName.ToUpperInvariant()}_USERNAME");
-        string? password = Environment.GetEnvironmentVariable($"WEBSITE_USER_{providerName.ToUpperInvariant()}_PASSWORD");
+        string? userName = Environment.GetEnvironmentVariable($"WEBSITE_USER_{providerName.ToUpperOrdinal()}_USERNAME");
+        string? password = Environment.GetEnvironmentVariable($"WEBSITE_USER_{providerName.ToUpperOrdinal()}_PASSWORD");
 
         Assert.SkipWhen(string.IsNullOrWhiteSpace(userName), $"No {providerName} username is configured.");
         Assert.SkipWhen(string.IsNullOrWhiteSpace(password), $"No {providerName} password is configured.");
@@ -82,7 +82,7 @@ public class SocialLoginTests(WebsiteFixture fixture, ITestOutputHelper outputHe
             async (page) =>
             {
                 page = await page.SignInAsync()
-                                 .ThenAsync((p) => p.SignInWithProviderAsync(providerName.ToLowerInvariant()));
+                                 .ThenAsync((p) => p.SignInWithProviderAsync(providerName.ToLowerOrdinal()));
 
                 await signIn(page.Navigator.Page, userName, password);
 
