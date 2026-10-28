@@ -2,6 +2,7 @@
 // Licensed under the Apache 2.0 license. See the LICENSE file in the project root for full license information.
 
 using System.Diagnostics;
+using Microsoft.Extensions.Diagnostics.Tracing;
 using OpenTelemetry;
 using OpenTelemetry.Instrumentation.Http;
 using OpenTelemetry.Metrics;
@@ -11,49 +12,49 @@ namespace MartinCostello.LondonTravel.Site.Extensions;
 
 public static class TelemetryExtensions
 {
-    public static void AddTelemetry(this IServiceCollection services, IWebHostEnvironment environment)
+    public static void AddTelemetry(this IHostApplicationBuilder builder)
     {
-        ArgumentNullException.ThrowIfNull(services);
+        ArgumentNullException.ThrowIfNull(builder);
 
-        var builder = services.AddOpenTelemetry();
+        builder.Services.AddMetrics();
+        builder.Services.AddTracing((p) => p.AddConfiguration(builder.Configuration.GetSection("Tracing")));
+
+        var telemetry = builder.Services.AddOpenTelemetry();
 
         if (ApplicationTelemetry.IsOtlpCollectorConfigured())
         {
-            builder.UseOtlpExporter();
+            telemetry.UseOtlpExporter();
         }
 
-        builder.WithMetrics((builder) =>
+        telemetry.WithMetrics((metrics) =>
                {
-                   builder.SetResourceBuilder(ApplicationTelemetry.ResourceBuilder)
+                   metrics.SetResourceBuilder(ApplicationTelemetry.ResourceBuilder)
                           .AddAspNetCoreInstrumentation()
                           .AddHttpClientInstrumentation()
                           .AddProcessInstrumentation()
-                          .AddMeter("Microsoft.Extensions.Caching.Memory.MemoryCache")
-                          .AddMeter("Microsoft.Extensions.Diagnostics.ResourceMonitoring")
-                          .AddMeter("Polly")
-                          .AddMeter("System.Runtime")
                           .SetExemplarFilter(ExemplarFilterType.TraceBased);
                })
-               .WithTracing((builder) =>
+               .WithTracing((traces) =>
                {
-                   builder.SetResourceBuilder(ApplicationTelemetry.ResourceBuilder)
-                          .AddAspNetCoreInstrumentation()
-                          .AddHttpClientInstrumentation()
-                          .AddSource(ApplicationTelemetry.ServiceName)
-                          .AddSource("Azure.*");
+                   traces.SetResourceBuilder(ApplicationTelemetry.ResourceBuilder)
+                         .AddAspNetCoreInstrumentation()
+                         .AddHttpClientInstrumentation();
 
-                   if (environment.IsDevelopment())
+                   if (builder.Environment.IsDevelopment())
                    {
-                       builder.SetSampler(new AlwaysOnSampler());
+                       traces.SetSampler(new AlwaysOnSampler());
                    }
                });
 
-        services.AddOptions<HttpClientTraceInstrumentationOptions>()
-                .Configure((options) =>
-                {
-                    options.EnrichWithHttpResponseMessage = EnrichHttpActivity;
-                    options.RecordException = true;
-                });
+        builder.Services
+            .AddOptions<HttpClientTraceInstrumentationOptions>()
+            .Configure((options) =>
+            {
+                options.EnrichWithHttpResponseMessage = EnrichHttpActivity;
+                options.RecordException = true;
+            });
+
+        builder.Logging.AddTelemetry();
     }
 
     private static void EnrichHttpActivity(Activity activity, HttpResponseMessage response)
