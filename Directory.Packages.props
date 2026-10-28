@@ -51,8 +51,8 @@
     <PackageVersion Include="OpenTelemetry.Resources.Host" Version="1.20.1-beta.1" />
     <PackageVersion Include="OpenTelemetry.Resources.OperatingSystem" Version="1.20.1-beta.1" />
     <PackageVersion Include="OpenTelemetry.Resources.ProcessRuntime" Version="1.20.1-beta.1" />
-    <PackageVersion Include="Polly.Extensions" Version="8.8.1" />
-    <PackageVersion Include="Polly.RateLimiting" Version="8.8.1" />
+    <PackageVersion Include="Polly.Extensions" Version="8.9.0" />
+    <PackageVersion Include="Polly.RateLimiting" Version="8.9.0" />
     <PackageVersion Include="Pyroscope" Version="1.5.1" />
     <PackageVersion Include="Pyroscope.OpenTelemetry" Version="0.5.1" />
     <PackageVersion Include="Sentry.AspNetCore" Version="6.12.1" />
