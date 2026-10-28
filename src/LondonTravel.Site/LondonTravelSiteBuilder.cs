@@ -71,8 +71,7 @@ public static class LondonTravelSiteBuilder
         builder.Services.AddOptions();
         builder.Services.Configure<SiteOptions>(builder.Configuration.GetSection("Site"));
 
-        builder.Logging.AddTelemetry();
-        builder.Services.AddTelemetry(builder.Environment);
+        builder.AddTelemetry();
 
         string environment = builder.Configuration.AzureEnvironment().ToLowerOrdinal();
 
