@@ -30,15 +30,20 @@ public static class ApplicationTelemetry
         => Environment.GetEnvironmentVariable("PYROSCOPE_PROFILING_ENABLED") is "1";
 
     [StackTraceHidden]
-    internal static async Task ProfileAsync<T>(T state, Func<T, Task> operation)
+    internal static Task ProfileAsync<T>(T state, Func<T, Task> operation)
     {
         // Based on https://github.com/grafana/pyroscope-go/blob/8fff2bccb5ed5611fdb09fdbd9a727367ab35f39/x/k6/baggage.go
         if (ExtractK6Baggage() is not { Count: > 0 } baggage)
         {
-            await operation(state);
-            return;
+            return operation(state);
         }
 
+        return ProfileWithBaggageAsync(state, operation, baggage);
+    }
+
+    [StackTraceHidden]
+    private static async Task ProfileWithBaggageAsync<T>(T state, Func<T, Task> operation, Dictionary<string, string> baggage)
+    {
         try
         {
             Profiler.Instance.ClearDynamicTags();
