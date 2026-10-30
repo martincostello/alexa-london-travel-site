@@ -135,7 +135,7 @@ jobs:
         PYROSCOPE_ARCH: 'x86_64'
         PYROSCOPE_VARIANT: 'glibc'
         # renovate: datasource=github-releases depName=Pyroscope packageName=grafana/pyroscope-dotnet extractVersion=^pyroscope-(?<version>.+)$
-        PYROSCOPE_VERSION: '1.5.1'
+        PYROSCOPE_VERSION: '1.6.0'
         SentryAuthToken: ${{ secrets.SENTRY_TOKEN }}
         UsePyroscope: 'false'
       run: |
