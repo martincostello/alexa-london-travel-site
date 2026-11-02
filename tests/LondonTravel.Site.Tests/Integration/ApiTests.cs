@@ -139,6 +139,7 @@ public class ApiTests(TestServerFixture fixture, ITestOutputHelper outputHelper)
         actual.ShouldNotBeNull();
         actual.Document.ShouldNotBeNull();
         actual.Diagnostic.ShouldNotBeNull();
+        actual.Diagnostic.SpecificationVersion.ShouldBe(OpenApiSpecVersion.OpenApi3_1);
         actual.Diagnostic.Errors.ShouldNotBeNull();
         actual.Diagnostic.Errors.ShouldBeEmpty();
         actual.Diagnostic.Warnings.ShouldNotBeNull();

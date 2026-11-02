@@ -3,6 +3,7 @@
 
 using MartinCostello.LondonTravel.Site.OpenApi;
 using MartinCostello.OpenApi;
+using Microsoft.OpenApi;
 
 namespace MartinCostello.LondonTravel.Site.Extensions;
 
@@ -26,6 +27,9 @@ public static class OpenApiServiceCollectionExtensions
 
         services.AddOpenApi(DocumentName, (options) =>
         {
+            // swagger-ui does not yet support OpenAPI 3.2
+            options.OpenApiVersion = OpenApiSpecVersion.OpenApi3_1;
+
             options.AddDocumentTransformer<AddApiInfo>();
             options.AddDocumentTransformer<AddSecurity>();
         });
