@@ -1,0 +1,8 @@
+@page "/account/external-sign-in-callback"
+@model MartinCostello.LondonTravel.Site.Pages.Account.ExternalSignInCallback
+@{
+    ViewBag.MetaDescription = Model.IsLockedOut ? string.Empty : SR.SignInMetaDescription;
+    ViewBag.MetaRobots = "NOINDEX";
+    ViewBag.Title = Model.IsLockedOut ? SR.AccountLockedTitle : SR.SignInTitle;
+}
+@await Html.PartialAsync(Model.IsLockedOut ? "_LockedOut" : "_SignIn")

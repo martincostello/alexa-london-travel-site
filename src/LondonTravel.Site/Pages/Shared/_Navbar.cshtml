@@ -34,7 +34,7 @@
                             @if (User?.Identity?.IsAuthenticated == true)
                             {
                                 <li>
-                                    <a class="dropdown-item" asp-route="@SiteRoutes.Manage" title="@SR.ManageLinkAltText" data-ga-label="Manage Account Navbar">
+                                    <a class="dropdown-item" asp-page="@SiteRoutes.Manage" title="@SR.ManageLinkAltText" data-ga-label="Manage Account Navbar">
                                         @SR.ManageLinkText
                                         <span class="fa-solid fa-user" aria-hidden="true"></span>
                                     </a>

@@ -20,7 +20,7 @@ This file provides guidance to agents when working with code in this repository.
 - `src/LondonTravel.Site` is the main ASP.NET Core application. `Program.cs` is intentionally thin; most service registration and middleware/endpoint wiring lives in `LondonTravelSiteBuilder.AddLondonTravelSite()` and `UseLondonTravelSite()`.
 - `src/LondonTravel.Site.AppHost` is the .NET Aspire orchestrator for local/dev composition. It wires Azure Storage and Cosmos DB emulators plus the site project, so changes that depend on Azure-backed infrastructure often touch both the site and the app host.
 - Request handling is split across several styles:
-  - MVC controllers and Razor Pages for the web UI.
+  - Razor Pages for the web UI, including the account and manage flows under `Pages/Account` and `Pages/Manage`.
   - Minimal API modules such as `ApiModule`, `AlexaModule`, and `RedirectsModule`, which are mapped from `UseLondonTravelSite()`.
   - OpenAPI generation is enabled for the API surface and is validated by integration tests.
 - Authentication is custom ASP.NET Core Identity over a Cosmos-backed document store. `AddApplicationAuthentication()` wires Identity, external OAuth providers, and the `admin` policy; `DocumentService` and `UserStore` back user persistence.
