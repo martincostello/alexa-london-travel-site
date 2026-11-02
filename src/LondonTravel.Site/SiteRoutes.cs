@@ -4,43 +4,43 @@
 namespace MartinCostello.LondonTravel.Site;
 
 /// <summary>
-/// A class containing the names of the routes for the site. This class cannot be inherited.
+/// A class containing the names of the pages for the site. This class cannot be inherited.
 /// </summary>
 public static class SiteRoutes
 {
-    public const string Account = nameof(Account);
+    public const string DeleteAccount = "/Manage/DeleteAccount";
 
-    public const string DeleteAccount = nameof(DeleteAccount);
+    public const string Error = "/Shared/Error";
 
-    public const string ExternalSignIn = nameof(ExternalSignIn);
+    public const string ExternalSignIn = "/Account/ExternalSignIn";
 
-    public const string ExternalSignInCallback = nameof(ExternalSignInCallback);
+    public const string ExternalSignInCallback = "/Account/ExternalSignInCallback";
 
     public const string Help = "/Help/Index";
 
     public const string Home = "/Home/Index";
 
-    public const string LinkAccount = nameof(LinkAccount);
+    public const string LinkAccount = "/Manage/LinkAccount";
 
-    public const string LinkAccountCallback = nameof(LinkAccountCallback);
+    public const string LinkAccountCallback = "/Manage/LinkAccountCallback";
 
-    public const string Manage = nameof(Manage);
+    public const string Manage = "/Manage/Index";
 
     public const string PrivacyPolicy = "/PrivacyPolicy/Index";
 
     public const string Register = "/Account/Register";
 
-    public const string RemoveAccountLink = nameof(RemoveAccountLink);
+    public const string RemoveAccountLink = "/Manage/RemoveAccountLink";
 
-    public const string RemoveAlexaLink = nameof(RemoveAlexaLink);
+    public const string RemoveAlexaLink = "/Manage/RemoveAlexaLink";
 
-    public const string SignIn = nameof(SignIn);
+    public const string SignIn = "/Account/SignIn";
 
-    public const string SignOut = nameof(SignOut);
+    public const string SignOut = "/Account/SignOut";
 
     public const string Technology = "/Technology/Index";
 
     public const string TermsOfService = "/Terms/Index";
 
-    public const string UpdateLinePreferences = nameof(UpdateLinePreferences);
+    public const string UpdateLinePreferences = "/Manage/UpdateLinePreferences";
 }

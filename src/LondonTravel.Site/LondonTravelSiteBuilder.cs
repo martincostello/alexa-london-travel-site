@@ -133,7 +133,36 @@ public static class LondonTravelSiteBuilder
 
         builder.Services
             .AddLocalization()
-            .AddControllersWithViews((options) =>
+            .AddRazorPages((options) =>
+            {
+                // Constrain the pages that only handle form posts at the routing level
+                // so that requests using other HTTP methods are rejected by routing rather
+                // than rendering an empty page, consistent with MVC actions using [HttpPost].
+                string[] postOnlyPages =
+                [
+                    SiteRoutes.DeleteAccount,
+                    SiteRoutes.ExternalSignIn,
+                    SiteRoutes.LinkAccount,
+                    SiteRoutes.RemoveAccountLink,
+                    SiteRoutes.RemoveAlexaLink,
+                    SiteRoutes.SignOut,
+                    SiteRoutes.UpdateLinePreferences,
+                ];
+
+                var postOnly = new HttpMethodMetadata([HttpMethods.Post]);
+
+                foreach (string pageName in postOnlyPages)
+                {
+                    options.Conventions.AddPageRouteModelConvention(pageName, (model) =>
+                    {
+                        foreach (var selector in model.Selectors)
+                        {
+                            selector.EndpointMetadata.Add(postOnly);
+                        }
+                    });
+                }
+            })
+            .AddMvcOptions((options) =>
             {
                 if (!builder.Environment.IsDevelopment())
                 {
@@ -142,8 +171,6 @@ public static class LondonTravelSiteBuilder
             })
             .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
             .AddDataAnnotationsLocalization();
-
-        builder.Services.AddRazorPages();
 
         builder.Services.AddRouting((options) =>
         {
@@ -260,7 +287,6 @@ public static class LondonTravelSiteBuilder
 
         app.UseIdentity(options.CurrentValue);
 
-        app.MapDefaultControllerRoute();
         app.MapRazorPages();
 
         app.MapAlexa();

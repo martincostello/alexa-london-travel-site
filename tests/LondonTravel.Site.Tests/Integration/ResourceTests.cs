@@ -87,6 +87,7 @@ public class ResourceTests(TestServerFixture fixture, ITestOutputHelper outputHe
     [InlineData("/alexa/authorize")]
     [InlineData("/api/_count")]
     [InlineData("/manage/")]
+    [InlineData("/manage/link-account-callback/")]
     public async Task Cannot_Load_Resource_Unauthenticated(string requestUri)
     {
         // Arrange
@@ -98,6 +99,138 @@ public class ResourceTests(TestServerFixture fixture, ITestOutputHelper outputHe
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
         response.Headers.Location?.PathAndQuery.ShouldBe($"/account/sign-in/?ReturnUrl={Uri.EscapeDataString(requestUri)}");
+    }
+
+    [Theory]
+    [InlineData("/account/external-sign-in/")]
+    [InlineData("/account/sign-out/")]
+    [InlineData("/manage/delete-account/")]
+    [InlineData("/manage/link-account/")]
+    [InlineData("/manage/remove-account-link/")]
+    [InlineData("/manage/remove-alexa-link/")]
+    [InlineData("/manage/update-line-preferences/")]
+    public async Task Resource_Only_Allows_Post_Requests(string requestUri)
+    {
+        // The pages are constrained to POST at the routing level, so other HTTP methods
+        // are rejected rather than rendering the page. The static assets fallback endpoint
+        // added by MapStaticAssets() during development matches any HTTP method, which
+        // results in a 404 rather than a 405 when the application is not published.
+        HttpStatusCode[] expected = [HttpStatusCode.MethodNotAllowed, HttpStatusCode.NotFound];
+
+        // Arrange
+        using var client = Fixture.CreateClient();
+
+        // Act
+        using (var response = await client.GetAsync(requestUri, CancellationToken))
+        {
+            // Assert
+            response.StatusCode.ShouldBeOneOf(expected);
+        }
+
+        // Arrange
+        using (var message = new HttpRequestMessage(HttpMethod.Head, requestUri))
+        {
+            // Act
+            using var response = await client.SendAsync(message, CancellationToken);
+
+            // Assert
+            response.StatusCode.ShouldBeOneOf(expected);
+        }
+    }
+
+    [Fact]
+    public async Task External_Sign_In_Callback_Renders_Sign_In_If_Remote_Error()
+    {
+        // Arrange
+        using var client = Fixture.CreateClient();
+
+        // Act
+        using var response = await client.GetAsync("/account/external-sign-in-callback/?remoteError=access_denied", CancellationToken);
+
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+        response.Content.Headers.ContentType?.MediaType.ShouldBe(MediaTypeNames.Text.Html);
+
+        string html = await response.Content.ReadAsStringAsync(CancellationToken);
+
+        html.ShouldContain("data-id=\"sign-in-amazon\"", Case.Sensitive);
+        html.ShouldNotContain("returnurl=", Case.Insensitive);
+    }
+
+    [Fact]
+    public async Task External_Sign_In_Callback_Redirects_To_Sign_In_If_No_External_Login()
+    {
+        // Arrange
+        using var client = Fixture.CreateClient();
+
+        // Act
+        using var response = await client.GetAsync("/account/external-sign-in-callback/", CancellationToken);
+
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
+        response.Headers.Location?.OriginalString.ShouldBe("/account/sign-in/");
+    }
+
+    [Theory]
+    [InlineData("https://londontravel.martincostello.com/manage/")]
+    [InlineData("https://www.example.com/")]
+    public async Task Sign_In_Redirects_To_Home_If_Return_Url_Is_Not_Relative(string returnUrl)
+    {
+        // Arrange
+        using var client = Fixture.CreateClient();
+
+        // Act
+        using var response = await client.GetAsync($"/account/sign-in/?ReturnUrl={Uri.EscapeDataString(returnUrl)}", CancellationToken);
+
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.Redirect);
+        response.Headers.Location?.OriginalString.ShouldBe("/");
+    }
+
+    [Theory]
+    [InlineData("", "amazon,apple,github,google,microsoft,twitter", "")]
+    [InlineData("/manage/", "amazon,apple,github,google,microsoft,twitter", "")]
+    [InlineData("/alexa/authorize/", "amazon,microsoft,twitter", "apple,github,google")]
+    [InlineData("/alexa/authorize/?client_id=alexa-london-travel&response_type=token", "amazon,microsoft,twitter", "apple,github,google")]
+    public async Task Sign_In_Shows_Correct_Providers_For_Return_Url(string returnUrl, string visible, string hidden)
+    {
+        // Arrange
+        string requestUri = "/account/sign-in/";
+
+        if (!string.IsNullOrEmpty(returnUrl))
+        {
+            requestUri += $"?ReturnUrl={Uri.EscapeDataString(returnUrl)}";
+        }
+
+        using var client = Fixture.CreateClient();
+
+        // Act
+        using var response = await client.GetAsync(requestUri, CancellationToken);
+
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+        response.Content.Headers.ContentType?.MediaType.ShouldBe(MediaTypeNames.Text.Html);
+
+        string html = await response.Content.ReadAsStringAsync(CancellationToken);
+
+        foreach (string provider in visible.Split(','))
+        {
+            html.ShouldContain($"data-id=\"sign-in-{provider}\"", Case.Sensitive, $"Expected sign-in button for {provider}.");
+        }
+
+        foreach (string provider in hidden.Split(',', StringSplitOptions.RemoveEmptyEntries))
+        {
+            html.ShouldNotContain($"data-id=\"sign-in-{provider}\"", Case.Sensitive, $"Did not expect sign-in button for {provider}.");
+        }
+
+        if (string.IsNullOrEmpty(returnUrl))
+        {
+            html.ShouldNotContain("returnurl=", Case.Insensitive);
+        }
+        else
+        {
+            html.ShouldContain($"returnurl={Uri.EscapeDataString(returnUrl)}", Case.Insensitive);
+        }
     }
 
     [Fact]

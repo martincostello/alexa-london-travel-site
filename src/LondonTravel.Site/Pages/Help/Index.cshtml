@@ -107,7 +107,7 @@
     <h3 id="signing-in">Signing in</h3>
     <p>
         To sign in to your London Travel account, visit the
-        <a href="@Url.RouteUrl(SiteRoutes.SignIn)" title="@SR.SignInLinkAltText" data-ga-label="Help Sign-In">sign-in</a>
+        <a asp-page="@SiteRoutes.SignIn" title="@SR.SignInLinkAltText" data-ga-label="Help Sign-In">sign-in</a>
         page and sign-in with an external account you have already linked to your London Travel account.
     </p>
 
@@ -121,7 +121,7 @@
 
     <h3 id="account-management">Managing your account</h3>
     <p>
-        You can use the <a href="@Url.RouteUrl(SiteRoutes.Manage)" title="@SR.ManageLinkAltText" data-ga-label="Helep Manage">account management</a>
+        You can use the <a asp-page="@SiteRoutes.Manage" title="@SR.ManageLinkAltText" data-ga-label="Helep Manage">account management</a>
         page to manage your London Travel account. For example, you can:
         <ul>
             <li>See whether your account is linked to the Alexa app</li>

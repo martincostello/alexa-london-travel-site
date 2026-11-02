@@ -1,0 +1,8 @@
+@page "/account/sign-in"
+@model MartinCostello.LondonTravel.Site.Pages.Account.SignIn
+@{
+    ViewBag.MetaDescription = Model.IsAlexaAuthorization ? SR.AlexaSignInMetaDescription : SR.SignInMetaDescription;
+    ViewBag.MetaRobots = "NOINDEX";
+    ViewBag.Title = Model.IsAlexaAuthorization ? SR.AlexaSignInTitle : SR.SignInTitle;
+}
+@await Html.PartialAsync(Model.IsAlexaAuthorization ? "_SignInAlexa" : "_SignIn")

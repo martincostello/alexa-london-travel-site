@@ -14,7 +14,7 @@
             .ToList();
     }
 }
-<form asp-route="@SiteRoutes.ExternalSignIn" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+<form asp-page="@SiteRoutes.ExternalSignIn" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
     <div>
         <p>
             <div class="vstack gap-2">
