@@ -139,6 +139,25 @@ public class ResourceTests(TestServerFixture fixture, ITestOutputHelper outputHe
     }
 
     [Fact]
+    public async Task External_Sign_In_Callback_Renders_Sign_In_If_Remote_Error()
+    {
+        // Arrange
+        using var client = Fixture.CreateClient();
+
+        // Act
+        using var response = await client.GetAsync("/account/external-sign-in-callback/?remoteError=access_denied", CancellationToken);
+
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+        response.Content.Headers.ContentType?.MediaType.ShouldBe(MediaTypeNames.Text.Html);
+
+        string html = await response.Content.ReadAsStringAsync(CancellationToken);
+
+        html.ShouldContain("data-id=\"sign-in-amazon\"", Case.Sensitive);
+        html.ShouldNotContain("returnurl=", Case.Insensitive);
+    }
+
+    [Fact]
     public async Task External_Sign_In_Callback_Redirects_To_Sign_In_If_No_External_Login()
     {
         // Arrange
