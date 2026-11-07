@@ -22,15 +22,18 @@ public sealed class TflService(HttpClient client, IMemoryCache cache, TflOptions
     /// <inheritdoc />
     public async Task<ICollection<LineInfo>> GetLinesAsync(CancellationToken cancellationToken = default)
     {
-        string supportedModes = string.Join(',', options.SupportedModes ?? []);
-        supportedModes = Uri.EscapeDataString(supportedModes);
-
-        var requestUri = CreateUri($"Line/Mode/{supportedModes}");
-
         return await GetWithCachingAsync(
             "TfL.AvailableLines",
             ApplicationJsonSerializerContext.Default.ICollectionLineInfo,
-            () => client.GetAsync(requestUri, cancellationToken));
+            () =>
+            {
+                string supportedModes = string.Join(',', options.SupportedModes ?? []);
+                supportedModes = Uri.EscapeDataString(supportedModes);
+
+                var requestUri = CreateUri($"Line/Mode/{supportedModes}");
+
+                return client.GetAsync(requestUri, cancellationToken);
+            });
     }
 
     /// <inheritdoc />
