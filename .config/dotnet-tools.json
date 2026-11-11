@@ -10,7 +10,7 @@
       "rollForward": false
     },
     "pseudolocalize": {
-      "version": "0.12.2",
+      "version": "0.13.0",
       "commands": [
         "pseudo-localize"
       ]
