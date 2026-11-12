@@ -55,7 +55,7 @@
     <PackageVersion Include="Polly.RateLimiting" Version="8.9.1" />
     <PackageVersion Include="Pyroscope" Version="1.6.1" />
     <PackageVersion Include="Pyroscope.OpenTelemetry" Version="0.5.1" />
-    <PackageVersion Include="Sentry.AspNetCore" Version="6.12.1" />
+    <PackageVersion Include="Sentry.AspNetCore" Version="6.13.0" />
     <PackageVersion Include="Shouldly" Version="4.3.0" />
     <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.23.0" />
     <PackageVersion Include="Verify.XunitV3" Version="33.3.4" />
