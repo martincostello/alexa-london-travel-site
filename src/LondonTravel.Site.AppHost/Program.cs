@@ -20,8 +20,7 @@ var cosmos = builder.AddAzureCosmosDB(Cosmos)
                     .RunAsEmulator((container) =>
                     {
                         container.WithDataVolume("londontravel-cosmosdb")
-                                 .WithLifetime(ContainerLifetime.Persistent)
-                                 .WithPartitionCount(1);
+                                 .WithLifetime(ContainerLifetime.Persistent);
                     });
 
 var database = cosmos.AddCosmosDatabase("LondonTravel");
@@ -30,7 +29,7 @@ var secrets = builder.ExecutionContext.IsPublishMode
     ? builder.AddAzureKeyVault(KeyVault)
     : builder.AddConnectionString(KeyVault);
 
-builder.AddProject<Projects.LondonTravel_Site>("LondonTravelSite")
+builder.AddDotnetProject("LondonTravelSite", "../LondonTravel.Site")
        .WithHttpHealthCheck("/version")
        .WithReference(blobs)
        .WithReference(cosmos)
