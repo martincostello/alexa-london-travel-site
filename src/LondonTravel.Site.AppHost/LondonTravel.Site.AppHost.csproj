@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <Sdk Name="Aspire.AppHost.Sdk" />
   <PropertyGroup>
     <AspireUseCliBundle>true</AspireUseCliBundle>
     <IsAspireHost>true</IsAspireHost>
@@ -9,11 +8,9 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Aspire.Hosting.AppHost" />
+    <PackageReference Include="Aspire.Hosting.Dotnet" />
     <PackageReference Include="Aspire.Hosting.Azure.CosmosDB" />
     <PackageReference Include="Aspire.Hosting.Azure.KeyVault" />
     <PackageReference Include="Aspire.Hosting.Azure.Storage" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\LondonTravel.Site\LondonTravel.Site.csproj" />
   </ItemGroup>
 </Project>

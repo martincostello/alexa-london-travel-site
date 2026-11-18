@@ -43,13 +43,15 @@ public static class LondonTravelSiteBuilder
             builder.AddAzureCosmosClient(
                 "AzureCosmos",
                 (settings) => settings.Credential = credential,
-                (options) =>
+                static (services, options) =>
                 {
                     options.ApplicationName = "london-travel";
                     options.RequestTimeout = TimeSpan.FromSeconds(15);
                     options.UseSystemTextJsonSerializerWithOptions = System.Text.Json.JsonSerializerOptions.Default;
 
-                    if (builder.Configuration["Site:Authentication:UserStore:CurrentLocation"] is { Length: > 0 } region)
+                    var configuration = services.GetRequiredService<IConfiguration>();
+
+                    if (configuration["Site:Authentication:UserStore:CurrentLocation"] is { Length: > 0 } region)
                     {
                         options.ApplicationRegion = region;
                     }
