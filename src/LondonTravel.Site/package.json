@@ -36,7 +36,7 @@
     "jsdom": "31.0.1",
     "moment": "2.31.0",
     "prettier": "3.10.1",
-    "stylelint-config-standard": "41.0.0",
+    "stylelint-config-standard": "41.1.0",
     "ts-loader": "9.6.2",
     "typescript": "6.0.3",
     "vitest": "5.1.1",
