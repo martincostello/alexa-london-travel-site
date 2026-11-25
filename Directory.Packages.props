@@ -22,7 +22,7 @@
     <PackageVersion Include="Azure.Identity" Version="1.21.0" />
     <PackageVersion Include="BenchmarkDotNet" Version="0.16.0-preview.2" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="3.0.5" />
-    <PackageVersion Include="JustEat.HttpClientInterception" Version="5.1.4" />
+    <PackageVersion Include="JustEat.HttpClientInterception" Version="6.0.0" />
     <PackageVersion Include="MartinCostello.Logging.XUnit.v3" Version="0.7.1" />
     <PackageVersion Include="MartinCostello.OpenApi.Extensions" Version="3.0.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="11.0.0" />
